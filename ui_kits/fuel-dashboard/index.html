@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fuel Resilience AU — Australia's liquid fuel, in plain English</title>
-<meta name="description" content="A neutral, public-interest dashboard tracking Australia's fuel imports, prices and security buffer. Updated monthly.">
+<meta name="description" content="A neutral, public-interest dashboard tracking Australia's fuel imports, prices and security buffer with transparent source availability.">
 <link rel="stylesheet" href="../../colors_and_type.css">
 <link rel="stylesheet" href="../shared/styles.css">
 </head>
@@ -35,17 +35,15 @@ function App() {
     return (
       <div className="page">
         <Header active="fuel"/>
-        <main id="main"><div className="loading-wrap">Loading official data…</div></main>
+        <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
   }
 
-  // Surface the freshest retrieved_at across sources as the "Updated" stamp.
-  const latestRetrieved = Object.values(data)
-    .map(e => e.retrieved_at).filter(Boolean).sort().pop();
-  const updatedDisplay = window.FR.fmtRetrieved(latestRetrieved);
+  const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
+  const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
 
-  // Build insight feed from release-note style notes on envelopes that have them.
+  // Build insight feed from release-note style notes on verified envelopes that have them.
   const insights = [];
   for (const [id, env] of Object.entries(data)) {
     if (env.status === 'ok' && env.last_data_point) {
@@ -60,7 +58,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="fuel" updated={updatedDisplay}/>
+      <Header active="fuel" updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         {/* INTRO */}
@@ -75,11 +73,11 @@ function App() {
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Data retrieved</strong>
+            <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Refresh</strong>
-            <span>Weekly · Monday 02:00 AEST</span>
+            <span>Programmatic weekly · manual values after verification</span>
           </aside>
         </section>
 
@@ -97,8 +95,8 @@ function App() {
               </p>
               <p>
                 This dashboard exists because most of the raw numbers are public, but scattered across government reports
-                and trade databases. It pulls the three indicators that matter most into one place, refreshes them weekly
-                from the publishers themselves, and explains what moved and why in everyday language.
+                and trade databases. It loads verified source envelopes where available and leaves unavailable values visible,
+                rather than filling gaps with estimates.
               </p>
               <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
                 Acronyms used here: <b>ABS</b> = Australian Bureau of Statistics. <b>APS</b> = Australian Petroleum Statistics.
@@ -205,7 +203,8 @@ function App() {
         <section className="section">
           <InsightFeed
             items={insights}
-            lede="Notes synthesised from the envelope metadata on each source. Populated as data arrives."
+            lede="Notes synthesised from the envelope metadata on each source. Populated as verified data arrives."
+            emptyMessage="Awaiting verified publisher release notes for the loaded source envelopes."
           />
         </section>
 
@@ -225,7 +224,7 @@ function App() {
                 <h4>{env.source_name}</h4>
                 <p className="body-sm">
                   {env.status === 'ok'
-                    ? `Live. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
+                    ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
                     : 'Awaiting hand-keyed values from the named public source.'}
                 </p>
                 <p className="caption"><b>Envelope:</b> <span className="mono">{id}</span></p>
@@ -252,7 +251,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={updatedDisplay}/>
+        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );
