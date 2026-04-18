@@ -1,5 +1,5 @@
-// InsightFeed.jsx — "What changed" column, shared across dashboards.
-function InsightFeed({ items, title = 'What changed', lede }) {
+// InsightFeed.jsx - "What changed" column, shared across dashboards.
+function InsightFeed({ items, title = 'What changed', lede, emptyMessage }) {
   if (!items || items.length === 0) {
     return (
       <section className="insight-feed">
@@ -7,7 +7,7 @@ function InsightFeed({ items, title = 'What changed', lede }) {
           <span className="eyebrow">This month</span>
           <h2>{title}</h2>
           <p className="body-sm insight-feed__lede">
-            Nothing new to report from the publisher release notes this cycle.
+            {emptyMessage || lede || 'Awaiting verified publisher release notes for this cycle.'}
           </p>
         </header>
       </section>
