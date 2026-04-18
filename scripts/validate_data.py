@@ -122,6 +122,12 @@ def is_iso_datetime(value: Any) -> bool:
 
 
 def is_iso_date(value: Any) -> bool:
+    # PyYAML parses unquoted YYYY-MM-DD scalars as datetime.date. JSON envelopes
+    # still arrive as strings, so accept both shapes.
+    if isinstance(value, dt.datetime):
+        return False
+    if isinstance(value, dt.date):
+        return True
     if not isinstance(value, str) or not value:
         return False
     try:
@@ -129,6 +135,14 @@ def is_iso_date(value: Any) -> bool:
         return True
     except ValueError:
         return False
+
+
+def as_date(value: Any) -> dt.date:
+    if isinstance(value, dt.datetime):
+        return value.date()
+    if isinstance(value, dt.date):
+        return value
+    return dt.date.fromisoformat(value)
 
 
 def validate_sources(errors: list[dict[str, str]], warnings: list[dict[str, str]]) -> dict[str, dict[str, Any]]:
@@ -271,7 +285,7 @@ def check_stale(path: pathlib.Path, env: dict[str, Any], source: dict[str, Any],
     last = env.get("last_data_point")
     if not is_iso_date(last):
         return
-    last_date = dt.date.fromisoformat(last)
+    last_date = as_date(last)
     today = dt.datetime.now(dt.timezone.utc).date()
     if (today - last_date).days > grace:
         add(warnings, rel(path), f"last_data_point may be stale for {cadence} cadence")
