@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fuel Resilience AU</title>
+<meta name="description" content="Static dashboard hub for Australian fuel, fertiliser, oil production and retail-price source envelopes.">
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="ui_kits/shared/styles.css">
+<style>
+  h1, h2, h3 { letter-spacing: 0; }
+  .home-hero {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: var(--s-9) var(--s-6) var(--s-7);
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    gap: var(--s-7);
+    align-items: end;
+    border-bottom: 1px solid var(--rule);
+  }
+  .home-hero h1 {
+    max-width: 16ch;
+    margin-top: var(--s-3);
+  }
+  .home-hero__lede {
+    max-width: 64ch;
+    margin-top: var(--s-4);
+    color: var(--ink-2);
+    font-size: var(--fs-18);
+    line-height: 1.5;
+  }
+  .home-hero__art {
+    justify-self: end;
+    width: min(320px, 100%);
+    opacity: 0.82;
+  }
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-5);
+  }
+  .home-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    min-height: 230px;
+  }
+  .home-card:hover {
+    border-color: var(--accent);
+  }
+  .home-card h3 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-24);
+    font-weight: 500;
+  }
+  .home-card p {
+    color: var(--ink-2);
+  }
+  .home-card__status {
+    margin-top: auto;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
+    color: var(--ink-3);
+    font-size: var(--fs-13);
+  }
+  .home-card__link {
+    align-self: flex-start;
+    font-weight: 600;
+  }
+  .home-note {
+    background: var(--paper-sunk);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .home-note__inner {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: var(--s-6);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-6);
+  }
+  .home-note p {
+    color: var(--ink-2);
+    margin-top: var(--s-2);
+  }
+  .home-footer {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: var(--s-6);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-4);
+    color: var(--ink-3);
+    font-size: var(--fs-13);
+  }
+  .home-footer a {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+  }
+  @media (max-width: 1100px) {
+    .home-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .home-hero {
+      grid-template-columns: 1fr;
+      padding-top: var(--s-7);
+    }
+    .home-hero__art {
+      justify-self: start;
+      width: min(220px, 70%);
+    }
+    .home-grid,
+    .home-note__inner {
+      grid-template-columns: 1fr;
+    }
+    .home-card {
+      min-height: auto;
+    }
+    .home-footer {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+<div class="page">
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="index.html" class="brand" aria-label="Fuel Resilience AU home">
+        <span class="brand__name">Fuel Resilience AU</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a class="active" aria-current="page" href="index.html">Home</a>
+        <a href="ui_kits/fuel-dashboard/index.html">Fuel</a>
+        <a href="ui_kits/fertilizer-dashboard/index.html">Fertilizer</a>
+        <a href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
+        <a href="ui_kits/who-pays-what/index.html">Who pays what</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="home-hero" aria-labelledby="home-title">
+      <div>
+        <span class="eyebrow">Public source dashboard</span>
+        <h1 id="home-title">Australia's fuel and fertiliser data, without estimates.</h1>
+        <p class="home-hero__lede">
+          This static site collects source-linked dashboard pages for liquid fuel, fertiliser,
+          oil production and retail-price breakdowns. Values appear only when they flow through
+          a verified JSON envelope; unavailable values remain visible as placeholders.
+        </p>
+      </div>
+      <img class="home-hero__art" src="assets/au-outline.svg" alt="Outline map of Australia">
+    </section>
+
+    <section class="section" aria-labelledby="dashboards-title">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow">Dashboards</span>
+          <h2 id="dashboards-title">Choose a dashboard</h2>
+          <p class="section__lede">
+            Brent and WTI crude envelopes are currently refreshed programmatically. Most Australian
+            source series are registered as manual pending or unavailable until verified from the named publisher.
+          </p>
+        </div>
+      </div>
+      <div class="home-grid">
+        <article class="home-card">
+          <h3>Fuel</h3>
+          <p>Imports, pump prices and days of net import cover.</p>
+          <a class="home-card__link" href="ui_kits/fuel-dashboard/index.html">Open fuel dashboard</a>
+          <div class="home-card__status">Status: manual Australian series pending verification.</div>
+        </article>
+        <article class="home-card">
+          <h3>Fertilizer</h3>
+          <p>Fertiliser import subseries, price index and supplier concentration slots.</p>
+          <a class="home-card__link" href="ui_kits/fertilizer-dashboard/index.html">Open fertiliser dashboard</a>
+          <div class="home-card__status">Status: source envelopes registered; values pending manual verification.</div>
+        </article>
+        <article class="home-card">
+          <h3>Oil &amp; production</h3>
+          <p>Crude benchmarks, domestic production, refinery utilisation and fuel-security placeholders.</p>
+          <a class="home-card__link" href="ui_kits/oil-and-production/index.html">Open oil dashboard</a>
+          <div class="home-card__status">Status: Brent and WTI live; other slots pending or unavailable by design.</div>
+        </article>
+        <article class="home-card">
+          <h3>Who pays what</h3>
+          <p>Company tax/profit table and ACCC retail-price breakdown slots.</p>
+          <a class="home-card__link" href="ui_kits/who-pays-what/index.html">Open tax and price dashboard</a>
+          <div class="home-card__status">Status: manual source envelopes pending verification.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="home-note" aria-labelledby="data-policy-title">
+      <div class="home-note__inner">
+        <div>
+          <span class="eyebrow">Data policy</span>
+          <h2 id="data-policy-title">No fabricated numbers</h2>
+          <p>
+            If a value cannot be verified from a named public source, the relevant dashboard renders
+            a placeholder instead of an estimate. Manual values should only be entered after checking
+            the publisher document listed in the source registry.
+          </p>
+        </div>
+        <div>
+          <span class="eyebrow">Source rights</span>
+          <h2>Publisher terms still apply</h2>
+          <p>
+            Project code, prose and metadata have their own licences. Upstream source data remains
+            under each publisher's rights and citation requirements.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="home-footer">
+    <span>Code MIT. Project metadata/prose CC BY 4.0. Upstream data rights remain with publishers.</span>
+    <a href="data/sources.yml">Open source registry</a>
+  </footer>
+</div>
+</body>
+</html>
