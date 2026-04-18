@@ -53,6 +53,81 @@ sources:
     fetch: manual
     used_by: [fuel, oil]
 
+  - id: aps_production_petrol
+    human_name: Australian Petroleum Statistics - motor spirit production
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, motor spirit production.
+    reuse_notes: Hand-key only from the APS workbook table that explicitly reports motor spirit production.
+    fetch: manual
+    used_by: [oil]
+
+  - id: aps_production_diesel
+    human_name: Australian Petroleum Statistics - diesel production
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, diesel production.
+    reuse_notes: Hand-key only from the APS workbook table that explicitly reports diesel production.
+    fetch: manual
+    used_by: [oil]
+
+  - id: aps_production_jet
+    human_name: Australian Petroleum Statistics - jet fuel production
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, jet fuel production.
+    reuse_notes: Hand-key only from the APS workbook table that explicitly reports jet fuel production.
+    fetch: manual
+    used_by: [oil]
+
+  - id: aps_production_fuel_oil
+    human_name: Australian Petroleum Statistics - fuel oil production
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, fuel oil production.
+    reuse_notes: Hand-key only from the APS workbook table that explicitly reports fuel oil production.
+    fetch: manual
+    used_by: [oil]
+
+  - id: aps_refinery_utilisation
+    human_name: Australian Petroleum Statistics - refinery utilisation
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, refinery utilisation.
+    reuse_notes: Hand-key only if the APS workbook reports a directly verifiable utilisation series or enough inputs to calculate it transparently.
+    fetch: manual
+    used_by: [oil]
+
   - id: abs_petroleum_imports
     human_name: ABS International Merchandise Trade — petroleum imports
     publisher: Australian Bureau of Statistics
@@ -80,6 +155,81 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, International Trade in Goods, HS 31 fertiliser imports.
     reuse_notes: Attribute ABS and preserve HS-code/table/date context for hand-keyed values.
+    fetch: manual
+    used_by: [fertilizer]
+
+  - id: abs_fertiliser_imports_urea
+    human_name: ABS International Merchandise Trade - urea imports (HS 3102)
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods, HS 3102 urea imports.
+    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3102 or the relevant urea classification.
+    fetch: manual
+    used_by: [fertilizer]
+
+  - id: abs_fertiliser_imports_potash
+    human_name: ABS International Merchandise Trade - potash imports (HS 3104)
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods, HS 3104 potash imports.
+    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3104 or the relevant potash classification.
+    fetch: manual
+    used_by: [fertilizer]
+
+  - id: abs_fertiliser_imports_phosphate
+    human_name: ABS International Merchandise Trade - phosphate imports (HS 3103)
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods, HS 3103 phosphate imports.
+    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3103 or the relevant phosphate classification.
+    fetch: manual
+    used_by: [fertilizer]
+
+  - id: abs_fertiliser_imports_compound
+    human_name: ABS International Merchandise Trade - compound fertiliser imports (HS 3105)
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods, HS 3105 compound fertiliser imports.
+    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3105 or the relevant compound fertiliser classification.
+    fetch: manual
+    used_by: [fertilizer]
+
+  - id: abs_fertiliser_source_concentration
+    human_name: ABS International Merchandise Trade - fertiliser source-country concentration
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods, HS 31 source-country detail.
+    reuse_notes: Hand-key only from ABS country-of-origin detail; preserve month, HS scope and country ranking method.
     fetch: manual
     used_by: [fertilizer]
 
@@ -158,6 +308,81 @@ sources:
     fetch: manual
     used_by: [fuel, who_pays_what]
 
+  - id: accc_petrol_wholesale_component
+    human_name: ACCC petrol price breakdown - wholesale component
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
+    reuse_notes: Hand-key only the wholesale/refiner component from the ACCC breakdown table; do not reuse this envelope for excise, GST or margin.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petrol_excise_component
+    human_name: ACCC petrol price breakdown - fuel excise component
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
+    reuse_notes: Hand-key only the fuel excise component from the ACCC breakdown table; do not reuse this envelope for wholesale, GST or margin.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petrol_gst_component
+    human_name: ACCC petrol price breakdown - GST component
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
+    reuse_notes: Hand-key only the GST component from the ACCC breakdown table; do not reuse this envelope for wholesale, excise or margin.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petrol_retail_margin_component
+    human_name: ACCC petrol price breakdown - retailer margin component
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
+    reuse_notes: Hand-key only the retailer margin component from the ACCC breakdown table; do not reuse this envelope for wholesale, excise or GST.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petrol_breakdown_series
+    human_name: ACCC petrol price breakdown - monthly component series
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown time series.
+    reuse_notes: Leave unavailable until the chart model can represent separate wholesale, excise, GST and margin series without collapsing them into one value.
+    fetch: manual
+    used_by: [who_pays_what]
+
   - id: eia_brent
     human_name: Brent crude spot price (EIA)
     publisher: U.S. Energy Information Administration via FRED mirror
@@ -235,6 +460,21 @@ sources:
     fetch: manual
     used_by: [oil]
 
+  - id: offshore_ticket_volumes
+    human_name: DCCEEW offshore ticket volume disclosures
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/
+    canonical_url: https://www.energy.gov.au/
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures.
+    reuse_notes: Hand-key only from a public DCCEEW disclosure that states offshore ticket volumes and reporting period.
+    fetch: manual
+    used_by: [oil]
+
   - id: abares_fertiliser_price
     human_name: ABARES fertiliser price index (Agricultural commodities)
     publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
@@ -248,6 +488,21 @@ sources:
     citation: ABARES, Agricultural commodities data.
     reuse_notes: Attribute ABARES and cite release quarter/table for hand-keyed values.
     fetch: manual
+    used_by: [fertilizer]
+
+  - id: abares_fertiliser_stock_cover
+    human_name: ABARES fertiliser stock-cover data
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data
+    canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: ABARES, Agricultural commodities data, fertiliser stock-cover indicator if published.
+    reuse_notes: Leave unavailable unless a named public ABARES or DCCEEW source explicitly reports fertiliser stock cover or enough inputs for a documented calculation.
+    fetch: unavailable
     used_by: [fertilizer]
 
   # =========================================================

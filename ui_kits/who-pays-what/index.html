@@ -39,6 +39,11 @@ const COMPANIES = [
 const SERIES = [
   'ato_corporate_tax',
   'accc_petroleum_monitoring',
+  'accc_petrol_wholesale_component',
+  'accc_petrol_excise_component',
+  'accc_petrol_gst_component',
+  'accc_petrol_retail_margin_component',
+  'accc_petrol_breakdown_series',
   ...COMPANIES.map(c => c.id),
 ];
 
@@ -256,10 +261,10 @@ function App() {
           </div>
 
           <div className="metric-grid metric-grid--4">
-            <MetricCard eyebrow="Pump $"  label="Wholesale component"  plain="What the refiner / wholesaler is paid."              fromEnvelope={data.accc_petroleum_monitoring} unit=" A$/L"/>
-            <MetricCard eyebrow="Pump $"  label="Fuel excise"          plain="Commonwealth excise, currently 50.8c/L (indexed)."  fromEnvelope={data.accc_petroleum_monitoring} unit=" A$/L"/>
-            <MetricCard eyebrow="Pump $"  label="GST"                  plain="10% goods and services tax on the total pump price." fromEnvelope={data.accc_petroleum_monitoring} unit=" A$/L"/>
-            <MetricCard eyebrow="Pump $"  label="Retailer margin"      plain="What the service-station operator earns per litre." fromEnvelope={data.accc_petroleum_monitoring} unit=" A$/L"/>
+            <MetricCard eyebrow="Pump $"  label="Wholesale component"  plain="What the refiner / wholesaler is paid."              fromEnvelope={data.accc_petrol_wholesale_component} unit=" A$/L"/>
+            <MetricCard eyebrow="Pump $"  label="Fuel excise"          plain="Commonwealth excise, currently 50.8c/L (indexed)."  fromEnvelope={data.accc_petrol_excise_component} unit=" A$/L"/>
+            <MetricCard eyebrow="Pump $"  label="GST"                  plain="10% goods and services tax on the total pump price." fromEnvelope={data.accc_petrol_gst_component} unit=" A$/L"/>
+            <MetricCard eyebrow="Pump $"  label="Retailer margin"      plain="What the service-station operator earns per litre." fromEnvelope={data.accc_petrol_retail_margin_component} unit=" A$/L"/>
           </div>
 
           <div style={{ height: 24 }}/>
@@ -268,11 +273,11 @@ function App() {
               eyebrow="Trailing 12 months"
               title="Monthly retail petrol price breakdown"
               unit="A$/L"
-              fromEnvelope={data.accc_petroleum_monitoring}
+              fromEnvelope={data.accc_petrol_breakdown_series}
               ranges={['1Y','3Y']}
               defaultRange="1Y"
               accent="#1F3A8A"
-              takeaway="Chart populates once the ACCC Petroleum Monitoring Report breakdown is hand-keyed into data/manual/accc_petroleum_monitoring.json."
+              takeaway="Chart remains unavailable until each ACCC breakdown component can be represented as a separate verified series."
               yAxisLabel="Australian dollars per litre (A$/L)"
             />
           </div>

@@ -28,9 +28,14 @@ const SERIES = [
   'eia_brent',
   'eia_wti',
   'tapis_crude',
-  'aps_monthly',
+  'aps_production_petrol',
+  'aps_production_diesel',
+  'aps_production_jet',
+  'aps_production_fuel_oil',
+  'aps_refinery_utilisation',
   'iea_90day',
   'fuel_security_payment',
+  'offshore_ticket_volumes',
   'aud_usd_rba',
 ];
 
@@ -72,13 +77,7 @@ function App() {
 
   const brentAud = toAud(data.eia_brent, data.aud_usd_rba);
   const wtiAud   = toAud(data.eia_wti,   data.aud_usd_rba);
-
-  // Derived per-fuel production envelopes (will surface as unavailable until APS is wired).
-  const prodPetrol  = { status: 'unavailable', source_name: 'APS — motor spirit production', source_url: data.aps_monthly.source_url };
-  const prodDiesel  = { status: 'unavailable', source_name: 'APS — diesel production',       source_url: data.aps_monthly.source_url };
-  const prodJet     = { status: 'unavailable', source_name: 'APS — jet fuel production',     source_url: data.aps_monthly.source_url };
-  const prodFuelOil = { status: 'unavailable', source_name: 'APS — fuel oil production',     source_url: data.aps_monthly.source_url };
-  const utilisation = { status: 'unavailable', source_name: 'APS — refinery utilisation',    source_url: data.aps_monthly.source_url };
+  const tapisAud = toAud(data.tapis_crude, data.aud_usd_rba);
 
   return (
     <div className="page">
@@ -142,7 +141,8 @@ function App() {
               <h2 id="h-crude">Crude oil price — the floor beneath the pump</h2>
               <p className="section__lede">
                 Monthly averages over the last five years where verified public source envelopes are available.
-                US$ and A$ views are shown side-by-side only when the currency series is also verified.
+                Brent, WTI and Tapis each have US$ and A$ slots; unavailable slots stay blank until both
+                the benchmark and currency source inputs are verified.
               </p>
             </div>
           </div>
@@ -186,11 +186,38 @@ function App() {
             />
             <ChartCard
               eyebrow="A$"
+              title="WTI crude — A$/barrel"
+              unit="AUD per barrel"
+              fromEnvelope={wtiAud}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
+              accent="#0F766E"
+              takeaway="Same WTI series converted using the RBA monthly AUD/USD where both source envelopes are verified."
+              yAxisLabel="Australian dollars per barrel"
+            />
+          </div>
+          <div style={{ height: 24 }}/>
+          <div className="charts-grid">
+            <ChartCard
+              eyebrow="US$"
+              title="Tapis crude — US$/barrel"
+              unit="USD per barrel"
+              fromEnvelope={data.tapis_crude}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
+              accent="#6B7280"
+              takeaway="Tapis is the Malaysian light-sweet crude benchmark most relevant to Asian refineries supplying Australia. This slot stays unavailable until a licence-compatible public source is identified."
+              yAxisLabel="US dollars per barrel"
+            />
+            <ChartCard
+              eyebrow="A$"
               title="Tapis crude — A$/barrel"
               unit="AUD per barrel"
-              fromEnvelope={data.tapis_crude}
+              fromEnvelope={tapisAud}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
               accent="#991B1B"
-              takeaway="Tapis is the Malaysian light-sweet crude most relevant to Asian refineries supplying Australia. The public Tapis series is owned by Platts and not freely licensable — this chart populates if a public mirror becomes available."
+              takeaway="Tapis converted to A$ will populate only if both a licence-compatible Tapis series and the AUD/USD source envelope are verified."
               yAxisLabel="Australian dollars per barrel"
             />
           </div>
@@ -210,10 +237,10 @@ function App() {
             </div>
           </div>
           <div className="metric-grid metric-grid--4">
-            <MetricCard eyebrow="Petrol"   label="Motor spirit production" plain="Volume refined domestically in the latest month." fromEnvelope={prodPetrol}  unit=" ML"/>
-            <MetricCard eyebrow="Diesel"   label="Diesel production"       plain="Volume refined domestically in the latest month." fromEnvelope={prodDiesel}  unit=" ML"/>
-            <MetricCard eyebrow="Jet"      label="Jet fuel production"     plain="Volume refined domestically in the latest month." fromEnvelope={prodJet}     unit=" ML"/>
-            <MetricCard eyebrow="Fuel oil" label="Fuel oil production"     plain="Volume refined domestically in the latest month." fromEnvelope={prodFuelOil} unit=" ML"/>
+            <MetricCard eyebrow="Petrol"   label="Motor spirit production" plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_petrol}  unit=" ML"/>
+            <MetricCard eyebrow="Diesel"   label="Diesel production"       plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_diesel}  unit=" ML"/>
+            <MetricCard eyebrow="Jet"      label="Jet fuel production"     plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_jet}     unit=" ML"/>
+            <MetricCard eyebrow="Fuel oil" label="Fuel oil production"     plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_fuel_oil} unit=" ML"/>
           </div>
           <div style={{ height: 24 }}/>
           <div className="charts-grid charts-grid--full">
@@ -221,7 +248,7 @@ function App() {
               eyebrow="Utilisation"
               title="Refinery utilisation rate"
               unit="%"
-              fromEnvelope={utilisation}
+              fromEnvelope={data.aps_refinery_utilisation}
               accent="#1F3A8A"
               takeaway="Share of installed capacity actually running. Falls during maintenance and when margins are thin."
               yAxisLabel="Percent of installed capacity"
@@ -263,7 +290,7 @@ function App() {
               eyebrow="Contracts"
               label="Offshore ticket volumes"
               plain="Volume of 'tickets' — rights to draw on oil stocks held overseas — disclosed publicly for the latest year."
-              fromEnvelope={{ status: 'unavailable', source_name: 'DCCEEW — offshore ticket disclosures', source_url: 'https://www.energy.gov.au/' }}
+              fromEnvelope={data.offshore_ticket_volumes}
               unit=" kL"
             />
           </div>

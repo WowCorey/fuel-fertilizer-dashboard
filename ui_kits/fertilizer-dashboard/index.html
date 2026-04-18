@@ -26,7 +26,13 @@
 <script type="text/babel">
 const SERIES = [
   'abs_fertiliser_imports',
+  'abs_fertiliser_imports_urea',
+  'abs_fertiliser_imports_potash',
+  'abs_fertiliser_imports_phosphate',
+  'abs_fertiliser_imports_compound',
+  'abs_fertiliser_source_concentration',
   'abares_fertiliser_price',
+  'abares_fertiliser_stock_cover',
 ];
 
 function App() {
@@ -44,13 +50,6 @@ function App() {
 
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-
-  // Derived series — these will only render if the ABS envelope ever ships
-  // sub-series. Today they resolve to unavailable.
-  const urea      = data.abs_fertiliser_imports_urea      || { status: 'unavailable', source_name: 'ABS HS 31 — urea', source_url: data.abs_fertiliser_imports.source_url };
-  const potash    = data.abs_fertiliser_imports_potash    || { status: 'unavailable', source_name: 'ABS HS 31 — potash', source_url: data.abs_fertiliser_imports.source_url };
-  const phos      = data.abs_fertiliser_imports_phosphate || { status: 'unavailable', source_name: 'ABS HS 31 — phosphates', source_url: data.abs_fertiliser_imports.source_url };
-  const compound  = data.abs_fertiliser_imports_compound  || { status: 'unavailable', source_name: 'ABS HS 31 — compound', source_url: data.abs_fertiliser_imports.source_url };
 
   return (
     <div className="page">
@@ -138,7 +137,7 @@ function App() {
               eyebrow="Concentration"
               label="Top-3 source countries"
               plain="Share of total fertiliser imports coming from the three largest supplier countries."
-              fromEnvelope={{ status: 'unavailable', source_name: 'ABS country breakdown (HS 31)', source_url: data.abs_fertiliser_imports.source_url }}
+              fromEnvelope={data.abs_fertiliser_source_concentration}
               unit="%"
             />
             <MetricCard
@@ -146,7 +145,7 @@ function App() {
               label="Months of cover"
               jargonHint={{ term: 'Months of cover', definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.' }}
               plain="How long Australia's fertiliser stockpile would last if imports stopped."
-              fromEnvelope={{ status: 'unavailable', source_name: 'DCCEEW / ABARES stockpile data', source_url: 'https://www.agriculture.gov.au/abares' }}
+              fromEnvelope={data.abares_fertiliser_stock_cover}
               unit=" months"
             />
           </div>
@@ -167,7 +166,7 @@ function App() {
               eyebrow="Urea"
               title="Monthly urea imports"
               unit="kt"
-              fromEnvelope={urea}
+              fromEnvelope={data.abs_fertiliser_imports_urea}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#1F3A8A"
@@ -178,7 +177,7 @@ function App() {
               eyebrow="Potash"
               title="Monthly potash imports"
               unit="kt"
-              fromEnvelope={potash}
+              fromEnvelope={data.abs_fertiliser_imports_potash}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#0F766E"
@@ -192,7 +191,7 @@ function App() {
               eyebrow="Phosphates"
               title="Monthly phosphate imports"
               unit="kt"
-              fromEnvelope={phos}
+              fromEnvelope={data.abs_fertiliser_imports_phosphate}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#B45309"
@@ -203,7 +202,7 @@ function App() {
               eyebrow="Compound"
               title="Monthly compound fertiliser imports"
               unit="kt"
-              fromEnvelope={compound}
+              fromEnvelope={data.abs_fertiliser_imports_compound}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#6B7280"
@@ -218,7 +217,7 @@ function App() {
               eyebrow="Supplier mix"
               title="Top-5 source countries' combined share, over time"
               unit="%"
-              fromEnvelope={{ status: 'unavailable', source_name: 'ABS country-of-origin detail (HS 31)', source_url: data.abs_fertiliser_imports.source_url }}
+              fromEnvelope={data.abs_fertiliser_source_concentration}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
               accent="#6B7280"
