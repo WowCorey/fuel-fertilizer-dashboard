@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fertilizer — Fuel Resilience AU</title>
+<meta name="description" content="Australia's fertiliser imports, prices and source-country mix. A public-interest dashboard in plain English.">
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="../shared/styles.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script src="../shared/data-loader.js"></script>
+<script type="text/babel" src="../shared/Header.jsx"></script>
+<script type="text/babel" src="../shared/MetricCard.jsx"></script>
+<script type="text/babel" src="../shared/ChartCard.jsx"></script>
+<script type="text/babel" src="../shared/InsightFeed.jsx"></script>
+<script type="text/babel" src="../shared/Footer.jsx"></script>
+
+<script type="text/babel">
+const SERIES = [
+  'abs_fertiliser_imports',
+  'abares_fertiliser_price',
+];
+
+function App() {
+  const [data, setData] = React.useState(null);
+  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+
+  if (!data) {
+    return (
+      <div className="page">
+        <Header active="fertilizer"/>
+        <main id="main"><div className="loading-wrap">Loading official data…</div></main>
+      </div>
+    );
+  }
+
+  const latestRetrieved = Object.values(data).map(e => e.retrieved_at).filter(Boolean).sort().pop();
+  const updatedDisplay = window.FR.fmtRetrieved(latestRetrieved);
+
+  // Derived series — these will only render if the ABS envelope ever ships
+  // sub-series. Today they resolve to unavailable.
+  const urea      = data.abs_fertiliser_imports_urea      || { status: 'unavailable', source_name: 'ABS HS 31 — urea', source_url: data.abs_fertiliser_imports.source_url };
+  const potash    = data.abs_fertiliser_imports_potash    || { status: 'unavailable', source_name: 'ABS HS 31 — potash', source_url: data.abs_fertiliser_imports.source_url };
+  const phos      = data.abs_fertiliser_imports_phosphate || { status: 'unavailable', source_name: 'ABS HS 31 — phosphates', source_url: data.abs_fertiliser_imports.source_url };
+  const compound  = data.abs_fertiliser_imports_compound  || { status: 'unavailable', source_name: 'ABS HS 31 — compound', source_url: data.abs_fertiliser_imports.source_url };
+
+  return (
+    <div className="page">
+      <Header active="fertilizer" updated={updatedDisplay}/>
+
+      <main id="main">
+        {/* INTRO */}
+        <section className="intro" id="fertilizer">
+          <div>
+            <span className="eyebrow">Fertilizer · v1.1</span>
+            <h1 style={{ marginTop: 12 }}>Australia's fertiliser, in plain English.</h1>
+            <p className="intro__lede">
+              Australia imports the majority of its fertiliser — the stuff that keeps wheat,
+              canola and pasture growing. When overseas supply gets tight, it shows up as higher
+              farm-gate prices within a season, and higher food costs not long after.
+            </p>
+          </div>
+          <aside className="intro__meta" aria-label="Publication details">
+            <strong>Data retrieved</strong>
+            <span className="mono">{updatedDisplay}</span>
+            <div style={{ height: 12 }}/>
+            <strong>Refresh</strong>
+            <span>Weekly · Monday 02:00 AEST</span>
+          </aside>
+        </section>
+
+        {/* WHY THIS MATTERS */}
+        <section className="section section--why" aria-labelledby="why">
+          <div className="why-grid">
+            <div>
+              <span className="eyebrow">What this is</span>
+              <h2 id="why" style={{ marginTop: 8 }}>Why this matters to you</h2>
+            </div>
+            <div className="why-body">
+              <p>
+                Nearly everything grown commercially in Australia depends on imported fertiliser.
+                Urea, potash and phosphates come in by the boatload, mostly from a short list of
+                supplier countries. That makes the supply chain efficient, but also exposed: a
+                single disruption at one end can push up farm costs across the country.
+              </p>
+              <p>
+                This page tracks how much we import each month, what it costs, and how
+                concentrated the supplier list is. Plain English where possible, full sources
+                at the bottom.
+              </p>
+              <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
+                Acronyms used here: <b>ABS</b> = Australian Bureau of Statistics.
+                <b> ABARES</b> = Australian Bureau of Agricultural and Resource Economics and Sciences.
+                <b> DCCEEW</b> = Department of Climate Change, Energy, the Environment and Water.
+                <b> HS 31</b> = the Harmonised System trade code for fertiliser.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* HEADLINE METRICS */}
+        <section className="section" aria-labelledby="metrics-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Headline numbers</span>
+              <h2 id="metrics-h">As of the latest publisher update</h2>
+              <p className="section__lede">
+                Cards marked "Source unavailable" are waiting on a verifiable figure from the
+                named source. We do not estimate.
+              </p>
+            </div>
+          </div>
+          <div className="metric-grid metric-grid--4">
+            <MetricCard
+              eyebrow="Volume"
+              label="Monthly fertiliser imports"
+              plain="Total tonnes of fertiliser (HS 31) landed in Australia in the latest month."
+              fromEnvelope={data.abs_fertiliser_imports}
+              unit=" kt"
+              highlight
+            />
+            <MetricCard
+              eyebrow="Price"
+              label="Fertiliser price index"
+              plain="ABARES index. 100 = long-run average."
+              fromEnvelope={data.abares_fertiliser_price}
+              unit=" index"
+            />
+            <MetricCard
+              eyebrow="Concentration"
+              label="Top-3 source countries"
+              plain="Share of total fertiliser imports coming from the three largest supplier countries."
+              fromEnvelope={{ status: 'unavailable', source_name: 'ABS country breakdown (HS 31)', source_url: data.abs_fertiliser_imports.source_url }}
+              unit="%"
+            />
+            <MetricCard
+              eyebrow="Resilience"
+              label="Months of cover"
+              jargonHint={{ term: 'Months of cover', definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.' }}
+              plain="How long Australia's fertiliser stockpile would last if imports stopped."
+              fromEnvelope={{ status: 'unavailable', source_name: 'DCCEEW / ABARES stockpile data', source_url: 'https://www.agriculture.gov.au/abares' }}
+              unit=" months"
+            />
+          </div>
+        </section>
+
+        {/* CHARTS */}
+        <section className="section" aria-labelledby="charts-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">How it's changed</span>
+              <h2 id="charts-h">Imports by type and source country, over time</h2>
+              <p className="section__lede">Two years of monthly data. Hover any point — or use arrow keys — to read the value.</p>
+            </div>
+          </div>
+
+          <div className="charts-grid">
+            <ChartCard
+              eyebrow="Urea"
+              title="Monthly urea imports"
+              unit="kt"
+              fromEnvelope={urea}
+              ranges={['1Y','3Y']}
+              defaultRange="3Y"
+              accent="#1F3A8A"
+              takeaway="Urea (HS 3102) is the largest-volume nitrogen fertiliser. Chart populates when a verified monthly series is available."
+              yAxisLabel="Thousand tonnes per month (kt)"
+            />
+            <ChartCard
+              eyebrow="Potash"
+              title="Monthly potash imports"
+              unit="kt"
+              fromEnvelope={potash}
+              ranges={['1Y','3Y']}
+              defaultRange="3Y"
+              accent="#0F766E"
+              takeaway="Potassium fertilisers (HS 3104). Chart populates when a verified monthly series is available."
+              yAxisLabel="Thousand tonnes per month (kt)"
+            />
+          </div>
+          <div style={{ height: 24 }}/>
+          <div className="charts-grid">
+            <ChartCard
+              eyebrow="Phosphates"
+              title="Monthly phosphate imports"
+              unit="kt"
+              fromEnvelope={phos}
+              ranges={['1Y','3Y']}
+              defaultRange="3Y"
+              accent="#B45309"
+              takeaway="Phosphate fertilisers (HS 3103 + DAP/MAP under HS 3105). Chart populates when verified."
+              yAxisLabel="Thousand tonnes per month (kt)"
+            />
+            <ChartCard
+              eyebrow="Compound"
+              title="Monthly compound fertiliser imports"
+              unit="kt"
+              fromEnvelope={compound}
+              ranges={['1Y','3Y']}
+              defaultRange="3Y"
+              accent="#6B7280"
+              takeaway="Mixed NPK compound fertilisers (HS 3105, excluding DAP/MAP). Chart populates when verified."
+              yAxisLabel="Thousand tonnes per month (kt)"
+            />
+          </div>
+
+          <div style={{ height: 24 }}/>
+          <div className="charts-grid charts-grid--full">
+            <ChartCard
+              eyebrow="Prices"
+              title="ABARES fertiliser price index"
+              unit="index"
+              fromEnvelope={data.abares_fertiliser_price}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="5Y"
+              accent="#1F3A8A"
+              takeaway="ABARES publishes an Australian fertiliser price index alongside its quarterly Agricultural Commodities release. 100 = long-run average."
+              yAxisLabel="Index (long-run average = 100)"
+            />
+          </div>
+        </section>
+
+        {/* WHAT CHANGED */}
+        <section className="section">
+          <InsightFeed
+            items={[]}
+            title="What changed"
+            lede="Populated from DCCEEW / ABS / ABARES release notes as new data arrives."
+          />
+        </section>
+
+        {/* SOURCES & METHODOLOGY */}
+        <section className="section section--sources" id="sources">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Sources & methodology</span>
+              <h2>Every dataset used on this page</h2>
+              <p className="section__lede">All sources are public. Cards marked "Source unavailable" are awaiting verified values — we do not estimate.</p>
+            </div>
+          </div>
+          <div className="sources-grid">
+            {Object.entries(data).map(([id, env]) => (
+              <article key={id} className="source-card">
+                <h4>{env.source_name}</h4>
+                <p className="body-sm">
+                  {env.status === 'ok'
+                    ? `Live. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
+                    : 'Awaiting hand-keyed values from the named public source.'}
+                </p>
+                <p className="caption"><b>Envelope:</b> <span className="mono">{id}</span></p>
+                {env.source_url && (
+                  <a href={env.source_url}>{env.source_url.replace(/^https?:\/\//,'')} <Icon name="external" size={12}/></a>
+                )}
+                <p className="caption mono">Retrieved: {env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—'}</p>
+              </article>
+            ))}
+          </div>
+          <div className="methodology">
+            <h3>How we calculate the numbers</h3>
+            <dl>
+              <dt>Monthly fertiliser imports</dt>
+              <dd>Total tonnes of goods cleared under Harmonised System chapter 31 (fertilisers) from ABS International Merchandise Trade, by calendar month.</dd>
+              <dt>Top-3 source countries</dt>
+              <dd>Sum of import value from the three largest supplier countries in the latest month, divided by total HS-31 imports in the same month, from ABS country-of-origin detail.</dd>
+              <dt>Fertiliser price index</dt>
+              <dd>Published by ABARES in the quarterly Agricultural Commodities report. Re-based so that the long-run average equals 100.</dd>
+              <dt>Months of cover</dt>
+              <dd>Stockpile (tonnes) divided by the prior 12-month average monthly usage, expressed in months. Only published when DCCEEW or ABARES makes stockpile figures public.</dd>
+            </dl>
+          </div>
+        </section>
+
+        <Footer updated={updatedDisplay}/>
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
