@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><style>body{padding:20px;background:var(--paper)}
+.card{padding:20px}
+.head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.title{font-family:var(--font-serif);font-size:20px;font-weight:500}
+.toggles{display:flex;gap:6px}
+svg{display:block}
+.axis{stroke:#C9C5B8;stroke-width:1}
+.grid{stroke:#EFEDE6;stroke-width:1}
+.line{fill:none;stroke:#1F3A8A;stroke-width:1.75}
+.area{fill:#1F3A8A;opacity:0.08}
+.tick{font-family:var(--font-mono);font-size:10px;fill:#6B7280}
+</style></head><body>
+<div class="card">
+  <div class="head">
+    <div><span class="eyebrow">Time series</span><div class="title" style="margin-top:4px">Monthly petroleum imports</div></div>
+    <div class="toggles"><button class="pill">1Y</button><button class="pill active">5Y</button><button class="pill">Max</button></div>
+  </div>
+  <svg viewBox="0 0 640 200" width="100%" height="200">
+    <line class="grid" x1="40" y1="40" x2="630" y2="40"/>
+    <line class="grid" x1="40" y1="90" x2="630" y2="90"/>
+    <line class="grid" x1="40" y1="140" x2="630" y2="140"/>
+    <line class="axis" x1="40" y1="180" x2="630" y2="180"/>
+    <text class="tick" x="10" y="44">5.0 ML</text><text class="tick" x="10" y="94">4.0</text><text class="tick" x="10" y="144">3.0</text>
+    <path class="area" d="M40,120 L100,110 L160,100 L220,115 L280,90 L340,85 L400,105 L460,75 L520,70 L580,95 L630,80 L630,180 L40,180 Z"/>
+    <path class="line" d="M40,120 L100,110 L160,100 L220,115 L280,90 L340,85 L400,105 L460,75 L520,70 L580,95 L630,80"/>
+    <text class="tick" x="40" y="196">2021</text><text class="tick" x="180" y="196">2022</text><text class="tick" x="320" y="196">2023</text><text class="tick" x="460" y="196">2024</text><text class="tick" x="590" y="196">2025</text>
+  </svg>
+</div>
+</body></html>
