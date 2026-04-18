@@ -77,12 +77,14 @@
     return `${months[mi]} ${String(y).slice(-2)}`;
   }
 
-  // Utility: build a source line from an envelope.
+  // Utility: build a source line from an envelope. Includes source_id so a
+  // reader can cross-reference against data/sources.yml.
   function sourceLine(env) {
     if (!env) return '';
     const ret = env.retrieved_at ? ` Retrieved ${fmtRetrieved(env.retrieved_at)}.` : '';
     const last = env.last_data_point ? ` Latest data point: ${env.last_data_point}.` : '';
-    return `Source: ${env.source_name}.${last}${ret}`;
+    const sid = env.source_id ? ` [${env.source_id}]` : '';
+    return `Source: ${env.source_name}${sid}.${last}${ret}`;
   }
 
   window.FR = { load, loadOne, fmtRetrieved, fmtMonth, sourceLine };

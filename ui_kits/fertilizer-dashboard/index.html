@@ -215,6 +215,21 @@ function App() {
           <div style={{ height: 24 }}/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
+              eyebrow="Supplier mix"
+              title="Top-5 source countries' combined share, over time"
+              unit="%"
+              fromEnvelope={{ status: 'unavailable', source_name: 'ABS country-of-origin detail (HS 31)', source_url: data.abs_fertiliser_imports.source_url }}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
+              accent="#6B7280"
+              takeaway="How concentrated Australia's fertiliser supply is. The higher the share, the more exposed we are to disruption in a small number of supplier countries. Chart populates when the ABS country breakdown is hand-keyed."
+              yAxisLabel="Percent of total monthly HS-31 imports (%)"
+            />
+          </div>
+
+          <div style={{ height: 24 }}/>
+          <div className="charts-grid charts-grid--full">
+            <ChartCard
               eyebrow="Prices"
               title="ABARES fertiliser price index"
               unit="index"

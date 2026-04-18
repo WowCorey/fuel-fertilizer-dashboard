@@ -65,21 +65,35 @@ function money(v, unit = 'A$m') {
   return String(v);
 }
 
-function Cell({ env, fieldKey, unit }) {
+// A cell that, when populated, wraps its value in a link to the source
+// document. ATO fields point at the ATO Corporate Tax Transparency release;
+// net_profit points at the company's own annual report. When no value is
+// hand-keyed, the cell reads "—" and carries no link.
+function Cell({ env, fieldKey, unit, atoEnv }) {
   const v = pick(env, fieldKey);
   if (v == null) {
     return <td className="unavail" aria-label="Source unavailable">—</td>;
   }
-  return <td>{money(v, unit)}</td>;
+  const atoFields = new Set(['total_income', 'taxable_income', 'income_tax_paid', 'fiscal_year']);
+  const linkEnv = atoFields.has(fieldKey) ? (atoEnv || env) : env;
+  const href = linkEnv && linkEnv.source_url;
+  return (
+    <td>
+      {href
+        ? <a href={href} rel="noopener" title={`Source: ${linkEnv.source_name}`}>{money(v, unit)}</a>
+        : money(v, unit)}
+    </td>
+  );
 }
 
 function SourceCell({ env }) {
   if (!env || !env.source_url) {
     return <td className="unavail">—</td>;
   }
+  const label = env.source_name.length > 34 ? env.source_name.slice(0, 32) + '…' : env.source_name;
   return (
     <td>
-      <a href={env.source_url} rel="noopener">{env.source_name.replace(/annual report.*/i,'report').slice(0, 34)}…</a>
+      <a href={env.source_url} rel="noopener">{label}</a>
     </td>
   );
 }
@@ -205,10 +219,10 @@ function App() {
                   return (
                     <tr key={c.id}>
                       <td><b>{c.short}</b></td>
-                      <Cell env={env} fieldKey="fiscal_year" />
-                      <Cell env={env} fieldKey="total_income" unit="A$m" />
-                      <Cell env={env} fieldKey="taxable_income" unit="A$m" />
-                      <Cell env={env} fieldKey="income_tax_paid" unit="A$m" />
+                      <Cell env={env} atoEnv={data.ato_corporate_tax} fieldKey="fiscal_year" />
+                      <Cell env={env} atoEnv={data.ato_corporate_tax} fieldKey="total_income" unit="A$m" />
+                      <Cell env={env} atoEnv={data.ato_corporate_tax} fieldKey="taxable_income" unit="A$m" />
+                      <Cell env={env} atoEnv={data.ato_corporate_tax} fieldKey="income_tax_paid" unit="A$m" />
                       <Cell env={env} fieldKey="net_profit" unit="A$m" />
                       {er == null
                         ? <td className="unavail">—</td>
