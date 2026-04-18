@@ -28,7 +28,7 @@ GENERATED_DIR = ROOT / "data" / "generated"
 MANUAL_DIR = ROOT / "data" / "manual"
 DASHBOARD_DIR = ROOT / "ui_kits"
 
-FETCH_MODES = {"programmatic", "manual", "unavailable"}
+FETCH_MODES = {"programmatic", "manual", "unavailable", "derived"}
 FORMATS = {"CSV", "JSON", "PDF", "HTML_TABLE", "XLSX", "MIXED"}
 CADENCES = {"daily", "weekly", "monthly", "quarterly", "annual", "ad-hoc"}
 REQUIRED_SOURCE_FIELDS = {
@@ -172,7 +172,7 @@ def validate_sources(errors: list[dict[str, str]], warnings: list[dict[str, str]
         sources[sid] = source
 
         if source.get("fetch") not in FETCH_MODES:
-            add(errors, path, "fetch must be one of: programmatic, manual, unavailable")
+            add(errors, path, "fetch must be one of: programmatic, manual, unavailable, derived")
         if source.get("format") not in FORMATS:
             add(errors, path, "format is not in the allowed set")
         if source.get("update_cadence") not in CADENCES:
@@ -183,6 +183,12 @@ def validate_sources(errors: list[dict[str, str]], warnings: list[dict[str, str]
             add(errors, path, "used_by must be a non-empty list")
         if source.get("fetch") == "programmatic" and not source.get("fetch_url"):
             add(errors, path, "programmatic sources must define fetch_url")
+        if source.get("fetch") == "derived":
+            parent = source.get("derived_from")
+            if not isinstance(parent, str) or not parent:
+                add(errors, path, "derived sources must define derived_from")
+            elif parent == sid:
+                add(errors, path, "derived_from must not reference the source itself")
         if not source.get("rights"):
             add(errors, path, "rights must describe upstream source rights")
         if not source.get("citation"):
@@ -310,10 +316,14 @@ def validate_envelopes(sources: dict[str, dict[str, Any]], errors: list[dict[str
 
     for sid, source in sorted(sources.items()):
         mode = source.get("fetch")
-        if mode == "programmatic" and sid not in generated:
-            add(errors, rel(GENERATED_DIR / f"{sid}.json"), "programmatic source is missing generated envelope")
+        if mode in {"programmatic", "derived"} and sid not in generated:
+            add(errors, rel(GENERATED_DIR / f"{sid}.json"), f"{mode} source is missing generated envelope")
         if mode in {"manual", "unavailable"} and sid not in manual:
             add(errors, rel(MANUAL_DIR / f"{sid}.json"), "manual/unavailable source is missing manual envelope")
+        if mode == "derived":
+            parent = source.get("derived_from")
+            if parent not in sources:
+                add(errors, f"{rel(SOURCES_FILE)}:{sid}", "derived_from references unknown source id")
 
 
 def extract_dashboard_refs() -> dict[str, set[str]]:

@@ -22,9 +22,12 @@ import csv
 import datetime as dt
 import io
 import json
+import os
 import pathlib
+import re
 import sys
 import urllib.parse
+import xml.etree.ElementTree as ET
 from typing import Any, Callable
 
 try:
@@ -232,6 +235,352 @@ def fetch_abs_sdmx(dataflow: str, key: str, start_period: str | None = None) -> 
     }
 
 
+def fetch_abs_petroleum_imports_yoy(source: dict[str, Any]) -> dict[str, Any]:
+    """Derive YoY percentage change from the generated ABS petroleum imports envelope."""
+    parent_id = source.get("derived_from") or "abs_petroleum_imports"
+    parent_path = GENERATED_DIR / f"{parent_id}.json"
+    if not parent_path.exists():
+        raise RuntimeError(f"Cannot derive {source['id']}; missing {parent_path.relative_to(ROOT)}")
+
+    with parent_path.open("r", encoding="utf-8") as f:
+        parent = json.load(f)
+
+    if parent.get("status") != "ok":
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} status is not ok")
+    parent_values = parent.get("values")
+    if not isinstance(parent_values, list) or len(parent_values) < 13:
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} has fewer than 13 observations")
+
+    by_month: dict[str, float] = {}
+    for point in parent_values:
+        if not isinstance(point, dict):
+            continue
+        t = point.get("t")
+        v = point.get("v")
+        if isinstance(t, str) and isinstance(v, (int, float)) and not isinstance(v, bool):
+            by_month[t] = float(v)
+
+    values: list[dict[str, Any]] = []
+    for month in sorted(by_month):
+        try:
+            current_month = dt.date.fromisoformat(f"{month}-01")
+        except ValueError:
+            continue
+        prior_year = current_month.year - 1
+        prior_month = f"{prior_year:04d}-{current_month.month:02d}"
+        previous = by_month.get(prior_month)
+        if previous in (None, 0):
+            continue
+        yoy = (by_month[month] - previous) / previous * 100
+        values.append({"t": month, "v": round(yoy, 1)})
+
+    if not values:
+        raise RuntimeError(f"Cannot derive {source['id']}; no comparable year-on-year observations")
+
+    return {
+        "unit": "%",
+        "values": values[-60:],
+        "last_data_point": parent.get("last_data_point"),
+        "notes": (
+            "Derived from abs_petroleum_imports by comparing each month to the same month one year earlier. "
+            "Source: ABS International Merchandise Trade."
+        ),
+        "source_url_resolved": parent.get("source_url"),
+    }
+
+
+def fetch_rba_f11(url: str) -> dict[str, Any]:
+    """Fetch RBA Table F11.1 CSV and return monthly mean AUD/USD values."""
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+
+    reader = list(csv.reader(io.StringIO(r.content.decode("utf-8-sig"))))
+    if len(reader) < 12:
+        raise RuntimeError("RBA F11.1 CSV was too short")
+
+    header_idx = None
+    usd_col = None
+    for idx, row in enumerate(reader):
+        if row and row[0] == "Title":
+            header_idx = idx
+            try:
+                usd_col = row.index("A$1=USD")
+            except ValueError as exc:
+                raise RuntimeError("RBA F11.1 CSV did not contain A$1=USD column") from exc
+            break
+    if header_idx is None or usd_col is None:
+        raise RuntimeError("RBA F11.1 CSV did not contain a Title header row")
+
+    data_start = None
+    for idx, row in enumerate(reader[header_idx + 1 :], start=header_idx + 1):
+        if row and row[0] == "Series ID":
+            data_start = idx + 1
+            break
+    if data_start is None:
+        raise RuntimeError("RBA F11.1 CSV did not contain a Series ID row")
+
+    by_month: dict[str, list[float]] = {}
+    latest_date: dt.date | None = None
+    for row in reader[data_start:]:
+        if len(row) <= usd_col or not row or not row[0].strip():
+            continue
+        try:
+            obs_date = dt.datetime.strptime(row[0].strip(), "%d-%b-%Y").date()
+            value = float(row[usd_col])
+        except (ValueError, TypeError):
+            continue
+        latest_date = max(latest_date, obs_date) if latest_date else obs_date
+        by_month.setdefault(obs_date.strftime("%Y-%m"), []).append(value)
+
+    values = [
+        {"t": month, "v": round(sum(month_values) / len(month_values), 4)}
+        for month, month_values in sorted(by_month.items())
+        if month_values
+    ][-60:]
+    if not values or latest_date is None:
+        raise RuntimeError("RBA F11.1 CSV contained no numeric AUD/USD observations")
+
+    return {
+        "unit": "USD per AUD",
+        "values": values,
+        "last_data_point": latest_date.isoformat(),
+        "notes": "Monthly mean of daily AUD/USD observations from RBA Table F11.1. Trimmed to last 60 months.",
+        "source_url_resolved": url,
+    }
+
+
+def warn_skip(label: str, message: str) -> None:
+    print(f"[WARN] {label}: {message}", file=sys.stderr)
+
+
+def retail_result(state: str, prices: list[float], source_date: str, detail: str) -> dict[str, Any] | None:
+    prices = [p for p in prices if p > 0]
+    if not prices:
+        return None
+    return {
+        "state": state,
+        "average": round(sum(prices) / len(prices), 1),
+        "stations": len(prices),
+        "date": source_date,
+        "detail": detail,
+    }
+
+
+def fetch_wa_fuelwatch(url: str) -> dict[str, Any] | None:
+    try:
+        r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+        if r.status_code != 200:
+            warn_skip("WA FuelWatch", f"HTTP {r.status_code}")
+            return None
+        root = ET.fromstring(r.content)
+    except Exception as exc:
+        warn_skip("WA FuelWatch", f"{type(exc).__name__}: {exc}")
+        return None
+
+    prices: list[float] = []
+    dates: set[str] = set()
+    for item in root.findall("./channel/item"):
+        price_text = item.findtext("price")
+        date_text = item.findtext("date")
+        try:
+            price = float(price_text) if price_text is not None else None
+        except ValueError:
+            continue
+        if price is None:
+            continue
+        prices.append(price)
+        if date_text:
+            dates.add(date_text)
+
+    source_date = sorted(dates)[-1] if dates else dt.datetime.now(dt.timezone.utc).date().isoformat()
+    return retail_result("WA", prices, source_date, "FuelWatch ULP 91 RSS feed")
+
+
+def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | None:
+    url = f"{ckan_base.rstrip('/')}/api/3/action/package_show?id={urllib.parse.quote(package_id)}"
+    try:
+        r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+        if r.status_code != 200:
+            warn_skip("QLD Fuel Prices", f"package_show HTTP {r.status_code}")
+            return None
+        package = r.json().get("result", {})
+    except Exception as exc:
+        warn_skip("QLD Fuel Prices", f"package lookup {type(exc).__name__}: {exc}")
+        return None
+
+    month_names = {
+        "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+        "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
+    }
+    candidates: list[tuple[tuple[int, int], dict[str, Any]]] = []
+    for resource in package.get("resources", []):
+        if str(resource.get("format", "")).upper() != "CSV" or not resource.get("datastore_active"):
+            continue
+        text = f"{resource.get('name', '')} {resource.get('url', '')}".lower()
+        year = None
+        month = None
+        if found := re.search(r"20\d{2}[-_](\d{2})", text):
+            year_match = re.search(r"(20\d{2})[-_]\d{2}", text)
+            if year_match:
+                year = int(year_match.group(1))
+                month = int(found.group(1))
+        if year is None:
+            if year_match := re.search(r"20\d{2}", text):
+                year = int(year_match.group(0))
+            for name, value in month_names.items():
+                if name in text:
+                    month = value
+                    break
+        if year and month:
+            candidates.append(((year, month), resource))
+
+    if not candidates:
+        warn_skip("QLD Fuel Prices", "no datastore-backed monthly CSV resource found")
+        return None
+    return sorted(candidates, key=lambda item: item[0])[-1][1]
+
+
+def fetch_qld_open_data(ckan_base: str, package_id: str) -> dict[str, Any] | None:
+    resource = latest_qld_resource(package_id, ckan_base)
+    if not resource:
+        return None
+    rid = resource.get("id")
+    if not rid:
+        warn_skip("QLD Fuel Prices", "latest resource did not have an id")
+        return None
+
+    sql = (
+        f'SELECT "SiteId", "Price", "TransactionDateutc" FROM "{rid}" '
+        'WHERE "Fuel_Type"=\'Unleaded\' AND "Price" < 9999'
+    )
+    url = f"{ckan_base.rstrip('/')}/api/3/action/datastore_search_sql?{urllib.parse.urlencode({'sql': sql})}"
+    try:
+        r = requests.get(url, headers={"User-Agent": UA}, timeout=60)
+        if r.status_code != 200:
+            warn_skip("QLD Fuel Prices", f"datastore_search_sql HTTP {r.status_code}")
+            return None
+        records = r.json().get("result", {}).get("records", [])
+    except Exception as exc:
+        warn_skip("QLD Fuel Prices", f"datastore query {type(exc).__name__}: {exc}")
+        return None
+
+    latest_by_site: dict[str, tuple[str, float]] = {}
+    for record in records:
+        site_id = str(record.get("SiteId", "")).strip()
+        date_text = str(record.get("TransactionDateutc", "")).strip()
+        try:
+            price = float(record.get("Price")) / 10
+        except (TypeError, ValueError):
+            continue
+        if not site_id or not date_text:
+            continue
+        previous = latest_by_site.get(site_id)
+        if previous is None or date_text > previous[0]:
+            latest_by_site[site_id] = (date_text, price)
+
+    if not latest_by_site:
+        warn_skip("QLD Fuel Prices", "latest public dataset contained no Unleaded prices")
+        return None
+    latest_date = max(date_text[:10] for date_text, _ in latest_by_site.values())
+    detail = f"Queensland Open Data latest public monthly file: {resource.get('name', rid)}"
+    return retail_result("QLD", [price for _, price in latest_by_site.values()], latest_date, detail)
+
+
+def fetch_nsw_fuelcheck(url: str) -> dict[str, Any] | None:
+    token = os.environ.get("NSW_FUELCHECK_API_KEY", "").strip()
+    if not token:
+        warn_skip("NSW FuelCheck", "NSW_FUELCHECK_API_KEY is not set")
+        return None
+    try:
+        r = requests.get(
+            url,
+            headers={
+                "User-Agent": UA,
+                "Authorization": f"Bearer {token}",
+                "apikey": token,
+                "Accept": "application/json",
+            },
+            timeout=45,
+        )
+        if r.status_code != 200:
+            warn_skip("NSW FuelCheck", f"HTTP {r.status_code}")
+            return None
+        doc = r.json()
+    except Exception as exc:
+        warn_skip("NSW FuelCheck", f"{type(exc).__name__}: {exc}")
+        return None
+
+    prices: list[float] = []
+    dates: set[str] = set()
+    price_nodes = doc.get("prices") or doc.get("Prices") or doc.get("fuelPrices") or []
+    if isinstance(price_nodes, dict):
+        price_nodes = list(price_nodes.values())
+    for item in price_nodes if isinstance(price_nodes, list) else []:
+        if not isinstance(item, dict):
+            continue
+        fuel_type = str(item.get("fueltype") or item.get("fuelType") or item.get("FuelType") or "").upper()
+        if fuel_type and fuel_type not in {"U91", "ULP", "UNLEADED", "REGULAR UNLEADED"}:
+            continue
+        try:
+            price = float(item.get("price") or item.get("Price"))
+        except (TypeError, ValueError):
+            continue
+        if price > 0:
+            prices.append(price)
+        date_text = item.get("lastupdated") or item.get("lastUpdated") or item.get("TransactionDateUtc")
+        if isinstance(date_text, str) and len(date_text) >= 10:
+            dates.add(date_text[:10])
+
+    source_date = sorted(dates)[-1] if dates else dt.datetime.now(dt.timezone.utc).date().isoformat()
+    return retail_result("NSW", prices, source_date, "NSW FuelCheck API")
+
+
+def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date().isoformat()
+    contributors = [
+        fetch_nsw_fuelcheck(source.get("nsw_fetch_url", "https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices")),
+        fetch_qld_open_data(
+            source.get("qld_ckan_base", "https://www.data.qld.gov.au"),
+            source.get("qld_package_id", f"fuel-price-reporting-{today[:4]}"),
+        ),
+        fetch_wa_fuelwatch(source.get("wa_fetch_url", "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today")),
+    ]
+    states = [state for state in contributors if state]
+    if not states:
+        return {
+            "status": "unavailable",
+            "unit": "cents per litre",
+            "values": [],
+            "last_data_point": None,
+            "notes": "No public state retail fuel feed returned usable ULP 91 observations during this fetch.",
+            "extra": {
+                "schema": "retail_fuel_multistate.v1",
+                "fields": {"states": [], "skipped": ["NSW", "QLD", "WA"]},
+            },
+        }
+
+    total_stations = sum(state["stations"] for state in states)
+    weighted = sum(state["average"] * state["stations"] for state in states) / total_stations
+    labels = [
+        f"{state['state']}: {state['stations']} stations, avg {state['average']} c/L, source date {state['date']}"
+        for state in states
+    ]
+    return {
+        "unit": "cents per litre",
+        "values": [{"t": today, "v": round(weighted, 1)}],
+        "last_data_point": today,
+        "notes": (
+            "Multi-state ULP 91 average weighted by station count. "
+            + "; ".join(labels)
+            + ". NSW contributes only when NSW_FUELCHECK_API_KEY is configured."
+        ),
+        "extra": {
+            "schema": "retail_fuel_multistate.v1",
+            "fields": {"states": states},
+        },
+    }
+
+
 Fetcher = Callable[[dict[str, Any]], dict[str, Any]]
 FETCHERS: dict[str, Fetcher] = {
     "eia_brent": lambda source: fetch_eia_series("RBRTE", source.get("fetch_url")),
@@ -239,6 +588,9 @@ FETCHERS: dict[str, Fetcher] = {
     "abs_petroleum_imports": lambda source: fetch_abs_sdmx(
         source["fetch_dataflow"], source["fetch_key"], source.get("fetch_start_period")
     ),
+    "abs_petroleum_imports_yoy": fetch_abs_petroleum_imports_yoy,
+    "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
+    "aus_retail_fuel_multistate": fetch_retail_multistate,
 }
 
 
@@ -250,23 +602,26 @@ def load_sources() -> list[dict[str, Any]]:
 
 def write_generated(source: dict[str, Any], block: dict[str, Any]) -> pathlib.Path:
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    status = block.get("status", "ok")
     payload = {
         "series_id": source["id"],
         "source_id": source["id"],
         "source_name": source["human_name"],
         "source_url": source.get("canonical_url") or source["url"],
         "unit": block["unit"],
-        "retrieved_at": now,
+        "retrieved_at": now if status == "ok" else None,
         "last_data_point": block.get("last_data_point"),
         "values": block["values"],
         "notes": block.get("notes", ""),
-        "status": "ok",
+        "status": status,
         "manual_entry": False,
     }
     if source.get("rights"):
         payload["source_rights"] = source["rights"]
     if source.get("citation"):
         payload["citation"] = source["citation"]
+    if block.get("extra") is not None:
+        payload["extra"] = block["extra"]
 
     path = GENERATED_DIR / f"{source['id']}.json"
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
@@ -311,6 +666,31 @@ def main() -> int:
     wrote: list[str] = []
     skipped: list[tuple[str, str]] = []
 
+    derived_by_parent: dict[str, list[dict[str, Any]]] = {}
+    for source in sources:
+        if source.get("fetch") == "derived" and source.get("derived_from"):
+            derived_by_parent.setdefault(source["derived_from"], []).append(source)
+
+    wrote_ids: set[str] = set()
+
+    def fetch_and_write(source: dict[str, Any]) -> None:
+        sid = source["id"]
+        if sid in wrote_ids:
+            return
+        fetcher = FETCHERS.get(sid)
+        if not fetcher:
+            errors.append(f"{sid}: marked {source.get('fetch')} but no fetcher registered")
+            return
+        try:
+            block = fetcher(source)
+            path = write_generated(source, block)
+            wrote_ids.add(sid)
+            wrote.append(str(path.relative_to(ROOT)))
+            print(f"[OK ] {sid:<32} -> {path.relative_to(ROOT)}")
+        except Exception as e:
+            errors.append(f"{sid}: {type(e).__name__}: {e}")
+            print(f"[ERR] {sid:<32} {e}", file=sys.stderr)
+
     for source in sources:
         sid = source["id"]
         if args.only and sid != args.only:
@@ -329,19 +709,11 @@ def main() -> int:
                 errors.append(f"{sid}: {msg}")
             continue
 
-        if fetch_mode == "programmatic":
-            fetcher = FETCHERS.get(sid)
-            if not fetcher:
-                errors.append(f"{sid}: marked programmatic but no fetcher registered")
-                continue
-            try:
-                block = fetcher(source)
-                path = write_generated(source, block)
-                wrote.append(str(path.relative_to(ROOT)))
-                print(f"[OK ] {sid:<32} -> {path.relative_to(ROOT)}")
-            except Exception as e:
-                errors.append(f"{sid}: {type(e).__name__}: {e}")
-                print(f"[ERR] {sid:<32} {e}", file=sys.stderr)
+        if fetch_mode in {"programmatic", "derived"}:
+            fetch_and_write(source)
+            if fetch_mode == "programmatic":
+                for derived in derived_by_parent.get(sid, []):
+                    fetch_and_write(derived)
         elif fetch_mode == "manual":
             manual_path = MANUAL_DIR / f"{sid}.json"
             skipped.append((sid, "manual, file present" if manual_path.exists() else "manual, FILE MISSING"))
