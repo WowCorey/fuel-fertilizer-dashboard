@@ -1,26 +1,27 @@
-# Fuel Dashboard UI kit
+# Fuel dashboard (v1)
 
-A high-fidelity recreation of the Fuel Resilience AU homepage.
+Main entry: `index.html`. Serve the project root with `python3 -m http.server`
+and open `http://localhost:8000/ui_kits/fuel-dashboard/index.html`.
+
+Reads JSON envelopes produced by `scripts/fetch_data.py` from
+`data/generated/*.json`, falling back to `data/manual/*.json` for sources
+that can't be fetched programmatically. Shared components live in
+`../shared/`.
 
 ## Files
 
-- `index.html` — live, interactive homepage
-- `Header.jsx` — sticky masthead + section nav + download action (`Header`, `Icon`)
-- `MetricCard.jsx` — headline metric card (`MetricCard`)
-- `ChartCard.jsx` — time-series chart container with range toggles and hover tooltip (`ChartCard`)
-- `InsightFeed.jsx` — "What changed this month" list + `Footer`
-- `styles.css` — layout + component styles (tokens come from `../../colors_and_type.css`)
+- `index.html` — page shell + React app
+- `data.js` — list of source ids this dashboard consumes (`window.FUEL_SERIES`)
 
-## Surfaces covered
+## Series consumed
 
-1. Intro band — title, lede, reporting period
-2. Headline metrics — 3-card row
-3. Time-series charts — imports, prices, days-of-cover with 90-day threshold line
-4. "What changed" insight feed
-5. Footer with sources, methodology, data links
+See `data/sources.yml` for each:
 
-## Notes
+- `aps_monthly` — Days of Net Import Cover, cover chart
+- `abs_petroleum_imports` — Monthly imports card & chart
+- `aip_retail` — National fuel price card & chart
+- `aip_tgp` — Reserved for terminal-gate price series
+- `iea_90day` — 90-day benchmark line
 
-- Chart data is synthetic — real series should be wired via the existing `series` prop shape `{ t, v }[]`.
-- Tooltip and range toggles work out of the box.
-- No icon library is bundled — the handful of icons used are inline SVG paths in `Icon`, matching Lucide's 1.5px stroke. Swap to CDN Lucide if needed.
+Any envelope with `status !== "ok"` renders as a "Source unavailable —
+awaiting data" placeholder. We never estimate.

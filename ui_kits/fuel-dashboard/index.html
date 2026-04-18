@@ -6,46 +6,67 @@
 <title>Fuel Resilience AU — Australia's liquid fuel, in plain English</title>
 <meta name="description" content="A neutral, public-interest dashboard tracking Australia's fuel imports, prices and security buffer. Updated monthly.">
 <link rel="stylesheet" href="../../colors_and_type.css">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="../shared/styles.css">
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to main content</a>
 <div id="root"></div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
 
+<script src="../shared/data-loader.js"></script>
 <script src="data.js"></script>
-<script type="text/babel" src="Header.jsx"></script>
-<script type="text/babel" src="MetricCard.jsx"></script>
-<script type="text/babel" src="ChartCard.jsx"></script>
-<script type="text/babel" src="InsightFeed.jsx"></script>
+<script type="text/babel" src="../shared/Header.jsx"></script>
+<script type="text/babel" src="../shared/MetricCard.jsx"></script>
+<script type="text/babel" src="../shared/ChartCard.jsx"></script>
+<script type="text/babel" src="../shared/InsightFeed.jsx"></script>
+<script type="text/babel" src="../shared/Footer.jsx"></script>
 
 <script type="text/babel">
-const D = window.FUEL_DATA;
-
-const insights = [
-  { date: '15 Apr 2026', body: 'A refinery outage in Singapore pushed up the main Asian petrol benchmark by about 6.8% last week. That flows through to Australian pump prices within a week or two.',
-    link: { href:'#chart-prices', text:'See price chart' }, tag: 'Prices', tagKind: 'prices' },
-  { date: '08 Apr 2026', body: 'Days of Net Import Cover — the number of days of fuel Australia would have if imports stopped — fell to 24, the lowest since late 2023. Diesel stocks drove the drop.',
-    link: { href:'#sources', text:'How this is measured' }, tag: 'Cover', tagKind: 'cover' },
-  { date: '02 Apr 2026', body: 'The Geelong refinery returned to 91% utilisation after scheduled maintenance, slightly offsetting the March fall in imports.',
-    tag: 'Refining', tagKind: 'refining' },
-  { date: '28 Mar 2026', body: 'Petroleum imports fell 4.2% compared to March last year — the first annual drop in seven months. Diesel and jet fuel drove most of the decline.',
-    link: { href:'#chart-imports', text:'See imports chart' }, tag: 'Imports', tagKind: 'imports' },
-];
-
 function App() {
+  const [data, setData] = React.useState(null);
+  React.useEffect(() => {
+    window.FR.load(window.FUEL_SERIES).then(setData);
+  }, []);
+
+  if (!data) {
+    return (
+      <div className="page">
+        <Header active="fuel"/>
+        <main id="main"><div className="loading-wrap">Loading official data…</div></main>
+      </div>
+    );
+  }
+
+  // Surface the freshest retrieved_at across sources as the "Updated" stamp.
+  const latestRetrieved = Object.values(data)
+    .map(e => e.retrieved_at).filter(Boolean).sort().pop();
+  const updatedDisplay = window.FR.fmtRetrieved(latestRetrieved);
+
+  // Build insight feed from release-note style notes on envelopes that have them.
+  const insights = [];
+  for (const [id, env] of Object.entries(data)) {
+    if (env.status === 'ok' && env.last_data_point) {
+      insights.push({
+        date: env.last_data_point,
+        body: `${env.source_name} — latest observation ${env.last_data_point}, ${env.values.length} data points available.`,
+        tag: 'Data', tagKind: 'imports',
+        link: env.source_url ? { href: env.source_url, text: 'Publisher page' } : null,
+      });
+    }
+  }
+
   return (
     <div className="page">
-      <Header active="fuel"/>
+      <Header active="fuel" updated={updatedDisplay}/>
 
       <main id="main">
         {/* INTRO */}
-        <section className="intro" data-screen-label="01 Intro" id="fuel">
+        <section className="intro" id="fuel">
           <div>
-            <span className="eyebrow">Fuel · March 2026</span>
+            <span className="eyebrow">Fuel</span>
             <h1 style={{ marginTop: 12 }}>Australia's liquid fuel, in plain English.</h1>
             <p className="intro__lede">
               Petrol, diesel and jet fuel power almost every truck, tractor and aircraft in the country.
@@ -54,19 +75,16 @@ function App() {
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Reporting period</strong>
-            <span className="mono">Mar 2026 · month-end</span>
+            <strong>Data retrieved</strong>
+            <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
-            <strong>Updated</strong>
-            <span className="mono">18 Apr 2026 · 09:00 AEST</span>
-            <div style={{ height: 12 }}/>
-            <strong>Next update</strong>
-            <span>Mid-May 2026</span>
+            <strong>Refresh</strong>
+            <span>Weekly · Monday 02:00 AEST</span>
           </aside>
         </section>
 
         {/* WHY THIS MATTERS */}
-        <section className="section section--why" aria-labelledby="why" data-screen-label="02 Why">
+        <section className="section section--why" aria-labelledby="why">
           <div className="why-grid">
             <div>
               <span className="eyebrow">What this is</span>
@@ -79,8 +97,8 @@ function App() {
               </p>
               <p>
                 This dashboard exists because most of the raw numbers are public, but scattered across government reports
-                and trade databases. It pulls the three indicators that matter most into one place, updates them monthly,
-                and explains what moved and why in everyday language.
+                and trade databases. It pulls the three indicators that matter most into one place, refreshes them weekly
+                from the publishers themselves, and explains what moved and why in everyday language.
               </p>
               <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
                 Acronyms used here: <b>ABS</b> = Australian Bureau of Statistics. <b>APS</b> = Australian Petroleum Statistics.
@@ -91,12 +109,15 @@ function App() {
         </section>
 
         {/* HEADLINE METRICS */}
-        <section className="section" aria-labelledby="metrics-h" data-screen-label="03 Headline Metrics">
+        <section className="section" aria-labelledby="metrics-h">
           <div className="section__head">
             <div>
               <span className="eyebrow">Three headline numbers</span>
-              <h2 id="metrics-h">As of month-end, March 2026</h2>
-              <p className="section__lede">Hover or tap the underlined terms for plain-English definitions.</p>
+              <h2 id="metrics-h">As of the latest publisher update</h2>
+              <p className="section__lede">
+                Any card marked "Source unavailable" is waiting on a verifiable figure from the named source.
+                We do not estimate.
+              </p>
             </div>
           </div>
           <div className="metric-grid">
@@ -104,143 +125,118 @@ function App() {
               eyebrow="Most watched"
               label="Days of Net Import Cover"
               jargonHint={{ term: 'Days of Net Import Cover', definition: 'How many days Australia could keep going on its fuel stockpile if imports stopped today.' }}
-              plain="If imports stopped today, our stockpile would last 24 days."
-              value="24"
-              unit="days"
-              delta={{ dir:'down', text:'2 days lower than February' }}
-              threshold={{ state:'below', text:'Below the 90-day IEA benchmark' }}
-              source="Australian Petroleum Statistics (DCCEEW), Mar 2026"
-              sample
+              plain="If imports stopped today, how long the national stockpile would last."
+              fromEnvelope={data.aps_monthly}
+              unit=" days"
+              threshold={{ state:'below', text:'IEA benchmark: 90 days' }}
               highlight
             />
             <MetricCard
               eyebrow="Pump"
               label="National Fuel Price"
               plain="A national average across petrol, diesel and premium grades."
-              value="A$1.92"
+              fromEnvelope={data.aip_retail}
               unit="/L"
-              delta={{ dir:'up', text:'3.1% higher than March last year' }}
-              threshold={{ state:'near', text:'Five-year average: A$1.78/L' }}
-              source="Australian Institute of Petroleum (AIP), 4-week avg to 12 Apr"
-              sample
             />
             <MetricCard
               eyebrow="Trade"
               label="Monthly Imports (year-on-year)"
-              plain="How March 2026 imports compared to March 2025."
-              value="−4.2"
+              plain="How the latest month compared to the same month a year earlier."
+              fromEnvelope={data.abs_petroleum_imports}
               unit="%"
-              delta={{ dir:'down', text:'First annual decline in 7 months' }}
-              threshold={{ state:'below', text:'Diesel drove 61% of the fall' }}
-              source="ABS International Merchandise Trade, Mar 2026"
-              sample
             />
           </div>
         </section>
 
         {/* CHARTS */}
-        <section className="section" aria-labelledby="charts-h" data-screen-label="04 Charts">
+        <section className="section" aria-labelledby="charts-h">
           <div className="section__head">
             <div>
               <span className="eyebrow">How it's changed</span>
               <h2 id="charts-h">Imports, prices and stockpile over time</h2>
-              <p className="section__lede">Three years of monthly data. Hover any point — or use arrow keys — to read the value.</p>
+              <p className="section__lede">Hover any point — or use arrow keys — to read the value.</p>
             </div>
           </div>
 
-          <div className="charts-grid" id="chart-imports">
+          <div className="charts-grid">
             <ChartCard
               eyebrow="Volume"
               title="Monthly petroleum imports"
-              unit=" ML"
-              series={D.imports}
+              unit="ML"
+              fromEnvelope={data.abs_petroleum_imports}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#1F3A8A"
-              takeaway="Imports run at roughly 4,300 million litres a month. March 2026 was 4.2% below March 2025."
+              takeaway="Monthly petroleum imports from ABS International Merchandise Trade. Chart populates when the latest month is verified."
               yAxisLabel="Millions of litres per month (ML)"
-              sourceLine="Source: ABS International Merchandise Trade · Australian Petroleum Statistics (DCCEEW). Retrieved 18 Apr 2026."
-              sample
             />
             <ChartCard
               eyebrow="Pump"
               title="National fuel price"
               unit="/L"
-              series={D.prices}
+              fromEnvelope={data.aip_retail}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#0F766E"
-              takeaway="The national pump price has climbed from around A$1.55 to A$1.92 over the last three years."
+              takeaway="Four-week rolling average across petrol and diesel from AIP. Chart populates when verified."
               yAxisLabel="Australian dollars per litre (A$/L)"
-              sourceLine="Source: Australian Institute of Petroleum (AIP) Terminal Gate Prices, four-week rolling average. Retrieved 12 Apr 2026."
-              sample
             />
           </div>
 
           <div style={{ height: 24 }}/>
-          <div className="charts-grid charts-grid--full" id="chart-cover">
+          <div className="charts-grid charts-grid--full">
             <ChartCard
               eyebrow="Resilience"
               title="Days of Net Import Cover vs. 90-day benchmark"
               unit=" days"
-              series={D.cover}
+              fromEnvelope={data.aps_monthly}
               baseline={90}
               baselineLabel="IEA 90-day benchmark"
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#1F3A8A"
-              takeaway="Australia's stockpile has sat well below the 90-day international benchmark for years. It reached 24 days in March — the lowest in over two years."
+              takeaway="Days of cover = petroleum stocks on land and in transit divided by average net imports. The 90-day benchmark is an IEA obligation for member countries."
               yAxisLabel="Days of cover"
-              sourceLine="Source: Australian Petroleum Statistics (DCCEEW); IEA stockholding obligation framework. Retrieved 18 Apr 2026."
-              sample
             />
           </div>
         </section>
 
         {/* WHAT CHANGED */}
-        <section className="section" data-screen-label="05 What Changed">
-          <InsightFeed items={insights}/>
+        <section className="section">
+          <InsightFeed
+            items={insights}
+            lede="Notes synthesised from the envelope metadata on each source. Populated as data arrives."
+          />
         </section>
 
         {/* SOURCES & METHODOLOGY */}
-        <section className="section section--sources" id="sources" data-screen-label="06 Sources">
+        <section className="section section--sources" id="sources">
           <div className="section__head">
             <div>
               <span className="eyebrow">Sources & methodology</span>
               <h2>Every dataset used on this page</h2>
-              <p className="section__lede">All sources are public. Where the exact figure can't be verified at time of publication, the card or chart is marked "Sample data".</p>
+              <p className="section__lede">All sources are public. When a figure cannot yet be verified, the card reads "Source unavailable" — we do not fill in estimates.</p>
             </div>
           </div>
 
           <div className="sources-grid">
-            <article className="source-card">
-              <h4>Australian Petroleum Statistics (APS)</h4>
-              <p className="body-sm">Monthly data on petroleum sales, production, imports and stocks, published by the Department of Climate Change, Energy, the Environment and Water (DCCEEW).</p>
-              <p className="caption"><b>Used for:</b> Days of Net Import Cover · Monthly imports chart</p>
-              <a href="https://www.energy.gov.au/publications/australian-petroleum-statistics">energy.gov.au/publications/australian-petroleum-statistics <Icon name="external" size={12}/></a>
-              <p className="caption mono">Retrieved: 18 Apr 2026</p>
-            </article>
-            <article className="source-card">
-              <h4>ABS International Merchandise Trade</h4>
-              <p className="body-sm">Monthly trade statistics from the Australian Bureau of Statistics, including petroleum import values and volumes.</p>
-              <p className="caption"><b>Used for:</b> Monthly Imports (year-on-year)</p>
-              <a href="https://www.abs.gov.au/statistics/economy/international-trade">abs.gov.au/statistics/economy/international-trade <Icon name="external" size={12}/></a>
-              <p className="caption mono">Retrieved: 18 Apr 2026</p>
-            </article>
-            <article className="source-card">
-              <h4>Australian Institute of Petroleum (AIP)</h4>
-              <p className="body-sm">Weekly Terminal Gate Price and retail price series for petrol and diesel across Australian capital cities.</p>
-              <p className="caption"><b>Used for:</b> National Fuel Price · Price chart</p>
-              <a href="https://www.aip.com.au/pricing">aip.com.au/pricing <Icon name="external" size={12}/></a>
-              <p className="caption mono">Retrieved: 12 Apr 2026</p>
-            </article>
-            <article className="source-card">
-              <h4>International Energy Agency (IEA)</h4>
-              <p className="body-sm">The 90-day stockholding obligation is a commitment IEA member countries, including Australia, make to hold emergency oil stocks equal to 90 days of net imports.</p>
-              <p className="caption"><b>Used for:</b> 90-day benchmark line</p>
-              <a href="https://www.iea.org/reports/oil-stockholding">iea.org/reports/oil-stockholding <Icon name="external" size={12}/></a>
-              <p className="caption mono">Reference document, no monthly retrieval.</p>
-            </article>
+            {Object.entries(data).map(([id, env]) => (
+              <article key={id} className="source-card">
+                <h4>{env.source_name}</h4>
+                <p className="body-sm">
+                  {env.status === 'ok'
+                    ? `Live. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
+                    : 'Awaiting hand-keyed values from the named public source.'}
+                </p>
+                <p className="caption"><b>Envelope:</b> <span className="mono">{id}</span></p>
+                {env.source_url && (
+                  <a href={env.source_url}>{env.source_url.replace(/^https?:\/\//,'')} <Icon name="external" size={12}/></a>
+                )}
+                <p className="caption mono">
+                  Retrieved: {env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—'}
+                </p>
+              </article>
+            ))}
           </div>
 
           <div className="methodology">
@@ -256,7 +252,7 @@ function App() {
           </div>
         </section>
 
-        <Footer/>
+        <Footer updated={updatedDisplay}/>
       </main>
     </div>
   );
