@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fertilizer — Fuel Resilience AU</title>
-<meta name="description" content="Australia's fertiliser imports, prices and source-country mix. A public-interest dashboard in plain English.">
+<meta name="description" content="Australia's fertiliser imports, prices and source-country mix with transparent source availability.">
 <link rel="stylesheet" href="../../colors_and_type.css">
 <link rel="stylesheet" href="../shared/styles.css">
 </head>
@@ -37,13 +37,13 @@ function App() {
     return (
       <div className="page">
         <Header active="fertilizer"/>
-        <main id="main"><div className="loading-wrap">Loading official data…</div></main>
+        <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
   }
 
-  const latestRetrieved = Object.values(data).map(e => e.retrieved_at).filter(Boolean).sort().pop();
-  const updatedDisplay = window.FR.fmtRetrieved(latestRetrieved);
+  const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
+  const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
 
   // Derived series — these will only render if the ABS envelope ever ships
   // sub-series. Today they resolve to unavailable.
@@ -54,7 +54,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="fertilizer" updated={updatedDisplay}/>
+      <Header active="fertilizer" updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         {/* INTRO */}
@@ -69,11 +69,11 @@ function App() {
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Data retrieved</strong>
+            <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Refresh</strong>
-            <span>Weekly · Monday 02:00 AEST</span>
+            <span>Programmatic weekly · manual values after verification</span>
           </aside>
         </section>
 
@@ -92,9 +92,9 @@ function App() {
                 single disruption at one end can push up farm costs across the country.
               </p>
               <p>
-                This page tracks how much we import each month, what it costs, and how
-                concentrated the supplier list is. Plain English where possible, full sources
-                at the bottom.
+                This page is structured to track how much we import each month, what it costs, and how
+                concentrated the supplier list is. Values appear only when the named public source has
+                been verified in a JSON envelope.
               </p>
               <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
                 Acronyms used here: <b>ABS</b> = Australian Bureau of Statistics.
@@ -158,7 +158,7 @@ function App() {
             <div>
               <span className="eyebrow">How it's changed</span>
               <h2 id="charts-h">Imports by type and source country, over time</h2>
-              <p className="section__lede">Two years of monthly data. Hover any point — or use arrow keys — to read the value.</p>
+              <p className="section__lede">Charts populate when verified monthly source data is available. Hover any point — or use arrow keys — to read the value.</p>
             </div>
           </div>
 
@@ -248,7 +248,8 @@ function App() {
           <InsightFeed
             items={[]}
             title="What changed"
-            lede="Populated from DCCEEW / ABS / ABARES release notes as new data arrives."
+            lede="Populated from DCCEEW / ABS / ABARES release notes as verified data arrives."
+            emptyMessage="Awaiting verified release notes for the loaded fertiliser source envelopes."
           />
         </section>
 
@@ -267,7 +268,7 @@ function App() {
                 <h4>{env.source_name}</h4>
                 <p className="body-sm">
                   {env.status === 'ok'
-                    ? `Live. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
+                    ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
                     : 'Awaiting hand-keyed values from the named public source.'}
                 </p>
                 <p className="caption"><b>Envelope:</b> <span className="mono">{id}</span></p>
@@ -293,7 +294,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={updatedDisplay}/>
+        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );
