@@ -133,14 +133,18 @@ sources:
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
-    format: XLSX
+    fetch_url: https://api.data.abs.gov.au/data/MERCH_IMP/33.TOT.TOT.M?format=jsondata&startPeriod=2021-01
+    fetch_dataflow: MERCH_IMP
+    fetch_key: 33.TOT.TOT.M
+    fetch_start_period: 2021-01
+    format: JSON
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-19
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, International Trade in Goods.
-    reuse_notes: Attribute ABS and preserve table/date context for hand-keyed values.
-    fetch: manual
+    reuse_notes: Fetched from the live ABS Data API MERCH_IMP dataflow using SITC 33 (petroleum, petroleum products and related materials), total country of origin, total state destination, monthly frequency. The live ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; do not describe this envelope as HS 27 unless an HS-coded ABS API series is added later.
+    fetch: programmatic
     used_by: [fuel]
 
   - id: abs_fertiliser_imports
