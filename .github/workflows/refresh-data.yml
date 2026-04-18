@@ -1,19 +1,22 @@
 name: Weekly data refresh
 
-# Runs scripts/fetch_data.py on a schedule. Any JSON files that change
-# are committed back to main with a "chore(data): weekly refresh" message.
-# If any source returns an HTTP error the workflow fails loudly so we
-# notice link rot.
+# Refreshes programmatic data sources and commits changed JSON after schema
+# validation. Blocking URL checks are limited to machine fetch URLs; broad
+# source landing-page link health is reported separately and does not block a
+# valid data refresh.
 
 on:
   schedule:
-    # 02:00 AEST on Monday = 16:00 UTC on Sunday (AEST is UTC+10, no DST in QLD;
-    # east-coast states observe AEDT UTC+11 in summer — pick AEST and document)
+    # 02:00 AEST on Monday = 16:00 UTC on Sunday (AEST is UTC+10, no DST in QLD)
     - cron: "0 16 * * 0"
   workflow_dispatch: {}
 
 permissions:
   contents: write
+
+concurrency:
+  group: weekly-data-refresh
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -28,12 +31,14 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyyaml requests
+        run: pip install pyyaml==6.0.2 requests==2.32.3
 
-      - name: Check all source URLs are reachable
+      - name: Check programmatic fetch URLs
         run: python scripts/fetch_data.py --check
+
+      - name: Report source landing-page link health
+        continue-on-error: true
+        run: python scripts/fetch_data.py --check-all-links
 
       - name: Fetch programmatic sources
         run: python scripts/fetch_data.py
@@ -41,9 +46,10 @@ jobs:
       - name: Ensure manual stub files exist
         run: python scripts/init_manual_stubs.py
 
+      - name: Validate source registry and envelopes
+        run: python scripts/validate_data.py
+
       - name: Commit any changed JSON
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
