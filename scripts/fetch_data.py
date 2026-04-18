@@ -24,6 +24,7 @@ import io
 import json
 import pathlib
 import sys
+import urllib.parse
 from typing import Any, Callable
 
 try:
@@ -103,10 +104,141 @@ def fetch_eia_series(series_code: str, url: str | None = None) -> dict[str, Any]
     }
 
 
+def fetch_abs_sdmx(dataflow: str, key: str, start_period: str | None = None) -> dict[str, Any]:
+    """Fetch one ABS SDMX-JSON time series from the ABS Data API."""
+    if not dataflow or not key:
+        raise RuntimeError("ABS SDMX fetch requires dataflow and key")
+
+    query = {"format": "jsondata"}
+    if start_period:
+        query["startPeriod"] = start_period
+    url = f"https://api.data.abs.gov.au/data/{dataflow}/{key}?{urllib.parse.urlencode(query)}"
+
+    r = requests.get(
+        url,
+        headers={
+            "User-Agent": UA,
+            "Accept": "application/vnd.sdmx.data+json",
+        },
+        timeout=45,
+    )
+    r.raise_for_status()
+
+    try:
+        doc = r.json()
+    except ValueError as exc:
+        raise RuntimeError("ABS SDMX response was not valid JSON") from exc
+
+    data_node = doc.get("data", doc)
+    data_sets = data_node.get("dataSets")
+    structures = data_node.get("structures")
+    structure = doc.get("structure")
+    if structure is None and isinstance(structures, list) and structures:
+        structure = structures[0]
+
+    if not isinstance(data_sets, list) or not data_sets:
+        raise RuntimeError("ABS SDMX response contained no dataSets")
+    if not isinstance(structure, dict):
+        raise RuntimeError("ABS SDMX response contained no usable structure")
+
+    data_set = data_sets[0]
+    series = data_set.get("series")
+    if not isinstance(series, dict) or not series:
+        raise RuntimeError("ABS SDMX response contained no series")
+    non_empty_series = [
+        item for item in series.values()
+        if isinstance(item, dict) and item.get("observations")
+    ]
+    if not non_empty_series:
+        raise RuntimeError("ABS SDMX response contained no observations")
+    if len(non_empty_series) != 1:
+        raise RuntimeError(f"ABS SDMX key returned {len(non_empty_series)} series; expected exactly one")
+
+    dimensions = structure.get("dimensions")
+    if not isinstance(dimensions, dict):
+        raise RuntimeError("ABS SDMX structure contained no dimensions")
+    obs_dimensions = dimensions.get("observation")
+    if not isinstance(obs_dimensions, list) or not obs_dimensions:
+        raise RuntimeError("ABS SDMX structure contained no observation dimensions")
+    time_values = obs_dimensions[0].get("values")
+    if not isinstance(time_values, list) or not time_values:
+        raise RuntimeError("ABS SDMX structure contained no time values")
+
+    values: list[dict[str, Any]] = []
+    period_ends: dict[str, str] = {}
+    observations = non_empty_series[0].get("observations", {})
+    for obs_idx, obs in observations.items():
+        try:
+            time_value = time_values[int(obs_idx)]
+        except (ValueError, IndexError) as exc:
+            raise RuntimeError(f"ABS SDMX observation index {obs_idx!r} has no matching time period") from exc
+        if not isinstance(obs, list) or not obs:
+            continue
+        raw_value = obs[0]
+        if raw_value is None:
+            continue
+        if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+            raise RuntimeError(f"ABS SDMX observation for {time_value.get('id')} was not numeric")
+        period = time_value.get("id") or time_value.get("name")
+        if not isinstance(period, str) or not period:
+            raise RuntimeError("ABS SDMX time value was missing an id")
+        period_end = time_value.get("end")
+        if isinstance(period_end, str) and len(period_end) >= 10:
+            period_ends[period] = period_end[:10]
+        values.append({"t": period, "v": raw_value})
+
+    values = sorted(values, key=lambda point: point["t"])[-60:]
+    if not values:
+        raise RuntimeError("ABS SDMX response contained no numeric observations")
+
+    def attr_label(attr_id: str) -> str | None:
+        attrs = structure.get("attributes", {})
+        if not isinstance(attrs, dict):
+            return None
+        for group in ("dataSet", "series", "observation"):
+            for attr in attrs.get(group, []) or []:
+                if attr.get("id") != attr_id:
+                    continue
+                attr_values = attr.get("values") or []
+                if not attr_values:
+                    return None
+                value_id = str(attr_values[0].get("id", "")).strip()
+                value_name = str(attr_values[0].get("name", "")).strip()
+                return value_id or value_name or None
+        return None
+
+    unit_measure = attr_label("UNIT_MEASURE") or "AUD"
+    unit_mult = attr_label("UNIT_MULT")
+    unit = unit_measure
+    if unit_measure == "AUD" and unit_mult == "3":
+        unit = "AUD thousands"
+    elif unit_mult:
+        unit = f"{unit_measure} (unit multiplier {unit_mult})"
+
+    last = values[-1]["t"]
+    last_data_point = period_ends.get(last) or (f"{last}-01" if len(last) == 7 else last)
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": (
+            f"Fetched from ABS Data API dataflow {dataflow}, key {key}. "
+            "Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. "
+            "ABS MERCH_IMP is a SITC commodity dataflow; this source uses SITC 33 "
+            "(petroleum, petroleum products and related materials) because the live API "
+            "does not expose an HS 27 monthly value series in this dataflow."
+        ),
+        "source_url_resolved": url,
+    }
+
+
 Fetcher = Callable[[dict[str, Any]], dict[str, Any]]
 FETCHERS: dict[str, Fetcher] = {
     "eia_brent": lambda source: fetch_eia_series("RBRTE", source.get("fetch_url")),
     "eia_wti": lambda source: fetch_eia_series("RWTC", source.get("fetch_url")),
+    "abs_petroleum_imports": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"], source["fetch_key"], source.get("fetch_start_period")
+    ),
 }
 
 
