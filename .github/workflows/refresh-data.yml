@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: weekly-data-refresh
+  group: weekly-data-refresh-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -56,7 +56,7 @@ jobs:
           if [ -n "$(git status --porcelain data)" ]; then
             git add data
             git commit -m "chore(data): weekly refresh $(date -u +%Y-%m-%d)"
-            git push origin HEAD:main
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           else
             echo "No data changes; nothing to commit."
           fi
