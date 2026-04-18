@@ -116,17 +116,17 @@ function App() {
     return (
       <div className="page">
         <Header active="who_pays_what"/>
-        <main id="main"><div className="loading-wrap">Loading official data…</div></main>
+        <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
   }
 
-  const latestRetrieved = Object.values(data).map(e => e.retrieved_at).filter(Boolean).sort().pop();
-  const updatedDisplay = window.FR.fmtRetrieved(latestRetrieved);
+  const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
+  const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
 
   return (
     <div className="page">
-      <Header active="who_pays_what" updated={updatedDisplay}/>
+      <Header active="who_pays_what" updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         {/* INTRO */}
@@ -137,15 +137,15 @@ function App() {
             <p className="intro__lede">
               This page shows what major energy companies earn in Australia, what tax they pay,
               and what consumers pay at the pump — using figures filed with the ATO, ACCC and ASX.
-              Nothing here is estimated. Every number has a link to the document it came from.
+              Nothing here is estimated. Populated numbers link to the document they came from.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Data retrieved</strong>
+            <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Source check</strong>
-            <span>Every cell links to a public report.</span>
+            <span>Populated cells link to public reports.</span>
           </aside>
         </section>
 
@@ -250,7 +250,7 @@ function App() {
               <h2 id="h-consumer">Retail petrol price breakdown</h2>
               <p className="section__lede">
                 Where each dollar at the pump goes — wholesale, fuel excise, GST and retailer
-                margin — from the ACCC Petroleum Monitoring Report. Trailing 12 months.
+                margin — from the ACCC Petroleum Monitoring Report once that breakdown is hand-keyed.
               </p>
             </div>
           </div>
@@ -296,7 +296,7 @@ function App() {
                 <h4>{env.source_name}</h4>
                 <p className="body-sm">
                   {env.status === 'ok'
-                    ? `Live. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
+                    ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
                     : 'Awaiting hand-keyed values from the named public source.'}
                 </p>
                 <p className="caption"><b>Envelope:</b> <span className="mono">{id}</span></p>
@@ -320,7 +320,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={updatedDisplay}/>
+        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );
