@@ -1,0 +1,62 @@
+name: Weekly data refresh
+
+# Refreshes programmatic data sources and commits changed JSON after schema
+# validation. Blocking URL checks are limited to machine fetch URLs; broad
+# source landing-page link health is reported separately and does not block a
+# valid data refresh.
+
+on:
+  schedule:
+    # 02:00 AEST on Monday = 16:00 UTC on Sunday (AEST is UTC+10, no DST in QLD)
+    - cron: "0 16 * * 0"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-data-refresh-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml==6.0.2 requests==2.32.3
+
+      - name: Check programmatic fetch URLs
+        run: python scripts/fetch_data.py --check
+
+      - name: Report source landing-page link health
+        continue-on-error: true
+        run: python scripts/fetch_data.py --check-all-links
+
+      - name: Fetch programmatic sources
+        run: python scripts/fetch_data.py
+
+      - name: Ensure manual stub files exist
+        run: python scripts/init_manual_stubs.py
+
+      - name: Validate source registry and envelopes
+        run: python scripts/validate_data.py
+
+      - name: Commit any changed JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data)" ]; then
+            git add data
+            git commit -m "chore(data): weekly refresh $(date -u +%Y-%m-%d)"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "No data changes; nothing to commit."
+          fi

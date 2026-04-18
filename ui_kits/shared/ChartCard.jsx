@@ -1,24 +1,61 @@
-// ChartCard.jsx — framed time-series container with takeaway, range toggles, hover tooltip, a11y
+// ChartCard.jsx — shared time-series card with takeaway, source line, a11y.
+//
+// Envelope-aware: pass {fromEnvelope: env} and the card will either plot
+// env.values or render a "Source unavailable — awaiting data" placeholder.
 function ChartCard({
   title, eyebrow, unit, series, baseline, baselineLabel,
-  ranges = ['1Y','5Y','Max'], defaultRange = '5Y',
+  ranges = ['1Y','3Y','5Y','Max'], defaultRange = '3Y',
   accent = '#1F3A8A',
-  takeaway,        // plain-English one-liner above chart
-  sourceLine,      // source + last-updated, below chart
-  sample = false,  // true = badge the chart as sample data
-  yAxisLabel,      // e.g. "Millions of litres per month (ML)"
-  description,     // longer a11y description for screen readers
+  takeaway,
+  sourceLine,
+  yAxisLabel,
+  description,
+  fromEnvelope,
+  unitFormatter,  // (v) => string — custom axis label formatter
 }) {
+  // Envelope handling
+  if (fromEnvelope !== undefined) {
+    const env = fromEnvelope;
+    const unavailable = !env || env.status !== 'ok' || !env.values || env.values.length === 0;
+    if (unavailable) {
+      return (
+        <article className="chart-card chart-card--unavailable" aria-label={`${title}: source unavailable`}>
+          <header className="chart-card__head">
+            <div>
+              {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+              <h3 className="chart-card__title">{title}</h3>
+            </div>
+          </header>
+          <p className="chart-card__takeaway">Source unavailable — awaiting data.</p>
+          <div className="chart-unavail">
+            <Icon name="alert" size={18}/>
+            <span>This chart will be populated when values can be verified from the named source.</span>
+          </div>
+          {env && env.source_url && (
+            <p className="chart-card__source">
+              <a href={env.source_url}>{env.source_name || 'Publisher'} <Icon name="external" size={12}/></a>
+            </p>
+          )}
+        </article>
+      );
+    }
+    series = env.values;
+    sourceLine = sourceLine || window.FR.sourceLine(env);
+    unit = unit || env.unit || '';
+  }
+
   const [range, setRange] = React.useState(defaultRange);
   const [hoverIdx, setHoverIdx] = React.useState(null);
 
   const data = React.useMemo(() => {
+    if (!series) return [];
     if (range === '1Y') return series.slice(-12);
+    if (range === '3Y') return series.slice(-36);
     if (range === '5Y') return series.slice(-60);
     return series;
   }, [range, series]);
 
-  const W = 640, H = 240, padL = 56, padR = 16, padT = 24, padB = 36;
+  const W = 640, H = 240, padL = 64, padR = 16, padT = 24, padB = 36;
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
@@ -26,11 +63,13 @@ function ChartCard({
   const yMin = Math.min(...ys, baseline ?? Infinity) * 0.95;
   const yMax = Math.max(...ys, baseline ?? -Infinity) * 1.05;
 
-  const x = i => padL + (i / (data.length - 1)) * innerW;
-  const y = v => padT + innerH - ((v - yMin) / (yMax - yMin)) * innerH;
+  const x = i => data.length <= 1 ? padL : padL + (i / (data.length - 1)) * innerW;
+  const y = v => padT + innerH - ((v - yMin) / (yMax - yMin || 1)) * innerH;
 
   const linePath = data.map((d, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(d.v)}`).join(' ');
-  const areaPath = `${linePath} L${x(data.length - 1)},${padT + innerH} L${padL},${padT + innerH} Z`;
+  const areaPath = data.length
+    ? `${linePath} L${x(data.length - 1)},${padT + innerH} L${padL},${padT + innerH} Z`
+    : '';
 
   const yTicks = 4;
   const yTickVals = Array.from({ length: yTicks + 1 }, (_, i) => yMin + ((yMax - yMin) * i) / yTicks);
@@ -51,6 +90,7 @@ function ChartCard({
   };
 
   const hover = hoverIdx != null ? data[hoverIdx] : null;
+  const fmt = unitFormatter || defaultFmt;
 
   return (
     <article className="chart-card" aria-labelledby={`ch-${title.replace(/\s+/g,'-')}`}>
@@ -67,9 +107,7 @@ function ChartCard({
         </div>
       </header>
 
-      {takeaway && (
-        <p className="chart-card__takeaway">{takeaway}</p>
-      )}
+      {takeaway && <p className="chart-card__takeaway">{takeaway}</p>}
 
       <div className="chart-card__svgwrap"
         onMouseLeave={() => setHoverIdx(null)}
@@ -77,7 +115,6 @@ function ChartCard({
         tabIndex="0"
         role="img"
         aria-label={description || `${title}. ${takeaway || ''}`}>
-        {sample && <span className="sample-tag sample-tag--chart">Sample data</span>}
         <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width="100%" height={H} onMouseMove={onMove} focusable="false">
           {yTickVals.map((v, i) => (
             <g key={i}>
@@ -94,10 +131,12 @@ function ChartCard({
             </g>
           )}
           <line x1={padL} x2={W - padR} y1={padT + innerH} y2={padT + innerH} stroke="#C9C5B8" />
-          <path d={areaPath} fill={accent} opacity="0.08" />
-          <path d={linePath} fill="none" stroke={accent} strokeWidth="1.75" />
-          {[0, Math.floor(data.length / 2), data.length - 1].map(i => (
-            <text key={i} x={x(i)} y={H - 10} textAnchor="middle" className="chart-tick">{data[i].t}</text>
+          {areaPath && <path d={areaPath} fill={accent} opacity="0.08" />}
+          {linePath && <path d={linePath} fill="none" stroke={accent} strokeWidth="1.75" />}
+          {data.length > 2 && [0, Math.floor(data.length / 2), data.length - 1].map(i => (
+            <text key={i} x={x(i)} y={H - 10} textAnchor="middle" className="chart-tick">
+              {window.FR.fmtMonth(data[i].t)}
+            </text>
           ))}
           {hover && (
             <g>
@@ -108,7 +147,7 @@ function ChartCard({
         </svg>
         {hover && (
           <div className="chart-tooltip" style={{ left: `${(x(hoverIdx) / W) * 100}%` }} role="status">
-            <div className="chart-tooltip__t">{hover.t}</div>
+            <div className="chart-tooltip__t">{window.FR.fmtMonth(hover.t)}</div>
             <div className="chart-tooltip__v">{fmt(hover.v, unit)}</div>
           </div>
         )}
@@ -120,12 +159,16 @@ function ChartCard({
   );
 }
 
-function fmt(v, unit) {
-  if (unit === '/L') return 'A$' + v.toFixed(2);
-  if (unit === ' ML') return v.toFixed(0) + ' ML';
-  if (unit === ' days') return Math.round(v) + 'd';
-  if (unit === '%') return v.toFixed(1) + '%';
-  return v.toFixed(1) + (unit || '');
+function defaultFmt(v, unit) {
+  if (unit === '/L' || unit === 'AUD/L') return 'A$' + v.toFixed(2);
+  if (unit === ' ML' || unit === 'ML')   return Math.round(v) + ' ML';
+  if (unit === ' kt' || unit === 'kt')   return Math.round(v) + ' kt';
+  if (unit === ' days' || unit === 'days') return Math.round(v) + 'd';
+  if (unit === '%')                      return v.toFixed(1) + '%';
+  if (unit === 'USD per barrel' || unit === 'USD/bbl') return 'US$' + v.toFixed(0);
+  if (unit === 'AUD per barrel' || unit === 'AUD/bbl') return 'A$' + v.toFixed(0);
+  if (unit === 'index')                  return v.toFixed(0);
+  return v.toFixed(1) + (unit ? ' ' + unit : '');
 }
 
 Object.assign(window, { ChartCard });

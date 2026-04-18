@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install minimal dependencies
+        run: pip install pyyaml==6.0.2
+
+      - name: Compile scripts
+        run: |
+          python -m py_compile scripts/fetch_data.py
+          python -m py_compile scripts/init_manual_stubs.py
+          python -m py_compile scripts/validate_data.py
+
+      - name: Validate source registry and envelopes
+        run: python scripts/validate_data.py
