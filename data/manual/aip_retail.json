@@ -1,0 +1,13 @@
+{
+  "series_id": "aip_retail",
+  "source_id": "aip_retail",
+  "source_name": "AIP national average retail petrol/diesel",
+  "source_url": "https://www.aip.com.au/pricing",
+  "unit": "",
+  "retrieved_at": "2026-04-18T12:27:44+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, and set 'status' to 'ok'.",
+  "status": "unavailable",
+  "manual_entry": true
+}

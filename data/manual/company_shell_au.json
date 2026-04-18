@@ -1,0 +1,13 @@
+{
+  "series_id": "company_shell_au",
+  "source_id": "company_shell_au",
+  "source_name": "Shell Australia / Viva Energy legacy financial statements",
+  "source_url": "https://www.shell.com.au/about-us.html",
+  "unit": "",
+  "retrieved_at": "2026-04-18T12:27:44+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, and set 'status' to 'ok'.",
+  "status": "unavailable",
+  "manual_entry": true
+}

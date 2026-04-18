@@ -1,0 +1,280 @@
+# Fuel Resilience AU — master source registry
+#
+# Every dataset shown on the site must appear here. The data pipeline
+# (scripts/fetch_data.py) reads this file, attempts to fetch each source
+# programmatically, and writes normalised JSON to data/generated/.
+#
+# If a source cannot be fetched (PDF-only, JS-rendered, paywalled) its
+# JSON file lives in data/manual/ with "manual_entry": true, hand-keyed
+# from the named public document.
+#
+# Never invent values. If a number cannot be verified, the file is
+# written with "status": "unavailable" and the UI renders a
+# "Source unavailable — awaiting data" placeholder.
+#
+# Schema for each entry:
+#   id:              slug used as filename (data/{generated|manual}/<id>.json)
+#   human_name:      short label shown in the UI footer
+#   publisher:       organisation that publishes the data
+#   url:             canonical landing page for the dataset
+#   format:          CSV | JSON | PDF | HTML_TABLE | XLSX | MIXED
+#   update_cadence:  monthly | quarterly | annual | weekly | ad-hoc
+#   last_verified:   YYYY-MM-DD — last time a human confirmed the URL works
+#   licence:         data licence (CC BY 4.0, Crown copyright, etc.)
+#   fetch:           programmatic | manual | unavailable
+#   used_by:         list of dashboard ids that consume this series
+
+sources:
+
+  # =========================================================
+  # FUEL — v1.0 (already live) & v1.2 (oil / production)
+  # =========================================================
+
+  - id: aps_monthly
+    human_name: Australian Petroleum Statistics (monthly)
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual          # landing page is HTML, data is inside monthly XLSX — too brittle to scrape blind
+    used_by: [fuel, oil]
+
+  - id: abs_petroleum_imports
+    human_name: ABS International Merchandise Trade — petroleum imports
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual
+    used_by: [fuel]
+
+  - id: abs_fertiliser_imports
+    human_name: ABS International Merchandise Trade — fertiliser imports (HS 31)
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual
+    used_by: [fertilizer]
+
+  - id: iea_90day
+    human_name: IEA 90-day oil stockholding obligation
+    publisher: International Energy Agency
+    url: https://www.iea.org/reports/oil-stockholding
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-15
+    licence: IEA terms of use
+    fetch: manual          # reference document, not a live feed
+    used_by: [fuel, oil]
+
+  - id: aip_tgp
+    human_name: AIP Terminal Gate Prices (weekly)
+    publisher: Australian Institute of Petroleum
+    url: https://www.aip.com.au/pricing
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-15
+    licence: AIP terms
+    fetch: manual          # JS-rendered table
+    used_by: [fuel]
+
+  - id: aip_retail
+    human_name: AIP national average retail petrol/diesel
+    publisher: Australian Institute of Petroleum
+    url: https://www.aip.com.au/pricing
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-15
+    licence: AIP terms
+    fetch: manual
+    used_by: [fuel]
+
+  - id: ato_corporate_tax
+    human_name: ATO Corporate Tax Transparency Report (latest year)
+    publisher: Australian Taxation Office
+    url: https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petroleum_monitoring
+    human_name: ACCC Petroleum Monitoring Report (latest)
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual
+    used_by: [fuel, who_pays_what]
+
+  - id: eia_brent
+    human_name: Brent crude spot price (EIA)
+    publisher: U.S. Energy Information Administration
+    url: https://www.eia.gov/dnav/pet/hist/RBRTEm.htm
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    licence: U.S. public domain
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: eia_wti
+    human_name: WTI crude spot price (EIA)
+    publisher: U.S. Energy Information Administration
+    url: https://www.eia.gov/dnav/pet/hist/RWTCm.htm
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    licence: U.S. public domain
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: tapis_crude
+    human_name: Tapis crude benchmark
+    publisher: Various market-data mirrors
+    url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm
+    format: MIXED
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    licence: Commercial (Platts) — public series not reliably available
+    fetch: unavailable     # no reliable free public series
+    used_by: [oil]
+
+  - id: aud_usd_rba
+    human_name: Reserve Bank of Australia — AUD/USD exchange rate (monthly)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/xls-hist/f11.1-data.xlsx
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual          # XLSX with layout that drifts; keep manual for now
+    used_by: [oil, who_pays_what]
+
+  - id: fuel_security_payment
+    human_name: Fuel Security Services Payment — recipients & payments
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/energy-and-climate-change-ministerial-council/priorities/fuel-security
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual
+    used_by: [oil]
+
+  - id: abares_fertiliser_price
+    human_name: ABARES fertiliser price index (Agricultural commodities)
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-15
+    licence: CC BY 4.0
+    fetch: manual
+    used_by: [fertilizer]
+
+  # =========================================================
+  # COMPANIES — v1.3 (tax vs price vs profit)
+  # Each company entry carries the latest annual-report URL.
+  # Figures are hand-keyed from the named report into the
+  # manual JSON file — never estimated.
+  # =========================================================
+
+  - id: company_exxonmobil_au
+    human_name: ExxonMobil Australia annual report & financial statements
+    publisher: ExxonMobil Australia Pty Ltd (ASIC lodgement)
+    url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: company_chevron_au
+    human_name: Chevron Australia annual financial statements
+    publisher: Chevron Australia Pty Ltd (ASIC lodgement)
+    url: https://australia.chevron.com/
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: company_viva_energy
+    human_name: Viva Energy Group annual report (ASX:VEA)
+    publisher: Viva Energy Group Limited
+    url: https://www.vivaenergy.com.au/investors/financial-results-reports
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: company_ampol
+    human_name: Ampol annual report (ASX:ALD)
+    publisher: Ampol Limited
+    url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: company_bp_au
+    human_name: BP Australia annual financial statements
+    publisher: BP Australia Pty Ltd (ASIC lodgement)
+    url: https://www.bp.com/en_au/australia.html
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: company_shell_au
+    human_name: Shell Australia / Viva Energy legacy financial statements
+    publisher: Shell Energy Australia / Shell Australia Pty Ltd
+    url: https://www.shell.com.au/about-us.html
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: company_woodside
+    human_name: Woodside Energy annual report (ASX:WDS)
+    publisher: Woodside Energy Group Ltd
+    url: https://www.woodside.com/investors/reports-investor-briefings
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: company_santos
+    human_name: Santos annual report (ASX:STO)
+    publisher: Santos Limited
+    url: https://www.santos.com/investors/results-reports-and-presentations/
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-15
+    licence: Company copyright
+    fetch: manual
+    used_by: [who_pays_what]
