@@ -41,6 +41,8 @@ jobs:
         run: python scripts/fetch_data.py --check-all-links
 
       - name: Fetch programmatic sources
+        env:
+          NSW_FUELCHECK_API_KEY: ${{ secrets.NSW_FUELCHECK_API_KEY }}
         run: python scripts/fetch_data.py
 
       - name: Ensure manual stub files exist

@@ -42,6 +42,12 @@ function App() {
 
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const retailStates = data.aus_retail_fuel_multistate?.extra?.fields?.states
+    ?.map(state => state.state)
+    ?.join(', ');
+  const retailPlain = retailStates
+    ? `${retailStates} ULP 91 average weighted by station count.`
+    : 'WA, QLD and NSW public feeds where available.';
 
   // Build insight feed from release-note style notes on verified envelopes that have them.
   const insights = [];
@@ -110,7 +116,7 @@ function App() {
         <section className="section" aria-labelledby="metrics-h">
           <div className="section__head">
             <div>
-              <span className="eyebrow">Three headline numbers</span>
+              <span className="eyebrow">Four headline numbers</span>
               <h2 id="metrics-h">As of the latest publisher update</h2>
               <p className="section__lede">
                 Any card marked "Source unavailable" is waiting on a verifiable figure from the named source.
@@ -118,7 +124,7 @@ function App() {
               </p>
             </div>
           </div>
-          <div className="metric-grid">
+          <div className="metric-grid metric-grid--4">
             <MetricCard
               eyebrow="Most watched"
               label="Days of Net Import Cover"
@@ -137,10 +143,21 @@ function App() {
               unit="/L"
             />
             <MetricCard
+              eyebrow="Pump"
+              label="Retail pump price — multi-state average"
+              plain={retailPlain}
+              fromEnvelope={data.aus_retail_fuel_multistate}
+              unit=" c/L"
+            />
+            <MetricCard
               eyebrow="Trade"
               label="Monthly Imports (year-on-year)"
               plain="How the latest month compared to the same month a year earlier."
-              fromEnvelope={data.abs_petroleum_imports}
+              fromEnvelope={data.abs_petroleum_imports_yoy}
+              valueFn={env => {
+                const v = env.values.at(-1).v;
+                return `${v > 0 ? '+' : ''}${v}`;
+              }}
               unit="%"
             />
           </div>
@@ -160,13 +177,13 @@ function App() {
             <ChartCard
               eyebrow="Volume"
               title="Monthly petroleum imports"
-              unit="ML"
+              unit="AUD thousands"
               fromEnvelope={data.abs_petroleum_imports}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#1F3A8A"
               takeaway="Monthly petroleum imports from ABS International Merchandise Trade. Chart populates when the latest month is verified."
-              yAxisLabel="Millions of litres per month (ML)"
+              yAxisLabel="Import value (AUD thousands per month)"
             />
             <ChartCard
               eyebrow="Pump"

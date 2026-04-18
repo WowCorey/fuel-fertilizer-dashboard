@@ -147,6 +147,22 @@ sources:
     fetch: programmatic
     used_by: [fuel]
 
+  - id: abs_petroleum_imports_yoy
+    human_name: ABS International Merchandise Trade — petroleum imports YoY
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: JSON
+    update_cadence: monthly
+    last_verified: 2026-04-19
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods.
+    reuse_notes: Derived from abs_petroleum_imports by comparing each month with the same month one year earlier. Do not hand-key or fetch directly.
+    fetch: derived
+    derived_from: abs_petroleum_imports
+    used_by: [fuel]
+
   - id: abs_fertiliser_imports
     human_name: ABS International Merchandise Trade — fertiliser imports (HS 31)
     publisher: Australian Bureau of Statistics
@@ -280,6 +296,25 @@ sources:
     citation: Australian Institute of Petroleum, national average retail prices.
     reuse_notes: Verify AIP reuse terms before republishing values.
     fetch: manual
+    used_by: [fuel]
+
+  - id: aus_retail_fuel_multistate
+    human_name: Retail pump price — multi-state average
+    publisher: NSW FuelCheck / Queensland Government Open Data / WA FuelWatch
+    url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
+    canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
+    fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
+    nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    qld_ckan_base: https://www.data.qld.gov.au
+    wa_fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
+    format: MIXED
+    update_cadence: daily
+    last_verified: 2026-04-19
+    rights: Mixed state government terms; verify each source before reuse
+    rights_url: https://www.fuelwatch.wa.gov.au/
+    citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
+    reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
+    fetch: programmatic
     used_by: [fuel]
 
   - id: ato_corporate_tax
@@ -448,6 +483,22 @@ sources:
     reuse_notes: Layout-sensitive workbook; preserve table/date context for hand-keyed values.
     fetch: manual
     used_by: [oil, who_pays_what]
+
+  - id: rba_aud_usd
+    human_name: Reserve Bank of Australia — AUD/USD exchange rate
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/#exchange-rates
+    canonical_url: https://www.rba.gov.au/statistics/tables/#exchange-rates
+    fetch_url: https://www.rba.gov.au/statistics/tables/csv/f11.1-data.csv
+    format: CSV
+    update_cadence: daily
+    last_verified: 2026-04-19
+    rights: RBA website terms
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table F11.1 Exchange Rates.
+    reuse_notes: Fetches daily AUD/USD observations from the RBA F11.1 CSV and publishes monthly means. The oil page still uses the existing manual aud_usd_rba stub until a later UI wiring PR.
+    fetch: programmatic
+    used_by: [oil]
 
   - id: fuel_security_payment
     human_name: Fuel Security Services Payment — recipients & payments
