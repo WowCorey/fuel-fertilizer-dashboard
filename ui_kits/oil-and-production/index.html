@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Oil & production — Fuel Resilience AU</title>
-<meta name="description" content="Crude benchmarks, Australian refined output and government fuel-security spending. Public data, plain English.">
+<meta name="description" content="Crude benchmarks, Australian refined output and government fuel-security spending with transparent source availability.">
 <link rel="stylesheet" href="../../colors_and_type.css">
 <link rel="stylesheet" href="../shared/styles.css">
 </head>
@@ -62,13 +62,13 @@ function App() {
     return (
       <div className="page">
         <Header active="oil"/>
-        <main id="main"><div className="loading-wrap">Loading official data…</div></main>
+        <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
   }
 
-  const latestRetrieved = Object.values(data).map(e => e.retrieved_at).filter(Boolean).sort().pop();
-  const updatedDisplay = window.FR.fmtRetrieved(latestRetrieved);
+  const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
+  const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
 
   const brentAud = toAud(data.eia_brent, data.aud_usd_rba);
   const wtiAud   = toAud(data.eia_wti,   data.aud_usd_rba);
@@ -82,7 +82,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="oil" updated={updatedDisplay}/>
+      <Header active="oil" updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         {/* INTRO */}
@@ -93,15 +93,16 @@ function App() {
             <p className="intro__lede">
               Four views: the global crude benchmarks that set the floor on pump prices; Australia's
               shrinking refining sector; the stockpile gap against our international obligation; and
-              how much the Australian taxpayer spends to keep refineries and storage open.
+              how much the Australian taxpayer spends to keep refineries and storage open. Values appear
+              only when the named source envelope is verified.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Data retrieved</strong>
+            <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Refresh</strong>
-            <span>Weekly · Monday 02:00 AEST</span>
+            <span>Programmatic weekly · manual values after verification</span>
           </aside>
         </section>
 
@@ -122,7 +123,8 @@ function App() {
               <p>
                 Australia still refines a share of the fuel it consumes, but refineries have closed
                 steadily for 15 years. The government now pays the two remaining operators to stay
-                open. This page tracks those volumes and those payments in one place.
+                open. This page keeps those topics together while leaving unavailable production and
+                payment figures blank until a public source is hand-keyed.
               </p>
               <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
                 Acronyms: <b>WTI</b> = West Texas Intermediate. <b>APS</b> = Australian Petroleum Statistics.
@@ -139,8 +141,8 @@ function App() {
               <span className="eyebrow">Section 1</span>
               <h2 id="h-crude">Crude oil price — the floor beneath the pump</h2>
               <p className="section__lede">
-                Monthly averages over the last five years. US$ and A$ side-by-side so
-                you can see how much of a local price move is the currency.
+                Monthly averages over the last five years where verified public source envelopes are available.
+                US$ and A$ views are shown side-by-side only when the currency series is also verified.
               </p>
             </div>
           </div>
@@ -202,7 +204,8 @@ function App() {
               <h2 id="h-prod">Australian refined fuel production</h2>
               <p className="section__lede">
                 Monthly output of petrol, diesel, jet fuel and fuel oil from Australia's two remaining
-                refineries (Lytton, QLD and Geelong, VIC), against domestic consumption.
+                refineries (Lytton, QLD and Geelong, VIC), against domestic consumption. Cards remain
+                unavailable until APS subseries are wired into verified envelopes.
               </p>
             </div>
           </div>
@@ -233,9 +236,9 @@ function App() {
               <span className="eyebrow">Section 3</span>
               <h2 id="h-gov">Government purchases and strategic reserve</h2>
               <p className="section__lede">
-                Australia is an IEA member and is obliged to hold 90 days of net imports. It has
-                been below that benchmark for over a decade. This section shows the gap, the
-                payments made to keep refineries and storage open, and any offshore tickets.
+                Australia is an IEA member and is obliged to hold 90 days of net imports. This section
+                shows the gap, refinery/storage payments and offshore tickets only when the underlying
+                public source has been verified.
               </p>
             </div>
           </div>
@@ -271,7 +274,8 @@ function App() {
           <InsightFeed
             items={[]}
             title="What changed"
-            lede="Populated as new APS / IEA / DCCEEW releases land."
+            lede="Populated as verified APS / IEA / DCCEEW releases land."
+            emptyMessage="Awaiting verified release notes for the loaded oil and production source envelopes."
           />
         </section>
 
@@ -290,7 +294,7 @@ function App() {
                 <h4>{env.source_name}</h4>
                 <p className="body-sm">
                   {env.status === 'ok'
-                    ? `Live. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
+                    ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
                     : 'Awaiting hand-keyed values from the named public source.'}
                 </p>
                 <p className="caption"><b>Envelope:</b> <span className="mono">{id}</span></p>
@@ -312,7 +316,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={updatedDisplay}/>
+        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );
