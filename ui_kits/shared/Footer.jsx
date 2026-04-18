@@ -1,4 +1,4 @@
-// Footer.jsx — shared footer across all dashboards.
+// Footer.jsx - shared footer across all dashboards.
 function Footer({ updated = '' }) {
   return (
     <footer className="site-footer">
@@ -7,8 +7,9 @@ function Footer({ updated = '' }) {
           <span className="eyebrow">About</span>
           <p className="body-sm">
             Fuel Resilience AU is a public-interest dashboard. Not affiliated with any
-            government department or industry body. Data is compiled from official
-            Australian and international public sources and released under CC BY 4.0.
+            government department or industry body. Project code, prose and metadata are
+            maintained here; upstream source data remains under the rights and terms listed
+            in data/sources.yml.
           </p>
         </div>
         <div className="site-footer__col">
@@ -36,7 +37,7 @@ function Footer({ updated = '' }) {
         </div>
       </div>
       <div className="site-footer__base">
-        <span className="caption">© 2026 · Released under CC BY 4.0</span>
+        <span className="caption">Code MIT · Project metadata/prose CC BY 4.0 · Upstream data rights remain with publishers</span>
         {updated && <span className="caption mono">Last updated {updated}</span>}
       </div>
     </footer>
