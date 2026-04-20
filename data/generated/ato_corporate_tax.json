@@ -4,11 +4,11 @@
   "source_name": "ATO Corporate Tax Transparency Report (latest year)",
   "source_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/in-detail/tax-transparency/corporate-tax-transparency-report-2023-24",
   "unit": "%",
-  "retrieved_at": "2026-04-20T14:57:30+00:00",
-  "last_data_point": "2048-06-30",
+  "retrieved_at": "2026-04-20T15:32:35+00:00",
+  "last_data_point": "2020-06-30",
   "values": [
     {
-      "t": "2048",
+      "t": "2020",
       "v": 24.75
     }
   ],

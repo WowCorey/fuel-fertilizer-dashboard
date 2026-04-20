@@ -4,15 +4,15 @@
   "source_name": "Ampol annual report (ASX:ALD)",
   "source_url": "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
   "unit": "%",
-  "retrieved_at": "2026-04-20T15:00:25+00:00",
+  "retrieved_at": "2026-04-20T15:33:46+00:00",
   "last_data_point": "2025-06-30",
   "values": [
     {
       "t": "2025",
-      "v": 27.64
+      "v": 30.0
     }
   ],
-  "notes": "Company-specific Ampol parser using NPAT and tax expense from the annual report.",
+  "notes": "Parsed company annual report PDF and captured directly reported tax rate.",
   "status": "ok",
   "manual_entry": false,
   "source_rights": "Company copyright",
@@ -20,15 +20,12 @@
   "extra": {
     "schema": "manual_automation.v2",
     "fields": {
-      "extractor": "company_ampol_pdf_v1",
+      "extractor": "company_pdf_v1",
       "resolved_url": "https://assets.contentstack.io/v3/assets/blt35cb056c1c8431c3/bltf2b88cca4ee2d090/686b0daa16ecf85da24ead41/2024_Annual_Report.pdf",
       "resolution": "company_resolver_direct_0:direct",
       "parse_mode": "pdf_text",
-      "financials": {
-        "net_profit_after_tax": 234.8,
-        "income_tax_expense_abs": 89.7,
-        "implied_profit_before_tax": 324.5
-      }
+      "rate_label": "tax rate",
+      "reported_rate_percent": 30.0
     }
   }
 }

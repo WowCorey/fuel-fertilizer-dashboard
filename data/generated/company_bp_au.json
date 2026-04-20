@@ -7,16 +7,17 @@
   "retrieved_at": null,
   "last_data_point": null,
   "values": [],
-  "notes": "Programmatic fetch failed (RuntimeError: structured attempts failed (xbrl:HTTPError, ixbrl:HTTPError); pdf fallback failed: 403 Client Error: Forbidden for url: https://www.bp.com/en_au/australia.html). Fell back to manual envelope because ALLOW_MANUAL_FALLBACK=1.",
+  "notes": "Programmatic extractor could not produce a directly verifiable value.",
   "status": "unavailable",
   "manual_entry": false,
   "source_rights": "Company copyright",
   "citation": "BP Australia annual financial statements.",
   "extra": {
-    "schema": "programmatic_manual_fallback.v1",
+    "schema": "programmatic_extractor_unavailable.v1",
     "fields": {
-      "manual_source_path": "data\\manual\\company_bp_au.json",
-      "original_error": "RuntimeError: structured attempts failed (xbrl:HTTPError, ixbrl:HTTPError); pdf fallback failed: 403 Client Error: Forbidden for url: https://www.bp.com/en_au/australia.html"
+      "extractor": "fetch_via_manual_extractor",
+      "resolved_url": "https://www.bp.com/en_au/australia.html",
+      "reason": "HTTPError: 403 Client Error: Forbidden for url: https://www.bp.com/en_au/australia.html"
     }
   }
 }
