@@ -1,5 +1,21 @@
 // Footer.jsx - shared footer across all dashboards.
+function resolveRepoUrl() {
+  const { hostname, pathname } = window.location;
+  const ghMatch = hostname.match(/^([^.]+)\.github\.io$/i);
+  if (ghMatch) {
+    const owner = ghMatch[1];
+    const segments = pathname.split('/').filter(Boolean);
+    if (segments.length >= 1) {
+      return `https://github.com/${owner}/${segments[0]}`;
+    }
+    return `https://github.com/${owner}`;
+  }
+  return 'https://github.com/WowCorey/fuel-fertilizer-dashboard';
+}
+
 function Footer({ updated = '' }) {
+  const repoUrl = resolveRepoUrl();
+  const issuesUrl = `${repoUrl}/issues`;
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
@@ -32,8 +48,8 @@ function Footer({ updated = '' }) {
         <div className="site-footer__col">
           <span className="eyebrow">Contact</span>
           <ul>
-            <li><a href="https://github.com/WowCorey/fuel-fertilizer-dashboard/issues">Report an error</a></li>
-            <li><a href="https://github.com/WowCorey/fuel-fertilizer-dashboard/issues">Suggest a dataset</a></li>
+            <li><a href={issuesUrl}>Report an error</a></li>
+            <li><a href={issuesUrl}>Suggest a dataset</a></li>
           </ul>
         </div>
       </div>

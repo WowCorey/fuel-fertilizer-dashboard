@@ -42,12 +42,17 @@ except ImportError:
     sys.stderr.write("requests is required. Install with: pip install requests\n")
     sys.exit(2)
 
+try:
+    from _repo_url import repo_url
+except ImportError:
+    from scripts._repo_url import repo_url
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCES_FILE = ROOT / "data" / "sources.yml"
 GENERATED_DIR = ROOT / "data" / "generated"
 MANUAL_DIR = ROOT / "data" / "manual"
 
-UA = "FuelResilienceAU-DataBot/1.0 (+https://github.com/WowCorey/fuel-fertilizer-dashboard)"
+UA = f"FuelResilienceAU-DataBot/1.0 (+{repo_url()})"
 
 
 def fetch_eia_series(series_code: str, url: str | None = None) -> dict[str, Any]:
