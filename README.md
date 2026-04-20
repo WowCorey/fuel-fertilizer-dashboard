@@ -142,6 +142,38 @@ flags, malformed values and unstructured `extra` data.
 minimal pinned Python dependencies, compile-checks scripts and runs the data
 validator so invalid registry or envelope structure fails loudly.
 
+## Commit, hook, and release workflow
+
+This repository now enforces small, targeted commits and quality checks before
+push via tracked local hooks.
+
+Install hooks once per clone:
+
+```sh
+python3 scripts/install_hooks.py
+```
+
+Hooks:
+
+- `pre-commit` runs `scripts/check_commit_scope.py` to block broad commits
+  (default limits: 15 files, 800 changed lines). Override one-off with
+  `ALLOW_LARGE_COMMIT=1`.
+- `commit-msg` requires Conventional Commits format:
+  `type(scope): summary` (supports `!` for breaking changes).
+- `pre-push` runs `scripts/validate_data.py` and compile-checks core scripts.
+
+Semver automation:
+
+- `VERSION` is the project release source of truth.
+- `.github/workflows/semver-release.yml` runs on push to `main`, infers bump
+  type from Conventional Commit messages, updates `VERSION`, then creates/pushes
+  a matching git tag (`vX.Y.Z`).
+- Bump policy:
+  - breaking (`!` or `BREAKING CHANGE`) -> major
+  - `feat` -> minor
+  - `fix`, `perf`, `refactor`, `data`, `docs`, `test`, `chore`, `ci`, `build`,
+    `style` -> patch
+
 ## Run the pipeline locally
 
 ```sh
@@ -151,8 +183,22 @@ python3 scripts/fetch_data.py --only eia_brent
 python3 scripts/fetch_data.py --check         # blocking check: programmatic fetch URLs only
 python3 scripts/fetch_data.py --check-all-links  # broad link-health check for canonical pages
 python3 scripts/init_manual_stubs.py          # create missing manual stubs
+python3 scripts/refresh_manual_sources.py     # auto-refresh manual/unavailable source envelopes
 python3 scripts/validate_data.py              # validate registry and envelopes
 ```
+
+### Optional private-feed environment variables
+
+Some fetchers are gated so private/internal data can be used without forcing
+redistribution-ready settings across the project.
+
+- `NSW_FUELCHECK_API_KEY` enables NSW contribution in `aus_retail_fuel_multistate`.
+- `TAPIS_ENABLE_PRIVATE_FEED=1` enables private Tapis ingestion.
+- `TAPIS_API_KEY` authenticates the Tapis provider when the gate is enabled.
+- `TAPIS_PROVIDER` currently supports `oilpriceapi` (default).
+
+If a private feed gate is disabled, the source remains explicitly unavailable
+rather than publishing inferred values.
 
 ### Weekly refresh
 
@@ -163,8 +209,9 @@ python3 scripts/validate_data.py              # validate registry and envelopes
 2. Runs broad canonical/manual link health as a non-blocking diagnostic.
 3. Refreshes programmatic JSON envelopes.
 4. Creates any missing manual stubs.
-5. Runs `scripts/validate_data.py` before committing.
-6. Commits changed data files to the repository only after validation passes.
+5. Refreshes manual/unavailable source envelopes with automated URL-resolution and reachability metadata.
+6. Runs `scripts/validate_data.py` before committing.
+7. Commits changed data files to the repository only after validation passes.
 
 Manual and canonical publisher pages should not block a valid programmatic data
 refresh; broken programmatic fetch URLs should fail loudly.
@@ -250,6 +297,30 @@ push to `main`:
   them.
 - **Cloudflare Pages** — more control. Connect the repo, set build command
   to none and output directory to `/`.
+
+## GitHub Pages compatibility guardrails
+
+This repository is intentionally **static-hosting only**. Keep all dashboard
+surfaces compatible with GitHub Pages (`Build from branch`, no server runtime).
+
+- No server-side runtime in the site path: no Node/Express handlers, no API
+  routes, no SSR-only framework features.
+- Keep links and assets repo-relative (`../` or `./`), not root-absolute
+  paths (for example `href="/foo"` or `src="/bar.js"`).
+- Keep client data reads relative and static-file based (current pattern:
+  `../../data/generated/*.json` and `../../data/manual/*.json`).
+- Do not rely on SPA history fallback rewrites. Every route must map to a real
+  checked-in HTML file.
+- If introducing a bundler/framework later, its output must be static export
+  only and configured with the repository base path for Pages.
+
+Quick pre-PR static checks:
+
+```sh
+rg "(href|src)=\\\"/" ui_kits/*.html ui_kits/**/*.html
+rg "fetch\\(\\s*['\\\"]/" ui_kits/shared ui_kits/*
+python3 scripts/validate_data.py
+```
 
 ## License and source rights
 

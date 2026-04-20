@@ -1,0 +1,15 @@
+---
+description: Enforce static-only patterns for GitHub Pages hosting
+globs:
+  - "ui_kits/**/*.html"
+  - "ui_kits/**/*.js"
+  - "ui_kits/**/*.jsx"
+alwaysApply: true
+---
+
+- This repository must remain compatible with GitHub Pages static hosting.
+- Do not introduce server-side runtime features in dashboard code paths.
+- Do not add API route assumptions or server middleware dependencies for page rendering.
+- Use relative links and asset paths. Avoid root-absolute URL patterns like `href="/..."`, `src="/..."`, or `fetch("/...")`.
+- Do not add SPA routing that depends on host-level rewrite/fallback rules.
+- Every navigable page should resolve to a real checked-in HTML file.
