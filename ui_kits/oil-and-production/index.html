@@ -88,7 +88,7 @@ function App() {
         <section className="intro" id="oil">
           <div>
             <span className="eyebrow">Oil &amp; production · v1.2</span>
-            <h1 style={{ marginTop: 12 }}>What crude costs, what we refine, and what the government pays.</h1>
+            <h1 className="title-gap">What crude costs, what we refine, and what the government pays.</h1>
             <p className="intro__lede">
               Four views: the global crude benchmarks that set the floor on pump prices; Australia's
               shrinking refining sector; the stockpile gap against our international obligation; and
@@ -99,7 +99,7 @@ function App() {
           <aside className="intro__meta" aria-label="Publication details">
             <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
-            <div style={{ height: 12 }}/>
+            <div className="meta-spacer"/>
             <strong>Refresh</strong>
             <span>Programmatic weekly · manual values after verification</span>
           </aside>
@@ -110,7 +110,7 @@ function App() {
           <div className="why-grid">
             <div>
               <span className="eyebrow">What this is</span>
-              <h2 style={{ marginTop: 8 }}>What this page shows</h2>
+              <h2 className="title-gap">What this page shows</h2>
             </div>
             <div className="why-body">
               <p>
@@ -125,7 +125,7 @@ function App() {
                 open. This page keeps those topics together while leaving unavailable production and
                 payment figures blank until a public source is hand-keyed.
               </p>
-              <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
+              <p className="body-sm muted-note">
                 Acronyms: <b>WTI</b> = West Texas Intermediate. <b>APS</b> = Australian Petroleum Statistics.
                 <b> IEA</b> = International Energy Agency. <b>FSSP</b> = Fuel Security Services Payment.
               </p>
@@ -155,7 +155,7 @@ function App() {
               fromEnvelope={data.eia_brent}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
-              accent="#1F3A8A"
+              accent="var(--series-1)"
               takeaway="Brent is the North Sea benchmark and the most-quoted global crude price. Higher Brent, higher Australian pump prices — usually within 2–4 weeks."
               yAxisLabel="US dollars per barrel"
             />
@@ -166,12 +166,12 @@ function App() {
               fromEnvelope={brentAud}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
-              accent="#0F766E"
+              accent="var(--series-2)"
               takeaway="Same Brent series converted using the RBA monthly AUD/USD. A weakening Australian dollar makes crude more expensive even when the US$ price is flat."
               yAxisLabel="Australian dollars per barrel"
             />
           </div>
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid">
             <ChartCard
               eyebrow="US$"
@@ -180,7 +180,7 @@ function App() {
               fromEnvelope={data.eia_wti}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
-              accent="#B45309"
+              accent="var(--series-3)"
               takeaway="WTI is the US benchmark. Shown here for comparison — Brent is the more relevant benchmark for Asian-sourced fuel."
               yAxisLabel="US dollars per barrel"
             />
@@ -191,12 +191,12 @@ function App() {
               fromEnvelope={wtiAud}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
-              accent="#0F766E"
+              accent="var(--series-2)"
               takeaway="Same WTI series converted using the RBA monthly AUD/USD where both source envelopes are verified."
               yAxisLabel="Australian dollars per barrel"
             />
           </div>
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid">
             <ChartCard
               eyebrow="US$"
@@ -205,7 +205,7 @@ function App() {
               fromEnvelope={data.tapis_crude}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
-              accent="#6B7280"
+              accent="var(--series-4)"
               takeaway="Tapis is the Malaysian light-sweet crude benchmark most relevant to Asian refineries supplying Australia. This slot stays unavailable until a licence-compatible public source is identified."
               yAxisLabel="US dollars per barrel"
             />
@@ -216,7 +216,7 @@ function App() {
               fromEnvelope={tapisAud}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
-              accent="#991B1B"
+              accent="var(--series-5)"
               takeaway="Tapis converted to A$ will populate only if both a licence-compatible Tapis series and the AUD/USD source envelope are verified."
               yAxisLabel="Australian dollars per barrel"
             />
@@ -242,14 +242,14 @@ function App() {
             <MetricCard eyebrow="Jet"      label="Jet fuel production"     plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_jet}     unit=" ML"/>
             <MetricCard eyebrow="Fuel oil" label="Fuel oil production"     plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_fuel_oil} unit=" ML"/>
           </div>
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
               eyebrow="Utilisation"
               title="Refinery utilisation rate"
               unit="%"
               fromEnvelope={data.aps_refinery_utilisation}
-              accent="#1F3A8A"
+              accent="var(--series-1)"
               takeaway="Share of installed capacity actually running. Falls during maintenance and when margins are thin."
               yAxisLabel="Percent of installed capacity"
             />

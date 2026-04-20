@@ -5,7 +5,7 @@
 function ChartCard({
   title, eyebrow, unit, series, baseline, baselineLabel,
   ranges = ['1Y','3Y','5Y','Max'], defaultRange = '3Y',
-  accent = '#1F3A8A',
+  accent = 'var(--accent)',
   takeaway,
   sourceLine,
   yAxisLabel,
@@ -118,19 +118,19 @@ function ChartCard({
         <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width="100%" height={H} onMouseMove={onMove} focusable="false">
           {yTickVals.map((v, i) => (
             <g key={i}>
-              <line x1={padL} x2={W - padR} y1={y(v)} y2={y(v)} stroke="#EFEDE6" strokeWidth="1" />
+              <line x1={padL} x2={W - padR} y1={y(v)} y2={y(v)} className="chart-gridline" />
               <text x={padL - 8} y={y(v) + 4} textAnchor="end" className="chart-tick">{fmt(v, unit)}</text>
             </g>
           ))}
           {baseline != null && (
             <g>
-              <line x1={padL} x2={W - padR} y1={y(baseline)} y2={y(baseline)} stroke="#B45309" strokeWidth="1" strokeDasharray="3 3"/>
+              <line x1={padL} x2={W - padR} y1={y(baseline)} y2={y(baseline)} className="chart-baseline-line"/>
               <text x={W - padR} y={y(baseline) - 6} textAnchor="end" className="chart-baseline">
                 {baselineLabel || `threshold · ${baseline}${unit || ''}`}
               </text>
             </g>
           )}
-          <line x1={padL} x2={W - padR} y1={padT + innerH} y2={padT + innerH} stroke="#C9C5B8" />
+          <line x1={padL} x2={W - padR} y1={padT + innerH} y2={padT + innerH} className="chart-axisline" />
           {areaPath && <path d={areaPath} fill={accent} opacity="0.08" />}
           {linePath && <path d={linePath} fill="none" stroke={accent} strokeWidth="1.75" />}
           {data.length > 2 && [0, Math.floor(data.length / 2), data.length - 1].map(i => (
@@ -140,8 +140,8 @@ function ChartCard({
           ))}
           {hover && (
             <g>
-              <line x1={x(hoverIdx)} x2={x(hoverIdx)} y1={padT} y2={padT + innerH} stroke="#14181F" strokeWidth="1" opacity="0.5"/>
-              <circle cx={x(hoverIdx)} cy={y(hover.v)} r="3.5" fill={accent} stroke="#FFF" strokeWidth="1.5"/>
+              <line x1={x(hoverIdx)} x2={x(hoverIdx)} y1={padT} y2={padT + innerH} className="chart-hover-line"/>
+              <circle cx={x(hoverIdx)} cy={y(hover.v)} r="3.5" fill={accent} className="chart-hover-dot"/>
             </g>
           )}
         </svg>

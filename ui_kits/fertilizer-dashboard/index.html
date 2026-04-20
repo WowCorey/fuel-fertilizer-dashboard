@@ -60,7 +60,7 @@ function App() {
         <section className="intro" id="fertilizer">
           <div>
             <span className="eyebrow">Fertilizer · v1.1</span>
-            <h1 style={{ marginTop: 12 }}>Australia's fertiliser, in plain English.</h1>
+            <h1 className="title-gap">Australia's fertiliser, in plain English.</h1>
             <p className="intro__lede">
               Australia imports the majority of its fertiliser — the stuff that keeps wheat,
               canola and pasture growing. When overseas supply gets tight, it shows up as higher
@@ -70,7 +70,7 @@ function App() {
           <aside className="intro__meta" aria-label="Publication details">
             <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
-            <div style={{ height: 12 }}/>
+            <div className="meta-spacer"/>
             <strong>Refresh</strong>
             <span>Programmatic weekly · manual values after verification</span>
           </aside>
@@ -81,7 +81,7 @@ function App() {
           <div className="why-grid">
             <div>
               <span className="eyebrow">What this is</span>
-              <h2 id="why" style={{ marginTop: 8 }}>Why this matters to you</h2>
+              <h2 id="why" className="title-gap">Why this matters to you</h2>
             </div>
             <div className="why-body">
               <p>
@@ -95,7 +95,7 @@ function App() {
                 concentrated the supplier list is. Values appear only when the named public source has
                 been verified in a JSON envelope.
               </p>
-              <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
+              <p className="body-sm muted-note">
                 Acronyms used here: <b>ABS</b> = Australian Bureau of Statistics.
                 <b> ABARES</b> = Australian Bureau of Agricultural and Resource Economics and Sciences.
                 <b> DCCEEW</b> = Department of Climate Change, Energy, the Environment and Water.
@@ -169,7 +169,7 @@ function App() {
               fromEnvelope={data.abs_fertiliser_imports_urea}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
-              accent="#1F3A8A"
+              accent="var(--series-1)"
               takeaway="Urea (HS 3102) is the largest-volume nitrogen fertiliser. Chart populates when a verified monthly series is available."
               yAxisLabel="Thousand tonnes per month (kt)"
             />
@@ -180,12 +180,12 @@ function App() {
               fromEnvelope={data.abs_fertiliser_imports_potash}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
-              accent="#0F766E"
+              accent="var(--series-2)"
               takeaway="Potassium fertilisers (HS 3104). Chart populates when a verified monthly series is available."
               yAxisLabel="Thousand tonnes per month (kt)"
             />
           </div>
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid">
             <ChartCard
               eyebrow="Phosphates"
@@ -194,7 +194,7 @@ function App() {
               fromEnvelope={data.abs_fertiliser_imports_phosphate}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
-              accent="#B45309"
+              accent="var(--series-3)"
               takeaway="Phosphate fertilisers (HS 3103 + DAP/MAP under HS 3105). Chart populates when verified."
               yAxisLabel="Thousand tonnes per month (kt)"
             />
@@ -205,13 +205,13 @@ function App() {
               fromEnvelope={data.abs_fertiliser_imports_compound}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
-              accent="#6B7280"
+              accent="var(--series-4)"
               takeaway="Mixed NPK compound fertilisers (HS 3105, excluding DAP/MAP). Chart populates when verified."
               yAxisLabel="Thousand tonnes per month (kt)"
             />
           </div>
 
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
               eyebrow="Supplier mix"
@@ -220,13 +220,13 @@ function App() {
               fromEnvelope={data.abs_fertiliser_source_concentration}
               ranges={['1Y','3Y','5Y']}
               defaultRange="3Y"
-              accent="#6B7280"
+              accent="var(--series-4)"
               takeaway="How concentrated Australia's fertiliser supply is. The higher the share, the more exposed we are to disruption in a small number of supplier countries. Chart populates when the ABS country breakdown is hand-keyed."
               yAxisLabel="Percent of total monthly HS-31 imports (%)"
             />
           </div>
 
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
               eyebrow="Prices"
@@ -235,7 +235,7 @@ function App() {
               fromEnvelope={data.abares_fertiliser_price}
               ranges={['1Y','3Y','5Y']}
               defaultRange="5Y"
-              accent="#1F3A8A"
+              accent="var(--series-1)"
               takeaway="ABARES publishes an Australian fertiliser price index alongside its quarterly Agricultural Commodities release. 100 = long-run average."
               yAxisLabel="Index (long-run average = 100)"
             />

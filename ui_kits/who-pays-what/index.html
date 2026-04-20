@@ -138,7 +138,7 @@ function App() {
         <section className="intro" id="who-pays-what">
           <div>
             <span className="eyebrow">Who pays what · v1.3</span>
-            <h1 style={{ marginTop: 12 }}>What companies earn, what tax they pay, and what consumers pay.</h1>
+            <h1 className="title-gap">What companies earn, what tax they pay, and what consumers pay.</h1>
             <p className="intro__lede">
               This page shows what major energy companies earn in Australia, what tax they pay,
               and what consumers pay at the pump — using figures filed with the ATO, ACCC and ASX.
@@ -148,7 +148,7 @@ function App() {
           <aside className="intro__meta" aria-label="Publication details">
             <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
-            <div style={{ height: 12 }}/>
+            <div className="meta-spacer"/>
             <strong>Source check</strong>
             <span>Populated cells link to public reports.</span>
           </aside>
@@ -159,7 +159,7 @@ function App() {
           <div className="why-grid">
             <div>
               <span className="eyebrow">Start here</span>
-              <h2 style={{ marginTop: 8 }}>How to read this page</h2>
+              <h2 className="title-gap">How to read this page</h2>
             </div>
             <div className="why-body">
               <p>
@@ -240,7 +240,7 @@ function App() {
             </table>
           </div>
 
-          <p className="caption" style={{ marginTop: 12 }}>
+          <p className="caption muted-note">
             "—" means the figure has not yet been hand-keyed from the company's latest filed
             report. Cross-check with the ATO Corporate Tax Transparency dataset:{' '}
             <a href={data.ato_corporate_tax.source_url}>{data.ato_corporate_tax.source_name}</a>.
@@ -267,7 +267,7 @@ function App() {
             <MetricCard eyebrow="Pump $"  label="Retailer margin"      plain="What the service-station operator earns per litre." fromEnvelope={data.accc_petrol_retail_margin_component} unit=" A$/L"/>
           </div>
 
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
               eyebrow="Trailing 12 months"
@@ -276,7 +276,7 @@ function App() {
               fromEnvelope={data.accc_petrol_breakdown_series}
               ranges={['1Y','3Y']}
               defaultRange="1Y"
-              accent="#1F3A8A"
+              accent="var(--series-1)"
               takeaway="Chart remains unavailable until each ACCC breakdown component can be represented as a separate verified series."
               yAxisLabel="Australian dollars per litre (A$/L)"
             />

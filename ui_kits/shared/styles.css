@@ -37,6 +37,10 @@ a.skip-link:focus, a.skip-link:focus-visible {
 .section--why { padding-top: var(--s-8); padding-bottom: var(--s-8); }
 .why-grid { display: grid; grid-template-columns: 1fr 2fr; gap: var(--s-8); align-items: start; }
 .why-body p { font-size: var(--fs-18); line-height: 1.6; margin-bottom: var(--s-3); max-width: 62ch; }
+.title-gap { margin-top: var(--s-2); }
+.muted-note { color: var(--ink-3); margin-top: var(--s-3); }
+.meta-spacer { height: var(--s-3); }
+.section-spacer { height: var(--s-5); }
 
 .metric-card__plain { font-size: var(--fs-13); color: var(--ink-3); margin-top: 4px; }
 
@@ -70,7 +74,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
 /* Header */
 .site-header {
   position: sticky; top: 0; z-index: 40; height: var(--header-h);
-  background: rgba(247, 246, 242, 0.85);
+  background: var(--paper-glass);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--rule);
 }
@@ -172,6 +176,11 @@ a.skip-link:focus, a.skip-link:focus-visible {
 .chart-card__toggles { display:flex; gap: 4px; }
 .chart-tick { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-3); }
 .chart-baseline { font-family: var(--font-mono); font-size: 10px; fill: var(--caution); }
+.chart-gridline { stroke: var(--rule-faint); stroke-width: 1; }
+.chart-baseline-line { stroke: var(--caution); stroke-width: 1; stroke-dasharray: 3 3; }
+.chart-axisline { stroke: var(--rule-strong); }
+.chart-hover-line { stroke: var(--ink); stroke-width: 1; opacity: 0.5; }
+.chart-hover-dot { stroke: var(--card); stroke-width: 1.5; }
 .chart-tooltip {
   position: absolute; top: 0; transform: translateX(-50%);
   background: var(--ink); color: var(--paper);

@@ -71,7 +71,7 @@ function App() {
         <section className="intro" id="fuel">
           <div>
             <span className="eyebrow">Fuel</span>
-            <h1 style={{ marginTop: 12 }}>Australia's liquid fuel, in plain English.</h1>
+            <h1 className="title-gap">Australia's liquid fuel, in plain English.</h1>
             <p className="intro__lede">
               Petrol, diesel and jet fuel power almost every truck, tractor and aircraft in the country.
               Most of it is imported. This page tracks how much we bring in, what it costs at the pump,
@@ -81,7 +81,7 @@ function App() {
           <aside className="intro__meta" aria-label="Publication details">
             <strong>Verified data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
-            <div style={{ height: 12 }}/>
+            <div className="meta-spacer"/>
             <strong>Refresh</strong>
             <span>Programmatic weekly · manual values after verification</span>
           </aside>
@@ -92,7 +92,7 @@ function App() {
           <div className="why-grid">
             <div>
               <span className="eyebrow">What this is</span>
-              <h2 id="why" style={{ marginTop: 8 }}>Why this matters to you</h2>
+              <h2 id="why" className="title-gap">Why this matters to you</h2>
             </div>
             <div className="why-body">
               <p>
@@ -104,7 +104,7 @@ function App() {
                 and trade databases. It loads verified source envelopes where available and leaves unavailable values visible,
                 rather than filling gaps with estimates.
               </p>
-              <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
+              <p className="body-sm muted-note">
                 Acronyms used here: <b>ABS</b> = Australian Bureau of Statistics. <b>APS</b> = Australian Petroleum Statistics.
                 <b> IEA</b> = International Energy Agency. <b>AIP</b> = Australian Institute of Petroleum.
               </p>
@@ -181,7 +181,7 @@ function App() {
               fromEnvelope={data.abs_petroleum_imports}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
-              accent="#1F3A8A"
+              accent="var(--series-1)"
               takeaway="Monthly petroleum imports from ABS International Merchandise Trade. Chart populates when the latest month is verified."
               yAxisLabel="Import value (AUD thousands per month)"
             />
@@ -192,13 +192,13 @@ function App() {
               fromEnvelope={data.aip_retail}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
-              accent="#0F766E"
+              accent="var(--series-2)"
               takeaway="Four-week rolling average across petrol and diesel from AIP. Chart populates when verified."
               yAxisLabel="Australian dollars per litre (A$/L)"
             />
           </div>
 
-          <div style={{ height: 24 }}/>
+          <div className="section-spacer"/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
               eyebrow="Resilience"
@@ -209,7 +209,7 @@ function App() {
               baselineLabel="IEA 90-day benchmark"
               ranges={['1Y','3Y']}
               defaultRange="3Y"
-              accent="#1F3A8A"
+              accent="var(--series-1)"
               takeaway="Days of cover = petroleum stocks on land and in transit divided by average net imports. The 90-day benchmark is an IEA obligation for member countries."
               yAxisLabel="Days of cover"
             />
