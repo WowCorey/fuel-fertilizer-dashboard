@@ -1,0 +1,30 @@
+{
+  "series_id": "accc_petroleum_monitoring",
+  "source_id": "accc_petroleum_monitoring",
+  "source_name": "ACCC Petroleum Monitoring Report (latest)",
+  "source_url": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
+  "unit": "index",
+  "retrieved_at": "2026-04-20T14:57:48+00:00",
+  "last_data_point": "2026-04-01",
+  "values": [
+    {
+      "t": "2026-04",
+      "v": 402.0
+    }
+  ],
+  "notes": "ACCC petroleum report parsed; detailed component extraction is available on dedicated series IDs.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report.",
+  "extra": {
+    "schema": "manual_automation.v2",
+    "fields": {
+      "extractor": "accc_pdf_v1",
+      "resolved_url": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
+      "resolution": "canonical_no_links:direct",
+      "parse_mode": "pdf_text",
+      "keyword_hits": 402
+    }
+  }
+}
