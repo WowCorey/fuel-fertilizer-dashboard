@@ -397,6 +397,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .wb-foot__links {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
   .wb-backlink {
     color: var(--lin-text-strong);
     border: 1px solid var(--lin-border);
@@ -546,6 +551,20 @@ function rotatingPoint(env, step, windowSize = 10) {
   const start = Math.max(0, vals.length - windowSize);
   const slice = vals.slice(start);
   return slice[step % slice.length] || vals[vals.length - 1];
+}
+
+function resolveWikiHref() {
+  const { hostname, pathname } = window.location;
+  const ghMatch = hostname.match(/^([^.]+)\.github\.io$/i);
+  if (ghMatch) {
+    const owner = ghMatch[1];
+    const segments = pathname.split('/').filter(Boolean);
+    if (segments.length >= 1) {
+      return `https://github.com/${owner}/${segments[0]}/wiki`;
+    }
+    return `https://github.com/${owner}`;
+  }
+  return 'https://github.com/WowCorey/fuel-fertilizer-dashboard/wiki';
 }
 
 function toAud(usdEnv, fxEnv) {
@@ -969,7 +988,15 @@ function App() {
         <span className="wb-foot__text">
           Verified retrieval {updatedDisplay}.
         </span>
-        <a className="wb-backlink" href="../../index.html">Back to main index</a>
+        <div className="wb-foot__links">
+          <a
+            className="wb-backlink"
+            href={resolveWikiHref()}
+            target="_blank"
+            rel="noopener noreferrer"
+          >Project wiki</a>
+          <a className="wb-backlink" href="../../index.html">Back to main index</a>
+        </div>
       </footer>
     </div>
   );
