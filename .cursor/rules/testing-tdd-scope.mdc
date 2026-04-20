@@ -1,0 +1,26 @@
+---
+description: Targeted deterministic TDD scope for data pipeline scripts
+globs:
+  - "scripts/*.py"
+  - "tests/**/*.py"
+  - ".github/workflows/ci.yml"
+alwaysApply: true
+---
+
+- Default workflow for script logic changes: write or update tests first, then implement, then run `pytest`.
+- Mandatory test areas for this repo:
+  - schema and contract validation behavior (required fields, status/shape guards, strict/fallback semantics)
+  - deterministic parsing/transforms (date parsing, numeric normalization, mapping/aggregation, derived metrics)
+  - fallback/unavailable behavior and metadata fields for failed extraction paths
+- Non-required or discouraged test areas:
+  - live endpoint availability and real external API responses
+  - brittle HTML/PDF content details that change frequently upstream
+  - full generated data snapshots unless fixture input is intentionally stable
+- Keep tests deterministic:
+  - mock or monkeypatch network, file I/O boundaries, and current time where behavior depends on clocks
+  - prefer small synthetic fixtures over large captured payloads
+  - assert stable contracts and core semantics, not volatile prose or formatting details
+- Test style standards:
+  - use clear arrange -> act -> assert structure
+  - one behavior focus per test, descriptive test names
+  - avoid sleeps, retries, and time-dependent race assumptions

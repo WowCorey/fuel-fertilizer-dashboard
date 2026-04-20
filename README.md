@@ -128,9 +128,10 @@ never estimate.
 Run the validator before opening or merging a PR:
 
 ```sh
-pip install pyyaml==6.0.2 requests==2.32.3
+pip install pyyaml==6.0.2 requests==2.32.3 pytest
 python3 scripts/validate_data.py
 python3 scripts/validate_data.py --json
+python3 scripts/run_tests.py
 ```
 
 The validator checks `data/sources.yml`, all generated/manual envelopes and the
@@ -177,7 +178,7 @@ Semver automation:
 ## Run the pipeline locally
 
 ```sh
-pip install pyyaml==6.0.2 requests==2.32.3
+pip install pyyaml==6.0.2 requests==2.32.3 pytest
 python3 scripts/fetch_data.py                 # pull every programmatic source
 python3 scripts/fetch_data.py --only eia_brent
 python3 scripts/fetch_data.py --check         # blocking check: programmatic fetch URLs only
@@ -185,6 +186,7 @@ python3 scripts/fetch_data.py --check-all-links  # broad link-health check for c
 python3 scripts/init_manual_stubs.py          # create missing manual stubs
 python3 scripts/refresh_manual_sources.py     # auto-refresh manual/unavailable source envelopes
 python3 scripts/validate_data.py              # validate registry and envelopes
+python3 scripts/run_tests.py                  # run deterministic unit tests
 ```
 
 ### Optional private-feed environment variables
