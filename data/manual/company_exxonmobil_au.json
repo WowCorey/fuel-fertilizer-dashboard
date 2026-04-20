@@ -10,18 +10,18 @@
   "notes": "Automated extraction failed; source left unavailable pending parser fix.",
   "status": "unavailable",
   "manual_entry": true,
-  "stub_created_at": "2026-04-20T12:21:54+00:00",
+  "stub_created_at": "2026-04-20T14:11:08+00:00",
   "source_rights": "Company copyright",
   "citation": "ExxonMobil Australia annual report and financial statements.",
   "extra": {
     "schema": "manual_automation.v2",
     "fields": {
       "extractor": "fallback_unavailable",
-      "resolved_url": "https://corporate.exxonmobil.com.au/community/worldwide-giving-report/volunteering-in-local-communities",
-      "resolution": "discovered_from_canonical:pdf",
+      "resolved_url": "https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports",
+      "resolution": "company_batch",
       "reachable": false,
       "reachability_note": "RuntimeError: OCR conversion unavailable: Unable to get page count. Is poppler installed and in PATH?",
-      "checked_at": "2026-04-20T12:21:54+00:00"
+      "checked_at": "2026-04-20T14:11:08+00:00"
     }
   }
 }

@@ -57,12 +57,17 @@ try:
 except ImportError:
     pytesseract = None
 
+try:
+    from _repo_url import repo_url
+except ImportError:
+    from scripts._repo_url import repo_url
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCES_FILE = ROOT / "data" / "sources.yml"
 MANUAL_DIR = ROOT / "data" / "manual"
 GENERATED_DIR = ROOT / "data" / "generated"
 
-UA = "FuelResilienceAU-ManualBot/1.0 (+https://github.com/WowCorey/fuel-fertilizer-dashboard)"
+UA = f"FuelResilienceAU-ManualBot/1.0 (+{repo_url()})"
 HTTP_TIMEOUT = 15
 EXTRA_SCHEMA = "manual_automation.v2"
 HTTP_RETRIES = 3
@@ -110,6 +115,7 @@ SOURCE_URL_OVERRIDES: dict[str, str] = {
     "accc_petrol_gst_component": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
     "accc_petrol_retail_margin_component": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
     "accc_petrol_breakdown_series": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
+    "company_ampol": "https://assets.contentstack.io/v3/assets/blt35cb056c1c8431c3/bltf2b88cca4ee2d090/686b0daa16ecf85da24ead41/2024_Annual_Report.pdf",
 }
 
 def now_iso() -> str:
@@ -218,6 +224,13 @@ def refine_download_url(source: dict[str, Any], url: str) -> tuple[str, str]:
             return sorted(xlsx_links, key=len)[0], "refined_xlsx_link"
     if fmt == "PDF":
         pdf_links = [u for u in links if ".pdf" in u.lower()]
+        if sid.startswith("company_"):
+            preferred = [
+                u for u in pdf_links
+                if any(token in u.lower() for token in ("annual", "financial", "results", "report"))
+            ]
+            if preferred:
+                return sorted(preferred, key=len)[0], "refined_company_pdf"
         if sid.startswith("accc_"):
             sys_pdf = [u for u in pdf_links if "/system/files/" in u.lower()]
             if sys_pdf:
@@ -539,12 +552,12 @@ def extract_ato_corporate_tax(source: dict[str, Any], resolved_url: str, resolut
         },
     }
 
-def extract_pdf_text(blob: bytes) -> tuple[str, str]:
+def extract_pdf_text(blob: bytes, *, max_pages: int = 40) -> tuple[str, str]:
     pages_text: list[str] = []
     if pdfplumber is not None:
         try:
             with pdfplumber.open(io.BytesIO(blob)) as pdf:
-                for page in pdf.pages[:40]:
+                for page in pdf.pages[:max_pages]:
                     txt = page.extract_text() or ""
                     if txt.strip():
                         pages_text.append(txt)
@@ -557,7 +570,7 @@ def extract_pdf_text(blob: bytes) -> tuple[str, str]:
         try:
             pdf = pypdfium2.PdfDocument(io.BytesIO(blob))
             pdfium_text = []
-            for idx in range(min(len(pdf), 30)):
+            for idx in range(min(len(pdf), max_pages)):
                 page = pdf[idx]
                 textpage = page.get_textpage()
                 txt = textpage.get_text_bounded()
@@ -571,7 +584,7 @@ def extract_pdf_text(blob: bytes) -> tuple[str, str]:
     if convert_from_bytes is None or pytesseract is None:
         raise RuntimeError("PDF had no extractable text and OCR dependencies are missing")
     try:
-        images = convert_from_bytes(blob, dpi=200, first_page=1, last_page=10)
+        images = convert_from_bytes(blob, dpi=200, first_page=1, last_page=max(10, min(max_pages, 30)))
     except Exception as exc:
         raise RuntimeError(f"OCR conversion unavailable: {exc}") from exc
     ocr_text = "\n".join(pytesseract.image_to_string(img) for img in images)
@@ -648,10 +661,47 @@ def extract_accc(source: dict[str, Any], resolved_url: str, resolution_note: str
 
 def extract_company_report(source: dict[str, Any], resolved_url: str, resolution_note: str) -> dict[str, Any]:
     blob = fetch_bytes(resolved_url)
-    text, parse_mode = extract_pdf_text(blob)
+    # Company reports often place financial statements deep in the document.
+    text, parse_mode = extract_pdf_text(blob, max_pages=220)
     lower = text.lower()
     if "annual report" not in lower and "financial statements" not in lower:
         raise RuntimeError("company PDF does not look like a report")
+
+    sid = source["id"]
+    if sid == "company_ampol":
+        npat = first_number_after(
+            lower,
+            r"(underlying rcop net profit after tax|net profit after tax attributable to equity holders)",
+        )
+        tax = first_number_after(lower, r"(income tax expense|tax expense|taxation expense)")
+        if npat is None or tax is None:
+            raise RuntimeError("Ampol parser could not locate NPAT/tax values")
+        tax_abs = abs(tax)
+        pbt = npat + tax_abs
+        etr = (tax_abs / pbt * 100.0) if pbt > 0 else 0.0
+        year_candidates = re.findall(r"(20\d{2})", text[:10000])
+        year = max(int(y) for y in year_candidates) if year_candidates else dt.datetime.now(dt.timezone.utc).year
+        return {
+            "status": "ok",
+            "unit": "%",
+            "values": [{"t": f"{year}", "v": round(etr, 2)}],
+            "last_data_point": f"{year}-06-30",
+            "notes": "Company-specific Ampol parser using NPAT and tax expense from the annual report.",
+            "extra": {
+                "schema": EXTRA_SCHEMA,
+                "fields": {
+                    "extractor": "company_ampol_pdf_v1",
+                    "resolved_url": resolved_url,
+                    "resolution": resolution_note,
+                    "parse_mode": parse_mode,
+                    "financials": {
+                        "net_profit_after_tax": round(npat, 2),
+                        "income_tax_expense_abs": round(tax_abs, 2),
+                        "implied_profit_before_tax": round(pbt, 2),
+                    },
+                },
+            },
+        }
 
     rev = first_number_after(lower, r"(revenue|total income|sales)")
     pbt = first_number_after(

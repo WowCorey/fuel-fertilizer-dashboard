@@ -3,25 +3,32 @@
   "source_id": "company_ampol",
   "source_name": "Ampol annual report (ASX:ALD)",
   "source_url": "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
-  "unit": "",
-  "retrieved_at": null,
-  "last_data_point": null,
-  "values": [],
-  "notes": "Automated extraction failed; source left unavailable pending parser fix.",
-  "status": "unavailable",
+  "unit": "%",
+  "retrieved_at": "2026-04-20T14:12:01+00:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2025",
+      "v": 27.64
+    }
+  ],
+  "notes": "Company-specific Ampol parser using NPAT and tax expense from the annual report.",
+  "status": "ok",
   "manual_entry": true,
-  "stub_created_at": "2026-04-20T12:22:06+00:00",
   "source_rights": "Company copyright",
   "citation": "Ampol annual report.",
   "extra": {
     "schema": "manual_automation.v2",
     "fields": {
-      "extractor": "fallback_unavailable",
+      "extractor": "company_ampol_pdf_v1",
       "resolved_url": "https://assets.contentstack.io/v3/assets/blt35cb056c1c8431c3/bltf2b88cca4ee2d090/686b0daa16ecf85da24ead41/2024_Annual_Report.pdf",
-      "resolution": "discovered_from_canonical:pdf",
-      "reachable": false,
-      "reachability_note": "RuntimeError: required financial metrics not found in company report",
-      "checked_at": "2026-04-20T12:22:06+00:00"
+      "resolution": "canonical_no_links:direct",
+      "parse_mode": "pdf_text",
+      "financials": {
+        "net_profit_after_tax": 234.8,
+        "income_tax_expense_abs": 89.7,
+        "implied_profit_before_tax": 324.5
+      }
     }
   }
 }

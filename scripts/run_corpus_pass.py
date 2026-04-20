@@ -31,12 +31,17 @@ try:
 except ImportError:
     pdfplumber = None
 
+try:
+    from _repo_url import repo_url
+except ImportError:
+    from scripts._repo_url import repo_url
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCES_FILE = ROOT / "data" / "sources.yml"
 RAW_DIR = ROOT / "data" / "raw"
 MANIFEST_DIR = ROOT / "data" / "corpus_manifests"
 
-UA = "FuelResilienceAU-CorpusBot/1.0 (+https://github.com/WowCorey/fuel-fertilizer-dashboard)"
+UA = f"FuelResilienceAU-CorpusBot/1.0 (+{repo_url()})"
 TIMEOUT = 25
 RETRY = 2
 

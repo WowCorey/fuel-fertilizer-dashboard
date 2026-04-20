@@ -10,7 +10,7 @@
   "notes": "Automated extraction failed; source left unavailable pending parser fix.",
   "status": "unavailable",
   "manual_entry": true,
-  "stub_created_at": "2026-04-20T12:22:09+00:00",
+  "stub_created_at": "2026-04-20T14:12:04+00:00",
   "source_rights": "Company copyright",
   "citation": "Woodside Energy annual report.",
   "extra": {
@@ -18,10 +18,10 @@
     "fields": {
       "extractor": "fallback_unavailable",
       "resolved_url": "https://www.woodside.com/investors/reports-investor-briefings",
-      "resolution": "default",
+      "resolution": "company_batch",
       "reachable": false,
       "reachability_note": "HTTPError: 403 Client Error: Forbidden for url: https://www.woodside.com/investors/reports-investor-briefings",
-      "checked_at": "2026-04-20T12:22:09+00:00"
+      "checked_at": "2026-04-20T14:12:04+00:00"
     }
   }
 }
