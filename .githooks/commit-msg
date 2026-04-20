@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+msg_file="${1:-}"
+if [ -z "$msg_file" ] || [ ! -f "$msg_file" ]; then
+  echo "[X] commit-msg hook requires commit message file."
+  exit 1
+fi
+
+first_line="$(sed -n '1p' "$msg_file")"
+pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|data)(\([a-z0-9._/-]+\))?(!)?: .{1,72}$'
+
+if [[ ! "$first_line" =~ $pattern ]]; then
+  echo "[X] Invalid commit message format."
+  echo "Use Conventional Commits:"
+  echo "    type(scope): short summary"
+  echo "Examples:"
+  echo "    feat(dashboard): add source freshness banner"
+  echo "    fix(data)!: remove fabricated fallback values"
+  exit 1
+fi
