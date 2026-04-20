@@ -1,0 +1,33 @@
+---
+description: Preserve original Fuel Resilience AU editorial, data, and design intent
+globs:
+  - "README.md"
+  - "colors_and_type.css"
+  - "ui_kits/**/*.html"
+  - "ui_kits/**/*.js"
+  - "ui_kits/**/*.jsx"
+  - "scripts/**/*.py"
+  - "data/**/*.json"
+  - "data/sources.yml"
+alwaysApply: true
+---
+
+- Keep the project static-host compatible (GitHub Pages). Do not add backend runtime requirements for dashboards.
+- Do not fabricate, interpolate, estimate, or backfill missing values. Missing or unverifiable values must remain explicitly unavailable.
+- Preserve envelope semantics:
+  - `status: "ok"` requires valid `retrieved_at`, `last_data_point`, and usable numeric `values` (or structured `extra` where appropriate).
+  - non-`ok` envelopes must not look freshly retrieved; keep `retrieved_at: null` and clear unavailable notes.
+  - `manual_entry` must match source of truth (`data/manual` true, `data/generated` false).
+- Treat `data/sources.yml` as the contract. New/updated sources must include required provenance/rights fields (`canonical_url`, `rights`, `rights_url`, `citation`, `reuse_notes`, cadence, fetch mode).
+- Keep `source_id` stable and traceable across registry, envelope filename, and dashboard usage.
+- For dashboard "updated" timestamps, only use verified envelopes (`status: "ok"` with `retrieved_at`). If none qualify, show a clear "no verified data" message.
+- Use plain English and Australian English copy. Expand acronyms on first use where reasonable.
+- Keep neutral, public-interest tone: no sponsor voice, hype, advocacy language, or implied affiliation claims.
+- Preserve accessibility baseline: skip links, keyboard-friendly interactions, ARIA labels for non-text affordances, WCAG AA contrast, and `prefers-reduced-motion` support.
+- Follow design-token discipline:
+  - use `colors_and_type.css` tokens; do not introduce ad-hoc colors/fonts/spacing outside the token system.
+  - no dark mode, gradients, decorative icon clutter, or emoji in UI copy.
+  - semantic colors apply to data meaning, not generic chrome.
+- Prefer relative paths for links/assets/fetches so local server and GitHub Pages behave the same.
+- Keep data scripts lightweight and reproducible. Maintain stdlib + minimal pinned dependency style (requests/PyYAML) unless there is a compelling, documented need.
+- Any automation that writes data must validate (`scripts/validate_data.py`) before publishing or committing.
