@@ -46,3 +46,46 @@ def test_check_stale_warns_when_last_data_point_exceeds_grace(tmp_path, monkeypa
     validate_data.check_stale(path, env, source, warnings)
 
     assert any("may be stale for monthly cadence" in item["message"] for item in warnings)
+
+
+def test_validate_phase2_extractors_requires_fields_for_manual_automation_schema():
+    errors = []
+    path = validate_data.ROOT / "data" / "manual" / "sample.json"
+    env = {"status": "ok", "extra": {"schema": "manual_automation.v2", "fields": {}}}
+    source = {"id": "sample", "fetch": "manual"}
+
+    validate_data.validate_phase2_extractors(path, env, source, errors)
+
+    assert any("extra.fields.extractor is required" in item["message"] for item in errors)
+    assert any("extra.fields.resolved_url must be an http URL" in item["message"] for item in errors)
+
+
+def test_validate_phase2_extractors_ignores_non_automation_envelopes():
+    errors = []
+    path = validate_data.ROOT / "data" / "manual" / "sample.json"
+    env = {"status": "ok", "extra": {"schema": "other.schema", "fields": {}}}
+    source = {"id": "sample", "fetch": "manual"}
+
+    validate_data.validate_phase2_extractors(path, env, source, errors)
+
+    assert errors == []
+
+
+def test_validate_phase2_extractors_allows_automation_schema_for_non_manual_sources():
+    errors = []
+    path = validate_data.ROOT / "data" / "generated" / "sample.json"
+    env = {
+        "status": "ok",
+        "extra": {
+            "schema": "manual_automation.v2",
+            "fields": {
+                "extractor": "programmatic_parser",
+                "resolved_url": "https://example.com/data.csv",
+            },
+        },
+    }
+    source = {"id": "sample", "fetch": "programmatic"}
+
+    validate_data.validate_phase2_extractors(path, env, source, errors)
+
+    assert errors == []

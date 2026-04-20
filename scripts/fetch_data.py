@@ -723,18 +723,38 @@ MIGRATED_PROGRAMMATIC_IDS = (
     set(manual_extractors.APS_IDS)
     | set(manual_extractors.ACCC_IDS)
     | set(manual_extractors.COMPANY_IDS)
-    | {"ato_corporate_tax", "aud_usd_rba"}
+    | {"ato_corporate_tax"}
 )
 
 
 def fetch_via_manual_extractor(source: dict[str, Any]) -> dict[str, Any]:
-    resolved_url, resolution_note = manual_extractors.resolve_machine_url(source)
-    resolved_url, refine_note = manual_extractors.refine_download_url(source, resolved_url)
-    resolution_note = f"{resolution_note}:{refine_note}"
-    extracted = manual_extractors.try_extract_ok(source, resolved_url, resolution_note)
-    if not extracted:
-        raise RuntimeError("programmatic extractor returned no deterministic result")
-    return extracted
+    try:
+        resolved_url, resolution_note = manual_extractors.resolve_machine_url(source)
+        resolved_url, refine_note = manual_extractors.refine_download_url(source, resolved_url)
+        resolution_note = f"{resolution_note}:{refine_note}"
+        extracted = manual_extractors.try_extract_ok(source, resolved_url, resolution_note)
+        if extracted:
+            return extracted
+        error_text = "programmatic extractor returned no deterministic result"
+    except Exception as exc:
+        resolved_url = source.get("canonical_url") or source.get("url") or ""
+        error_text = f"{type(exc).__name__}: {exc}"
+
+    return {
+        "status": "unavailable",
+        "unit": "",
+        "values": [],
+        "last_data_point": None,
+        "notes": "Programmatic extractor could not produce a directly verifiable value.",
+        "extra": {
+            "schema": "programmatic_extractor_unavailable.v1",
+            "fields": {
+                "extractor": "fetch_via_manual_extractor",
+                "resolved_url": resolved_url,
+                "reason": error_text,
+            },
+        },
+    }
 
 
 for migrated_id in sorted(MIGRATED_PROGRAMMATIC_IDS):
@@ -816,23 +836,25 @@ def maybe_manual_fallback(source: dict[str, Any], err: Exception) -> dict[str, A
         return None
     if not isinstance(manual_doc, dict):
         return None
-    status = manual_doc.get("status", "unavailable")
-    if status not in {"ok", "unavailable"}:
-        status = "unavailable"
+    manual_status = manual_doc.get("status", "unavailable")
+    manual_last = manual_doc.get("last_data_point")
     return {
-        "status": status,
-        "unit": manual_doc.get("unit", ""),
-        "values": manual_doc.get("values", []) if isinstance(manual_doc.get("values"), list) else [],
-        "last_data_point": manual_doc.get("last_data_point"),
+        "status": "unavailable",
+        "unit": "",
+        "values": [],
+        "last_data_point": None,
         "notes": (
             f"Programmatic fetch failed ({type(err).__name__}: {err}). "
-            "Fell back to manual envelope because ALLOW_MANUAL_FALLBACK=1."
+            "Using ALLOW_MANUAL_FALLBACK no longer promotes manual data to status ok; "
+            f"manual envelope remains authoritative ({manual_status}, last_data_point={manual_last})."
         ),
         "extra": {
             "schema": "programmatic_manual_fallback.v1",
             "fields": {
                 "manual_source_path": str(manual_path.relative_to(ROOT)),
                 "original_error": f"{type(err).__name__}: {err}",
+                "manual_status": manual_status,
+                "manual_last_data_point": manual_last,
             },
         },
     }

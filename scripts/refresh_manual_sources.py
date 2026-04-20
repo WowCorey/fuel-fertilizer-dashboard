@@ -74,6 +74,10 @@ UA = f"FuelResilienceAU-ManualBot/1.0 (+{repo_url()})"
 HTTP_TIMEOUT = 15
 EXTRA_SCHEMA = "manual_automation.v2"
 HTTP_RETRIES = 3
+DIRECT_RATE_LABEL_RE = re.compile(
+    r"(effective\s+tax\s+rate|income\s+tax\s+rate|tax\s+rate|effective\s+income\s+tax)",
+    re.IGNORECASE,
+)
 
 APS_IDS = {
     "aps_monthly",
@@ -448,35 +452,18 @@ def extract_company_structured(source: dict[str, Any], candidate_url: str, candi
     if not text.strip():
         raise RuntimeError("structured candidate had no text payload")
 
-    pbt = detect_structured_numeric(
-        text,
-        ("profitlossbeforetax", "profitbeforetax", "earningsbeforetax", "profitbeforeincometax"),
-    )
-    tax = detect_structured_numeric(
-        text,
-        ("incometaxexpense", "taxexpense", "taxationexpense", "incometaxtaxexpense"),
-    )
-    rev = detect_structured_numeric(
-        text,
-        ("revenue", "revenuefromcontractswithcustomers", "totalrevenue", "salesrevenuegoodsnet"),
-    )
-    if pbt is None or tax is None:
-        raise RuntimeError("structured parser could not locate required pbt/tax metrics")
-    if abs(pbt) < 0.0001:
-        raise RuntimeError("structured parser rejected near-zero pbt")
-
-    tax_abs = abs(tax)
-    etr = (tax_abs / abs(pbt) * 100.0) if abs(pbt) > 0 else 0.0
-    etr = max(min(etr, 100.0), 0.0)
-    year_candidates = re.findall(r"(20\d{2})", text[:20000])
-    year = max(int(y) for y in year_candidates) if year_candidates else dt.datetime.now(dt.timezone.utc).year
+    direct_rate = extract_direct_tax_rate_percent(text)
+    if direct_rate is None:
+        raise RuntimeError("structured parser found no directly reported tax rate")
+    etr, rate_label = direct_rate
+    year = extract_report_year(text[:20000], resolved_url)
     sid = source["id"]
     return {
         "status": "ok",
         "unit": "%",
         "values": [{"t": f"{year}", "v": round(etr, 2)}],
         "last_data_point": f"{year}-06-30",
-        "notes": "Parsed company structured filing (XBRL/iXBRL) and computed effective tax rate.",
+        "notes": "Parsed company structured filing (XBRL/iXBRL) and captured directly reported tax rate.",
         "extra": {
             "schema": EXTRA_SCHEMA,
             "fields": {
@@ -484,11 +471,8 @@ def extract_company_structured(source: dict[str, Any], candidate_url: str, candi
                 "resolved_url": resolved_url,
                 "resolution": f"{resolution_note}:{discover_note}",
                 "parse_mode": candidate_kind,
-                "financials": {
-                    "revenue": round(rev, 2) if rev is not None else None,
-                    "profit_before_tax": round(pbt, 2),
-                    "income_tax_abs": round(tax_abs, 2),
-                },
+                "rate_label": rate_label,
+                "reported_rate_percent": round(etr, 2),
                 "source_id": sid,
             },
         },
@@ -726,6 +710,51 @@ def parse_numeric(value: Any) -> float | None:
     except ValueError:
         return None
 
+
+def extract_report_year(text: str, hint_url: str = "") -> int:
+    current_year = dt.datetime.now(dt.timezone.utc).year
+    candidates: set[int] = set()
+
+    for start_s, end_s in re.findall(r"(?<!\d)(20\d{2})\s*[-/]\s*(\d{2})(?!\d)", text):
+        start = int(start_s)
+        end = 2000 + int(end_s)
+        if end < start:
+            end += 100
+        if 2000 <= end <= current_year + 1:
+            candidates.add(end)
+
+    for year_s in re.findall(r"(?<!\d)(20\d{2})(?!\d)", f"{text}\n{hint_url}"):
+        year = int(year_s)
+        if 2000 <= year <= current_year + 1:
+            candidates.add(year)
+
+    if not candidates:
+        raise RuntimeError("could not infer a plausible report year")
+    return max(candidates)
+
+
+def extract_direct_tax_rate_percent(text: str) -> tuple[float, str] | None:
+    for match in DIRECT_RATE_LABEL_RE.finditer(text):
+        snippet = text[max(0, match.start() - 120) : match.end() + 240]
+        percent_tokens = re.findall(r"-?\(?\d[\d,]{0,20}(?:\.\d+)?\)?\s*%", snippet)
+        for token in percent_tokens:
+            value = parse_numeric(token)
+            if value is None:
+                continue
+            if -100.0 <= value <= 100.0:
+                return round(value, 2), match.group(1).lower()
+
+        numeric_tokens = re.findall(r"-?\(?\d[\d,]{0,20}(?:\.\d+)?\)?", snippet)
+        for token in numeric_tokens:
+            value = parse_numeric(token)
+            if value is None:
+                continue
+            if -1.0 <= value <= 1.0:
+                return round(value * 100.0, 2), match.group(1).lower()
+            if -100.0 <= value <= 100.0:
+                return round(value, 2), match.group(1).lower()
+    return None
+
 def xlsx_rows(blob: bytes) -> list[list[Any]]:
     if openpyxl is None:
         raise RuntimeError("openpyxl dependency missing")
@@ -906,15 +935,15 @@ def extract_ato_corporate_tax(source: dict[str, Any], resolved_url: str, resolut
     if rows_count < 100:
         raise RuntimeError("ATO extractor captured too few rows")
 
-    year_match = re.search(r"(20\d{2})[- ]?(?:2[0-9])?", resolved_url)
-    last_year = int(year_match.group(1)) if year_match else dt.datetime.now(dt.timezone.utc).year
-    label = f"{last_year}"
+    year_text = "\n".join(" ".join(str(cell or "") for cell in row[:10]) for row in rows[:300])
+    report_year = extract_report_year(year_text, chosen_url)
+    label = f"{report_year}"
     eff = (total_tax / total_taxable * 100.0) if total_taxable > 0 else 0.0
     return {
         "status": "ok",
         "unit": "%",
         "values": [{"t": label, "v": round(eff, 2)}],
-        "last_data_point": f"{last_year}-06-30",
+        "last_data_point": f"{report_year}-06-30",
         "notes": "Calculated aggregate effective tax rate from ATO Corporate Tax Transparency workbook rows.",
         "extra": {
             "schema": EXTRA_SCHEMA,
@@ -1044,90 +1073,18 @@ def extract_company_report(source: dict[str, Any], resolved_url: str, resolution
     lower = text.lower()
     if "annual report" not in lower and "financial statements" not in lower:
         raise RuntimeError("company PDF does not look like a report")
-
-    sid = source["id"]
-    profile = COMPANY_PARSER_PROFILES.get(sid, {})
-    if sid == "company_ampol":
-        npat = first_number_after(
-            lower,
-            r"(underlying rcop net profit after tax|net profit after tax attributable to equity holders)",
-        )
-        tax = first_number_after(lower, r"(income tax expense|tax expense|taxation expense)")
-        if npat is None or tax is None:
-            raise RuntimeError("Ampol parser could not locate NPAT/tax values")
-        tax_abs = abs(tax)
-        pbt = npat + tax_abs
-        etr = (tax_abs / pbt * 100.0) if pbt > 0 else 0.0
-        year_candidates = re.findall(r"(20\d{2})", text[:10000])
-        year = max(int(y) for y in year_candidates) if year_candidates else dt.datetime.now(dt.timezone.utc).year
-        return {
-            "status": "ok",
-            "unit": "%",
-            "values": [{"t": f"{year}", "v": round(etr, 2)}],
-            "last_data_point": f"{year}-06-30",
-            "notes": "Company-specific Ampol parser using NPAT and tax expense from the annual report.",
-            "extra": {
-                "schema": EXTRA_SCHEMA,
-                "fields": {
-                    "extractor": "company_ampol_pdf_v1",
-                    "resolved_url": resolved_url,
-                    "resolution": resolution_note,
-                    "parse_mode": parse_mode,
-                    "financials": {
-                        "net_profit_after_tax": round(npat, 2),
-                        "income_tax_expense_abs": round(tax_abs, 2),
-                        "implied_profit_before_tax": round(pbt, 2),
-                    },
-                },
-            },
-        }
-
-    rev_patterns = profile.get("revenue_patterns") or [r"(revenue|total income|sales)"]
-    pbt_patterns = profile.get("pbt_patterns") or [
-        r"(profit before tax|profit\s+before\s+income\s+tax|earnings before tax|profit before income tax)"
-    ]
-    tax_patterns = profile.get("tax_patterns") or [
-        r"(income tax expense|income tax paid|tax expense|taxation expense|income tax|tax charge)"
-    ]
-
-    rev = None
-    for pat in rev_patterns:
-        rev = first_number_after(lower, pat)
-        if rev is not None:
-            break
-    pbt = None
-    for pat in pbt_patterns:
-        pbt = first_number_after(lower, pat)
-        if pbt is not None:
-            break
-    tax = None
-    for pat in tax_patterns:
-        tax = first_number_after(lower, pat)
-        if tax is not None:
-            break
-    if pbt is None:
-        npat_patterns = profile.get("npat_patterns") or [r"(profit after tax|net profit after tax|net income)"]
-        for npat_pat in npat_patterns:
-            pat = first_number_after(lower, npat_pat)
-            if pat is not None and tax is not None:
-                pbt = pat + tax
-                break
-    if pbt is None or tax is None:
-        raise RuntimeError("required financial metrics not found in company report")
-    if abs(pbt) < 0.0001:
-        raise RuntimeError("company metric sanity check failed (near-zero pbt)")
-
-    etr = (tax / pbt * 100.0) if pbt > 0 else 0.0
-    etr = max(min(etr, 100.0), -100.0)
-    year_candidates = re.findall(r"(20\d{2})", text[:8000])
-    year = max(int(y) for y in year_candidates) if year_candidates else dt.datetime.now(dt.timezone.utc).year
+    direct_rate = extract_direct_tax_rate_percent(text)
+    if direct_rate is None:
+        raise RuntimeError("company report has no directly reported tax rate")
+    etr, rate_label = direct_rate
+    year = extract_report_year(text[:10000], resolved_url)
 
     return {
         "status": "ok",
         "unit": "%",
         "values": [{"t": f"{year}", "v": round(etr, 2)}],
         "last_data_point": f"{year}-06-30",
-        "notes": "Parsed company annual report PDF and computed effective tax rate from extracted financial metrics.",
+        "notes": "Parsed company annual report PDF and captured directly reported tax rate.",
         "extra": {
             "schema": EXTRA_SCHEMA,
             "fields": {
@@ -1135,40 +1092,14 @@ def extract_company_report(source: dict[str, Any], resolved_url: str, resolution
                 "resolved_url": resolved_url,
                 "resolution": resolution_note,
                 "parse_mode": parse_mode,
-                "financials": {
-                    "revenue": round(rev, 2) if rev is not None else None,
-                    "profit_before_tax": round(pbt, 2),
-                    "income_tax": round(tax, 2),
-                },
+                "rate_label": rate_label,
+                "reported_rate_percent": round(etr, 2),
             },
         },
     }
 
 def try_extract_ok(source: dict[str, Any], resolved_url: str, resolution_note: str) -> dict[str, Any] | None:
     sid = source["id"]
-
-    if sid == "aud_usd_rba":
-        parent = load_generated("rba_aud_usd")
-        if not parent or parent.get("status") != "ok":
-            return None
-        values = parent.get("values")
-        if not isinstance(values, list) or not values:
-            return None
-        return {
-            "status": "ok",
-            "unit": "USD per AUD",
-            "values": values,
-            "last_data_point": parent.get("last_data_point"),
-            "notes": "Automated alias of generated rba_aud_usd monthly means.",
-            "extra": {
-                "schema": EXTRA_SCHEMA,
-                "fields": {
-                    "extractor": "alias_rba_aud_usd",
-                    "resolved_url": resolved_url,
-                    "resolution": resolution_note,
-                },
-            },
-        }
 
     if sid in APS_IDS:
         return extract_aps(source, resolved_url, resolution_note)
@@ -1279,16 +1210,6 @@ def main(argv: list[str] | None = None) -> int:
         resolved_url = source.get("canonical_url") or source.get("url") or ""
         resolution_note = "default"
         try:
-            # Aliases that can be derived from already-generated data should run
-            # before any network discovery.
-            if sid == "aud_usd_rba":
-                extracted = try_extract_ok(source, resolved_url, resolution_note)
-                if extracted:
-                    out = write_manual(source, extracted)
-                    wrote += 1
-                    print(f"[OK ] {sid:<32} -> {out.relative_to(ROOT)} ({extracted['extra']['fields']['extractor']})")
-                    continue
-
             resolved_url, resolution_note = resolve_machine_url(source)
             resolved_url, refine_note = refine_download_url(source, resolved_url)
             resolution_note = f"{resolution_note}:{refine_note}"

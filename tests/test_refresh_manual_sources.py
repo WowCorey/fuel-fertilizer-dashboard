@@ -37,3 +37,44 @@ def test_non_extractor_block_contains_reachability_metadata(monkeypatch):
     assert block["extra"]["schema"] == refresh_manual_sources.EXTRA_SCHEMA
     assert block["extra"]["fields"]["reachable"] is True
     assert block["extra"]["fields"]["checked_at"] == "2026-04-20T00:00:00+00:00"
+
+
+def test_extract_report_year_ignores_embedded_numeric_ids():
+    text = "Corporate Tax Transparency Report 2019-20 income tax details"
+    url = (
+        "https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26/"
+        "resource/db83/download/report.xlsx"
+    )
+
+    year = refresh_manual_sources.extract_report_year(text, url)
+
+    assert year == 2020
+
+
+def test_extract_report_year_rejects_implausible_future_year():
+    text = "Annual report FY 2099 effective tax rate summary"
+
+    try:
+        refresh_manual_sources.extract_report_year(text, "https://example.com/report.pdf")
+        assert False, "expected RuntimeError for implausible report year"
+    except RuntimeError as exc:
+        assert "could not infer a plausible report year" in str(exc)
+
+
+def test_extract_direct_tax_rate_percent_requires_rate_label():
+    missing = refresh_manual_sources.extract_direct_tax_rate_percent(
+        "Profit before tax was 1234 and tax expense was 321."
+    )
+    assert missing is None
+
+    found = refresh_manual_sources.extract_direct_tax_rate_percent(
+        "Effective tax rate was 27.6% for the reporting period."
+    )
+    assert found == (27.6, "effective tax rate")
+
+
+def test_extract_direct_tax_rate_percent_converts_fractional_values():
+    found = refresh_manual_sources.extract_direct_tax_rate_percent(
+        "Income tax rate 0.286 in the current year."
+    )
+    assert found == (28.6, "income tax rate")
