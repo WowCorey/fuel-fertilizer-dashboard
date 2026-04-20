@@ -454,6 +454,42 @@ sources:
     fetch: programmatic
     used_by: [oil]
 
+  - id: eia_diesel_retail_us
+    human_name: U.S. retail diesel price (EIA, weekly)
+    publisher: U.S. Energy Information Administration via FRED mirror
+    url: https://www.eia.gov/petroleum/gasdiesel/
+    canonical_url: https://www.eia.gov/petroleum/gasdiesel/
+    fetch_url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=GASDESW
+    fred_series: GASDESW
+    fetch_unit: USD per gallon
+    format: CSV
+    update_cadence: weekly
+    last_verified: 2026-04-20
+    rights: U.S. public domain; FRED citation requested
+    rights_url: https://fred.stlouisfed.org/series/GASDESW
+    citation: U.S. Energy Information Administration, U.S. No 2 Diesel Retail Prices [GASDESW], retrieved from FRED.
+    reuse_notes: Fetched from FRED as a mirror of EIA weekly U.S. No 2 diesel retail prices; cite both EIA and FRED. Stored as monthly means of the published weekly observations.
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: eia_jet_spot_usgc
+    human_name: U.S. Gulf Coast jet fuel spot price (EIA, daily)
+    publisher: U.S. Energy Information Administration via FRED mirror
+    url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm
+    canonical_url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm
+    fetch_url: https://fred.stlouisfed.org/graph/fredgraph.csv?id=DJFUELUSGULF
+    fred_series: DJFUELUSGULF
+    fetch_unit: USD per gallon
+    format: CSV
+    update_cadence: daily
+    last_verified: 2026-04-20
+    rights: U.S. public domain; FRED citation requested
+    rights_url: https://fred.stlouisfed.org/series/DJFUELUSGULF
+    citation: U.S. Energy Information Administration, U.S. Gulf Coast Kerosene-Type Jet Fuel Spot Price FOB [DJFUELUSGULF], retrieved from FRED.
+    reuse_notes: Fetched from FRED as a mirror of EIA daily Gulf Coast kerosene-type jet fuel spot prices; cite both EIA and FRED. Stored as monthly means of the published daily observations.
+    fetch: programmatic
+    used_by: [oil]
+
   - id: tapis_crude
     human_name: Tapis crude benchmark
     publisher: Various market-data mirrors

@@ -107,6 +107,76 @@ def fetch_eia_series(series_code: str, url: str | None = None) -> dict[str, Any]
     }
 
 
+def fetch_fred_fuel_csv(source: dict[str, Any]) -> dict[str, Any]:
+    """Fetch a FRED CSV mirror of an EIA refined-fuel price series.
+
+    Shared by weekly retail and daily spot series. Values are aggregated to
+    monthly means; last_data_point reflects the latest raw observation so the
+    envelope's freshness matches the publisher's cadence.
+    """
+    url = source.get("fetch_url")
+    sid = source.get("id", "<unknown>")
+    if not url:
+        raise RuntimeError(f"{sid}: fetch_url is required")
+
+    parsed_qs = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+    fred_id = (source.get("fred_series") or "").strip() or (parsed_qs.get("id", [""])[0]).strip()
+    if not fred_id:
+        raise RuntimeError(f"{sid}: cannot determine FRED series id from fetch_url or fred_series")
+    unit = source.get("fetch_unit") or "USD per gallon"
+
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+
+    reader = csv.reader(io.StringIO(r.text))
+    try:
+        header = next(reader)
+    except StopIteration as exc:
+        raise RuntimeError(f"FRED CSV for {fred_id} was empty") from exc
+
+    normalized = [h.strip().lower() for h in header]
+    accepted = {("observation_date", fred_id.lower()), ("date", fred_id.lower())}
+    if tuple(normalized) not in accepted:
+        raise RuntimeError(f"Unexpected FRED CSV header for {fred_id}: {header!r}")
+
+    by_month: dict[str, list[float]] = {}
+    latest_raw: str | None = None
+    for row in reader:
+        if len(row) < 2:
+            continue
+        date_str, val_str = row[0].strip(), row[1].strip()
+        if val_str in ("", "."):
+            continue
+        try:
+            v = float(val_str)
+        except ValueError:
+            continue
+        if len(date_str) < 10:
+            continue
+        by_month.setdefault(date_str[:7], []).append(v)
+        if latest_raw is None or date_str > latest_raw:
+            latest_raw = date_str
+
+    values = [
+        {"t": month, "v": round(sum(vs) / len(vs), 3)}
+        for month, vs in sorted(by_month.items())
+    ][-60:]
+
+    if not values or latest_raw is None:
+        raise RuntimeError(f"No numeric observations found in {fred_id}")
+
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": latest_raw,
+        "notes": (
+            f"Monthly mean of FRED series {fred_id} (mirror of EIA). "
+            "Trimmed to last 60 months; last_data_point reflects the latest raw observation."
+        ),
+        "source_url_resolved": url,
+    }
+
+
 def fetch_abs_sdmx(dataflow: str, key: str, start_period: str | None = None) -> dict[str, Any]:
     """Fetch one ABS SDMX-JSON time series from the ABS Data API."""
     if not dataflow or not key:
@@ -585,6 +655,8 @@ Fetcher = Callable[[dict[str, Any]], dict[str, Any]]
 FETCHERS: dict[str, Fetcher] = {
     "eia_brent": lambda source: fetch_eia_series("RBRTE", source.get("fetch_url")),
     "eia_wti": lambda source: fetch_eia_series("RWTC", source.get("fetch_url")),
+    "eia_diesel_retail_us": fetch_fred_fuel_csv,
+    "eia_jet_spot_usgc": fetch_fred_fuel_csv,
     "abs_petroleum_imports": lambda source: fetch_abs_sdmx(
         source["fetch_dataflow"], source["fetch_key"], source.get("fetch_start_period")
     ),
