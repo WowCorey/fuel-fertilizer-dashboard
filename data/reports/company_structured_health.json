@@ -1,0 +1,223 @@
+{
+  "schema": "company_structured_health.v1",
+  "checked_at": "2026-04-20T14:46:23+00:00",
+  "count": 8,
+  "companies": [
+    {
+      "source_id": "company_exxonmobil_au",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "xbrl",
+          "url": "https://www.sec.gov/Archives/edgar/data/34088/",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 403 Client Error: Forbidden for url: https://www.sec.gov/Archives/edgar/data/34088/"
+        },
+        {
+          "kind": "ixbrl",
+          "url": "https://www.exxonmobil.com/investor-relations/annual-report",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 404 Client Error: Not Found for url: https://www.exxonmobil.com/investor-relations/annual-report"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports",
+        "resolution": "company_resolver_endpoint_0:html_no_artifact",
+        "reachable": true,
+        "reachability_note": "HTTP 200"
+      }
+    },
+    {
+      "source_id": "company_chevron_au",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "xbrl",
+          "url": "https://www.sec.gov/Archives/edgar/data/93410/",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 403 Client Error: Forbidden for url: https://www.sec.gov/Archives/edgar/data/93410/"
+        },
+        {
+          "kind": "ixbrl",
+          "url": "https://www.chevron.com/investors/reports",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 403 Client Error: Forbidden for url: https://www.chevron.com/investors/reports"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://australia.chevron.com/",
+        "resolution": "company_resolver_endpoint_0:html_no_links",
+        "reachable": false,
+        "reachability_note": "HTTP 403"
+      }
+    },
+    {
+      "source_id": "company_viva_energy",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "ixbrl",
+          "url": "https://www.vivaenergy.com.au/investors/reports-and-presentations",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 404 Client Error: Not Found for url: https://www.vivaenergy.com.au/investors/reports-and-presentations"
+        },
+        {
+          "kind": "xbrl",
+          "url": "https://www.asx.com.au/markets/company/VEA",
+          "discovered_url": "https://www.asx.com.au/content/asx/home/about/regulation/clearing-and-settlement-of-cash-equities-in-australia/cs-services-rules-and-code-of-practice.html",
+          "discover_note": "structured_discovered_link",
+          "reachable": true,
+          "reachability_note": "HTTP 200",
+          "parse_status": "error",
+          "parse_error": "RuntimeError: structured parser could not locate required pbt/tax metrics"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://www.vivaenergy.com.au/investors/financial-results-reports",
+        "resolution": "company_resolver_endpoint_0:html_no_artifact",
+        "reachable": false,
+        "reachability_note": "HTTP 404"
+      }
+    },
+    {
+      "source_id": "company_ampol",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "ixbrl",
+          "url": "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
+          "discovered_url": "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
+          "discover_note": "structured_html_no_candidate",
+          "reachable": true,
+          "reachability_note": "HTTP 200",
+          "parse_status": "error",
+          "parse_error": "RuntimeError: structured parser could not locate required pbt/tax metrics"
+        },
+        {
+          "kind": "xbrl",
+          "url": "https://www.asx.com.au/markets/company/ALD",
+          "discovered_url": "https://www.asx.com.au/content/asx/home/about/regulation/clearing-and-settlement-of-cash-equities-in-australia/cs-services-rules-and-code-of-practice.html",
+          "discover_note": "structured_discovered_link",
+          "reachable": true,
+          "reachability_note": "HTTP 200",
+          "parse_status": "error",
+          "parse_error": "RuntimeError: structured parser could not locate required pbt/tax metrics"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://assets.contentstack.io/v3/assets/blt35cb056c1c8431c3/bltf2b88cca4ee2d090/686b0daa16ecf85da24ead41/2024_Annual_Report.pdf",
+        "resolution": "company_resolver_direct_0:direct",
+        "reachable": true,
+        "reachability_note": "HTTP 200"
+      }
+    },
+    {
+      "source_id": "company_bp_au",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "xbrl",
+          "url": "https://www.sec.gov/Archives/edgar/data/313807/",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 403 Client Error: Forbidden for url: https://www.sec.gov/Archives/edgar/data/313807/"
+        },
+        {
+          "kind": "ixbrl",
+          "url": "https://www.bp.com/en/global/corporate/investors/results-and-reporting.html",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 403 Client Error: Forbidden for url: https://www.bp.com/en/global/corporate/investors/results-and-reporting.html"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://www.bp.com/en_au/australia.html",
+        "resolution": "company_resolver_endpoint_0:html_no_links",
+        "reachable": false,
+        "reachability_note": "HTTP 403"
+      }
+    },
+    {
+      "source_id": "company_shell_au",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "xbrl",
+          "url": "https://www.sec.gov/Archives/edgar/data/1306965/",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 403 Client Error: Forbidden for url: https://www.sec.gov/Archives/edgar/data/1306965/"
+        },
+        {
+          "kind": "ixbrl",
+          "url": "https://www.shell.com/investors/results-and-reporting/annual-report.html",
+          "discovered_url": "https://www.shell.com/investors/results-and-reporting/annual-report.html",
+          "discover_note": "structured_discovered_link",
+          "reachable": true,
+          "reachability_note": "HTTP 200",
+          "parse_status": "error",
+          "parse_error": "RuntimeError: structured parser could not locate required pbt/tax metrics"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://reports.shell.com/annual-report/2024/servicepages/downloads/files/entire_shell_ar24.pdf",
+        "resolution": "company_resolver_direct_1:html_no_artifact",
+        "reachable": true,
+        "reachability_note": "HTTP 200"
+      }
+    },
+    {
+      "source_id": "company_woodside",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "ixbrl",
+          "url": "https://www.woodside.com/investors/reports-investor-briefings",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 403 Client Error: Forbidden for url: https://www.woodside.com/investors/reports-investor-briefings"
+        },
+        {
+          "kind": "xbrl",
+          "url": "https://www.asx.com.au/markets/company/WDS",
+          "discovered_url": "https://www.asx.com.au/content/asx/home/about/regulation/clearing-and-settlement-of-cash-equities-in-australia/cs-services-rules-and-code-of-practice.html",
+          "discover_note": "structured_discovered_link",
+          "reachable": true,
+          "reachability_note": "HTTP 200",
+          "parse_status": "error",
+          "parse_error": "RuntimeError: structured parser could not locate required pbt/tax metrics"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://www.woodside.com/investors/reports-investor-briefings",
+        "resolution": "company_resolver_endpoint_0:html_no_links",
+        "reachable": false,
+        "reachability_note": "HTTP 403"
+      }
+    },
+    {
+      "source_id": "company_santos",
+      "checked_at": "2026-04-20T14:46:23+00:00",
+      "structured_candidates": [
+        {
+          "kind": "ixbrl",
+          "url": "https://www.santos.com/investors/results-reports-and-presentations/",
+          "discover_status": "error",
+          "discover_error": "HTTPError: 404 Client Error: Not Found for url: https://www.santos.com/investors/results-reports-and-presentations/"
+        },
+        {
+          "kind": "xbrl",
+          "url": "https://www.asx.com.au/markets/company/STO",
+          "discovered_url": "https://www.asx.com.au/content/asx/home/about/regulation/clearing-and-settlement-of-cash-equities-in-australia/cs-services-rules-and-code-of-practice.html",
+          "discover_note": "structured_discovered_link",
+          "reachable": true,
+          "reachability_note": "HTTP 200",
+          "parse_status": "error",
+          "parse_error": "RuntimeError: structured parser could not locate required pbt/tax metrics"
+        }
+      ],
+      "pdf_fallback": {
+        "resolved_url": "https://www.santos.com/investors/results-reports-and-presentations/",
+        "resolution": "company_resolver_endpoint_0:html_no_artifact",
+        "reachable": false,
+        "reachability_note": "HTTP 404"
+      }
+    }
+  ]
+}

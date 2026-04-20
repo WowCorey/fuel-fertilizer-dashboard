@@ -44,6 +44,21 @@ sequenceDiagram
 - **Manual extraction confidence is low**: source is held unavailable rather than publishing uncertain numbers.
 - **Derived dependency missing**: derived envelope does not publish as valid until the parent source is restored.
 
+## Deferred Migration Note
+
+When company parser profiles are test-stable, migrate deterministic automated
+manual-mode extractors into the programmatic pipeline contract:
+
+- Move stable source IDs from `fetch: manual` to `fetch: programmatic`.
+- Relocate mature extractors from `scripts/refresh_manual_sources.py` to
+  `scripts/fetch_data.py`.
+- Publish resulting envelopes in `data/generated/` rather than `data/manual/`.
+- Keep `scripts/refresh_manual_sources.py` focused on diagnostics, link health,
+  and explicit unavailable/manual metadata paths.
+
+This migration is intentionally deferred until company-specific parsers have
+repeatable tests and confidence thresholds.
+
 ## Related
 
 - [Fuel Resilience Wiki](../index.md)

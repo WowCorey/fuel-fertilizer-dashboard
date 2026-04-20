@@ -578,6 +578,11 @@ sources:
     rights_url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
     citation: ExxonMobil Australia annual report and financial statements.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: xbrl
+        url: https://www.sec.gov/Archives/edgar/data/34088/
+      - kind: ixbrl
+        url: https://www.exxonmobil.com/investor-relations/annual-report
     fetch: manual
     used_by: [who_pays_what]
 
@@ -593,6 +598,11 @@ sources:
     rights_url: https://australia.chevron.com/
     citation: Chevron Australia annual financial statements.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: xbrl
+        url: https://www.sec.gov/Archives/edgar/data/93410/
+      - kind: ixbrl
+        url: https://www.chevron.com/investors/reports
     fetch: manual
     used_by: [who_pays_what]
 
@@ -608,6 +618,11 @@ sources:
     rights_url: https://www.vivaenergy.com.au/investors/financial-results-reports
     citation: Viva Energy Group annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: ixbrl
+        url: https://www.vivaenergy.com.au/investors/reports-and-presentations
+      - kind: xbrl
+        url: https://www.asx.com.au/markets/company/VEA
     fetch: manual
     used_by: [who_pays_what]
 
@@ -623,6 +638,11 @@ sources:
     rights_url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
     citation: Ampol annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: ixbrl
+        url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
+      - kind: xbrl
+        url: https://www.asx.com.au/markets/company/ALD
     fetch: manual
     used_by: [who_pays_what]
 
@@ -638,6 +658,11 @@ sources:
     rights_url: https://www.bp.com/en_au/australia.html
     citation: BP Australia annual financial statements.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: xbrl
+        url: https://www.sec.gov/Archives/edgar/data/313807/
+      - kind: ixbrl
+        url: https://www.bp.com/en/global/corporate/investors/results-and-reporting.html
     fetch: manual
     used_by: [who_pays_what]
 
@@ -653,6 +678,11 @@ sources:
     rights_url: https://www.shell.com.au/about-us.html
     citation: Shell Australia financial statements.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: xbrl
+        url: https://www.sec.gov/Archives/edgar/data/1306965/
+      - kind: ixbrl
+        url: https://www.shell.com/investors/results-and-reporting/annual-report.html
     fetch: manual
     used_by: [who_pays_what]
 
@@ -668,6 +698,11 @@ sources:
     rights_url: https://www.woodside.com/investors/reports-investor-briefings
     citation: Woodside Energy annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: ixbrl
+        url: https://www.woodside.com/investors/reports-investor-briefings
+      - kind: xbrl
+        url: https://www.asx.com.au/markets/company/WDS
     fetch: manual
     used_by: [who_pays_what]
 
@@ -683,5 +718,10 @@ sources:
     rights_url: https://www.santos.com/investors/results-reports-and-presentations/
     citation: Santos annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    company_structured_source_candidates:
+      - kind: ixbrl
+        url: https://www.santos.com/investors/results-reports-and-presentations/
+      - kind: xbrl
+        url: https://www.asx.com.au/markets/company/STO
     fetch: manual
     used_by: [who_pays_what]

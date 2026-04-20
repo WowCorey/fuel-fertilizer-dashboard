@@ -11,6 +11,7 @@ Phase 2 extractor coverage:
 from __future__ import annotations
 
 import datetime as dt
+import os
 import io
 import json
 import pathlib
@@ -18,6 +19,7 @@ import re
 import sys
 import time
 import urllib.parse
+import argparse
 from typing import Any
 
 try:
@@ -66,6 +68,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCES_FILE = ROOT / "data" / "sources.yml"
 MANUAL_DIR = ROOT / "data" / "manual"
 GENERATED_DIR = ROOT / "data" / "generated"
+REPORTS_DIR = ROOT / "data" / "reports"
 
 UA = f"FuelResilienceAU-ManualBot/1.0 (+{repo_url()})"
 HTTP_TIMEOUT = 15
@@ -99,6 +102,70 @@ COMPANY_IDS = {
     "company_santos",
 }
 
+COMPANY_PARSER_PROFILES: dict[str, dict[str, Any]] = {
+    "company_exxonmobil_au": {
+        "resolver_endpoints": [
+            "https://corporate.exxonmobil.com/locations/australia",
+            "https://corporate.exxonmobil.com/sustainability-and-reports/reports-and-publications",
+            "https://corporate.exxonmobil.com/energy-and-innovation/annual-reports",
+        ],
+    },
+    "company_chevron_au": {
+        "resolver_endpoints": [
+            "https://australia.chevron.com/",
+            "https://www.chevron.com/investors/financial-reporting",
+            "https://www.chevron.com/investors/reports",
+            "https://www.asx.com.au/markets/company/CVX",
+        ],
+    },
+    "company_viva_energy": {
+        "resolver_endpoints": [
+            "https://www.vivaenergy.com.au/investors/reports-and-presentations",
+            "https://www.vivaenergy.com.au/investors",
+            "https://www.asx.com.au/markets/company/VEA",
+        ],
+    },
+    "company_ampol": {
+        "resolver_endpoints": [
+            "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
+            "https://www.asx.com.au/markets/company/ALD",
+        ],
+        "npat_patterns": [
+            r"(underlying rcop net profit after tax|net profit after tax attributable to equity holders)",
+            r"(net profit after tax|profit after tax)",
+        ],
+        "tax_patterns": [
+            r"(income tax expense|tax expense|taxation expense)",
+        ],
+    },
+    "company_bp_au": {
+        "resolver_endpoints": [
+            "https://www.bp.com/en/global/corporate/investors/results-and-reporting.html",
+            "https://www.bp.com/en_au/australia/home/who-we-are.html",
+            "https://www.asx.com.au/markets/company/BPT",
+        ],
+    },
+    "company_shell_au": {
+        "resolver_endpoints": [
+            "https://www.shell.com/investors/results-and-reporting/annual-report.html",
+            "https://reports.shell.com/annual-report/2024/servicepages/downloads/files/entire_shell_ar24.pdf",
+            "https://www.shell.com.au/about-us.html",
+        ],
+    },
+    "company_woodside": {
+        "resolver_endpoints": [
+            "https://www.woodside.com/investors/reports-investor-briefings",
+            "https://www.asx.com.au/markets/company/WDS",
+        ],
+    },
+    "company_santos": {
+        "resolver_endpoints": [
+            "https://www.santos.com/investors/reports/",
+            "https://www.asx.com.au/markets/company/STO",
+        ],
+    },
+}
+
 SOURCE_URL_OVERRIDES: dict[str, str] = {
     # Prefer stable data catalogue for APS extraction.
     "aps_monthly": "https://www.data.gov.au/data/dataset/australian-petroleum-statistics",
@@ -117,6 +184,57 @@ SOURCE_URL_OVERRIDES: dict[str, str] = {
     "accc_petrol_breakdown_series": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
     "company_ampol": "https://assets.contentstack.io/v3/assets/blt35cb056c1c8431c3/bltf2b88cca4ee2d090/686b0daa16ecf85da24ead41/2024_Annual_Report.pdf",
 }
+
+
+def configure_ocr_runtime() -> None:
+    """Best-effort OCR binary discovery for local Windows environments."""
+    if os.name != "nt":
+        return
+    poppler_env = os.environ.get("POPPLER_PATH")
+    poppler_candidates = [
+        pathlib.Path(r"C:\Program Files\poppler\Library\bin"),
+        pathlib.Path(r"C:\Program Files (x86)\poppler\Library\bin"),
+    ]
+    if poppler_env:
+        poppler_candidates.insert(0, pathlib.Path(poppler_env))
+    local_winget = pathlib.Path(os.environ.get("LOCALAPPDATA", "")) / "Microsoft" / "WinGet" / "Packages"
+    if local_winget.exists():
+        poppler_candidates.extend(
+            p / "poppler-25.07.0" / "Library" / "bin"
+            for p in local_winget.glob("oschwartz10612.Poppler*")
+        )
+
+    for candidate in poppler_candidates:
+        if not candidate:
+            continue
+        try:
+            if candidate.exists() and (candidate / "pdftoppm.exe").exists():
+                os.environ["PATH"] = str(candidate) + os.pathsep + os.environ.get("PATH", "")
+                break
+        except OSError:
+            continue
+
+    if pytesseract is None:
+        return
+    tesseract_candidates = [
+        pathlib.Path(r"C:\Program Files\Tesseract-OCR\tesseract.exe"),
+        pathlib.Path(r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"),
+    ]
+    tesseract_env = os.environ.get("TESSERACT_CMD")
+    if tesseract_env:
+        tesseract_candidates.insert(0, pathlib.Path(tesseract_env))
+    for candidate in tesseract_candidates:
+        if not candidate:
+            continue
+        try:
+            if candidate.exists() and candidate.is_file():
+                pytesseract.pytesseract.tesseract_cmd = str(candidate)
+                break
+        except OSError:
+            continue
+
+
+configure_ocr_runtime()
 
 def now_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
@@ -172,6 +290,11 @@ def resolve_machine_url(source: dict[str, Any]) -> tuple[str, str]:
     if fmt == "HTML_TABLE":
         return canonical, "canonical_html"
 
+    if sid in COMPANY_IDS:
+        resolved = resolve_company_pdf_url(source, canonical)
+        if resolved:
+            return resolved
+
     r = request_get(canonical)
     r.raise_for_status()
     links = find_links(r.text, canonical)
@@ -200,6 +323,261 @@ def resolve_machine_url(source: dict[str, Any]) -> tuple[str, str]:
     if score_candidate(best, fmt) <= 0:
         return canonical, "canonical_no_scored_doc"
     return best, f"discovered_from_canonical:{fmt.lower()}"
+
+
+def company_pdf_candidates(base_url: str) -> list[str]:
+    try:
+        r = request_get(base_url)
+    except Exception:
+        return []
+    links = find_links(r.text, base_url)
+    pdfs = [u for u in links if ".pdf" in u.lower()]
+    if not pdfs:
+        return []
+    ranked = sorted(
+        pdfs,
+        key=lambda u: (
+            any(token in u.lower() for token in ("annual", "financial", "report", "results")),
+            ".asx" in u.lower() or "announcement" in u.lower(),
+            len(u),
+        ),
+        reverse=True,
+    )
+    out: list[str] = []
+    seen = set()
+    for link in ranked:
+        if link in seen:
+            continue
+        seen.add(link)
+        out.append(link)
+    return out
+
+
+def resolve_company_pdf_url(source: dict[str, Any], canonical: str) -> tuple[str, str] | None:
+    sid = str(source.get("id", ""))
+    endpoints = list((COMPANY_PARSER_PROFILES.get(sid) or {}).get("resolver_endpoints", []))
+    if canonical not in endpoints:
+        endpoints = [canonical] + endpoints
+    for idx, endpoint in enumerate(endpoints):
+        direct_pdf = endpoint.lower().endswith(".pdf")
+        if direct_pdf:
+            return endpoint, f"company_resolver_direct_{idx}"
+        for candidate in company_pdf_candidates(endpoint):
+            return candidate, f"company_resolver_pdf_{idx}"
+    if endpoints:
+        # Return a stable endpoint even if PDF discovery fails, so the resolver
+        # remains deterministic and extractor metadata can surface what failed.
+        return endpoints[0], "company_resolver_endpoint_0"
+    return None
+
+
+def company_structured_candidates(source: dict[str, Any]) -> list[dict[str, str]]:
+    raw = source.get("company_structured_source_candidates")
+    if not isinstance(raw, list):
+        return []
+    out: list[dict[str, str]] = []
+    for entry in raw:
+        if not isinstance(entry, dict):
+            continue
+        url = str(entry.get("url", "")).strip()
+        kind = str(entry.get("kind", "")).strip().lower()
+        if not url or kind not in {"xbrl", "ixbrl"}:
+            continue
+        out.append({"url": url, "kind": kind})
+    return out
+
+
+def detect_structured_numeric(text: str, labels: tuple[str, ...]) -> float | None:
+    candidates: list[float] = []
+    lowered = text.lower()
+    for label in labels:
+        pattern = re.compile(
+            rf"(?:name\s*=\s*[\"'][^\"']*{re.escape(label)}[^\"']*[\"'][^>]*>|<[^>]*{re.escape(label)}[^>]*>)\s*([-]?\d[\d,]*(?:\.\d+)?)",
+            re.IGNORECASE,
+        )
+        for m in pattern.finditer(text):
+            val = parse_numeric(m.group(1))
+            if val is not None:
+                candidates.append(val)
+        # Some ixbrl pages carry facts in hidden containers; allow a wider nearby scan.
+        idx = lowered.find(label.lower())
+        if idx >= 0:
+            window = text[max(0, idx - 300) : idx + 600]
+            for token in re.findall(r"[-]?\d[\d,]{0,20}(?:\.\d+)?", window):
+                val = parse_numeric(token)
+                if val is not None:
+                    candidates.append(val)
+    if not candidates:
+        return None
+    return max(candidates, key=lambda v: abs(v))
+
+
+def discover_structured_artifact(url: str) -> tuple[str, str]:
+    r = request_get(url)
+    r.raise_for_status()
+    ctype = (r.headers.get("content-type") or "").lower()
+    looks_html = "text/html" in ctype or "<html" in (r.text[:400].lower() if hasattr(r, "text") else "")
+    if not looks_html:
+        return url, "structured_direct"
+    links = find_links(r.text, url)
+    if not links:
+        return url, "structured_html_no_links"
+    structured = [
+        u
+        for u in links
+        if any(token in u.lower() for token in (".xml", ".xhtml", ".htm", "xbrl", "ixbrl", "inline"))
+    ]
+    if not structured:
+        return url, "structured_html_no_candidate"
+    ranked = sorted(
+        structured,
+        key=lambda u: (
+            any(token in u.lower() for token in ("ixbrl", "inline", ".xhtml")),
+            any(token in u.lower() for token in (".xml", "xbrl")),
+            len(u),
+        ),
+        reverse=True,
+    )
+    return ranked[0], "structured_discovered_link"
+
+
+def extract_company_structured(source: dict[str, Any], candidate_url: str, candidate_kind: str, resolution_note: str) -> dict[str, Any]:
+    resolved_url, discover_note = discover_structured_artifact(candidate_url)
+    blob = fetch_bytes(resolved_url)
+    text = blob.decode("utf-8", errors="ignore")
+    if not text.strip():
+        raise RuntimeError("structured candidate had no text payload")
+
+    pbt = detect_structured_numeric(
+        text,
+        ("profitlossbeforetax", "profitbeforetax", "earningsbeforetax", "profitbeforeincometax"),
+    )
+    tax = detect_structured_numeric(
+        text,
+        ("incometaxexpense", "taxexpense", "taxationexpense", "incometaxtaxexpense"),
+    )
+    rev = detect_structured_numeric(
+        text,
+        ("revenue", "revenuefromcontractswithcustomers", "totalrevenue", "salesrevenuegoodsnet"),
+    )
+    if pbt is None or tax is None:
+        raise RuntimeError("structured parser could not locate required pbt/tax metrics")
+    if abs(pbt) < 0.0001:
+        raise RuntimeError("structured parser rejected near-zero pbt")
+
+    tax_abs = abs(tax)
+    etr = (tax_abs / abs(pbt) * 100.0) if abs(pbt) > 0 else 0.0
+    etr = max(min(etr, 100.0), 0.0)
+    year_candidates = re.findall(r"(20\d{2})", text[:20000])
+    year = max(int(y) for y in year_candidates) if year_candidates else dt.datetime.now(dt.timezone.utc).year
+    sid = source["id"]
+    return {
+        "status": "ok",
+        "unit": "%",
+        "values": [{"t": f"{year}", "v": round(etr, 2)}],
+        "last_data_point": f"{year}-06-30",
+        "notes": "Parsed company structured filing (XBRL/iXBRL) and computed effective tax rate.",
+        "extra": {
+            "schema": EXTRA_SCHEMA,
+            "fields": {
+                "extractor": f"company_{candidate_kind}_v1",
+                "resolved_url": resolved_url,
+                "resolution": f"{resolution_note}:{discover_note}",
+                "parse_mode": candidate_kind,
+                "financials": {
+                    "revenue": round(rev, 2) if rev is not None else None,
+                    "profit_before_tax": round(pbt, 2),
+                    "income_tax_abs": round(tax_abs, 2),
+                },
+                "source_id": sid,
+            },
+        },
+    }
+
+
+def extract_company_with_fallback(source: dict[str, Any], resolved_url: str, resolution_note: str) -> dict[str, Any]:
+    attempts: list[str] = []
+    for candidate in company_structured_candidates(source):
+        try:
+            return extract_company_structured(source, candidate["url"], candidate["kind"], resolution_note)
+        except Exception as exc:
+            attempts.append(f"{candidate['kind']}:{type(exc).__name__}")
+    try:
+        return extract_company_report(source, resolved_url, resolution_note)
+    except Exception as exc:
+        if attempts:
+            raise RuntimeError(f"structured attempts failed ({', '.join(attempts)}); pdf fallback failed: {exc}") from exc
+        raise
+
+
+def run_company_structured_health_report(sources: list[dict[str, Any]]) -> int:
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    checked_at = now_iso()
+    rows: list[dict[str, Any]] = []
+    company_sources = [s for s in sources if str(s.get("id", "")).startswith("company_")]
+    for source in company_sources:
+        sid = str(source.get("id", ""))
+        entry: dict[str, Any] = {
+            "source_id": sid,
+            "checked_at": checked_at,
+            "structured_candidates": [],
+            "pdf_fallback": {},
+        }
+        for candidate in company_structured_candidates(source):
+            cand_row: dict[str, Any] = {"kind": candidate["kind"], "url": candidate["url"]}
+            try:
+                discovered_url, discover_note = discover_structured_artifact(candidate["url"])
+                cand_row["discovered_url"] = discovered_url
+                cand_row["discover_note"] = discover_note
+                ok, note = check_url(discovered_url)
+                cand_row["reachable"] = ok
+                cand_row["reachability_note"] = note
+                try:
+                    parsed = extract_company_structured(source, candidate["url"], candidate["kind"], "health_check")
+                    cand_row["parse_status"] = "ok"
+                    cand_row["extractor"] = parsed.get("extra", {}).get("fields", {}).get("extractor")
+                except Exception as exc:
+                    cand_row["parse_status"] = "error"
+                    cand_row["parse_error"] = f"{type(exc).__name__}: {exc}"
+            except Exception as exc:
+                cand_row["discover_status"] = "error"
+                cand_row["discover_error"] = f"{type(exc).__name__}: {exc}"
+            entry["structured_candidates"].append(cand_row)
+
+        try:
+            resolved, resolution_note = resolve_machine_url(source)
+            resolved, refine_note = refine_download_url(source, resolved)
+            ok, note = check_url(resolved)
+            entry["pdf_fallback"] = {
+                "resolved_url": resolved,
+                "resolution": f"{resolution_note}:{refine_note}",
+                "reachable": ok,
+                "reachability_note": note,
+            }
+        except Exception as exc:
+            entry["pdf_fallback"] = {
+                "status": "error",
+                "error": f"{type(exc).__name__}: {exc}",
+            }
+        rows.append(entry)
+
+    report = {
+        "schema": "company_structured_health.v1",
+        "checked_at": checked_at,
+        "count": len(rows),
+        "companies": rows,
+    }
+    out_path = REPORTS_DIR / "company_structured_health.json"
+    with out_path.open("w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print(f"[OK ] wrote report -> {out_path.relative_to(ROOT)}")
+    for row in rows:
+        sid = row["source_id"]
+        structured_ok = any(c.get("parse_status") == "ok" for c in row["structured_candidates"])
+        pdf_ok = bool(row.get("pdf_fallback", {}).get("reachable"))
+        print(f"[INFO] {sid:<32} structured_ok={structured_ok} pdf_reachable={pdf_ok}")
+    return 0
 
 
 def refine_download_url(source: dict[str, Any], url: str) -> tuple[str, str]:
@@ -668,6 +1046,7 @@ def extract_company_report(source: dict[str, Any], resolved_url: str, resolution
         raise RuntimeError("company PDF does not look like a report")
 
     sid = source["id"]
+    profile = COMPANY_PARSER_PROFILES.get(sid, {})
     if sid == "company_ampol":
         npat = first_number_after(
             lower,
@@ -703,19 +1082,36 @@ def extract_company_report(source: dict[str, Any], resolved_url: str, resolution
             },
         }
 
-    rev = first_number_after(lower, r"(revenue|total income|sales)")
-    pbt = first_number_after(
-        lower,
-        r"(profit before tax|profit\s+before\s+income\s+tax|earnings before tax|profit before income tax)",
-    )
-    tax = first_number_after(
-        lower,
-        r"(income tax expense|income tax paid|tax expense|taxation expense|income tax|tax charge)",
-    )
+    rev_patterns = profile.get("revenue_patterns") or [r"(revenue|total income|sales)"]
+    pbt_patterns = profile.get("pbt_patterns") or [
+        r"(profit before tax|profit\s+before\s+income\s+tax|earnings before tax|profit before income tax)"
+    ]
+    tax_patterns = profile.get("tax_patterns") or [
+        r"(income tax expense|income tax paid|tax expense|taxation expense|income tax|tax charge)"
+    ]
+
+    rev = None
+    for pat in rev_patterns:
+        rev = first_number_after(lower, pat)
+        if rev is not None:
+            break
+    pbt = None
+    for pat in pbt_patterns:
+        pbt = first_number_after(lower, pat)
+        if pbt is not None:
+            break
+    tax = None
+    for pat in tax_patterns:
+        tax = first_number_after(lower, pat)
+        if tax is not None:
+            break
     if pbt is None:
-        pat = first_number_after(lower, r"(profit after tax|net profit after tax|net income)")
-        if pat is not None and tax is not None:
-            pbt = pat + tax
+        npat_patterns = profile.get("npat_patterns") or [r"(profit after tax|net profit after tax|net income)"]
+        for npat_pat in npat_patterns:
+            pat = first_number_after(lower, npat_pat)
+            if pat is not None and tax is not None:
+                pbt = pat + tax
+                break
     if pbt is None or tax is None:
         raise RuntimeError("required financial metrics not found in company report")
     if abs(pbt) < 0.0001:
@@ -781,7 +1177,7 @@ def try_extract_ok(source: dict[str, Any], resolved_url: str, resolution_note: s
     if sid in ACCC_IDS:
         return extract_accc(source, resolved_url, resolution_note)
     if sid in COMPANY_IDS:
-        return extract_company_report(source, resolved_url, resolution_note)
+        return extract_company_with_fallback(source, resolved_url, resolution_note)
     return None
 
 def write_manual(source: dict[str, Any], block: dict[str, Any]) -> pathlib.Path:
@@ -856,8 +1252,21 @@ def non_extractor_block(source: dict[str, Any], resolved_url: str, resolution_no
         },
     }
 
-def main() -> int:
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Refresh manual/unavailable source envelopes.")
+    parser.add_argument(
+        "--company-structured-health",
+        action="store_true",
+        help="Run structured-source health checks for all company_* sources and write data/reports/company_structured_health.json.",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv if argv is not None else sys.argv[1:])
     sources = load_sources()
+    if args.company_structured_health:
+        return run_company_structured_health_report(sources)
     targets = [s for s in sources if s.get("fetch") in {"manual", "unavailable"}]
     if not targets:
         print("No manual/unavailable sources found.")
