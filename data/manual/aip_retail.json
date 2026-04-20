@@ -8,7 +8,7 @@
   "stub_created_at": "2026-04-18T12:27:44+00:00",
   "last_data_point": null,
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "notes": "Awaiting hand-keyed values from the named public source. AIP publishes weekly national average retail petrol and diesel reports only as PDF under aip.com.au/sites/default/files/download-files/<yyyy-mm>/Weekly%20<Product>%20Prices%20Report%20-%20<dd>%20<Month>%20<yyyy>.pdf. No CSV, XLSX, or JSON equivalent is exposed. PDF parsing is out of scope for the current fetcher runtime (stdlib + requests + pyyaml only). When populated: copy the national weighted-average c/L from the AIP weekly PDF, keep manual_entry true, set retrieved_at to the data-entry timestamp, and set status to ok.",
   "status": "unavailable",
   "manual_entry": true
 }
