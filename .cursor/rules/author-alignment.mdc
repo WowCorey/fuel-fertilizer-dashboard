@@ -28,6 +28,10 @@ alwaysApply: true
   - use `colors_and_type.css` tokens; do not introduce ad-hoc colors/fonts/spacing outside the token system.
   - no dark mode, gradients, decorative icon clutter, or emoji in UI copy.
   - semantic colors apply to data meaning, not generic chrome.
+- Wallboard-only styling exception:
+  - `ui_kits/wallboard/**` may use its own visual system (custom colors, typography, spacing, and richer dashboard styling) to optimise persistent 1080p/4k billboard display.
+  - this exception is styling-only; all data integrity, envelope semantics, neutral editorial tone, accessibility baseline, and source transparency rules still apply.
+  - GitHub Pages static-hosting constraints remain mandatory (see `github-pages-static-only.mdc`).
 - Prefer relative paths for links/assets/fetches so local server and GitHub Pages behave the same.
 - Keep data scripts lightweight and reproducible. Maintain stdlib + minimal pinned dependency style (requests/PyYAML) unless there is a compelling, documented need.
 - Any automation that writes data must validate (`scripts/validate_data.py`) before publishing or committing.
