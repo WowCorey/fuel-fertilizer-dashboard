@@ -3,25 +3,30 @@
   "source_id": "ato_corporate_tax",
   "source_name": "ATO Corporate Tax Transparency Report (latest year)",
   "source_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/in-detail/tax-transparency/corporate-tax-transparency-report-2023-24",
-  "unit": "",
-  "retrieved_at": null,
-  "last_data_point": null,
-  "values": [],
-  "notes": "Automated extraction failed; source left unavailable pending parser fix.",
-  "status": "unavailable",
+  "unit": "%",
+  "retrieved_at": "2026-04-20T13:40:20+00:00",
+  "last_data_point": "2048-06-30",
+  "values": [
+    {
+      "t": "2048",
+      "v": 24.75
+    }
+  ],
+  "notes": "Calculated aggregate effective tax rate from ATO Corporate Tax Transparency workbook rows.",
+  "status": "ok",
   "manual_entry": true,
-  "stub_created_at": "2026-04-20T12:17:59+00:00",
   "source_rights": "CC BY 4.0 where stated by publisher",
   "citation": "Australian Taxation Office, Corporate Tax Transparency Report.",
   "extra": {
     "schema": "manual_automation.v2",
     "fields": {
-      "extractor": "fallback_unavailable",
-      "resolved_url": "https://www.ato.gov.au/single-page-applications/legaldatabase",
-      "resolution": "discovered_from_canonical:xlsx",
-      "reachable": false,
-      "reachability_note": "RuntimeError: no valid ATO XLSX candidate was readable",
-      "checked_at": "2026-04-20T12:17:59+00:00"
+      "extractor": "ato_xlsx_v1",
+      "resolved_url": "https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26/resource/db83e667-819f-41f3-a8b7-fcb13366105b/download/2019-20-corporate-report-of-entity-tax-information.xlsx",
+      "resolution": "discovered_from_canonical:xlsx:direct",
+      "entities_count": 2436,
+      "aggregate_total_income": 2214208726987.0,
+      "aggregate_taxable_income": 233226539446.0,
+      "aggregate_tax_payable": 57719046101.0
     }
   }
 }

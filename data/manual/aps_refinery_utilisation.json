@@ -4,7 +4,7 @@
   "source_name": "Australian Petroleum Statistics - refinery utilisation",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "varies by APS table",
-  "retrieved_at": "2026-04-20T12:17:44+00:00",
+  "retrieved_at": "2026-04-20T13:39:55+00:00",
   "last_data_point": "2026-02-01",
   "values": [
     {
@@ -258,7 +258,7 @@
     "fields": {
       "extractor": "aps_xlsx_v1",
       "resolved_url": "https://data.gov.au/data/dataset/d889484e-fb65-4190-a2e3-1739517cbf9b/resource/a5825135-47fa-4c59-a4e8-94e19511cb95/download/australian_petroleum_statistics_-_data_extract_february_2026.xlsx",
-      "resolution": "discovered_from_canonical:xlsx"
+      "resolution": "discovered_from_canonical:xlsx:direct"
     }
   }
 }

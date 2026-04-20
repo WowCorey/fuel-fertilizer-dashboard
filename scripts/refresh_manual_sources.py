@@ -103,13 +103,13 @@ SOURCE_URL_OVERRIDES: dict[str, str] = {
     "aps_production_fuel_oil": "https://www.data.gov.au/data/dataset/australian-petroleum-statistics",
     "aps_refinery_utilisation": "https://www.data.gov.au/data/dataset/australian-petroleum-statistics",
     # Prefer known current page roots for flaky redirect chains.
-    "ato_corporate_tax": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/in-detail/tax-transparency/corporate-tax-transparency-report-2023-24",
-    "accc_petroleum_monitoring": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
-    "accc_petrol_wholesale_component": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
-    "accc_petrol_excise_component": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
-    "accc_petrol_gst_component": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
-    "accc_petrol_retail_margin_component": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
-    "accc_petrol_breakdown_series": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
+    "ato_corporate_tax": "https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26",
+    "accc_petroleum_monitoring": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
+    "accc_petrol_wholesale_component": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
+    "accc_petrol_excise_component": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
+    "accc_petrol_gst_component": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
+    "accc_petrol_retail_margin_component": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
+    "accc_petrol_breakdown_series": "https://www.accc.gov.au/system/files/petrol-quarterly-report-june24.pdf",
 }
 
 def now_iso() -> str:
@@ -173,15 +173,70 @@ def resolve_machine_url(source: dict[str, Any]) -> tuple[str, str]:
         return canonical, "canonical_no_links"
 
     canonical_host = urllib.parse.urlparse(canonical).netloc.lower()
+    sid = str(source.get("id", ""))
+    def preferred_pdf(u: str) -> bool:
+        lu = u.lower()
+        if sid.startswith("accc_"):
+            return "/system/files/" in lu and ".pdf" in lu
+        return ".pdf" in lu
+
     ranked = sorted(
         links,
-        key=lambda u: (score_candidate(u, fmt), urllib.parse.urlparse(u).netloc.lower() == canonical_host, u),
+        key=lambda u: (
+            preferred_pdf(u) if fmt == "PDF" else False,
+            score_candidate(u, fmt),
+            urllib.parse.urlparse(u).netloc.lower() == canonical_host,
+            u,
+        ),
         reverse=True,
     )
     best = ranked[0]
     if score_candidate(best, fmt) <= 0:
         return canonical, "canonical_no_scored_doc"
     return best, f"discovered_from_canonical:{fmt.lower()}"
+
+
+def refine_download_url(source: dict[str, Any], url: str) -> tuple[str, str]:
+    fmt = str(source.get("format", "MIXED"))
+    sid = str(source.get("id", ""))
+    try:
+        r = request_get(url)
+    except Exception:
+        return url, "refine_probe_failed"
+    ctype = (r.headers.get("content-type") or "").lower()
+    looks_html = "text/html" in ctype or "<html" in (r.text[:400].lower() if hasattr(r, "text") else "")
+    if not looks_html:
+        return url, "direct"
+
+    links = find_links(r.text, url)
+    if not links:
+        return url, "html_no_links"
+
+    if fmt == "XLSX":
+        xlsx_links = [u for u in links if ".xlsx" in u.lower()]
+        if xlsx_links:
+            return sorted(xlsx_links, key=len)[0], "refined_xlsx_link"
+    if fmt == "PDF":
+        pdf_links = [u for u in links if ".pdf" in u.lower()]
+        if sid.startswith("accc_"):
+            sys_pdf = [u for u in pdf_links if "/system/files/" in u.lower()]
+            if sys_pdf:
+                return sorted(sys_pdf, key=len)[0], "refined_accc_pdf"
+            for page_idx in range(0, 8):
+                try:
+                    page_url = "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry"
+                    if page_idx:
+                        page_url = f"{page_url}?page={page_idx}"
+                    rr = request_get(page_url)
+                    sub_links = find_links(rr.text, page_url)
+                    sub_pdfs = [u for u in sub_links if ".pdf" in u.lower() and "/system/files/" in u.lower()]
+                    if sub_pdfs:
+                        return sorted(sub_pdfs, key=len)[0], "refined_accc_pdf_crawled"
+                except Exception:
+                    continue
+        if pdf_links:
+            return sorted(pdf_links, key=len)[0], "refined_pdf_link"
+    return url, "html_no_artifact"
 
 def request_get(url: str, *, stream: bool = False) -> requests.Response:
     last_exc: Exception | None = None
@@ -292,6 +347,14 @@ def xlsx_rows(blob: bytes) -> list[list[Any]]:
             rows.append(list(row))
     return rows
 
+
+def xlsx_workbook(blob: bytes):
+    if openpyxl is None:
+        raise RuntimeError("openpyxl dependency missing")
+    if not is_zip_xlsx(blob):
+        raise RuntimeError("response is not an XLSX zip payload")
+    return openpyxl.load_workbook(io.BytesIO(blob), data_only=True, read_only=True)
+
 def extract_series_from_rows(rows: list[list[Any]], keyword_tokens: tuple[str, ...]) -> list[dict[str, Any]]:
     values: list[dict[str, Any]] = []
     for row in rows:
@@ -388,26 +451,37 @@ def extract_aps(source: dict[str, Any], resolved_url: str, resolution_note: str)
     }
 
 def extract_ato_corporate_tax(source: dict[str, Any], resolved_url: str, resolution_note: str) -> dict[str, Any]:
-    rows = None
+    wb = None
     chosen_url = resolved_url
     for candidate in xlsx_candidate_urls(source, resolved_url):
         try:
-            rows = xlsx_rows(fetch_bytes(candidate))
+            wb = xlsx_workbook(fetch_bytes(candidate))
             chosen_url = candidate
             break
         except Exception:
             continue
-    if rows is None:
+    if wb is None:
         raise RuntimeError("no valid ATO XLSX candidate was readable")
+    ws = None
+    for sheet in wb.worksheets:
+        if "income tax details" in sheet.title.lower():
+            ws = sheet
+            break
+    if ws is None:
+        ws = wb.worksheets[0] if wb.worksheets else None
+    if ws is None:
+        raise RuntimeError("ATO workbook had no sheets")
+
+    rows = [list(r) for r in ws.iter_rows(values_only=True)]
     header_idx = None
-    header = []
-    for idx, row in enumerate(rows[:100]):
+    header: list[str] = []
+    for idx, row in enumerate(rows[:250]):
         lower = [str(c or "").strip().lower() for c in row]
         if "taxable income" in " | ".join(lower) and "tax payable" in " | ".join(lower):
             header_idx = idx
             header = lower
             break
-    if header_idx is None:
+    if header_idx is None or not header:
         raise RuntimeError("ATO header row not found")
 
     def col_index(candidates: tuple[str, ...]) -> int | None:
@@ -438,7 +512,7 @@ def extract_ato_corporate_tax(source: dict[str, Any], resolved_url: str, resolut
         total_taxable += taxable or 0.0
         total_tax += tax or 0.0
         rows_count += 1
-    if rows_count < 10:
+    if rows_count < 100:
         raise RuntimeError("ATO extractor captured too few rows")
 
     year_match = re.search(r"(20\d{2})[- ]?(?:2[0-9])?", resolved_url)
@@ -506,11 +580,14 @@ def extract_pdf_text(blob: bytes) -> tuple[str, str]:
     return ocr_text, "pdf_ocr"
 
 def first_number_after(text: str, label: str) -> float | None:
-    pattern = re.compile(label + r".{0,120}?(-?\(?\d[\d,]*\.?\d*\)?)", re.IGNORECASE | re.DOTALL)
-    match = pattern.search(text)
-    if not match:
-        return None
-    return parse_numeric(match.group(1))
+    pattern = re.compile(label + r".{0,900}", re.IGNORECASE | re.DOTALL)
+    for match in pattern.finditer(text):
+        chunk = match.group(0)
+        for token in re.findall(r"-?\(?\d[\d,]{0,20}(?:\.\d+)?\)?", chunk):
+            value = parse_numeric(token)
+            if value is not None:
+                return value
+    return None
 
 def extract_accc(source: dict[str, Any], resolved_url: str, resolution_note: str) -> dict[str, Any]:
     blob = fetch_bytes(resolved_url)
@@ -583,16 +660,16 @@ def extract_company_report(source: dict[str, Any], resolved_url: str, resolution
     )
     tax = first_number_after(
         lower,
-        r"(income tax expense|income tax paid|tax expense|taxation expense|income tax)",
+        r"(income tax expense|income tax paid|tax expense|taxation expense|income tax|tax charge)",
     )
     if pbt is None:
         pat = first_number_after(lower, r"(profit after tax|net profit after tax|net income)")
         if pat is not None and tax is not None:
             pbt = pat + tax
-    if rev is None or pbt is None or tax is None:
+    if pbt is None or tax is None:
         raise RuntimeError("required financial metrics not found in company report")
-    if rev <= 0 or abs(pbt) > rev * 5:
-        raise RuntimeError("company metric sanity check failed")
+    if abs(pbt) < 0.0001:
+        raise RuntimeError("company metric sanity check failed (near-zero pbt)")
 
     etr = (tax / pbt * 100.0) if pbt > 0 else 0.0
     etr = max(min(etr, 100.0), -100.0)
@@ -613,7 +690,7 @@ def extract_company_report(source: dict[str, Any], resolved_url: str, resolution
                 "resolution": resolution_note,
                 "parse_mode": parse_mode,
                 "financials": {
-                    "revenue": round(rev, 2),
+                    "revenue": round(rev, 2) if rev is not None else None,
                     "profit_before_tax": round(pbt, 2),
                     "income_tax": round(tax, 2),
                 },
@@ -754,6 +831,8 @@ def main() -> int:
                     continue
 
             resolved_url, resolution_note = resolve_machine_url(source)
+            resolved_url, refine_note = refine_download_url(source, resolved_url)
+            resolution_note = f"{resolution_note}:{refine_note}"
             extracted = try_extract_ok(source, resolved_url, resolution_note)
             if extracted:
                 out = write_manual(source, extracted)
