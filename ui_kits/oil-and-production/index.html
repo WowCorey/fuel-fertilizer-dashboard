@@ -28,6 +28,8 @@ const SERIES = [
   'eia_brent',
   'eia_wti',
   'tapis_crude',
+  'eia_diesel_retail_us',
+  'eia_jet_spot_usgc',
   'aps_production_petrol',
   'aps_production_diesel',
   'aps_production_jet',
@@ -219,6 +221,44 @@ function App() {
               accent="#991B1B"
               takeaway="Tapis converted to A$ will populate only if both a licence-compatible Tapis series and the AUD/USD source envelope are verified."
               yAxisLabel="Australian dollars per barrel"
+            />
+          </div>
+
+          <div style={{ height: 32 }}/>
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Refined benchmarks</span>
+              <h3 id="h-refined-benchmarks">U.S. reference prices for diesel and jet fuel</h3>
+              <p className="section__lede">
+                Published U.S. reference prices for refined fuels. These are not Australian pump prices; they
+                are the closest free public benchmarks for tracking refined-product markets that feed Australian
+                import costs. Values are monthly means of the weekly (diesel) or daily (jet) observations
+                mirrored by FRED from the U.S. Energy Information Administration.
+              </p>
+            </div>
+          </div>
+          <div className="charts-grid">
+            <ChartCard
+              eyebrow="US$"
+              title="U.S. retail diesel — US$/gallon"
+              unit="USD per gallon"
+              fromEnvelope={data.eia_diesel_retail_us}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
+              accent="#1F3A8A"
+              takeaway="U.S. weekly retail diesel price, all types. A reference for refined-product costs; Australian diesel is priced at the pump in cents per litre and is not directly comparable."
+              yAxisLabel="US dollars per gallon"
+            />
+            <ChartCard
+              eyebrow="US$"
+              title="Jet fuel — U.S. Gulf Coast spot, US$/gallon"
+              unit="USD per gallon"
+              fromEnvelope={data.eia_jet_spot_usgc}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
+              accent="#B45309"
+              takeaway="Daily kerosene-type jet fuel spot price at the U.S. Gulf Coast, aggregated to monthly means. A widely cited reference for refined-product cost feeding import parity."
+              yAxisLabel="US dollars per gallon"
             />
           </div>
         </section>
