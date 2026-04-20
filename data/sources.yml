@@ -50,7 +50,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.
     reuse_notes: Verify the latest workbook terms before republishing hand-keyed values.
-    fetch: manual
+    fetch: programmatic
     used_by: [fuel, oil]
 
   - id: aps_production_petrol
@@ -65,7 +65,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, motor spirit production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports motor spirit production.
-    fetch: manual
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_production_diesel
@@ -80,7 +80,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, diesel production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports diesel production.
-    fetch: manual
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_production_jet
@@ -95,7 +95,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, jet fuel production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports jet fuel production.
-    fetch: manual
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_production_fuel_oil
@@ -110,7 +110,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, fuel oil production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports fuel oil production.
-    fetch: manual
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_refinery_utilisation
@@ -125,7 +125,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, refinery utilisation.
     reuse_notes: Hand-key only if the APS workbook reports a directly verifiable utilisation series or enough inputs to calculate it transparently.
-    fetch: manual
+    fetch: programmatic
     used_by: [oil]
 
   - id: abs_petroleum_imports
@@ -329,7 +329,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Taxation Office, Corporate Tax Transparency Report.
     reuse_notes: Attribute ATO and preserve entity/year context for hand-keyed values.
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: accc_petroleum_monitoring
@@ -344,7 +344,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report.
     reuse_notes: Attribute ACCC and cite report quarter/page/table for hand-keyed values.
-    fetch: manual
+    fetch: programmatic
     used_by: [fuel, who_pays_what]
 
   - id: accc_petrol_wholesale_component
@@ -359,7 +359,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
     reuse_notes: Hand-key only the wholesale/refiner component from the ACCC breakdown table; do not reuse this envelope for excise, GST or margin.
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: accc_petrol_excise_component
@@ -374,7 +374,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
     reuse_notes: Hand-key only the fuel excise component from the ACCC breakdown table; do not reuse this envelope for wholesale, GST or margin.
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: accc_petrol_gst_component
@@ -389,7 +389,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
     reuse_notes: Hand-key only the GST component from the ACCC breakdown table; do not reuse this envelope for wholesale, excise or margin.
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: accc_petrol_retail_margin_component
@@ -404,7 +404,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.
     reuse_notes: Hand-key only the retailer margin component from the ACCC breakdown table; do not reuse this envelope for wholesale, excise or GST.
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: accc_petrol_breakdown_series
@@ -419,7 +419,7 @@ sources:
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown time series.
     reuse_notes: Leave unavailable until the chart model can represent separate wholesale, excise, GST and margin series without collapsing them into one value.
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: eia_brent
@@ -483,7 +483,7 @@ sources:
     rights_url: https://www.rba.gov.au/copyright/
     citation: Reserve Bank of Australia, Statistical Table F11.1.
     reuse_notes: Layout-sensitive workbook; preserve table/date context for hand-keyed values.
-    fetch: manual
+    fetch: programmatic
     used_by: [oil, who_pays_what]
 
   - id: rba_aud_usd
@@ -583,7 +583,7 @@ sources:
         url: https://www.sec.gov/Archives/edgar/data/34088/
       - kind: ixbrl
         url: https://www.exxonmobil.com/investor-relations/annual-report
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: company_chevron_au
@@ -603,7 +603,7 @@ sources:
         url: https://www.sec.gov/Archives/edgar/data/93410/
       - kind: ixbrl
         url: https://www.chevron.com/investors/reports
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: company_viva_energy
@@ -623,7 +623,7 @@ sources:
         url: https://www.vivaenergy.com.au/investors/reports-and-presentations
       - kind: xbrl
         url: https://www.asx.com.au/markets/company/VEA
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: company_ampol
@@ -643,7 +643,7 @@ sources:
         url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
       - kind: xbrl
         url: https://www.asx.com.au/markets/company/ALD
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: company_bp_au
@@ -663,7 +663,7 @@ sources:
         url: https://www.sec.gov/Archives/edgar/data/313807/
       - kind: ixbrl
         url: https://www.bp.com/en/global/corporate/investors/results-and-reporting.html
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: company_shell_au
@@ -683,7 +683,7 @@ sources:
         url: https://www.sec.gov/Archives/edgar/data/1306965/
       - kind: ixbrl
         url: https://www.shell.com/investors/results-and-reporting/annual-report.html
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: company_woodside
@@ -703,7 +703,7 @@ sources:
         url: https://www.woodside.com/investors/reports-investor-briefings
       - kind: xbrl
         url: https://www.asx.com.au/markets/company/WDS
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]
 
   - id: company_santos
@@ -723,5 +723,5 @@ sources:
         url: https://www.santos.com/investors/results-reports-and-presentations/
       - kind: xbrl
         url: https://www.asx.com.au/markets/company/STO
-    fetch: manual
+    fetch: programmatic
     used_by: [who_pays_what]

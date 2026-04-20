@@ -47,6 +47,11 @@ try:
 except ImportError:
     from scripts._repo_url import repo_url
 
+try:
+    import refresh_manual_sources as manual_extractors
+except ImportError:
+    from scripts import refresh_manual_sources as manual_extractors
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCES_FILE = ROOT / "data" / "sources.yml"
 GENERATED_DIR = ROOT / "data" / "generated"
@@ -714,6 +719,27 @@ FETCHERS: dict[str, Fetcher] = {
     "tapis_crude": fetch_tapis_private,
 }
 
+MIGRATED_PROGRAMMATIC_IDS = (
+    set(manual_extractors.APS_IDS)
+    | set(manual_extractors.ACCC_IDS)
+    | set(manual_extractors.COMPANY_IDS)
+    | {"ato_corporate_tax", "aud_usd_rba"}
+)
+
+
+def fetch_via_manual_extractor(source: dict[str, Any]) -> dict[str, Any]:
+    resolved_url, resolution_note = manual_extractors.resolve_machine_url(source)
+    resolved_url, refine_note = manual_extractors.refine_download_url(source, resolved_url)
+    resolution_note = f"{resolution_note}:{refine_note}"
+    extracted = manual_extractors.try_extract_ok(source, resolved_url, resolution_note)
+    if not extracted:
+        raise RuntimeError("programmatic extractor returned no deterministic result")
+    return extracted
+
+
+for migrated_id in sorted(MIGRATED_PROGRAMMATIC_IDS):
+    FETCHERS[migrated_id] = fetch_via_manual_extractor
+
 
 def load_sources() -> list[dict[str, Any]]:
     with SOURCES_FILE.open("r", encoding="utf-8") as f:
@@ -777,6 +803,45 @@ def private_feed_enabled(source: dict[str, Any]) -> bool:
     return os.environ.get("TAPIS_ENABLE_PRIVATE_FEED", "").strip() == "1"
 
 
+def maybe_manual_fallback(source: dict[str, Any], err: Exception) -> dict[str, Any] | None:
+    if os.environ.get("ALLOW_MANUAL_FALLBACK", "").strip() != "1":
+        return None
+    manual_path = MANUAL_DIR / f"{source['id']}.json"
+    if not manual_path.exists():
+        return None
+    try:
+        with manual_path.open("r", encoding="utf-8") as f:
+            manual_doc = json.load(f)
+    except Exception:
+        return None
+    if not isinstance(manual_doc, dict):
+        return None
+    status = manual_doc.get("status", "unavailable")
+    if status not in {"ok", "unavailable"}:
+        status = "unavailable"
+    return {
+        "status": status,
+        "unit": manual_doc.get("unit", ""),
+        "values": manual_doc.get("values", []) if isinstance(manual_doc.get("values"), list) else [],
+        "last_data_point": manual_doc.get("last_data_point"),
+        "notes": (
+            f"Programmatic fetch failed ({type(err).__name__}: {err}). "
+            "Fell back to manual envelope because ALLOW_MANUAL_FALLBACK=1."
+        ),
+        "extra": {
+            "schema": "programmatic_manual_fallback.v1",
+            "fields": {
+                "manual_source_path": str(manual_path.relative_to(ROOT)),
+                "original_error": f"{type(err).__name__}: {err}",
+            },
+        },
+    }
+
+
+def prefer_manual_fallback() -> bool:
+    return os.environ.get("FORCE_MANUAL_FALLBACK", "").strip() == "1"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Fetch data for Fuel Resilience AU")
     ap.add_argument("--only", help="Only fetch this source id")
@@ -808,6 +873,14 @@ def main() -> int:
         if not fetcher:
             errors.append(f"{sid}: marked {source.get('fetch')} but no fetcher registered")
             return
+        if prefer_manual_fallback():
+            forced_fallback = maybe_manual_fallback(source, RuntimeError("FORCE_MANUAL_FALLBACK=1"))
+            if forced_fallback is not None:
+                path = write_generated(source, forced_fallback)
+                wrote_ids.add(sid)
+                wrote.append(str(path.relative_to(ROOT)))
+                print(f"[OK ] {sid:<32} -> {path.relative_to(ROOT)} (manual fallback forced)")
+                return
         try:
             block = fetcher(source)
             path = write_generated(source, block)
@@ -815,6 +888,13 @@ def main() -> int:
             wrote.append(str(path.relative_to(ROOT)))
             print(f"[OK ] {sid:<32} -> {path.relative_to(ROOT)}")
         except Exception as e:
+            fallback = maybe_manual_fallback(source, e)
+            if fallback is not None:
+                path = write_generated(source, fallback)
+                wrote_ids.add(sid)
+                wrote.append(str(path.relative_to(ROOT)))
+                print(f"[OK ] {sid:<32} -> {path.relative_to(ROOT)} (manual fallback)")
+                return
             errors.append(f"{sid}: {type(e).__name__}: {e}")
             print(f"[ERR] {sid:<32} {e}", file=sys.stderr)
 

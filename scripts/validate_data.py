@@ -204,8 +204,10 @@ def validate_sources(errors: list[dict[str, str]], warnings: list[dict[str, str]
             add(errors, path, "last_verified must be YYYY-MM-DD")
         if not isinstance(source.get("used_by"), list) or not source.get("used_by"):
             add(errors, path, "used_by must be a non-empty list")
-        if source.get("fetch") == "programmatic" and not source.get("fetch_url"):
-            add(errors, path, "programmatic sources must define fetch_url")
+        if source.get("fetch") == "programmatic" and not (
+            source.get("fetch_url") or source.get("canonical_url") or source.get("url")
+        ):
+            add(errors, path, "programmatic sources must define a resolvable URL (fetch_url/canonical_url/url)")
         if source.get("fetch") == "derived":
             parent = source.get("derived_from")
             if not isinstance(parent, str) or not parent:
@@ -315,6 +317,8 @@ def validate_phase2_extractors(
 ) -> None:
     sid = source.get("id")
     if sid not in PHASE2_IDS:
+        return
+    if source.get("fetch") != "manual":
         return
     if env.get("status") != "ok":
         return
