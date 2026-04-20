@@ -1,0 +1,22 @@
+{
+  "series_id": "tapis_crude",
+  "source_id": "tapis_crude",
+  "source_name": "Tapis crude benchmark",
+  "source_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm",
+  "unit": "USD per barrel",
+  "retrieved_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Private Tapis feed is disabled. Set TAPIS_ENABLE_PRIVATE_FEED=1 and TAPIS_API_KEY to enable this source. Left unavailable by policy.",
+  "status": "unavailable",
+  "manual_entry": false,
+  "source_rights": "Private internal feed for non-redistributed use. Confirm publisher licence before any external/commercial publication.",
+  "citation": "Private market-data API feed for internal analysis only; do not treat as public redistribution-ready.",
+  "extra": {
+    "schema": "private_feed_gate.v1",
+    "fields": {
+      "enabled": false,
+      "provider": "oilpriceapi"
+    }
+  }
+}
