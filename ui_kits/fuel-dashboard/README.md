@@ -1,6 +1,6 @@
 # Fuel dashboard (v1)
 
-Main entry: `index.html`. Serve the project root with `python3 -m http.server`
+Main entry: `index.html`. Serve the project root with `python -m http.server`
 and open `http://localhost:8000/ui_kits/fuel-dashboard/index.html`.
 
 Reads JSON envelopes produced by `scripts/fetch_data.py` from

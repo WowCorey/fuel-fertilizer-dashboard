@@ -27,7 +27,8 @@ Run these commands from repository root:
 ```sh
 rg "(href|src)=\\\"/" ui_kits/*.html ui_kits/**/*.html
 rg "fetch\\(\\s*['\\\"]/" ui_kits/shared ui_kits/*
-python3 scripts/validate_data.py
+python scripts/validate_data.py
+python scripts/run_tests.py
 ```
 
 If `rg` finds matches in dashboard HTML/JS for root-absolute URLs, convert them
