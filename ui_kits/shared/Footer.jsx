@@ -15,6 +15,7 @@ function Footer({ updated = '' }) {
         <div className="site-footer__col">
           <span className="eyebrow">Dashboards</span>
           <ul>
+            <li><a href="../wallboard/index.html">Wallboard</a></li>
             <li><a href="../fuel-dashboard/index.html">Fuel</a></li>
             <li><a href="../fertilizer-dashboard/index.html">Fertilizer</a></li>
             <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>

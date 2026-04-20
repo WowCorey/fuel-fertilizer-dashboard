@@ -2,6 +2,7 @@
 // Cross-links to sibling dashboards so every page has the same nav.
 function Header({ active = 'fuel', updated = '' }) {
   const nav = [
+    { id: 'wallboard',     label: 'Wallboard',             href: '../wallboard/index.html' },
     { id: 'fuel',          label: 'Fuel',                  href: '../fuel-dashboard/index.html' },
     { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },

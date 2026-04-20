@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wallboard — Fuel Resilience AU</title>
+<meta name="description" content="Always-on wallboard view across fuel, fertiliser, oil and who-pays-what indicators.">
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="../shared/styles.css">
+<style>
+  .wallboard-main {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-5);
+  }
+  .wallboard-hero {
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    background: var(--card);
+    padding: var(--s-6);
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--s-6);
+    align-items: start;
+  }
+  .wallboard-hero h1 {
+    font-size: var(--fs-32);
+    line-height: var(--lh-snug);
+    margin-top: var(--s-2);
+  }
+  .wallboard-hero__lede {
+    margin-top: var(--s-4);
+    color: var(--ink-2);
+    max-width: 62ch;
+  }
+  .wallboard-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-3);
+  }
+  .wallboard-stat {
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    background: var(--paper);
+    padding: var(--s-4);
+  }
+  .wallboard-stat__k {
+    display: block;
+    color: var(--ink-3);
+    font-size: var(--fs-12);
+    text-transform: uppercase;
+    letter-spacing: var(--tr-eyebrow);
+    font-weight: 600;
+  }
+  .wallboard-stat__v {
+    display: block;
+    margin-top: var(--s-2);
+    font-size: var(--fs-20);
+    font-weight: 600;
+  }
+  .wallboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-5);
+  }
+  .wallboard-panel {
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    background: var(--card);
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+  }
+  .wallboard-panel__head h2 {
+    font-size: var(--fs-24);
+    font-family: var(--font-serif);
+    font-weight: 500;
+    margin-top: var(--s-1);
+  }
+  .wallboard-panel__head p {
+    color: var(--ink-2);
+    font-size: var(--fs-14);
+    margin-top: var(--s-2);
+  }
+  .wallboard-links {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-3);
+    border-top: 1px solid var(--rule);
+    padding-top: var(--s-3);
+    font-size: var(--fs-13);
+    color: var(--ink-3);
+  }
+  .wallboard-links a {
+    font-size: var(--fs-13);
+    font-weight: 600;
+  }
+  @media (max-width: 1100px) {
+    .wallboard-hero { grid-template-columns: 1fr; }
+    .wallboard-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script src="../shared/data-loader.js"></script>
+<script type="text/babel" src="../shared/Header.jsx"></script>
+<script type="text/babel" src="../shared/MetricCard.jsx"></script>
+<script type="text/babel" src="../shared/ChartCard.jsx"></script>
+<script type="text/babel" src="../shared/Footer.jsx"></script>
+
+<script type="text/babel">
+const SERIES = [
+  'aps_monthly',
+  'aip_retail',
+  'abs_fertiliser_imports',
+  'abares_fertiliser_price',
+  'eia_brent',
+  'aps_refinery_utilisation',
+  'ato_corporate_tax',
+  'accc_petroleum_monitoring',
+];
+
+function App() {
+  const [data, setData] = React.useState(null);
+  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+
+  if (!data) {
+    return (
+      <div className="page">
+        <Header active="wallboard"/>
+        <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
+      </div>
+    );
+  }
+
+  const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
+  const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const envelopeList = Object.values(data);
+  const verifiedCount = envelopeList.filter(env => env.status === 'ok').length;
+  const unavailableCount = envelopeList.length - verifiedCount;
+  const latestDataPoint = envelopeList.map(env => env.last_data_point).filter(Boolean).sort().at(-1) || 'No verified point';
+
+  return (
+    <div className="page">
+      <Header active="wallboard" updated={latestRetrieved ? updatedDisplay : ''}/>
+      <main id="main" className="wallboard-main">
+        <section className="wallboard-hero" aria-labelledby="wallboard-title">
+          <div>
+            <span className="eyebrow">Always-on wallboard</span>
+            <h1 id="wallboard-title">One screen for fuel, fertiliser, oil and consumer cost signals</h1>
+            <p className="wallboard-hero__lede">
+              Built for persistent display. Layout is stable, cards are source-linked, and unavailable values remain explicit until verified.
+            </p>
+          </div>
+          <div className="wallboard-stats" aria-label="Wallboard status">
+            <article className="wallboard-stat">
+              <span className="wallboard-stat__k">Verified sources</span>
+              <span className="wallboard-stat__v">{verifiedCount}</span>
+            </article>
+            <article className="wallboard-stat">
+              <span className="wallboard-stat__k">Unavailable sources</span>
+              <span className="wallboard-stat__v">{unavailableCount}</span>
+            </article>
+            <article className="wallboard-stat">
+              <span className="wallboard-stat__k">Verified retrieval</span>
+              <span className="wallboard-stat__v mono">{updatedDisplay}</span>
+            </article>
+            <article className="wallboard-stat">
+              <span className="wallboard-stat__k">Latest data point</span>
+              <span className="wallboard-stat__v mono">{latestDataPoint}</span>
+            </article>
+          </div>
+        </section>
+
+        <section className="wallboard-grid" aria-label="Four focus areas">
+          <article className="wallboard-panel">
+            <header className="wallboard-panel__head">
+              <span className="eyebrow">Fuel</span>
+              <h2>Supply and retail pulse</h2>
+              <p>Stock cover and national retail levels.</p>
+            </header>
+            <MetricCard
+              eyebrow="Resilience"
+              label="Days of Net Import Cover"
+              plain="How long stock covers demand if imports stop."
+              fromEnvelope={data.aps_monthly}
+              unit=" days"
+              threshold={{ state:'below', text:'IEA benchmark: 90 days' }}
+              highlight
+            />
+            <ChartCard
+              eyebrow="Pump"
+              title="National fuel price"
+              unit="/L"
+              fromEnvelope={data.aip_retail}
+              ranges={['1Y','3Y']}
+              defaultRange="3Y"
+              accent="var(--series-2)"
+              yAxisLabel="Australian dollars per litre (A$/L)"
+            />
+            <div className="wallboard-links">
+              <span>Detail view</span>
+              <a href="../fuel-dashboard/index.html">Open fuel dashboard</a>
+            </div>
+          </article>
+
+          <article className="wallboard-panel">
+            <header className="wallboard-panel__head">
+              <span className="eyebrow">Fertilizer</span>
+              <h2>Import and cost pressure</h2>
+              <p>Monthly imports and fertiliser price index.</p>
+            </header>
+            <MetricCard
+              eyebrow="Volume"
+              label="Monthly fertiliser imports"
+              plain="Latest monthly HS-31 import volume."
+              fromEnvelope={data.abs_fertiliser_imports}
+              unit=" kt"
+              highlight
+            />
+            <ChartCard
+              eyebrow="Price"
+              title="ABARES fertiliser price index"
+              unit="index"
+              fromEnvelope={data.abares_fertiliser_price}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="5Y"
+              accent="var(--series-3)"
+              yAxisLabel="Index (long-run average = 100)"
+            />
+            <div className="wallboard-links">
+              <span>Detail view</span>
+              <a href="../fertilizer-dashboard/index.html">Open fertiliser dashboard</a>
+            </div>
+          </article>
+
+          <article className="wallboard-panel">
+            <header className="wallboard-panel__head">
+              <span className="eyebrow">Oil &amp; production</span>
+              <h2>Global crude and local refining</h2>
+              <p>Brent benchmark and refinery utilisation.</p>
+            </header>
+            <MetricCard
+              eyebrow="Utilisation"
+              label="Refinery utilisation rate"
+              plain="Share of installed refining capacity running."
+              fromEnvelope={data.aps_refinery_utilisation}
+              unit="%"
+              highlight
+            />
+            <ChartCard
+              eyebrow="Crude"
+              title="Brent crude — US$/barrel"
+              unit="USD per barrel"
+              fromEnvelope={data.eia_brent}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
+              accent="var(--series-1)"
+              yAxisLabel="US dollars per barrel"
+            />
+            <div className="wallboard-links">
+              <span>Detail view</span>
+              <a href="../oil-and-production/index.html">Open oil dashboard</a>
+            </div>
+          </article>
+
+          <article className="wallboard-panel">
+            <header className="wallboard-panel__head">
+              <span className="eyebrow">Who pays what</span>
+              <h2>Company tax and pump economics</h2>
+              <p>ATO transparency and ACCC monitoring series.</p>
+            </header>
+            <MetricCard
+              eyebrow="Tax"
+              label="ATO corporate tax transparency"
+              plain="Latest recorded value from loaded ATO envelope."
+              fromEnvelope={data.ato_corporate_tax}
+              unit=""
+              highlight
+            />
+            <ChartCard
+              eyebrow="Retail"
+              title="ACCC petroleum monitoring"
+              unit=""
+              fromEnvelope={data.accc_petroleum_monitoring}
+              ranges={['1Y','3Y','5Y']}
+              defaultRange="3Y"
+              accent="var(--series-4)"
+              yAxisLabel="Series units per source envelope"
+            />
+            <div className="wallboard-links">
+              <span>Detail view</span>
+              <a href="../who-pays-what/index.html">Open who pays what</a>
+            </div>
+          </article>
+        </section>
+      </main>
+      <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
