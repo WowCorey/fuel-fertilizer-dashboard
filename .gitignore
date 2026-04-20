@@ -1,0 +1,10 @@
+# Temporary scraped/generated artifacts
+data/raw/
+data/corpus_manifests/
+
+# Python cache artifacts
+__pycache__/
+*.py[cod]
+# Temporary scraped/generated artifacts
+data/raw/
+data/corpus_manifests/

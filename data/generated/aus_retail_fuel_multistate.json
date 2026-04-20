@@ -4,11 +4,11 @@
   "source_name": "Retail pump price — multi-state average",
   "source_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
   "unit": "cents per litre",
-  "retrieved_at": "2026-04-19T16:55:36+00:00",
-  "last_data_point": "2026-04-20",
+  "retrieved_at": "2026-04-20T14:57:27+00:00",
+  "last_data_point": "2026-04-21",
   "values": [
     {
-      "t": "2026-04-20",
+      "t": "2026-04-21",
       "v": 192.8
     }
   ],
