@@ -5,10 +5,23 @@
   "source_url": "https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports",
   "unit": "",
   "retrieved_at": null,
-  "stub_created_at": "2026-04-18T12:27:44+00:00",
   "last_data_point": null,
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "notes": "Automated extraction failed; source left unavailable pending parser fix.",
   "status": "unavailable",
-  "manual_entry": true
+  "manual_entry": true,
+  "stub_created_at": "2026-04-20T12:21:54+00:00",
+  "source_rights": "Company copyright",
+  "citation": "ExxonMobil Australia annual report and financial statements.",
+  "extra": {
+    "schema": "manual_automation.v2",
+    "fields": {
+      "extractor": "fallback_unavailable",
+      "resolved_url": "https://corporate.exxonmobil.com.au/community/worldwide-giving-report/volunteering-in-local-communities",
+      "resolution": "discovered_from_canonical:pdf",
+      "reachable": false,
+      "reachability_note": "RuntimeError: OCR conversion unavailable: Unable to get page count. Is poppler installed and in PATH?",
+      "checked_at": "2026-04-20T12:21:54+00:00"
+    }
+  }
 }

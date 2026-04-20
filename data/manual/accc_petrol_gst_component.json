@@ -2,15 +2,26 @@
   "series_id": "accc_petrol_gst_component",
   "source_id": "accc_petrol_gst_component",
   "source_name": "ACCC petrol price breakdown - GST component",
-  "source_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+  "source_url": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry",
   "unit": "",
   "retrieved_at": null,
-  "stub_created_at": "2026-04-18T13:44:14+00:00",
   "last_data_point": null,
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "notes": "Automated extraction failed; source left unavailable pending parser fix.",
   "status": "unavailable",
   "manual_entry": true,
+  "stub_created_at": "2026-04-20T12:18:18+00:00",
   "source_rights": "CC BY 4.0 where stated by publisher",
-  "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown."
+  "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.",
+  "extra": {
+    "schema": "manual_automation.v2",
+    "fields": {
+      "extractor": "fallback_unavailable",
+      "resolved_url": "https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry?page=4",
+      "resolution": "discovered_from_canonical:pdf",
+      "reachable": false,
+      "reachability_note": "RuntimeError: OCR conversion unavailable: Unable to get page count. Is poppler installed and in PATH?",
+      "checked_at": "2026-04-20T12:18:18+00:00"
+    }
+  }
 }
