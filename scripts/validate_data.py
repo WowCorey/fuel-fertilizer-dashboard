@@ -68,6 +68,29 @@ STALE_GRACE_DAYS = {
     "annual": 460,
     "ad-hoc": None,
 }
+PHASE2_IDS = {
+    "aps_monthly",
+    "aps_production_petrol",
+    "aps_production_diesel",
+    "aps_production_jet",
+    "aps_production_fuel_oil",
+    "aps_refinery_utilisation",
+    "ato_corporate_tax",
+    "accc_petroleum_monitoring",
+    "accc_petrol_wholesale_component",
+    "accc_petrol_excise_component",
+    "accc_petrol_gst_component",
+    "accc_petrol_retail_margin_component",
+    "accc_petrol_breakdown_series",
+    "company_exxonmobil_au",
+    "company_chevron_au",
+    "company_viva_energy",
+    "company_ampol",
+    "company_bp_au",
+    "company_shell_au",
+    "company_woodside",
+    "company_santos",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -281,6 +304,37 @@ def validate_envelope(
     expected_url = source.get("canonical_url") or source.get("url")
     if env.get("source_url") != expected_url:
         add(warnings, rel(path), "source_url differs from source canonical_url")
+    validate_phase2_extractors(path, env, source, errors)
+
+
+def validate_phase2_extractors(
+    path: pathlib.Path,
+    env: dict[str, Any],
+    source: dict[str, Any],
+    errors: list[dict[str, str]],
+) -> None:
+    sid = source.get("id")
+    if sid not in PHASE2_IDS:
+        return
+    if env.get("status") != "ok":
+        return
+    extra = env.get("extra")
+    if not isinstance(extra, dict):
+        add(errors, rel(path), "phase2 source with status ok requires structured extra object")
+        return
+    if extra.get("schema") != "manual_automation.v2":
+        add(errors, rel(path), "phase2 source with status ok must set extra.schema=manual_automation.v2")
+        return
+    fields = extra.get("fields")
+    if not isinstance(fields, dict):
+        add(errors, rel(path), "phase2 source extra.fields must be an object")
+        return
+    extractor = fields.get("extractor")
+    if not isinstance(extractor, str) or not extractor.strip():
+        add(errors, rel(path), "phase2 source extra.fields.extractor is required")
+    resolved_url = fields.get("resolved_url")
+    if not isinstance(resolved_url, str) or not resolved_url.startswith("http"):
+        add(errors, rel(path), "phase2 source extra.fields.resolved_url must be an http URL")
 
 
 def check_stale(path: pathlib.Path, env: dict[str, Any], source: dict[str, Any], warnings: list[dict[str, str]]) -> None:

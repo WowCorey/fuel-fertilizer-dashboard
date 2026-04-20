@@ -349,6 +349,121 @@ def fetch_rba_f11(url: str) -> dict[str, Any]:
     }
 
 
+def fetch_tapis_private(source: dict[str, Any]) -> dict[str, Any]:
+    """Fetch Tapis crude from a private API feed behind an explicit gate."""
+    if os.environ.get("TAPIS_ENABLE_PRIVATE_FEED", "").strip() != "1":
+        return {
+            "status": "unavailable",
+            "unit": "USD per barrel",
+            "values": [],
+            "last_data_point": None,
+            "notes": (
+                "Private Tapis feed is disabled. Set TAPIS_ENABLE_PRIVATE_FEED=1 and TAPIS_API_KEY "
+                "to enable this source. Left unavailable by policy."
+            ),
+            "extra": {
+                "schema": "private_feed_gate.v1",
+                "fields": {"enabled": False, "provider": os.environ.get("TAPIS_PROVIDER", "oilpriceapi")},
+            },
+        }
+
+    api_key = os.environ.get("TAPIS_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("TAPIS_ENABLE_PRIVATE_FEED=1 but TAPIS_API_KEY is not set")
+
+    provider = os.environ.get("TAPIS_PROVIDER", "oilpriceapi").strip().lower() or "oilpriceapi"
+    if provider != "oilpriceapi":
+        raise RuntimeError(f"Unsupported TAPIS_PROVIDER: {provider}")
+
+    url = source.get("fetch_url")
+    if not isinstance(url, str) or not url.strip():
+        raise RuntimeError("tapis_crude is missing fetch_url")
+    url = url.strip()
+    r = requests.get(
+        url,
+        headers={
+            "User-Agent": UA,
+            "Authorization": f"Token {api_key}",
+            "X-API-Key": api_key,
+            "Accept": "application/json",
+        },
+        timeout=45,
+    )
+    r.raise_for_status()
+    try:
+        doc = r.json()
+    except ValueError as exc:
+        raise RuntimeError("Tapis API response was not valid JSON") from exc
+
+    def walk_numbers(node: Any) -> list[float]:
+        out: list[float] = []
+        if isinstance(node, dict):
+            for value in node.values():
+                out.extend(walk_numbers(value))
+        elif isinstance(node, list):
+            for value in node:
+                out.extend(walk_numbers(value))
+        elif isinstance(node, (int, float)) and not isinstance(node, bool):
+            out.append(float(node))
+        return out
+
+    candidates = [
+        doc.get("price"),
+        doc.get("data", {}).get("price") if isinstance(doc.get("data"), dict) else None,
+        doc.get("data", {}).get("value") if isinstance(doc.get("data"), dict) else None,
+        doc.get("prices", {}).get("TAPIS_CRUDE_USD") if isinstance(doc.get("prices"), dict) else None,
+    ]
+    price = None
+    for candidate in candidates:
+        if isinstance(candidate, (int, float)) and not isinstance(candidate, bool):
+            price = float(candidate)
+            break
+    if price is None:
+        for numeric in walk_numbers(doc):
+            if 1 <= numeric <= 500:
+                price = numeric
+                break
+    if price is None:
+        raise RuntimeError("Could not locate a numeric Tapis price in API response")
+
+    date_candidates = [
+        doc.get("date"),
+        doc.get("timestamp"),
+        doc.get("updated_at"),
+        doc.get("data", {}).get("date") if isinstance(doc.get("data"), dict) else None,
+        doc.get("data", {}).get("timestamp") if isinstance(doc.get("data"), dict) else None,
+    ]
+    day = None
+    for raw in date_candidates:
+        if not isinstance(raw, str) or len(raw) < 10:
+            continue
+        token = raw[:10]
+        try:
+            dt.date.fromisoformat(token)
+            day = token
+            break
+        except ValueError:
+            continue
+    if day is None:
+        day = dt.datetime.now(dt.timezone.utc).date().isoformat()
+
+    month = day[:7]
+    return {
+        "unit": "USD per barrel",
+        "values": [{"t": month, "v": round(price, 2)}],
+        "last_data_point": day,
+        "notes": (
+            "Fetched from private Tapis market-data feed behind TAPIS_ENABLE_PRIVATE_FEED gate. "
+            "Internal use only until licence and redistribution terms are approved."
+        ),
+        "source_url_resolved": url,
+        "extra": {
+            "schema": "private_feed_gate.v1",
+            "fields": {"enabled": True, "provider": provider},
+        },
+    }
+
+
 def warn_skip(label: str, message: str) -> None:
     print(f"[WARN] {label}: {message}", file=sys.stderr)
 
@@ -591,6 +706,7 @@ FETCHERS: dict[str, Fetcher] = {
     "abs_petroleum_imports_yoy": fetch_abs_petroleum_imports_yoy,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
+    "tapis_crude": fetch_tapis_private,
 }
 
 
@@ -650,6 +766,12 @@ def source_check_url(source: dict[str, Any], *, all_links: bool) -> str:
     return source.get("fetch_url") or source.get("canonical_url") or source["url"]
 
 
+def private_feed_enabled(source: dict[str, Any]) -> bool:
+    if not source.get("private_feed_gate"):
+        return True
+    return os.environ.get("TAPIS_ENABLE_PRIVATE_FEED", "").strip() == "1"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Fetch data for Fuel Resilience AU")
     ap.add_argument("--only", help="Only fetch this source id")
@@ -700,6 +822,9 @@ def main() -> int:
         if args.check or args.check_all_links:
             if args.check and fetch_mode != "programmatic":
                 skipped.append((sid, "not programmatic; skipped blocking fetch check"))
+                continue
+            if args.check and not private_feed_enabled(source):
+                skipped.append((sid, "private feed gate disabled; skipped blocking fetch check"))
                 continue
             url = source_check_url(source, all_links=args.check_all_links)
             ok, msg = check_url(url)

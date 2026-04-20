@@ -320,8 +320,8 @@ sources:
   - id: ato_corporate_tax
     human_name: ATO Corporate Tax Transparency Report (latest year)
     publisher: Australian Taxation Office
-    url: https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/
-    canonical_url: https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/
+    url: https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/in-detail/tax-transparency/corporate-tax-transparency-report-2023-24
+    canonical_url: https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/in-detail/tax-transparency/corporate-tax-transparency-report-2023-24
     format: XLSX
     update_cadence: annual
     last_verified: 2026-04-15
@@ -335,8 +335,8 @@ sources:
   - id: accc_petroleum_monitoring
     human_name: ACCC Petroleum Monitoring Report (latest)
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
-    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
+    canonical_url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
     format: PDF
     update_cadence: quarterly
     last_verified: 2026-04-15
@@ -350,8 +350,8 @@ sources:
   - id: accc_petrol_wholesale_component
     human_name: ACCC petrol price breakdown - wholesale component
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
-    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
+    canonical_url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
     format: PDF
     update_cadence: quarterly
     last_verified: 2026-04-15
@@ -365,8 +365,8 @@ sources:
   - id: accc_petrol_excise_component
     human_name: ACCC petrol price breakdown - fuel excise component
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
-    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
+    canonical_url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
     format: PDF
     update_cadence: quarterly
     last_verified: 2026-04-15
@@ -380,8 +380,8 @@ sources:
   - id: accc_petrol_gst_component
     human_name: ACCC petrol price breakdown - GST component
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
-    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
+    canonical_url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
     format: PDF
     update_cadence: quarterly
     last_verified: 2026-04-15
@@ -395,8 +395,8 @@ sources:
   - id: accc_petrol_retail_margin_component
     human_name: ACCC petrol price breakdown - retailer margin component
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
-    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
+    canonical_url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
     format: PDF
     update_cadence: quarterly
     last_verified: 2026-04-15
@@ -410,8 +410,8 @@ sources:
   - id: accc_petrol_breakdown_series
     human_name: ACCC petrol price breakdown - monthly component series
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
-    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports
+    url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
+    canonical_url: https://www.accc.gov.au/publications/quarterly-reports-on-the-australian-petroleum-industry
     format: PDF
     update_cadence: quarterly
     last_verified: 2026-04-15
@@ -459,14 +459,16 @@ sources:
     publisher: Various market-data mirrors
     url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm
     canonical_url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm
+    fetch_url: https://api.oilpriceapi.com/v1/prices/latest?by_code=TAPIS_CRUDE_USD
+    private_feed_gate: true
     format: MIXED
     update_cadence: monthly
-    last_verified: 2026-04-15
-    rights: Commercial market data; no reliable free public series identified
+    last_verified: 2026-04-20
+    rights: Private internal feed for non-redistributed use. Confirm publisher licence before any external/commercial publication.
     rights_url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm
-    citation: Tapis benchmark source to be cited when a licence-compatible source is identified.
-    reuse_notes: Unavailable by design until a licence-compatible public source is confirmed.
-    fetch: unavailable
+    citation: Private market-data API feed for internal analysis only; do not treat as public redistribution-ready.
+    reuse_notes: Gated programmatic source. Disabled by default. Set TAPIS_ENABLE_PRIVATE_FEED=1 and provide TAPIS_API_KEY to fetch. Keep status unavailable when gate is off.
+    fetch: programmatic
     used_by: [oil]
 
   - id: aud_usd_rba

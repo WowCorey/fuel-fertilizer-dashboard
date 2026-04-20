@@ -5,10 +5,12 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** v1.3 — four dashboard surfaces read from a shared JSON-envelope data
-pipeline. Coverage varies by source: Brent and WTI are currently fetched
-programmatically; most Australian datasets remain manual stubs until verified
-values are hand-keyed from the named source.
+**Status:** five dashboard surfaces read from a shared JSON-envelope data
+pipeline (four detailed dashboards plus an always-on wallboard). Coverage
+varies by source: Brent, WTI, ABS imports, ABS import YoY, RBA AUD/USD and the
+multistate retail series are fetched programmatically; most Australian
+institutional datasets remain manual stubs until verified values are hand-keyed
+from the named source.
 
 ## What this is
 
@@ -31,6 +33,7 @@ interpolate or estimate missing numbers.
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | Manual stubs pending verification |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI fetched; other series pending |
 | [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | Manual stubs pending verification |
+| [Wallboard](ui_kits/wallboard/index.html) | rolling | Always-on single-screen operational view across all four domains | Mixed; renders verified values and explicit unavailable states |
 
 Every page cross-links to the others in the header nav.
 
@@ -40,7 +43,7 @@ No build step. Serve the repo root with any static server — `fetch()` of the
 JSON envelopes does not work from `file://`, so you must use a server.
 
 ```sh
-python3 -m http.server 8000
+python -m http.server 8000
 # then visit:
 #   http://localhost:8000/ui_kits/fuel-dashboard/index.html
 #   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
@@ -128,16 +131,17 @@ never estimate.
 Run the validator before opening or merging a PR:
 
 ```sh
-pip install pyyaml==6.0.2 requests==2.32.3 pytest
-python3 scripts/validate_data.py
-python3 scripts/validate_data.py --json
-python3 scripts/run_tests.py
+pip install pyyaml requests pytest
+python scripts/validate_data.py
+python scripts/validate_data.py --json
+python scripts/run_tests.py
 ```
 
 The validator checks `data/sources.yml`, all generated/manual envelopes and the
-source IDs referenced by dashboard pages. It rejects duplicate IDs, missing
-registry entries, invalid status/timestamp semantics, inconsistent manual-entry
-flags, malformed values and unstructured `extra` data.
+source IDs referenced by dashboard pages (including wallboard references). It
+rejects duplicate IDs, missing registry entries, invalid status/timestamp
+semantics, inconsistent manual-entry flags, malformed values and unstructured
+`extra` data.
 
 `.github/workflows/ci.yml` runs on pull requests and pushes. It installs only
 minimal pinned Python dependencies, compile-checks scripts and runs the data
@@ -151,7 +155,7 @@ push via tracked local hooks.
 Install hooks once per clone:
 
 ```sh
-python3 scripts/install_hooks.py
+python scripts/install_hooks.py
 ```
 
 Hooks:
@@ -178,15 +182,16 @@ Semver automation:
 ## Run the pipeline locally
 
 ```sh
-pip install pyyaml==6.0.2 requests==2.32.3 pytest
-python3 scripts/fetch_data.py                 # pull every programmatic source
-python3 scripts/fetch_data.py --only eia_brent
-python3 scripts/fetch_data.py --check         # blocking check: programmatic fetch URLs only
-python3 scripts/fetch_data.py --check-all-links  # broad link-health check for canonical pages
-python3 scripts/init_manual_stubs.py          # create missing manual stubs
-python3 scripts/refresh_manual_sources.py     # auto-refresh manual/unavailable source envelopes
-python3 scripts/validate_data.py              # validate registry and envelopes
-python3 scripts/run_tests.py                  # run deterministic unit tests
+pip install -r requirements.txt
+pip install pytest
+python scripts/fetch_data.py                     # pull every programmatic/derived source
+python scripts/fetch_data.py --only eia_brent
+python scripts/fetch_data.py --check             # blocking check: programmatic fetch URLs only
+python scripts/fetch_data.py --check-all-links   # broad link-health check for canonical pages
+python scripts/init_manual_stubs.py              # create missing manual stubs
+python scripts/refresh_manual_sources.py         # refresh manual/unavailable source envelopes
+python scripts/validate_data.py                  # validate registry and envelopes
+python scripts/run_tests.py                      # run deterministic unit tests
 ```
 
 ### Optional private-feed environment variables
@@ -223,7 +228,7 @@ refresh; broken programmatic fetch URLs should fail loudly.
 1. Add or edit an entry in `data/sources.yml` with the full source registry contract above.
 2. If `fetch: programmatic`, register a fetcher in `FETCHERS` inside
    `scripts/fetch_data.py` that returns `{unit, values, last_data_point, notes}`.
-3. If `fetch: manual`, run `python3 scripts/init_manual_stubs.py` to create
+3. If `fetch: manual`, run `python scripts/init_manual_stubs.py` to create
    the placeholder, then hand-key values from the named publisher document.
 4. When manual values are verified, set `status` to `"ok"`, set `retrieved_at`
    to the data-entry timestamp, set `last_data_point`, and keep
@@ -233,12 +238,13 @@ refresh; broken programmatic fetch URLs should fail loudly.
 6. Reference the envelope from one of the dashboard pages by adding its ID to
    the page's `SERIES` array and passing `fromEnvelope={data.<id>}` to
    `<MetricCard>` or `<ChartCard>`.
-7. Run `python3 scripts/validate_data.py` before committing.
+7. Run `python scripts/validate_data.py` before committing.
 
 ## Repo layout
 
 ```
 README.md                      This file
+CONTRIBUTING.md                Contribution workflow and static-hosting rules
 SKILL.md                       Agent Skill front-matter
 colors_and_type.css            Design tokens (color, type, spacing, motion)
 assets/                        Logo mark, Australia outline
@@ -252,16 +258,21 @@ data/
 scripts/
   fetch_data.py                Pipeline entry point
   init_manual_stubs.py         Creates missing data/manual/*.json stubs
+  refresh_manual_sources.py    Refreshes manual/unavailable envelopes from sources.yml
+  run_tests.py                 Deterministic pytest wrapper
   validate_data.py             Validates registry, envelopes and dashboard refs
+  install_hooks.py             Installs tracked git hooks from .githooks
 
 .github/workflows/
   ci.yml                       PR/push validation
   refresh-data.yml             Weekly Monday 02:00 AEST data refresh
+  semver-release.yml           Conventional Commit based version bump + tag
 
 ui_kits/
   shared/                      Header, Footer, MetricCard, ChartCard,
                                InsightFeed, data-loader, styles — used by
                                every dashboard
+  wallboard/                   Always-on one-screen aggregate operational view
   fuel-dashboard/              v1.0 — liquid fuel
   fertilizer-dashboard/        v1.1 — fertiliser
   oil-and-production/          v1.2 — crude, refining, government spending
@@ -321,7 +332,7 @@ Quick pre-PR static checks:
 ```sh
 rg "(href|src)=\\\"/" ui_kits/*.html ui_kits/**/*.html
 rg "fetch\\(\\s*['\\\"]/" ui_kits/shared ui_kits/*
-python3 scripts/validate_data.py
+python scripts/validate_data.py
 ```
 
 ## License and source rights
