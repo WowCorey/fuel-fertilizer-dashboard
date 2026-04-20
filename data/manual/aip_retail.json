@@ -5,10 +5,23 @@
   "source_url": "https://www.aip.com.au/pricing",
   "unit": "",
   "retrieved_at": null,
-  "stub_created_at": "2026-04-18T12:27:44+00:00",
   "last_data_point": null,
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "notes": "Automated source retrieval check completed; deterministic extractor not yet implemented.",
   "status": "unavailable",
-  "manual_entry": true
+  "manual_entry": true,
+  "stub_created_at": "2026-04-20T12:17:55+00:00",
+  "source_rights": "AIP terms",
+  "citation": "Australian Institute of Petroleum, national average retail prices.",
+  "extra": {
+    "schema": "manual_automation.v2",
+    "fields": {
+      "extractor": "none",
+      "resolved_url": "https://www.aip.com.au/pricing",
+      "resolution": "canonical_html",
+      "reachable": true,
+      "reachability_note": "HTTP 200",
+      "checked_at": "2026-04-20T12:17:55+00:00"
+    }
+  }
 }

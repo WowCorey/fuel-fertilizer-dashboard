@@ -5,12 +5,23 @@
   "source_url": "https://www.energy.gov.au/",
   "unit": "",
   "retrieved_at": null,
-  "stub_created_at": "2026-04-18T13:44:14+00:00",
   "last_data_point": null,
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "notes": "Automated extraction failed; source left unavailable pending parser fix.",
   "status": "unavailable",
   "manual_entry": true,
+  "stub_created_at": "2026-04-20T12:20:05+00:00",
   "source_rights": "CC BY 4.0 where stated by publisher",
-  "citation": "Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures."
+  "citation": "Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures.",
+  "extra": {
+    "schema": "manual_automation.v2",
+    "fields": {
+      "extractor": "fallback_unavailable",
+      "resolved_url": "https://www.energy.gov.au/",
+      "resolution": "default",
+      "reachable": false,
+      "reachability_note": "ReadTimeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=15)",
+      "checked_at": "2026-04-20T12:20:05+00:00"
+    }
+  }
 }

@@ -5,12 +5,23 @@
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "",
   "retrieved_at": null,
-  "stub_created_at": "2026-04-18T13:44:14+00:00",
   "last_data_point": null,
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "notes": "Automated source retrieval check completed; deterministic extractor not yet implemented.",
   "status": "unavailable",
   "manual_entry": true,
+  "stub_created_at": "2026-04-20T12:17:52+00:00",
   "source_rights": "CC BY 4.0 where stated by publisher",
-  "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 31 source-country detail."
+  "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 31 source-country detail.",
+  "extra": {
+    "schema": "manual_automation.v2",
+    "fields": {
+      "extractor": "none",
+      "resolved_url": "https://www.abs.gov.au/statistics/microdata-tablebuilder",
+      "resolution": "discovered_from_canonical:xlsx",
+      "reachable": true,
+      "reachability_note": "HTTP 200",
+      "checked_at": "2026-04-20T12:17:52+00:00"
+    }
+  }
 }
