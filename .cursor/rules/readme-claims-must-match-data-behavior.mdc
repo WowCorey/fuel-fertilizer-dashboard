@@ -1,0 +1,31 @@
+---
+description: Keep README claims accurate to implemented data/status behavior
+globs:
+  - "README.md"
+  - "scripts/**/*.py"
+  - "data/sources.yml"
+  - "data/**/*.json"
+  - "ui_kits/**/*.html"
+  - "ui_kits/**/*.js"
+  - "ui_kits/**/*.jsx"
+  - ".github/workflows/*.yml"
+alwaysApply: true
+---
+
+- Treat README operational statements as testable claims. If behavior changes, update README in the same change.
+- Do not claim a source is "live", "current", "verified", or "refreshed" unless envelopes and pipeline behavior prove it.
+- README refresh wording must match real automation:
+  - `scripts/fetch_data.py` behavior
+  - `.github/workflows/refresh-data.yml` schedule/steps
+  - `scripts/validate_data.py` enforcement gates
+- If a README sentence references cadence (daily/weekly/monthly), verify cadence consistency with `data/sources.yml` and workflow schedule.
+- If a README sentence references fetched datasets, ensure those source IDs are actually programmatic/derived and have corresponding script logic.
+- If a README sentence references manual datasets, ensure manual mode and placeholder behavior are correctly described.
+- Preserve "no made-up data" policy language; never add wording that implies interpolation or estimation.
+- Keep wording explicit about verified stamps:
+  - page "updated/retrieved" display must be computed from `status: "ok"` envelopes with valid retrieval metadata
+  - if none exist, docs must describe the fallback "no verified data" behavior
+- For any PR touching data pipeline/workflows/loader semantics, include a README drift check:
+  1) What changed in behavior?
+  2) Which README lines are affected?
+  3) Were docs updated or intentionally unchanged?

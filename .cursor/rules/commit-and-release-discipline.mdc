@@ -1,0 +1,23 @@
+---
+description: Enforce small frequent commits, test-before-push, and semver release discipline
+globs:
+  - ".githooks/*"
+  - "scripts/check_commit_scope.py"
+  - "scripts/install_hooks.py"
+  - "scripts/release_semver.py"
+  - ".github/workflows/semver-release.yml"
+  - "VERSION"
+  - "README.md"
+alwaysApply: true
+---
+
+- Keep commits small and targeted by default. Split broad work into sequenced commits by concern (data, pipeline, UI, docs).
+- Use Conventional Commits (`type(scope): summary`) so semver automation can classify changes.
+- Protect push quality: run validator/compile checks before push; never push known-failing state.
+- Keep hook logic lightweight and cross-platform where practical (repo scripts + minimal shell wrapper).
+- If hook behavior changes, update README workflow docs in same change.
+- `VERSION` is source of truth for release version and is bumped automatically from commit intent on `main`.
+- Semver bump policy:
+  - breaking (`!` or `BREAKING CHANGE`) -> major
+  - `feat` -> minor
+  - `fix`/`perf`/`refactor`/`data`/`docs`/`test`/`chore`/`ci`/`build`/`style` -> patch
