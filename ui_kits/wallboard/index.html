@@ -6,101 +6,437 @@
 <title>Wallboard — Fuel Resilience AU</title>
 <meta name="description" content="Always-on wallboard view across fuel, fertiliser, oil and who-pays-what indicators.">
 <link rel="stylesheet" href="../../colors_and_type.css">
-<link rel="stylesheet" href="../shared/styles.css">
 <style>
-  .wallboard-main {
-    max-width: var(--max-content);
-    margin: 0 auto;
-    padding: var(--s-6);
+  :root {
+    --lin-bg-0: #08090a;
+    --lin-bg-1: #0f1011;
+    --lin-bg-2: #191a1b;
+    --lin-bg-3: #28282c;
+    --lin-border: #23252a;
+    --lin-border-strong: #34343a;
+    --lin-text-strong: #f7f8f8;
+    --lin-text-mid: #d0d6e0;
+    --lin-text-dim: #8a8f98;
+    --lin-cyan: #4ea7fc;
+    --lin-violet: #7170ff;
+    --lin-green: #27a644;
+    --lin-amber: #f59e0b;
+    --lin-red: #eb5757;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "SF Pro Text", "Segoe UI Variable", "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+    background: var(--lin-bg-0);
+    color: var(--lin-text-strong);
+  }
+  a.skip-link {
+    position: absolute !important;
+    left: -9999px !important;
+  }
+  a.skip-link:focus, a.skip-link:focus-visible {
+    left: 12px !important;
+    top: 12px !important;
+    width: auto;
+    height: auto;
+    z-index: 10;
+    background: var(--lin-bg-2);
+    color: var(--lin-text-strong);
+    border: 1px solid var(--lin-border);
+    padding: 8px 10px;
+  }
+  .wallboard-shell {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    padding: 16px;
     display: grid;
-    gap: var(--s-5);
+    grid-template-rows: 88px 1fr 84px;
+    gap: 10px;
+    transform: translate(var(--shift-x, 0px), var(--shift-y, 0px));
+    transition: transform 32s ease-in-out;
+    position: relative;
   }
-  .wallboard-hero {
-    border: 1px solid var(--rule);
-    border-radius: var(--r-2);
-    background: var(--card);
-    padding: var(--s-6);
+  .wb-top,
+  .wb-grid,
+  .wb-foot {
+    transition: filter 2400ms cubic-bezier(0.24, 0.74, 0.28, 1);
+    filter: saturate(1) contrast(1) brightness(1);
+  }
+  .wallboard-shell.is-desat .wb-top,
+  .wallboard-shell.is-desat .wb-grid,
+  .wallboard-shell.is-desat .wb-foot {
+    filter: saturate(0.2) contrast(0.85) brightness(0.72);
+  }
+  .scene-fade {
+    position: absolute;
+    inset: 0;
+    background: #05060a;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9;
+    transition: opacity 3600ms cubic-bezier(0.24, 0.74, 0.28, 1);
+  }
+  .scene-fade.is-on {
+    opacity: 1;
+  }
+  .wb-top {
+    border: 1px solid var(--lin-border);
+    border-radius: 10px;
+    background: var(--lin-bg-1);
+    padding: 10px 12px;
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: var(--s-6);
-    align-items: start;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 12px;
+    align-items: center;
   }
-  .wallboard-hero h1 {
-    font-size: var(--fs-32);
-    line-height: var(--lh-snug);
-    margin-top: var(--s-2);
-  }
-  .wallboard-hero__lede {
-    margin-top: var(--s-4);
-    color: var(--ink-2);
-    max-width: 62ch;
-  }
-  .wallboard-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-3);
-  }
-  .wallboard-stat {
-    border: 1px solid var(--rule);
-    border-radius: var(--r-2);
-    background: var(--paper);
-    padding: var(--s-4);
-  }
-  .wallboard-stat__k {
+  .wb-title {
     display: block;
-    color: var(--ink-3);
-    font-size: var(--fs-12);
+  }
+  .wb-title h1 {
+    margin: 0;
+    font-size: clamp(24px, 1.65vw, 32px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-weight: 650;
+  }
+  .wb-status {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .wb-chip {
+    border: 1px solid var(--lin-border);
+    border-radius: 8px;
+    background: var(--lin-bg-2);
+    padding: 5px 7px;
+    min-height: 52px;
+    display: grid;
+    grid-template-rows: auto auto;
+    align-content: center;
+  }
+  .wb-chip--button {
+    appearance: none;
+    border: 1px solid var(--lin-border);
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+  }
+  .wb-chip--button:hover {
+    border-color: var(--lin-border-strong);
+    background: var(--lin-bg-3);
+  }
+  .wb-chip--button:focus-visible {
+    outline: 2px solid var(--lin-border-strong);
+    outline-offset: 1px;
+  }
+  .wb-chip__k {
+    font-size: 8px;
+    color: var(--lin-text-dim);
     text-transform: uppercase;
-    letter-spacing: var(--tr-eyebrow);
+    letter-spacing: 0.08em;
     font-weight: 600;
+    white-space: nowrap;
   }
-  .wallboard-stat__v {
+  .wb-chip__v {
+    margin-top: 1px;
+    font-size: clamp(15px, 0.92vw, 18px);
+    font-weight: 600;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wb-chip__v--ok { color: var(--lin-green); }
+  .wb-chip__v--risk { color: var(--lin-amber); }
+  .wb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    min-height: 0;
+    transition: grid-template-columns 3600ms cubic-bezier(0.24, 0.74, 0.28, 1);
+  }
+  .wb-grid--routine.wb-grid--focus-0 { grid-template-columns: 9fr 1fr 1fr 1fr; }
+  .wb-grid--routine.wb-grid--focus-1 { grid-template-columns: 1fr 9fr 1fr 1fr; }
+  .wb-grid--routine.wb-grid--focus-2 { grid-template-columns: 1fr 1fr 9fr 1fr; }
+  .wb-grid--routine.wb-grid--focus-3 { grid-template-columns: 1fr 1fr 1fr 9fr; }
+  .focus-card {
+    border: 1px solid var(--lin-border);
+    border-radius: 10px;
+    background: var(--lin-bg-1);
+    min-height: 0;
+    padding: 8px;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 7px;
+    opacity: 1;
+    filter: saturate(1) brightness(1);
+    transform-origin: center center;
+    transition:
+      border-color 2800ms ease,
+      box-shadow 2800ms ease,
+      background-color 2800ms ease,
+      opacity 3600ms cubic-bezier(0.24, 0.74, 0.28, 1),
+      filter 3600ms cubic-bezier(0.24, 0.74, 0.28, 1);
+  }
+  .focus-card.is-active {
+    border-color: var(--lin-border-strong);
+    background: var(--lin-bg-2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.015);
+  }
+  .wb-grid--routine .focus-card {
+    opacity: 0.28;
+    filter: saturate(0.4) brightness(0.62);
+  }
+  .wb-grid--routine .focus-card.is-routine-focus {
+    opacity: 1;
+    filter: saturate(1) brightness(1);
+    z-index: 4;
+    border-color: var(--lin-border-strong);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 24px 72px rgba(0, 0, 0, 0.58);
+    animation: routineSpotlight 8800ms ease-out;
+  }
+  .wb-grid--routine .focus-card.is-routine-focus .plot-box {
+    border-color: var(--lin-border-strong);
+  }
+  .wb-grid--routine .focus-card.is-routine-focus .metric-tile {
+    border-color: var(--lin-border-strong);
+    background: var(--lin-bg-3);
+  }
+  @keyframes routineSpotlight {
+    0% {
+      transform: none;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 8px 24px rgba(0, 0, 0, 0.34);
+    }
+    35% {
+      transform: none;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 28px 84px rgba(0, 0, 0, 0.62);
+    }
+    100% {
+      transform: none;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 24px 72px rgba(0, 0, 0, 0.58);
+    }
+  }
+  .focus-card__head h2 {
+    margin: 2px 0 0;
+    font-size: clamp(19px, 1.12vw, 24px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .focus-card__head p {
+    margin: 4px 0 0;
+    color: var(--lin-text-mid);
+    font-size: 13px;
+    line-height: 1.25;
+  }
+  .focus-card__kicker {
+    color: var(--lin-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+    font-weight: 600;
     display: block;
-    margin-top: var(--s-2);
-    font-size: var(--fs-20);
-    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .wallboard-grid {
+  .focus-card__body {
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 7px;
+  }
+  .focus-card__body--triple {
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .focus-metrics {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--s-5);
+    gap: 6px;
   }
-  .wallboard-panel {
-    border: 1px solid var(--rule);
-    border-radius: var(--r-2);
-    background: var(--card);
-    padding: var(--s-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--s-4);
+  .focus-metrics--fuel {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  .wallboard-panel__head h2 {
-    font-size: var(--fs-24);
-    font-family: var(--font-serif);
-    font-weight: 500;
-    margin-top: var(--s-1);
+  .metric-tile {
+    border: 1px solid var(--lin-border);
+    border-radius: 8px;
+    background: var(--lin-bg-2);
+    padding: 7px 8px;
+    min-height: 88px;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 2px;
   }
-  .wallboard-panel__head p {
-    color: var(--ink-2);
-    font-size: var(--fs-14);
-    margin-top: var(--s-2);
-  }
-  .wallboard-links {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--s-3);
-    border-top: 1px solid var(--rule);
-    padding-top: var(--s-3);
-    font-size: var(--fs-13);
-    color: var(--ink-3);
-  }
-  .wallboard-links a {
-    font-size: var(--fs-13);
+  .metric-tile__k {
+    color: var(--lin-text-dim);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  @media (max-width: 1100px) {
-    .wallboard-hero { grid-template-columns: 1fr; }
-    .wallboard-grid { grid-template-columns: 1fr; }
+  .metric-tile__v {
+    margin-top: 4px;
+    font-size: clamp(22px, 1.35vw, 30px);
+    line-height: 1.05;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .metric-tile__m {
+    color: var(--lin-text-mid);
+    font-size: 12px;
+    margin-top: 4px;
+    font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .metric-tile--unavail .metric-tile__v {
+    color: var(--lin-text-mid);
+    font-size: clamp(15px, 1vw, 20px);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .plot-box {
+    border: 1px solid var(--lin-border);
+    border-radius: 8px;
+    background: var(--lin-bg-1);
+    padding: 6px 8px 4px;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 6px;
+    height: 100%;
+  }
+  .plot-box__label {
+    color: var(--lin-text-mid);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .plot-box svg {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: block;
+  }
+  .plot-box--fuel svg { min-height: 0; }
+  .plot-box--secondary svg { min-height: 0; }
+  .plot-legend {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 10px;
+    color: var(--lin-text-mid);
+    font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+  }
+  .plot-legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .plot-legend__swatch {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    flex: 0 0 auto;
+  }
+  .plot-axis {
+    stroke: var(--lin-border-strong);
+    stroke-width: 1;
+  }
+  .plot-tick {
+    fill: var(--lin-text-dim);
+    font-size: 9px;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  .plot-line {
+    fill: none;
+    stroke-width: 2.2;
+  }
+  .plot-area {
+    opacity: 0.1;
+  }
+  .plot-cursor {
+    stroke: var(--lin-text-mid);
+    stroke-width: 1.4;
+    opacity: 0.55;
+    stroke-dasharray: 3 3;
+  }
+  .wb-grid--routine .focus-card.is-routine-focus .plot-cursor {
+    opacity: 0.82;
+    stroke-width: 1.8;
+    stroke-dasharray: 0;
+  }
+  .wb-foot {
+    border: 1px solid var(--lin-border);
+    border-radius: 10px;
+    background: var(--lin-bg-1);
+    padding: 8px 10px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+  }
+  .wb-foot__text {
+    color: var(--lin-text-mid);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wb-backlink {
+    color: var(--lin-text-strong);
+    border: 1px solid var(--lin-border);
+    border-radius: 8px;
+    text-decoration: none;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--lin-bg-3);
+  }
+  .wb-backlink:hover {
+    border-color: var(--lin-border-strong);
+    color: #fff;
+  }
+  .wb-title h1,
+  .focus-card__head h2 {
+    font-family: "SF Pro Display", "Segoe UI Variable", "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif !important;
+  }
+  @media (min-width: 2560px) {
+    .wallboard-shell { padding: 26px; grid-template-rows: 98px 1fr 92px; }
+    .metric-tile { min-height: 112px; }
+    .plot-box svg { min-height: 0; }
+    .plot-box--fuel svg { min-height: 0; }
+    .plot-box--secondary svg { min-height: 0; }
+  }
+  @media (max-width: 1800px) {
+    .focus-metrics--fuel { grid-template-columns: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wallboard-shell,
+    .focus-card {
+      transition: none !important;
+    }
+    .focus-card.is-routine-focus {
+      animation: none !important;
+    }
+    .scene-fade {
+      transition: none !important;
+      opacity: 0 !important;
+    }
   }
 </style>
 </head>
@@ -113,199 +449,528 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
 
 <script src="../shared/data-loader.js"></script>
-<script type="text/babel" src="../shared/Header.jsx"></script>
-<script type="text/babel" src="../shared/MetricCard.jsx"></script>
-<script type="text/babel" src="../shared/ChartCard.jsx"></script>
-<script type="text/babel" src="../shared/Footer.jsx"></script>
 
 <script type="text/babel">
 const SERIES = [
   'aps_monthly',
   'aip_retail',
+  'aus_retail_fuel_multistate',
+  'abs_petroleum_imports_yoy',
+  'abs_petroleum_imports',
   'abs_fertiliser_imports',
+  'abs_fertiliser_imports_urea',
+  'abs_fertiliser_imports_potash',
+  'abs_fertiliser_imports_phosphate',
+  'abs_fertiliser_imports_compound',
   'abares_fertiliser_price',
+  'abares_fertiliser_stock_cover',
+  'abs_fertiliser_source_concentration',
   'eia_brent',
+  'eia_wti',
+  'tapis_crude',
+  'aud_usd_rba',
+  'iea_90day',
   'aps_refinery_utilisation',
-  'ato_corporate_tax',
+  'fuel_security_payment',
+  'offshore_ticket_volumes',
   'accc_petroleum_monitoring',
+  'accc_petrol_wholesale_component',
+  'accc_petrol_excise_component',
+  'accc_petrol_gst_component',
+  'accc_petrol_retail_margin_component',
+  'accc_petrol_breakdown_series',
 ];
+
+function latestValue(env) {
+  if (!env || env.status !== 'ok' || !env.values || env.values.length === 0) return null;
+  return env.values[env.values.length - 1];
+}
+
+function formatValue(point, unit) {
+  if (!point) return 'UNAVAILABLE';
+  const v = point.v;
+  if (unit === '/L' || unit === 'AUD/L') return `A$${Number(v).toFixed(2)}`;
+  if (unit === 'USD per barrel' || unit === 'USD/bbl') return `US$${Number(v).toFixed(0)}`;
+  if (unit === ' days' || unit === 'days') return `${Math.round(Number(v))} d`;
+  if (unit === ' kt' || unit === 'kt') return `${Math.round(Number(v))} kt`;
+  if (unit === 'index') return `${Math.round(Number(v))}`;
+  if (unit === '%') return `${Number(v).toFixed(1)}%`;
+  if (!unit) return `${Number(v).toFixed(1)}`;
+  return `${Number(v).toFixed(1)} ${unit}`;
+}
+
+function parsePointDate(dateText) {
+  if (!dateText || typeof dateText !== 'string') return null;
+  let match = dateText.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (match) return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  match = dateText.match(/^(\d{4})-(\d{2})$/);
+  if (match) return new Date(Number(match[1]), Number(match[2]) - 1, 1);
+  match = dateText.match(/^(\d{4})$/);
+  if (match) return new Date(Number(match[1]), 0, 1);
+  const parsed = new Date(dateText);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed;
+}
+
+function formatAgeMonthsDays(dateText) {
+  const pointDate = parsePointDate(dateText);
+  if (!pointDate) return 'UNAVAILABLE';
+
+  const start = new Date(pointDate.getFullYear(), pointDate.getMonth(), pointDate.getDate());
+  const nowDate = new Date();
+  const today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate());
+  if (start > today) return '0m 0d';
+
+  let months = (today.getFullYear() - start.getFullYear()) * 12 + (today.getMonth() - start.getMonth());
+  let anchor = new Date(start.getFullYear(), start.getMonth() + months, start.getDate());
+  if (anchor > today) {
+    months -= 1;
+    anchor = new Date(start.getFullYear(), start.getMonth() + months, start.getDate());
+  }
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const days = Math.floor((today - anchor) / msPerDay);
+  return `${Math.max(0, months)}m ${Math.max(0, days)}d`;
+}
+
+function normalisedSeries(env, points = 24) {
+  if (!env || env.status !== 'ok' || !env.values || env.values.length < 2) return [];
+  const vals = env.values.slice(-points);
+  const first = Number(vals[0].v);
+  if (!Number.isFinite(first) || first === 0) return [];
+  return vals.map(p => ({ t: p.t, v: (Number(p.v) / first) * 100 }));
+}
+
+function rotatingPoint(env, step, windowSize = 10) {
+  if (!env || env.status !== 'ok' || !env.values || env.values.length === 0) return null;
+  const vals = env.values;
+  const start = Math.max(0, vals.length - windowSize);
+  const slice = vals.slice(start);
+  return slice[step % slice.length] || vals[vals.length - 1];
+}
+
+function toAud(usdEnv, fxEnv) {
+  if (!usdEnv || usdEnv.status !== 'ok' || !usdEnv.values?.length) return { ...usdEnv, status: 'unavailable', values: [] };
+  if (!fxEnv || fxEnv.status !== 'ok' || !fxEnv.values?.length) return { ...usdEnv, status: 'unavailable', values: [] };
+  const fxByMonth = Object.fromEntries(fxEnv.values.map(p => [p.t, p.v]));
+  const values = usdEnv.values
+    .map(p => {
+      const fx = fxByMonth[p.t];
+      return fx ? { t: p.t, v: +(p.v / fx).toFixed(2) } : null;
+    })
+    .filter(Boolean);
+  return { ...usdEnv, unit: 'AUD per barrel', values };
+}
+
+function mergedSeries(seriesDefs, points = 28, normalize = false) {
+  const prepared = seriesDefs
+    .map(s => {
+      if (!s.env || s.env.status !== 'ok' || !s.env.values || s.env.values.length < 2) return { ...s, points: [] };
+      let vals = s.env.values.slice(-points).map(p => ({ t: p.t, v: Number(p.v) }));
+      if (normalize) {
+        const first = vals[0]?.v;
+        if (!Number.isFinite(first) || first === 0) return { ...s, points: [] };
+        vals = vals.map(p => ({ t: p.t, v: (p.v / first) * 100 }));
+      }
+      return { ...s, points: vals };
+    })
+    .filter(s => s.points.length > 1);
+  if (prepared.length === 0) return null;
+  const sharedDates = prepared
+    .map(s => new Set(s.points.map(p => p.t)))
+    .reduce((acc, set) => new Set([...acc].filter(v => set.has(v))));
+  const dates = [...sharedDates].sort().slice(-24);
+  if (dates.length < 2) return null;
+  const aligned = prepared.map(s => {
+    const byDate = Object.fromEntries(s.points.map(p => [p.t, p.v]));
+    return { ...s, points: dates.map(d => ({ t: d, v: byDate[d] })) };
+  });
+  return { aligned, dates };
+}
+
+function FuelMergedPlot({ series, focusTick = null, normalize = true }) {
+  const merged = mergedSeries(series, 28, normalize);
+  if (!merged) return null;
+  const { aligned, dates } = merged;
+  const all = aligned.flatMap(s => s.points.map(p => p.v));
+  const min = Math.min(...all);
+  const max = Math.max(...all);
+  const w = 1120;
+  const h = 260;
+  const padL = 18;
+  const padR = 12;
+  const padT = 10;
+  const padB = 18;
+  const innerW = w - padL - padR;
+  const innerH = h - padT - padB;
+  const x = i => (i / (dates.length - 1)) * innerW + padL;
+  const y = v => padT + innerH - ((v - min) / (max - min || 1)) * innerH;
+  const cursorIndex = focusTick == null ? dates.length - 1 : (focusTick % dates.length);
+  const cursorX = x(cursorIndex);
+  return (
+    <>
+      <div className="plot-legend">
+        {aligned.map(s => (
+          <span key={s.label} className="plot-legend__item">
+            <span className="plot-legend__swatch" style={{ background: s.color }} />
+            {s.label}
+          </span>
+        ))}
+      </div>
+      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" aria-hidden="true">
+        <line className="plot-axis" x1={padL} y1={padT + innerH} x2={w - padR} y2={padT + innerH} />
+        {[min, (min + max) / 2, max].map((v, idx) => (
+          <text key={idx} className="plot-tick" x={2} y={y(v) + 3}>{v.toFixed(0)}</text>
+        ))}
+        <line className="plot-cursor" x1={cursorX} x2={cursorX} y1={padT} y2={padT + innerH} />
+        {aligned.map(s => {
+          const line = s.points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(p.v)}`).join(' ');
+          return <path key={s.label} className="plot-line" d={line} stroke={s.color} />;
+        })}
+        <text className="plot-tick" x={padL} y={h - 2}>{dates[0]}</text>
+        <text className="plot-tick" x={w - padR - 50} y={h - 2}>{dates[dates.length - 1]}</text>
+      </svg>
+    </>
+  );
+}
+
+function TrendPlot({ env, stroke, focusTick = null }) {
+  if (!env || env.status !== 'ok' || !env.values || env.values.length < 2) {
+    return null;
+  }
+  const values = env.values.slice(-28).map(p => Number(p.v));
+  const w = 620;
+  const h = 220;
+  const padL = 10;
+  const padR = 6;
+  const padT = 6;
+  const padB = 14;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const innerW = w - padL - padR;
+  const innerH = h - padT - padB;
+  const scaleX = idx => (idx / (values.length - 1)) * innerW + padL;
+  const scaleY = val => {
+    const pct = (val - min) / (max - min || 1);
+    return padT + innerH - pct * innerH;
+  };
+  const line = values.map((v, i) => `${i === 0 ? 'M' : 'L'}${scaleX(i)},${scaleY(v)}`).join(' ');
+  const area = `${line} L${scaleX(values.length - 1)},${padT + innerH} L${padL},${padT + innerH} Z`;
+  const cursorIndex = focusTick == null ? values.length - 1 : (focusTick % values.length);
+  const cursorX = scaleX(cursorIndex);
+  const startLabel = env.values.slice(-28)[0]?.t || '';
+  const endLabel = env.values.slice(-1)[0]?.t || '';
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" aria-hidden="true">
+      <line className="plot-axis" x1={padL} y1={padT + innerH} x2={w - padR} y2={padT + innerH} />
+      {[min, (min + max) / 2, max].map((v, idx) => (
+        <text key={idx} className="plot-tick" x={2} y={scaleY(v) + 3}>{v.toFixed(0)}</text>
+      ))}
+      <line className="plot-cursor" x1={cursorX} x2={cursorX} y1={padT} y2={padT + innerH} />
+      <path className="plot-area" d={area} fill={stroke} />
+      <path className="plot-line" d={line} stroke={stroke} />
+      <text className="plot-tick" x={padL} y={h - 2}>{startLabel}</text>
+      <text className="plot-tick" x={w - padR - 50} y={h - 2}>{endLabel}</text>
+    </svg>
+  );
+}
+
+function MetricTile({ label, env, unit, pointOverride = null }) {
+  const point = pointOverride || latestValue(env);
+  const unavailable = !point;
+  return (
+    <article className={`metric-tile ${unavailable ? 'metric-tile--unavail' : ''}`}>
+      <span className="metric-tile__k">{label}</span>
+      <span className="metric-tile__v">{formatValue(point, unit)}</span>
+      <span className="metric-tile__m mono">{point ? point.t : 'awaiting source'}</span>
+    </article>
+  );
+}
 
 function App() {
   const [data, setData] = React.useState(null);
+  const [activePanel, setActivePanel] = React.useState(0);
+  const [routinePhase, setRoutinePhase] = React.useState('static');
+  const [routineStep, setRoutineStep] = React.useState(0);
+  const [shiftIndex, setShiftIndex] = React.useState(0);
+  const [sceneFadeOn, setSceneFadeOn] = React.useState(false);
+  const [sceneDesatOn, setSceneDesatOn] = React.useState(false);
+  const MOTION_SCALE = 1;
+  const [motionEnabled, setMotionEnabled] = React.useState(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlMotion = urlParams.get('motion');
+    if (urlMotion === 'force') return true;
+    if (urlMotion === 'off') return false;
+    try {
+      const saved = window.localStorage.getItem('wallboard.motion');
+      if (saved === 'on') return true;
+      if (saved === 'off') return false;
+    } catch (e) {
+      // ignore storage errors and fall back to system setting
+    }
+    return !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  });
+  const reducedMotion = !motionEnabled;
   React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+  React.useEffect(() => {
+    try {
+      window.localStorage.setItem('wallboard.motion', motionEnabled ? 'on' : 'off');
+    } catch (e) {
+      // ignore storage errors
+    }
+  }, [motionEnabled]);
+  React.useEffect(() => {
+    if (reducedMotion) return undefined;
+    let cancelled = false;
+    let stepTimer = null;
+    let phaseTimer = null;
+    let fadeLeadTimer = null;
+    let fadeCoreTimer = null;
+    let fadeReleaseTimer = null;
+    const DESAT_LEAD = 1400 * MOTION_SCALE;
+    const FADE_IN = 1800 * MOTION_SCALE;
+    const FADE_HOLD = 1200 * MOTION_SCALE;
+    const FADE_OUT = 1600 * MOTION_SCALE;
+    const runCycle = (panelIndex) => {
+      if (cancelled) return;
+      setSceneDesatOn(true);
+      fadeLeadTimer = setTimeout(() => {
+        if (cancelled) return;
+        setSceneFadeOn(true);
+        fadeCoreTimer = setTimeout(() => {
+          if (cancelled) return;
+          setSceneDesatOn(false);
+          setActivePanel(panelIndex);
+          setRoutinePhase('focus');
+          setRoutineStep(0);
+          fadeReleaseTimer = setTimeout(() => {
+            if (!cancelled) setSceneFadeOn(false);
+          }, FADE_HOLD);
+          stepTimer = setInterval(() => {
+            setRoutineStep(prev => prev + 1);
+          }, 1200 * MOTION_SCALE);
+          phaseTimer = setTimeout(() => {
+            clearInterval(stepTimer);
+            if (cancelled) return;
+            setRoutinePhase('static');
+            setRoutineStep(0);
+            phaseTimer = setTimeout(() => {
+              runCycle((panelIndex + 1) % 4);
+            }, 120000);
+          }, 20000);
+        }, FADE_IN);
+      }, DESAT_LEAD);
+    };
+    runCycle(0);
+    const shiftTimer = setInterval(() => {
+      setShiftIndex(prev => (prev + 1) % 6);
+    }, 90000);
+    return () => {
+      cancelled = true;
+      clearInterval(stepTimer);
+      clearTimeout(phaseTimer);
+      clearTimeout(fadeLeadTimer);
+      clearTimeout(fadeCoreTimer);
+      clearTimeout(fadeReleaseTimer);
+      clearInterval(shiftTimer);
+    };
+  }, [reducedMotion]);
 
   if (!data) {
     return (
-      <div className="page">
-        <Header active="wallboard"/>
+      <div className="wallboard-shell">
         <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
   }
 
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
+  const brentAud = toAud(data.eia_brent, data.aud_usd_rba);
+  const wtiAud = toAud(data.eia_wti, data.aud_usd_rba);
+  const tapisAud = toAud(data.tapis_crude, data.aud_usd_rba);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const envelopeList = Object.values(data);
   const verifiedCount = envelopeList.filter(env => env.status === 'ok').length;
   const unavailableCount = envelopeList.length - verifiedCount;
   const latestDataPoint = envelopeList.map(env => env.last_data_point).filter(Boolean).sort().at(-1) || 'No verified point';
+  const latestPointAge = formatAgeMonthsDays(latestDataPoint);
+  const signalCount = SERIES.length;
+  const shifts = [
+    { x: 0, y: 0 },
+    { x: 3, y: 1 },
+    { x: 2, y: 3 },
+    { x: -2, y: 2 },
+    { x: -3, y: -1 },
+    { x: 1, y: -2 },
+  ];
+  const activeShift = reducedMotion ? shifts[0] : shifts[shiftIndex];
+  const focusMode = !reducedMotion && routinePhase === 'focus';
+  const panelTick = (panelIndex) => (focusMode && activePanel === panelIndex ? routineStep : null);
+  const pointFor = (env, panelIndex) => (focusMode && activePanel === panelIndex ? rotatingPoint(env, routineStep, 10) : null);
 
   return (
-    <div className="page">
-      <Header active="wallboard" updated={latestRetrieved ? updatedDisplay : ''}/>
-      <main id="main" className="wallboard-main">
-        <section className="wallboard-hero" aria-labelledby="wallboard-title">
-          <div>
-            <span className="eyebrow">Always-on wallboard</span>
-            <h1 id="wallboard-title">One screen for fuel, fertiliser, oil and consumer cost signals</h1>
-            <p className="wallboard-hero__lede">
-              Built for persistent display. Layout is stable, cards are source-linked, and unavailable values remain explicit until verified.
-            </p>
+    <div className={`wallboard-shell ${sceneDesatOn ? 'is-desat' : ''}`} style={{ '--shift-x': `${activeShift.x}px`, '--shift-y': `${activeShift.y}px` }}>
+      <div className={`scene-fade ${sceneFadeOn ? 'is-on' : ''}`} aria-hidden="true" />
+      <header className="wb-top">
+        <div className="wb-title">
+          <h1 id="wallboard-title">Fuel Resilience AU</h1>
+        </div>
+        <div className="wb-status" aria-label="Wallboard status strip">
+          <article className="wb-chip">
+            <span className="wb-chip__k">Signals loaded</span>
+            <span className="wb-chip__v">{signalCount}</span>
+          </article>
+          <article className="wb-chip">
+            <span className="wb-chip__k">Verified</span>
+            <span className="wb-chip__v wb-chip__v--ok">{verifiedCount}</span>
+          </article>
+          <article className="wb-chip">
+            <span className="wb-chip__k">Unavailable</span>
+            <span className="wb-chip__v wb-chip__v--risk">{unavailableCount}</span>
+          </article>
+          <article className="wb-chip">
+            <span className="wb-chip__k">Age</span>
+            <span className="wb-chip__v mono">{latestPointAge}</span>
+          </article>
+          <button
+            type="button"
+            className="wb-chip wb-chip--button"
+            onClick={() => setMotionEnabled(prev => !prev)}
+            aria-pressed={motionEnabled}
+            aria-label={motionEnabled ? 'Disable motion' : 'Enable motion'}
+            title={motionEnabled ? 'Click to disable motion' : 'Click to enable motion'}
+          >
+            <span className="wb-chip__k">Motion</span>
+            <span className="wb-chip__v mono">{reducedMotion ? 'OFF' : 'ON'}</span>
+          </button>
+        </div>
+      </header>
+      <main id="main" className={`wb-grid ${focusMode ? `wb-grid--routine wb-grid--focus-${activePanel}` : ''}`}>
+        <section className={`focus-card focus-card--fuel ${!focusMode || activePanel === 0 ? 'is-active' : ''} ${focusMode && activePanel === 0 ? 'is-routine-focus' : ''}`} aria-labelledby="fuel-panel">
+          <div className="focus-card__head">
+            <span id="fuel-panel" className="focus-card__kicker">FUEL</span>
           </div>
-          <div className="wallboard-stats" aria-label="Wallboard status">
-            <article className="wallboard-stat">
-              <span className="wallboard-stat__k">Verified sources</span>
-              <span className="wallboard-stat__v">{verifiedCount}</span>
-            </article>
-            <article className="wallboard-stat">
-              <span className="wallboard-stat__k">Unavailable sources</span>
-              <span className="wallboard-stat__v">{unavailableCount}</span>
-            </article>
-            <article className="wallboard-stat">
-              <span className="wallboard-stat__k">Verified retrieval</span>
-              <span className="wallboard-stat__v mono">{updatedDisplay}</span>
-            </article>
-            <article className="wallboard-stat">
-              <span className="wallboard-stat__k">Latest data point</span>
-              <span className="wallboard-stat__v mono">{latestDataPoint}</span>
-            </article>
+          <div className="focus-card__body focus-card__body--triple">
+            <div className="focus-metrics focus-metrics--fuel">
+              <MetricTile label="Import cover" env={data.aps_monthly} unit=" days" pointOverride={pointFor(data.aps_monthly, 0)} />
+              <MetricTile label="National fuel price" env={data.aip_retail} unit="/L" pointOverride={pointFor(data.aip_retail, 0)} />
+              <MetricTile label="Multi-state retail avg" env={data.aus_retail_fuel_multistate} unit=" c/L" pointOverride={pointFor(data.aus_retail_fuel_multistate, 0)} />
+              <MetricTile label="Imports YoY" env={data.abs_petroleum_imports_yoy} unit="%" pointOverride={pointFor(data.abs_petroleum_imports_yoy, 0)} />
+            </div>
+            <div className="plot-box plot-box--fuel">
+              <span className="plot-box__label">Shared trend area (indexed to first visible point = 100)</span>
+              <FuelMergedPlot
+                focusTick={panelTick(0)}
+                series={[
+                  { label: 'Imports', env: data.abs_petroleum_imports, color: 'var(--lin-cyan)' },
+                  { label: 'Fuel price', env: data.aip_retail, color: 'var(--lin-amber)' },
+                  { label: 'Import cover', env: data.aps_monthly, color: 'var(--lin-violet)' },
+                ]}
+              />
+            </div>
           </div>
         </section>
-
-        <section className="wallboard-grid" aria-label="Four focus areas">
-          <article className="wallboard-panel">
-            <header className="wallboard-panel__head">
-              <span className="eyebrow">Fuel</span>
-              <h2>Supply and retail pulse</h2>
-              <p>Stock cover and national retail levels.</p>
-            </header>
-            <MetricCard
-              eyebrow="Resilience"
-              label="Days of Net Import Cover"
-              plain="How long stock covers demand if imports stop."
-              fromEnvelope={data.aps_monthly}
-              unit=" days"
-              threshold={{ state:'below', text:'IEA benchmark: 90 days' }}
-              highlight
-            />
-            <ChartCard
-              eyebrow="Pump"
-              title="National fuel price"
-              unit="/L"
-              fromEnvelope={data.aip_retail}
-              ranges={['1Y','3Y']}
-              defaultRange="3Y"
-              accent="var(--series-2)"
-              yAxisLabel="Australian dollars per litre (A$/L)"
-            />
-            <div className="wallboard-links">
-              <span>Detail view</span>
-              <a href="../fuel-dashboard/index.html">Open fuel dashboard</a>
+        <section className={`focus-card ${!focusMode || activePanel === 1 ? 'is-active' : ''} ${focusMode && activePanel === 1 ? 'is-routine-focus' : ''}`} aria-labelledby="fert-panel">
+          <div className="focus-card__head">
+            <span id="fert-panel" className="focus-card__kicker">FERTILIZER</span>
+          </div>
+          <div className="focus-card__body">
+            <div className="focus-metrics">
+              <MetricTile label="Fertiliser imports" env={data.abs_fertiliser_imports} unit=" kt" pointOverride={pointFor(data.abs_fertiliser_imports, 1)} />
+              <MetricTile label="Price index" env={data.abares_fertiliser_price} unit="index" pointOverride={pointFor(data.abares_fertiliser_price, 1)} />
+              <MetricTile label="Top-3 concentration" env={data.abs_fertiliser_source_concentration} unit="%" pointOverride={pointFor(data.abs_fertiliser_source_concentration, 1)} />
+              <MetricTile label="Months of cover" env={data.abares_fertiliser_stock_cover} unit=" months" pointOverride={pointFor(data.abares_fertiliser_stock_cover, 1)} />
             </div>
-          </article>
-
-          <article className="wallboard-panel">
-            <header className="wallboard-panel__head">
-              <span className="eyebrow">Fertilizer</span>
-              <h2>Import and cost pressure</h2>
-              <p>Monthly imports and fertiliser price index.</p>
-            </header>
-            <MetricCard
-              eyebrow="Volume"
-              label="Monthly fertiliser imports"
-              plain="Latest monthly HS-31 import volume."
-              fromEnvelope={data.abs_fertiliser_imports}
-              unit=" kt"
-              highlight
-            />
-            <ChartCard
-              eyebrow="Price"
-              title="ABARES fertiliser price index"
-              unit="index"
-              fromEnvelope={data.abares_fertiliser_price}
-              ranges={['1Y','3Y','5Y']}
-              defaultRange="5Y"
-              accent="var(--series-3)"
-              yAxisLabel="Index (long-run average = 100)"
-            />
-            <div className="wallboard-links">
-              <span>Detail view</span>
-              <a href="../fertilizer-dashboard/index.html">Open fertiliser dashboard</a>
+            <div className="plot-box">
+              <span className="plot-box__label">Trend: imports by type</span>
+              <FuelMergedPlot
+                focusTick={panelTick(1)}
+                normalize={false}
+                series={[
+                  { label: 'Urea', env: data.abs_fertiliser_imports_urea, color: 'var(--lin-cyan)' },
+                  { label: 'Potash', env: data.abs_fertiliser_imports_potash, color: 'var(--lin-amber)' },
+                  { label: 'Phosphate', env: data.abs_fertiliser_imports_phosphate, color: 'var(--lin-violet)' },
+                  { label: 'Compound', env: data.abs_fertiliser_imports_compound, color: 'var(--lin-green)' },
+                ]}
+              />
             </div>
-          </article>
-
-          <article className="wallboard-panel">
-            <header className="wallboard-panel__head">
-              <span className="eyebrow">Oil &amp; production</span>
-              <h2>Global crude and local refining</h2>
-              <p>Brent benchmark and refinery utilisation.</p>
-            </header>
-            <MetricCard
-              eyebrow="Utilisation"
-              label="Refinery utilisation rate"
-              plain="Share of installed refining capacity running."
-              fromEnvelope={data.aps_refinery_utilisation}
-              unit="%"
-              highlight
-            />
-            <ChartCard
-              eyebrow="Crude"
-              title="Brent crude — US$/barrel"
-              unit="USD per barrel"
-              fromEnvelope={data.eia_brent}
-              ranges={['1Y','3Y','5Y']}
-              defaultRange="3Y"
-              accent="var(--series-1)"
-              yAxisLabel="US dollars per barrel"
-            />
-            <div className="wallboard-links">
-              <span>Detail view</span>
-              <a href="../oil-and-production/index.html">Open oil dashboard</a>
+            <div className="plot-box plot-box--secondary">
+              <span className="plot-box__label">Trend: concentration and price index</span>
+              <FuelMergedPlot
+                focusTick={panelTick(1)}
+                normalize={true}
+                series={[
+                  { label: 'Concentration', env: data.abs_fertiliser_source_concentration, color: 'var(--lin-violet)' },
+                  { label: 'Price index', env: data.abares_fertiliser_price, color: 'var(--lin-amber)' },
+                ]}
+              />
             </div>
-          </article>
-
-          <article className="wallboard-panel">
-            <header className="wallboard-panel__head">
-              <span className="eyebrow">Who pays what</span>
-              <h2>Company tax and pump economics</h2>
-              <p>ATO transparency and ACCC monitoring series.</p>
-            </header>
-            <MetricCard
-              eyebrow="Tax"
-              label="ATO corporate tax transparency"
-              plain="Latest recorded value from loaded ATO envelope."
-              fromEnvelope={data.ato_corporate_tax}
-              unit=""
-              highlight
-            />
-            <ChartCard
-              eyebrow="Retail"
-              title="ACCC petroleum monitoring"
-              unit=""
-              fromEnvelope={data.accc_petroleum_monitoring}
-              ranges={['1Y','3Y','5Y']}
-              defaultRange="3Y"
-              accent="var(--series-4)"
-              yAxisLabel="Series units per source envelope"
-            />
-            <div className="wallboard-links">
-              <span>Detail view</span>
-              <a href="../who-pays-what/index.html">Open who pays what</a>
+          </div>
+        </section>
+        <section className={`focus-card ${!focusMode || activePanel === 2 ? 'is-active' : ''} ${focusMode && activePanel === 2 ? 'is-routine-focus' : ''}`} aria-labelledby="oil-panel">
+          <div className="focus-card__head">
+            <span id="oil-panel" className="focus-card__kicker">OIL &amp; PRODUCTION</span>
+          </div>
+          <div className="focus-card__body focus-card__body--triple">
+            <div className="focus-metrics">
+              <MetricTile label="IEA gap (days)" env={data.iea_90day} unit=" days" pointOverride={pointFor(data.iea_90day, 2)} />
+              <MetricTile label="Fuel security payment" env={data.fuel_security_payment} unit=" A$m" pointOverride={pointFor(data.fuel_security_payment, 2)} />
+              <MetricTile label="Offshore tickets" env={data.offshore_ticket_volumes} unit=" kL" pointOverride={pointFor(data.offshore_ticket_volumes, 2)} />
+              <MetricTile label="Refinery utilisation" env={data.aps_refinery_utilisation} unit="%" pointOverride={pointFor(data.aps_refinery_utilisation, 2)} />
             </div>
-          </article>
+            <div className="plot-box">
+              <span className="plot-box__label">Trend: crude benchmarks (USD)</span>
+              <FuelMergedPlot
+                focusTick={panelTick(2)}
+                normalize={false}
+                series={[
+                  { label: 'Brent', env: data.eia_brent, color: 'var(--lin-amber)' },
+                  { label: 'WTI', env: data.eia_wti, color: 'var(--lin-cyan)' },
+                  { label: 'Tapis', env: data.tapis_crude, color: 'var(--lin-violet)' },
+                ]}
+              />
+            </div>
+            <div className="plot-box plot-box--secondary">
+              <span className="plot-box__label">Trend: crude benchmarks (AUD)</span>
+              <FuelMergedPlot
+                focusTick={panelTick(2)}
+                normalize={false}
+                series={[
+                  { label: 'Brent A$', env: brentAud, color: 'var(--lin-amber)' },
+                  { label: 'WTI A$', env: wtiAud, color: 'var(--lin-cyan)' },
+                  { label: 'Tapis A$', env: tapisAud, color: 'var(--lin-violet)' },
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+        <section className={`focus-card ${!focusMode || activePanel === 3 ? 'is-active' : ''} ${focusMode && activePanel === 3 ? 'is-routine-focus' : ''}`} aria-labelledby="tax-panel">
+          <div className="focus-card__head">
+            <span id="tax-panel" className="focus-card__kicker">WHO PAYS WHAT</span>
+          </div>
+          <div className="focus-card__body focus-card__body--triple">
+            <div className="focus-metrics">
+              <MetricTile label="Wholesale" env={data.accc_petrol_wholesale_component} unit=" A$/L" pointOverride={pointFor(data.accc_petrol_wholesale_component, 3)} />
+              <MetricTile label="Excise" env={data.accc_petrol_excise_component} unit=" A$/L" pointOverride={pointFor(data.accc_petrol_excise_component, 3)} />
+              <MetricTile label="GST" env={data.accc_petrol_gst_component} unit=" A$/L" pointOverride={pointFor(data.accc_petrol_gst_component, 3)} />
+              <MetricTile label="Retail margin" env={data.accc_petrol_retail_margin_component} unit=" A$/L" pointOverride={pointFor(data.accc_petrol_retail_margin_component, 3)} />
+            </div>
+            <div className="plot-box">
+              <span className="plot-box__label">Trend: pump breakdown series</span>
+              <TrendPlot env={data.accc_petrol_breakdown_series} stroke="var(--lin-green)" focusTick={panelTick(3)} />
+            </div>
+            <div className="plot-box plot-box--secondary">
+              <span className="plot-box__label">Trend: petroleum monitoring</span>
+              <TrendPlot env={data.accc_petroleum_monitoring} stroke="var(--lin-cyan)" focusTick={panelTick(3)} />
+            </div>
+          </div>
         </section>
       </main>
-      <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
+      <footer className="wb-foot">
+        <span className="wb-foot__text">
+          Verified retrieval {updatedDisplay}.
+        </span>
+        <a className="wb-backlink" href="../../index.html">Back to main index</a>
+      </footer>
     </div>
   );
 }
