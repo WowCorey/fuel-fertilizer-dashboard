@@ -43,6 +43,7 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://www.data.gov.au/data/dataset/australian-petroleum-statistics
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
@@ -51,6 +52,8 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.
     reuse_notes: Verify the latest workbook terms before republishing hand-keyed values.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: APS publisher endpoints are intermittently slow/time out in CI; extractor resolves stable machine URLs separately.
     used_by: [fuel, oil]
 
   - id: aps_production_petrol
@@ -58,6 +61,7 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://www.data.gov.au/data/dataset/australian-petroleum-statistics
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
@@ -66,6 +70,8 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, motor spirit production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports motor spirit production.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: APS publisher endpoints are intermittently slow/time out in CI; extractor resolves stable machine URLs separately.
     used_by: [oil]
 
   - id: aps_production_diesel
@@ -73,6 +79,7 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://www.data.gov.au/data/dataset/australian-petroleum-statistics
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
@@ -81,6 +88,8 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, diesel production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports diesel production.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: APS publisher endpoints are intermittently slow/time out in CI; extractor resolves stable machine URLs separately.
     used_by: [oil]
 
   - id: aps_production_jet
@@ -88,6 +97,7 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://www.data.gov.au/data/dataset/australian-petroleum-statistics
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
@@ -96,6 +106,8 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, jet fuel production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports jet fuel production.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: APS publisher endpoints are intermittently slow/time out in CI; extractor resolves stable machine URLs separately.
     used_by: [oil]
 
   - id: aps_production_fuel_oil
@@ -103,6 +115,7 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://www.data.gov.au/data/dataset/australian-petroleum-statistics
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
@@ -111,6 +124,8 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, fuel oil production.
     reuse_notes: Hand-key only from the APS workbook table that explicitly reports fuel oil production.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: APS publisher endpoints are intermittently slow/time out in CI; extractor resolves stable machine URLs separately.
     used_by: [oil]
 
   - id: aps_refinery_utilisation
@@ -118,6 +133,7 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://www.data.gov.au/data/dataset/australian-petroleum-statistics
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
@@ -126,6 +142,8 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, refinery utilisation.
     reuse_notes: Hand-key only if the APS workbook reports a directly verifiable utilisation series or enough inputs to calculate it transparently.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: APS publisher endpoints are intermittently slow/time out in CI; extractor resolves stable machine URLs separately.
     used_by: [oil]
 
   - id: abs_petroleum_imports
@@ -320,8 +338,9 @@ sources:
   - id: ato_corporate_tax
     human_name: ATO Corporate Tax Transparency Report (latest year)
     publisher: Australian Taxation Office
-    url: https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/in-detail/tax-transparency/corporate-tax-transparency-report-2023-24
-    canonical_url: https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/in-detail/tax-transparency/corporate-tax-transparency-report-2023-24
+    url: https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26
+    canonical_url: https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26
+    fetch_url: https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26
     format: XLSX
     update_cadence: annual
     last_verified: 2026-04-15
@@ -330,6 +349,8 @@ sources:
     citation: Australian Taxation Office, Corporate Tax Transparency Report.
     reuse_notes: Attribute ATO and preserve entity/year context for hand-keyed values.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: ATO landing pages can block bot traffic; extractor resolves workbook link from data.gov.au catalogue.
     used_by: [who_pays_what]
 
   - id: accc_petroleum_monitoring
@@ -594,13 +615,15 @@ sources:
     citation: Chevron Australia annual financial statements.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: Company and investor portals may apply anti-bot controls; URL health is monitored in manual refresh metadata.
     used_by: [who_pays_what]
 
   - id: company_viva_energy
     human_name: Viva Energy Group annual report (ASX:VEA)
     publisher: Viva Energy Group Limited
-    url: https://www.vivaenergy.com.au/investors/financial-results-reports
-    canonical_url: https://www.vivaenergy.com.au/investors/financial-results-reports
+    url: https://www.vivaenergy.com.au/investors/reports-and-presentations
+    canonical_url: https://www.vivaenergy.com.au/investors/reports-and-presentations
     format: PDF
     update_cadence: annual
     last_verified: 2026-04-15
@@ -609,6 +632,8 @@ sources:
     citation: Viva Energy Group annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: Company and investor portals may apply anti-bot controls; URL health is monitored in manual refresh metadata.
     used_by: [who_pays_what]
 
   - id: company_ampol
@@ -639,6 +664,8 @@ sources:
     citation: BP Australia annual financial statements.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: Company and investor portals may apply anti-bot controls; URL health is monitored in manual refresh metadata.
     used_by: [who_pays_what]
 
   - id: company_shell_au
@@ -669,13 +696,15 @@ sources:
     citation: Woodside Energy annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: Company and investor portals may apply anti-bot controls; URL health is monitored in manual refresh metadata.
     used_by: [who_pays_what]
 
   - id: company_santos
     human_name: Santos annual report (ASX:STO)
     publisher: Santos Limited
-    url: https://www.santos.com/investors/results-reports-and-presentations/
-    canonical_url: https://www.santos.com/investors/results-reports-and-presentations/
+    url: https://www.santos.com/investors/reports/
+    canonical_url: https://www.santos.com/investors/reports/
     format: PDF
     update_cadence: annual
     last_verified: 2026-04-15
@@ -684,4 +713,6 @@ sources:
     citation: Santos annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: programmatic
+    check_policy: non_blocking
+    check_policy_reason: Company and investor portals may apply anti-bot controls; URL health is monitored in manual refresh metadata.
     used_by: [who_pays_what]

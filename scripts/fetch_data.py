@@ -26,6 +26,7 @@ import os
 import pathlib
 import re
 import sys
+import time
 import urllib.parse
 import xml.etree.ElementTree as ET
 from typing import Any, Callable
@@ -58,6 +59,8 @@ GENERATED_DIR = ROOT / "data" / "generated"
 MANUAL_DIR = ROOT / "data" / "manual"
 
 UA = f"FuelResilienceAU-DataBot/1.0 (+{repo_url()})"
+CHECK_TIMEOUT_SECONDS = 25
+CHECK_RETRIES = 3
 
 
 def fetch_eia_series(series_code: str, url: str | None = None) -> dict[str, Any]:
@@ -799,22 +802,50 @@ def write_generated(source: dict[str, Any], block: dict[str, Any]) -> pathlib.Pa
 
 
 def check_url(url: str) -> tuple[bool, str]:
-    try:
-        r = requests.head(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True)
-        if r.status_code >= 400:
-            r = requests.get(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True, stream=True)
-            r.close()
-        if r.status_code >= 400:
-            return False, f"HTTP {r.status_code}"
-        return True, f"HTTP {r.status_code}"
-    except requests.RequestException as e:
-        return False, f"{type(e).__name__}: {e}"
+    last_exc: Exception | None = None
+    for attempt in range(CHECK_RETRIES):
+        try:
+            r = requests.head(
+                url,
+                headers={"User-Agent": UA},
+                timeout=CHECK_TIMEOUT_SECONDS,
+                allow_redirects=True,
+            )
+            if r.status_code >= 400:
+                r = requests.get(
+                    url,
+                    headers={"User-Agent": UA},
+                    timeout=CHECK_TIMEOUT_SECONDS,
+                    allow_redirects=True,
+                    stream=True,
+                )
+                r.close()
+            if r.status_code >= 400:
+                return False, f"HTTP {r.status_code}"
+            return True, f"HTTP {r.status_code}"
+        except requests.RequestException as exc:
+            last_exc = exc
+            if attempt < CHECK_RETRIES - 1:
+                time.sleep(1.5 * (attempt + 1))
+
+    assert last_exc is not None
+    return False, f"{type(last_exc).__name__}: {last_exc}"
 
 
 def source_check_url(source: dict[str, Any], *, all_links: bool) -> str:
     if all_links:
         return source.get("canonical_url") or source["url"]
     return source.get("fetch_url") or source.get("canonical_url") or source["url"]
+
+
+def source_check_policy(source: dict[str, Any]) -> tuple[str, str]:
+    policy = str(source.get("check_policy", "blocking")).strip().lower() or "blocking"
+    if policy not in {"blocking", "non_blocking"}:
+        return "blocking", "invalid check_policy value; defaulting to blocking"
+    if policy == "non_blocking":
+        reason = str(source.get("check_policy_reason", "")).strip() or "non-blocking by source policy"
+        return policy, reason
+    return policy, "blocking by source policy"
 
 
 def private_feed_enabled(source: dict[str, Any]) -> bool:
@@ -935,10 +966,16 @@ def main() -> int:
                 continue
             url = source_check_url(source, all_links=args.check_all_links)
             ok, msg = check_url(url)
-            tag = "OK " if ok else "ERR"
-            print(f"[{tag}] {sid:<32} {msg}  {url}")
-            if not ok:
+            if args.check:
+                policy, policy_note = source_check_policy(source)
+            else:
+                policy, policy_note = ("blocking", "check-all-links diagnostic")
+            tag = "OK " if ok else ("WRN" if policy == "non_blocking" else "ERR")
+            print(f"[{tag}] {sid:<32} {msg}  {url}  ({policy_note})")
+            if not ok and policy != "non_blocking":
                 errors.append(f"{sid}: {msg}")
+            if not ok and policy == "non_blocking":
+                skipped.append((sid, f"non-blocking check failure: {msg}"))
             continue
 
         if fetch_mode in {"programmatic", "derived"}:

@@ -39,6 +39,20 @@ def test_private_feed_enabled_respects_gate(monkeypatch):
     assert fetch_data.private_feed_enabled({"private_feed_gate": False}) is True
 
 
+def test_source_check_policy_defaults_to_blocking():
+    policy, note = fetch_data.source_check_policy({})
+    assert policy == "blocking"
+    assert "blocking" in note
+
+
+def test_source_check_policy_non_blocking_uses_reason():
+    policy, note = fetch_data.source_check_policy(
+        {"check_policy": "non_blocking", "check_policy_reason": "anti-bot"}
+    )
+    assert policy == "non_blocking"
+    assert note == "anti-bot"
+
+
 def test_fetch_abs_petroleum_imports_yoy_derives_expected_values(tmp_path, monkeypatch):
     generated_dir = tmp_path / "generated"
     generated_dir.mkdir(parents=True, exist_ok=True)
