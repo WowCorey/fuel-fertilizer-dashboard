@@ -1,0 +1,22 @@
+{
+  "series_id": "company_chevron_au",
+  "source_id": "company_chevron_au",
+  "source_name": "Chevron Australia annual financial statements",
+  "source_url": "https://australia.chevron.com/",
+  "unit": "",
+  "retrieved_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Programmatic fetch failed (RuntimeError: structured attempts failed (xbrl:HTTPError, ixbrl:HTTPError); pdf fallback failed: 403 Client Error: Forbidden for url: https://australia.chevron.com/). Fell back to manual envelope because ALLOW_MANUAL_FALLBACK=1.",
+  "status": "unavailable",
+  "manual_entry": false,
+  "source_rights": "Company copyright",
+  "citation": "Chevron Australia annual financial statements.",
+  "extra": {
+    "schema": "programmatic_manual_fallback.v1",
+    "fields": {
+      "manual_source_path": "data\\manual\\company_chevron_au.json",
+      "original_error": "RuntimeError: structured attempts failed (xbrl:HTTPError, ixbrl:HTTPError); pdf fallback failed: 403 Client Error: Forbidden for url: https://australia.chevron.com/"
+    }
+  }
+}

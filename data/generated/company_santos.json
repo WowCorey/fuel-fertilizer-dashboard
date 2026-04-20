@@ -1,0 +1,22 @@
+{
+  "series_id": "company_santos",
+  "source_id": "company_santos",
+  "source_name": "Santos annual report (ASX:STO)",
+  "source_url": "https://www.santos.com/investors/results-reports-and-presentations/",
+  "unit": "",
+  "retrieved_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Programmatic fetch failed (RuntimeError: structured attempts failed (ixbrl:HTTPError, xbrl:RuntimeError); pdf fallback failed: 404 Client Error: Not Found for url: https://www.santos.com/investors/results-reports-and-presentations/). Fell back to manual envelope because ALLOW_MANUAL_FALLBACK=1.",
+  "status": "unavailable",
+  "manual_entry": false,
+  "source_rights": "Company copyright",
+  "citation": "Santos annual report.",
+  "extra": {
+    "schema": "programmatic_manual_fallback.v1",
+    "fields": {
+      "manual_source_path": "data\\manual\\company_santos.json",
+      "original_error": "RuntimeError: structured attempts failed (ixbrl:HTTPError, xbrl:RuntimeError); pdf fallback failed: 404 Client Error: Not Found for url: https://www.santos.com/investors/results-reports-and-presentations/"
+    }
+  }
+}
