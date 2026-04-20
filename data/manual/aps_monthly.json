@@ -3,12 +3,262 @@
   "source_id": "aps_monthly",
   "source_name": "Australian Petroleum Statistics (monthly)",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-18T12:27:44+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
-  "manual_entry": true
+  "unit": "varies by APS table",
+  "retrieved_at": "2026-04-20T12:12:59+00:00",
+  "last_data_point": "2026-02-01",
+  "values": [
+    {
+      "t": "2021-06",
+      "v": 102.0
+    },
+    {
+      "t": "2021-07",
+      "v": 99.0
+    },
+    {
+      "t": "2021-08",
+      "v": 100.0
+    },
+    {
+      "t": "2021-09",
+      "v": 90.0
+    },
+    {
+      "t": "2021-10",
+      "v": 98.0
+    },
+    {
+      "t": "2021-11",
+      "v": 99.0
+    },
+    {
+      "t": "2021-12",
+      "v": 90.0
+    },
+    {
+      "t": "2021-22",
+      "v": 4.0
+    },
+    {
+      "t": "2022-01",
+      "v": 95.0
+    },
+    {
+      "t": "2022-02",
+      "v": 101.0
+    },
+    {
+      "t": "2022-03",
+      "v": 98.0
+    },
+    {
+      "t": "2022-04",
+      "v": 87.0
+    },
+    {
+      "t": "2022-05",
+      "v": 88.0
+    },
+    {
+      "t": "2022-06",
+      "v": 85.0
+    },
+    {
+      "t": "2022-07",
+      "v": 85.0
+    },
+    {
+      "t": "2022-08",
+      "v": 85.0
+    },
+    {
+      "t": "2022-09",
+      "v": 78.0
+    },
+    {
+      "t": "2022-10",
+      "v": 89.0
+    },
+    {
+      "t": "2022-11",
+      "v": 86.0
+    },
+    {
+      "t": "2022-12",
+      "v": 82.0
+    },
+    {
+      "t": "2022-23",
+      "v": 324.0
+    },
+    {
+      "t": "2023-01",
+      "v": 89.0
+    },
+    {
+      "t": "2023-02",
+      "v": 85.0
+    },
+    {
+      "t": "2023-03",
+      "v": 86.0
+    },
+    {
+      "t": "2023-04",
+      "v": 76.0
+    },
+    {
+      "t": "2023-05",
+      "v": 84.0
+    },
+    {
+      "t": "2023-06",
+      "v": 74.0
+    },
+    {
+      "t": "2023-07",
+      "v": 76.0
+    },
+    {
+      "t": "2023-08",
+      "v": 78.0
+    },
+    {
+      "t": "2023-09",
+      "v": 75.0
+    },
+    {
+      "t": "2023-10",
+      "v": 71.0
+    },
+    {
+      "t": "2023-11",
+      "v": 72.0
+    },
+    {
+      "t": "2023-12",
+      "v": 76.0
+    },
+    {
+      "t": "2023-24",
+      "v": 2287.0
+    },
+    {
+      "t": "2024-01",
+      "v": 81.0
+    },
+    {
+      "t": "2024-02",
+      "v": 71.0
+    },
+    {
+      "t": "2024-03",
+      "v": 85.0
+    },
+    {
+      "t": "2024-04",
+      "v": 87.0
+    },
+    {
+      "t": "2024-05",
+      "v": 68.0
+    },
+    {
+      "t": "2024-06",
+      "v": 68.0
+    },
+    {
+      "t": "2024-07",
+      "v": 89.0
+    },
+    {
+      "t": "2024-08",
+      "v": 71.0
+    },
+    {
+      "t": "2024-09",
+      "v": 67.0
+    },
+    {
+      "t": "2024-10",
+      "v": 68.0
+    },
+    {
+      "t": "2024-11",
+      "v": 70.0
+    },
+    {
+      "t": "2024-12",
+      "v": 67.0
+    },
+    {
+      "t": "2025-01",
+      "v": 73.0
+    },
+    {
+      "t": "2025-02",
+      "v": 71.0
+    },
+    {
+      "t": "2025-03",
+      "v": 72.0
+    },
+    {
+      "t": "2025-04",
+      "v": 62.0
+    },
+    {
+      "t": "2025-05",
+      "v": 67.0
+    },
+    {
+      "t": "2025-06",
+      "v": 62.0
+    },
+    {
+      "t": "2025-07",
+      "v": 67.0
+    },
+    {
+      "t": "2025-08",
+      "v": 62.0
+    },
+    {
+      "t": "2025-09",
+      "v": 66.0
+    },
+    {
+      "t": "2025-10",
+      "v": 63.0
+    },
+    {
+      "t": "2025-11",
+      "v": 60.0
+    },
+    {
+      "t": "2025-12",
+      "v": 59.0
+    },
+    {
+      "t": "2026-01",
+      "v": 63.0
+    },
+    {
+      "t": "2026-02",
+      "v": 61.0
+    }
+  ],
+  "notes": "Extracted from APS workbook using keyword-based table matching.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.",
+  "extra": {
+    "schema": "manual_automation.v2",
+    "fields": {
+      "extractor": "aps_xlsx_v1",
+      "resolved_url": "https://data.gov.au/data/dataset/d889484e-fb65-4190-a2e3-1739517cbf9b/resource/a5825135-47fa-4c59-a4e8-94e19511cb95/download/australian_petroleum_statistics_-_data_extract_february_2026.xlsx",
+      "resolution": "discovered_from_canonical:xlsx"
+    }
+  }
 }
