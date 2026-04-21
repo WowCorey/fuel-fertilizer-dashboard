@@ -43,13 +43,14 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    data_portal_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
     format: XLSX
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.
-    reuse_notes: Verify the latest workbook terms before republishing hand-keyed values.
+    reuse_notes: Latest monthly workbook is discoverable via the data.gov.au CKAN package endpoint under stable dataset id d889484e-fb65-4190-a2e3-1739517cbf9b; the only resource is the APS data-extract XLSX. Stays manual until XLSX parsing is added to the fetcher runtime. Verify workbook terms before republishing hand-keyed values.
     fetch: manual
     used_by: [fuel, oil]
 
@@ -260,11 +261,11 @@ sources:
     canonical_url: https://www.iea.org/reports/oil-stockholding
     format: HTML_TABLE
     update_cadence: ad-hoc
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: IEA terms of use
     rights_url: https://www.iea.org/terms
-    citation: International Energy Agency, Oil stockholding.
-    reuse_notes: Treat as reference metadata unless explicit reuse terms permit republication of values.
+    citation: International Energy Agency, Agreement on an International Energy Program (1974), 90-day stockholding obligation.
+    reuse_notes: Treaty-level policy constant; value is the 90-day obligation itself, not a country's compliance figure. Per-country compliance data (the IEA Oil Stocks of IEA Countries data tool) sits behind an IEA account login and is not fetched here.
     fetch: manual
     used_by: [fuel, oil]
 
@@ -273,13 +274,14 @@ sources:
     publisher: Australian Institute of Petroleum
     url: https://www.aip.com.au/pricing
     canonical_url: https://www.aip.com.au/pricing
-    format: HTML_TABLE
+    archive_url: https://www.aip.com.au/historical-ulp-and-diesel-tgp-data
+    format: XLSX
     update_cadence: weekly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: AIP terms
     rights_url: https://www.aip.com.au/pricing
     citation: Australian Institute of Petroleum, Terminal Gate Prices.
-    reuse_notes: JS-rendered table; verify AIP reuse terms before republishing values.
+    reuse_notes: Weekly TGP data is published as date-stamped XLSX files under aip.com.au/sites/default/files/download-files/<yyyy-mm>/AIP_TGP_Data_<dd-Mon-yyyy>.xlsx plus an annual XLSX roll-up; filenames change each week so the URL is not stable, and the fetcher runtime has no XLSX parser. Stays manual. Verify AIP reuse terms before republishing values.
     fetch: manual
     used_by: [fuel]
 
@@ -288,13 +290,14 @@ sources:
     publisher: Australian Institute of Petroleum
     url: https://www.aip.com.au/pricing
     canonical_url: https://www.aip.com.au/pricing
-    format: HTML_TABLE
+    archive_url: https://www.aip.com.au/pricing/weekly-prices-reports
+    format: PDF
     update_cadence: weekly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: AIP terms
     rights_url: https://www.aip.com.au/pricing
     citation: Australian Institute of Petroleum, national average retail prices.
-    reuse_notes: Verify AIP reuse terms before republishing values.
+    reuse_notes: AIP publishes the national weighted-average weekly retail petrol and diesel figures only as date-stamped PDF reports under aip.com.au/sites/default/files/download-files/<yyyy-mm>/Weekly%20<Product>%20Prices%20Report%20-%20<dd>%20<Month>%20<yyyy>.pdf. No CSV/XLSX/JSON is offered, and the fetcher runtime has no PDF parser. Stays manual. Verify AIP reuse terms before republishing values.
     fetch: manual
     used_by: [fuel]
 
