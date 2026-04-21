@@ -193,6 +193,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "accc_petrol_gird_component": {
+      "id": "accc_petrol_gird_component",
+      "human_name": "ACCC petrol price breakdown - gross indicative retail difference",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, Key messages and Figure 1.2.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "accc_petrol_gst_component": {
       "id": "accc_petrol_gst_component",
       "human_name": "ACCC petrol price breakdown - GST component",
@@ -209,6 +225,38 @@
       "has_generated": false,
       "has_manual": true
     },
+    "accc_petrol_mogas95_component": {
+      "id": "accc_petrol_mogas95_component",
+      "human_name": "ACCC petrol price breakdown - international refined petrol cost",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, Figure 1.2 and petrol snapshot.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "accc_petrol_other_costs_margins_component": {
+      "id": "accc_petrol_other_costs_margins_component",
+      "human_name": "ACCC petrol price breakdown - other costs and margins",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, petrol snapshot.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "accc_petrol_retail_margin_component": {
       "id": "accc_petrol_retail_margin_component",
       "human_name": "ACCC petrol price breakdown - retailer margin component",
@@ -221,6 +269,22 @@
       "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "accc_petrol_tax_component": {
+      "id": "accc_petrol_tax_component",
+      "human_name": "ACCC petrol price breakdown - excise and GST component",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, petrol snapshot and Figure 1.2 notes.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -616,11 +680,11 @@
       "human_name": "Fuel Security Services Payment — recipients & payments",
       "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
       "fetch": "manual",
-      "update_cadence": "annual",
+      "update_cadence": "quarterly",
       "used_by": [
         "oil"
       ],
-      "canonical_url": "https://www.energy.gov.au/energy-and-climate-change-ministerial-council/priorities/fuel-security",
+      "canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Department of Climate Change, Energy, the Environment and Water, Fuel Security Services Payment disclosures.",
       "preferred_dir": "manual",
@@ -649,11 +713,11 @@
       "human_name": "DCCEEW offshore ticket volume disclosures",
       "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
       "fetch": "manual",
-      "update_cadence": "annual",
+      "update_cadence": "ad-hoc",
       "used_by": [
         "oil"
       ],
-      "canonical_url": "https://www.energy.gov.au/",
+      "canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures.",
       "preferred_dir": "manual",

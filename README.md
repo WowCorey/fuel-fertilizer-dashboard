@@ -31,15 +31,16 @@ interpolate or estimate missing numbers.
 |---|---|---|---|
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and multi-state retail average fetched; AIP retail and IEA obligation remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | ABS SITC 562 total imports fetched; nutrient subseries, ABARES and concentration slots remain manual/unavailable |
-| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet and APS production fetched; Tapis, refinery utilisation, FSSP and offshore tickets remain manual/unavailable |
-| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | Manual stubs pending verification |
+| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet and APS production fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
+| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields and ACCC December quarter 2025 petrol components are hand-keyed; company profit remains unavailable |
 
 Every page cross-links to the others in the header nav.
 
 ## Run locally
 
-No build step. Serve the repo root with any static server — `fetch()` of the
-JSON envelopes does not work from `file://`, so you must use a server.
+The committed site can be served as static files because the dashboard JSX is
+precompiled. Serve the repo root with any static server - `fetch()` of the JSON
+envelopes does not work from `file://`, so you must use a server.
 
 ```sh
 python3 -m http.server 8000
@@ -135,6 +136,8 @@ Run the validator before opening or merging a PR:
 
 ```sh
 pip install -r requirements.txt
+npm ci
+npm run check:ui
 python3 scripts/validate_data.py
 python3 scripts/validate_data.py --json
 python3 scripts/build_source_manifest.py --check
@@ -147,9 +150,10 @@ registry entries, invalid status/timestamp semantics, inconsistent manual-entry
 flags, malformed values and unstructured `extra` data.
 
 `.github/workflows/ci.yml` runs on pull requests and pushes. It installs the
-minimal Python dependencies in `requirements.txt`, compile-checks scripts, runs
-the data validator, checks the browser source manifest, and runs unit tests for
-the fetch/data-entry transforms.
+minimal Python dependencies in `requirements.txt` and the pinned Node build
+dependencies in `package-lock.json`, checks that compiled dashboard JS is fresh,
+compile-checks scripts, runs the data validator, checks the browser source
+manifest, and runs unit tests for the fetch/data-entry transforms.
 
 ## Run the pipeline locally
 

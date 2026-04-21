@@ -377,6 +377,66 @@ sources:
     fetch: manual
     used_by: [fuel, who_pays_what]
 
+  - id: accc_petrol_mogas95_component
+    human_name: ACCC petrol price breakdown - international refined petrol cost
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, Figure 1.2 and petrol snapshot.
+    reuse_notes: Hand-keyed from the ACCC December quarter 2025 report. Represents the Mogas 95 international refined petrol cost component, not a retail margin or tax component.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petrol_tax_component
+    human_name: ACCC petrol price breakdown - excise and GST component
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, petrol snapshot and Figure 1.2 notes.
+    reuse_notes: Hand-keyed from the ACCC December quarter 2025 report. Represents the combined excise and GST component because the report does not publish pure excise and pure GST as separate pump-price components.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petrol_other_costs_margins_component
+    human_name: ACCC petrol price breakdown - other costs and margins
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, petrol snapshot.
+    reuse_notes: Hand-keyed from the ACCC December quarter 2025 petrol snapshot. Represents other costs and margins across wholesale and retail; it is not pure retailer profit.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: accc_petrol_gird_component
+    human_name: ACCC petrol price breakdown - gross indicative retail difference
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, Key messages and Figure 1.2.
+    reuse_notes: Hand-keyed from the ACCC December quarter 2025 report. Gross indicative retail differences are a broad indicator of retail costs and margins, including retail GST; they are not pure profit.
+    fetch: manual
+    used_by: [who_pays_what]
+
   - id: accc_petrol_wholesale_component
     human_name: ACCC petrol price breakdown - wholesale component
     publisher: Australian Competition and Consumer Commission
@@ -554,30 +614,30 @@ sources:
   - id: fuel_security_payment
     human_name: Fuel Security Services Payment — recipients & payments
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
-    url: https://www.energy.gov.au/energy-and-climate-change-ministerial-council/priorities/fuel-security
-    canonical_url: https://www.energy.gov.au/energy-and-climate-change-ministerial-council/priorities/fuel-security
+    url: https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment
+    canonical_url: https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment
     format: MIXED
-    update_cadence: annual
-    last_verified: 2026-04-15
+    update_cadence: quarterly
+    last_verified: 2026-04-22
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Fuel Security Services Payment disclosures.
-    reuse_notes: Verify source document/report year before republishing values.
+    reuse_notes: Hand-key only from the public FSSP amounts paid table. Values are GST-exclusive quarterly payments and should be converted from dollars to A$m for the dashboard.
     fetch: manual
     used_by: [oil]
 
   - id: offshore_ticket_volumes
     human_name: DCCEEW offshore ticket volume disclosures
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
-    url: https://www.energy.gov.au/
-    canonical_url: https://www.energy.gov.au/
+    url: https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks
+    canonical_url: https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks
     format: MIXED
-    update_cadence: annual
-    last_verified: 2026-04-15
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures.
-    reuse_notes: Hand-key only from a public DCCEEW disclosure that states offshore ticket volumes and reporting period.
+    reuse_notes: Hand-key only from a public DCCEEW disclosure that states offshore stockholding/ticket status and reporting date. The current public disclosure says no stock is held overseas under agreement.
     fetch: manual
     used_by: [oil]
 
