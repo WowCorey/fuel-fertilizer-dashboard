@@ -49,10 +49,41 @@ const SERIES = [
   ...COMPANIES.map(c => c.id),
 ];
 
-// Extract a named scalar from an envelope. Companies use an `extra` object
-// once a human has hand-keyed values; until then, everything returns null.
+const TAX_FIELDS = ['fiscal_year', 'total_income', 'taxable_income', 'income_tax_paid', 'net_profit'];
+const PUMP_COMPONENTS = [
+  {
+    id: 'accc_petrol_wholesale_component',
+    eyebrow: 'Pump $',
+    label: 'Wholesale component',
+    plain: 'What the refiner / wholesaler is paid.',
+  },
+  {
+    id: 'accc_petrol_excise_component',
+    eyebrow: 'Pump $',
+    label: 'Fuel excise',
+    plain: 'Commonwealth fuel excise, copied from the ACCC breakdown once verified.',
+  },
+  {
+    id: 'accc_petrol_gst_component',
+    eyebrow: 'Pump $',
+    label: 'GST',
+    plain: 'Goods and services tax component copied from the ACCC breakdown once verified.',
+  },
+  {
+    id: 'accc_petrol_retail_margin_component',
+    eyebrow: 'Pump $',
+    label: 'Retailer margin',
+    plain: 'What the service-station operator earns per litre.',
+  },
+];
+
+// Extract a named scalar from an envelope. Manual company records use the
+// validator-approved typed shape: extra.schema + extra.fields.
 function pick(env, key) {
   if (!env || env.status !== 'ok') return null;
+  if (env.extra && env.extra.fields && !Array.isArray(env.extra.fields) && env.extra.fields[key] != null) {
+    return env.extra.fields[key];
+  }
   if (env.extra && env.extra[key] != null) return env.extra[key];
   if (Array.isArray(env.values)) {
     const hit = env.values.find(p => p.t === key);
@@ -101,6 +132,7 @@ function SourceCell({ env }) {
   return (
     <td>
       <a href={env.source_url} rel="noopener">{label}</a>
+      {env.status !== 'ok' && <div className="caption">pending</div>}
     </td>
   );
 }
@@ -113,6 +145,19 @@ function effectiveRate(env) {
   const taxable = pick(env, 'taxable_income');
   if (paid == null || taxable == null || !taxable) return null;
   return (paid / taxable) * 100;
+}
+
+function sourceSummary(env) {
+  if (!env || env.status !== 'ok') {
+    return 'Awaiting hand-keyed values from the named public source.';
+  }
+  const fields = env.extra && env.extra.fields && !Array.isArray(env.extra.fields)
+    ? Object.keys(env.extra.fields).length
+    : 0;
+  if (fields) {
+    return `Verified. ${fields} fields; latest ${env.last_data_point || 'unknown'}.`;
+  }
+  return `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`;
 }
 
 function App() {
@@ -130,6 +175,12 @@ function App() {
 
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const populatedCompanyCount = COMPANIES.filter(c => (
+    TAX_FIELDS.some(field => pick(data[c.id], field) != null)
+  )).length;
+  const verifiedPumpComponents = PUMP_COMPONENTS.filter(c => data[c.id]?.status === 'ok').length;
+  const allPumpComponentsVerified = verifiedPumpComponents === PUMP_COMPONENTS.length;
+  const pumpSeriesVerified = data.accc_petrol_breakdown_series?.status === 'ok';
 
   return (
     <div className="page">
@@ -207,6 +258,17 @@ function App() {
             </div>
           </div>
 
+          <div className="pending-list" aria-label="Company tax source coverage">
+            <article className="source-card">
+              <h4>Company rows awaiting manual verification</h4>
+              <p className="body-sm">
+                {populatedCompanyCount} of {COMPANIES.length} company envelopes currently contain verified
+                tax/profit fields. Values should be entered only after checking the ATO release and the
+                company's annual report or ASIC-lodged statements.
+              </p>
+            </article>
+          </div>
+
           <div className="data-table-wrap" role="region" aria-label="Company tax and profit table">
             <table className="data-table">
               <thead>
@@ -246,7 +308,7 @@ function App() {
 
           <p className="caption" style={{ marginTop: 12 }}>
             "—" means the figure has not yet been hand-keyed from the company's latest filed
-            report. Cross-check with the ATO Corporate Tax Transparency dataset:{' '}
+            report. Cross-check with the ATO Corporate Tax Transparency dataset before publishing:{' '}
             <a href={data.ato_corporate_tax.source_url}>{data.ato_corporate_tax.source_name}</a>.
           </p>
         </section>
@@ -264,27 +326,55 @@ function App() {
             </div>
           </div>
 
-          <div className="metric-grid metric-grid--4">
-            <MetricCard eyebrow="Pump $"  label="Wholesale component"  plain="What the refiner / wholesaler is paid."              fromEnvelope={data.accc_petrol_wholesale_component} unit=" A$/L"/>
-            <MetricCard eyebrow="Pump $"  label="Fuel excise"          plain="Commonwealth excise, currently 50.8c/L (indexed)."  fromEnvelope={data.accc_petrol_excise_component} unit=" A$/L"/>
-            <MetricCard eyebrow="Pump $"  label="GST"                  plain="10% goods and services tax on the total pump price." fromEnvelope={data.accc_petrol_gst_component} unit=" A$/L"/>
-            <MetricCard eyebrow="Pump $"  label="Retailer margin"      plain="What the service-station operator earns per litre." fromEnvelope={data.accc_petrol_retail_margin_component} unit=" A$/L"/>
-          </div>
+          {allPumpComponentsVerified ? (
+            <div className="metric-grid metric-grid--4">
+              {PUMP_COMPONENTS.map(component => (
+                <MetricCard
+                  key={component.id}
+                  eyebrow={component.eyebrow}
+                  label={component.label}
+                  plain={component.plain}
+                  fromEnvelope={data[component.id]}
+                  unit=" A$/L"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="pending-list" aria-label="Pending ACCC retail breakdown coverage">
+              <article className="source-card">
+                <h4>Retail breakdown pending</h4>
+                <p className="body-sm">
+                  {verifiedPumpComponents} of {PUMP_COMPONENTS.length} ACCC petrol-breakdown components are verified.
+                  The component cards stay hidden until wholesale, excise, GST and retailer margin are all populated
+                  from the same ACCC Petroleum Monitoring Report.
+                </p>
+                {data.accc_petroleum_monitoring?.source_url && (
+                  <a href={data.accc_petroleum_monitoring.source_url}>
+                    {data.accc_petroleum_monitoring.source_name} <Icon name="external" size={12}/>
+                  </a>
+                )}
+              </article>
+            </div>
+          )}
 
-          <div style={{ height: 24 }}/>
-          <div className="charts-grid charts-grid--full">
-            <ChartCard
-              eyebrow="Trailing 12 months"
-              title="Monthly retail petrol price breakdown"
-              unit="A$/L"
-              fromEnvelope={data.accc_petrol_breakdown_series}
-              ranges={['1Y','3Y']}
-              defaultRange="1Y"
-              accent="#1F3A8A"
-              takeaway="Chart remains unavailable until each ACCC breakdown component can be represented as a separate verified series."
-              yAxisLabel="Australian dollars per litre (A$/L)"
-            />
-          </div>
+          {pumpSeriesVerified && (
+            <>
+              <div style={{ height: 24 }}/>
+              <div className="charts-grid charts-grid--full">
+                <ChartCard
+                  eyebrow="Trailing 12 months"
+                  title="Monthly retail petrol price breakdown"
+                  unit="A$/L"
+                  fromEnvelope={data.accc_petrol_breakdown_series}
+                  ranges={['1Y','3Y']}
+                  defaultRange="1Y"
+                  accent="#1F3A8A"
+                  takeaway="Monthly ACCC retail petrol price breakdown from verified component series."
+                  yAxisLabel="Australian dollars per litre (A$/L)"
+                />
+              </div>
+            </>
+          )}
         </section>
 
         {/* SOURCES */}
@@ -303,11 +393,7 @@ function App() {
             {Object.entries(data).map(([id, env]) => (
               <article key={id} className="source-card">
                 <h4>{env.source_name}</h4>
-                <p className="body-sm">
-                  {env.status === 'ok'
-                    ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`
-                    : 'Awaiting hand-keyed values from the named public source.'}
-                </p>
+                <p className="body-sm">{sourceSummary(env)}</p>
                 <p className="caption"><b>Envelope:</b> <span className="mono">{id}</span></p>
                 {env.source_url && <a href={env.source_url}>{env.source_url.replace(/^https?:\/\//,'')} <Icon name="external" size={12}/></a>}
                 <p className="caption mono">Retrieved: {env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—'}</p>
