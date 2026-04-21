@@ -5,12 +5,13 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Four dashboard surfaces read from a shared JSON-envelope data
+**Status:** Five dashboard surfaces read from a shared JSON-envelope data
 pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
 ABS fertiliser imports, APS net-import cover, APS refinery production series,
 AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
-and the multi-state retail fuel average. Other sources remain manual or
-unavailable until a named public source can support the value.
+and the multi-state retail fuel average. The national status page adds a
+manually verified PM&C/DCCEEW public fuel-supply snapshot. Other sources remain
+manual or unavailable until a named public source can support the value.
 
 ## What this is
 
@@ -29,6 +30,7 @@ interpolate or estimate missing numbers.
 
 | Page | Version | What it covers | Current data state |
 |---|---|---|---|
+| [National status](ui_kits/national-status-dashboard/index.html) | v1.4 | National Fuel Security Plan level, MSO reserves, ships on water and retail stock-outs | PM&C/DCCEEW public fuel-supply snapshot hand-keyed; direct scripted access is blocked/deferred until a stable machine-readable endpoint exists |
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and multi-state retail average fetched; AIP retail and IEA obligation remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | ABS SITC 562 total imports fetched; nutrient subseries, ABARES and concentration slots remain manual/unavailable |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet and APS production fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
@@ -49,6 +51,7 @@ envelopes does not work from `file://`, so you must use a server.
 ```sh
 python3 -m http.server 8000
 # then visit:
+#   http://localhost:8000/ui_kits/national-status-dashboard/index.html
 #   http://localhost:8000/ui_kits/fuel-dashboard/index.html
 #   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
 #   http://localhost:8000/ui_kits/oil-and-production/index.html
@@ -245,6 +248,7 @@ ui_kits/
   shared/                      Header, Footer, MetricCard, ChartCard,
                                InsightFeed, data-loader, styles — used by
                                every dashboard
+  national-status-dashboard/   v1.4 — public fuel-status snapshot
   fuel-dashboard/              v1.0 — liquid fuel
   fertilizer-dashboard/        v1.1 — fertiliser
   oil-and-production/          v1.2 — crude, refining, government spending

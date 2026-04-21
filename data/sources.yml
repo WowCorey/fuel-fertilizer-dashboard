@@ -641,6 +641,96 @@ sources:
     fetch: manual
     used_by: [oil]
 
+  - id: pmc_fuel_security_level
+    human_name: PM&C public fuel supply - National Fuel Security Plan level
+    publisher: Department of the Prime Minister and Cabinet, data compiled by DCCEEW
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-22
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; data compiled by DCCEEW.
+    reuse_notes: Hand-key from the public PM&C fuel supply page. Local pipeline requests to this page return an Incapsula challenge, so this source remains manual until a stable machine-readable endpoint is found.
+    fetch: manual
+    used_by: [national_status]
+
+  - id: pmc_mso_days_cover
+    human_name: PM&C public fuel supply - MSO days of cover
+    publisher: Department of the Prime Minister and Cabinet, data compiled by DCCEEW
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-22
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
+    reuse_notes: Hand-key from the PM&C table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover.
+    fetch: manual
+    used_by: [national_status]
+
+  - id: pmc_mso_fuel_reserves
+    human_name: PM&C public fuel supply - MSO fuel reserves
+    publisher: Department of the Prime Minister and Cabinet, data compiled by DCCEEW
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-22
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO reserves table.
+    reuse_notes: Hand-key from the PM&C table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page.
+    fetch: manual
+    used_by: [national_status]
+
+  - id: pmc_forward_import_orders
+    human_name: PM&C public fuel supply - four-week import orders
+    publisher: Department of the Prime Minister and Cabinet, data compiled by DCCEEW
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-22
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; current and anticipated national supplies text.
+    reuse_notes: Hand-key only when PM&C publishes the reported four-week forward import-order volume. Do not infer from tanker counts or other sources.
+    fetch: manual
+    used_by: [national_status]
+
+  - id: pmc_tankers_on_water
+    human_name: PM&C public fuel supply - ships on water to Australia
+    publisher: Department of the Prime Minister and Cabinet, data compiled by DCCEEW using Kpler commodity terminal
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-22
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW estimate using Kpler commodity terminal.
+    reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and should not be presented as individual tanker movement data.
+    fetch: manual
+    used_by: [national_status]
+
+  - id: pmc_retail_stockouts
+    human_name: PM&C public fuel supply - retail stock-outs
+    publisher: Department of the Prime Minister and Cabinet, data provided by state and territory governments
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-22
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; retail stock-outs table provided by state and territory governments.
+    reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one.
+    fetch: manual
+    used_by: [national_status]
+
   - id: abares_fertiliser_price
     human_name: ABARES fertiliser price index (Agricultural commodities)
     publisher: Australian Bureau of Agricultural and Resource Economics and Sciences

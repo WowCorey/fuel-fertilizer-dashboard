@@ -7,6 +7,14 @@ estimates. A gap can move to "ready to populate" only when a named public source
 contains the exact field, reporting period, unit, and reuse rights needed for a
 JSON envelope.
 
+## National status
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Programmatic PM&C/DCCEEW public fuel-supply snapshot | deferred | The PM&C public fuel-supply page is readable in a browser, but direct pipeline requests return an Incapsula challenge. DCCEEW and energy.gov.au page requests currently time out from the local pipeline environment. | Keep the PM&C snapshot manual and source-linked. Move to `fetch: programmatic` only if PM&C/DCCEEW publishes a stable machine-readable endpoint or an accessible static data file. |
+| Vessel-level tanker movements | intentionally not published | The public PM&C page reports aggregate tanker counts and equivalent days only. It does not publish vessel identities or live AIS movements. | Keep aggregate "ships on water" counts only. Do not add vessel-level movement displays without a public, licence-compatible source and clear public-interest rationale. |
+| Daily stock-out updates | deferred | The current PM&C stock-out table is a dated public snapshot with seven-day changes. It is not a daily API. | Hand-key dated snapshots when reviewed, or add ingestion only when a stable state/territory or PM&C endpoint is found. |
+
 ## Fuel
 
 | Gap | Current status | Why not filled yet | Next action |

@@ -585,7 +585,50 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_fertiliser_imports', 'abs_fertiliser_imports_urea', 'abs_fertiliser_imports_potash', 'abs_fertiliser_imports_phosphate', 'abs_fertiliser_imports_compound', 'abs_fertiliser_source_concentration', 'abares_fertiliser_price', 'abares_fertiliser_stock_cover'];
+const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts', 'aps_monthly', 'aus_retail_fuel_multistate'];
+function latestValue(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1).v;
+}
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function fmtInt(value) {
+  if (value === null || value === undefined) return '-';
+  return Number(value).toLocaleString('en-AU', {
+    maximumFractionDigits: 0
+  });
+}
+function fmtChange(value) {
+  if (value === null || value === undefined) return '-';
+  if (value === 0) return 'no change';
+  return `${value > 0 ? '+' : ''}${value}`;
+}
+function MetricValue({
+  value,
+  unit
+}) {
+  return React.createElement("span", null, React.createElement("span", {
+    className: "metric-numeral"
+  }, value), unit && React.createElement("span", {
+    className: "metric-unit"
+  }, unit));
+}
+function SourceTable({
+  title,
+  source,
+  children
+}) {
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("h4", null, title), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, children)), React.createElement("p", {
+    className: "caption mono"
+  }, source));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -595,7 +638,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fertilizer"
+      active: "national_status"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -604,235 +647,18 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  return React.createElement("div", {
-    className: "page"
-  }, React.createElement(Header, {
-    active: "fertilizer",
-    updated: latestRetrieved ? updatedDisplay : ''
-  }), React.createElement("main", {
-    id: "main"
-  }, React.createElement("section", {
-    className: "intro",
-    id: "fertilizer"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Fertilizer \xB7 v1.1"), React.createElement("h1", {
-    style: {
-      marginTop: 12
-    }
-  }, "Australia's fertiliser, in plain English."), React.createElement("p", {
-    className: "intro__lede"
-  }, "Australia imports the majority of its fertiliser \u2014 the stuff that keeps wheat, canola and pasture growing. When overseas supply gets tight, it shows up as higher farm-gate prices within a season, and higher food costs not long after.")), React.createElement("aside", {
-    className: "intro__meta",
-    "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
-    className: "mono"
-  }, updatedDisplay), React.createElement("div", {
-    style: {
-      height: 12
-    }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
-    data: data
-  }), React.createElement("section", {
-    className: "section section--why",
-    "aria-labelledby": "why"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
-    id: "why",
-    style: {
-      marginTop: 8
-    }
-  }, "Why this matters to you")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, "Nearly everything grown commercially in Australia depends on imported fertiliser. Urea, potash and phosphates come in by the boatload, mostly from a short list of supplier countries. That makes the supply chain efficient, but also exposed: a single disruption at one end can push up farm costs across the country."), React.createElement("p", null, "This page is structured to track how much we import each month, what it costs, and how concentrated the supplier list is. Values appear only when the named public source has been verified in a JSON envelope."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ABARES"), " = Australian Bureau of Agricultural and Resource Economics and Sciences.", React.createElement("b", null, " DCCEEW"), " = Department of Climate Change, Energy, the Environment and Water.", React.createElement("b", null, " HS 31"), " = the Harmonised System trade code for fertiliser.")))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "metrics-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Headline numbers"), React.createElement("h2", {
-    id: "metrics-h"
-  }, "As of the latest publisher update"), React.createElement("p", {
-    className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Value",
-    label: "Monthly fertiliser imports",
-    plain: "Total value of manufactured fertiliser (SITC 562) cleared into Australia in the latest month, from the ABS Data API.",
-    fromEnvelope: data.abs_fertiliser_imports,
-    unit: " AUD thousands",
-    highlight: true
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Price",
-    label: "Fertiliser price index",
-    plain: "ABARES index. 100 = long-run average.",
-    fromEnvelope: data.abares_fertiliser_price,
-    unit: " index"
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Concentration",
-    label: "Top-3 source countries",
-    plain: "Share of total fertiliser imports coming from the three largest supplier countries.",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    unit: "%"
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Resilience",
-    label: "Months of cover",
-    jargonHint: {
-      term: 'Months of cover',
-      definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.'
-    },
-    plain: "How long Australia's fertiliser stockpile would last if imports stopped.",
-    fromEnvelope: data.abares_fertiliser_stock_cover,
-    unit: " months"
-  })), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending fertiliser source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
-    className: "body-sm"
-  }, "Nutrient subseries, ABARES price index, supplier concentration and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.")))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "charts-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "How it's changed"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Imports by type and source country, over time"), React.createElement("p", {
-    className: "section__lede"
-  }, "Charts populate when verified monthly source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Value",
-    title: "Monthly fertiliser imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_fertiliser_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  })), false && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Urea",
-    title: "Monthly urea imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_urea,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Urea (HS 3102) is the largest-volume nitrogen fertiliser. Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Potash",
-    title: "Monthly potash imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_potash,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Potassium fertilisers (HS 3104). Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Phosphates",
-    title: "Monthly phosphate imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_phosphate,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#B45309",
-    takeaway: "Phosphate fertilisers (HS 3103 + DAP/MAP under HS 3105). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Compound",
-    title: "Monthly compound fertiliser imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_compound,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Mixed NPK compound fertilisers (HS 3105, excluding DAP/MAP). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Supplier mix",
-    title: "Top-5 source countries' combined share, over time",
-    unit: "%",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "How concentrated Australia's fertiliser supply is. The higher the share, the more exposed we are to disruption in a small number of supplier countries. Chart populates when the ABS country breakdown is hand-keyed.",
-    yAxisLabel: "Percent of total monthly HS-31 imports (%)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Prices",
-    title: "ABARES fertiliser price index",
-    unit: "index",
-    fromEnvelope: data.abares_fertiliser_price,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#1F3A8A",
-    takeaway: "ABARES publishes an Australian fertiliser price index alongside its quarterly Agricultural Commodities release. 100 = long-run average.",
-    yAxisLabel: "Index (long-run average = 100)"
-  })))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: [],
-    title: "What changed",
-    lede: "Populated from DCCEEW / ABS / ABARES release notes as verified data arrives.",
-    emptyMessage: "Awaiting verified release notes for the loaded fertiliser source envelopes."
-  })), React.createElement("section", {
-    className: "section section--sources",
-    id: "sources"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
-    className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
-    className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+  const levelFields = fields(data.pmc_fuel_security_level);
+  const days = fields(data.pmc_mso_days_cover);
+  const reserves = fields(data.pmc_mso_fuel_reserves);
+  const tankers = fields(data.pmc_tankers_on_water);
+  const stockouts = fields(data.pmc_retail_stockouts);
+  const stockoutRows = [['ACT', stockouts.act_petrol, stockouts.act_petrol_change_7d, stockouts.act_diesel, stockouts.act_diesel_change_7d], ['NSW', stockouts.nsw_petrol, stockouts.nsw_petrol_change_7d, stockouts.nsw_diesel, stockouts.nsw_diesel_change_7d], ['VIC', stockouts.vic_petrol, stockouts.vic_petrol_change_7d, stockouts.vic_diesel, stockouts.vic_diesel_change_7d], ['QLD', stockouts.qld_petrol, stockouts.qld_petrol_change_7d, stockouts.qld_diesel, stockouts.qld_diesel_change_7d], ['SA', stockouts.sa_petrol, stockouts.sa_petrol_change_7d, stockouts.sa_diesel, stockouts.sa_diesel_change_7d], ['TAS', stockouts.tas_petrol, stockouts.tas_petrol_change_7d, stockouts.tas_diesel, stockouts.tas_diesel_change_7d], ['NT', stockouts.nt_petrol, stockouts.nt_petrol_change_7d, stockouts.nt_diesel, stockouts.nt_diesel_change_7d], ['WA', stockouts.wa_petrol, stockouts.wa_petrol_change_7d, stockouts.wa_diesel, stockouts.wa_diesel_change_7d], ['Australia', stockouts.australia_petrol, null, stockouts.australia_diesel, stockouts.australia_diesel_change_7d]];
+  const sourceCards = Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
     className: "source-card"
   }, React.createElement("h4", null, env.source_name), React.createElement("p", {
     className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
+  }, env.status === 'ok' ? `Verified envelope. ${env.values.length} data point${env.values.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting verified values from the named public source.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
@@ -843,9 +669,155 @@ function App() {
     size: 12
   })), React.createElement("p", {
     className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-')));
+  return React.createElement("div", {
+    className: "page"
+  }, React.createElement(Header, {
+    active: "national_status",
+    updated: latestRetrieved ? updatedDisplay : ''
+  }), React.createElement("main", {
+    id: "main"
+  }, React.createElement("section", {
+    className: "intro",
+    id: "national-status"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "National fuel status"), React.createElement("h1", {
+    style: {
+      marginTop: 12
+    }
+  }, "A single public snapshot of Australian fuel resilience."), React.createElement("p", {
+    className: "intro__lede"
+  }, "This page pulls the public emergency-status, stockholding, tanker-arrival and stock-out signals into one source-linked view. The PM&C fuel-supply page is currently hand-keyed because it blocks direct scripted fetches; no values are estimated.")), React.createElement("aside", {
+    className: "intro__meta",
+    "aria-label": "Publication details"
+  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+    className: "mono"
+  }, updatedDisplay), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Coverage"), React.createElement("span", null, "Manual public snapshot plus live APS and retail feeds"))), React.createElement(DataCoverage, {
+    data: data
+  }), React.createElement("section", {
+    className: "section section--why"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "What this is"), React.createElement("h2", {
+    style: {
+      marginTop: 8
+    }
+  }, "What \"national status\" means here")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "This is not private operational intelligence. It is a public-source summary of the figures the Australian Government has chosen to publish: National Fuel Security Plan level, MSO stock coverage, expected arrivals and retail stock-outs."), React.createElement("p", null, "Tanker counts are aggregate counts from the PM&C page. They are not live AIS tracking and they do not identify individual vessels.")))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "status-cards"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Current public snapshot"), React.createElement("h2", {
+    id: "status-cards"
+  }, "Headline indicators"), React.createElement("p", {
+    className: "section__lede"
+  }, "PM&C/DCCEEW values are hand-keyed from the public fuel supply page. Live programmatic sources remain programmatic on the underlying fuel and oil pages."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Plan level",
+    label: "National Fuel Security Plan",
+    plain: "Public status level from the PM&C fuel supply page.",
+    fromEnvelope: data.pmc_fuel_security_level,
+    valueFn: () => levelFields.level_label || `Level ${latestValue(data.pmc_fuel_security_level)}`,
+    unitFn: () => '',
+    highlight: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "Lowest cover",
+    label: "MSO days cover",
+    plain: "Lowest current product coverage across petrol, diesel and jet fuel.",
+    fromEnvelope: data.pmc_mso_days_cover,
+    valueFn: env => fmtInt(latestValue(env)),
+    unit: " days"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Bulk stocks",
+    label: "MSO reserves",
+    plain: "Published petrol, diesel and jet fuel reserve volumes summed.",
+    fromEnvelope: data.pmc_mso_fuel_reserves,
+    valueFn: env => fmtInt(latestValue(env)),
+    unit: " ML"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Imports",
+    label: "Forward import orders",
+    plain: "Reported overseas arrivals scheduled for the next four weeks.",
+    fromEnvelope: data.pmc_forward_import_orders,
+    valueFn: env => latestValue(env),
+    unit: " billion L"
+  }), React.createElement(MetricCard, {
+    eyebrow: "On water",
+    label: "Ships on water",
+    plain: "Crude and clean-product tankers reported on the public PM&C page.",
+    fromEnvelope: data.pmc_tankers_on_water,
+    valueFn: env => fmtInt(latestValue(env)),
+    unit: " tankers"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Retail supply",
+    label: "Diesel stock-outs",
+    plain: "Australia-wide diesel stock-out count; petrol national total is not published.",
+    fromEnvelope: data.pmc_retail_stockouts,
+    valueFn: env => fmtInt(latestValue(env)),
+    unit: " sites"
+  }))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "tables-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Breakdowns"), React.createElement("h2", {
+    id: "tables-h"
+  }, "What sits behind the headline cards"))), React.createElement("div", {
+    className: "sources-grid"
+  }, React.createElement(SourceTable, {
+    title: "MSO cover and reserves",
+    source: window.FR.sourceLine(data.pmc_mso_fuel_reserves)
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Fuel"), React.createElement("th", null, "Days cover"), React.createElement("th", null, "Current reserves"), React.createElement("th", null, "Dec qtr avg"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Petrol"), React.createElement("td", null, fmtInt(days.petrol_days)), React.createElement("td", null, fmtInt(reserves.petrol_ml), " ML"), React.createElement("td", null, fmtInt(reserves.december_quarter_2025_petrol_average_ml), " ML")), React.createElement("tr", null, React.createElement("td", null, "Diesel"), React.createElement("td", null, fmtInt(days.diesel_days)), React.createElement("td", null, fmtInt(reserves.diesel_ml), " ML"), React.createElement("td", null, fmtInt(reserves.december_quarter_2025_diesel_average_ml), " ML")), React.createElement("tr", null, React.createElement("td", null, "Jet fuel"), React.createElement("td", null, fmtInt(days.jet_fuel_days)), React.createElement("td", null, fmtInt(reserves.jet_fuel_ml), " ML"), React.createElement("td", null, fmtInt(reserves.december_quarter_2025_jet_fuel_average_ml), " ML")))), React.createElement(SourceTable, {
+    title: "Ships on water",
+    source: window.FR.sourceLine(data.pmc_tankers_on_water)
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Category"), React.createElement("th", null, "Tankers"), React.createElement("th", null, "Equivalent days"), React.createElement("th", null, "Prior week"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Crude oil"), React.createElement("td", null, fmtInt(tankers.crude_oil_tankers)), React.createElement("td", null, fmtInt(tankers.crude_oil_equivalent_days)), React.createElement("td", null, fmtInt(tankers.previous_crude_oil_tankers), " tankers")), React.createElement("tr", null, React.createElement("td", null, "Clean refined products"), React.createElement("td", null, fmtInt(tankers.clean_refined_product_tankers)), React.createElement("td", null, fmtInt(tankers.clean_refined_product_equivalent_days)), React.createElement("td", null, fmtInt(tankers.previous_clean_refined_product_tankers), " tankers"))))), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Petrol stock-outs"), React.createElement("th", null, "7-day change"), React.createElement("th", null, "Diesel stock-outs"), React.createElement("th", null, "7-day change"))), React.createElement("tbody", null, stockoutRows.map(row => React.createElement("tr", {
+    key: row[0]
+  }, React.createElement("td", null, row[0]), React.createElement("td", {
+    className: row[1] === null || row[1] === undefined ? 'unavail' : ''
+  }, fmtInt(row[1])), React.createElement("td", {
+    className: row[2] === null || row[2] === undefined ? 'unavail' : ''
+  }, fmtChange(row[2])), React.createElement("td", {
+    className: row[3] === null || row[3] === undefined ? 'unavail' : ''
+  }, fmtInt(row[3])), React.createElement("td", {
+    className: row[4] === null || row[4] === undefined ? 'unavail' : ''
+  }, fmtChange(row[4]))))))), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.pmc_retail_stockouts))), React.createElement("section", {
+    className: "section section--sources",
+    id: "sources"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+    className: "section__lede"
+  }, "Public status values are manually entered from the named source page. The source registry records why these are not yet marked programmatic."))), React.createElement("div", {
+    className: "sources-grid"
+  }, sourceCards), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Monthly fertiliser imports"), React.createElement("dd", null, "Total import value (AUD thousands) of manufactured fertilisers, fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; the four-digit SITC subdivisions (5621 nitrogenous, 5622 potassic, 5623 phosphatic, 5629 other) are not exposed via the live API, so per-nutrient monthly series remain hand-keyed from the ABS International Trade release tables."), React.createElement("dt", null, "Top-3 source countries"), React.createElement("dd", null, "Sum of import value from the three largest supplier countries in the latest month, divided by total HS-31 imports in the same month, from ABS country-of-origin detail."), React.createElement("dt", null, "Fertiliser price index"), React.createElement("dd", null, "Published by ABARES in the quarterly Agricultural Commodities report. Re-based so that the long-run average equals 100."), React.createElement("dt", null, "Months of cover"), React.createElement("dd", null, "Stockpile (tonnes) divided by the prior 12-month average monthly usage, expressed in months. Only published when DCCEEW or ABARES makes stockpile figures public.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "Rules for this page"), React.createElement("dl", null, React.createElement("dt", null, "MSO"), React.createElement("dd", null, "Minimum Stockholding Obligation. The PM&C page reports product-specific days and reserve volumes; this page does not convert them into a single resilience score."), React.createElement("dt", null, "Ships on water"), React.createElement("dd", null, "Aggregate tanker counts and equivalent days as published. No vessel tracking, port-call prediction or private logistics data is inferred."), React.createElement("dt", null, "Retail stock-outs"), React.createElement("dd", null, "State and territory counts copied from the PM&C table. Missing national petrol total remains blank because the source table does not publish it.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

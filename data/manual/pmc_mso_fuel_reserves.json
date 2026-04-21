@@ -1,0 +1,33 @@
+{
+  "series_id": "pmc_mso_fuel_reserves",
+  "source_id": "pmc_mso_fuel_reserves",
+  "source_name": "PM&C public fuel supply - MSO fuel reserves",
+  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "unit": "ML",
+  "retrieved_at": "2026-04-21T15:37:26Z",
+  "last_data_point": "2026-04-14",
+  "values": [
+    {
+      "t": "2026-04-14",
+      "v": 5697
+    }
+  ],
+  "notes": "Hand-keyed from PM&C's 'Fuel reserves (ML) held under the minimum stockholding obligation' table. Display value is petrol, diesel and jet fuel reserve volume summed from the published table.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+  "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO reserves table.",
+  "extra": {
+    "schema": "pmc_mso_fuel_reserves.v1",
+    "fields": {
+      "as_at": "2026-04-14",
+      "petrol_ml": 1977,
+      "diesel_ml": 2886,
+      "jet_fuel_ml": 834,
+      "december_quarter_2025_petrol_average_ml": 1631,
+      "december_quarter_2025_diesel_average_ml": 2905,
+      "december_quarter_2025_jet_fuel_average_ml": 790,
+      "includes": "Stocks in Australia and on water in Australia's exclusive economic zone, as stated by PM&C."
+    }
+  }
+}

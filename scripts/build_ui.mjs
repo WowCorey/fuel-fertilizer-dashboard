@@ -18,6 +18,7 @@ const sharedFiles = [
 ];
 
 const dashboards = [
+  'national-status-dashboard',
   'fuel-dashboard',
   'fertilizer-dashboard',
   'oil-and-production',
