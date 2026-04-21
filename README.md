@@ -186,9 +186,12 @@ refresh; broken programmatic fetch URLs should fail loudly.
 2. If `fetch: programmatic`, register a fetcher in `FETCHERS` inside
    `scripts/fetch_data.py` that returns `{unit, values, last_data_point, notes}`.
 3. If `fetch: manual`, run `python3 scripts/init_manual_stubs.py` to create
-   the placeholder, then use `python3 scripts/enter_manual.py --source <id>
-   --point YYYY-MM=123.4 --unit <unit> --notes "Checked table/page"` after
-   verifying the named publisher document.
+   the placeholder, then use `python3 scripts/enter_manual.py` after verifying
+   the named publisher document. Time-series values use `--point
+   YYYY-MM=123.4 --unit <unit>`. Scalar records, such as company tax table
+   fields, use typed `extra.fields`, for example `--field
+   fiscal_year=2023-24 --field total_income=1234 --last-data-point
+   2024-06-30`.
 4. When manual values are verified, set `status` to `"ok"`, set `retrieved_at`
    to the data-entry timestamp, set `last_data_point`, and keep
    `manual_entry: true`.
