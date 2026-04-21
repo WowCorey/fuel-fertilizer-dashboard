@@ -59,6 +59,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
 }
 .source-card h4 { font-family: var(--font-serif); font-size: var(--fs-20); font-weight: 500; }
 .source-card a { font-size: var(--fs-13); font-family: var(--font-mono); }
+.pending-list { margin-top: var(--s-5); }
 .methodology { border-top: 1px solid var(--rule); padding-top: var(--s-6); }
 .methodology h3 { margin-bottom: var(--s-4); }
 .methodology dl { display: grid; grid-template-columns: 220px 1fr; gap: var(--s-3) var(--s-5); margin: 0; }

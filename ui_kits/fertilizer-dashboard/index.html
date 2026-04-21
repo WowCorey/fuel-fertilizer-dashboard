@@ -28,13 +28,6 @@
 <script type="text/babel">
 const SERIES = [
   'abs_fertiliser_imports',
-  'abs_fertiliser_imports_urea',
-  'abs_fertiliser_imports_potash',
-  'abs_fertiliser_imports_phosphate',
-  'abs_fertiliser_imports_compound',
-  'abs_fertiliser_source_concentration',
-  'abares_fertiliser_price',
-  'abares_fertiliser_stock_cover',
 ];
 
 function App() {
@@ -130,28 +123,34 @@ function App() {
               unit=" AUD thousands"
               highlight
             />
-            <MetricCard
+            {false && <MetricCard
               eyebrow="Price"
               label="Fertiliser price index"
               plain="ABARES index. 100 = long-run average."
               fromEnvelope={data.abares_fertiliser_price}
               unit=" index"
-            />
-            <MetricCard
+            />}
+            {false && <MetricCard
               eyebrow="Concentration"
               label="Top-3 source countries"
               plain="Share of total fertiliser imports coming from the three largest supplier countries."
               fromEnvelope={data.abs_fertiliser_source_concentration}
               unit="%"
-            />
-            <MetricCard
+            />}
+            {false && <MetricCard
               eyebrow="Resilience"
               label="Months of cover"
               jargonHint={{ term: 'Months of cover', definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.' }}
               plain="How long Australia's fertiliser stockpile would last if imports stopped."
               fromEnvelope={data.abares_fertiliser_stock_cover}
               unit=" months"
-            />
+            />}
+          </div>
+          <div className="pending-list" aria-label="Pending fertiliser source coverage">
+            <article className="source-card">
+              <h4>Pending source coverage</h4>
+              <p className="body-sm">Nutrient subseries, ABARES price index, supplier concentration and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.</p>
+            </article>
           </div>
         </section>
 
@@ -178,6 +177,7 @@ function App() {
               yAxisLabel="Import value (AUD thousands per month)"
             />
           </div>
+          {false && <>
           <div style={{ height: 24 }}/>
           <div className="charts-grid">
             <ChartCard
@@ -258,6 +258,7 @@ function App() {
               yAxisLabel="Index (long-run average = 100)"
             />
           </div>
+          </>}
         </section>
 
         {/* WHAT CHANGED */}

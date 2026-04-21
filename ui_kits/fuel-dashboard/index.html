@@ -141,16 +141,16 @@ function App() {
             />
             <MetricCard
               eyebrow="Pump"
-              label="National Fuel Price"
-              plain="A national average across petrol, diesel and premium grades."
-              fromEnvelope={data.aip_retail}
-              unit="/L"
-            />
-            <MetricCard
-              eyebrow="Pump"
-              label="Retail pump price — multi-state average"
+              label="Retail pump price - multi-state average"
               plain={retailPlain}
               fromEnvelope={data.aus_retail_fuel_multistate}
+              unit=" c/L"
+            />
+            <MetricCard
+              eyebrow="Wholesale"
+              label="Terminal gate price"
+              plain="AIP national average unleaded petrol terminal gate price."
+              fromEnvelope={data.aip_tgp}
               unit=" c/L"
             />
             <MetricCard
@@ -190,15 +190,15 @@ function App() {
               yAxisLabel="Import value (AUD thousands per month)"
             />
             <ChartCard
-              eyebrow="Pump"
-              title="National fuel price"
-              unit="/L"
-              fromEnvelope={data.aip_retail}
+              eyebrow="Wholesale"
+              title="Terminal gate price"
+              unit="cents per litre"
+              fromEnvelope={data.aip_tgp}
               ranges={['1Y','3Y']}
               defaultRange="3Y"
               accent="#0F766E"
-              takeaway="Four-week rolling average across petrol and diesel from AIP. Chart populates when verified."
-              yAxisLabel="Australian dollars per litre (A$/L)"
+              takeaway="Monthly mean of AIP daily national average unleaded petrol terminal gate prices."
+              yAxisLabel="Cents per litre (c/L)"
             />
           </div>
 
@@ -264,10 +264,12 @@ function App() {
             <dl>
               <dt>Days of Net Import Cover</dt>
               <dd>Total petroleum stocks (on land and in transit) divided by the prior 12-month average of net imports, expressed in days. Follows the IEA methodology used by DCCEEW.</dd>
-              <dt>National Fuel Price</dt>
-              <dd>A volume-weighted average across petrol (ULP 91, 95, 98) and diesel, using AIP's four-week rolling retail series. Weights reflect national sales mix.</dd>
+              <dt>Retail pump price - multi-state average</dt>
+              <dd>Daily ULP 91 average across the public state feeds that returned usable observations, weighted by station count.</dd>
+              <dt>Terminal gate price</dt>
+              <dd>Monthly mean of AIP daily national average unleaded petrol terminal gate prices from the historical TGP workbook.</dd>
               <dt>Monthly Imports (year-on-year)</dt>
-              <dd>Percent change in total refined petroleum import volume vs. the same calendar month one year earlier, from ABS International Merchandise Trade.</dd>
+              <dd>Percent change in petroleum import value vs. the same calendar month one year earlier, derived from ABS International Merchandise Trade.</dd>
             </dl>
           </div>
         </section>
