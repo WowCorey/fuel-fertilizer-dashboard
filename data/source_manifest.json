@@ -856,14 +856,14 @@
       "id": "resource_domestic_gas_prices_accc",
       "human_name": "ACCC Gas Inquiry - domestic gas prices",
       "publisher": "Australian Competition and Consumer Commission",
-      "fetch": "unavailable",
+      "fetch": "manual",
       "update_cadence": "quarterly",
       "used_by": [
         "resource_value"
       ],
-      "canonical_url": "https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30",
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report",
       "rights": "Commonwealth copyright; ACCC copyright terms apply",
-      "citation": "Australian Competition and Consumer Commission, Gas Inquiry 2017-30 reports.",
+      "citation": "Australian Competition and Consumer Commission, Gas Inquiry March 2026 interim report, Chart 2.1.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -916,6 +916,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "resource_lng_netback_accc": {
+      "id": "resource_lng_netback_accc",
+      "human_name": "ACCC LNG netback price series",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30/lng-netback-price-series",
+      "rights": "Commonwealth copyright; ACCC copyright terms and third-party data disclaimers apply",
+      "citation": "Australian Competition and Consumer Commission, LNG netback price series, 16 April 2026 update.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "resource_norway_petroleum_tax_model": {
       "id": "resource_norway_petroleum_tax_model",
       "human_name": "Norwegian petroleum tax system",
@@ -964,6 +980,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "resource_oil_origin_aecr": {
+      "id": "resource_oil_origin_aecr",
+      "human_name": "Geoscience Australia AECR - oil production and exports",
+      "publisher": "Geoscience Australia",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.ga.gov.au/aecr2025/oil",
+      "rights": "Commonwealth copyright; Geoscience Australia copyright terms apply",
+      "citation": "Geoscience Australia, Australia's Energy Commodity Resources 2025: Oil.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "resource_prrt_policy": {
       "id": "resource_prrt_policy",
       "human_name": "ATO Petroleum Resource Rent Tax policy",
@@ -980,18 +1012,34 @@
       "has_generated": false,
       "has_manual": true
     },
+    "resource_resource_rent_tax_receipts_budget": {
+      "id": "resource_resource_rent_tax_receipts_budget",
+      "human_name": "Australian Government Budget - resource rent tax receipts",
+      "publisher": "Australian Government Budget",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://budget.gov.au/content/bp1/",
+      "rights": "Commonwealth copyright; Budget website terms apply",
+      "citation": "Australian Government, Budget Paper No. 1, Statement 4, Online Table 1, Australian Government cash receipts.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "resource_state_production_aes": {
       "id": "resource_state_production_aes",
       "human_name": "Australian Energy Statistics - production by state",
       "publisher": "Department of Climate Change, Energy, the Environment and Water",
-      "fetch": "unavailable",
+      "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
         "resource_value"
       ],
       "canonical_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
-      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics.",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics 2025, Tables I and Q.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1024,6 +1072,22 @@
       "canonical_url": "https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties",
       "rights": "Government of Western Australia copyright and website terms",
       "citation": "Government of Western Australia, Petroleum royalties.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_wa_petroleum_royalty_receipts": {
+      "id": "resource_wa_petroleum_royalty_receipts",
+      "human_name": "WA petroleum royalty and North West Shelf grant receipts",
+      "publisher": "Government of Western Australia, Department of Treasury and Finance",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
+      "rights": "Government of Western Australia copyright and website terms",
+      "citation": "Government of Western Australia, Overview of State Taxes and Royalties 2025-26, summary tables.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

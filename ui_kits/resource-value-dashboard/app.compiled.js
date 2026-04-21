@@ -591,7 +591,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['resource_company_tax_rate', 'resource_prrt_policy', 'resource_wa_petroleum_royalties', 'resource_lng_export_value_req', 'resource_oil_export_value_req', 'resource_lng_export_destinations_req', 'resource_gas_origin_aecr', 'resource_domestic_gas_prices_accc', 'resource_state_production_aes', 'resource_norway_petroleum_tax_model', 'resource_norway_state_revenue_model', 'resource_value_leakage_model'];
+const SERIES = ['resource_company_tax_rate', 'resource_prrt_policy', 'resource_resource_rent_tax_receipts_budget', 'resource_wa_petroleum_royalties', 'resource_wa_petroleum_royalty_receipts', 'resource_lng_export_value_req', 'resource_oil_export_value_req', 'resource_lng_export_destinations_req', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_domestic_gas_prices_accc', 'resource_lng_netback_accc', 'resource_state_production_aes', 'resource_norway_petroleum_tax_model', 'resource_norway_state_revenue_model', 'resource_value_leakage_model'];
 function latestValue(env) {
   if (!env || env.status !== 'ok' || !env.values?.length) return null;
   return env.values.at(-1).v;
@@ -611,42 +611,73 @@ function oneDecimal(value) {
     maximumFractionDigits: 1
   });
 }
+function withUnit(value, unit) {
+  if (value == null) return 'na';
+  return `${oneDecimal(value)} ${unit}`;
+}
+function audBillionsFromBillion(valueB) {
+  if (valueB == null) return '-';
+  return 'A$' + Number(valueB).toLocaleString('en-AU', {
+    maximumFractionDigits: 1
+  }) + 'b';
+}
+function price(value) {
+  if (value == null) return '-';
+  return '$' + Number(value).toLocaleString('en-AU', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + '/GJ';
+}
 function ScenarioCard({
   lngEnv,
-  oilEnv
+  oilEnv,
+  rentTaxEnv,
+  royaltyReceiptEnv
 }) {
   const lng = latestValue(lngEnv);
   const oil = latestValue(oilEnv);
-  const canCompute = lng != null && oil != null;
-  const value = canCompute ? (lng + oil) * 0.25 : null;
+  const rentTax = latestValue(rentTaxEnv);
+  const royaltyReceipt = latestValue(royaltyReceiptEnv);
+  const canCompute = lng != null && oil != null && rentTax != null && royaltyReceipt != null;
+  const exportBase = lng != null && oil != null ? lng + oil : null;
+  const scenario = exportBase != null ? exportBase * 0.25 : null;
+  const loadedReceiptContext = rentTax != null && royaltyReceipt != null ? rentTax + royaltyReceipt : null;
+  const difference = scenario != null && loadedReceiptContext != null ? scenario - loadedReceiptContext : null;
   return React.createElement("article", {
     className: `metric-card ${canCompute ? '' : 'metric-card--unavailable'}`
   }, React.createElement("div", {
     className: "card-status-row"
   }, React.createElement("span", {
     className: "eyebrow"
-  }, "Scenario only"), React.createElement("span", {
+  }, "Calculator"), React.createElement("span", {
     className: "status-pill status-pill--derived"
   }, "Method")), React.createElement("h3", {
     className: "metric-card__label"
-  }, "25% gross export-value scenario"), React.createElement("p", {
+  }, "25% gross export-value calculator"), React.createElement("p", {
     className: "metric-card__plain"
-  }, "Hypothetical 25% levy on the currently loaded LNG plus oil export earnings. This is not current law and not a PRRT estimate."), canCompute ? React.createElement("div", {
+  }, "Hypothetical 25% levy on loaded LNG plus oil export earnings, with loaded receipt context shown separately."), canCompute ? React.createElement("div", null, React.createElement("div", {
     className: "metric-card__row"
   }, React.createElement("span", {
     className: "metric-numeral"
-  }, oneDecimal(value / 1000)), React.createElement("span", {
+  }, oneDecimal(scenario / 1000)), React.createElement("span", {
     className: "metric-unit"
-  }, "A$b")) : React.createElement("div", {
+  }, "A$b")), React.createElement("div", {
+    className: "data-table-wrap",
+    style: {
+      marginTop: 16
+    }
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Loaded export base"), React.createElement("td", null, audBillions(exportBase))), React.createElement("tr", null, React.createElement("td", null, "25% gross scenario"), React.createElement("td", null, audBillions(scenario))), React.createElement("tr", null, React.createElement("td", null, "Loaded receipt context, mixed periods"), React.createElement("td", null, audBillions(loadedReceiptContext))), React.createElement("tr", null, React.createElement("td", null, "Difference before missing channels"), React.createElement("td", null, audBillions(difference))))))) : React.createElement("div", {
     className: "metric-card__unavail"
   }, React.createElement(Icon, {
     name: "alert",
     size: 18
-  }), React.createElement("span", null, "Scenario hidden until both LNG and oil export-value envelopes are verified.")), React.createElement("footer", {
+  }), React.createElement("span", null, "Calculator hidden until export-value and receipt-context envelopes are verified.")), React.createElement("footer", {
     className: "metric-card__foot"
   }, React.createElement("span", {
     className: "metric-card__source"
-  }, "Method: (LNG export value + oil export value) x 25%.")));
+  }, "Not a leakage estimate. Loaded receipt context is not period-aligned and excludes company tax, other royalty systems, timing effects, deductions, project boundaries and denominator choice.")));
 }
 function SourceSummary({
   id,
@@ -676,7 +707,7 @@ function SourceSummary({
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-'));
 }
 function PhaseTable() {
-  const rows = [['Phase 1', 'Tax, royalty and PRRT explainer', 'Added here with official source envelopes.'], ['Phase 2', 'Production and export-flow maps/tables', 'Started with national gas origin and LNG destination envelopes; full state/basin flow map still pending.'], ['Phase 3', 'Domestic vs export price comparison', 'Source registered; no comparison published until the exact ACCC price measure and export benchmark are selected.'], ['Phase 4', '25% export-tax scenario calculator', 'Method card added as a transparent scenario, using loaded export-value envelopes only.'], ['Phase 5', 'Norway comparison and value retained/leaked', 'Norway comparison sources added; leakage estimate remains unavailable until Australian receipt inputs and method exist.']];
+  const rows = [['Phase 1', 'Tax, royalty and PRRT explainer', 'Policy rates plus Budget resource-rent tax receipts and WA petroleum/NWS receipt context are loaded.'], ['Phase 2', 'Production and export-flow maps/tables', 'Gas and oil national/basin context, AES state production and LNG destination values are loaded.'], ['Phase 3', 'Domestic vs export price comparison', 'ACCC domestic contract prices and LNG netback benchmark are shown with a non-equivalence caveat.'], ['Phase 4', '25% export-tax scenario calculator', 'Expanded to show loaded export base, gross scenario, loaded receipt context and missing-channel caveat.'], ['Phase 5', 'Norway comparison and value retained/leaked', 'Norway comparison sources are shown; value leaked remains unavailable until the method and denominator are defensible.']];
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
@@ -704,9 +735,31 @@ function App() {
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const royaltyFields = fields(data.resource_wa_petroleum_royalties);
+  const rentTaxFields = fields(data.resource_resource_rent_tax_receipts_budget);
+  const royaltyReceiptFields = fields(data.resource_wa_petroleum_royalty_receipts);
   const gasFields = fields(data.resource_gas_origin_aecr);
+  const oilFields = fields(data.resource_oil_origin_aecr);
+  const stateFields = fields(data.resource_state_production_aes);
+  const domesticGasFields = fields(data.resource_domestic_gas_prices_accc);
+  const lngNetbackFields = fields(data.resource_lng_netback_accc);
   const norwayRevenue = fields(data.resource_norway_state_revenue_model);
   const destinations = fields(data.resource_lng_export_destinations_req).destinations || [];
+  const gasBasinRows = gasFields.basin_rows || [];
+  const gasFlowRows = gasFields.flow_rows || [];
+  const stateProductionRows = stateFields.state_rows || [];
+  const oilFlowRows = [['AECR oil production', `${oneDecimal(oilFields.production_crude_condensate_lpg_pj)} PJ`, '2023 calendar-year headline; AECR notes LPG undercount on the North West Shelf.'], ['AECR oil exports', `${oneDecimal(oilFields.exports_crude_refinery_feedstocks_lpg_pj)} PJ`, 'Crude oil, refinery feedstocks and LPG exports in 2023.'], ['AECR oil export earnings', audBillionsFromBillion(oilFields.export_value_aud_billion), 'Crude oil, refinery feedstocks and LPG exports in 2023.'], ['AES crude/condensate/LPG production', `${oneDecimal(oilFields.aes_crude_condensate_lpg_production_pj)} PJ`, `${oilFields.aes_period} Australian Energy Statistics context.`], ['AES crude/condensate/LPG exports', `${oneDecimal(oilFields.aes_crude_condensate_lpg_exports_pj)} PJ`, `${oilFields.aes_period}; about ${oneDecimal(oilFields.aes_exported_domestic_oil_resources_share_percent)}% of domestically produced oil resources exported.`], ['Refined products and LPG imports', `${oneDecimal(oilFields.aes_refined_products_and_lpg_imports_pj)} PJ`, `${oilFields.aes_period}; Australia imports most refined petroleum product demand.`]];
+  const oilBasinRows = [...(oilFields.crude_basin_rows || []).map(row => ({
+    product: 'Crude oil',
+    ...row
+  })), ...(oilFields.condensate_basin_rows || []).map(row => ({
+    product: 'Condensate',
+    ...row
+  }))];
+  const domesticRows = domesticGasFields.rows || [];
+  const netbackRows = lngNetbackFields.annual_forward_short_term || [];
+  const domesticProducer = latestValue(data.resource_domestic_gas_prices_accc);
+  const netbackAverage = latestValue(data.resource_lng_netback_accc);
+  const netbackGap = domesticProducer != null && netbackAverage != null ? netbackAverage - domesticProducer : null;
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
@@ -725,7 +778,7 @@ function App() {
     }
   }, "Who captures Australian oil and gas value?"), React.createElement("p", {
     className: "intro__lede"
-  }, "This page separates the resource-value question from the company-tax dashboard. It shows official policy rates, export-value context and comparison sources without turning them into a leakage claim until the receipts and methodology are verified.")), React.createElement("aside", {
+  }, "This page separates the resource-value question from the company-tax dashboard. It shows official policy rates, receipt context, export-value context and comparison sources without turning them into a leakage claim before the denominator and method are defensible.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -748,7 +801,7 @@ function App() {
     }
   }, "What this page does and does not claim")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, React.createElement("b", null, "Company tax"), ", ", React.createElement("b", null, "PRRT"), " and ", React.createElement("b", null, "royalties"), " are different capture channels. A policy rate is not the same thing as cash received by government."), React.createElement("p", null, "The 25% export-tax card is a transparent scenario using the currently loaded export value envelopes. It is not current law, not a PRRT model and not a recommendation."), React.createElement("p", null, "\"Value leaked\" stays blank until the repo has verified Australian royalty receipts, PRRT receipts, export values, company profit data and a documented denominator.")))), React.createElement("section", {
+  }, React.createElement("p", null, React.createElement("b", null, "Company tax"), ", ", React.createElement("b", null, "PRRT"), " and ", React.createElement("b", null, "royalties"), " are different capture channels. A policy rate is not the same thing as cash received by government."), React.createElement("p", null, "The 25% export-tax card is a transparent scenario using the currently loaded export value envelopes. It is not current law, not a PRRT model and not a recommendation."), React.createElement("p", null, "\"Value leaked\" stays blank until the repo has verified Australian royalty receipts, resource-rent receipts, export values, company profit data and a documented denominator.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "headline-h"
   }, React.createElement("div", {
@@ -757,7 +810,7 @@ function App() {
     className: "eyebrow"
   }, "Headline figures"), React.createElement("h2", {
     id: "headline-h"
-  }, "Policy rates and export-value context"), React.createElement("p", {
+  }, "Policy rates, receipts and export-value context"), React.createElement("p", {
     className: "section__lede"
   }, "Values are copied from official sources or calculated transparently from loaded envelopes."))), React.createElement("div", {
     className: "metric-grid"
@@ -774,11 +827,25 @@ function App() {
     fromEnvelope: data.resource_prrt_policy,
     unit: "%"
   }), React.createElement(MetricCard, {
+    eyebrow: "Receipts",
+    label: "Budget resource rent taxes",
+    plain: "Commonwealth Budget receipt line; not project-level PRRT.",
+    fromEnvelope: data.resource_resource_rent_tax_receipts_budget,
+    valueFn: env => audBillions(latestValue(env)),
+    unitFn: () => ''
+  }), React.createElement(MetricCard, {
     eyebrow: "Royalty",
     label: "WA Barrow Island RRR",
     plain: "Resource Rent Royalty on net cash flow; not total Australian royalty receipts.",
     fromEnvelope: data.resource_wa_petroleum_royalties,
     unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Receipts",
+    label: "WA petroleum/NWS receipts",
+    plain: "WA petroleum state component plus North West Shelf grants.",
+    fromEnvelope: data.resource_wa_petroleum_royalty_receipts,
+    valueFn: env => audBillions(latestValue(env)),
+    unitFn: () => ''
   }), React.createElement(MetricCard, {
     eyebrow: "Exports",
     label: "LNG export earnings",
@@ -793,9 +860,25 @@ function App() {
     fromEnvelope: data.resource_oil_export_value_req,
     valueFn: env => audBillions(latestValue(env)),
     unitFn: () => ''
+  }), React.createElement(MetricCard, {
+    eyebrow: "Domestic gas",
+    label: "Producer contract price",
+    plain: "ACCC east coast 2026 supply contracts agreed Oct-Dec 2025.",
+    fromEnvelope: data.resource_domestic_gas_prices_accc,
+    valueFn: env => price(latestValue(env)),
+    unitFn: () => ''
+  }), React.createElement(MetricCard, {
+    eyebrow: "Export parity",
+    label: "LNG netback 2026 average",
+    plain: "ACCC Wallumbilla LNG netback benchmark, 16 April 2026 update.",
+    fromEnvelope: data.resource_lng_netback_accc,
+    valueFn: env => price(latestValue(env)),
+    unitFn: () => ''
   }), React.createElement(ScenarioCard, {
     lngEnv: data.resource_lng_export_value_req,
-    oilEnv: data.resource_oil_export_value_req
+    oilEnv: data.resource_oil_export_value_req,
+    rentTaxEnv: data.resource_resource_rent_tax_receipts_budget,
+    royaltyReceiptEnv: data.resource_wa_petroleum_royalty_receipts
   }), React.createElement(MetricCard, {
     eyebrow: "Norway comparison",
     label: "Marginal petroleum tax rate",
@@ -821,7 +904,7 @@ function App() {
     className: "data-table-wrap"
   }, React.createElement("table", {
     className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Channel"), React.createElement("th", null, "Basis"), React.createElement("th", null, "Current envelope"), React.createElement("th", null, "Missing before full value analysis"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Company income tax"), React.createElement("td", null, "Taxable income at the company level."), React.createElement("td", null, latestValue(data.resource_company_tax_rate), "% full company tax rate."), React.createElement("td", null, "Already separate from company-level ATO values on Who pays what.")), React.createElement("tr", null, React.createElement("td", null, "PRRT"), React.createElement("td", null, "Taxable profit of petroleum projects."), React.createElement("td", null, latestValue(data.resource_prrt_policy), "% policy rate."), React.createElement("td", null, "Official PRRT receipts by year/project scope, deductions and uplift treatment.")), React.createElement("tr", null, React.createElement("td", null, "Petroleum royalties"), React.createElement("td", null, "Field-specific royalty systems such as wellhead value or net cash flow."), React.createElement("td", null, "Barrow Island ", latestValue(data.resource_wa_petroleum_royalties), "% RRR; NWS ", royaltyFields.north_west_shelf_primary_production_licence_rate_percent, "% / ", royaltyFields.north_west_shelf_secondary_production_licence_rate_percent, "% royalty rates."), React.createElement("td", null, "Total royalty receipts and field/state coverage.")), React.createElement("tr", null, React.createElement("td", null, "Direct state ownership"), React.createElement("td", null, "Norway comparison channel through SDFI and Equinor shareholding."), React.createElement("td", null, "Norway source lists taxes, SDFI, dividends, fees and environmental taxes."), React.createElement("td", null, "Australian equivalent does not exist at the same scale; comparison needs careful framing.")))))), React.createElement("section", {
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Channel"), React.createElement("th", null, "Basis"), React.createElement("th", null, "Current envelope"), React.createElement("th", null, "Missing before full value analysis"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Company income tax"), React.createElement("td", null, "Taxable income at the company level."), React.createElement("td", null, latestValue(data.resource_company_tax_rate), "% full company tax rate."), React.createElement("td", null, "Already separate from company-level ATO values on Who pays what.")), React.createElement("tr", null, React.createElement("td", null, "PRRT"), React.createElement("td", null, "Taxable profit of petroleum projects."), React.createElement("td", null, latestValue(data.resource_prrt_policy), "% policy rate; Budget resource-rent tax receipts ", audBillions(latestValue(data.resource_resource_rent_tax_receipts_budget)), " for ", rentTaxFields.latest_actual_period, " actual."), React.createElement("td", null, "Exact project-level PRRT receipts, company/project scope, deductions and uplift treatment.")), React.createElement("tr", null, React.createElement("td", null, "Petroleum royalties"), React.createElement("td", null, "Field-specific royalty systems such as wellhead value or net cash flow."), React.createElement("td", null, "Barrow Island ", latestValue(data.resource_wa_petroleum_royalties), "% RRR; NWS ", royaltyFields.north_west_shelf_primary_production_licence_rate_percent, "% / ", royaltyFields.north_west_shelf_secondary_production_licence_rate_percent, "% royalty rates; WA petroleum/NWS receipt context ", audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts)), "."), React.createElement("td", null, "Other state/federal petroleum royalty receipts and field-level coverage.")), React.createElement("tr", null, React.createElement("td", null, "Direct state ownership"), React.createElement("td", null, "Norway comparison channel through SDFI and Equinor shareholding."), React.createElement("td", null, "Norway source lists taxes, SDFI, dividends, fees and environmental taxes."), React.createElement("td", null, "Australian equivalent does not exist at the same scale; comparison needs careful framing.")))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "flows-h"
   }, React.createElement("div", {
@@ -830,9 +913,9 @@ function App() {
     className: "eyebrow"
   }, "Production and buyers"), React.createElement("h2", {
     id: "flows-h"
-  }, "Where the gas comes from and where LNG goes"), React.createElement("p", {
+  }, "Where oil and gas come from, and where exports go"), React.createElement("p", {
     className: "section__lede"
-  }, "Phase 2 starts with national gas-origin context and the latest verified full LNG destination split."))), React.createElement("div", {
+  }, "National and basin context is loaded from AECR; buyer detail is currently limited to the latest verified full LNG destination split."))), React.createElement("div", {
     className: "sources-grid"
   }, React.createElement("article", {
     className: "source-card"
@@ -844,6 +927,14 @@ function App() {
     className: "caption mono"
   }, window.FR.sourceLine(data.resource_gas_origin_aecr))), React.createElement("article", {
     className: "source-card"
+  }, React.createElement("h4", null, "Oil origin snapshot"), React.createElement("p", {
+    className: "body-sm"
+  }, "AECR records ", oneDecimal(oilFields.production_crude_condensate_lpg_pj), " PJ of oil production in ", oilFields.year, ";", ` ${oneDecimal(oilFields.exports_crude_refinery_feedstocks_lpg_pj)} PJ of crude oil, refinery feedstocks and LPG exports.`), React.createElement("p", {
+    className: "caption"
+  }, "AECR says nearly ", oneDecimal(oilFields.north_west_shelf_production_share_percent), "% of oil production came from offshore North West Shelf fields in 2023."), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_oil_origin_aecr))), React.createElement("article", {
+    className: "source-card"
   }, React.createElement("h4", null, "Norway capture-channel comparison"), React.createElement("p", {
     className: "body-sm"
   }, "Norway's 2025 estimated petroleum net government cash flow is ", oneDecimal(norwayRevenue.net_government_cashflow_nok_billion), " NOK billion."), React.createElement("p", {
@@ -854,7 +945,65 @@ function App() {
     style: {
       height: 24
     }
-  }), React.createElement("div", {
+  }), React.createElement("h3", null, "Gas production and export flow"), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Flow"), React.createElement("th", null, "Value"), React.createElement("th", null, "Context"))), React.createElement("tbody", null, gasFlowRows.map(row => React.createElement("tr", {
+    key: `${row.flow}-${row.value_pj || row.value_mt || row.value_aud_billion}`
+  }, React.createElement("td", null, row.flow), React.createElement("td", null, row.value_pj != null ? `${oneDecimal(row.value_pj)} PJ` : row.value_mt != null ? `${oneDecimal(row.value_mt)} Mt` : audBillionsFromBillion(row.value_aud_billion)), React.createElement("td", null, gasFields.year)))))), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_gas_origin_aecr)), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("h3", null, "Gas basin/source context"), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Group"), React.createElement("th", null, "Basins"), React.createElement("th", null, "Production"), React.createElement("th", null, "Source note"))), React.createElement("tbody", null, gasBasinRows.map(row => React.createElement("tr", {
+    key: row.group
+  }, React.createElement("td", null, row.group), React.createElement("td", null, row.basins), React.createElement("td", null, oneDecimal(row.production_pj), " PJ"), React.createElement("td", null, row.share_note)))))), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("h3", null, "State and territory production"), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "Conventional gas"), React.createElement("th", null, "Coal seam gas"), React.createElement("th", null, "Crude oil and NGL"), React.createElement("th", null, "LPG"))), React.createElement("tbody", null, stateProductionRows.map(row => React.createElement("tr", {
+    key: row.state
+  }, React.createElement("td", null, row.state), React.createElement("td", null, withUnit(row.conventional_gas_pj, 'PJ')), React.createElement("td", null, withUnit(row.coal_seam_gas_pj, 'PJ')), React.createElement("td", null, withUnit(row.crude_oil_and_ngl_ml, 'ML')), React.createElement("td", null, withUnit(row.naturally_occurring_lpg_ml, 'ML'))))))), React.createElement("p", {
+    className: "caption"
+  }, "Source units are mixed by product; this table does not add oil, LPG and gas together."), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_state_production_aes)), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("h3", null, "Oil production and trade flow"), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Measure"), React.createElement("th", null, "Value"), React.createElement("th", null, "Context"))), React.createElement("tbody", null, oilFlowRows.map(row => React.createElement("tr", {
+    key: row[0]
+  }, React.createElement("td", null, row[0]), React.createElement("td", null, row[1]), React.createElement("td", null, row[2])))))), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_oil_origin_aecr)), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("h3", null, "Oil basin context"), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Product"), React.createElement("th", null, "Basin"), React.createElement("th", null, "Annual production"))), React.createElement("tbody", null, oilBasinRows.map(row => React.createElement("tr", {
+    key: `${row.product}-${row.basin}`
+  }, React.createElement("td", null, row.product), React.createElement("td", null, row.basin), React.createElement("td", null, oneDecimal(row.annual_production_pj), " PJ")))))), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("h3", null, "LNG export destinations"), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
     className: "data-table"
@@ -863,6 +1012,29 @@ function App() {
   }, React.createElement("td", null, row.destination), React.createElement("td", null, audBillions(row.value)), React.createElement("td", null, (row.value / fields(data.resource_lng_export_destinations_req).total * 100).toFixed(1), "%")))))), React.createElement("p", {
     className: "caption mono"
   }, window.FR.sourceLine(data.resource_lng_export_destinations_req))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "gas-price-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Domestic vs export price"), React.createElement("h2", {
+    id: "gas-price-h"
+  }, "ACCC gas contract prices and LNG netback"), React.createElement("p", {
+    className: "section__lede"
+  }, "This comparison is contextual only. Domestic long-term contract prices and LNG netback are related market signals, not identical products."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Measure"), React.createElement("th", null, "Period"), React.createElement("th", null, "Value"), React.createElement("th", null, "Scope"))), React.createElement("tbody", null, domesticRows.map(row => React.createElement("tr", {
+    key: `${row.segment}-${row.period}`
+  }, React.createElement("td", null, row.segment), React.createElement("td", null, row.period), React.createElement("td", null, price(row.volume_weighted_average)), React.createElement("td", null, "2026 east coast gas supply contracts; range ", price(row.min_price), " to ", price(row.max_price)))), netbackRows.map(row => React.createElement("tr", {
+    key: row.period
+  }, React.createElement("td", null, "ACCC LNG netback"), React.createElement("td", null, row.period), React.createElement("td", null, price(row.value)), React.createElement("td", null, "Wallumbilla export-parity benchmark."))), netbackGap != null && React.createElement("tr", null, React.createElement("td", null, "Simple gap"), React.createElement("td", null, "2026 producer contract VWA vs 2026 netback average"), React.createElement("td", null, price(netbackGap)), React.createElement("td", null, "Arithmetic difference only; not a margin, leakage estimate or delivered customer bill."))))), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_domestic_gas_prices_accc)), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_lng_netback_accc))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "roadmap-h"
   }, React.createElement("div", {
@@ -888,7 +1060,7 @@ function App() {
     env: env
   }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "Method rules"), React.createElement("dl", null, React.createElement("dt", null, "Tax and royalty rates"), React.createElement("dd", null, "Policy rates are shown only as rates. Cash received by government needs separate official receipts."), React.createElement("dt", null, "25% export-tax scenario"), React.createElement("dd", null, "Computed as 25% of the loaded LNG plus oil export-value envelopes. It is a gross scenario, not a profits-based tax model."), React.createElement("dt", null, "Value leakage"), React.createElement("dd", null, "Not published. It remains unavailable until the denominator, Australian receipt channels and Norway comparison are documented from source envelopes.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "Method rules"), React.createElement("dl", null, React.createElement("dt", null, "Tax and royalty rates"), React.createElement("dd", null, "Policy rates are shown separately from receipt envelopes. Loaded receipts are context only and do not yet cover every Australian capture channel."), React.createElement("dt", null, "Domestic gas versus netback"), React.createElement("dd", null, "Domestic contract prices and LNG netback are shown side by side only as market context. They are not like-for-like delivered prices."), React.createElement("dt", null, "25% export-tax scenario"), React.createElement("dd", null, "Computed as 25% of the loaded LNG plus oil export-value envelopes, then compared with loaded receipt context. It is a gross scenario, not a profits-based tax model."), React.createElement("dt", null, "Value leakage"), React.createElement("dd", null, "Not published. It remains unavailable until the denominator, Australian receipt channels, company profit scope and comparison method are documented from source envelopes.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
