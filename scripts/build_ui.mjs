@@ -26,6 +26,10 @@ const dashboards = [
   'who-pays-what',
 ];
 
+function normalizeNewlines(text) {
+  return text.replace(/\r\n/g, '\n');
+}
+
 function read(relPath) {
   return fs.readFileSync(path.join(root, relPath), 'utf8');
 }
@@ -58,7 +62,7 @@ function compileDashboard(name) {
 
   if (checkOnly) {
     const existing = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : null;
-    if (existing !== output) {
+    if (existing === null || normalizeNewlines(existing) !== normalizeNewlines(output)) {
       throw new Error(`${path.relative(root, outputPath)} is missing or stale. Run npm run build:ui.`);
     }
     return;
