@@ -605,6 +605,54 @@
       "has_generated": false,
       "has_manual": true
     },
+    "aus_oil_gas_export_destinations": {
+      "id": "aus_oil_gas_export_destinations",
+      "human_name": "Australian oil and gas export destinations",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+      "rights": "Commonwealth of Australia (CC BY 4.0 where stated by publisher)",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au), LNG and crude oil export chapters.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aus_oil_gas_export_value": {
+      "id": "aus_oil_gas_export_value",
+      "human_name": "Australian oil and gas export value (RE-Q)",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+      "rights": "Commonwealth of Australia (CC BY 4.0 where stated by publisher)",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au), LNG and crude oil export value tables.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aus_prrt_revenue": {
+      "id": "aus_prrt_revenue",
+      "human_name": "Commonwealth PRRT receipts (Final Budget Outcome)",
+      "publisher": "Australian Government (Treasury and Department of Finance)",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://budget.gov.au/",
+      "rights": "Commonwealth of Australia (CC BY 4.0 where stated by publisher)",
+      "citation": "Australian Government, Final Budget Outcome, Appendix A — Australian Government receipts (budget.gov.au).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "aus_retail_fuel_multistate": {
       "id": "aus_retail_fuel_multistate",
       "human_name": "Retail pump price - ULP 91 multi-state average",
@@ -672,6 +720,38 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "aus_royalty_revenue": {
+      "id": "aus_royalty_revenue",
+      "human_name": "State and Commonwealth petroleum royalties (aggregate)",
+      "publisher": "State treasuries and Commonwealth (WA, QLD, NT, SA, North West Shelf)",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://budget.gov.au/",
+      "rights": "Crown copyright (each state) / Commonwealth of Australia",
+      "citation": "Aggregated from WA DMIRS, QLD Treasury, NT Treasury, SA Department for Energy and Mining, and Commonwealth Final Budget Outcome for the North West Shelf royalty share.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aus_state_production": {
+      "id": "aus_state_production",
+      "human_name": "Australian oil and gas production by state/jurisdiction",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+      "rights": "Commonwealth of Australia (CC BY 4.0 where stated by publisher)",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au); Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "company_ampol": {
       "id": "company_ampol",
@@ -1006,6 +1086,22 @@
       "canonical_url": "https://www.iea.org/reports/oil-stockholding",
       "rights": "IEA terms of use",
       "citation": "International Energy Agency, Agreement on an International Energy Program (1974), 90-day stockholding obligation.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "norway_benchmark": {
+      "id": "norway_benchmark",
+      "human_name": "Norway petroleum fiscal framework (benchmark)",
+      "publisher": "Norwegian Petroleum Directorate / Ministry of Petroleum and Energy",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+      "rights": "Norwegian Petroleum Directorate / Ministry of Petroleum and Energy terms of use",
+      "citation": "Norwegian Petroleum Directorate and Ministry of Petroleum and Energy, 'The government's revenues' and 'Norway's petroleum tax system' (norskpetroleum.no).",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

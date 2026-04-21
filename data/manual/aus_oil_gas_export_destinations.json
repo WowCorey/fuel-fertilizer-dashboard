@@ -1,0 +1,47 @@
+{
+  "series_id": "aus_oil_gas_export_destinations",
+  "source_id": "aus_oil_gas_export_destinations",
+  "source_name": "Australian oil and gas export destinations",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+  "unit": "",
+  "retrieved_at": "2026-04-21T07:40:00+00:00",
+  "last_data_point": "2023-06-30",
+  "values": [],
+  "extra": {
+    "schema": "aus_oil_gas_export_destinations.v1",
+    "fields": {
+      "as_of": "Most recent full fiscal year reported in the Resources and Energy Quarterly (RE-Q).",
+      "evidence_tier": "primary_framing_headline_only",
+      "primary_source_document": "Department of Industry, Science and Resources — Resources and Energy Quarterly. Country-level destination shares appear in the LNG and crude oil chapters.",
+      "commodities": [
+        {
+          "commodity": "LNG",
+          "headline_framing": "Australian LNG exports go almost entirely to North Asia. Japan, China and South Korea together account for the overwhelming majority of volumes in every recent fiscal year reported in the RE-Q; Taiwan is the consistent fourth buyer.",
+          "top_destinations_by_rank": [
+            {"rank": 1, "destination": "Japan", "share_pct": null},
+            {"rank": 2, "destination": "China", "share_pct": null},
+            {"rank": 3, "destination": "South Korea", "share_pct": null},
+            {"rank": 4, "destination": "Taiwan", "share_pct": null}
+          ],
+          "share_basis_note": "Numerical shares are left null in this first pass. The RE-Q reports LNG exports by volume (million tonnes) and by value (A$); picking one basis must be explicit. Do not invent combined shares."
+        },
+        {
+          "commodity": "Crude oil and condensate",
+          "headline_framing": "Australian crude and condensate is lighter than domestic refineries can economically process; the majority is exported to refineries in North Asia (principally South Korea, China, Thailand, Singapore, Japan) while Australia imports heavier crude slates and refined product.",
+          "top_destinations_by_rank": [
+            {"rank": 1, "destination": "South Korea", "share_pct": null},
+            {"rank": 2, "destination": "China", "share_pct": null},
+            {"rank": 3, "destination": "Thailand", "share_pct": null},
+            {"rank": 4, "destination": "Singapore", "share_pct": null}
+          ],
+          "share_basis_note": "As above — RE-Q presents separate volume and value tables; pick an explicit basis before keying shares."
+        }
+      ],
+      "what_this_does_not_show": "Australia also imports finished refined product (petrol, diesel, jet) from Singapore, South Korea and other Asian refineries. That import flow is covered on the Fuel page via abs_petroleum_imports and is not duplicated here."
+    }
+  },
+  "notes": "Top LNG destinations are consistently Japan, China, South Korea and Taiwan; top crude and condensate destinations are typically South Korea, China, Thailand and Singapore. Numerical share percentages are deliberately left null until an explicit volume-or-value basis can be keyed from the most recent Resources and Energy Quarterly.",
+  "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au), LNG and crude oil export chapters.",
+  "status": "ok",
+  "manual_entry": true
+}

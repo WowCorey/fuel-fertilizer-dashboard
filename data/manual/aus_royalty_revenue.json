@@ -1,0 +1,14 @@
+{
+  "series_id": "aus_royalty_revenue",
+  "source_id": "aus_royalty_revenue",
+  "source_name": "State and Commonwealth petroleum royalties (aggregate)",
+  "source_url": "https://budget.gov.au/",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-21T07:40:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Aggregated petroleum royalty receipts are not published as a single line item; they are split across WA (Department of Mines, Industry Regulation and Safety), QLD (QLD Treasury / Resources), NT (NT Treasury), SA (Department for Energy and Mining) and Commonwealth onshore royalty arrangements (North West Shelf shared with WA). No single CSV or XLSX aggregates these series. Hand-keying requires pulling each state's published royalty receipts from annual state budget papers and adding them with explicit accounting. Leave unavailable until a documented reconciliation is available. Do not add state royalty totals to PRRT without clear labelling.",
+  "status": "unavailable",
+  "manual_entry": true
+}

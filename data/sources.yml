@@ -1638,3 +1638,97 @@ sources:
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: manual
     used_by: [who_pays_what]
+
+  # =========================================================
+  # v1.5 Who-pays-what — economic / fiscal context
+  # =========================================================
+
+  - id: norway_benchmark
+    human_name: Norway petroleum fiscal framework (benchmark)
+    publisher: Norwegian Petroleum Directorate / Ministry of Petroleum and Energy
+    url: https://www.norskpetroleum.no/en/economy/governments-revenues/
+    canonical_url: https://www.norskpetroleum.no/en/economy/governments-revenues/
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-21
+    rights: Norwegian Petroleum Directorate / Ministry of Petroleum and Energy terms of use
+    rights_url: https://www.norskpetroleum.no/en/
+    citation: Norwegian Petroleum Directorate and Ministry of Petroleum and Energy, 'The government's revenues' and 'Norway's petroleum tax system' (norskpetroleum.no).
+    reuse_notes: Benchmark framing only. Norway's 22% corporate income tax plus 71.8% special petroleum tax (combined marginal rate 78%), SDFI participation and Government Pension Fund Global are hand-keyed from the NPD/MPE summary pages. Present as a benchmark comparison, not a claim of structural equivalence with the Australian PRRT-plus-state-royalty regime.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: aus_prrt_revenue
+    human_name: Commonwealth PRRT receipts (Final Budget Outcome)
+    publisher: Australian Government (Treasury and Department of Finance)
+    url: https://budget.gov.au/
+    canonical_url: https://budget.gov.au/
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-21
+    rights: Commonwealth of Australia (CC BY 4.0 where stated by publisher)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Government, Final Budget Outcome, Appendix A — Australian Government receipts (budget.gov.au).
+    reuse_notes: Hand-key from the Final Budget Outcome Appendix A receipts table or Budget Paper No. 1. Refresh each year when the Final Budget Outcome is published, and update prior-year actuals where restated. Do not aggregate with state royalty receipts under a single label.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: aus_royalty_revenue
+    human_name: State and Commonwealth petroleum royalties (aggregate)
+    publisher: State treasuries and Commonwealth (WA, QLD, NT, SA, North West Shelf)
+    url: https://budget.gov.au/
+    canonical_url: https://budget.gov.au/
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-21
+    rights: Crown copyright (each state) / Commonwealth of Australia
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Aggregated from WA DMIRS, QLD Treasury, NT Treasury, SA Department for Energy and Mining, and Commonwealth Final Budget Outcome for the North West Shelf royalty share.
+    reuse_notes: No single published aggregate exists. Populating this series requires pulling each state's petroleum royalty receipts from their own budget papers and adding them with an explicit accounting note. Leave unavailable unless a reconciled total can be documented source-by-source.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: aus_state_production
+    human_name: Australian oil and gas production by state/jurisdiction
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-21
+    rights: Commonwealth of Australia (CC BY 4.0 where stated by publisher)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au); Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.
+    reuse_notes: Hand-key the state-by-state framing (commodity profile, royalty regime, export orientation) from the RE-Q's LNG, gas and oil chapters. Numerical state-share percentages must cite an explicit commodity basis (petajoule production, LNG tonnes, or A$ value) before being published.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: aus_oil_gas_export_destinations
+    human_name: Australian oil and gas export destinations
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-21
+    rights: Commonwealth of Australia (CC BY 4.0 where stated by publisher)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au), LNG and crude oil export chapters.
+    reuse_notes: Hand-key top-N destination framing from the RE-Q. Share percentages require an explicit volume-or-value basis and must not be fabricated. Do not present destination data as ABS-reconciled trade statistics without cross-checking the MERCH_EXP dataflow.
+    fetch: manual
+    used_by: [who_pays_what]
+
+  - id: aus_oil_gas_export_value
+    human_name: Australian oil and gas export value (RE-Q)
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-21
+    rights: Commonwealth of Australia (CC BY 4.0 where stated by publisher)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au), LNG and crude oil export value tables.
+    reuse_notes: Hand-key the combined LNG + crude oil export value per fiscal year from the RE-Q. Refresh quarterly; note the exact RE-Q edition used. Used as the denominator in the modelled 25% export-tax scenario on the Who-pays-what page; the 25% figure is scenario-only and must never be presented as current law.
+    fetch: manual
+    used_by: [who_pays_what]

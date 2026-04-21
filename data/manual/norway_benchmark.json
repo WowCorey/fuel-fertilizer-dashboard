@@ -1,0 +1,28 @@
+{
+  "series_id": "norway_benchmark",
+  "source_id": "norway_benchmark",
+  "source_name": "Norway petroleum fiscal framework (benchmark)",
+  "source_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+  "unit": "% marginal rate on offshore petroleum profit",
+  "retrieved_at": "2026-04-21T07:40:00+00:00",
+  "last_data_point": "2024-12-31",
+  "values": [
+    {"t": "2024-12-31", "v": 78}
+  ],
+  "extra": {
+    "schema": "norway_fiscal_regime.v1",
+    "fields": {
+      "corporate_tax_rate_pct": 22,
+      "special_petroleum_tax_rate_pct": 71.8,
+      "marginal_combined_rate_pct": 78,
+      "state_participation": "SDFI (State's Direct Financial Interest) — the Norwegian state holds direct equity stakes in petroleum licences and infrastructure, separately from Equinor which is majority state-owned.",
+      "sovereign_wealth_fund": "Government Pension Fund Global (GPFG) — petroleum revenues net of state spending are transferred to the fund; the fiscal rule caps annual withdrawals at the fund's expected real return.",
+      "evidence_tier": "primary",
+      "benchmark_only_caveat": "This is a benchmark, not a claim of structural equivalence. Norway is a smaller economy with concentrated offshore production under a single national fiscal regime; Australia has a federal PRRT on a subset of projects plus separate state royalty regimes on onshore and state-waters production."
+    }
+  },
+  "notes": "Norway applies a 22% ordinary corporate income tax plus a 71.8% special petroleum tax to offshore petroleum profits, giving a combined marginal rate of 78%. State participation operates through the SDFI and majority state ownership of Equinor. Petroleum revenues flow to the Government Pension Fund Global under the fiscal rule. Primary source: Norwegian Petroleum Directorate / Ministry of Petroleum and Energy at norskpetroleum.no.",
+  "citation": "Norwegian Petroleum Directorate and Ministry of Petroleum and Energy, 'The government's revenues' and 'Norway's petroleum tax system', norskpetroleum.no, retrieved 21 April 2026.",
+  "status": "ok",
+  "manual_entry": true
+}

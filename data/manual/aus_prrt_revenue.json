@@ -1,0 +1,31 @@
+{
+  "series_id": "aus_prrt_revenue",
+  "source_id": "aus_prrt_revenue",
+  "source_name": "Commonwealth PRRT receipts (Final Budget Outcome)",
+  "source_url": "https://budget.gov.au/",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-21T07:40:00+00:00",
+  "last_data_point": "2023-06-30",
+  "values": [
+    {"t": "2021-06-30", "v": 921},
+    {"t": "2022-06-30", "v": 1838},
+    {"t": "2023-06-30", "v": 2317}
+  ],
+  "extra": {
+    "schema": "aus_prrt_receipts.v1",
+    "fields": {
+      "series_basis": "Commonwealth PRRT cash receipts, financial year ending 30 June.",
+      "fy_2020_21_am": 921,
+      "fy_2021_22_am": 1838,
+      "fy_2022_23_am": 2317,
+      "evidence_tier": "primary",
+      "primary_source_document": "Australian Government Final Budget Outcome 2022-23, Appendix A — Australian Government receipts. Cross-check against Budget Paper No. 1 receipts statement for the most recent Budget.",
+      "value_precision_caveat": "Values are rounded to A$m as published in the Final Budget Outcome. Later Budget papers may restate prior-year outcomes; when a restatement is published, update the series and bump retrieved_at.",
+      "what_prrt_does_not_cover": "PRRT applies to petroleum projects, principally offshore, after deductible expenditure and uplift. It does not cover state-regulated royalty receipts (WA, QLD, NT, SA, VIC), which flow to state treasuries under separate regimes. Do not add PRRT and state royalties without clear labelling."
+    }
+  },
+  "notes": "Headline figures for recent years: FY2020-21 A$921m, FY2021-22 A$1,838m, FY2022-23 A$2,317m. Source: Australian Government Final Budget Outcome (Appendix A — Commonwealth receipts). The most recent figure should be refreshed against the latest Final Budget Outcome; an estimated actual for the current fiscal year appears first in Budget Paper No. 1 and is revised at the Final Budget Outcome.",
+  "citation": "Australian Government, Final Budget Outcome 2022-23, Appendix A — Australian Government receipts (budget.gov.au).",
+  "status": "ok",
+  "manual_entry": true
+}

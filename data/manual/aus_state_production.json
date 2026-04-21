@@ -1,0 +1,80 @@
+{
+  "series_id": "aus_state_production",
+  "source_id": "aus_state_production",
+  "source_name": "Australian oil and gas production by state/jurisdiction",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+  "unit": "share of national production",
+  "retrieved_at": "2026-04-21T07:40:00+00:00",
+  "last_data_point": "2023-06-30",
+  "values": [],
+  "extra": {
+    "schema": "aus_state_oil_gas_production.v1",
+    "fields": {
+      "as_of": "Most recent full fiscal year reported in the Resources and Energy Quarterly (RE-Q) and DCCEEW Australian Petroleum Statistics at the time of keying.",
+      "evidence_tier": "primary",
+      "primary_source_document": "Department of Industry, Science and Resources — Resources and Energy Quarterly; DCCEEW — Australian Petroleum Statistics (APS).",
+      "states": [
+        {
+          "state": "WA",
+          "name": "Western Australia",
+          "commodity_profile": ["LNG", "natural gas", "condensate", "crude oil"],
+          "headline_framing": "Dominant share of national gas and LNG production, anchored by the North West Shelf, Pluto, Gorgon, Wheatstone and Prelude projects. Major offshore fields sit in Commonwealth waters adjacent to WA; the North West Shelf royalty is shared between the Commonwealth and WA under the 1979 Heads of Agreement.",
+          "royalty_regime": "Commonwealth/WA royalties on North West Shelf (pre-PRRT grandfathered); PRRT on later offshore projects. State royalties on onshore gas.",
+          "export_orientation": "Overwhelmingly export: majority of Karratha and Pilbara LNG flows to North Asia.",
+          "notable_projects": ["North West Shelf", "Gorgon", "Wheatstone", "Pluto", "Prelude", "Ichthys onshore-pipe to NT"],
+          "share_pct_primary": null,
+          "share_pct_note": "Key the most recent RE-Q state share here when refreshing."
+        },
+        {
+          "state": "QLD",
+          "name": "Queensland",
+          "commodity_profile": ["LNG (coal seam gas origin)", "natural gas"],
+          "headline_framing": "The only Australian LNG stream produced from coal seam gas (CSG). Three Gladstone-based trains — QCLNG, APLNG, GLNG — ship to Asia. QLD gas supplies the east-coast domestic market alongside exports.",
+          "royalty_regime": "State petroleum royalty under QLD Petroleum and Gas (Production and Safety) Act. Transitioned to a value-based royalty with tiered price bands from 2023.",
+          "export_orientation": "Mixed: LNG export plus east-coast domestic supply.",
+          "notable_projects": ["QCLNG (Shell)", "APLNG (ConocoPhillips / Origin / Sinopec)", "GLNG (Santos)"],
+          "share_pct_primary": null,
+          "share_pct_note": "Key the most recent RE-Q state share here when refreshing."
+        },
+        {
+          "state": "NT",
+          "name": "Northern Territory",
+          "commodity_profile": ["LNG", "natural gas", "condensate"],
+          "headline_framing": "Ichthys LNG (operated by INPEX) is the anchor LNG stream; gas is piped from the Browse Basin offshore WA to Darwin for processing. Beetaloo Basin is the onshore frontier under active exploration.",
+          "royalty_regime": "PRRT on offshore Ichthys production; NT territory royalties on onshore gas.",
+          "export_orientation": "LNG export-oriented; limited domestic market.",
+          "notable_projects": ["Ichthys LNG", "Darwin LNG / Bayu-Undan (end of life)", "Beetaloo Basin (exploration)"],
+          "share_pct_primary": null,
+          "share_pct_note": "Key the most recent RE-Q state share here when refreshing."
+        },
+        {
+          "state": "SA",
+          "name": "South Australia",
+          "commodity_profile": ["natural gas", "crude oil", "condensate"],
+          "headline_framing": "Cooper Basin (Moomba) is the historical onshore producer; gas supplies the east-coast market via the Moomba-Sydney pipeline.",
+          "royalty_regime": "State petroleum royalty under the Petroleum and Geothermal Energy Act.",
+          "export_orientation": "Primarily domestic east-coast supply; some liquids export via ports.",
+          "notable_projects": ["Cooper Basin (Santos-operated)"],
+          "share_pct_primary": null,
+          "share_pct_note": "Key the most recent RE-Q state share here when refreshing."
+        },
+        {
+          "state": "VIC",
+          "name": "Victoria",
+          "commodity_profile": ["natural gas", "crude oil (declining)"],
+          "headline_framing": "Bass Strait (Gippsland Basin, ExxonMobil/Esso-BHP JV) is the long-standing east-coast gas source; output is in structural decline as legacy fields deplete.",
+          "royalty_regime": "Commonwealth offshore Bass Strait arrangements predate PRRT; state royalty on Victorian onshore gas.",
+          "export_orientation": "Domestic east-coast supply only.",
+          "notable_projects": ["Bass Strait (Gippsland)"],
+          "share_pct_primary": null,
+          "share_pct_note": "Key the most recent RE-Q state share here when refreshing."
+        }
+      ],
+      "percent_share_population_note": "Numerical state-share percentages are deliberately left null in this first pass because the Resources and Energy Quarterly presents production by commodity and quarter rather than a single consolidated state share for oil-plus-gas. Keying requires choosing a commodity basis (e.g. petajoule production of natural gas, or LNG tonnes shipped) and citing it explicitly. Do not fabricate a combined share."
+    }
+  },
+  "notes": "State-by-state framing of Australian oil and gas production. WA dominates gas/LNG; QLD is the sole CSG-to-LNG producer; NT is offshore-Ichthys-anchored; SA is Cooper Basin gas to the east coast; VIC is the declining Bass Strait. Numerical shares are deliberately left null until a documented commodity basis can be keyed from the most recent Resources and Energy Quarterly.",
+  "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au); Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics (energy.gov.au).",
+  "status": "ok",
+  "manual_entry": true
+}

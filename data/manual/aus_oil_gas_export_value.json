@@ -1,0 +1,29 @@
+{
+  "series_id": "aus_oil_gas_export_value",
+  "source_id": "aus_oil_gas_export_value",
+  "source_name": "Australian oil and gas export value (RE-Q)",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+  "unit": "A$bn nominal, financial year",
+  "retrieved_at": "2026-04-21T07:40:00+00:00",
+  "last_data_point": "2023-06-30",
+  "values": [
+    {"t": "2022-06-30", "v": 70.2},
+    {"t": "2023-06-30", "v": 92.0}
+  ],
+  "extra": {
+    "schema": "aus_oil_gas_export_value.v1",
+    "fields": {
+      "series_basis": "Combined Australian export value for LNG plus crude oil and refinery feedstock, nominal A$ billion, full financial year ending 30 June. Drawn from the Resources and Energy Quarterly's commodity export-value tables.",
+      "breakdown_note": "The RE-Q presents LNG, crude oil, LPG and condensate separately. This combined figure rolls up LNG plus crude oil and condensate. LPG, refined product re-exports and coal are not included. Users comparing against the ABS MERCH_EXP dataflow will see slightly different totals because the ABS series uses SITC commodity codes and calendar-year totals.",
+      "evidence_tier": "primary_headline_approximate",
+      "primary_source_document": "Department of Industry, Science and Resources — Resources and Energy Quarterly. Specific tables: LNG exports (volume and value) and Crude oil exports (volume and value).",
+      "value_precision_caveat": "Values shown are approximate headline figures for the LNG + crude aggregate as reported across consecutive RE-Q editions. Refresh by keying the RE-Q's published A$ table directly and citing the exact edition; the most recent RE-Q revises prior-year actuals.",
+      "fy_2021_22_abn": 70.2,
+      "fy_2022_23_abn": 92.0
+    }
+  },
+  "notes": "Headline LNG + crude oil export value: approximately A$70.2bn in FY2021-22, approximately A$92bn in FY2022-23, reflecting the 2022 gas-price shock. These figures are approximate rollups of the LNG and crude chapters of the Resources and Energy Quarterly and should be refreshed to the exact figure and edition when next keyed. Do not treat these as final ABS-reconciled trade statistics.",
+  "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au), LNG and crude oil export value tables.",
+  "status": "ok",
+  "manual_entry": true
+}
