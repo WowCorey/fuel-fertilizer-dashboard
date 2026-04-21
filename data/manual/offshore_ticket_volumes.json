@@ -2,14 +2,18 @@
   "series_id": "offshore_ticket_volumes",
   "source_id": "offshore_ticket_volumes",
   "source_name": "DCCEEW offshore ticket volume disclosures",
-  "source_url": "https://www.energy.gov.au/",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-18T13:44:14+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
+  "source_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks",
+  "unit": "kL",
+  "retrieved_at": "2026-04-21T14:46:57+00:00",
+  "last_data_point": "2025-10-23",
+  "values": [
+    {
+      "t": "2025-10-23",
+      "v": 0.0
+    }
+  ],
+  "notes": "DCCEEW Measures of liquid fuel stocks page, last updated 23 October 2025, states Australia no longer holds any stock overseas under agreement from July 2022 onward and the current held-overseas category is none at present. Recorded as 0 kL for the current public disclosure state.",
+  "status": "ok",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 where stated by publisher",
   "citation": "Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures."

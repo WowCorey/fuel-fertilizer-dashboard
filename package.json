@@ -1,0 +1,12 @@
+{
+  "name": "fuel-fertilizer-dashboard",
+  "private": true,
+  "scripts": {
+    "build:ui": "node scripts/build_ui.mjs",
+    "check:ui": "node scripts/build_ui.mjs --check"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.0",
+    "@babel/preset-react": "7.28.5"
+  }
+}
