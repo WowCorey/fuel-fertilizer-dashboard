@@ -42,6 +42,10 @@ function Header({
   updated = ''
 }) {
   const nav = [{
+    id: 'national_status',
+    label: 'National status',
+    href: '../national-status-dashboard/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -67,9 +71,9 @@ function Header({
   }, React.createElement("div", {
     className: "site-header__inner"
   }, React.createElement("a", {
-    href: "../fuel-dashboard/index.html",
+    href: "../../index.html",
     className: "brand",
-    "aria-label": "Fuel Resilience AU \u2014 home"
+    "aria-label": "Fuel Resilience AU home"
   }, React.createElement("span", {
     className: "brand__name"
   }, "Fuel Resilience AU")), React.createElement("nav", {
@@ -545,6 +549,8 @@ function Footer({
   }, React.createElement("span", {
     className: "eyebrow"
   }, "Dashboards"), React.createElement("ul", null, React.createElement("li", null, React.createElement("a", {
+    href: "../national-status-dashboard/index.html"
+  }, "National status")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"

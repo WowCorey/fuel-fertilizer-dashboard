@@ -1,7 +1,8 @@
-// Header.jsx — shared masthead across all four dashboards.
+// Header.jsx - shared masthead across dashboard pages.
 // Cross-links to sibling dashboards so every page has the same nav.
 function Header({ active = 'fuel', updated = '' }) {
   const nav = [
+    { id: 'national_status', label: 'National status',      href: '../national-status-dashboard/index.html' },
     { id: 'fuel',          label: 'Fuel',                  href: '../fuel-dashboard/index.html' },
     { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },
@@ -11,7 +12,7 @@ function Header({ active = 'fuel', updated = '' }) {
   return (
     <header className="site-header">
       <div className="site-header__inner">
-        <a href="../fuel-dashboard/index.html" className="brand" aria-label="Fuel Resilience AU — home">
+        <a href="../../index.html" className="brand" aria-label="Fuel Resilience AU home">
           <span className="brand__name">Fuel Resilience AU</span>
         </a>
         <nav className="site-nav" aria-label="Primary">
@@ -31,7 +32,7 @@ function Header({ active = 'fuel', updated = '' }) {
   );
 }
 
-// Shared icon set — Lucide-style, 1.5px stroke, currentColor.
+// Shared icon set - Lucide-style, 1.5px stroke, currentColor.
 function Icon({ name, size = 20 }) {
   const paths = {
     download: <path d="M12 5v14M5 12l7 7 7-7"/>,

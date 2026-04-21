@@ -724,6 +724,102 @@
       "has_generated": false,
       "has_manual": true
     },
+    "pmc_forward_import_orders": {
+      "id": "pmc_forward_import_orders",
+      "human_name": "PM&C public fuel supply - four-week import orders",
+      "publisher": "Department of the Prime Minister and Cabinet, data compiled by DCCEEW",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "national_status"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; current and anticipated national supplies text.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "pmc_fuel_security_level": {
+      "id": "pmc_fuel_security_level",
+      "human_name": "PM&C public fuel supply - National Fuel Security Plan level",
+      "publisher": "Department of the Prime Minister and Cabinet, data compiled by DCCEEW",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "national_status"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; data compiled by DCCEEW.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "pmc_mso_days_cover": {
+      "id": "pmc_mso_days_cover",
+      "human_name": "PM&C public fuel supply - MSO days of cover",
+      "publisher": "Department of the Prime Minister and Cabinet, data compiled by DCCEEW",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "national_status"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "pmc_mso_fuel_reserves": {
+      "id": "pmc_mso_fuel_reserves",
+      "human_name": "PM&C public fuel supply - MSO fuel reserves",
+      "publisher": "Department of the Prime Minister and Cabinet, data compiled by DCCEEW",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "national_status"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO reserves table.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "pmc_retail_stockouts": {
+      "id": "pmc_retail_stockouts",
+      "human_name": "PM&C public fuel supply - retail stock-outs",
+      "publisher": "Department of the Prime Minister and Cabinet, data provided by state and territory governments",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "national_status"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; retail stock-outs table provided by state and territory governments.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "pmc_tankers_on_water": {
+      "id": "pmc_tankers_on_water",
+      "human_name": "PM&C public fuel supply - ships on water to Australia",
+      "publisher": "Department of the Prime Minister and Cabinet, data compiled by DCCEEW using Kpler commodity terminal",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "national_status"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW estimate using Kpler commodity terminal.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "rba_aud_usd": {
       "id": "rba_aud_usd",
       "human_name": "Reserve Bank of Australia — AUD/USD exchange rate",
