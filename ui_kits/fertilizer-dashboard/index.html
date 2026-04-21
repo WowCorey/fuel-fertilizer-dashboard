@@ -119,11 +119,11 @@ function App() {
           </div>
           <div className="metric-grid metric-grid--4">
             <MetricCard
-              eyebrow="Volume"
+              eyebrow="Value"
               label="Monthly fertiliser imports"
-              plain="Total tonnes of fertiliser (HS 31) landed in Australia in the latest month."
+              plain="Total value of manufactured fertiliser (SITC 562) cleared into Australia in the latest month, from the ABS Data API."
               fromEnvelope={data.abs_fertiliser_imports}
-              unit=" kt"
+              unit=" AUD thousands"
               highlight
             />
             <MetricCard
@@ -161,6 +161,20 @@ function App() {
             </div>
           </div>
 
+          <div className="charts-grid charts-grid--full">
+            <ChartCard
+              eyebrow="Value"
+              title="Monthly fertiliser imports"
+              unit="AUD thousands"
+              fromEnvelope={data.abs_fertiliser_imports}
+              ranges={['1Y','3Y']}
+              defaultRange="3Y"
+              accent="#1F3A8A"
+              takeaway="Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade."
+              yAxisLabel="Import value (AUD thousands per month)"
+            />
+          </div>
+          <div style={{ height: 24 }}/>
           <div className="charts-grid">
             <ChartCard
               eyebrow="Urea"
@@ -282,7 +296,7 @@ function App() {
             <h3>How we calculate the numbers</h3>
             <dl>
               <dt>Monthly fertiliser imports</dt>
-              <dd>Total tonnes of goods cleared under Harmonised System chapter 31 (fertilisers) from ABS International Merchandise Trade, by calendar month.</dd>
+              <dd>Total import value (AUD thousands) of manufactured fertilisers, fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; the four-digit SITC subdivisions (5621 nitrogenous, 5622 potassic, 5623 phosphatic, 5629 other) are not exposed via the live API, so per-nutrient monthly series remain hand-keyed from the ABS International Trade release tables.</dd>
               <dt>Top-3 source countries</dt>
               <dd>Sum of import value from the three largest supplier countries in the latest month, divided by total HS-31 imports in the same month, from ABS country-of-origin detail.</dd>
               <dt>Fertiliser price index</dt>

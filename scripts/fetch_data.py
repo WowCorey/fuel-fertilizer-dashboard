@@ -177,7 +177,12 @@ def fetch_fred_fuel_csv(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def fetch_abs_sdmx(dataflow: str, key: str, start_period: str | None = None) -> dict[str, Any]:
+def fetch_abs_sdmx(
+    dataflow: str,
+    key: str,
+    start_period: str | None = None,
+    classification_note: str | None = None,
+) -> dict[str, Any]:
     """Fetch one ABS SDMX-JSON time series from the ABS Data API."""
     if not dataflow or not key:
         raise RuntimeError("ABS SDMX fetch requires dataflow and key")
@@ -290,17 +295,17 @@ def fetch_abs_sdmx(dataflow: str, key: str, start_period: str | None = None) -> 
 
     last = values[-1]["t"]
     last_data_point = period_ends.get(last) or (f"{last}-01" if len(last) == 7 else last)
+    notes = (
+        f"Fetched from ABS Data API dataflow {dataflow}, key {key}. "
+        "Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations."
+    )
+    if classification_note:
+        notes = f"{notes} {classification_note}"
     return {
         "unit": unit,
         "values": values,
         "last_data_point": last_data_point,
-        "notes": (
-            f"Fetched from ABS Data API dataflow {dataflow}, key {key}. "
-            "Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. "
-            "ABS MERCH_IMP is a SITC commodity dataflow; this source uses SITC 33 "
-            "(petroleum, petroleum products and related materials) because the live API "
-            "does not expose an HS 27 monthly value series in this dataflow."
-        ),
+        "notes": notes,
         "source_url_resolved": url,
     }
 
@@ -658,9 +663,18 @@ FETCHERS: dict[str, Fetcher] = {
     "eia_diesel_retail_us": fetch_fred_fuel_csv,
     "eia_jet_spot_usgc": fetch_fred_fuel_csv,
     "abs_petroleum_imports": lambda source: fetch_abs_sdmx(
-        source["fetch_dataflow"], source["fetch_key"], source.get("fetch_start_period")
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
     ),
     "abs_petroleum_imports_yoy": fetch_abs_petroleum_imports_yoy,
+    "abs_fertiliser_imports": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+    ),
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
 }
