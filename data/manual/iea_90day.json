@@ -1,0 +1,16 @@
+{
+  "series_id": "iea_90day",
+  "source_id": "iea_90day",
+  "source_name": "IEA 90-day oil stockholding obligation",
+  "source_url": "https://www.iea.org/reports/oil-stockholding",
+  "unit": "days",
+  "retrieved_at": "2026-04-20T00:00:00+00:00",
+  "last_data_point": "1974-11-18",
+  "values": [
+    {"t": "1974-11-18", "v": 90}
+  ],
+  "notes": "Treaty constant, not a time series. Under Article 2 of the Agreement on an International Energy Program (Paris, 18 November 1974), each IEA member country must hold emergency oil reserves equivalent to 90 days of the previous year's net imports. The Fuel Resilience AU fuel page uses this as a fixed horizontal baseline on the Days of Net Import Cover chart. Australia's actual monthly compliance figure is published separately by DCCEEW via the Australian Petroleum Statistics workbook and by the IEA via the Oil Stocks of IEA Countries data tool; neither is fetched here. Update this envelope only if the IEA or Treaty revises the 90-day figure.",
+  "citation": "International Energy Agency, Agreement on an International Energy Program (1974), Article 2, 90-day emergency oil stockholding obligation.",
+  "status": "ok",
+  "manual_entry": true
+}

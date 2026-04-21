@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><style>
+body{padding:24px;background:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sw{border:1px solid var(--rule);border-radius:var(--r-2);overflow:hidden;background:var(--card)}
+.chip{height:96px;display:flex;align-items:flex-end;padding:12px;color:#fff;font-family:var(--font-mono);font-size:12px;font-weight:500}
+.tint{height:24px}
+.meta{padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.name{font-size:var(--fs-14);font-weight:600;color:var(--ink)}
+.hex{font-family:var(--font-mono);font-size:11px;color:var(--ink-3)}
+.role{font-size:var(--fs-12);color:var(--ink-2);margin-top:2px}
+</style></head><body>
+<div class="grid">
+  <div class="sw">
+    <div class="chip" style="background:#0F766E">Surplus</div>
+    <div class="tint" style="background:#E3F1EF"></div>
+    <div class="meta"><span class="name">Surplus · Deep Teal</span><span class="hex">#0F766E  /  tint #E3F1EF</span><span class="role">Above target, positive change</span></div>
+  </div>
+  <div class="sw">
+    <div class="chip" style="background:#B45309">Caution</div>
+    <div class="tint" style="background:#F7EBD9"></div>
+    <div class="meta"><span class="name">Caution · Amber Brown</span><span class="hex">#B45309  /  tint #F7EBD9</span><span class="role">Near threshold, watch state</span></div>
+  </div>
+  <div class="sw">
+    <div class="chip" style="background:#991B1B">Deficit</div>
+    <div class="tint" style="background:#F5E0E0"></div>
+    <div class="meta"><span class="name">Deficit · Oxblood</span><span class="hex">#991B1B  /  tint #F5E0E0</span><span class="role">Breach, negative change</span></div>
+  </div>
+</div>
+</body></html>

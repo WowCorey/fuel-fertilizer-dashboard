@@ -1,0 +1,16 @@
+{
+  "series_id": "abares_fertiliser_stock_cover",
+  "source_id": "abares_fertiliser_stock_cover",
+  "source_name": "ABARES fertiliser stock-cover data",
+  "source_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-18T13:44:14+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "ABARES, Agricultural commodities data, fertiliser stock-cover indicator if published."
+}

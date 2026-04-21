@@ -1,0 +1,283 @@
+# Fuel Resilience AU
+
+A neutral, public-interest dashboard for everyday Australians — tracking the
+bits of the energy and agricultural supply chain that most shape prices at the
+pump and at the farm gate. Written in plain English, sourced from named public
+Australian and international sources, and explicit when data is unavailable.
+
+**Status:** Four dashboard surfaces read from a shared JSON-envelope data
+pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
+ABS fertiliser imports, APS net-import cover, APS refinery production series,
+AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
+and the multi-state retail fuel average. Other sources remain manual or
+unavailable until a named public source can support the value.
+
+## What this is
+
+Australia imports around 90% of its refined fuel and the majority of its
+fertiliser. When overseas supply wobbles, it shows up domestically within days
+to weeks. Most of the raw numbers are public but scattered across government
+reports and trade databases. This project pulls the source references into one
+place, fetches the sources that are safe to fetch, and leaves every unverified
+figure visibly unavailable.
+
+The dashboards have no publisher brand, no sponsors, and no affiliation with
+any government department or industry body. The project does not fabricate,
+interpolate or estimate missing numbers.
+
+## Dashboards
+
+| Page | Version | What it covers | Current data state |
+|---|---|---|---|
+| [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and multi-state retail average fetched; AIP retail and IEA obligation remain manual |
+| [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | ABS SITC 562 total imports fetched; nutrient subseries, ABARES and concentration slots remain manual/unavailable |
+| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet and APS production fetched; Tapis, refinery utilisation, FSSP and offshore tickets remain manual/unavailable |
+| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | Manual stubs pending verification |
+
+Every page cross-links to the others in the header nav.
+
+## Run locally
+
+No build step. Serve the repo root with any static server — `fetch()` of the
+JSON envelopes does not work from `file://`, so you must use a server.
+
+```sh
+python3 -m http.server 8000
+# then visit:
+#   http://localhost:8000/ui_kits/fuel-dashboard/index.html
+#   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
+#   http://localhost:8000/ui_kits/oil-and-production/index.html
+#   http://localhost:8000/ui_kits/who-pays-what/index.html
+```
+
+## Data pipeline
+
+Every series shown on the site lives as a JSON envelope on disk. Envelopes are
+produced by `scripts/fetch_data.py` for programmatic sources or hand-keyed into
+`data/manual/` for PDFs, paywalls, JS-rendered tables and sources that require a
+human check. The dashboards read those JSON files via
+`ui_kits/shared/data-loader.js`.
+
+```
+data/
+  sources.yml              master registry — every dataset used, with
+                           publisher, URLs, cadence, rights and fetch mode
+  source_manifest.json     browser manifest that tells dashboards whether to
+                           look in generated/ or manual/ first
+  generated/*.json         produced by scripts/fetch_data.py
+  manual/*.json            hand-keyed from the named public document
+```
+
+### Source registry contract
+
+Each source in `data/sources.yml` must have:
+
+- `id`, `human_name`, `publisher`, `format`, `update_cadence`, `last_verified`
+- `url` and `canonical_url` for the human-facing publisher page
+- `fetch` set to `programmatic`, `derived`, `manual` or `unavailable`
+- `fetch_url` only when `fetch: programmatic`
+- `rights`, `rights_url`, `citation` and `reuse_notes` describing upstream source rights
+- `used_by` listing the dashboard surfaces that depend on it
+
+`url` remains for compatibility with existing scripts; new code should prefer
+`canonical_url` for citations and `fetch_url` for machine retrieval. Sources may
+also include fetcher-specific keys such as ABS SDMX parameters or APS workbook
+sheet/column names.
+
+### Envelope schema
+
+A successful envelope uses `status: "ok"` and must carry a real retrieval time,
+a latest data point and either numeric `values` or a structured `extra` block.
+
+```json
+{
+  "series_id": "eia_brent",
+  "source_id": "eia_brent",
+  "source_name": "Brent crude spot price (EIA)",
+  "source_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+  "unit": "USD per barrel",
+  "retrieved_at": "2026-04-18T00:00:00+00:00",
+  "last_data_point": "2026-04-01",
+  "values": [{"t": "2026-04", "v": 66.42}],
+  "notes": "Monthly average from published daily observations.",
+  "status": "ok",
+  "manual_entry": false
+}
+```
+
+An unavailable stub must not look freshly retrieved:
+
+```json
+{
+  "series_id": "aps_monthly",
+  "source_id": "aps_monthly",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-18T12:27:44+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Awaiting hand-keyed values from the named public source.",
+  "status": "unavailable",
+  "manual_entry": true
+}
+```
+
+The page-level `Updated` stamp is computed only from verified `status: "ok"`
+envelopes. If a page has no verified loaded data, it says so instead of showing
+a stub timestamp.
+
+When `status` is anything other than `"ok"`, the dashboard shows a
+**"Source unavailable — awaiting data"** placeholder instead of a value. We
+never estimate.
+
+## Validation and CI
+
+Run the validator before opening or merging a PR:
+
+```sh
+pip install -r requirements.txt
+python3 scripts/validate_data.py
+python3 scripts/validate_data.py --json
+python3 scripts/build_source_manifest.py --check
+python3 -m unittest discover -s tests
+```
+
+The validator checks `data/sources.yml`, all generated/manual envelopes and the
+source IDs referenced by dashboard pages. It rejects duplicate IDs, missing
+registry entries, invalid status/timestamp semantics, inconsistent manual-entry
+flags, malformed values and unstructured `extra` data.
+
+`.github/workflows/ci.yml` runs on pull requests and pushes. It installs the
+minimal Python dependencies in `requirements.txt`, compile-checks scripts, runs
+the data validator, checks the browser source manifest, and runs unit tests for
+the fetch/data-entry transforms.
+
+## Run the pipeline locally
+
+```sh
+pip install -r requirements.txt
+python3 scripts/fetch_data.py                 # pull every programmatic source
+python3 scripts/fetch_data.py --only eia_brent
+python3 scripts/fetch_data.py --check         # blocking check: programmatic fetch URLs only
+python3 scripts/fetch_data.py --check-all-links  # broad link-health check for canonical pages
+python3 scripts/init_manual_stubs.py          # create missing manual stubs
+python3 scripts/build_source_manifest.py      # update browser loader manifest
+python3 scripts/validate_data.py              # validate registry and envelopes
+```
+
+### Weekly refresh
+
+`.github/workflows/refresh-data.yml` runs every Monday at 02:00 AEST
+(`cron: "0 16 * * 0"`). It:
+
+1. Checks only programmatic `fetch_url` endpoints as a blocking preflight.
+2. Runs broad canonical/manual link health as a non-blocking diagnostic.
+3. Refreshes programmatic JSON envelopes.
+4. Creates any missing manual stubs.
+5. Rebuilds `data/source_manifest.json`.
+6. Runs `scripts/validate_data.py` before committing.
+7. Commits changed data files to the repository only after validation passes.
+
+Manual and canonical publisher pages should not block a valid programmatic data
+refresh; broken programmatic fetch URLs should fail loudly.
+
+### Add or update a source
+
+1. Add or edit an entry in `data/sources.yml` with the full source registry contract above.
+2. If `fetch: programmatic`, register a fetcher in `FETCHERS` inside
+   `scripts/fetch_data.py` that returns `{unit, values, last_data_point, notes}`.
+3. If `fetch: manual`, run `python3 scripts/init_manual_stubs.py` to create
+   the placeholder, then use `python3 scripts/enter_manual.py --source <id>
+   --point YYYY-MM=123.4 --unit <unit> --notes "Checked table/page"` after
+   verifying the named publisher document.
+4. When manual values are verified, set `status` to `"ok"`, set `retrieved_at`
+   to the data-entry timestamp, set `last_data_point`, and keep
+   `manual_entry: true`.
+5. If `fetch: unavailable`, leave the stub unavailable until a named public
+   source can support the figure.
+6. Reference the envelope from one of the dashboard pages by adding its ID to
+   the page's `SERIES` array and passing `fromEnvelope={data.<id>}` to
+   `<MetricCard>` or `<ChartCard>`.
+7. Run `python3 scripts/build_source_manifest.py` and
+   `python3 scripts/validate_data.py` before committing.
+
+## Repo layout
+
+```
+README.md                      This file
+SKILL.md                       Agent Skill front-matter
+colors_and_type.css            Design tokens (color, type, spacing, motion)
+assets/                        Logo mark, Australia outline
+preview/                       Small HTML reference cards for each token group
+
+data/
+  sources.yml                  Master source registry
+  generated/                   JSON produced by fetch_data.py
+  manual/                      Hand-keyed JSON for sources we can't fetch
+  source_manifest.json         Browser loader manifest
+
+scripts/
+  build_source_manifest.py     Builds data/source_manifest.json
+  enter_manual.py              Safer manual data-entry helper
+  fetch_data.py                Pipeline entry point
+  init_manual_stubs.py         Creates missing data/manual/*.json stubs
+  validate_data.py             Validates registry, envelopes and dashboard refs
+
+tests/
+  test_fetch_transforms.py     Fetch/derivation transform coverage
+  test_enter_manual.py         Manual-entry helper coverage
+
+.github/workflows/
+  ci.yml                       PR/push validation
+  refresh-data.yml             Weekly Monday 02:00 AEST data refresh
+
+ui_kits/
+  shared/                      Header, Footer, MetricCard, ChartCard,
+                               InsightFeed, data-loader, styles — used by
+                               every dashboard
+  fuel-dashboard/              v1.0 — liquid fuel
+  fertilizer-dashboard/        v1.1 — fertiliser
+  oil-and-production/          v1.2 — crude, refining, government spending
+  who-pays-what/               v1.3 — tax vs consumer price vs profit
+```
+
+## Accessibility
+
+- WCAG AA contrast on all text and data colours
+- Skip link on every page
+- Keyboard-navigable charts (arrow keys scrub; Escape clears)
+- ARIA labels on all non-text affordances
+- `prefers-reduced-motion` honoured
+
+## Editorial rules
+
+- Plain English. Any acronym expanded on first use.
+- Every chart has a one-line plain-English takeaway above it, units on axes,
+  and a source line below it.
+- No fonts, colours or tokens outside `colors_and_type.css`.
+- No dark mode. No emojis. No gradients.
+- No made-up data. Ever. If a number cannot be sourced from a named public
+  document, the card renders "Source unavailable" — never an estimate.
+- Do not describe a page as live or current unless the referenced envelopes have
+  `status: "ok"` and valid freshness metadata.
+
+## Deployment (suggested, not configured)
+
+Either option works — both are free for public static sites and trigger on
+push to `main`:
+
+- **GitHub Pages** — simplest. Settings → Pages → Build from branch `main`,
+  folder `/`. Note that GitHub Pages serves the entire repo, so the JSON
+  envelopes under `data/` are fetched the same way the dev server resolves
+  them.
+- **Cloudflare Pages** — more control. Connect the repo, set build command
+  to none and output directory to `/`.
+
+## License and source rights
+
+Project code is MIT licensed. Project-authored prose and metadata are released
+under CC BY 4.0 unless a file states otherwise.
+
+Upstream source data remains under the rights, terms and citation requirements
+of each publisher. Those publisher rights are tracked per source in
+`data/sources.yml` through `rights`, `rights_url`, `citation` and
+`reuse_notes`. Do not assume this repository can relicense upstream source data.
