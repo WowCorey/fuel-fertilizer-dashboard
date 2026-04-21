@@ -38,7 +38,7 @@ const SERIES = [
   'iea_90day',
   'fuel_security_payment',
   'offshore_ticket_volumes',
-  'aud_usd_rba',
+  'rba_aud_usd',
 ];
 
 // Transform a USD/bbl envelope into AUD/bbl using the AUD/USD series, if both
@@ -77,9 +77,9 @@ function App() {
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
 
-  const brentAud = toAud(data.eia_brent, data.aud_usd_rba);
-  const wtiAud   = toAud(data.eia_wti,   data.aud_usd_rba);
-  const tapisAud = toAud(data.tapis_crude, data.aud_usd_rba);
+  const brentAud = toAud(data.eia_brent, data.rba_aud_usd);
+  const wtiAud   = toAud(data.eia_wti,   data.rba_aud_usd);
+  const tapisAud = toAud(data.tapis_crude, data.rba_aud_usd);
 
   return (
     <div className="page">
