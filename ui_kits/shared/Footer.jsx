@@ -16,6 +16,7 @@ function Footer({ updated = '' }) {
           <span className="eyebrow">Dashboards</span>
           <ul>
             <li><a href="../national-status-dashboard/index.html">National status</a></li>
+            <li><a href="../resource-value-dashboard/index.html">Resource value</a></li>
             <li><a href="../fuel-dashboard/index.html">Fuel</a></li>
             <li><a href="../fertilizer-dashboard/index.html">Fertilizer</a></li>
             <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>

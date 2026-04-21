@@ -1,0 +1,14 @@
+{
+  "series_id": "resource_state_production_aes",
+  "source_id": "resource_state_production_aes",
+  "source_name": "Australian Energy Statistics - production by state",
+  "source_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-21T18:31:04Z",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Registered for the later production-by-state phase. No value is published until the exact Australian Energy Statistics table, product scope, state/basin mapping and unit are selected.",
+  "status": "unavailable",
+  "manual_entry": true
+}

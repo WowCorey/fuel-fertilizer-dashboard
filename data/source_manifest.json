@@ -836,6 +836,198 @@
       "has_generated": true,
       "has_manual": false
     },
+    "resource_company_tax_rate": {
+      "id": "resource_company_tax_rate",
+      "human_name": "ATO company tax rates",
+      "publisher": "Australian Taxation Office",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates",
+      "rights": "Commonwealth copyright; ATO website terms apply",
+      "citation": "Australian Taxation Office, Company tax rates.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_domestic_gas_prices_accc": {
+      "id": "resource_domestic_gas_prices_accc",
+      "human_name": "ACCC Gas Inquiry - domestic gas prices",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "unavailable",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30",
+      "rights": "Commonwealth copyright; ACCC copyright terms apply",
+      "citation": "Australian Competition and Consumer Commission, Gas Inquiry 2017-30 reports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_gas_origin_aecr": {
+      "id": "resource_gas_origin_aecr",
+      "human_name": "Geoscience Australia AECR - gas production and exports",
+      "publisher": "Geoscience Australia",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.ga.gov.au/aecr2025/gas",
+      "rights": "Commonwealth copyright; Geoscience Australia copyright terms apply",
+      "citation": "Geoscience Australia, Australia's Energy Commodity Resources 2025: Gas.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_lng_export_destinations_req": {
+      "id": "resource_lng_export_destinations_req",
+      "human_name": "Resources and Energy Quarterly - LNG export destinations",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "rights": "Commonwealth copyright; DISR copyright terms apply",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025, LNG exports by destination table.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_lng_export_value_req": {
+      "id": "resource_lng_export_value_req",
+      "human_name": "Resources and Energy Quarterly - LNG export earnings",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "rights": "Commonwealth copyright; DISR copyright terms apply",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_norway_petroleum_tax_model": {
+      "id": "resource_norway_petroleum_tax_model",
+      "human_name": "Norwegian petroleum tax system",
+      "publisher": "Norwegian Ministry of Energy and Norwegian Offshore Directorate via Norskpetroleum.no",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.norskpetroleum.no/en/economy/petroleum-tax/",
+      "rights": "Norskpetroleum.no copyright and reuse terms",
+      "citation": "Norskpetroleum.no, The Petroleum Tax System.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_norway_state_revenue_model": {
+      "id": "resource_norway_state_revenue_model",
+      "human_name": "Norwegian petroleum government revenues",
+      "publisher": "Norwegian Ministry of Energy and Norwegian Offshore Directorate via Norskpetroleum.no",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+      "rights": "Norskpetroleum.no copyright and reuse terms",
+      "citation": "Norskpetroleum.no, The government's revenues.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_oil_export_value_req": {
+      "id": "resource_oil_export_value_req",
+      "human_name": "Resources and Energy Quarterly - oil export earnings",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "rights": "Commonwealth copyright; DISR copyright terms apply",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_prrt_policy": {
+      "id": "resource_prrt_policy",
+      "human_name": "ATO Petroleum Resource Rent Tax policy",
+      "publisher": "Australian Taxation Office",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax",
+      "rights": "Commonwealth copyright; ATO website terms apply",
+      "citation": "Australian Taxation Office, Petroleum resource rent tax.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_state_production_aes": {
+      "id": "resource_state_production_aes",
+      "human_name": "Australian Energy Statistics - production by state",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "unavailable",
+      "update_cadence": "annual",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_value_leakage_model": {
+      "id": "resource_value_leakage_model",
+      "human_name": "Resource value leakage model placeholder",
+      "publisher": "Fuel Resilience AU methodology",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://github.com/WowCorey/fuel-fertilizer-dashboard",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU methodology, resource value dashboard.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_wa_petroleum_royalties": {
+      "id": "resource_wa_petroleum_royalties",
+      "human_name": "WA petroleum royalties",
+      "publisher": "Government of Western Australia, Department of Energy, Mines, Industry Regulation and Safety",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties",
+      "rights": "Government of Western Australia copyright and website terms",
+      "citation": "Government of Western Australia, Petroleum royalties.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "tapis_crude": {
       "id": "tapis_crude",
       "human_name": "Tapis crude benchmark",

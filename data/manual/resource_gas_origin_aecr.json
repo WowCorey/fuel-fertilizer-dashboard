@@ -1,0 +1,33 @@
+{
+  "series_id": "resource_gas_origin_aecr",
+  "source_id": "resource_gas_origin_aecr",
+  "source_name": "Geoscience Australia AECR - gas production and exports",
+  "source_url": "https://www.ga.gov.au/aecr2025/gas",
+  "unit": "PJ",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2023-12-31",
+  "values": [
+    {
+      "t": "2023",
+      "v": 6264
+    }
+  ],
+  "notes": "National gas context from Geoscience Australia's AECR 2025 gas page. This is not a state-by-state flow table.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; Geoscience Australia copyright terms apply",
+  "citation": "Geoscience Australia, Australia's Energy Commodity Resources 2025: Gas.",
+  "extra": {
+    "schema": "resource_gas_origin.v1",
+    "fields": {
+      "year": 2023,
+      "raw_gas_production_pj": 6264,
+      "lng_exports_pj": 4388,
+      "lng_exports_mt": 80.7,
+      "export_share_percent": 69,
+      "conventional_resource_north_west_shelf_share_percent": 93,
+      "north_west_shelf_basins": ["Northern Carnarvon", "Browse", "Bonaparte"],
+      "not_captured": "No state-by-state or buyer-level map is published from this envelope."
+    }
+  }
+}

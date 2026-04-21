@@ -47,6 +47,17 @@ JSON envelope.
 | Company net profit | deferred | ATO tax fields are now populated, but net profit must come from each company's own annual report or ASIC-lodged statements and may not map one-to-one to the ATO entity. | Populate one company at a time with `scripts/enter_manual.py --field net_profit=...`, preserving fiscal year, entity scope, and source URL. |
 | ACCC pure excise/GST/retailer-profit split | intentionally not published | The latest ACCC petrol snapshot publishes combined excise/GST, other costs and margins, and GIRD. It does not publish pure GST, pure excise, and pure retailer profit as separate dashboard-safe components. | Keep the current ACCC taxonomy unless a later report publishes more granular components. |
 
+## Resource Value
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| PRRT and royalty receipts | deferred | The first resource-value page shows official policy rates and royalty mechanisms only. It does not yet have a verified annual receipt series by PRRT, royalty regime or project scope. | Add ATO/Treasury PRRT receipts and state/Commonwealth royalty receipt envelopes before any "value captured" total is published. |
+| Production by state, basin and project | deferred | The Geoscience Australia AECR envelope gives national gas production/export context and major basin concentration, but not a full state/basin/project flow map. | Wire Australian Energy Statistics and/or Geoscience Australia tables only after the exact product scope, geography and units are selected. |
+| Domestic vs export price comparison | deferred | ACCC gas price sources are registered but no comparison is published because the repo has not selected the buyer segment, region, quarter and LNG export benchmark. | Define the comparison method first, then add source envelopes for domestic contract prices and LNG netback/export prices. |
+| 25% export-tax scenario | partial | A transparent gross export-value scenario can be computed from LNG and oil export-value envelopes. It is not current law and not a PRRT estimate. | Keep the scenario labelled as a hypothetical gross-export calculation; do not expand it into policy analysis until receipt and incidence assumptions are documented. |
+| Norway retained-value comparison | partial | Norway's official tax and state-revenue sources are registered, but Australia lacks a matched capture-channel denominator. | Add Australian receipts and export values on the same period basis before publishing a retained/leaked comparison. |
+| Value leakage estimate | intentionally unavailable | The dashboard has no verified denominator or full receipt model. Publishing a leakage number now would be fabricated. | Keep `resource_value_leakage_model` unavailable until the methodology and all source envelopes exist. |
+
 ## Fuel Stress Index Gate
 
 Do not start the Fuel Stress Index until:

@@ -46,6 +46,10 @@ function Header({
     label: 'National status',
     href: '../national-status-dashboard/index.html'
   }, {
+    id: 'resource_value',
+    label: 'Resource value',
+    href: '../resource-value-dashboard/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -551,6 +555,8 @@ function Footer({
   }, "Dashboards"), React.createElement("ul", null, React.createElement("li", null, React.createElement("a", {
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
+    href: "../resource-value-dashboard/index.html"
+  }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
