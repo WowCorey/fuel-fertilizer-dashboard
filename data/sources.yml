@@ -138,6 +138,7 @@ sources:
     fetch_dataflow: MERCH_IMP
     fetch_key: 33.TOT.TOT.M
     fetch_start_period: 2021-01
+    sdmx_note_suffix: ABS MERCH_IMP is a SITC commodity dataflow; this source uses SITC 33 (petroleum, petroleum products and related materials) because the live API does not expose an HS 27 monthly value series in this dataflow.
     format: JSON
     update_cadence: monthly
     last_verified: 2026-04-19
@@ -165,18 +166,23 @@ sources:
     used_by: [fuel]
 
   - id: abs_fertiliser_imports
-    human_name: ABS International Merchandise Trade — fertiliser imports (HS 31)
+    human_name: ABS International Merchandise Trade — fertiliser imports (SITC 562)
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
-    format: XLSX
+    fetch_url: https://api.data.abs.gov.au/data/MERCH_IMP/562.TOT.TOT.M?format=jsondata&startPeriod=2021-01
+    fetch_dataflow: MERCH_IMP
+    fetch_key: 562.TOT.TOT.M
+    fetch_start_period: 2021-01
+    sdmx_note_suffix: ABS MERCH_IMP is a SITC commodity dataflow; this source uses SITC 562 (manufactured fertilisers) because the live API does not expose an HS 31 monthly value series in this dataflow.
+    format: JSON
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, International Trade in Goods, HS 31 fertiliser imports.
-    reuse_notes: Attribute ABS and preserve HS-code/table/date context for hand-keyed values.
-    fetch: manual
+    citation: Australian Bureau of Statistics, International Trade in Goods, SITC 562 manufactured fertiliser imports.
+    reuse_notes: Fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The live ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; do not describe this envelope as HS 31 unless an HS-coded ABS API series is added later.
+    fetch: programmatic
     used_by: [fertilizer]
 
   - id: abs_fertiliser_imports_urea
@@ -186,11 +192,11 @@ sources:
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     format: XLSX
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, International Trade in Goods, HS 3102 urea imports.
-    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3102 or the relevant urea classification.
+    reuse_notes: No programmatic endpoint. The ABS Data API MERCH_IMP dataflow only exposes two- and three-digit SITC commodity codes (e.g. 56, 562); four-digit SITC subdivisions (5621 nitrogenous) return 404 and there is no HS-coded ABS API dataflow for merchandise imports. Hand-key only from the ABS International Trade release table that explicitly reports HS 3102 or the relevant urea classification.
     fetch: manual
     used_by: [fertilizer]
 
@@ -201,11 +207,11 @@ sources:
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     format: XLSX
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, International Trade in Goods, HS 3104 potash imports.
-    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3104 or the relevant potash classification.
+    reuse_notes: No programmatic endpoint. The ABS Data API MERCH_IMP dataflow only exposes two- and three-digit SITC commodity codes (e.g. 56, 562); four-digit SITC subdivisions (5622 potassic) return 404 and there is no HS-coded ABS API dataflow for merchandise imports. Hand-key only from the ABS International Trade release table that explicitly reports HS 3104 or the relevant potash classification.
     fetch: manual
     used_by: [fertilizer]
 
@@ -216,11 +222,11 @@ sources:
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     format: XLSX
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, International Trade in Goods, HS 3103 phosphate imports.
-    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3103 or the relevant phosphate classification.
+    reuse_notes: No programmatic endpoint. The ABS Data API MERCH_IMP dataflow only exposes two- and three-digit SITC commodity codes (e.g. 56, 562); four-digit SITC subdivisions (5623 phosphatic) return 404 and there is no HS-coded ABS API dataflow for merchandise imports. Hand-key only from the ABS International Trade release table that explicitly reports HS 3103 or the relevant phosphate classification.
     fetch: manual
     used_by: [fertilizer]
 
@@ -231,11 +237,11 @@ sources:
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     format: XLSX
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, International Trade in Goods, HS 3105 compound fertiliser imports.
-    reuse_notes: Hand-key only from the ABS table/code that explicitly reports HS 3105 or the relevant compound fertiliser classification.
+    reuse_notes: No programmatic endpoint. The ABS Data API MERCH_IMP dataflow only exposes two- and three-digit SITC commodity codes (e.g. 56, 562); four-digit SITC subdivisions (5629 other manufactured) return 404 and there is no HS-coded ABS API dataflow for merchandise imports. Hand-key only from the ABS International Trade release table that explicitly reports HS 3105 or the relevant compound fertiliser classification.
     fetch: manual
     used_by: [fertilizer]
 
@@ -246,11 +252,11 @@ sources:
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     format: XLSX
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, International Trade in Goods, HS 31 source-country detail.
-    reuse_notes: Hand-key only from ABS country-of-origin detail; preserve month, HS scope and country ranking method.
+    reuse_notes: No programmatic endpoint for a ranked country-of-origin concentration series. The ABS Data API MERCH_IMP dataflow allows a single country code in the COUNTRY dimension but does not expose a top-N ranking or share-of-total aggregation; computing concentration (e.g. HHI, top-3 share) would require fetching every country-by-month cell and aggregating client-side, which exceeds the stdlib+requests fetcher runtime and is out of scope for this dashboard. Hand-key only from the ABS country-of-origin detail tables; preserve month, HS/SITC scope and ranking method.
     fetch: manual
     used_by: [fertilizer]
 
@@ -576,11 +582,11 @@ sources:
     canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data
     format: XLSX
     update_cadence: quarterly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: ABARES, Agricultural commodities data.
-    reuse_notes: Attribute ABARES and cite release quarter/table for hand-keyed values.
+    reuse_notes: No programmatic endpoint. ABARES publishes the Agricultural commodities quarterly release as XLSX workbooks on agriculture.gov.au/abares/research-topics/agricultural-outlook/data; no CSV/JSON API or CKAN feed exposes the fertiliser price index series. XLSX parsing is out of scope for the current fetcher runtime (stdlib + requests + pyyaml). Attribute ABARES and cite release quarter/table for hand-keyed values.
     fetch: manual
     used_by: [fertilizer]
 
@@ -591,11 +597,11 @@ sources:
     canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data
     format: XLSX
     update_cadence: quarterly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: ABARES, Agricultural commodities data, fertiliser stock-cover indicator if published.
-    reuse_notes: Leave unavailable unless a named public ABARES or DCCEEW source explicitly reports fertiliser stock cover or enough inputs for a documented calculation.
+    reuse_notes: No programmatic endpoint; the ABARES Agricultural commodities release does not publish a standalone fertiliser stock-cover indicator in its public XLSX workbooks. Leave unavailable unless a named public ABARES or DCCEEW source explicitly reports fertiliser stock cover or enough inputs for a documented calculation.
     fetch: unavailable
     used_by: [fertilizer]
 
