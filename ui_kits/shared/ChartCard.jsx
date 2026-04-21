@@ -22,7 +22,10 @@ function ChartCard({
         <article className="chart-card chart-card--unavailable" aria-label={`${title}: source unavailable`}>
           <header className="chart-card__head">
             <div>
-              {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+              <div className="card-status-row">
+                {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+                {window.StatusPill && <StatusPill env={env}/>}
+              </div>
               <h3 className="chart-card__title">{title}</h3>
             </div>
           </header>
@@ -96,7 +99,10 @@ function ChartCard({
     <article className="chart-card" aria-labelledby={`ch-${title.replace(/\s+/g,'-')}`}>
       <header className="chart-card__head">
         <div>
-          {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+          <div className="card-status-row">
+            {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+            {fromEnvelope !== undefined && window.StatusPill && <StatusPill env={fromEnvelope}/>}
+          </div>
           <h3 id={`ch-${title.replace(/\s+/g,'-')}`} className="chart-card__title">{title}</h3>
         </div>
         <div className="chart-card__toggles" role="group" aria-label="Time range">

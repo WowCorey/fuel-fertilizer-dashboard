@@ -29,7 +29,7 @@
 #   rights_url:      upstream licence/terms URL, when known
 #   citation:        required or recommended source attribution
 #   reuse_notes:     practical caveats for republishing values
-#   fetch:           programmatic | manual | unavailable
+#   fetch:           programmatic | derived | manual | unavailable
 #   used_by:         dashboard ids that consume this source
 
 sources:
@@ -44,14 +44,18 @@ sources:
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     data_portal_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: IEA days net import cover
+    aps_column: IEA days of net import coverage
+    fetch_unit: days
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-20
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.
-    reuse_notes: Latest monthly workbook is discoverable via the data.gov.au CKAN package endpoint under stable dataset id d889484e-fb65-4190-a2e3-1739517cbf9b; the only resource is the APS data-extract XLSX. Stays manual until XLSX parsing is added to the fetcher runtime. Verify workbook terms before republishing hand-keyed values.
-    fetch: manual
+    reuse_notes: Programmatically discovered from the data.gov.au CKAN package endpoint under stable dataset id d889484e-fb65-4190-a2e3-1739517cbf9b. The fetcher reads the latest APS data-extract XLSX, sheet "IEA days net import cover", column "IEA days of net import coverage".
+    fetch: programmatic
     used_by: [fuel, oil]
 
   - id: aps_production_petrol
@@ -59,14 +63,18 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Refinery production
+    aps_column: Automotive gasoline (ML)
+    fetch_unit: ML
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, motor spirit production.
-    reuse_notes: Hand-key only from the APS workbook table that explicitly reports motor spirit production.
-    fetch: manual
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Refinery production", column "Automotive gasoline (ML)".
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_production_diesel
@@ -74,14 +82,18 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Refinery production
+    aps_column: Diesel oil (ML)
+    fetch_unit: ML
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, diesel production.
-    reuse_notes: Hand-key only from the APS workbook table that explicitly reports diesel production.
-    fetch: manual
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Refinery production", column "Diesel oil (ML)".
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_production_jet
@@ -89,14 +101,18 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Refinery production
+    aps_column: Aviation turbine fuel (ML)
+    fetch_unit: ML
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, jet fuel production.
-    reuse_notes: Hand-key only from the APS workbook table that explicitly reports jet fuel production.
-    fetch: manual
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Refinery production", column "Aviation turbine fuel (ML)".
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_production_fuel_oil
@@ -104,14 +120,18 @@ sources:
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
     url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Refinery production
+    aps_column: Fuel oil (ML)
+    fetch_unit: ML
     format: XLSX
     update_cadence: monthly
     last_verified: 2026-04-15
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, fuel oil production.
-    reuse_notes: Hand-key only from the APS workbook table that explicitly reports fuel oil production.
-    fetch: manual
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Refinery production", column "Fuel oil (ML)".
+    fetch: programmatic
     used_by: [oil]
 
   - id: aps_refinery_utilisation
@@ -280,6 +300,7 @@ sources:
     publisher: Australian Institute of Petroleum
     url: https://www.aip.com.au/pricing
     canonical_url: https://www.aip.com.au/pricing
+    fetch_url: https://www.aip.com.au/historical-ulp-and-diesel-tgp-data
     archive_url: https://www.aip.com.au/historical-ulp-and-diesel-tgp-data
     format: XLSX
     update_cadence: weekly
@@ -287,8 +308,8 @@ sources:
     rights: AIP terms
     rights_url: https://www.aip.com.au/pricing
     citation: Australian Institute of Petroleum, Terminal Gate Prices.
-    reuse_notes: Weekly TGP data is published as date-stamped XLSX files under aip.com.au/sites/default/files/download-files/<yyyy-mm>/AIP_TGP_Data_<dd-Mon-yyyy>.xlsx plus an annual XLSX roll-up; filenames change each week so the URL is not stable, and the fetcher runtime has no XLSX parser. Stays manual. Verify AIP reuse terms before republishing values.
-    fetch: manual
+    reuse_notes: The fetcher reads the AIP historical TGP page, discovers the current date-stamped AIP_TGP_Data_<dd-Mon-yyyy>.xlsx workbook, and publishes monthly means of the daily national average unleaded petrol terminal gate price from the "Petrol TGP" sheet. Verify AIP reuse terms before republishing values.
+    fetch: programmatic
     used_by: [fuel]
 
   - id: aip_retail
@@ -303,7 +324,7 @@ sources:
     rights: AIP terms
     rights_url: https://www.aip.com.au/pricing
     citation: Australian Institute of Petroleum, national average retail prices.
-    reuse_notes: AIP publishes the national weighted-average weekly retail petrol and diesel figures only as date-stamped PDF reports under aip.com.au/sites/default/files/download-files/<yyyy-mm>/Weekly%20<Product>%20Prices%20Report%20-%20<dd>%20<Month>%20<yyyy>.pdf. No CSV/XLSX/JSON is offered, and the fetcher runtime has no PDF parser. Stays manual. Verify AIP reuse terms before republishing values.
+    reuse_notes: AIP publishes current retail-price table data and date-stamped weekly PDF reports, but no stable public historical CSV/XLSX/JSON time series was identified. Keep manual until a deterministic source file and reporting-period model are confirmed. Verify AIP reuse terms before republishing values.
     fetch: manual
     used_by: [fuel]
 

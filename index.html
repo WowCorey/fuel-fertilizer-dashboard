@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fuel Resilience AU</title>
 <meta name="description" content="Static dashboard hub for Australian fuel, fertiliser, oil production and retail-price source envelopes.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="colors_and_type.css">
 <link rel="stylesheet" href="ui_kits/shared/styles.css">
 <style>
@@ -166,8 +167,9 @@
           <span class="eyebrow">Dashboards</span>
           <h2 id="dashboards-title">Choose a dashboard</h2>
           <p class="section__lede">
-            Brent and WTI crude envelopes are currently refreshed programmatically. Most Australian
-            source series are registered as manual pending or unavailable until verified from the named publisher.
+            Programmatic envelopes now cover ABS trade, APS petroleum statistics, AIP terminal
+            gate prices, RBA AUD/USD, EIA/FRED benchmarks and multi-state retail fuel. Manual and
+            unavailable slots remain visible where a safe source has not been wired.
           </p>
         </div>
       </div>
@@ -176,19 +178,19 @@
           <h3>Fuel</h3>
           <p>Imports, pump prices and days of net import cover.</p>
           <a class="home-card__link" href="ui_kits/fuel-dashboard/index.html">Open fuel dashboard</a>
-          <div class="home-card__status">Status: manual Australian series pending verification.</div>
+          <div class="home-card__status">Status: ABS imports, APS cover, AIP TGP and multi-state retail average live; AIP retail remains manual.</div>
         </article>
         <article class="home-card">
           <h3>Fertilizer</h3>
           <p>Fertiliser import subseries, price index and supplier concentration slots.</p>
           <a class="home-card__link" href="ui_kits/fertilizer-dashboard/index.html">Open fertiliser dashboard</a>
-          <div class="home-card__status">Status: source envelopes registered; values pending manual verification.</div>
+          <div class="home-card__status">Status: ABS total fertiliser imports live; nutrient and ABARES slots remain manual or unavailable.</div>
         </article>
         <article class="home-card">
           <h3>Oil &amp; production</h3>
           <p>Crude benchmarks, domestic production, refinery utilisation and fuel-security placeholders.</p>
           <a class="home-card__link" href="ui_kits/oil-and-production/index.html">Open oil dashboard</a>
-          <div class="home-card__status">Status: Brent and WTI live; other slots pending or unavailable by design.</div>
+          <div class="home-card__status">Status: Brent, WTI, RBA AUD/USD, EIA refined fuels and APS production live; Tapis and policy slots remain pending.</div>
         </article>
         <article class="home-card">
           <h3>Who pays what</h3>

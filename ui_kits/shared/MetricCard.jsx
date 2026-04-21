@@ -20,7 +20,10 @@ function MetricCard({
       return (
         <article className="metric-card metric-card--unavailable"
           aria-label={`${label}: source unavailable`}>
-          {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+          <div className="card-status-row">
+            {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+            {window.StatusPill && <StatusPill env={env}/>}
+          </div>
           <h3 className="metric-card__label">{label}</h3>
           <p className="metric-card__plain">Source unavailable — awaiting data.</p>
           <div className="metric-card__unavail">
@@ -46,7 +49,10 @@ function MetricCard({
   return (
     <article className={`metric-card ${highlight ? 'metric-card--highlight' : ''}`}
       aria-label={`${label}: ${value}${unit || ''}`}>
-      {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+      <div className="card-status-row">
+        {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+        {fromEnvelope !== undefined && window.StatusPill && <StatusPill env={fromEnvelope}/>}
+      </div>
       <h3 className="metric-card__label">
         {jargonHint ? (
           <>

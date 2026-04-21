@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fertilizer — Fuel Resilience AU</title>
 <meta name="description" content="Australia's fertiliser imports, prices and source-country mix with transparent source availability.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../colors_and_type.css">
 <link rel="stylesheet" href="../shared/styles.css">
 </head>
@@ -17,6 +18,7 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
 
 <script src="../shared/data-loader.js"></script>
+<script type="text/babel" src="../shared/DataCoverage.jsx"></script>
 <script type="text/babel" src="../shared/Header.jsx"></script>
 <script type="text/babel" src="../shared/MetricCard.jsx"></script>
 <script type="text/babel" src="../shared/ChartCard.jsx"></script>
@@ -72,9 +74,11 @@ function App() {
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Refresh</strong>
-            <span>Programmatic weekly · manual values after verification</span>
+            <span>Live where fetched · manual only after verification</span>
           </aside>
         </section>
+
+        <DataCoverage data={data}/>
 
         {/* WHY THIS MATTERS */}
         <section className="section section--why" aria-labelledby="why">

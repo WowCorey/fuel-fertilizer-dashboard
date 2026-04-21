@@ -1,0 +1,696 @@
+{
+  "schema": "fuel_resilience_source_manifest.v1",
+  "sources": {
+    "abares_fertiliser_price": {
+      "id": "abares_fertiliser_price",
+      "human_name": "ABARES fertiliser price index (Agricultural commodities)",
+      "publisher": "Australian Bureau of Agricultural and Resource Economics and Sciences",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "ABARES, Agricultural commodities data.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abares_fertiliser_stock_cover": {
+      "id": "abares_fertiliser_stock_cover",
+      "human_name": "ABARES fertiliser stock-cover data",
+      "publisher": "Australian Bureau of Agricultural and Resource Economics and Sciences",
+      "fetch": "unavailable",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "ABARES, Agricultural commodities data, fertiliser stock-cover indicator if published.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_fertiliser_imports": {
+      "id": "abs_fertiliser_imports",
+      "human_name": "ABS International Merchandise Trade — fertiliser imports (SITC 562)",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, SITC 562 manufactured fertiliser imports.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "abs_fertiliser_imports_compound": {
+      "id": "abs_fertiliser_imports_compound",
+      "human_name": "ABS International Merchandise Trade - compound fertiliser imports (HS 3105)",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 3105 compound fertiliser imports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_fertiliser_imports_phosphate": {
+      "id": "abs_fertiliser_imports_phosphate",
+      "human_name": "ABS International Merchandise Trade - phosphate imports (HS 3103)",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 3103 phosphate imports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_fertiliser_imports_potash": {
+      "id": "abs_fertiliser_imports_potash",
+      "human_name": "ABS International Merchandise Trade - potash imports (HS 3104)",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 3104 potash imports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_fertiliser_imports_urea": {
+      "id": "abs_fertiliser_imports_urea",
+      "human_name": "ABS International Merchandise Trade - urea imports (HS 3102)",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 3102 urea imports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_fertiliser_source_concentration": {
+      "id": "abs_fertiliser_source_concentration",
+      "human_name": "ABS International Merchandise Trade - fertiliser source-country concentration",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 31 source-country detail.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_petroleum_imports": {
+      "id": "abs_petroleum_imports",
+      "human_name": "ABS International Merchandise Trade — petroleum imports",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "abs_petroleum_imports_yoy": {
+      "id": "abs_petroleum_imports_yoy",
+      "human_name": "ABS International Merchandise Trade — petroleum imports YoY",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "derived",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "accc_petrol_breakdown_series": {
+      "id": "accc_petrol_breakdown_series",
+      "human_name": "ACCC petrol price breakdown - monthly component series",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown time series.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "accc_petrol_excise_component": {
+      "id": "accc_petrol_excise_component",
+      "human_name": "ACCC petrol price breakdown - fuel excise component",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "accc_petrol_gst_component": {
+      "id": "accc_petrol_gst_component",
+      "human_name": "ACCC petrol price breakdown - GST component",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "accc_petrol_retail_margin_component": {
+      "id": "accc_petrol_retail_margin_component",
+      "human_name": "ACCC petrol price breakdown - retailer margin component",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "accc_petrol_wholesale_component": {
+      "id": "accc_petrol_wholesale_component",
+      "human_name": "ACCC petrol price breakdown - wholesale component",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report, petrol price breakdown.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "accc_petroleum_monitoring": {
+      "id": "accc_petroleum_monitoring",
+      "human_name": "ACCC Petroleum Monitoring Report (latest)",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "fuel",
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aip_retail": {
+      "id": "aip_retail",
+      "human_name": "AIP national average retail petrol/diesel",
+      "publisher": "Australian Institute of Petroleum",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.aip.com.au/pricing",
+      "rights": "AIP terms",
+      "citation": "Australian Institute of Petroleum, national average retail prices.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aip_tgp": {
+      "id": "aip_tgp",
+      "human_name": "AIP Terminal Gate Prices (weekly)",
+      "publisher": "Australian Institute of Petroleum",
+      "fetch": "programmatic",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.aip.com.au/pricing",
+      "rights": "AIP terms",
+      "citation": "Australian Institute of Petroleum, Terminal Gate Prices.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_monthly": {
+      "id": "aps_monthly",
+      "human_name": "Australian Petroleum Statistics (monthly)",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fuel",
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_production_diesel": {
+      "id": "aps_production_diesel",
+      "human_name": "Australian Petroleum Statistics - diesel production",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, diesel production.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_production_fuel_oil": {
+      "id": "aps_production_fuel_oil",
+      "human_name": "Australian Petroleum Statistics - fuel oil production",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, fuel oil production.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_production_jet": {
+      "id": "aps_production_jet",
+      "human_name": "Australian Petroleum Statistics - jet fuel production",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, jet fuel production.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_production_petrol": {
+      "id": "aps_production_petrol",
+      "human_name": "Australian Petroleum Statistics - motor spirit production",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, motor spirit production.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_refinery_utilisation": {
+      "id": "aps_refinery_utilisation",
+      "human_name": "Australian Petroleum Statistics - refinery utilisation",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, refinery utilisation.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "ato_corporate_tax": {
+      "id": "ato_corporate_tax",
+      "human_name": "ATO Corporate Tax Transparency Report (latest year)",
+      "publisher": "Australian Taxation Office",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Taxation Office, Corporate Tax Transparency Report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aus_retail_fuel_multistate": {
+      "id": "aus_retail_fuel_multistate",
+      "human_name": "Retail pump price — multi-state average",
+      "publisher": "NSW FuelCheck / Queensland Government Open Data / WA FuelWatch",
+      "fetch": "programmatic",
+      "update_cadence": "daily",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
+      "rights": "Mixed state government terms; verify each source before reuse",
+      "citation": "NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "company_ampol": {
+      "id": "company_ampol",
+      "human_name": "Ampol annual report (ASX:ALD)",
+      "publisher": "Ampol Limited",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
+      "rights": "Company copyright",
+      "citation": "Ampol annual report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "company_bp_au": {
+      "id": "company_bp_au",
+      "human_name": "BP Australia annual financial statements",
+      "publisher": "BP Australia Pty Ltd (ASIC lodgement)",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.bp.com/en_au/australia.html",
+      "rights": "Company copyright",
+      "citation": "BP Australia annual financial statements.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "company_chevron_au": {
+      "id": "company_chevron_au",
+      "human_name": "Chevron Australia annual financial statements",
+      "publisher": "Chevron Australia Pty Ltd (ASIC lodgement)",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://australia.chevron.com/",
+      "rights": "Company copyright",
+      "citation": "Chevron Australia annual financial statements.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "company_exxonmobil_au": {
+      "id": "company_exxonmobil_au",
+      "human_name": "ExxonMobil Australia annual report & financial statements",
+      "publisher": "ExxonMobil Australia Pty Ltd (ASIC lodgement)",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports",
+      "rights": "Company copyright",
+      "citation": "ExxonMobil Australia annual report and financial statements.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "company_santos": {
+      "id": "company_santos",
+      "human_name": "Santos annual report (ASX:STO)",
+      "publisher": "Santos Limited",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.santos.com/investors/results-reports-and-presentations/",
+      "rights": "Company copyright",
+      "citation": "Santos annual report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "company_shell_au": {
+      "id": "company_shell_au",
+      "human_name": "Shell Australia / Viva Energy legacy financial statements",
+      "publisher": "Shell Energy Australia / Shell Australia Pty Ltd",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.shell.com.au/about-us.html",
+      "rights": "Company copyright",
+      "citation": "Shell Australia financial statements.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "company_viva_energy": {
+      "id": "company_viva_energy",
+      "human_name": "Viva Energy Group annual report (ASX:VEA)",
+      "publisher": "Viva Energy Group Limited",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.vivaenergy.com.au/investors/financial-results-reports",
+      "rights": "Company copyright",
+      "citation": "Viva Energy Group annual report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "company_woodside": {
+      "id": "company_woodside",
+      "human_name": "Woodside Energy annual report (ASX:WDS)",
+      "publisher": "Woodside Energy Group Ltd",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what"
+      ],
+      "canonical_url": "https://www.woodside.com/investors/reports-investor-briefings",
+      "rights": "Company copyright",
+      "citation": "Woodside Energy annual report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "eia_brent": {
+      "id": "eia_brent",
+      "human_name": "Brent crude spot price (EIA)",
+      "publisher": "U.S. Energy Information Administration via FRED mirror",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.eia.gov/dnav/pet/hist/RBRTEm.htm",
+      "rights": "U.S. public domain; FRED citation requested",
+      "citation": "U.S. Energy Information Administration, Crude Oil Prices Brent - Europe [DCOILBRENTEU], retrieved from FRED.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "eia_diesel_retail_us": {
+      "id": "eia_diesel_retail_us",
+      "human_name": "U.S. retail diesel price (EIA, weekly)",
+      "publisher": "U.S. Energy Information Administration via FRED mirror",
+      "fetch": "programmatic",
+      "update_cadence": "weekly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.eia.gov/petroleum/gasdiesel/",
+      "rights": "U.S. public domain; FRED citation requested",
+      "citation": "U.S. Energy Information Administration, U.S. No 2 Diesel Retail Prices [GASDESW], retrieved from FRED.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "eia_jet_spot_usgc": {
+      "id": "eia_jet_spot_usgc",
+      "human_name": "U.S. Gulf Coast jet fuel spot price (EIA, daily)",
+      "publisher": "U.S. Energy Information Administration via FRED mirror",
+      "fetch": "programmatic",
+      "update_cadence": "daily",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+      "rights": "U.S. public domain; FRED citation requested",
+      "citation": "U.S. Energy Information Administration, U.S. Gulf Coast Kerosene-Type Jet Fuel Spot Price FOB [DJFUELUSGULF], retrieved from FRED.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "eia_wti": {
+      "id": "eia_wti",
+      "human_name": "WTI crude spot price (EIA)",
+      "publisher": "U.S. Energy Information Administration via FRED mirror",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.eia.gov/dnav/pet/hist/RWTCm.htm",
+      "rights": "U.S. public domain; FRED citation requested",
+      "citation": "U.S. Energy Information Administration, Crude Oil Prices WTI - Cushing Oklahoma [DCOILWTICO], retrieved from FRED.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "fuel_security_payment": {
+      "id": "fuel_security_payment",
+      "human_name": "Fuel Security Services Payment — recipients & payments",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/energy-and-climate-change-ministerial-council/priorities/fuel-security",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Fuel Security Services Payment disclosures.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "iea_90day": {
+      "id": "iea_90day",
+      "human_name": "IEA 90-day oil stockholding obligation",
+      "publisher": "International Energy Agency",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel",
+        "oil"
+      ],
+      "canonical_url": "https://www.iea.org/reports/oil-stockholding",
+      "rights": "IEA terms of use",
+      "citation": "International Energy Agency, Agreement on an International Energy Program (1974), 90-day stockholding obligation.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "offshore_ticket_volumes": {
+      "id": "offshore_ticket_volumes",
+      "human_name": "DCCEEW offshore ticket volume disclosures",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "rba_aud_usd": {
+      "id": "rba_aud_usd",
+      "human_name": "Reserve Bank of Australia — AUD/USD exchange rate",
+      "publisher": "Reserve Bank of Australia",
+      "fetch": "programmatic",
+      "update_cadence": "daily",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.rba.gov.au/statistics/tables/#exchange-rates",
+      "rights": "RBA website terms",
+      "citation": "Reserve Bank of Australia, Statistical Table F11.1 Exchange Rates.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "tapis_crude": {
+      "id": "tapis_crude",
+      "human_name": "Tapis crude benchmark",
+      "publisher": "Various market-data mirrors",
+      "fetch": "unavailable",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm",
+      "rights": "Commercial market data; no reliable free public series identified",
+      "citation": "Tapis benchmark source to be cited when a licence-compatible source is identified.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    }
+  }
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Fuel Resilience AU">
+  <rect width="64" height="64" rx="8" fill="#14181F"/>
+  <path d="M20 11h24v8H28v9h13v8H28v17h-8z" fill="#F8F5EC"/>
+  <path d="M44 31c0 9-5 15-12 22-7-7-12-13-12-22 0-8 5-14 12-14s12 6 12 14z" fill="none" stroke="#2F8F83" stroke-width="4"/>
+</svg>
