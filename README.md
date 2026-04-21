@@ -36,6 +36,10 @@ interpolate or estimate missing numbers.
 
 Every page cross-links to the others in the header nav.
 
+Known missing data is tracked in
+[`docs/remaining-data-gaps.md`](docs/remaining-data-gaps.md). Those gaps stay
+unavailable until a named public source supports the exact value.
+
 ## Run locally
 
 The committed site can be served as static files because the dashboard JSX is
