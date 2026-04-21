@@ -508,21 +508,6 @@ sources:
     fetch: unavailable
     used_by: [oil]
 
-  - id: aud_usd_rba
-    human_name: Reserve Bank of Australia — AUD/USD exchange rate (monthly)
-    publisher: Reserve Bank of Australia
-    url: https://www.rba.gov.au/statistics/tables/xls-hist/f11.1-data.xlsx
-    canonical_url: https://www.rba.gov.au/statistics/tables/xls-hist/f11.1-data.xlsx
-    format: XLSX
-    update_cadence: monthly
-    last_verified: 2026-04-15
-    rights: RBA website terms
-    rights_url: https://www.rba.gov.au/copyright/
-    citation: Reserve Bank of Australia, Statistical Table F11.1.
-    reuse_notes: Layout-sensitive workbook; preserve table/date context for hand-keyed values.
-    fetch: manual
-    used_by: [oil, who_pays_what]
-
   - id: rba_aud_usd
     human_name: Reserve Bank of Australia — AUD/USD exchange rate
     publisher: Reserve Bank of Australia
@@ -531,11 +516,11 @@ sources:
     fetch_url: https://www.rba.gov.au/statistics/tables/csv/f11.1-data.csv
     format: CSV
     update_cadence: daily
-    last_verified: 2026-04-19
+    last_verified: 2026-04-20
     rights: RBA website terms
     rights_url: https://www.rba.gov.au/copyright/
     citation: Reserve Bank of Australia, Statistical Table F11.1 Exchange Rates.
-    reuse_notes: Fetches daily AUD/USD observations from the RBA F11.1 CSV and publishes monthly means. The oil page still uses the existing manual aud_usd_rba stub until a later UI wiring PR.
+    reuse_notes: Fetches daily AUD/USD observations from the RBA F11.1 CSV and publishes monthly means for dashboard display; last_data_point reflects the latest raw daily observation.
     fetch: programmatic
     used_by: [oil]
 
