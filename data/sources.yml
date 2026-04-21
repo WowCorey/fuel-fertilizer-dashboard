@@ -731,6 +731,190 @@ sources:
     fetch: manual
     used_by: [national_status]
 
+  # =========================================================
+  # RESOURCE VALUE - v1.5 (who captures oil and gas value)
+  # =========================================================
+
+  - id: resource_company_tax_rate
+    human_name: ATO company tax rates
+    publisher: Australian Taxation Office
+    url: https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates
+    canonical_url: https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates
+    format: HTML_TABLE
+    update_cadence: annual
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; ATO website terms apply
+    rights_url: https://www.ato.gov.au/using-our-website/terms-of-use
+    citation: Australian Taxation Office, Company tax rates.
+    reuse_notes: Policy-rate source only. The dashboard uses the full company tax rate as the headline and records the base-rate entity rate separately in structured extra fields. Do not treat this as tax actually paid by any oil or gas company.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_prrt_policy
+    human_name: ATO Petroleum Resource Rent Tax policy
+    publisher: Australian Taxation Office
+    url: https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax
+    canonical_url: https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; ATO website terms apply
+    rights_url: https://www.ato.gov.au/using-our-website/terms-of-use
+    citation: Australian Taxation Office, Petroleum resource rent tax.
+    reuse_notes: Policy-rate source only. PRRT is a profits-based tax on project taxable profit, not a royalty and not a gross export-value tax. Receipts and company/project-level liabilities require separate official data before display.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_wa_petroleum_royalties
+    human_name: WA petroleum royalties
+    publisher: Government of Western Australia, Department of Energy, Mines, Industry Regulation and Safety
+    url: https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties
+    canonical_url: https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Government of Western Australia copyright and website terms
+    rights_url: https://www.wa.gov.au/copyright
+    citation: Government of Western Australia, Petroleum royalties.
+    reuse_notes: Explainer source for petroleum royalty mechanisms. The headline metric uses the Barrow Island Resource Rent Royalty rate; North West Shelf royalty rates and shares are stored as structured fields. This does not represent total royalty receipts.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_lng_export_value_req
+    human_name: Resources and Energy Quarterly - LNG export earnings
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; DISR copyright terms apply
+    rights_url: https://www.industry.gov.au/about-us/copyright
+    citation: "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025."
+    reuse_notes: Manual extract from the official REQ gas summary. Values are export earnings in A$m and may be forecast or estimate values depending on the REQ release; retain the value period and release in the envelope notes.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_oil_export_value_req
+    human_name: Resources and Energy Quarterly - oil export earnings
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; DISR copyright terms apply
+    rights_url: https://www.industry.gov.au/about-us/copyright
+    citation: "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025."
+    reuse_notes: Manual extract from the official REQ oil summary. Values are export earnings in A$m and may be forecast or estimate values depending on the REQ release; retain the value period and release in the envelope notes.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_lng_export_destinations_req
+    human_name: Resources and Energy Quarterly - LNG export destinations
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; DISR copyright terms apply
+    rights_url: https://www.industry.gov.au/about-us/copyright
+    citation: "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025, LNG exports by destination table."
+    reuse_notes: Manual extract from the REQ LNG destinations table. Later destination years can be confidentialised; keep unavailable cells blank rather than backfilling or estimating buyer shares.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_gas_origin_aecr
+    human_name: Geoscience Australia AECR - gas production and exports
+    publisher: Geoscience Australia
+    url: https://www.ga.gov.au/aecr2025/gas
+    canonical_url: https://www.ga.gov.au/aecr2025/gas
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; Geoscience Australia copyright terms apply
+    rights_url: https://www.ga.gov.au/copyright
+    citation: "Geoscience Australia, Australia's Energy Commodity Resources 2025: Gas."
+    reuse_notes: National gas origin and production context only. This source does not provide a complete state-by-state or project-by-project export-flow map for the dashboard.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_domestic_gas_prices_accc
+    human_name: ACCC Gas Inquiry - domestic gas prices
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30
+    canonical_url: https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; ACCC copyright terms apply
+    rights_url: https://www.accc.gov.au/about-us/using-this-website/copyright-and-disclaimer
+    citation: Australian Competition and Consumer Commission, Gas Inquiry 2017-30 reports.
+    reuse_notes: Registered for the later domestic-versus-export price phase. Leave unavailable until the exact ACCC price measure, buyer segment, region, quarter and comparison methodology are selected.
+    fetch: unavailable
+    used_by: [resource_value]
+
+  - id: resource_state_production_aes
+    human_name: Australian Energy Statistics - production by state
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.energy.gov.au/energy-data/australian-energy-statistics
+    canonical_url: https://www.energy.gov.au/energy-data/australian-energy-statistics
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics.
+    reuse_notes: Registered for the later production-by-state phase. Leave unavailable until the exact table, product scope, state/basin mapping and unit are selected.
+    fetch: unavailable
+    used_by: [resource_value]
+
+  - id: resource_norway_petroleum_tax_model
+    human_name: Norwegian petroleum tax system
+    publisher: Norwegian Ministry of Energy and Norwegian Offshore Directorate via Norskpetroleum.no
+    url: https://www.norskpetroleum.no/en/economy/petroleum-tax/
+    canonical_url: https://www.norskpetroleum.no/en/economy/petroleum-tax/
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Norskpetroleum.no copyright and reuse terms
+    rights_url: https://www.norskpetroleum.no/en/about/
+    citation: Norskpetroleum.no, The Petroleum Tax System.
+    reuse_notes: Comparison source only. Norway's 78% marginal petroleum tax rate is not directly comparable to Australia's company tax or PRRT without also showing direct state ownership, dividends and field-level fiscal design.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_norway_state_revenue_model
+    human_name: Norwegian petroleum government revenues
+    publisher: Norwegian Ministry of Energy and Norwegian Offshore Directorate via Norskpetroleum.no
+    url: https://www.norskpetroleum.no/en/economy/governments-revenues/
+    canonical_url: https://www.norskpetroleum.no/en/economy/governments-revenues/
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Norskpetroleum.no copyright and reuse terms
+    rights_url: https://www.norskpetroleum.no/en/about/
+    citation: Norskpetroleum.no, The government's revenues.
+    reuse_notes: "Comparison source for Norway's state capture channels: petroleum tax, SDFI, Equinor dividends, fees and environmental taxes. Do not reduce this to a single Australian leakage number without a documented denominator."
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_value_leakage_model
+    human_name: Resource value leakage model placeholder
+    publisher: Fuel Resilience AU methodology
+    url: https://github.com/WowCorey/fuel-fertilizer-dashboard
+    canonical_url: https://github.com/WowCorey/fuel-fertilizer-dashboard
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU methodology, resource value dashboard.
+    reuse_notes: Intentional unavailable envelope. A leakage estimate requires verified export values, government receipts, company profits, royalty/PRRT receipts and a published method. Keep unavailable until those inputs exist.
+    fetch: unavailable
+    used_by: [resource_value]
+
   - id: abares_fertiliser_price
     human_name: ABARES fertiliser price index (Agricultural commodities)
     publisher: Australian Bureau of Agricultural and Resource Economics and Sciences

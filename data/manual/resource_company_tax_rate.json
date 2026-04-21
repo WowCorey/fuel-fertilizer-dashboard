@@ -1,0 +1,29 @@
+{
+  "series_id": "resource_company_tax_rate",
+  "source_id": "resource_company_tax_rate",
+  "source_name": "ATO company tax rates",
+  "source_url": "https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates",
+  "unit": "%",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 30
+    }
+  ],
+  "notes": "Policy-rate envelope. The headline is the full company tax rate. The base-rate entity rate is recorded in structured fields, but this dashboard does not use it as an oil and gas company tax-paid figure.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; ATO website terms apply",
+  "citation": "Australian Taxation Office, Company tax rates.",
+  "extra": {
+    "schema": "resource_policy_rate.v1",
+    "fields": {
+      "period": "2024-25",
+      "full_company_tax_rate_percent": 30,
+      "base_rate_entity_rate_percent": 25,
+      "dashboard_use": "Company tax policy rate only; actual company tax paid is handled by the separate who-pays-what company envelopes."
+    }
+  }
+}

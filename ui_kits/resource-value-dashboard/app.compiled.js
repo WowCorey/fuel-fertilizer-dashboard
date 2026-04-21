@@ -591,7 +591,100 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_fertiliser_imports', 'abs_fertiliser_imports_urea', 'abs_fertiliser_imports_potash', 'abs_fertiliser_imports_phosphate', 'abs_fertiliser_imports_compound', 'abs_fertiliser_source_concentration', 'abares_fertiliser_price', 'abares_fertiliser_stock_cover'];
+const SERIES = ['resource_company_tax_rate', 'resource_prrt_policy', 'resource_wa_petroleum_royalties', 'resource_lng_export_value_req', 'resource_oil_export_value_req', 'resource_lng_export_destinations_req', 'resource_gas_origin_aecr', 'resource_domestic_gas_prices_accc', 'resource_state_production_aes', 'resource_norway_petroleum_tax_model', 'resource_norway_state_revenue_model', 'resource_value_leakage_model'];
+function latestValue(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1).v;
+}
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function audBillions(valueAm) {
+  if (valueAm == null) return '-';
+  return 'A$' + (Number(valueAm) / 1000).toLocaleString('en-AU', {
+    maximumFractionDigits: 1
+  }) + 'b';
+}
+function oneDecimal(value) {
+  if (value == null) return '-';
+  return Number(value).toLocaleString('en-AU', {
+    maximumFractionDigits: 1
+  });
+}
+function ScenarioCard({
+  lngEnv,
+  oilEnv
+}) {
+  const lng = latestValue(lngEnv);
+  const oil = latestValue(oilEnv);
+  const canCompute = lng != null && oil != null;
+  const value = canCompute ? (lng + oil) * 0.25 : null;
+  return React.createElement("article", {
+    className: `metric-card ${canCompute ? '' : 'metric-card--unavailable'}`
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Scenario only"), React.createElement("span", {
+    className: "status-pill status-pill--derived"
+  }, "Method")), React.createElement("h3", {
+    className: "metric-card__label"
+  }, "25% gross export-value scenario"), React.createElement("p", {
+    className: "metric-card__plain"
+  }, "Hypothetical 25% levy on the currently loaded LNG plus oil export earnings. This is not current law and not a PRRT estimate."), canCompute ? React.createElement("div", {
+    className: "metric-card__row"
+  }, React.createElement("span", {
+    className: "metric-numeral"
+  }, oneDecimal(value / 1000)), React.createElement("span", {
+    className: "metric-unit"
+  }, "A$b")) : React.createElement("div", {
+    className: "metric-card__unavail"
+  }, React.createElement(Icon, {
+    name: "alert",
+    size: 18
+  }), React.createElement("span", null, "Scenario hidden until both LNG and oil export-value envelopes are verified.")), React.createElement("footer", {
+    className: "metric-card__foot"
+  }, React.createElement("span", {
+    className: "metric-card__source"
+  }, "Method: (LNG export value + oil export value) x 25%.")));
+}
+function SourceSummary({
+  id,
+  env
+}) {
+  const meta = env?._meta || {};
+  const status = env?.status === 'ok' ? `Verified envelope. ${env.values?.length || 0} data point${env.values?.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting a verified method or value before publication.';
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
+    className: "body-sm"
+  }, status), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), meta.rights && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })), React.createElement("p", {
+    className: "caption mono"
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-'));
+}
+function PhaseTable() {
+  const rows = [['Phase 1', 'Tax, royalty and PRRT explainer', 'Added here with official source envelopes.'], ['Phase 2', 'Production and export-flow maps/tables', 'Started with national gas origin and LNG destination envelopes; full state/basin flow map still pending.'], ['Phase 3', 'Domestic vs export price comparison', 'Source registered; no comparison published until the exact ACCC price measure and export benchmark are selected.'], ['Phase 4', '25% export-tax scenario calculator', 'Method card added as a transparent scenario, using loaded export-value envelopes only.'], ['Phase 5', 'Norway comparison and value retained/leaked', 'Norway comparison sources added; leakage estimate remains unavailable until Australian receipt inputs and method exist.']];
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Phase"), React.createElement("th", null, "Scope"), React.createElement("th", null, "Current status"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row[0]
+  }, React.createElement("td", null, React.createElement("b", null, row[0])), React.createElement("td", null, row[1]), React.createElement("td", null, row[2]))))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -601,7 +694,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fertilizer"
+      active: "resource_value"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -610,25 +703,29 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const royaltyFields = fields(data.resource_wa_petroleum_royalties);
+  const gasFields = fields(data.resource_gas_origin_aecr);
+  const norwayRevenue = fields(data.resource_norway_state_revenue_model);
+  const destinations = fields(data.resource_lng_export_destinations_req).destinations || [];
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fertilizer",
+    active: "resource_value",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "fertilizer"
+    id: "resource-value"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Fertilizer \xB7 v1.1"), React.createElement("h1", {
+  }, "Resource value"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's fertiliser, in plain English."), React.createElement("p", {
+  }, "Who captures Australian oil and gas value?"), React.createElement("p", {
     className: "intro__lede"
-  }, "Australia imports the majority of its fertiliser \u2014 the stuff that keeps wheat, canola and pasture growing. When overseas supply gets tight, it shows up as higher farm-gate prices within a season, and higher food costs not long after.")), React.createElement("aside", {
+  }, "This page separates the resource-value question from the company-tax dashboard. It shows official policy rates, export-value context and comparison sources without turning them into a leakage claim until the receipts and methodology are verified.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -637,221 +734,161 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "No leakage estimate is published yet."))), React.createElement(DataCoverage, {
     data: data
   }), React.createElement("section", {
-    className: "section section--why",
-    "aria-labelledby": "why"
+    className: "section section--why"
   }, React.createElement("div", {
     className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
-    id: "why",
+  }, "Start here"), React.createElement("h2", {
     style: {
       marginTop: 8
     }
-  }, "Why this matters to you")), React.createElement("div", {
+  }, "What this page does and does not claim")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Nearly everything grown commercially in Australia depends on imported fertiliser. Urea, potash and phosphates come in by the boatload, mostly from a short list of supplier countries. That makes the supply chain efficient, but also exposed: a single disruption at one end can push up farm costs across the country."), React.createElement("p", null, "This page is structured to track how much we import each month, what it costs, and how concentrated the supplier list is. Values appear only when the named public source has been verified in a JSON envelope."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ABARES"), " = Australian Bureau of Agricultural and Resource Economics and Sciences.", React.createElement("b", null, " DCCEEW"), " = Department of Climate Change, Energy, the Environment and Water.", React.createElement("b", null, " HS 31"), " = the Harmonised System trade code for fertiliser.")))), React.createElement("section", {
+  }, React.createElement("p", null, React.createElement("b", null, "Company tax"), ", ", React.createElement("b", null, "PRRT"), " and ", React.createElement("b", null, "royalties"), " are different capture channels. A policy rate is not the same thing as cash received by government."), React.createElement("p", null, "The 25% export-tax card is a transparent scenario using the currently loaded export value envelopes. It is not current law, not a PRRT model and not a recommendation."), React.createElement("p", null, "\"Value leaked\" stays blank until the repo has verified Australian royalty receipts, PRRT receipts, export values, company profit data and a documented denominator.")))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "metrics-h"
+    "aria-labelledby": "headline-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Headline numbers"), React.createElement("h2", {
-    id: "metrics-h"
-  }, "As of the latest publisher update"), React.createElement("p", {
+  }, "Headline figures"), React.createElement("h2", {
+    id: "headline-h"
+  }, "Policy rates and export-value context"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
+  }, "Values are copied from official sources or calculated transparently from loaded envelopes."))), React.createElement("div", {
+    className: "metric-grid"
   }, React.createElement(MetricCard, {
-    eyebrow: "Value",
-    label: "Monthly fertiliser imports",
-    plain: "Total value of manufactured fertiliser (SITC 562) cleared into Australia in the latest month, from the ABS Data API.",
-    fromEnvelope: data.abs_fertiliser_imports,
-    unit: " AUD thousands",
-    highlight: true
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Price",
-    label: "Fertiliser price index",
-    plain: "ABARES index. 100 = long-run average.",
-    fromEnvelope: data.abares_fertiliser_price,
-    unit: " index"
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Concentration",
-    label: "Top-3 source countries",
-    plain: "Share of total fertiliser imports coming from the three largest supplier countries.",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
+    eyebrow: "Company tax",
+    label: "Full company tax rate",
+    plain: "Policy rate only; actual paid tax is handled on the Who pays what page.",
+    fromEnvelope: data.resource_company_tax_rate,
     unit: "%"
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Resilience",
-    label: "Months of cover",
-    jargonHint: {
-      term: 'Months of cover',
-      definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.'
-    },
-    plain: "How long Australia's fertiliser stockpile would last if imports stopped.",
-    fromEnvelope: data.abares_fertiliser_stock_cover,
-    unit: " months"
-  })), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending fertiliser source coverage"
+  }), React.createElement(MetricCard, {
+    eyebrow: "PRRT",
+    label: "Petroleum Resource Rent Tax rate",
+    plain: "Applies to taxable petroleum-project profit, not gross export value.",
+    fromEnvelope: data.resource_prrt_policy,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Royalty",
+    label: "WA Barrow Island RRR",
+    plain: "Resource Rent Royalty on net cash flow; not total Australian royalty receipts.",
+    fromEnvelope: data.resource_wa_petroleum_royalties,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Exports",
+    label: "LNG export earnings",
+    plain: "REQ December 2025 value for 2024-25.",
+    fromEnvelope: data.resource_lng_export_value_req,
+    valueFn: env => audBillions(latestValue(env)),
+    unitFn: () => ''
+  }), React.createElement(MetricCard, {
+    eyebrow: "Exports",
+    label: "Oil export earnings",
+    plain: "REQ December 2025 value for 2024-25.",
+    fromEnvelope: data.resource_oil_export_value_req,
+    valueFn: env => audBillions(latestValue(env)),
+    unitFn: () => ''
+  }), React.createElement(ScenarioCard, {
+    lngEnv: data.resource_lng_export_value_req,
+    oilEnv: data.resource_oil_export_value_req
+  }), React.createElement(MetricCard, {
+    eyebrow: "Norway comparison",
+    label: "Marginal petroleum tax rate",
+    plain: "Comparison source only; Norway also uses direct state ownership and dividends.",
+    fromEnvelope: data.resource_norway_petroleum_tax_model,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Not published",
+    label: "Value retained vs leaked",
+    fromEnvelope: data.resource_value_leakage_model
+  }))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "capture-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Capture channels"), React.createElement("h2", {
+    id: "capture-h"
+  }, "What exists now"), React.createElement("p", {
+    className: "section__lede"
+  }, "This table describes the channel. It does not claim how much cash each channel captured."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Channel"), React.createElement("th", null, "Basis"), React.createElement("th", null, "Current envelope"), React.createElement("th", null, "Missing before full value analysis"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Company income tax"), React.createElement("td", null, "Taxable income at the company level."), React.createElement("td", null, latestValue(data.resource_company_tax_rate), "% full company tax rate."), React.createElement("td", null, "Already separate from company-level ATO values on Who pays what.")), React.createElement("tr", null, React.createElement("td", null, "PRRT"), React.createElement("td", null, "Taxable profit of petroleum projects."), React.createElement("td", null, latestValue(data.resource_prrt_policy), "% policy rate."), React.createElement("td", null, "Official PRRT receipts by year/project scope, deductions and uplift treatment.")), React.createElement("tr", null, React.createElement("td", null, "Petroleum royalties"), React.createElement("td", null, "Field-specific royalty systems such as wellhead value or net cash flow."), React.createElement("td", null, "Barrow Island ", latestValue(data.resource_wa_petroleum_royalties), "% RRR; NWS ", royaltyFields.north_west_shelf_primary_production_licence_rate_percent, "% / ", royaltyFields.north_west_shelf_secondary_production_licence_rate_percent, "% royalty rates."), React.createElement("td", null, "Total royalty receipts and field/state coverage.")), React.createElement("tr", null, React.createElement("td", null, "Direct state ownership"), React.createElement("td", null, "Norway comparison channel through SDFI and Equinor shareholding."), React.createElement("td", null, "Norway source lists taxes, SDFI, dividends, fees and environmental taxes."), React.createElement("td", null, "Australian equivalent does not exist at the same scale; comparison needs careful framing.")))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "flows-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Production and buyers"), React.createElement("h2", {
+    id: "flows-h"
+  }, "Where the gas comes from and where LNG goes"), React.createElement("p", {
+    className: "section__lede"
+  }, "Phase 2 starts with national gas-origin context and the latest verified full LNG destination split."))), React.createElement("div", {
+    className: "sources-grid"
   }, React.createElement("article", {
     className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
+  }, React.createElement("h4", null, "Gas origin snapshot"), React.createElement("p", {
     className: "body-sm"
-  }, "Nutrient subseries, ABARES price index, supplier concentration and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.")))), React.createElement("section", {
+  }, "Australia produced ", oneDecimal(gasFields.raw_gas_production_pj), " PJ of gas in ", gasFields.year, ";", ` ${oneDecimal(gasFields.lng_exports_pj)} PJ was exported as LNG.`), React.createElement("p", {
+    className: "caption"
+  }, "About ", oneDecimal(gasFields.conventional_resource_north_west_shelf_share_percent), "% of conventional gas resources are on the North West Shelf, across ", Array.isArray(gasFields.north_west_shelf_basins) ? gasFields.north_west_shelf_basins.join(', ') : 'listed basins', "."), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_gas_origin_aecr))), React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("h4", null, "Norway capture-channel comparison"), React.createElement("p", {
+    className: "body-sm"
+  }, "Norway's 2025 estimated petroleum net government cash flow is ", oneDecimal(norwayRevenue.net_government_cashflow_nok_billion), " NOK billion."), React.createElement("p", {
+    className: "caption"
+  }, "It combines taxes, SDFI, Equinor dividends, fees and environmental taxes. Australia cannot be compared honestly until those channels are mapped separately."), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_norway_state_revenue_model)))), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "LNG destination"), React.createElement("th", null, "Export value"), React.createElement("th", null, "Share of listed total"))), React.createElement("tbody", null, destinations.map(row => React.createElement("tr", {
+    key: row.destination
+  }, React.createElement("td", null, row.destination), React.createElement("td", null, audBillions(row.value)), React.createElement("td", null, (row.value / fields(data.resource_lng_export_destinations_req).total * 100).toFixed(1), "%")))))), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_lng_export_destinations_req))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "charts-h"
+    "aria-labelledby": "roadmap-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "How it's changed"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Imports by type and source country, over time"), React.createElement("p", {
-    className: "section__lede"
-  }, "Charts populate when verified monthly source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Value",
-    title: "Monthly fertiliser imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_fertiliser_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  })), false && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Urea",
-    title: "Monthly urea imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_urea,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Urea (HS 3102) is the largest-volume nitrogen fertiliser. Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Potash",
-    title: "Monthly potash imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_potash,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Potassium fertilisers (HS 3104). Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Phosphates",
-    title: "Monthly phosphate imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_phosphate,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#B45309",
-    takeaway: "Phosphate fertilisers (HS 3103 + DAP/MAP under HS 3105). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Compound",
-    title: "Monthly compound fertiliser imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_compound,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Mixed NPK compound fertilisers (HS 3105, excluding DAP/MAP). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Supplier mix",
-    title: "Top-5 source countries' combined share, over time",
-    unit: "%",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "How concentrated Australia's fertiliser supply is. The higher the share, the more exposed we are to disruption in a small number of supplier countries. Chart populates when the ABS country breakdown is hand-keyed.",
-    yAxisLabel: "Percent of total monthly HS-31 imports (%)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Prices",
-    title: "ABARES fertiliser price index",
-    unit: "index",
-    fromEnvelope: data.abares_fertiliser_price,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#1F3A8A",
-    takeaway: "ABARES publishes an Australian fertiliser price index alongside its quarterly Agricultural Commodities release. 100 = long-run average.",
-    yAxisLabel: "Index (long-run average = 100)"
-  })))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: [],
-    title: "What changed",
-    lede: "Populated from DCCEEW / ABS / ABARES release notes as verified data arrives.",
-    emptyMessage: "Awaiting verified release notes for the loaded fertiliser source envelopes."
-  })), React.createElement("section", {
+  }, "Build phases"), React.createElement("h2", {
+    id: "roadmap-h"
+  }, "What still needs to be done"))), React.createElement(PhaseTable, null)), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+  }, "Sources & methodology"), React.createElement("h2", null, "Every source used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
+  }, "Source envelopes separate verified official facts from future-phase placeholders."))), React.createElement("div", {
     className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+  }, Object.entries(data).map(([id, env]) => React.createElement(SourceSummary, {
     key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+    id: id,
+    env: env
+  }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Monthly fertiliser imports"), React.createElement("dd", null, "Total import value (AUD thousands) of manufactured fertilisers, fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; the four-digit SITC subdivisions (5621 nitrogenous, 5622 potassic, 5623 phosphatic, 5629 other) are not exposed via the live API, so per-nutrient monthly series remain hand-keyed from the ABS International Trade release tables."), React.createElement("dt", null, "Top-3 source countries"), React.createElement("dd", null, "Sum of import value from the three largest supplier countries in the latest month, divided by total HS-31 imports in the same month, from ABS country-of-origin detail."), React.createElement("dt", null, "Fertiliser price index"), React.createElement("dd", null, "Published by ABARES in the quarterly Agricultural Commodities report. Re-based so that the long-run average equals 100."), React.createElement("dt", null, "Months of cover"), React.createElement("dd", null, "Stockpile (tonnes) divided by the prior 12-month average monthly usage, expressed in months. Only published when DCCEEW or ABARES makes stockpile figures public.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "Method rules"), React.createElement("dl", null, React.createElement("dt", null, "Tax and royalty rates"), React.createElement("dd", null, "Policy rates are shown only as rates. Cash received by government needs separate official receipts."), React.createElement("dt", null, "25% export-tax scenario"), React.createElement("dd", null, "Computed as 25% of the loaded LNG plus oil export-value envelopes. It is a gross scenario, not a profits-based tax model."), React.createElement("dt", null, "Value leakage"), React.createElement("dd", null, "Not published. It remains unavailable until the denominator, Australian receipt channels and Norway comparison are documented from source envelopes.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

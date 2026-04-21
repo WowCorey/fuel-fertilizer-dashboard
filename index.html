@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fuel Resilience AU</title>
-<meta name="description" content="Static dashboard hub for Australian fuel, fertiliser, oil production and retail-price source envelopes.">
+<meta name="description" content="Static dashboard hub for Australian fuel, fertiliser, oil production, national status and resource-value source envelopes.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="colors_and_type.css">
 <link rel="stylesheet" href="ui_kits/shared/styles.css">
@@ -140,6 +140,7 @@
       <nav class="site-nav" aria-label="Primary">
         <a class="active" aria-current="page" href="index.html">Home</a>
         <a href="ui_kits/national-status-dashboard/index.html">National status</a>
+        <a href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
         <a href="ui_kits/fuel-dashboard/index.html">Fuel</a>
         <a href="ui_kits/fertilizer-dashboard/index.html">Fertilizer</a>
         <a href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
@@ -155,8 +156,9 @@
         <h1 id="home-title">Australia's fuel and fertiliser data, without estimates.</h1>
         <p class="home-hero__lede">
           This static site collects source-linked dashboard pages for liquid fuel, fertiliser,
-          oil production and retail-price breakdowns. Values appear only when they flow through
-          a verified JSON envelope; unavailable values remain visible as placeholders.
+          oil production, national fuel status, resource value and retail-price breakdowns.
+          Values appear only when they flow through a verified JSON envelope; unavailable
+          values remain visible as placeholders.
         </p>
       </div>
       <img class="home-hero__art" src="assets/au-outline.svg" alt="Outline map of Australia">
@@ -170,7 +172,7 @@
           <p class="section__lede">
             Programmatic envelopes now cover ABS trade, APS petroleum statistics, AIP terminal
             gate prices, RBA AUD/USD, EIA/FRED benchmarks and multi-state retail fuel. The national
-            status page adds a manually verified public PM&C/DCCEEW fuel-supply snapshot.
+            status and resource-value pages add manually verified public policy and supply snapshots.
           </p>
         </div>
       </div>
@@ -180,6 +182,12 @@
           <p>Public fuel-security level, MSO reserves, incoming tankers and retail stock-outs.</p>
           <a class="home-card__link" href="ui_kits/national-status-dashboard/index.html">Open national status</a>
           <div class="home-card__status">Status: PM&C/DCCEEW public supply snapshot hand-keyed; direct programmatic fetch is deferred until a stable machine-readable endpoint is available.</div>
+        </article>
+        <article class="home-card">
+          <h3>Resource value</h3>
+          <p>Tax, royalty, PRRT, export-value and Norway comparison sources.</p>
+          <a class="home-card__link" href="ui_kits/resource-value-dashboard/index.html">Open resource value</a>
+          <div class="home-card__status">Status: official policy and export-value envelopes added; production maps, price comparisons and leakage estimates stay pending until verified.</div>
         </article>
         <article class="home-card">
           <h3>Fuel</h3>

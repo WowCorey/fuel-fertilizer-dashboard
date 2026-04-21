@@ -1,0 +1,30 @@
+{
+  "series_id": "resource_oil_export_value_req",
+  "source_id": "resource_oil_export_value_req",
+  "source_name": "Resources and Energy Quarterly - oil export earnings",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 12500
+    }
+  ],
+  "notes": "Manual extract from the December 2025 Resources and Energy Quarterly oil summary: Australian oil export values are described as falling from $12.5 billion to $6.9 billion in 2026-27.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; DISR copyright terms apply",
+  "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025.",
+  "extra": {
+    "schema": "resource_export_value.v1",
+    "fields": {
+      "commodity": "Oil",
+      "value_period": "2024-25",
+      "value_aud_billion": 12.5,
+      "forecast_2026_27_aud_billion": 6.9,
+      "release": "Resources and Energy Quarterly: December 2025"
+    }
+  }
+}
