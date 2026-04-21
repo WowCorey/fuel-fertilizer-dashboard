@@ -765,6 +765,22 @@ sources:
     fetch: manual
     used_by: [resource_value]
 
+  - id: resource_resource_rent_tax_receipts_budget
+    human_name: Australian Government Budget - resource rent tax receipts
+    publisher: Australian Government Budget
+    url: https://budget.gov.au/content/bp1/
+    canonical_url: https://budget.gov.au/content/bp1/
+    fetch_url: https://budget.gov.au/content/bp1/download/bp1_s4-online_t1.csv
+    format: CSV
+    update_cadence: annual
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; Budget website terms apply
+    rights_url: https://budget.gov.au/copyright.htm
+    citation: Australian Government, Budget Paper No. 1, Statement 4, Online Table 1, Australian Government cash receipts.
+    reuse_notes: Budget Paper No. 1 labels this line as resource rent taxes. Use it as Commonwealth resource-rent receipt context only; do not describe it as project-level PRRT, company-level tax paid, or a leakage denominator.
+    fetch: manual
+    used_by: [resource_value]
+
   - id: resource_wa_petroleum_royalties
     human_name: WA petroleum royalties
     publisher: Government of Western Australia, Department of Energy, Mines, Industry Regulation and Safety
@@ -777,6 +793,21 @@ sources:
     rights_url: https://www.wa.gov.au/copyright
     citation: Government of Western Australia, Petroleum royalties.
     reuse_notes: Explainer source for petroleum royalty mechanisms. The headline metric uses the Barrow Island Resource Rent Royalty rate; North West Shelf royalty rates and shares are stored as structured fields. This does not represent total royalty receipts.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_wa_petroleum_royalty_receipts
+    human_name: WA petroleum royalty and North West Shelf grant receipts
+    publisher: Government of Western Australia, Department of Treasury and Finance
+    url: https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf
+    canonical_url: https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-22
+    rights: Government of Western Australia copyright and website terms
+    rights_url: https://www.wa.gov.au/copyright
+    citation: Government of Western Australia, Overview of State Taxes and Royalties 2025-26, summary tables.
+    reuse_notes: Receipt context only. The envelope sums WA petroleum state component royalties and North West Shelf grants, and explicitly excludes non-petroleum iron ore lease rentals shown near the same source table.
     fetch: manual
     used_by: [resource_value]
 
@@ -840,19 +871,49 @@ sources:
     fetch: manual
     used_by: [resource_value]
 
+  - id: resource_oil_origin_aecr
+    human_name: Geoscience Australia AECR - oil production and exports
+    publisher: Geoscience Australia
+    url: https://www.ga.gov.au/aecr2025/oil
+    canonical_url: https://www.ga.gov.au/aecr2025/oil
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; Geoscience Australia copyright terms apply
+    rights_url: https://www.ga.gov.au/copyright
+    citation: "Geoscience Australia, Australia's Energy Commodity Resources 2025: Oil."
+    reuse_notes: National oil production, trade and basin context only. Production and export definitions differ between AECR calendar-year headline figures and Australian Energy Statistics financial-year flow figures; preserve both labels and do not combine them silently.
+    fetch: manual
+    used_by: [resource_value]
+
   - id: resource_domestic_gas_prices_accc
     human_name: ACCC Gas Inquiry - domestic gas prices
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30
-    canonical_url: https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30
-    format: PDF
+    url: https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report
+    canonical_url: https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report
+    format: XLSX
     update_cadence: quarterly
     last_verified: 2026-04-22
     rights: Commonwealth copyright; ACCC copyright terms apply
     rights_url: https://www.accc.gov.au/about-us/using-this-website/copyright-and-disclaimer
-    citation: Australian Competition and Consumer Commission, Gas Inquiry 2017-30 reports.
-    reuse_notes: Registered for the later domestic-versus-export price phase. Leave unavailable until the exact ACCC price measure, buyer segment, region, quarter and comparison methodology are selected.
-    fetch: unavailable
+    citation: Australian Competition and Consumer Commission, Gas Inquiry March 2026 interim report, Chart 2.1.
+    reuse_notes: Manual extract from ACCC long-term gas supply agreement prices for 2026 supply. These are east coast commodity prices agreed under long-term contracts, not household retail prices and not directly equivalent to LNG netback without the page caveat.
+    fetch: manual
+    used_by: [resource_value]
+
+  - id: resource_lng_netback_accc
+    human_name: ACCC LNG netback price series
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30/lng-netback-price-series
+    canonical_url: https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30/lng-netback-price-series
+    format: HTML_TABLE
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: Commonwealth copyright; ACCC copyright terms and third-party data disclaimers apply
+    rights_url: https://www.accc.gov.au/about-us/using-this-website/copyright-and-disclaimer
+    citation: Australian Competition and Consumer Commission, LNG netback price series, 16 April 2026 update.
+    reuse_notes: Netback is an export-parity benchmark at Wallumbilla. It is not a domestic price forecast, not a price cap, and uses third-party LNG and freight inputs under ACCC disclaimers.
+    fetch: manual
     used_by: [resource_value]
 
   - id: resource_state_production_aes
@@ -865,9 +926,9 @@ sources:
     last_verified: 2026-04-22
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics.
-    reuse_notes: Registered for the later production-by-state phase. Leave unavailable until the exact table, product scope, state/basin mapping and unit are selected.
-    fetch: unavailable
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics 2025, Tables I and Q.
+    reuse_notes: Manual extract from AES Table I physical primary-fuel production and Table Q gas production by state/territory. Units differ by product; preserve units per field and do not combine oil, LPG and gas without a documented conversion method.
+    fetch: manual
     used_by: [resource_value]
 
   - id: resource_norway_petroleum_tax_model
