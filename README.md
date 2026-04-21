@@ -25,6 +25,38 @@ The dashboards have no publisher brand, no sponsors, and no affiliation with
 any government department or industry body. The project does not fabricate,
 interpolate or estimate missing numbers.
 
+## National dashboard alignment
+
+The "National Fuel Dashboard" policy goal implies two distinct jobs:
+
+1. **Public transparency and accountability** (what this project delivers now).
+2. **Operational readiness visibility** for disruption response (partially
+   delivered; still maturing).
+
+Current posture:
+
+- This repository is a credible transparency baseline: named public sources,
+  strict no-fabrication policy, and explicit unavailable states.
+- It is not yet a decision-grade readiness console for national operations.
+  Several readiness-critical measures are still manual or unavailable, and
+  national-state granularity is uneven across sources.
+
+Near-term alignment priorities (v1.4+):
+
+- Reduce manual dependency in readiness-critical fuel indicators before adding
+  lower-impact new series.
+- Keep source-state signalling explicit at card level (`Verified`, `Verified,
+  N days old`, `Awaiting source`) so stale/manual risk is visible.
+- Improve state-level comparability where source rights and machine access
+  allow, so "national" reflects cross-jurisdiction conditions.
+- Add readiness-layer synthesis in plain English (stock-cover context, import
+  dependence, concentration and known data gaps), while preserving source-level
+  traceability.
+
+Success criterion for this phase: a user can distinguish at a glance which
+figures are fresh and verified, which are manual or delayed, and where critical
+readiness blind spots still exist.
+
 ## Dashboards
 
 | Page | Version | What it covers | Current data state |
