@@ -31,7 +31,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pyyaml==6.0.2 requests==2.32.3
+        run: pip install -r requirements.txt
 
       - name: Check programmatic fetch URLs
         run: python scripts/fetch_data.py --check
@@ -47,6 +47,9 @@ jobs:
 
       - name: Ensure manual stub files exist
         run: python scripts/init_manual_stubs.py
+
+      - name: Build source manifest
+        run: python scripts/build_source_manifest.py
 
       - name: Validate source registry and envelopes
         run: python scripts/validate_data.py

@@ -5,10 +5,12 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** v1.3 — four dashboard surfaces read from a shared JSON-envelope data
-pipeline. Coverage varies by source: Brent and WTI are currently fetched
-programmatically; most Australian datasets remain manual stubs until verified
-values are hand-keyed from the named source.
+**Status:** Four dashboard surfaces read from a shared JSON-envelope data
+pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
+ABS fertiliser imports, APS net-import cover, APS refinery production series,
+AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
+and the multi-state retail fuel average. Other sources remain manual or
+unavailable until a named public source can support the value.
 
 ## What this is
 
@@ -27,9 +29,9 @@ interpolate or estimate missing numbers.
 
 | Page | Version | What it covers | Current data state |
 |---|---|---|---|
-| [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | Manual stubs pending verification |
-| [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | Manual stubs pending verification |
-| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI fetched; other series pending |
+| [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and multi-state retail average fetched; AIP retail and IEA obligation remain manual |
+| [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | ABS SITC 562 total imports fetched; nutrient subseries, ABARES and concentration slots remain manual/unavailable |
+| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet and APS production fetched; Tapis, refinery utilisation, FSSP and offshore tickets remain manual/unavailable |
 | [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | Manual stubs pending verification |
 
 Every page cross-links to the others in the header nav.
@@ -60,6 +62,8 @@ human check. The dashboards read those JSON files via
 data/
   sources.yml              master registry — every dataset used, with
                            publisher, URLs, cadence, rights and fetch mode
+  source_manifest.json     browser manifest that tells dashboards whether to
+                           look in generated/ or manual/ first
   generated/*.json         produced by scripts/fetch_data.py
   manual/*.json            hand-keyed from the named public document
 ```
@@ -70,13 +74,15 @@ Each source in `data/sources.yml` must have:
 
 - `id`, `human_name`, `publisher`, `format`, `update_cadence`, `last_verified`
 - `url` and `canonical_url` for the human-facing publisher page
-- `fetch` set to `programmatic`, `manual` or `unavailable`
+- `fetch` set to `programmatic`, `derived`, `manual` or `unavailable`
 - `fetch_url` only when `fetch: programmatic`
 - `rights`, `rights_url`, `citation` and `reuse_notes` describing upstream source rights
 - `used_by` listing the dashboard surfaces that depend on it
 
 `url` remains for compatibility with existing scripts; new code should prefer
-`canonical_url` for citations and `fetch_url` for machine retrieval.
+`canonical_url` for citations and `fetch_url` for machine retrieval. Sources may
+also include fetcher-specific keys such as ABS SDMX parameters or APS workbook
+sheet/column names.
 
 ### Envelope schema
 
@@ -128,9 +134,11 @@ never estimate.
 Run the validator before opening or merging a PR:
 
 ```sh
-pip install pyyaml==6.0.2 requests==2.32.3
+pip install -r requirements.txt
 python3 scripts/validate_data.py
 python3 scripts/validate_data.py --json
+python3 scripts/build_source_manifest.py --check
+python3 -m unittest discover -s tests
 ```
 
 The validator checks `data/sources.yml`, all generated/manual envelopes and the
@@ -138,19 +146,21 @@ source IDs referenced by dashboard pages. It rejects duplicate IDs, missing
 registry entries, invalid status/timestamp semantics, inconsistent manual-entry
 flags, malformed values and unstructured `extra` data.
 
-`.github/workflows/ci.yml` runs on pull requests and pushes. It installs only
-minimal pinned Python dependencies, compile-checks scripts and runs the data
-validator so invalid registry or envelope structure fails loudly.
+`.github/workflows/ci.yml` runs on pull requests and pushes. It installs the
+minimal Python dependencies in `requirements.txt`, compile-checks scripts, runs
+the data validator, checks the browser source manifest, and runs unit tests for
+the fetch/data-entry transforms.
 
 ## Run the pipeline locally
 
 ```sh
-pip install pyyaml==6.0.2 requests==2.32.3
+pip install -r requirements.txt
 python3 scripts/fetch_data.py                 # pull every programmatic source
 python3 scripts/fetch_data.py --only eia_brent
 python3 scripts/fetch_data.py --check         # blocking check: programmatic fetch URLs only
 python3 scripts/fetch_data.py --check-all-links  # broad link-health check for canonical pages
 python3 scripts/init_manual_stubs.py          # create missing manual stubs
+python3 scripts/build_source_manifest.py      # update browser loader manifest
 python3 scripts/validate_data.py              # validate registry and envelopes
 ```
 
@@ -163,8 +173,9 @@ python3 scripts/validate_data.py              # validate registry and envelopes
 2. Runs broad canonical/manual link health as a non-blocking diagnostic.
 3. Refreshes programmatic JSON envelopes.
 4. Creates any missing manual stubs.
-5. Runs `scripts/validate_data.py` before committing.
-6. Commits changed data files to the repository only after validation passes.
+5. Rebuilds `data/source_manifest.json`.
+6. Runs `scripts/validate_data.py` before committing.
+7. Commits changed data files to the repository only after validation passes.
 
 Manual and canonical publisher pages should not block a valid programmatic data
 refresh; broken programmatic fetch URLs should fail loudly.
@@ -175,7 +186,9 @@ refresh; broken programmatic fetch URLs should fail loudly.
 2. If `fetch: programmatic`, register a fetcher in `FETCHERS` inside
    `scripts/fetch_data.py` that returns `{unit, values, last_data_point, notes}`.
 3. If `fetch: manual`, run `python3 scripts/init_manual_stubs.py` to create
-   the placeholder, then hand-key values from the named publisher document.
+   the placeholder, then use `python3 scripts/enter_manual.py --source <id>
+   --point YYYY-MM=123.4 --unit <unit> --notes "Checked table/page"` after
+   verifying the named publisher document.
 4. When manual values are verified, set `status` to `"ok"`, set `retrieved_at`
    to the data-entry timestamp, set `last_data_point`, and keep
    `manual_entry: true`.
@@ -184,7 +197,8 @@ refresh; broken programmatic fetch URLs should fail loudly.
 6. Reference the envelope from one of the dashboard pages by adding its ID to
    the page's `SERIES` array and passing `fromEnvelope={data.<id>}` to
    `<MetricCard>` or `<ChartCard>`.
-7. Run `python3 scripts/validate_data.py` before committing.
+7. Run `python3 scripts/build_source_manifest.py` and
+   `python3 scripts/validate_data.py` before committing.
 
 ## Repo layout
 
@@ -199,11 +213,18 @@ data/
   sources.yml                  Master source registry
   generated/                   JSON produced by fetch_data.py
   manual/                      Hand-keyed JSON for sources we can't fetch
+  source_manifest.json         Browser loader manifest
 
 scripts/
+  build_source_manifest.py     Builds data/source_manifest.json
+  enter_manual.py              Safer manual data-entry helper
   fetch_data.py                Pipeline entry point
   init_manual_stubs.py         Creates missing data/manual/*.json stubs
   validate_data.py             Validates registry, envelopes and dashboard refs
+
+tests/
+  test_fetch_transforms.py     Fetch/derivation transform coverage
+  test_enter_manual.py         Manual-entry helper coverage
 
 .github/workflows/
   ci.yml                       PR/push validation

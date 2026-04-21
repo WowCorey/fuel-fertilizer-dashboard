@@ -12,7 +12,6 @@ window.FUEL_SERIES = [
   'abs_petroleum_imports',
   'abs_petroleum_imports_yoy',
   'aus_retail_fuel_multistate',
-  'aip_retail',
   'aip_tgp',
   'iea_90day',
 ];

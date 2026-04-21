@@ -8,7 +8,8 @@ under data/generated/<id>.json for every entry whose "fetch" key is
 
 Design rules
 ------------
-* Standard library + requests + PyYAML only. No heavy deps.
+* Standard library + requests + PyYAML, plus openpyxl for selected publisher
+  XLSX workbooks. No heavy data-frame dependencies.
 * Never fabricate values. If a programmatic fetch fails, exit non-zero.
 * Blocking URL checks apply only to programmatic fetch_url endpoints.
 * Broad source landing-page link health is available as a separate, non-blocking
@@ -18,6 +19,7 @@ Design rules
 from __future__ import annotations
 
 import argparse
+import calendar
 import csv
 import datetime as dt
 import io
@@ -424,6 +426,170 @@ def fetch_rba_f11(url: str) -> dict[str, Any]:
     }
 
 
+def month_end_iso(month: dt.date) -> str:
+    last_day = calendar.monthrange(month.year, month.month)[1]
+    return dt.date(month.year, month.month, last_day).isoformat()
+
+
+def load_xlsx_from_url(url: str):
+    try:
+        import openpyxl
+    except ImportError as exc:
+        raise RuntimeError("openpyxl is required for XLSX fetchers. Install with: pip install openpyxl") from exc
+
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=90)
+    r.raise_for_status()
+    return openpyxl.load_workbook(io.BytesIO(r.content), read_only=True, data_only=True)
+
+
+def discover_aps_workbook_url(package_url: str) -> str:
+    r = requests.get(package_url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    package = r.json().get("result", {})
+    candidates = [
+        res for res in package.get("resources", [])
+        if str(res.get("format", "")).lower() in {"xlsx", "excel (.xlsx)"}
+        and str(res.get("url", "")).lower().endswith(".xlsx")
+    ]
+    if not candidates:
+        raise RuntimeError("APS CKAN package did not contain an XLSX resource")
+    return candidates[0]["url"]
+
+
+def sheet_series(
+    wb: Any,
+    sheet_name: str,
+    column_name: str,
+    ndigits: int = 1,
+    limit: int | None = 60,
+) -> list[dict[str, Any]]:
+    if sheet_name not in wb.sheetnames:
+        raise RuntimeError(f"Workbook did not contain sheet {sheet_name!r}")
+    ws = wb[sheet_name]
+    rows = list(ws.iter_rows(values_only=True))
+    if not rows:
+        raise RuntimeError(f"Sheet {sheet_name!r} was empty")
+    header = [str(cell).strip() if cell is not None else "" for cell in rows[0]]
+    normalized = [h.replace("\n", " ").strip().lower() for h in header]
+    target = column_name.replace("\n", " ").strip().lower()
+    try:
+        col_idx = normalized.index(target)
+    except ValueError as exc:
+        raise RuntimeError(f"Sheet {sheet_name!r} did not contain column {column_name!r}") from exc
+
+    values: list[dict[str, Any]] = []
+    for row in rows[1:]:
+        if not row or not isinstance(row[0], (dt.datetime, dt.date)):
+            continue
+        raw = row[col_idx] if col_idx < len(row) else None
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+            continue
+        month = row[0].date() if isinstance(row[0], dt.datetime) else row[0]
+        values.append({"t": month.strftime("%Y-%m"), "v": round(float(raw), ndigits)})
+    if not values:
+        raise RuntimeError(f"Sheet {sheet_name!r} column {column_name!r} contained no numeric observations")
+    return values[-limit:] if limit else values
+
+
+def sheet_dated_series(
+    wb: Any,
+    sheet_name: str,
+    column_name: str,
+    ndigits: int = 1,
+) -> list[dict[str, Any]]:
+    if sheet_name not in wb.sheetnames:
+        raise RuntimeError(f"Workbook did not contain sheet {sheet_name!r}")
+    ws = wb[sheet_name]
+    rows = list(ws.iter_rows(values_only=True))
+    if not rows:
+        raise RuntimeError(f"Sheet {sheet_name!r} was empty")
+    header = [str(cell).strip() if cell is not None else "" for cell in rows[0]]
+    normalized = [h.replace("\n", " ").strip().lower() for h in header]
+    target = column_name.replace("\n", " ").strip().lower()
+    try:
+        col_idx = normalized.index(target)
+    except ValueError as exc:
+        raise RuntimeError(f"Sheet {sheet_name!r} did not contain column {column_name!r}") from exc
+
+    values: list[dict[str, Any]] = []
+    for row in rows[1:]:
+        if not row or not isinstance(row[0], (dt.datetime, dt.date)):
+            continue
+        raw = row[col_idx] if col_idx < len(row) else None
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+            continue
+        obs_date = row[0].date() if isinstance(row[0], dt.datetime) else row[0]
+        values.append({"t": obs_date.isoformat(), "v": round(float(raw), ndigits)})
+    if not values:
+        raise RuntimeError(f"Sheet {sheet_name!r} column {column_name!r} contained no numeric observations")
+    return values
+
+
+def fetch_aps_xlsx_series(source: dict[str, Any]) -> dict[str, Any]:
+    package_url = source.get("fetch_url") or source.get("data_portal_url")
+    if not package_url:
+        raise RuntimeError(f"{source['id']}: APS fetch_url/data_portal_url is required")
+    workbook_url = discover_aps_workbook_url(package_url)
+    wb = load_xlsx_from_url(workbook_url)
+    values = sheet_series(
+        wb,
+        source["aps_sheet"],
+        source["aps_column"],
+        int(source.get("fetch_round_digits", 1)),
+    )
+    last_month = dt.date.fromisoformat(values[-1]["t"] + "-01")
+    return {
+        "unit": source.get("fetch_unit", ""),
+        "values": values,
+        "last_data_point": month_end_iso(last_month),
+        "notes": (
+            f"Fetched from the Australian Petroleum Statistics XLSX data extract. "
+            f"Sheet: {source['aps_sheet']}; column: {source['aps_column']}. "
+            "Values are trimmed to the last 60 monthly observations."
+        ),
+        "source_url_resolved": workbook_url,
+    }
+
+
+def discover_aip_tgp_workbook_url(page_url: str) -> str:
+    r = requests.get(page_url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    matches = re.findall(r"https?://[^\"']+/AIP_TGP_Data_[^\"']+\.xlsx", r.text)
+    if not matches:
+        raise RuntimeError("AIP TGP page did not link a dated AIP_TGP_Data XLSX workbook")
+    return matches[-1]
+
+
+def fetch_aip_tgp(source: dict[str, Any]) -> dict[str, Any]:
+    page_url = source.get("fetch_url") or source.get("archive_url") or source.get("canonical_url")
+    if not page_url:
+        raise RuntimeError("aip_tgp requires a fetch_url/archive_url")
+    workbook_url = discover_aip_tgp_workbook_url(page_url)
+    wb = load_xlsx_from_url(workbook_url)
+    raw_values = sheet_dated_series(wb, "Petrol TGP", "National Average", 1)
+
+    by_month: dict[str, list[float]] = {}
+    for point in raw_values:
+        by_month.setdefault(point["t"][:7], []).append(point["v"])
+    values = [
+        {"t": month, "v": round(sum(month_values) / len(month_values), 1)}
+        for month, month_values in sorted(by_month.items())
+    ][-60:]
+    if not values:
+        raise RuntimeError("AIP TGP workbook contained no national average ULP observations")
+    latest_raw_date = max(point["t"] for point in raw_values)
+    return {
+        "unit": "cents per litre",
+        "values": values,
+        "last_data_point": latest_raw_date,
+        "notes": (
+            "Monthly mean of daily national average unleaded petrol terminal gate prices "
+            "from the AIP historical TGP XLSX workbook."
+        ),
+        "source_url_resolved": workbook_url,
+    }
+
+
 def warn_skip(label: str, message: str) -> None:
     print(f"[WARN] {label}: {message}", file=sys.stderr)
 
@@ -662,6 +828,11 @@ FETCHERS: dict[str, Fetcher] = {
     "eia_wti": lambda source: fetch_eia_series("RWTC", source.get("fetch_url")),
     "eia_diesel_retail_us": fetch_fred_fuel_csv,
     "eia_jet_spot_usgc": fetch_fred_fuel_csv,
+    "aps_monthly": fetch_aps_xlsx_series,
+    "aps_production_petrol": fetch_aps_xlsx_series,
+    "aps_production_diesel": fetch_aps_xlsx_series,
+    "aps_production_jet": fetch_aps_xlsx_series,
+    "aps_production_fuel_oil": fetch_aps_xlsx_series,
     "abs_petroleum_imports": lambda source: fetch_abs_sdmx(
         source["fetch_dataflow"],
         source["fetch_key"],
@@ -677,6 +848,7 @@ FETCHERS: dict[str, Fetcher] = {
     ),
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
+    "aip_tgp": fetch_aip_tgp,
 }
 
 

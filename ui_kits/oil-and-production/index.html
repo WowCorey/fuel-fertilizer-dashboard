@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Oil & production — Fuel Resilience AU</title>
 <meta name="description" content="Crude benchmarks, Australian refined output and government fuel-security spending with transparent source availability.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../colors_and_type.css">
 <link rel="stylesheet" href="../shared/styles.css">
 </head>
@@ -17,6 +18,7 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
 
 <script src="../shared/data-loader.js"></script>
+<script type="text/babel" src="../shared/DataCoverage.jsx"></script>
 <script type="text/babel" src="../shared/Header.jsx"></script>
 <script type="text/babel" src="../shared/MetricCard.jsx"></script>
 <script type="text/babel" src="../shared/ChartCard.jsx"></script>
@@ -27,17 +29,13 @@
 const SERIES = [
   'eia_brent',
   'eia_wti',
-  'tapis_crude',
   'eia_diesel_retail_us',
   'eia_jet_spot_usgc',
   'aps_production_petrol',
   'aps_production_diesel',
   'aps_production_jet',
   'aps_production_fuel_oil',
-  'aps_refinery_utilisation',
   'iea_90day',
-  'fuel_security_payment',
-  'offshore_ticket_volumes',
   'rba_aud_usd',
 ];
 
@@ -79,7 +77,6 @@ function App() {
 
   const brentAud = toAud(data.eia_brent, data.rba_aud_usd);
   const wtiAud   = toAud(data.eia_wti,   data.rba_aud_usd);
-  const tapisAud = toAud(data.tapis_crude, data.rba_aud_usd);
 
   return (
     <div className="page">
@@ -92,10 +89,9 @@ function App() {
             <span className="eyebrow">Oil &amp; production · v1.2</span>
             <h1 style={{ marginTop: 12 }}>What crude costs, what we refine, and what the government pays.</h1>
             <p className="intro__lede">
-              Four views: the global crude benchmarks that set the floor on pump prices; Australia's
-              shrinking refining sector; the stockpile gap against our international obligation; and
-              how much the Australian taxpayer spends to keep refineries and storage open. Values appear
-              only when the named source envelope is verified.
+              Three views: the global crude benchmarks that set the floor on pump prices; Australia's
+              refined-fuel production; and the public stockholding benchmark. Values appear only when
+              the named source envelope is verified.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
@@ -103,9 +99,11 @@ function App() {
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Refresh</strong>
-            <span>Programmatic weekly · manual values after verification</span>
+            <span>Live where fetched · manual only after verification</span>
           </aside>
         </section>
+
+        <DataCoverage data={data}/>
 
         {/* WHAT THIS PAGE SHOWS */}
         <section className="section section--why">
@@ -117,15 +115,15 @@ function App() {
             <div className="why-body">
               <p>
                 Crude oil is the raw input for petrol, diesel and jet fuel. Australia buys most of
-                its crude on global markets, priced in US dollars per barrel. The three benchmarks
-                that matter are <b>Brent</b> (North Sea), <b>WTI</b> (US) and <b>Tapis</b>
-                (Malaysia — most relevant to Asian refineries).
+                its crude on global markets, priced in US dollars per barrel. This page currently
+                shows licence-compatible public series for <b>Brent</b> (North Sea) and <b>WTI</b>
+                (US). Tapis remains pending until a reusable public series is identified.
               </p>
               <p>
                 Australia still refines a share of the fuel it consumes, but refineries have closed
-                steadily for 15 years. The government now pays the two remaining operators to stay
-                open. This page keeps those topics together while leaving unavailable production and
-                payment figures blank until a public source is hand-keyed.
+                steadily for 15 years. APS production series are loaded from the public workbook;
+                payment and utilisation figures stay out of the main dashboard until exact public
+                source fields are verified.
               </p>
               <p className="body-sm" style={{ color: 'var(--ink-3)', marginTop: 12 }}>
                 Acronyms: <b>WTI</b> = West Texas Intermediate. <b>APS</b> = Australian Petroleum Statistics.
@@ -143,8 +141,8 @@ function App() {
               <h2 id="h-crude">Crude oil price — the floor beneath the pump</h2>
               <p className="section__lede">
                 Monthly averages over the last five years where verified public source envelopes are available.
-                Brent, WTI and Tapis each have US$ and A$ slots; unavailable slots stay blank until both
-                the benchmark and currency source inputs are verified.
+                Brent and WTI each have US$ and A$ slots. Tapis is not charted until a
+                licence-compatible public source is identified.
               </p>
             </div>
           </div>
@@ -198,6 +196,7 @@ function App() {
               yAxisLabel="Australian dollars per barrel"
             />
           </div>
+          {false && <>
           <div style={{ height: 24 }}/>
           <div className="charts-grid">
             <ChartCard
@@ -223,6 +222,7 @@ function App() {
               yAxisLabel="Australian dollars per barrel"
             />
           </div>
+          </>}
 
           <div style={{ height: 32 }}/>
           <div className="section__head">
@@ -270,9 +270,9 @@ function App() {
               <span className="eyebrow">Section 2</span>
               <h2 id="h-prod">Australian refined fuel production</h2>
               <p className="section__lede">
-                Monthly output of petrol, diesel, jet fuel and fuel oil from Australia's two remaining
-                refineries (Lytton, QLD and Geelong, VIC), against domestic consumption. Cards remain
-                unavailable until APS subseries are wired into verified envelopes.
+                Monthly output of petrol, diesel, jet fuel and fuel oil from the public Australian
+                Petroleum Statistics workbook. Refinery utilisation remains pending until the exact
+                numerator and denominator can be sourced without assumptions.
               </p>
             </div>
           </div>
@@ -282,6 +282,7 @@ function App() {
             <MetricCard eyebrow="Jet"      label="Jet fuel production"     plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_jet}     unit=" ML"/>
             <MetricCard eyebrow="Fuel oil" label="Fuel oil production"     plain="Volume refined domestically in the latest month." fromEnvelope={data.aps_production_fuel_oil} unit=" ML"/>
           </div>
+          {false && <>
           <div style={{ height: 24 }}/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
@@ -294,6 +295,7 @@ function App() {
               yAxisLabel="Percent of installed capacity"
             />
           </div>
+          </>}
         </section>
 
         {/* 3 — GOVERNMENT PURCHASES */}
@@ -301,24 +303,25 @@ function App() {
           <div className="section__head">
             <div>
               <span className="eyebrow">Section 3</span>
-              <h2 id="h-gov">Government purchases and strategic reserve</h2>
+              <h2 id="h-gov">Policy benchmark and pending disclosures</h2>
               <p className="section__lede">
-                Australia is an IEA member and is obliged to hold 90 days of net imports. This section
-                shows the gap, refinery/storage payments and offshore tickets only when the underlying
-                public source has been verified.
+                Australia is an IEA member and is obliged to hold 90 days of net imports. The treaty
+                benchmark is shown below; payment and offshore ticket figures are listed as pending
+                until their public disclosure sources are wired into envelopes.
               </p>
             </div>
           </div>
           <div className="metric-grid">
             <MetricCard
-              eyebrow="IEA gap"
-              label="Days below the 90-day obligation"
-              plain="How many days short of the IEA benchmark Australia's stockpile currently runs."
+              eyebrow="IEA benchmark"
+              label="Stockholding obligation"
+              plain="Treaty benchmark for IEA members; this is not Australia's current compliance figure."
               fromEnvelope={data.iea_90day}
               unit=" days"
-              threshold={{ state:'below', text:'Benchmark: 90 days' }}
+              threshold={{ state:'near', text:'Policy constant' }}
               highlight
             />
+            {false && (
             <MetricCard
               eyebrow="Cost"
               label="Fuel Security Services Payment — latest FY"
@@ -326,6 +329,8 @@ function App() {
               fromEnvelope={data.fuel_security_payment}
               unit=" A$m"
             />
+            )}
+            {false && (
             <MetricCard
               eyebrow="Contracts"
               label="Offshore ticket volumes"
@@ -333,6 +338,13 @@ function App() {
               fromEnvelope={data.offshore_ticket_volumes}
               unit=" kL"
             />
+            )}
+          </div>
+          <div className="pending-list" aria-label="Pending oil source coverage">
+            <article className="source-card">
+              <h4>Pending source coverage</h4>
+              <p className="body-sm">Fuel Security Services Payment, offshore ticket volumes, refinery utilisation and Tapis stay out of the main dashboard until their public source fields are verified.</p>
+            </article>
           </div>
         </section>
 
@@ -375,10 +387,10 @@ function App() {
             <dl>
               <dt>Crude A$ conversion</dt>
               <dd>USD-denominated monthly spot series divided by the RBA monthly average AUD/USD for the same month. No hedging or lag applied.</dd>
-              <dt>Days below the 90-day obligation</dt>
-              <dd>Australia's reported net import cover in days, subtracted from 90. Only populated when DCCEEW publishes the underlying net-imports figure.</dd>
-              <dt>Fuel Security Services Payment</dt>
-              <dd>Commonwealth payments to Ampol (Lytton) and Viva Energy (Geelong) under the FSSP, as disclosed in the DCCEEW annual report and Portfolio Budget Statements.</dd>
+              <dt>Stockholding obligation</dt>
+              <dd>The IEA treaty benchmark is 90 days of net imports. This dashboard does not present an Australian compliance gap unless a current public compliance series is wired into an envelope.</dd>
+              <dt>Pending policy disclosures</dt>
+              <dd>Fuel Security Services Payment and offshore ticket figures require exact public source fields before they return to the main dashboard.</dd>
             </dl>
           </div>
         </section>
