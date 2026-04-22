@@ -1028,6 +1028,21 @@ sources:
     fetch: manual
     used_by: [resource_value]
 
+  - id: resource_qld_petroleum_royalty_receipts
+    human_name: Queensland petroleum royalty receipts
+    publisher: Queensland Treasury
+    url: https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf
+    canonical_url: https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-22
+    rights: Queensland Government copyright and budget website terms
+    rights_url: https://www.qld.gov.au/legal/copyright
+    citation: Queensland Government, Budget Strategy and Outlook 2025-26, BP2 Revenue, Table 3.4 Royalty revenue.
+    reuse_notes: Receipt context only. Table 3.4 reports petroleum royalties separately and notes that petroleum includes gas converted into LNG. Use actual-year rows for display; keep estimates and projections in typed extra fields.
+    fetch: manual
+    used_by: [resource_value]
+
   - id: resource_lng_export_value_req
     human_name: Resources and Energy Quarterly - LNG export earnings
     publisher: Department of Industry, Science and Resources
@@ -1261,10 +1276,10 @@ sources:
     human_name: Viva Energy Group annual report (ASX:VEA)
     publisher: Viva Energy Group Limited
     url: https://www.vivaenergy.com.au/investors/financial-results-reports
-    canonical_url: https://www.vivaenergy.com.au/investors/financial-results-reports
+    canonical_url: https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-22
     rights: Company copyright
     rights_url: https://www.vivaenergy.com.au/investors/financial-results-reports
     citation: Viva Energy Group annual report.
@@ -1276,10 +1291,10 @@ sources:
     human_name: Ampol annual report (ASX:ALD)
     publisher: Ampol Limited
     url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
-    canonical_url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
+    canonical_url: https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-22
     rights: Company copyright
     rights_url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
     citation: Ampol annual report.
@@ -1321,10 +1336,10 @@ sources:
     human_name: Woodside Energy annual report (ASX:WDS)
     publisher: Woodside Energy Group Ltd
     url: https://www.woodside.com/investors/reports-investor-briefings
-    canonical_url: https://www.woodside.com/investors/reports-investor-briefings
+    canonical_url: https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-22
     rights: Company copyright
     rights_url: https://www.woodside.com/investors/reports-investor-briefings
     citation: Woodside Energy annual report.
@@ -1336,10 +1351,10 @@ sources:
     human_name: Santos annual report (ASX:STO)
     publisher: Santos Limited
     url: https://www.santos.com/investors/results-reports-and-presentations/
-    canonical_url: https://www.santos.com/investors/results-reports-and-presentations/
+    canonical_url: https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-22
     rights: Company copyright
     rights_url: https://www.santos.com/investors/results-reports-and-presentations/
     citation: Santos annual report.

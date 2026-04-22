@@ -4,6 +4,7 @@ const SERIES = [
   'resource_resource_rent_tax_receipts_budget',
   'resource_wa_petroleum_royalties',
   'resource_wa_petroleum_royalty_receipts',
+  'resource_qld_petroleum_royalty_receipts',
   'resource_lng_export_value_req',
   'resource_oil_export_value_req',
   'resource_lng_export_destinations_req',
@@ -55,11 +56,14 @@ function valuePeriod(env) {
   return env?.values?.at(-1)?.t || env?.last_data_point || '-';
 }
 
-function ScenarioCard({ lngEnv, oilEnv, rentTaxEnv, royaltyReceiptEnv }) {
+function ScenarioCard({ lngEnv, oilEnv, rentTaxEnv, royaltyReceiptEnvs }) {
   const lng = latestValue(lngEnv);
   const oil = latestValue(oilEnv);
   const rentTax = latestValue(rentTaxEnv);
-  const royaltyReceipt = latestValue(royaltyReceiptEnv);
+  const royaltyReceipts = (royaltyReceiptEnvs || []).map(env => latestValue(env));
+  const royaltyReceipt = royaltyReceipts.every(v => v != null)
+    ? royaltyReceipts.reduce((sum, v) => sum + v, 0)
+    : null;
   const canCompute = lng != null && oil != null && rentTax != null && royaltyReceipt != null;
   const exportBase = lng != null && oil != null ? lng + oil : null;
   const scenario = exportBase != null ? exportBase * 0.25 : null;
@@ -140,7 +144,7 @@ function App() {
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const royaltyFields = fields(data.resource_wa_petroleum_royalties);
   const rentTaxFields = fields(data.resource_resource_rent_tax_receipts_budget);
-  const royaltyReceiptFields = fields(data.resource_wa_petroleum_royalty_receipts);
+  const qldRoyaltyReceiptFields = fields(data.resource_qld_petroleum_royalty_receipts);
   const gasFields = fields(data.resource_gas_origin_aecr);
   const oilFields = fields(data.resource_oil_origin_aecr);
   const stateFields = fields(data.resource_state_production_aes);
@@ -172,8 +176,11 @@ function App() {
   const oilExportValue = latestValue(data.resource_oil_export_value_req);
   const exportValueBase = lngExportValue != null && oilExportValue != null ? lngExportValue + oilExportValue : null;
   const grossScenario25 = exportValueBase != null ? exportValueBase * 0.25 : null;
-  const loadedReceiptContext = latestValue(data.resource_resource_rent_tax_receipts_budget) != null && latestValue(data.resource_wa_petroleum_royalty_receipts) != null
-    ? latestValue(data.resource_resource_rent_tax_receipts_budget) + latestValue(data.resource_wa_petroleum_royalty_receipts)
+  const loadedRoyaltyReceiptContext = latestValue(data.resource_wa_petroleum_royalty_receipts) != null && latestValue(data.resource_qld_petroleum_royalty_receipts) != null
+    ? latestValue(data.resource_wa_petroleum_royalty_receipts) + latestValue(data.resource_qld_petroleum_royalty_receipts)
+    : null;
+  const loadedReceiptContext = latestValue(data.resource_resource_rent_tax_receipts_budget) != null && loadedRoyaltyReceiptContext != null
+    ? latestValue(data.resource_resource_rent_tax_receipts_budget) + loadedRoyaltyReceiptContext
     : null;
   const scenarioLessLoadedReceipts = grossScenario25 != null && loadedReceiptContext != null ? grossScenario25 - loadedReceiptContext : null;
 
@@ -276,6 +283,14 @@ function App() {
               unitFn={() => ''}
             />
             <MetricCard
+              eyebrow="Receipts"
+              label="Queensland petroleum royalties"
+              plain="Queensland Budget petroleum royalty row; includes gas converted into LNG."
+              fromEnvelope={data.resource_qld_petroleum_royalty_receipts}
+              valueFn={env => audBillions(latestValue(env))}
+              unitFn={() => ''}
+            />
+            <MetricCard
               eyebrow="Exports"
               label="LNG export earnings"
               plain="REQ December 2025 value for 2024-25."
@@ -353,8 +368,8 @@ function App() {
                 <tr>
                   <td>Petroleum royalties</td>
                   <td>Field-specific royalty systems such as wellhead value or net cash flow.</td>
-                  <td>Barrow Island {latestValue(data.resource_wa_petroleum_royalties)}% RRR; NWS {royaltyFields.north_west_shelf_primary_production_licence_rate_percent}% / {royaltyFields.north_west_shelf_secondary_production_licence_rate_percent}% royalty rates; WA petroleum/NWS receipt context {audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts))}.</td>
-                  <td>Other state/federal petroleum royalty receipts and field-level coverage.</td>
+                  <td>Barrow Island {latestValue(data.resource_wa_petroleum_royalties)}% RRR; NWS {royaltyFields.north_west_shelf_primary_production_licence_rate_percent}% / {royaltyFields.north_west_shelf_secondary_production_licence_rate_percent}% royalty rates; WA petroleum/NWS receipt context {audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts))}; Queensland petroleum royalty actual {audBillions(latestValue(data.resource_qld_petroleum_royalty_receipts))} for {qldRoyaltyReceiptFields.latest_actual_period}.</td>
+                  <td>Other state/federal petroleum royalty receipts and field-level/project coverage.</td>
                 </tr>
                 <tr>
                   <td>Direct state ownership</td>
@@ -604,7 +619,10 @@ function App() {
               lngEnv={data.resource_lng_export_value_req}
               oilEnv={data.resource_oil_export_value_req}
               rentTaxEnv={data.resource_resource_rent_tax_receipts_budget}
-              royaltyReceiptEnv={data.resource_wa_petroleum_royalty_receipts}
+              royaltyReceiptEnvs={[
+                data.resource_wa_petroleum_royalty_receipts,
+                data.resource_qld_petroleum_royalty_receipts,
+              ]}
             />
           </div>
           <div className="data-table-wrap" style={{ marginTop: 24 }}>
@@ -617,7 +635,7 @@ function App() {
                 <tr><td>Oil export earnings</td><td>{audBillions(oilExportValue)}</td><td>{valuePeriod(data.resource_oil_export_value_req)} REQ envelope.</td></tr>
                 <tr><td>Loaded export base</td><td>{audBillions(exportValueBase)}</td><td>Only LNG and oil export-value envelopes currently loaded.</td></tr>
                 <tr><td>25% gross scenario</td><td>{audBillions(grossScenario25)}</td><td>Gross export-value scenario, not profits-based tax law.</td></tr>
-                <tr><td>Loaded receipt context</td><td>{audBillions(loadedReceiptContext)}</td><td>Mixed-period Budget resource-rent taxes plus WA petroleum/NWS receipts; not full Australian public capture.</td></tr>
+                <tr><td>Loaded receipt context</td><td>{audBillions(loadedReceiptContext)}</td><td>Mixed-period Budget resource-rent taxes plus WA petroleum/NWS and Queensland petroleum royalty receipts; not full Australian public capture.</td></tr>
                 <tr><td>Scenario less loaded receipt context</td><td>{audBillions(scenarioLessLoadedReceipts)}</td><td>Displayed as a gap in loaded rows only. It is not value leaked.</td></tr>
               </tbody>
             </table>
@@ -647,7 +665,7 @@ function App() {
             <MetricCard
               eyebrow="Australia"
               label="Loaded receipt context"
-              plain="Only the loaded Budget resource-rent and WA petroleum/NWS receipt context."
+              plain="Only the loaded Budget resource-rent, WA petroleum/NWS and Queensland petroleum royalty rows."
               fromEnvelope={data.resource_resource_rent_tax_receipts_budget}
               valueFn={() => audBillions(loadedReceiptContext)}
               unitFn={() => ''}
@@ -671,7 +689,7 @@ function App() {
                 </tr>
                 <tr>
                   <td>Australia</td>
-                  <td>Budget resource-rent tax actuals plus WA petroleum/NWS receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here.</td>
+                  <td>Budget resource-rent tax actuals plus WA petroleum/NWS and Queensland petroleum royalty receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here.</td>
                   <td>Enough for a structured explainer and scenario, not enough for a retained-value or leaked-value claim.</td>
                 </tr>
                 <tr>

@@ -40,6 +40,7 @@ jobs:
           python -m py_compile scripts/enter_manual.py
           python -m py_compile scripts/init_manual_stubs.py
           python -m py_compile scripts/build_source_manifest.py
+          python -m py_compile scripts/review_due.py
           python -m py_compile scripts/write_refresh_status.py
           python -m py_compile scripts/validate_data.py
 
@@ -51,6 +52,14 @@ jobs:
 
       - name: Run tests
         run: python -m unittest discover -s tests
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
       - name: Install Playwright Chromium
         run: npx playwright install chromium

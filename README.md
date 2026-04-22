@@ -1,5 +1,7 @@
 # Fuel Resilience AU
 
+[![Deploy GitHub Pages](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml/badge.svg)](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml)
+
 A neutral, public-interest dashboard for everyday Australians — tracking the
 bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
@@ -11,8 +13,8 @@ ABS fertiliser imports, APS net-import cover, APS refinery production series,
 AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
 and the multi-state retail fuel average. The national status page adds a
 manually verified PM&C/DCCEEW public fuel-supply snapshot. The resource value
-page adds official tax, PRRT, royalty, export-value and Norway comparison
-envelopes, while leaving unsupported leakage and price-comparison claims
+page adds official tax, PRRT, WA/NWS and Queensland royalty receipts,
+export-value and Norway comparison envelopes, while leaving unsupported leakage and price-comparison claims
 unavailable. Other sources remain manual or unavailable until a named public
 source can support the value.
 
@@ -34,11 +36,11 @@ interpolate or estimate missing numbers.
 | Page | Version | What it covers | Current data state |
 |---|---|---|---|
 | [National status](ui_kits/national-status-dashboard/index.html) | v1.4 | National Fuel Security Plan level, MSO reserves, ships on water and retail stock-outs | PM&C/DCCEEW public fuel-supply snapshot hand-keyed; direct scripted access is blocked/deferred until a stable machine-readable endpoint exists |
-| [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources; value-leakage estimate remains unavailable until a documented denominator and method exist |
+| [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources, including WA/NWS and Queensland petroleum royalty receipt context; value-leakage estimate remains unavailable until a documented denominator and method exist |
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by fertiliser category, price index, supplier concentration | ABS SITC 562 total imports and source-country top-3 concentration fetched; nutrient subseries, ABARES price and stock cover remain manual/unavailable |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
-| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields and ACCC December quarter 2025 petrol components are hand-keyed; company profit remains unavailable |
+| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields, four ASX annual-report profit rows and ACCC December quarter 2025 petrol components are hand-keyed; private Australian subsidiary profit remains unavailable until source filings are verified |
 
 Every page cross-links to the others in the header nav.
 
@@ -154,6 +156,7 @@ npm run smoke:ui
 python3 scripts/validate_data.py
 python3 scripts/validate_data.py --json
 python3 scripts/build_source_manifest.py --check
+python3 scripts/review_due.py
 python3 -m unittest discover -s tests
 ```
 
@@ -197,6 +200,13 @@ python3 scripts/validate_data.py              # validate registry and envelopes
 Manual and canonical publisher pages should not block a valid programmatic data
 refresh; broken programmatic fetch URLs should fail loudly.
 
+To run the scheduled refresh manually, open the repository on GitHub, go to
+Actions, choose **Weekly data refresh**, then use **Run workflow** on `main`.
+That refresh only updates programmatic envelopes and stubs. Manual public
+snapshot sources, such as PM&C national status, FSSP disclosures, company
+profits and resource-value receipts, still need a human review before changing
+their JSON.
+
 ### Add or update a source
 
 1. Add or edit an entry in `data/sources.yml` with the full source registry contract above.
@@ -209,6 +219,9 @@ refresh; broken programmatic fetch URLs should fail loudly.
    fields, use typed `extra.fields`, for example `--field
    fiscal_year=2023-24 --field total_income=1234 --last-data-point
    2024-06-30`.
+   Use `python3 scripts/enter_manual.py --examples` for source-specific command
+   templates and review `docs/manual-entry-templates.md` before updating public
+   snapshot sources.
 4. When manual values are verified, set `status` to `"ok"`, set `retrieved_at`
    to the data-entry timestamp, set `last_data_point`, and keep
    `manual_entry: true`.
@@ -219,6 +232,21 @@ refresh; broken programmatic fetch URLs should fail loudly.
    `<MetricCard>` or `<ChartCard>`.
 7. Run `python3 scripts/build_source_manifest.py` and
    `python3 scripts/validate_data.py` before committing.
+
+### Manual review due report
+
+Run this when checking whether hand-keyed sources need attention:
+
+```sh
+python3 scripts/review_due.py
+python3 scripts/review_due.py --used-by national_status
+python3 scripts/review_due.py --used-by resource_value --json
+```
+
+The report uses the same freshness windows as the validator and flags missing,
+unavailable or stale manual envelopes. It does not fail CI by default because
+some public sources legitimately lag; use `--fail-on-due` only for an
+intentional manual-data review workflow.
 
 ## Repo layout
 
@@ -240,6 +268,7 @@ scripts/
   enter_manual.py              Safer manual data-entry helper
   fetch_data.py                Pipeline entry point
   init_manual_stubs.py         Creates missing data/manual/*.json stubs
+  review_due.py                Reports manual sources that need review
   validate_data.py             Validates registry, envelopes and dashboard refs
   write_refresh_status.py      Writes data/last_successful_refresh.json after refresh
 

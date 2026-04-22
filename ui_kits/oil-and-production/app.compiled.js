@@ -12,7 +12,7 @@ function DataCoverage({
     className: "coverage-strip__inner"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.")), React.createElement("div", {
+  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Verified means copied or fetched from a named source; derived means calculated from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
     className: "coverage-badges"
   }, React.createElement("span", {
     className: "status-pill status-pill--verified"
