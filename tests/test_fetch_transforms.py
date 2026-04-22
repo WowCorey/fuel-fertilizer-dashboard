@@ -61,9 +61,13 @@ class FetchTransformTests(unittest.TestCase):
                 },
             },
         }
-        with mock.patch.object(fetch_data.requests, "get", return_value=FakeResponse(json_doc=doc)):
+        with mock.patch.object(fetch_data.requests, "get", return_value=FakeResponse(json_doc=doc)) as get:
             out = fetch_data.fetch_abs_sdmx("MERCH_IMP", "33.TOT.TOT.M", "2026-01")
 
+        self.assertEqual(
+            get.call_args.args[0],
+            "https://data.api.abs.gov.au/rest/data/MERCH_IMP/33.TOT.TOT.M?format=jsondata&startPeriod=2026-01",
+        )
         self.assertEqual(out["unit"], "AUD thousands")
         self.assertEqual(out["last_data_point"], "2026-02-28")
         self.assertEqual(out["values"], [{"t": "2026-01", "v": 1000}, {"t": "2026-02", "v": 1250}])
