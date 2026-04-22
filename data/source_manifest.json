@@ -117,17 +117,17 @@
       "id": "abs_fertiliser_source_concentration",
       "human_name": "ABS International Merchandise Trade - fertiliser source-country concentration",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
         "fertilizer"
       ],
       "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
       "rights": "CC BY 4.0 where stated by publisher",
-      "citation": "Australian Bureau of Statistics, International Trade in Goods, HS 31 source-country detail.",
-      "preferred_dir": "manual",
-      "has_generated": false,
-      "has_manual": true
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, MERCH_IMP SITC 562 manufactured fertiliser imports by country of origin.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
     },
     "abs_petroleum_imports": {
       "id": "abs_petroleum_imports",

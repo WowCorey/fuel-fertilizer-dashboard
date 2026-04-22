@@ -109,13 +109,13 @@ function App() {
               fromEnvelope={data.abares_fertiliser_price}
               unit=" index"
             />}
-            {false && <MetricCard
+            <MetricCard
               eyebrow="Concentration"
               label="Top-3 source countries"
-              plain="Share of total fertiliser imports coming from the three largest supplier countries."
+              plain="Share of monthly SITC 562 manufactured fertiliser import value coming from the three largest source countries."
               fromEnvelope={data.abs_fertiliser_source_concentration}
               unit="%"
-            />}
+            />
             {false && <MetricCard
               eyebrow="Resilience"
               label="Months of cover"
@@ -128,7 +128,7 @@ function App() {
           <div className="pending-list" aria-label="Pending fertiliser source coverage">
             <article className="source-card">
               <h4>Pending source coverage</h4>
-              <p className="body-sm">Nutrient subseries, ABARES price index, supplier concentration and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.</p>
+              <p className="body-sm">Nutrient subseries, ABARES price index and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.</p>
             </article>
           </div>
         </section>
@@ -154,6 +154,20 @@ function App() {
               accent="#1F3A8A"
               takeaway="Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade."
               yAxisLabel="Import value (AUD thousands per month)"
+            />
+          </div>
+          <div style={{ height: 24 }}/>
+          <div className="charts-grid charts-grid--full">
+            <ChartCard
+              eyebrow="Supplier mix"
+              title="Top-3 source countries' combined share, over time"
+              unit="%"
+              fromEnvelope={data.abs_fertiliser_source_concentration}
+              ranges={['1Y','3Y']}
+              defaultRange="3Y"
+              accent="#6B7280"
+              takeaway="Share of monthly SITC 562 manufactured fertiliser import value from the three largest non-total source countries."
+              yAxisLabel="Top-3 share of SITC 562 import value (%)"
             />
           </div>
           {false && <>
@@ -208,22 +222,6 @@ function App() {
             />
           </div>
 
-          <div style={{ height: 24 }}/>
-          <div className="charts-grid charts-grid--full">
-            <ChartCard
-              eyebrow="Supplier mix"
-              title="Top-5 source countries' combined share, over time"
-              unit="%"
-              fromEnvelope={data.abs_fertiliser_source_concentration}
-              ranges={['1Y','3Y','5Y']}
-              defaultRange="3Y"
-              accent="#6B7280"
-              takeaway="How concentrated Australia's fertiliser supply is. The higher the share, the more exposed we are to disruption in a small number of supplier countries. Chart populates when the ABS country breakdown is hand-keyed."
-              yAxisLabel="Percent of total monthly HS-31 imports (%)"
-            />
-          </div>
-
-          <div style={{ height: 24 }}/>
           <div className="charts-grid charts-grid--full">
             <ChartCard
               eyebrow="Prices"
@@ -282,7 +280,7 @@ function App() {
               <dt>Monthly fertiliser imports</dt>
               <dd>Total import value (AUD thousands) of manufactured fertilisers, fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; the four-digit SITC subdivisions (5621 nitrogenous, 5622 potassic, 5623 phosphatic, 5629 other) are not exposed via the live API, so per-nutrient monthly series remain hand-keyed from the ABS International Trade release tables.</dd>
               <dt>Top-3 source countries</dt>
-              <dd>Sum of import value from the three largest supplier countries in the latest month, divided by total HS-31 imports in the same month, from ABS country-of-origin detail.</dd>
+              <dd>Sum of import value from the three largest non-total source countries in the latest month, divided by total SITC 562 manufactured fertiliser imports in the same month, fetched from the ABS Data API MERCH_IMP dataflow using country-of-origin detail. Nutrient-level monthly subseries remain unavailable because the checked live ABS API paths for HS 3102/3103/3104/3105 and SITC 5621/5622/5623/5629 return no usable monthly series, and the checked ABS latest-release workbooks did not expose a dashboard-safe monthly nutrient-level value table.</dd>
               <dt>Fertiliser price index</dt>
               <dd>Published by ABARES in the quarterly Agricultural Commodities report. Re-based so that the long-run average equals 100.</dd>
               <dt>Months of cover</dt>

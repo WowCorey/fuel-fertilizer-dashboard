@@ -270,14 +270,19 @@ sources:
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
-    format: XLSX
+    fetch_url: https://data.api.abs.gov.au/rest/data/MERCH_IMP/562..TOT.M?format=jsondata&startPeriod=2021-01
+    fetch_dataflow: MERCH_IMP
+    fetch_key: 562..TOT.M
+    fetch_start_period: 2021-01
+    fetch_commodity: "562"
+    format: JSON
     update_cadence: monthly
-    last_verified: 2026-04-20
+    last_verified: 2026-04-22
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, International Trade in Goods, HS 31 source-country detail.
-    reuse_notes: No programmatic endpoint for a ranked country-of-origin concentration series. The ABS Data API MERCH_IMP dataflow allows a single country code in the COUNTRY dimension but does not expose a top-N ranking or share-of-total aggregation; computing concentration (e.g. HHI, top-3 share) would require fetching every country-by-month cell and aggregating client-side, which exceeds the stdlib+requests fetcher runtime and is out of scope for this dashboard. Hand-key only from the ABS country-of-origin detail tables; preserve month, HS/SITC scope and ranking method.
-    fetch: manual
+    citation: Australian Bureau of Statistics, International Trade in Goods, MERCH_IMP SITC 562 manufactured fertiliser imports by country of origin.
+    reuse_notes: Programmatically fetched from the ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), all country-of-origin rows, total state destination, monthly frequency. The generated envelope reports the top-3 non-total source-country share of monthly SITC 562 import value and keeps the latest top countries in structured extra.fields. Do not describe this as HS 31 concentration unless an HS-coded source is added later.
+    fetch: programmatic
     used_by: [fertilizer]
 
   - id: iea_90day
