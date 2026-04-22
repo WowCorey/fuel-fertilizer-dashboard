@@ -134,6 +134,158 @@ sources:
     fetch: programmatic
     used_by: [oil]
 
+  - id: aps_sales_petrol
+    human_name: Australian Petroleum Statistics - automotive gasoline sales
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Sales of products
+    aps_column: Automotive gasoline total (ML)
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Automotive gasoline total (ML)". This is reported sales volume, not household expenditure.
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: aps_sales_diesel
+    human_name: Australian Petroleum Statistics - diesel sales
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Sales of products
+    aps_column: "Diesel oil: total (ML)"
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
+    reuse_notes: 'Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Diesel oil: total (ML)". This is reported sales volume, not a live shortage indicator.'
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: aps_sales_jet
+    human_name: Australian Petroleum Statistics - jet fuel sales
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Sales of products
+    aps_column: Aviation turbine fuel total (ML)
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Aviation turbine fuel total (ML)".
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: aps_stocks_petrol
+    human_name: Australian Petroleum Statistics - automotive gasoline stocks
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Stock volume by product
+    aps_column: Automotive gasoline (ML)
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Stock volume by product", column "Automotive gasoline (ML)".
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: aps_stocks_diesel
+    human_name: Australian Petroleum Statistics - diesel stocks
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Stock volume by product
+    aps_column: Diesel oil (ML)
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Stock volume by product", column "Diesel oil (ML)".
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: aps_imports_petrol
+    human_name: Australian Petroleum Statistics - automotive gasoline imports
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Imports volume
+    aps_column: Automotive gasoline (ML)
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Imports volume", column "Automotive gasoline (ML)".
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: aps_imports_diesel
+    human_name: Australian Petroleum Statistics - diesel imports
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Imports volume
+    aps_column: Diesel oil (ML)
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Imports volume", column "Diesel oil (ML)".
+    fetch: programmatic
+    used_by: [oil]
+
+  - id: aps_exports_crude_feedstocks
+    human_name: Australian Petroleum Statistics - crude and refinery feedstock exports
+    publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
+    url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
+    fetch_url: https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b
+    aps_sheet: Exports volume
+    aps_column: Crude oil & other refinery feedstocks (ML)
+    fetch_unit: ML
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, exports volume.
+    reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Exports volume", column "Crude oil & other refinery feedstocks (ML)".
+    fetch: programmatic
+    used_by: [oil]
+
   - id: aps_refinery_utilisation
     human_name: Australian Petroleum Statistics - refinery utilisation
     publisher: Department of Climate Change, Energy, the Environment and Water (DCCEEW)
@@ -141,11 +293,11 @@ sources:
     canonical_url: https://www.energy.gov.au/publications/australian-petroleum-statistics
     format: XLSX
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-22
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, refinery utilisation.
-    reuse_notes: Hand-key only if the APS workbook reports a directly verifiable utilisation series or enough inputs to calculate it transparently.
+    reuse_notes: Explicitly deferred. The APS workbook exposes refinery total input, but not a utilisation percentage or a capacity denominator. Do not derive utilisation unless a public capacity denominator is registered and documented, or a publisher reports utilisation directly.
     fetch: manual
     used_by: [oil]
 
@@ -320,20 +472,21 @@ sources:
     archive_url: https://www.aip.com.au/pricing/weekly-prices-reports
     format: PDF
     update_cadence: weekly
-    last_verified: 2026-04-20
+    last_verified: 2026-04-22
     rights: AIP terms
     rights_url: https://www.aip.com.au/pricing
     citation: Australian Institute of Petroleum, national average retail prices.
-    reuse_notes: AIP publishes current retail-price table data and date-stamped weekly PDF reports, but no stable public historical CSV/XLSX/JSON time series was identified. Keep manual until a deterministic source file and reporting-period model are confirmed. Verify AIP reuse terms before republishing values.
+    reuse_notes: Re-checked on 2026-04-22. AIP publishes current retail-price content and date-stamped weekly petrol/diesel reports, but no stable public historical CSV/XLSX/JSON time series was verified for automated ingestion. Keep manual until a deterministic source file, reporting-period model and reuse terms are confirmed.
     fetch: manual
     used_by: [fuel]
 
   - id: aus_retail_fuel_multistate
-    human_name: Retail pump price — multi-state average
+    human_name: Retail pump price - ULP 91 multi-state average
     publisher: NSW FuelCheck / Queensland Government Open Data / WA FuelWatch
     url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
     canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
     fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
+    retail_product: ulp91
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
     qld_ckan_base: https://www.data.qld.gov.au
     wa_fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
@@ -344,6 +497,65 @@ sources:
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
     reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
+    fetch: programmatic
+    used_by: [fuel]
+
+  - id: aus_retail_fuel_multistate_diesel
+    human_name: Retail pump price - diesel multi-state average
+    publisher: NSW FuelCheck / Queensland Government Open Data / WA FuelWatch
+    url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
+    canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
+    fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
+    retail_product: diesel
+    nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    qld_ckan_base: https://www.data.qld.gov.au
+    wa_fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
+    format: MIXED
+    update_cadence: daily
+    last_verified: 2026-04-22
+    rights: Mixed state government terms; verify each source before reuse
+    rights_url: https://www.fuelwatch.wa.gov.au/
+    citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
+    reuse_notes: Programmatic multi-state diesel average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
+    fetch: programmatic
+    used_by: [fuel]
+
+  - id: aus_retail_fuel_multistate_premium95
+    human_name: Retail pump price - premium 95 multi-state average
+    publisher: NSW FuelCheck / Queensland Government Open Data / WA FuelWatch
+    url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
+    canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
+    fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
+    retail_product: premium95
+    nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    qld_ckan_base: https://www.data.qld.gov.au
+    wa_fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
+    format: MIXED
+    update_cadence: daily
+    last_verified: 2026-04-22
+    rights: Mixed state government terms; verify each source before reuse
+    rights_url: https://www.fuelwatch.wa.gov.au/
+    citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
+    reuse_notes: Programmatic multi-state premium 95 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem.
+    fetch: programmatic
+    used_by: [fuel]
+
+  - id: aus_retail_fuel_multistate_e10
+    human_name: Retail pump price - E10 public-feed average
+    publisher: NSW FuelCheck / Queensland Government Open Data
+    url: https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026
+    canonical_url: https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026
+    fetch_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
+    retail_product: e10
+    nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    qld_ckan_base: https://www.data.qld.gov.au
+    format: MIXED
+    update_cadence: monthly
+    last_verified: 2026-04-22
+    rights: Mixed state government terms; verify each source before reuse
+    rights_url: https://www.data.qld.gov.au/article/data-licence
+    citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting.
+    reuse_notes: Programmatic E10 average from public feeds where available. Queensland publishes E10 in monthly Open Data resources. NSW contributes only when NSW_FUELCHECK_API_KEY is configured. WA FuelWatch's active public RSS product-code list does not expose E10, so WA is intentionally excluded.
     fetch: programmatic
     used_by: [fuel]
 
@@ -587,11 +799,11 @@ sources:
     canonical_url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm
     format: MIXED
     update_cadence: monthly
-    last_verified: 2026-04-15
+    last_verified: 2026-04-22
     rights: Commercial market data; no reliable free public series identified
     rights_url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm
     citation: Tapis benchmark source to be cited when a licence-compatible source is identified.
-    reuse_notes: Unavailable by design until a licence-compatible public source is confirmed.
+    reuse_notes: Explicitly deferred. EIA's public spot-price table exposes WTI and Brent but not Tapis. Public API vendors found during review require accounts or paid historical access and do not provide a licence-safe open Tapis time series for this repo. Keep unavailable until an official or clearly reusable public source is confirmed.
     fetch: unavailable
     used_by: [oil]
 
@@ -622,7 +834,7 @@ sources:
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Climate Change, Energy, the Environment and Water, Fuel Security Services Payment disclosures.
-    reuse_notes: Hand-key only from the public FSSP amounts paid table. Values are GST-exclusive quarterly payments and should be converted from dollars to A$m for the dashboard.
+    reuse_notes: Hand-key only from the public FSSP amounts paid table. Values are GST-exclusive quarterly payments and should be converted from dollars to A$m for the dashboard. Use docs/manual-data-review-checklist.md for quarterly review; if the publisher has not advanced, leave the existing value and let stale warnings remain visible.
     fetch: manual
     used_by: [oil]
 

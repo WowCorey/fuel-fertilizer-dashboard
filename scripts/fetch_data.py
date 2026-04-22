@@ -611,7 +611,36 @@ def retail_result(state: str, prices: list[float], source_date: str, detail: str
     }
 
 
-def fetch_wa_fuelwatch(url: str) -> dict[str, Any] | None:
+RETAIL_PRODUCTS: dict[str, dict[str, Any]] = {
+    "ulp91": {
+        "label": "ULP 91",
+        "nsw_fuel_types": {"U91", "ULP", "UNLEADED", "REGULAR UNLEADED"},
+        "qld_fuel_types": ["Unleaded"],
+        "wa_product_code": 1,
+    },
+    "diesel": {
+        "label": "diesel",
+        "nsw_fuel_types": {"DL", "DIESEL"},
+        "qld_fuel_types": ["Diesel"],
+        "wa_product_code": 4,
+    },
+    "premium95": {
+        "label": "premium 95",
+        "nsw_fuel_types": {"P95", "PULP95", "PREMIUM 95", "PREMIUM UNLEADED 95"},
+        "qld_fuel_types": ["PULP 95/96 RON"],
+        "wa_product_code": 2,
+    },
+    "e10": {
+        "label": "E10",
+        "nsw_fuel_types": {"E10"},
+        "qld_fuel_types": ["e10"],
+        # WA FuelWatch's public RSS product-code list has no active E10 code.
+        "wa_product_code": None,
+    },
+}
+
+
+def fetch_wa_fuelwatch(url: str, label: str = "ULP 91") -> dict[str, Any] | None:
     try:
         r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
         if r.status_code != 200:
@@ -638,7 +667,7 @@ def fetch_wa_fuelwatch(url: str) -> dict[str, Any] | None:
             dates.add(date_text)
 
     source_date = sorted(dates)[-1] if dates else dt.datetime.now(dt.timezone.utc).date().isoformat()
-    return retail_result("WA", prices, source_date, "FuelWatch ULP 91 RSS feed")
+    return retail_result("WA", prices, source_date, f"FuelWatch {label} RSS feed")
 
 
 def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | None:
@@ -685,7 +714,12 @@ def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | Non
     return sorted(candidates, key=lambda item: item[0])[-1][1]
 
 
-def fetch_qld_open_data(ckan_base: str, package_id: str) -> dict[str, Any] | None:
+def fetch_qld_open_data(
+    ckan_base: str,
+    package_id: str,
+    fuel_types: list[str] | None = None,
+    label: str = "ULP 91",
+) -> dict[str, Any] | None:
     resource = latest_qld_resource(package_id, ckan_base)
     if not resource:
         return None
@@ -694,9 +728,11 @@ def fetch_qld_open_data(ckan_base: str, package_id: str) -> dict[str, Any] | Non
         warn_skip("QLD Fuel Prices", "latest resource did not have an id")
         return None
 
+    fuel_types = fuel_types or ["Unleaded"]
+    escaped_types = ", ".join("'" + fuel_type.replace("'", "''") + "'" for fuel_type in fuel_types)
     sql = (
         f'SELECT "SiteId", "Price", "TransactionDateutc" FROM "{rid}" '
-        'WHERE "Fuel_Type"=\'Unleaded\' AND "Price" < 9999'
+        f'WHERE "Fuel_Type" IN ({escaped_types}) AND "Price" < 9999'
     )
     url = f"{ckan_base.rstrip('/')}/api/3/action/datastore_search_sql?{urllib.parse.urlencode({'sql': sql})}"
     try:
@@ -724,14 +760,14 @@ def fetch_qld_open_data(ckan_base: str, package_id: str) -> dict[str, Any] | Non
             latest_by_site[site_id] = (date_text, price)
 
     if not latest_by_site:
-        warn_skip("QLD Fuel Prices", "latest public dataset contained no Unleaded prices")
+        warn_skip("QLD Fuel Prices", f"latest public dataset contained no {label} prices")
         return None
     latest_date = max(date_text[:10] for date_text, _ in latest_by_site.values())
-    detail = f"Queensland Open Data latest public monthly file: {resource.get('name', rid)}"
+    detail = f"Queensland Open Data {label} latest public monthly file: {resource.get('name', rid)}"
     return retail_result("QLD", [price for _, price in latest_by_site.values()], latest_date, detail)
 
 
-def fetch_nsw_fuelcheck(url: str) -> dict[str, Any] | None:
+def fetch_nsw_fuelcheck(url: str, fuel_types: set[str] | None = None, label: str = "ULP 91") -> dict[str, Any] | None:
     token = os.environ.get("NSW_FUELCHECK_API_KEY", "").strip()
     if not token:
         warn_skip("NSW FuelCheck", "NSW_FUELCHECK_API_KEY is not set")
@@ -757,6 +793,7 @@ def fetch_nsw_fuelcheck(url: str) -> dict[str, Any] | None:
 
     prices: list[float] = []
     dates: set[str] = set()
+    fuel_types = fuel_types or RETAIL_PRODUCTS["ulp91"]["nsw_fuel_types"]
     price_nodes = doc.get("prices") or doc.get("Prices") or doc.get("fuelPrices") or []
     if isinstance(price_nodes, dict):
         price_nodes = list(price_nodes.values())
@@ -764,7 +801,7 @@ def fetch_nsw_fuelcheck(url: str) -> dict[str, Any] | None:
         if not isinstance(item, dict):
             continue
         fuel_type = str(item.get("fueltype") or item.get("fuelType") or item.get("FuelType") or "").upper()
-        if fuel_type and fuel_type not in {"U91", "ULP", "UNLEADED", "REGULAR UNLEADED"}:
+        if fuel_type and fuel_type not in fuel_types:
             continue
         try:
             price = float(item.get("price") or item.get("Price"))
@@ -777,18 +814,35 @@ def fetch_nsw_fuelcheck(url: str) -> dict[str, Any] | None:
             dates.add(date_text[:10])
 
     source_date = sorted(dates)[-1] if dates else dt.datetime.now(dt.timezone.utc).date().isoformat()
-    return retail_result("NSW", prices, source_date, "NSW FuelCheck API")
+    return retail_result("NSW", prices, source_date, f"NSW FuelCheck API {label}")
 
 
 def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
-    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date().isoformat()
+    product_key = source.get("retail_product", "ulp91")
+    product = RETAIL_PRODUCTS.get(product_key)
+    if not product:
+        raise RuntimeError(f"{source['id']}: unknown retail_product {product_key!r}")
+    label = product["label"]
+
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date()
+    qld_package_id = source.get("qld_package_id", f"fuel-price-reporting-{today.year}")
+    wa_url = source.get("wa_fetch_url")
+    if wa_url is None and product.get("wa_product_code") is not None:
+        wa_url = f"https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product={product['wa_product_code']}&Day=today"
+
     contributors = [
-        fetch_nsw_fuelcheck(source.get("nsw_fetch_url", "https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices")),
+        fetch_nsw_fuelcheck(
+            source.get("nsw_fetch_url", "https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices"),
+            product["nsw_fuel_types"],
+            label,
+        ),
         fetch_qld_open_data(
             source.get("qld_ckan_base", "https://www.data.qld.gov.au"),
-            source.get("qld_package_id", f"fuel-price-reporting-{today[:4]}"),
+            qld_package_id,
+            product["qld_fuel_types"],
+            label,
         ),
-        fetch_wa_fuelwatch(source.get("wa_fetch_url", "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today")),
+        fetch_wa_fuelwatch(wa_url, label) if wa_url else None,
     ]
     states = [state for state in contributors if state]
     if not states:
@@ -797,7 +851,7 @@ def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
             "unit": "cents per litre",
             "values": [],
             "last_data_point": None,
-            "notes": "No public state retail fuel feed returned usable ULP 91 observations during this fetch.",
+            "notes": f"No public state retail fuel feed returned usable {label} observations during this fetch.",
             "extra": {
                 "schema": "retail_fuel_multistate.v1",
                 "fields": {"states": [], "skipped": ["NSW", "QLD", "WA"]},
@@ -806,22 +860,23 @@ def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
 
     total_stations = sum(state["stations"] for state in states)
     weighted = sum(state["average"] * state["stations"] for state in states) / total_stations
+    latest_date = max(state["date"] for state in states if state.get("date"))
     labels = [
         f"{state['state']}: {state['stations']} stations, avg {state['average']} c/L, source date {state['date']}"
         for state in states
     ]
     return {
         "unit": "cents per litre",
-        "values": [{"t": today, "v": round(weighted, 1)}],
-        "last_data_point": today,
+        "values": [{"t": latest_date, "v": round(weighted, 1)}],
+        "last_data_point": latest_date,
         "notes": (
-            "Multi-state ULP 91 average weighted by station count. "
+            f"Multi-state {label} average weighted by station count. "
             + "; ".join(labels)
             + ". NSW contributes only when NSW_FUELCHECK_API_KEY is configured."
         ),
         "extra": {
             "schema": "retail_fuel_multistate.v1",
-            "fields": {"states": states},
+            "fields": {"product": product_key, "label": label, "states": states},
         },
     }
 
@@ -942,6 +997,10 @@ def main() -> int:
         if sid in wrote_ids:
             return
         fetcher = FETCHERS.get(sid)
+        if fetcher is None and source.get("aps_sheet") and source.get("aps_column"):
+            fetcher = fetch_aps_xlsx_series
+        if fetcher is None and source.get("retail_product"):
+            fetcher = fetch_retail_multistate
         if not fetcher:
             errors.append(f"{sid}: marked {source.get('fetch')} but no fetcher registered")
             return

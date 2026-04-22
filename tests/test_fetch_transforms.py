@@ -3,6 +3,7 @@ import pathlib
 import sys
 import tempfile
 import unittest
+import datetime as dt
 from unittest import mock
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -123,6 +124,52 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(out["unit"], "USD per AUD")
         self.assertEqual(out["values"], [{"t": "2026-01", "v": 0.66}, {"t": "2026-02", "v": 0.7}])
         self.assertEqual(out["last_data_point"], "2026-02-03")
+
+    def test_aps_xlsx_series_reads_named_sheet_and_column(self):
+        import openpyxl
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Sales of products"
+        ws.append(["Month", "Diesel oil: total (ML)"])
+        ws.append([dt.date(2026, 1, 1), 1200.44])
+        ws.append([dt.date(2026, 2, 1), 1300.56])
+
+        source = {
+            "id": "aps_sales_diesel",
+            "fetch_url": "https://example.test/package",
+            "aps_sheet": "Sales of products",
+            "aps_column": "Diesel oil: total (ML)",
+            "fetch_unit": "ML",
+        }
+        with mock.patch.object(fetch_data, "discover_aps_workbook_url", return_value="https://example.test/aps.xlsx"), \
+             mock.patch.object(fetch_data, "load_xlsx_from_url", return_value=wb):
+            out = fetch_data.fetch_aps_xlsx_series(source)
+
+        self.assertEqual(out["unit"], "ML")
+        self.assertEqual(out["values"], [{"t": "2026-01", "v": 1200.4}, {"t": "2026-02", "v": 1300.6}])
+        self.assertEqual(out["last_data_point"], "2026-02-28")
+        self.assertIn("Sales of products", out["notes"])
+
+    def test_aip_tgp_monthly_average_from_workbook(self):
+        import openpyxl
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Petrol TGP"
+        ws.append(["Date", "National Average"])
+        ws.append([dt.date(2026, 1, 1), 180.0])
+        ws.append([dt.date(2026, 1, 2), 184.0])
+        ws.append([dt.date(2026, 2, 1), 190.0])
+
+        source = {"id": "aip_tgp", "fetch_url": "https://example.test/aip"}
+        with mock.patch.object(fetch_data, "discover_aip_tgp_workbook_url", return_value="https://example.test/aip.xlsx"), \
+             mock.patch.object(fetch_data, "load_xlsx_from_url", return_value=wb):
+            out = fetch_data.fetch_aip_tgp(source)
+
+        self.assertEqual(out["unit"], "cents per litre")
+        self.assertEqual(out["values"], [{"t": "2026-01", "v": 182.0}, {"t": "2026-02", "v": 190.0}])
+        self.assertEqual(out["last_data_point"], "2026-02-01")
 
     def test_retail_multistate_weighted_average(self):
         contributors = [

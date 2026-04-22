@@ -3,10 +3,12 @@
   "private": true,
   "scripts": {
     "build:ui": "node scripts/build_ui.mjs",
-    "check:ui": "node scripts/build_ui.mjs --check"
+    "check:ui": "node scripts/build_ui.mjs --check",
+    "smoke:ui": "playwright test tests/ui-smoke.spec.js --project=chromium"
   },
   "devDependencies": {
     "@babel/core": "7.29.0",
-    "@babel/preset-react": "7.28.5"
+    "@babel/preset-react": "7.28.5",
+    "@playwright/test": "^1.59.1"
   }
 }
