@@ -780,7 +780,7 @@ sources:
     used_by: [oil]
 
   - id: eia_jet_spot_usgc
-    human_name: U.S. Gulf Coast jet fuel spot price (EIA, daily)
+    human_name: U.S. Gulf Coast jet fuel spot price (EIA/FRED monthly mean)
     publisher: U.S. Energy Information Administration via FRED mirror
     url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm
     canonical_url: https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm
@@ -788,12 +788,12 @@ sources:
     fred_series: DJFUELUSGULF
     fetch_unit: USD per gallon
     format: CSV
-    update_cadence: daily
+    update_cadence: monthly
     last_verified: 2026-04-20
     rights: U.S. public domain; FRED citation requested
     rights_url: https://fred.stlouisfed.org/series/DJFUELUSGULF
     citation: U.S. Energy Information Administration, U.S. Gulf Coast Kerosene-Type Jet Fuel Spot Price FOB [DJFUELUSGULF], retrieved from FRED.
-    reuse_notes: Fetched from FRED as a mirror of EIA daily Gulf Coast kerosene-type jet fuel spot prices; cite both EIA and FRED. Stored as monthly means of the published daily observations.
+    reuse_notes: Fetched from FRED as a mirror of EIA daily Gulf Coast kerosene-type jet fuel spot prices; cite both EIA and FRED. The raw upstream source is daily, but this dashboard envelope stores monthly means, so freshness is assessed on the monthly dashboard series.
     fetch: programmatic
     used_by: [oil]
 
@@ -1259,16 +1259,16 @@ sources:
 
   - id: company_chevron_au
     human_name: Chevron Australia annual financial statements
-    publisher: Chevron Australia Pty Ltd (ASIC lodgement)
+    publisher: Chevron Australia Holdings Pty Ltd
     url: https://australia.chevron.com/
-    canonical_url: https://australia.chevron.com/
+    canonical_url: https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-22
     rights: Company copyright
     rights_url: https://australia.chevron.com/
-    citation: Chevron Australia annual financial statements.
-    reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
+    citation: Chevron Australia Holdings Pty Ltd Tax Transparency Report, year ended 31 December 2024.
+    reuse_notes: Report states relevant information from Chevron Australia's audited Annual Report for the year ended 31 December 2024. Net profit is entered only when derived directly from stated profit before tax less stated total income tax expense, with the formula recorded in the envelope notes.
     fetch: manual
     used_by: [who_pays_what]
 
