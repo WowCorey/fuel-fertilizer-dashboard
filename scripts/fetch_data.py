@@ -316,6 +316,178 @@ def fetch_abs_sdmx(
     }
 
 
+def fetch_abs_fertiliser_source_concentration(source: dict[str, Any]) -> dict[str, Any]:
+    """Fetch ABS SITC 562 import values by source country and compute top-3 share."""
+    dataflow = source.get("fetch_dataflow")
+    key = source.get("fetch_key")
+    if not dataflow or not key:
+        raise RuntimeError(f"{source['id']}: fetch_dataflow and fetch_key are required")
+
+    if source.get("fetch_url"):
+        url = source["fetch_url"]
+    else:
+        query = {"format": "jsondata"}
+        if source.get("fetch_start_period"):
+            query["startPeriod"] = source["fetch_start_period"]
+        url = f"https://data.api.abs.gov.au/rest/data/{dataflow}/{key}?{urllib.parse.urlencode(query)}"
+
+    r = requests.get(
+        url,
+        headers={
+            "User-Agent": UA,
+            "Accept": "application/vnd.sdmx.data+json",
+        },
+        timeout=60,
+    )
+    r.raise_for_status()
+    try:
+        doc = r.json()
+    except ValueError as exc:
+        raise RuntimeError("ABS source-country response was not valid JSON") from exc
+
+    data_node = doc.get("data", doc)
+    data_sets = data_node.get("dataSets")
+    structures = data_node.get("structures")
+    structure = doc.get("structure")
+    if structure is None and isinstance(structures, list) and structures:
+        structure = structures[0]
+    if not isinstance(data_sets, list) or not data_sets:
+        raise RuntimeError("ABS source-country response contained no dataSets")
+    if not isinstance(structure, dict):
+        raise RuntimeError("ABS source-country response contained no usable structure")
+
+    dimensions = structure.get("dimensions")
+    if not isinstance(dimensions, dict):
+        raise RuntimeError("ABS source-country structure contained no dimensions")
+    series_dims = dimensions.get("series")
+    obs_dims = dimensions.get("observation")
+    if not isinstance(series_dims, list) or not isinstance(obs_dims, list) or not obs_dims:
+        raise RuntimeError("ABS source-country structure was missing series or observation dimensions")
+
+    dim_positions = {dim.get("id"): idx for idx, dim in enumerate(series_dims)}
+    required_dims = ("COMMODITY_SITC", "COUNTRY_ORIGIN", "STATE_DEST", "FREQ")
+    missing_dims = [dim for dim in required_dims if dim not in dim_positions]
+    if missing_dims:
+        raise RuntimeError(f"ABS source-country structure missing dimensions: {', '.join(missing_dims)}")
+
+    time_values = obs_dims[0].get("values")
+    if not isinstance(time_values, list) or not time_values:
+        raise RuntimeError("ABS source-country structure contained no time values")
+
+    values_by_period: dict[str, dict[str, float]] = {}
+    totals_by_period: dict[str, float] = {}
+    period_ends: dict[str, str] = {}
+    target_commodity = source.get("fetch_commodity", "562")
+
+    data_set = data_sets[0]
+    series = data_set.get("series")
+    if not isinstance(series, dict) or not series:
+        raise RuntimeError("ABS source-country response contained no series")
+
+    for series_key, series_doc in series.items():
+        if not isinstance(series_doc, dict) or not series_doc.get("observations"):
+            continue
+        try:
+            key_indices = [int(part) for part in series_key.split(":")]
+        except ValueError as exc:
+            raise RuntimeError(f"ABS source-country series key was malformed: {series_key!r}") from exc
+
+        def dim_value(dim_id: str) -> dict[str, Any]:
+            pos = dim_positions[dim_id]
+            try:
+                dim = series_dims[pos]
+                return dim["values"][key_indices[pos]]
+            except (IndexError, KeyError, TypeError) as exc:
+                raise RuntimeError(f"ABS source-country key {series_key!r} did not match dimension {dim_id}") from exc
+
+        commodity = dim_value("COMMODITY_SITC")
+        country = dim_value("COUNTRY_ORIGIN")
+        state = dim_value("STATE_DEST")
+        freq = dim_value("FREQ")
+        if commodity.get("id") != target_commodity or state.get("id") != "TOT" or freq.get("id") != "M":
+            continue
+
+        country_id = country.get("id")
+        country_name = country.get("name") or country_id
+        if not isinstance(country_name, str) or not country_name:
+            raise RuntimeError("ABS source-country series had no country name")
+
+        for obs_idx, obs in series_doc.get("observations", {}).items():
+            try:
+                time_value = time_values[int(obs_idx)]
+            except (ValueError, IndexError) as exc:
+                raise RuntimeError(f"ABS source-country observation index {obs_idx!r} has no time period") from exc
+            if not isinstance(obs, list) or not obs:
+                continue
+            raw_value = obs[0]
+            if raw_value is None:
+                continue
+            if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+                raise RuntimeError(f"ABS source-country observation for {country_name} was not numeric")
+            period = time_value.get("id") or time_value.get("name")
+            if not isinstance(period, str) or not period:
+                raise RuntimeError("ABS source-country time value was missing an id")
+            period_end = time_value.get("end")
+            if isinstance(period_end, str) and len(period_end) >= 10:
+                period_ends[period] = period_end[:10]
+            if country_id == "TOT":
+                totals_by_period[period] = float(raw_value)
+            else:
+                values_by_period.setdefault(period, {})[country_name] = float(raw_value)
+
+    values: list[dict[str, Any]] = []
+    latest_fields: dict[str, Any] | None = None
+    for period in sorted(values_by_period):
+        country_values = {country: value for country, value in values_by_period[period].items() if value > 0}
+        total = totals_by_period.get(period) or sum(country_values.values())
+        if total <= 0 or not country_values:
+            continue
+        ranked = sorted(country_values.items(), key=lambda item: item[1], reverse=True)
+        top3 = ranked[:3]
+        top3_total = sum(value for _, value in top3)
+        top3_share = round(top3_total / total * 100, 1)
+        values.append({"t": period, "v": top3_share})
+        hhi = round(sum((value / total * 100) ** 2 for value in country_values.values()), 1)
+        latest_fields = {
+            "commodity": "SITC 562 manufactured fertilisers",
+            "period": period,
+            "total_import_value_aud_thousands": round(total),
+            "top3_share_percent": top3_share,
+            "top3_value_aud_thousands": round(top3_total),
+            "positive_country_count": len(country_values),
+            "hhi": hhi,
+            "top_countries": [
+                {
+                    "country": country,
+                    "value_aud_thousands": round(value),
+                    "share_percent": round(value / total * 100, 1),
+                }
+                for country, value in top3
+            ],
+        }
+
+    values = values[-60:]
+    if not values or latest_fields is None:
+        raise RuntimeError("ABS source-country response contained no usable SITC 562 country observations")
+
+    last = values[-1]["t"]
+    return {
+        "unit": "%",
+        "values": values,
+        "last_data_point": period_ends.get(last) or (f"{last}-01" if len(last) == 7 else last),
+        "notes": (
+            "Fetched from ABS Data API MERCH_IMP using SITC 562 by country of origin. "
+            "Each value is the share of monthly SITC 562 import value from the three largest "
+            "non-total source countries. Values are trimmed to the last 60 monthly observations."
+        ),
+        "source_url_resolved": url,
+        "extra": {
+            "schema": "abs_sitc562_source_concentration.v1",
+            "fields": latest_fields,
+        },
+    }
+
+
 def fetch_abs_petroleum_imports_yoy(source: dict[str, Any]) -> dict[str, Any]:
     """Derive YoY percentage change from the generated ABS petroleum imports envelope."""
     parent_id = source.get("derived_from") or "abs_petroleum_imports"
@@ -907,6 +1079,7 @@ FETCHERS: dict[str, Fetcher] = {
         source.get("sdmx_note_suffix"),
         source.get("fetch_url"),
     ),
+    "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
     "aip_tgp": fetch_aip_tgp,

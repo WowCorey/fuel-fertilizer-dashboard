@@ -98,6 +98,70 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(out["values"][-1], {"t": "2026-01", "v": 25.0})
         self.assertEqual(out["last_data_point"], "2026-01-31")
 
+    def test_abs_fertiliser_source_concentration(self):
+        countries = [
+            ("TOT", "Total"),
+            ("SA", "Saudi Arabia"),
+            ("MA", "Morocco"),
+            ("CN", "China"),
+            ("US", "United States"),
+        ]
+        doc = {
+            "dataSets": [{"series": {}}],
+            "structure": {
+                "dimensions": {
+                    "series": [
+                        {"id": "COMMODITY_SITC", "values": [{"id": "562", "name": "Fertilisers"}]},
+                        {"id": "COUNTRY_ORIGIN", "values": [{"id": code, "name": name} for code, name in countries]},
+                        {"id": "STATE_DEST", "values": [{"id": "TOT", "name": "Total"}]},
+                        {"id": "FREQ", "values": [{"id": "M", "name": "Monthly"}]},
+                    ],
+                    "observation": [
+                        {
+                            "id": "TIME_PERIOD",
+                            "values": [
+                                {"id": "2026-01", "end": "2026-01-31T00:00:00"},
+                                {"id": "2026-02", "end": "2026-02-28T00:00:00"},
+                            ],
+                        }
+                    ],
+                }
+            },
+        }
+        rows = {
+            0: [1000, 2000],
+            1: [300, 800],
+            2: [250, 500],
+            3: [200, 400],
+            4: [100, 100],
+        }
+        for country_idx, values in rows.items():
+            doc["dataSets"][0]["series"][f"0:{country_idx}:0:0"] = {
+                "observations": {"0": [values[0]], "1": [values[1]]}
+            }
+
+        source = {
+            "id": "abs_fertiliser_source_concentration",
+            "fetch_dataflow": "MERCH_IMP",
+            "fetch_key": "562..TOT.M",
+            "fetch_start_period": "2026-01",
+            "fetch_commodity": "562",
+        }
+        with mock.patch.object(fetch_data.requests, "get", return_value=FakeResponse(json_doc=doc)) as get:
+            out = fetch_data.fetch_abs_fertiliser_source_concentration(source)
+
+        self.assertEqual(
+            get.call_args.args[0],
+            "https://data.api.abs.gov.au/rest/data/MERCH_IMP/562..TOT.M?format=jsondata&startPeriod=2026-01",
+        )
+        self.assertEqual(out["unit"], "%")
+        self.assertEqual(out["last_data_point"], "2026-02-28")
+        self.assertEqual(out["values"], [{"t": "2026-01", "v": 75.0}, {"t": "2026-02", "v": 85.0}])
+        fields = out["extra"]["fields"]
+        self.assertEqual(fields["top3_share_percent"], 85.0)
+        self.assertEqual(fields["total_import_value_aud_thousands"], 2000)
+        self.assertEqual([row["country"] for row in fields["top_countries"]], ["Saudi Arabia", "Morocco", "China"])
+
     def test_rba_f11_monthly_means(self):
         csv_text = "\n".join(
             [
