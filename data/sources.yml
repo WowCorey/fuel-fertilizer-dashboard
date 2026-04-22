@@ -56,7 +56,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.
     reuse_notes: Programmatically discovered from the data.gov.au CKAN package endpoint under stable dataset id d889484e-fb65-4190-a2e3-1739517cbf9b. The fetcher reads the latest APS data-extract XLSX, sheet "IEA days net import cover", column "IEA days of net import coverage".
     fetch: programmatic
-    used_by: [fuel, oil]
+    used_by: [fuel, oil, fuel_security]
 
   - id: aps_production_petrol
     human_name: Australian Petroleum Statistics - motor spirit production
@@ -151,7 +151,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Automotive gasoline total (ML)". This is reported sales volume, not household expenditure.
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_sales_diesel
     human_name: Australian Petroleum Statistics - diesel sales
@@ -170,7 +170,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
     reuse_notes: 'Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Diesel oil: total (ML)". This is reported sales volume, not a live shortage indicator.'
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_sales_jet
     human_name: Australian Petroleum Statistics - jet fuel sales
@@ -189,7 +189,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Aviation turbine fuel total (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_stocks_petrol
     human_name: Australian Petroleum Statistics - automotive gasoline stocks
@@ -208,7 +208,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Stock volume by product", column "Automotive gasoline (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_stocks_diesel
     human_name: Australian Petroleum Statistics - diesel stocks
@@ -227,7 +227,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Stock volume by product", column "Diesel oil (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_imports_petrol
     human_name: Australian Petroleum Statistics - automotive gasoline imports
@@ -246,7 +246,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Imports volume", column "Automotive gasoline (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_imports_diesel
     human_name: Australian Petroleum Statistics - diesel imports
@@ -265,7 +265,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Imports volume", column "Diesel oil (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_exports_crude_feedstocks
     human_name: Australian Petroleum Statistics - crude and refinery feedstock exports
@@ -319,7 +319,7 @@ sources:
     citation: Australian Bureau of Statistics, International Trade in Goods.
     reuse_notes: Fetched from the live ABS Data API MERCH_IMP dataflow using SITC 33 (petroleum, petroleum products and related materials), total country of origin, total state destination, monthly frequency. The live ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; do not describe this envelope as HS 27 unless an HS-coded ABS API series is added later.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: abs_petroleum_imports_yoy
     human_name: ABS International Merchandise Trade — petroleum imports YoY
@@ -335,7 +335,7 @@ sources:
     reuse_notes: Derived from abs_petroleum_imports by comparing each month with the same month one year earlier. Do not hand-key or fetch directly.
     fetch: derived
     derived_from: abs_petroleum_imports
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: abs_fertiliser_imports
     human_name: ABS International Merchandise Trade — fertiliser imports (SITC 562)
@@ -503,7 +503,7 @@ sources:
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
     reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: aus_retail_fuel_multistate_diesel
     human_name: Retail pump price - diesel multi-state average
@@ -523,7 +523,7 @@ sources:
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
     reuse_notes: Programmatic multi-state diesel average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: aus_retail_fuel_multistate_premium95
     human_name: Retail pump price - premium 95 multi-state average
@@ -543,7 +543,7 @@ sources:
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
     reuse_notes: Programmatic multi-state premium 95 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: aus_retail_fuel_multistate_e10
     human_name: Retail pump price - E10 public-feed average
@@ -562,7 +562,7 @@ sources:
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting.
     reuse_notes: Programmatic E10 average from public feeds where available. Queensland publishes E10 in monthly Open Data resources. NSW contributes only when NSW_FUELCHECK_API_KEY is configured. WA FuelWatch's active public RSS product-code list does not expose E10, so WA is intentionally excluded.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: ato_corporate_tax
     human_name: ATO Corporate Tax Transparency Report (latest year)
@@ -865,13 +865,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; data compiled by DCCEEW.
     reuse_notes: Hand-key from the public PM&C fuel supply page. Local pipeline requests to this page return an Incapsula challenge, so this source remains manual until a stable machine-readable endpoint is found.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_mso_days_cover
     human_name: PM&C public fuel supply - MSO days of cover
@@ -880,13 +880,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
     reuse_notes: Hand-key from the PM&C table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_mso_fuel_reserves
     human_name: PM&C public fuel supply - MSO fuel reserves
@@ -895,13 +895,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO reserves table.
     reuse_notes: Hand-key from the PM&C table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_forward_import_orders
     human_name: PM&C public fuel supply - four-week import orders
@@ -910,13 +910,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; current and anticipated national supplies text.
     reuse_notes: Hand-key only when PM&C publishes the reported four-week forward import-order volume. Do not infer from tanker counts or other sources.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_tankers_on_water
     human_name: PM&C public fuel supply - ships on water to Australia
@@ -925,13 +925,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW estimate using Kpler commodity terminal.
     reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and should not be presented as individual tanker movement data.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_retail_stockouts
     human_name: PM&C public fuel supply - retail stock-outs
@@ -940,13 +940,130 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; retail stock-outs table provided by state and territory governments.
     reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
+
+  - id: fuel_security_petrol_days_remaining
+    human_name: Fuel security - petrol days remaining
+    publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: JSON
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
+    reuse_notes: Derived by selecting the petrol_days field from pmc_mso_days_cover. This is product-specific reshaping of the published table, not an independent stock or demand estimate.
+    fetch: derived
+    derived_from: pmc_mso_days_cover
+    derived_field: petrol_days
+    derived_label: Petrol
+    fetch_unit: days
+    used_by: [fuel_security]
+
+  - id: fuel_security_diesel_days_remaining
+    human_name: Fuel security - diesel days remaining
+    publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: JSON
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
+    reuse_notes: Derived by selecting the diesel_days field from pmc_mso_days_cover. This is product-specific reshaping of the published table, not an independent stock or demand estimate.
+    fetch: derived
+    derived_from: pmc_mso_days_cover
+    derived_field: diesel_days
+    derived_label: Diesel
+    fetch_unit: days
+    used_by: [fuel_security]
+
+  - id: fuel_security_jet_days_remaining
+    human_name: Fuel security - jet fuel days remaining
+    publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: JSON
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
+    reuse_notes: Derived by selecting the jet_fuel_days field from pmc_mso_days_cover. This is product-specific reshaping of the published table, not an independent stock or demand estimate.
+    fetch: derived
+    derived_from: pmc_mso_days_cover
+    derived_field: jet_fuel_days
+    derived_label: Jet fuel
+    fetch_unit: days
+    used_by: [fuel_security]
+
+  - id: fuel_security_status_model
+    human_name: Fuel security status model
+    publisher: Fuel Resilience AU methodology
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU, Fuel security methodology.
+    reuse_notes: Fail-closed status model placeholder. Do not publish Stable/Tight/Disrupted/Critical until the methodology has enough observed coverage across days, stock, import, outage and disruption signals.
+    fetch: unavailable
+    used_by: [fuel_security]
+
+  - id: fuel_security_live_station_outage_feed
+    human_name: Live national station outage feed
+    publisher: No public national feed currently loaded
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Not applicable; unavailable placeholder
+    rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    citation: Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.
+    reuse_notes: Do not imply live national station outage visibility. Use PM&C retail stock-outs for the dated partial public snapshot until a stable, licence-safe public feed exists.
+    fetch: unavailable
+    used_by: [fuel_security]
+
+  - id: fuel_security_live_vessel_tracking
+    human_name: Live shipment-level tanker tracking
+    publisher: No source-safe live vessel feed currently loaded
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Not applicable; unavailable placeholder
+    rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    citation: Fuel Resilience AU source review; PM&C aggregate ships-on-water counts remain the loaded partial public source.
+    reuse_notes: Do not scrape or infer live vessel movements. PM&C publishes aggregate tanker counts estimated by DCCEEW using Kpler; this repo does not publish individual vessel identities or ETAs.
+    fetch: unavailable
+    used_by: [fuel_security]
+
+  - id: fuel_security_terminal_capacity
+    human_name: Terminal-level storage capacity
+    publisher: No defensible national terminal-capacity source currently loaded
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Not applicable; unavailable placeholder
+    rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    citation: Fuel Resilience AU source review; PM&C MSO reserve volumes and APS stock series remain the loaded public storage context.
+    reuse_notes: Do not fabricate terminal-by-terminal capacity. Publish only national/product stock context until a public, reusable terminal-capacity dataset is verified.
+    fetch: unavailable
+    used_by: [fuel_security]
 
   # =========================================================
   # RESOURCE VALUE - v1.5 (who captures oil and gas value)

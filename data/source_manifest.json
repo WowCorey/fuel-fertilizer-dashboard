@@ -136,7 +136,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "fuel"
+        "fuel",
+        "fuel_security"
       ],
       "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -152,7 +153,8 @@
       "fetch": "derived",
       "update_cadence": "monthly",
       "used_by": [
-        "fuel"
+        "fuel",
+        "fuel_security"
       ],
       "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -377,7 +379,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -393,7 +396,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -410,7 +414,8 @@
       "update_cadence": "monthly",
       "used_by": [
         "fuel",
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -506,7 +511,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -522,7 +528,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -538,7 +545,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -554,7 +562,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -570,7 +579,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "oil"
+        "oil",
+        "fuel_security"
       ],
       "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -602,7 +612,8 @@
       "fetch": "programmatic",
       "update_cadence": "daily",
       "used_by": [
-        "fuel"
+        "fuel",
+        "fuel_security"
       ],
       "canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
       "rights": "Mixed state government terms; verify each source before reuse",
@@ -618,7 +629,8 @@
       "fetch": "programmatic",
       "update_cadence": "daily",
       "used_by": [
-        "fuel"
+        "fuel",
+        "fuel_security"
       ],
       "canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today",
       "rights": "Mixed state government terms; verify each source before reuse",
@@ -634,7 +646,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "fuel"
+        "fuel",
+        "fuel_security"
       ],
       "canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
       "rights": "Mixed state government terms; verify each source before reuse",
@@ -650,7 +663,8 @@
       "fetch": "programmatic",
       "update_cadence": "daily",
       "used_by": [
-        "fuel"
+        "fuel",
+        "fuel_security"
       ],
       "canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today",
       "rights": "Mixed state government terms; verify each source before reuse",
@@ -851,6 +865,70 @@
       "has_generated": true,
       "has_manual": false
     },
+    "fuel_security_diesel_days_remaining": {
+      "id": "fuel_security_diesel_days_remaining",
+      "human_name": "Fuel security - diesel days remaining",
+      "publisher": "Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply",
+      "fetch": "derived",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "fuel_security_jet_days_remaining": {
+      "id": "fuel_security_jet_days_remaining",
+      "human_name": "Fuel security - jet fuel days remaining",
+      "publisher": "Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply",
+      "fetch": "derived",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "fuel_security_live_station_outage_feed": {
+      "id": "fuel_security_live_station_outage_feed",
+      "human_name": "Live national station outage feed",
+      "publisher": "No public national feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable placeholder",
+      "citation": "Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fuel_security_live_vessel_tracking": {
+      "id": "fuel_security_live_vessel_tracking",
+      "human_name": "Live shipment-level tanker tracking",
+      "publisher": "No source-safe live vessel feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable placeholder",
+      "citation": "Fuel Resilience AU source review; PM&C aggregate ships-on-water counts remain the loaded partial public source.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "fuel_security_payment": {
       "id": "fuel_security_payment",
       "human_name": "Fuel Security Services Payment — recipients & payments",
@@ -863,6 +941,54 @@
       "canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Department of Climate Change, Energy, the Environment and Water, Fuel Security Services Payment disclosures.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fuel_security_petrol_days_remaining": {
+      "id": "fuel_security_petrol_days_remaining",
+      "human_name": "Fuel security - petrol days remaining",
+      "publisher": "Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply",
+      "fetch": "derived",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "fuel_security_status_model": {
+      "id": "fuel_security_status_model",
+      "human_name": "Fuel security status model",
+      "publisher": "Fuel Resilience AU methodology",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU, Fuel security methodology.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fuel_security_terminal_capacity": {
+      "id": "fuel_security_terminal_capacity",
+      "human_name": "Terminal-level storage capacity",
+      "publisher": "No defensible national terminal-capacity source currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable placeholder",
+      "citation": "Fuel Resilience AU source review; PM&C MSO reserve volumes and APS stock series remain the loaded public storage context.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -907,7 +1033,8 @@
       "fetch": "manual",
       "update_cadence": "weekly",
       "used_by": [
-        "national_status"
+        "national_status",
+        "fuel_security"
       ],
       "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
       "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
@@ -923,7 +1050,8 @@
       "fetch": "manual",
       "update_cadence": "weekly",
       "used_by": [
-        "national_status"
+        "national_status",
+        "fuel_security"
       ],
       "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
       "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
@@ -939,7 +1067,8 @@
       "fetch": "manual",
       "update_cadence": "weekly",
       "used_by": [
-        "national_status"
+        "national_status",
+        "fuel_security"
       ],
       "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
       "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
@@ -955,7 +1084,8 @@
       "fetch": "manual",
       "update_cadence": "weekly",
       "used_by": [
-        "national_status"
+        "national_status",
+        "fuel_security"
       ],
       "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
       "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
@@ -971,7 +1101,8 @@
       "fetch": "manual",
       "update_cadence": "weekly",
       "used_by": [
-        "national_status"
+        "national_status",
+        "fuel_security"
       ],
       "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
       "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
@@ -987,7 +1118,8 @@
       "fetch": "manual",
       "update_cadence": "weekly",
       "used_by": [
-        "national_status"
+        "national_status",
+        "fuel_security"
       ],
       "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
       "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",

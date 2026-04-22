@@ -1,0 +1,31 @@
+{
+  "series_id": "fuel_security_jet_days_remaining",
+  "source_id": "fuel_security_jet_days_remaining",
+  "source_name": "Fuel security - jet fuel days remaining",
+  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "unit": "days",
+  "retrieved_at": "2026-04-22T17:13:40+00:00",
+  "last_data_point": "2026-04-14",
+  "values": [
+    {
+      "t": "2026-04-14",
+      "v": 30.0
+    }
+  ],
+  "notes": "Derived by selecting jet_fuel_days from pmc_mso_days_cover. This is a product-specific reshaping of the PM&C/DCCEEW public table, not an independent estimate.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+  "citation": "Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.",
+  "extra": {
+    "schema": "fuel_security_product_metric.v1",
+    "fields": {
+      "product": "Jet fuel",
+      "parent_source_id": "pmc_mso_days_cover",
+      "parent_field": "jet_fuel_days",
+      "parent_last_data_point": "2026-04-14",
+      "parent_manual_entry": true,
+      "method": "typed_extra_field_selection"
+    }
+  }
+}

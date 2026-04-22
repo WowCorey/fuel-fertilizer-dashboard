@@ -37,6 +37,262 @@ Object.assign(window, {
   DataCoverage,
   StatusPill
 });
+function TrustBadge({
+  kind,
+  children
+}) {
+  const key = String(kind || 'observed').toLowerCase().replace(/\s+/g, '-');
+  const labels = {
+    observed: 'Observed',
+    derived: 'Derived',
+    scenario: 'Scenario',
+    estimated: 'Estimated',
+    manual: 'Manual',
+    stale: 'Stale',
+    unavailable: 'Unavailable',
+    partial: 'Partial coverage'
+  };
+  return React.createElement("span", {
+    className: `trust-badge trust-badge--${key}`
+  }, children || labels[key] || kind);
+}
+function EnvTrustBadges({
+  env,
+  partial = false
+}) {
+  if (!env || env.status !== 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(TrustBadge, {
+      kind: "unavailable"
+    }));
+  }
+  const f = window.FR.freshness(env);
+  const badges = [];
+  if (env._meta?.fetch === 'derived') {
+    badges.push(React.createElement(TrustBadge, {
+      key: "derived",
+      kind: "derived"
+    }));
+  } else {
+    badges.push(React.createElement(TrustBadge, {
+      key: "observed",
+      kind: "observed"
+    }));
+  }
+  if (env.manual_entry || env.extra?.fields?.parent_manual_entry) badges.push(React.createElement(TrustBadge, {
+    key: "manual",
+    kind: "manual"
+  }));
+  if (f.state === 'stale') badges.push(React.createElement(TrustBadge, {
+    key: "stale",
+    kind: "stale"
+  }));
+  if (partial) badges.push(React.createElement(TrustBadge, {
+    key: "partial",
+    kind: "partial"
+  }));
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, badges);
+}
+Object.assign(window, {
+  TrustBadge,
+  EnvTrustBadges
+});
+function ShippingVisibility({
+  tankersEnv,
+  forwardOrdersEnv,
+  importsEnv,
+  liveVesselEnv
+}) {
+  const [filter, setFilter] = React.useState('all');
+  function latest(env) {
+    if (!env || env.status !== 'ok' || !env.values?.length) return null;
+    return env.values.at(-1).v;
+  }
+  function fields(env) {
+    return env?.extra?.fields || {};
+  }
+  function fmt(value, digits = 0) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    return Number(value).toLocaleString('en-AU', {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits
+    });
+  }
+  const tankerFields = fields(tankersEnv);
+  const groups = [{
+    key: 'crude',
+    label: 'Crude oil',
+    shortLabel: 'Crude',
+    count: tankerFields.crude_oil_tankers,
+    previous: tankerFields.previous_crude_oil_tankers,
+    days: tankerFields.crude_oil_equivalent_days,
+    route: 'Overseas crude supply -> Australian refining system',
+    note: 'Aggregate PM&C count. No vessel identities or ETAs are loaded.'
+  }, {
+    key: 'clean',
+    label: 'Clean refined products',
+    shortLabel: 'Clean products',
+    count: tankerFields.clean_refined_product_tankers,
+    previous: tankerFields.previous_clean_refined_product_tankers,
+    days: tankerFields.clean_refined_product_equivalent_days,
+    route: 'Regional product supply -> Australian terminals',
+    note: 'Aggregate PM&C count covering refined-product tankers.'
+  }];
+  const visibleGroups = filter === 'all' ? groups : groups.filter(group => group.key === filter);
+  const totalTankers = latest(tankersEnv);
+  const filterButtons = [['all', `All (${fmt(totalTankers)})`], ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`], ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`]];
+  return React.createElement("div", {
+    className: "shipping-visibility"
+  }, React.createElement("div", {
+    className: "shipping-visibility__summary",
+    "aria-label": "Inbound fuel summary"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Inbound fuel visibility"), React.createElement("h3", null, "Australia supply inbound, shown only at aggregate level."), React.createElement("p", null, "PM&C publishes tanker counts and equivalent days. This layout makes that flow easier to read without inventing vessel identities, live positions or cargo assignments.")), React.createElement("div", {
+    className: "shipping-stats"
+  }, React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "reported tankers")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(latest(forwardOrdersEnv), 1)), React.createElement("small", null, "billion L ordered")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "AUD thousands imports")), React.createElement("div", {
+    className: "shipping-stat shipping-stat--unavailable"
+  }, React.createElement("span", null, "0"), React.createElement("small", null, "live vessel feeds")))), React.createElement("div", {
+    className: "shipping-tabs",
+    role: "tablist",
+    "aria-label": "Inbound fuel visibility filters"
+  }, filterButtons.map(([key, label]) => React.createElement("button", {
+    key: key,
+    type: "button",
+    className: filter === key ? 'is-active' : '',
+    "aria-pressed": filter === key,
+    onClick: () => setFilter(key)
+  }, label))), React.createElement("div", {
+    className: "shipping-visibility__body"
+  }, React.createElement("div", {
+    className: "shipping-list",
+    "aria-label": "Aggregate tanker groups"
+  }, visibleGroups.map(group => React.createElement("article", {
+    key: group.key,
+    className: "shipping-row"
+  }, React.createElement("div", {
+    className: "shipping-row__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, group.shortLabel), React.createElement("h4", null, group.label)), React.createElement(EnvTrustBadges, {
+    env: tankersEnv,
+    partial: true
+  })), React.createElement("dl", {
+    className: "shipping-row__facts"
+  }, React.createElement("div", null, React.createElement("dt", null, "Current"), React.createElement("dd", null, fmt(group.count), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Previous"), React.createElement("dd", null, fmt(group.previous), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Equivalent"), React.createElement("dd", null, fmt(group.days), " days"))), React.createElement("p", {
+    className: "shipping-route"
+  }, group.route), React.createElement("p", {
+    className: "caption"
+  }, group.note))), React.createElement("article", {
+    className: "shipping-row shipping-row--unavailable"
+  }, React.createElement("div", {
+    className: "shipping-row__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Vessel layer"), React.createElement("h4", null, "Live vessel identities and ETAs")), React.createElement(EnvTrustBadges, {
+    env: liveVesselEnv
+  })), React.createElement("p", null, liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.'))), React.createElement("div", {
+    className: "shipping-map",
+    "aria-label": "Illustrative aggregate fuel supply lane map"
+  }, React.createElement("div", {
+    className: "shipping-map__canvas"
+  }, React.createElement("svg", {
+    viewBox: "0 0 720 420",
+    role: "img",
+    "aria-labelledby": "shipping-map-title shipping-map-desc"
+  }, React.createElement("title", {
+    id: "shipping-map-title"
+  }, "Aggregate inbound fuel lane context"), React.createElement("desc", {
+    id: "shipping-map-desc"
+  }, "Illustrative Indo-Pacific fuel supply lanes into Australia. No live vessel positions are plotted."), React.createElement("rect", {
+    x: "0",
+    y: "0",
+    width: "720",
+    height: "420",
+    rx: "8"
+  }), React.createElement("path", {
+    className: "shipping-grid",
+    d: "M60 80H660M60 160H660M60 240H660M60 320H660M120 40V380M240 40V380M360 40V380M480 40V380M600 40V380"
+  }), React.createElement("path", {
+    className: "shipping-lane shipping-lane--crude",
+    d: "M96 116 C220 80 340 112 466 210 C508 244 540 270 592 286"
+  }), React.createElement("path", {
+    className: "shipping-lane shipping-lane--clean",
+    d: "M136 238 C246 202 358 216 484 272 C524 290 552 306 612 318"
+  }), React.createElement("path", {
+    className: "shipping-lane shipping-lane--context",
+    d: "M198 312 C320 282 424 306 578 342"
+  }), React.createElement("circle", {
+    className: "shipping-origin",
+    cx: "96",
+    cy: "116",
+    r: "6"
+  }), React.createElement("circle", {
+    className: "shipping-origin",
+    cx: "136",
+    cy: "238",
+    r: "6"
+  }), React.createElement("circle", {
+    className: "shipping-origin",
+    cx: "198",
+    cy: "312",
+    r: "6"
+  }), React.createElement("path", {
+    className: "shipping-australia",
+    d: "M536 242 L602 230 L650 260 L666 314 L622 358 L556 344 L510 302 Z"
+  }), React.createElement("circle", {
+    className: "shipping-port",
+    cx: "592",
+    cy: "286",
+    r: "5"
+  }), React.createElement("circle", {
+    className: "shipping-port",
+    cx: "612",
+    cy: "318",
+    r: "5"
+  }), React.createElement("circle", {
+    className: "shipping-port",
+    cx: "578",
+    cy: "342",
+    r: "5"
+  }), React.createElement("text", {
+    x: "80",
+    y: "96"
+  }, "Crude supply"), React.createElement("text", {
+    x: "118",
+    y: "220"
+  }, "Refined-product hubs"), React.createElement("text", {
+    x: "188",
+    y: "296"
+  }, "Regional context"), React.createElement("text", {
+    x: "528",
+    y: "222"
+  }, "Australia"))), React.createElement("div", {
+    className: "shipping-map__legend"
+  }, React.createElement("span", null, React.createElement("i", {
+    className: "lane-key lane-key--crude"
+  }), "Crude aggregate"), React.createElement("span", null, React.createElement("i", {
+    className: "lane-key lane-key--clean"
+  }), "Clean-product aggregate"), React.createElement("span", null, React.createElement("i", {
+    className: "lane-key lane-key--context"
+  }), "Context only")), React.createElement("p", {
+    className: "caption mono"
+  }, "Illustrative route context only. No AIS positions, vessel names, port-call ETAs or live tracks are loaded."))), React.createElement("p", {
+    className: "shipping-source mono"
+  }, window.FR.sourceLine(tankersEnv)));
+}
+Object.assign(window, {
+  ShippingVisibility
+});
 function Header({
   active = 'fuel',
   updated = ''
@@ -45,6 +301,10 @@ function Header({
     id: 'national_status',
     label: 'National status',
     href: '../national-status-dashboard/index.html'
+  }, {
+    id: 'fuel_security',
+    label: 'Fuel security',
+    href: '../fuel-security-dashboard/index.html'
   }, {
     id: 'resource_value',
     label: 'Resource value',

@@ -1,10 +1,15 @@
 # Fuel Stress Index Input Specification
 
-Last reviewed: 2026-04-22
+Last reviewed: 2026-04-23
 
 This document locks the rules that must exist before the project publishes any
 0-100 Fuel Stress Index. It is a methodology gate only; there is no public score,
 public label, or index UI until every rule below is implemented and visible.
+
+The fuel-security dashboard added in v1.6 is a visibility page, not this index.
+It can show observed, derived, partial and unavailable operational signals, but
+it must not display a 0-100 score or a Stable/Tight/Disrupted/Critical status
+until the coverage rules below are implemented.
 
 ## Purpose
 

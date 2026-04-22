@@ -542,6 +542,70 @@ def fetch_abs_petroleum_imports_yoy(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def load_parent_envelope(parent_id: str) -> dict[str, Any]:
+    """Load a generated or manual parent envelope by source id."""
+    for base in (GENERATED_DIR, MANUAL_DIR):
+        path = base / f"{parent_id}.json"
+        if path.exists():
+            with path.open("r", encoding="utf-8") as f:
+                parent = json.load(f)
+            if not isinstance(parent, dict):
+                raise RuntimeError(f"Parent envelope {path.relative_to(ROOT)} is not a JSON object")
+            return parent
+    raise RuntimeError(f"Missing parent envelope for {parent_id}")
+
+
+def fetch_extra_field_derived(source: dict[str, Any]) -> dict[str, Any]:
+    """Derive a single-point series by selecting a typed extra.fields value.
+
+    This is used for fuel-security dashboard slots where the source publishes
+    several product-specific values inside one public table. The parent remains
+    the auditable source envelope; this generated envelope gives each product a
+    first-class source id for cards, coverage and freshness display.
+    """
+    parent_id = source.get("derived_from")
+    field = source.get("derived_field")
+    if not parent_id or not field:
+        raise RuntimeError(f"{source.get('id', '<unknown>')}: derived_from and derived_field are required")
+
+    parent = load_parent_envelope(parent_id)
+    if parent.get("status") != "ok":
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} status is not ok")
+    fields = parent.get("extra", {}).get("fields", {})
+    if not isinstance(fields, dict):
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} has no typed extra.fields")
+    value = fields.get(field)
+    if not isinstance(value, (int, float)):
+        raise RuntimeError(f"Cannot derive {source['id']}; parent field {field!r} is missing or not numeric")
+
+    point_date = fields.get("as_at") or parent.get("last_data_point")
+    if not isinstance(point_date, str) or not point_date:
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} has no date")
+
+    label = source.get("derived_label") or field
+    return {
+        "unit": source.get("fetch_unit") or parent.get("unit") or "",
+        "values": [{"t": point_date, "v": round(float(value), 1)}],
+        "last_data_point": parent.get("last_data_point"),
+        "notes": (
+            f"Derived by selecting {field} from {parent_id}. "
+            f"This is a product-specific reshaping of the PM&C/DCCEEW public table, not an independent estimate."
+        ),
+        "extra": {
+            "schema": "fuel_security_product_metric.v1",
+            "fields": {
+                "product": label,
+                "parent_source_id": parent_id,
+                "parent_field": field,
+                "parent_last_data_point": parent.get("last_data_point"),
+                "parent_manual_entry": bool(parent.get("manual_entry")),
+                "method": "typed_extra_field_selection",
+            },
+        },
+        "source_url_resolved": parent.get("source_url"),
+    }
+
+
 def fetch_rba_f11(url: str) -> dict[str, Any]:
     """Fetch RBA Table F11.1 CSV and return monthly mean AUD/USD values."""
     r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
@@ -1174,6 +1238,8 @@ def main() -> int:
             fetcher = fetch_aps_xlsx_series
         if fetcher is None and source.get("retail_product"):
             fetcher = fetch_retail_multistate
+        if fetcher is None and source.get("derived_from") and source.get("derived_field"):
+            fetcher = fetch_extra_field_derived
         if not fetcher:
             errors.append(f"{sid}: marked {source.get('fetch')} but no fetcher registered")
             return

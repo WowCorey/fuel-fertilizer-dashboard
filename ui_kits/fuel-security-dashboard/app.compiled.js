@@ -851,7 +851,114 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_fertiliser_imports', 'abs_fertiliser_imports_urea', 'abs_fertiliser_imports_potash', 'abs_fertiliser_imports_phosphate', 'abs_fertiliser_imports_compound', 'abs_fertiliser_source_concentration', 'abares_fertiliser_price', 'abares_fertiliser_stock_cover'];
+const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'fuel_security_petrol_days_remaining', 'fuel_security_diesel_days_remaining', 'fuel_security_jet_days_remaining', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts', 'aps_monthly', 'aps_stocks_petrol', 'aps_stocks_diesel', 'aps_sales_petrol', 'aps_sales_diesel', 'aps_sales_jet', 'aps_imports_petrol', 'aps_imports_diesel', 'abs_petroleum_imports', 'aus_retail_fuel_multistate', 'fuel_security_status_model', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking', 'fuel_security_terminal_capacity'];
+const PRODUCTS = [{
+  name: 'Petrol',
+  daysId: 'fuel_security_petrol_days_remaining',
+  reserveField: 'petrol_ml',
+  stockId: 'aps_stocks_petrol',
+  salesId: 'aps_sales_petrol',
+  importId: 'aps_imports_petrol'
+}, {
+  name: 'Diesel',
+  daysId: 'fuel_security_diesel_days_remaining',
+  reserveField: 'diesel_ml',
+  stockId: 'aps_stocks_diesel',
+  salesId: 'aps_sales_diesel',
+  importId: 'aps_imports_diesel'
+}, {
+  name: 'Jet fuel',
+  daysId: 'fuel_security_jet_days_remaining',
+  reserveField: 'jet_fuel_ml',
+  stockId: null,
+  salesId: 'aps_sales_jet',
+  importId: null
+}];
+function latest(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1).v;
+}
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function fmtNumber(value, digits = 0) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+  return Number(value).toLocaleString('en-AU', {
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits
+  });
+}
+function fmtMetric(value, unit, digits = 0) {
+  if (value === null || value === undefined) return '-';
+  return `${fmtNumber(value, digits)}${unit ? ` ${unit}` : ''}`;
+}
+function SecurityCard({
+  eyebrow,
+  title,
+  value,
+  unit,
+  env,
+  children,
+  partial = false,
+  unavailable = false
+}) {
+  const isUnavailable = unavailable || !env || env.status !== 'ok' || value === null || value === undefined;
+  return React.createElement("article", {
+    className: `metric-card ${isUnavailable ? 'metric-card--unavailable' : ''}`
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, eyebrow), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("h3", {
+    className: "metric-card__label"
+  }, title), isUnavailable ? React.createElement("div", {
+    className: "metric-card__unavail"
+  }, React.createElement(Icon, {
+    name: "alert",
+    size: 18
+  }), React.createElement("span", null, children || 'No verified source is currently loaded for this metric.')) : React.createElement(React.Fragment, null, React.createElement("div", {
+    className: "metric-card__row"
+  }, React.createElement("span", {
+    className: "metric-numeral"
+  }, value), unit && React.createElement("span", {
+    className: "metric-unit"
+  }, unit)), children && React.createElement("p", {
+    className: "metric-card__plain"
+  }, children)), React.createElement("footer", {
+    className: "metric-card__foot"
+  }, env && React.createElement("span", {
+    className: "metric-card__source"
+  }, window.FR.sourceLine(env))));
+}
+function SourceCard({
+  id,
+  env,
+  partial = false
+}) {
+  const f = window.FR.freshness(env);
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, env.source_name), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, env.status === 'ok' ? `Loaded envelope. Latest data point ${env.last_data_point || 'unknown'}; status ${f.label.toLowerCase()}.` : env.notes), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), env.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -861,7 +968,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fertilizer"
+      active: "fuel_security"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -870,244 +977,264 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const level = data.pmc_fuel_security_level;
+  const levelFields = fields(level);
+  const reserves = fields(data.pmc_mso_fuel_reserves);
+  const tankers = fields(data.pmc_tankers_on_water);
+  const stockouts = fields(data.pmc_retail_stockouts);
+  const officialLevel = levelFields.level_label || (latest(level) ? `Level ${latest(level)}` : 'Unavailable');
+  const coreOk = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts'].every(id => data[id]?.status === 'ok');
+  const modelUnavailableReason = coreOk ? 'Official snapshots are loaded, but live national outage, vessel-level shipment and terminal-capacity feeds are not. The dashboard therefore does not publish its own Stable/Tight/Disrupted/Critical status.' : 'Core public-source coverage is incomplete, so the dashboard status model is unavailable.';
+  const stockoutRows = [['ACT', stockouts.act_petrol, stockouts.act_diesel], ['NSW', stockouts.nsw_petrol, stockouts.nsw_diesel], ['VIC', stockouts.vic_petrol, stockouts.vic_diesel], ['QLD', stockouts.qld_petrol, stockouts.qld_diesel], ['SA', stockouts.sa_petrol, stockouts.sa_diesel], ['TAS', stockouts.tas_petrol, stockouts.tas_diesel], ['NT', stockouts.nt_petrol, stockouts.nt_diesel], ['WA', stockouts.wa_petrol, stockouts.wa_diesel], ['Australia', stockouts.australia_petrol, stockouts.australia_diesel]];
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fertilizer",
+    active: "fuel_security",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "fertilizer"
+    id: "fuel-security"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Fertilizer \xB7 v1.1"), React.createElement("h1", {
+  }, "Australia fuel security dashboard"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's fertiliser, in plain English."), React.createElement("p", {
+  }, "What Australia can see from public fuel-security data."), React.createElement("p", {
     className: "intro__lede"
-  }, "Australia imports the majority of its fertiliser \u2014 the stuff that keeps wheat, canola and pasture growing. When overseas supply gets tight, it shows up as higher farm-gate prices within a season, and higher food costs not long after.")), React.createElement("aside", {
+  }, "This page separates observed public signals from derived, partial and unavailable operational layers. It shows PM&C/DCCEEW status, product days, stock context, import/shipping context and the blind spots that are not yet public-source safe.")), React.createElement("aside", {
     className: "intro__meta",
-    "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+    "aria-label": "Fuel security status"
+  }, React.createElement("strong", null, "Official public level"), React.createElement("span", {
     className: "mono"
-  }, updatedDisplay), React.createElement("div", {
+  }, officialLevel), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Dashboard status model"), React.createElement("span", {
+    className: "mono"
+  }, "Status unavailable"))), React.createElement(DataCoverage, {
     data: data
   }), React.createElement("section", {
-    className: "section section--why",
-    "aria-labelledby": "why"
+    className: "section section--why"
   }, React.createElement("div", {
     className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
-    id: "why",
+  }, "Fail-closed status engine"), React.createElement("h2", {
     style: {
       marginTop: 8
     }
-  }, "Why this matters to you")), React.createElement("div", {
+  }, "No national status score yet")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Nearly everything grown commercially in Australia depends on imported fertiliser. Urea, potash and phosphates come in by the boatload, mostly from a short list of supplier countries. That makes the supply chain efficient, but also exposed: a single disruption at one end can push up farm costs across the country."), React.createElement("p", null, "This page is structured to track how much we import each month, what it costs, and how concentrated the supplier list is. Values appear only when the named public source has been verified in a JSON envelope."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ABARES"), " = Australian Bureau of Agricultural and Resource Economics and Sciences.", React.createElement("b", null, " DCCEEW"), " = Department of Climate Change, Energy, the Environment and Water.", React.createElement("b", null, " HS 31"), " = the Harmonised System trade code for fertiliser.")))), React.createElement("section", {
+  }, React.createElement("p", null, modelUnavailableReason), React.createElement("p", null, "The page keeps the observed PM&C level visible and labels the missing operational layers instead of collapsing weak evidence into a score."), React.createElement("div", {
+    className: "trust-badges",
+    "aria-label": "Trust label examples"
+  }, React.createElement(TrustBadge, {
+    kind: "observed"
+  }), React.createElement(TrustBadge, {
+    kind: "derived"
+  }), React.createElement(TrustBadge, {
+    kind: "manual"
+  }), React.createElement(TrustBadge, {
+    kind: "partial"
+  }), React.createElement(TrustBadge, {
+    kind: "unavailable"
+  }))))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "metrics-h"
+    "aria-labelledby": "national-summary"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Headline numbers"), React.createElement("h2", {
-    id: "metrics-h"
-  }, "As of the latest publisher update"), React.createElement("p", {
+  }, "1. National status"), React.createElement("h2", {
+    id: "national-summary"
+  }, "Public national fuel signals"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Value",
-    label: "Monthly fertiliser imports",
-    plain: "Total value of manufactured fertiliser (SITC 562) cleared into Australia in the latest month, from the ABS Data API.",
-    fromEnvelope: data.abs_fertiliser_imports,
-    unit: " AUD thousands",
-    highlight: true
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Price",
-    label: "Fertiliser price index",
-    plain: "ABARES index. 100 = long-run average.",
-    fromEnvelope: data.abares_fertiliser_price,
-    unit: " index"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Concentration",
-    label: "Top-3 source countries",
-    plain: "Share of monthly SITC 562 manufactured fertiliser import value coming from the three largest source countries.",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    unit: "%"
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Resilience",
-    label: "Months of cover",
-    jargonHint: {
-      term: 'Months of cover',
-      definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.'
-    },
-    plain: "How long Australia's fertiliser stockpile would last if imports stopped.",
-    fromEnvelope: data.abares_fertiliser_stock_cover,
-    unit: " months"
-  })), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending fertiliser source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
-    className: "body-sm"
-  }, "Nutrient subseries, ABARES price index and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.")))), React.createElement("section", {
+  }, "These are observed public snapshot values. Manual means the page value was copied from a named public page because no stable machine-readable endpoint is loaded."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "PM&C National Fuel Security Plan",
+    value: officialLevel,
+    env: level
+  }, "Official public level. This dashboard does not reinterpret the level into its own risk score."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "MSO fuel reserves",
+    value: fmtNumber(latest(data.pmc_mso_fuel_reserves)),
+    unit: "ML",
+    env: data.pmc_mso_fuel_reserves
+  }, "Petrol, diesel and jet fuel reserves summed from the PM&C/DCCEEW table."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Dashboard status model",
+    env: data.fuel_security_status_model,
+    unavailable: true
+  }, data.fuel_security_status_model.notes))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "charts-h"
+    "aria-labelledby": "days-remaining"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "How it's changed"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Imports by type and source country, over time"), React.createElement("p", {
+  }, "2. Days remaining"), React.createElement("h2", {
+    id: "days-remaining"
+  }, "Product days from the public MSO table"), React.createElement("p", {
     className: "section__lede"
-  }, "Charts populate when verified monthly source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Value",
-    title: "Monthly fertiliser imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_fertiliser_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Supplier mix",
-    title: "Top-3 source countries' combined share, over time",
-    unit: "%",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Share of monthly SITC 562 manufactured fertiliser import value from the three largest non-total source countries.",
-    yAxisLabel: "Top-3 share of SITC 562 import value (%)"
-  })), false && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Urea",
-    title: "Monthly urea imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_urea,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Urea (HS 3102) is the largest-volume nitrogen fertiliser. Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Potash",
-    title: "Monthly potash imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_potash,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Potassium fertilisers (HS 3104). Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Phosphates",
-    title: "Monthly phosphate imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_phosphate,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#B45309",
-    takeaway: "Phosphate fertilisers (HS 3103 + DAP/MAP under HS 3105). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Compound",
-    title: "Monthly compound fertiliser imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_compound,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Mixed NPK compound fertilisers (HS 3105, excluding DAP/MAP). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Prices",
-    title: "ABARES fertiliser price index",
-    unit: "index",
-    fromEnvelope: data.abares_fertiliser_price,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#1F3A8A",
-    takeaway: "ABARES publishes an Australian fertiliser price index alongside its quarterly Agricultural Commodities release. 100 = long-run average.",
-    yAxisLabel: "Index (long-run average = 100)"
-  })))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: [],
-    title: "What changed",
-    lede: "Populated from DCCEEW / ABS / ABARES release notes as verified data arrives.",
-    emptyMessage: "Awaiting verified release notes for the loaded fertiliser source envelopes."
+  }, "These cards are derived by reshaping the product-specific PM&C/DCCEEW MSO days table into first-class envelopes. They are not independently calculated from private terminal stocks or hidden demand assumptions."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Derived",
+    title: "Petrol days remaining",
+    value: fmtNumber(latest(data.fuel_security_petrol_days_remaining)),
+    unit: "days",
+    env: data.fuel_security_petrol_days_remaining
+  }, "Derived from the PM&C petrol MSO days field."), React.createElement(SecurityCard, {
+    eyebrow: "Derived",
+    title: "Diesel days remaining",
+    value: fmtNumber(latest(data.fuel_security_diesel_days_remaining)),
+    unit: "days",
+    env: data.fuel_security_diesel_days_remaining
+  }, "Derived from the PM&C diesel MSO days field."), React.createElement(SecurityCard, {
+    eyebrow: "Derived",
+    title: "Jet fuel days remaining",
+    value: fmtNumber(latest(data.fuel_security_jet_days_remaining)),
+    unit: "days",
+    env: data.fuel_security_jet_days_remaining
+  }, "Derived from the PM&C jet fuel MSO days field."))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "product-position"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "3. Product supply position"), React.createElement("h2", {
+    id: "product-position"
+  }, "Stocks and demand context"), React.createElement("p", {
+    className: "section__lede"
+  }, "PM&C gives product MSO reserve volumes. APS gives monthly stock, sales and import context where the workbook exposes those product series."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Product"), React.createElement("th", null, "Days remaining"), React.createElement("th", null, "PM&C MSO reserves"), React.createElement("th", null, "APS stocks"), React.createElement("th", null, "APS sales/demand context"), React.createElement("th", null, "APS imports"))), React.createElement("tbody", null, PRODUCTS.map(product => React.createElement("tr", {
+    key: product.name
+  }, React.createElement("td", null, product.name), React.createElement("td", null, fmtMetric(latest(data[product.daysId]), 'days')), React.createElement("td", null, fmtMetric(reserves[product.reserveField], 'ML')), React.createElement("td", {
+    className: product.stockId ? '' : 'unavail'
+  }, product.stockId ? fmtMetric(latest(data[product.stockId]), 'ML', 1) : '-'), React.createElement("td", null, fmtMetric(latest(data[product.salesId]), 'ML', 1)), React.createElement("td", {
+    className: product.importId ? '' : 'unavail'
+  }, product.importId ? fmtMetric(latest(data[product.importId]), 'ML', 1) : '-')))))), React.createElement("p", {
+    className: "caption mono"
+  }, "Derived days: PM&C MSO table. APS context: monthly public APS workbook. Blank cells mean no loaded defensible product series.")), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "import-risk"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "4. Inbound fuel visibility"), React.createElement("h2", {
+    id: "import-risk"
+  }, "Aggregate shipping context, no fake vessel layer"), React.createElement("p", {
+    className: "section__lede"
+  }, "This section borrows the readable shape of a ship-tracking dashboard, but only uses source-safe aggregate public data. It does not plot live AIS, vessel ETAs or shipment-level Kpler records."))), React.createElement(ShippingVisibility, {
+    tankersEnv: data.pmc_tankers_on_water,
+    forwardOrdersEnv: data.pmc_forward_import_orders,
+    importsEnv: data.abs_petroleum_imports,
+    liveVesselEnv: data.fuel_security_live_vessel_tracking
   })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "outages"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "5. Outage and disruption visibility"), React.createElement("h2", {
+    id: "outages"
+  }, "Retail stock-outs are a dated partial snapshot"), React.createElement("p", {
+    className: "section__lede"
+  }, "PM&C publishes state/territory retail stock-out counts. This is not a live national dry-station feed and it does not publish an Australia-wide petrol total in the current table."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Partial coverage",
+    title: "Australia diesel stock-outs",
+    value: fmtNumber(latest(data.pmc_retail_stockouts)),
+    unit: "sites",
+    env: data.pmc_retail_stockouts,
+    partial: true
+  }, "Australia-wide diesel stock-out count from the PM&C table."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Live national outage feed",
+    env: data.fuel_security_live_station_outage_feed,
+    unavailable: true
+  }, data.fuel_security_live_station_outage_feed.notes)), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Petrol stock-outs"), React.createElement("th", null, "Diesel stock-outs"))), React.createElement("tbody", null, stockoutRows.map(row => React.createElement("tr", {
+    key: row[0]
+  }, React.createElement("td", null, row[0]), React.createElement("td", {
+    className: row[1] === null || row[1] === undefined ? 'unavail' : ''
+  }, fmtNumber(row[1])), React.createElement("td", {
+    className: row[2] === null || row[2] === undefined ? 'unavail' : ''
+  }, fmtNumber(row[2])))))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "storage"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "6. Storage and terminal visibility"), React.createElement("h2", {
+    id: "storage"
+  }, "National stock context, not terminal telemetry"), React.createElement("p", {
+    className: "section__lede"
+  }, "The dashboard can show national/product stock context from PM&C and APS. It does not show terminal-by-terminal capacity because no defensible public dataset is loaded."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "APS net-import cover",
+    value: fmtNumber(latest(data.aps_monthly)),
+    unit: "days",
+    env: data.aps_monthly
+  }, "Monthly APS IEA days of net import coverage. Different concept from PM&C MSO product days."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "Petrol APS stocks",
+    value: fmtNumber(latest(data.aps_stocks_petrol), 1),
+    unit: "ML",
+    env: data.aps_stocks_petrol
+  }, "Monthly APS automotive gasoline stock volume."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "Diesel APS stocks",
+    value: fmtNumber(latest(data.aps_stocks_diesel), 1),
+    unit: "ML",
+    env: data.aps_stocks_diesel
+  }, "Monthly APS diesel stock volume."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Terminal-level capacity",
+    env: data.fuel_security_terminal_capacity,
+    unavailable: true
+  }, data.fuel_security_terminal_capacity.notes))), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+  }, "7. Source coverage and caveats"), React.createElement("h2", null, "Every envelope used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
+  }, "Observed means copied or fetched from a named public source. Derived means reshaped from a verified envelope. Partial coverage and unavailable labels are intentionally visible."))), React.createElement("div", {
     className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+  }, Object.entries(data).map(([id, env]) => React.createElement(SourceCard, {
     key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+    id: id,
+    env: env,
+    partial: ['pmc_tankers_on_water', 'pmc_retail_stockouts', 'pmc_forward_import_orders'].includes(id)
+  }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Monthly fertiliser imports"), React.createElement("dd", null, "Total import value (AUD thousands) of manufactured fertilisers, fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; the four-digit SITC subdivisions (5621 nitrogenous, 5622 potassic, 5623 phosphatic, 5629 other) are not exposed via the live API, so per-nutrient monthly series remain hand-keyed from the ABS International Trade release tables."), React.createElement("dt", null, "Top-3 source countries"), React.createElement("dd", null, "Sum of import value from the three largest non-total source countries in the latest month, divided by total SITC 562 manufactured fertiliser imports in the same month, fetched from the ABS Data API MERCH_IMP dataflow using country-of-origin detail. Nutrient-level monthly subseries remain unavailable because the checked live ABS API paths for HS 3102/3103/3104/3105 and SITC 5621/5622/5623/5629 return no usable monthly series, and the checked ABS latest-release workbooks did not expose a dashboard-safe monthly nutrient-level value table."), React.createElement("dt", null, "Fertiliser price index"), React.createElement("dd", null, "Published by ABARES in the quarterly Agricultural Commodities report. Re-based so that the long-run average equals 100."), React.createElement("dt", null, "Months of cover"), React.createElement("dd", null, "Stockpile (tonnes) divided by the prior 12-month average monthly usage, expressed in months. Only published when DCCEEW or ABARES makes stockpile figures public.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "What this dashboard does not currently know"), React.createElement("dl", null, React.createElement("dt", null, "Live station outages"), React.createElement("dd", null, "No public national live dry-site feed is loaded. PM&C stock-outs are a dated public snapshot."), React.createElement("dt", null, "Shipment-level visibility"), React.createElement("dd", null, "No source-safe live vessel or ETA feed is loaded. PM&C tanker numbers are aggregate counts."), React.createElement("dt", null, "Terminal capacity"), React.createElement("dd", null, "No terminal-by-terminal public capacity dataset is loaded. The page uses national/product stock context only."), React.createElement("dt", null, "Status score"), React.createElement("dd", null, "No Stable/Tight/Disrupted/Critical label is published until the status method has enough observed coverage.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
