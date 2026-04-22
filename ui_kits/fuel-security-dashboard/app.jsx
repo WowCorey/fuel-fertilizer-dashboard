@@ -310,55 +310,21 @@ function App() {
         <section className="section" aria-labelledby="import-risk">
           <div className="section__head">
             <div>
-              <span className="eyebrow">4. Import and shipping risk</span>
-              <h2 id="import-risk">Aggregate import visibility only</h2>
+              <span className="eyebrow">4. Inbound fuel visibility</span>
+              <h2 id="import-risk">Aggregate shipping context, no fake vessel layer</h2>
               <p className="section__lede">
-                This repo does not load live AIS, vessel ETAs or shipment-level Kpler data. It uses
-                aggregate PM&C tanker counts and public import-value/volume context.
+                This section borrows the readable shape of a ship-tracking dashboard, but only
+                uses source-safe aggregate public data. It does not plot live AIS, vessel ETAs
+                or shipment-level Kpler records.
               </p>
             </div>
           </div>
-          <div className="metric-grid">
-            <SecurityCard eyebrow="Observed" title="Forward import orders" value={fmtNumber(latest(data.pmc_forward_import_orders), 1)} unit="billion L" env={data.pmc_forward_import_orders} partial>
-              Reported crude, diesel, jet and petrol scheduled to arrive from overseas in the next four weeks.
-            </SecurityCard>
-            <SecurityCard eyebrow="Observed" title="Ships on water" value={fmtNumber(latest(data.pmc_tankers_on_water))} unit="tankers" env={data.pmc_tankers_on_water} partial>
-              Aggregate crude and clean-product tanker counts. Not live vessel tracking.
-            </SecurityCard>
-            <SecurityCard eyebrow="Observed" title="ABS petroleum import value" value={fmtNumber(latest(data.abs_petroleum_imports))} unit="AUD thousands" env={data.abs_petroleum_imports}>
-              Monthly public merchandise-import value for petroleum-related products.
-            </SecurityCard>
-            <SecurityCard eyebrow="Unavailable" title="Live vessel tracking" env={data.fuel_security_live_vessel_tracking} unavailable>
-              {data.fuel_security_live_vessel_tracking.notes}
-            </SecurityCard>
-          </div>
-          <div style={{ height: 24 }}/>
-          <div className="data-table-wrap">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Shipment context</th>
-                  <th>Current</th>
-                  <th>Previous</th>
-                  <th>Equivalent days</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Crude oil tankers</td>
-                  <td>{fmtMetric(tankers.crude_oil_tankers, 'tankers')}</td>
-                  <td>{fmtMetric(tankers.previous_crude_oil_tankers, 'tankers')}</td>
-                  <td>{fmtMetric(tankers.crude_oil_equivalent_days, 'days')}</td>
-                </tr>
-                <tr>
-                  <td>Clean refined product tankers</td>
-                  <td>{fmtMetric(tankers.clean_refined_product_tankers, 'tankers')}</td>
-                  <td>{fmtMetric(tankers.previous_clean_refined_product_tankers, 'tankers')}</td>
-                  <td>{fmtMetric(tankers.clean_refined_product_equivalent_days, 'days')}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <ShippingVisibility
+            tankersEnv={data.pmc_tankers_on_water}
+            forwardOrdersEnv={data.pmc_forward_import_orders}
+            importsEnv={data.abs_petroleum_imports}
+            liveVesselEnv={data.fuel_security_live_vessel_tracking}
+          />
         </section>
 
         <section className="section" aria-labelledby="outages">

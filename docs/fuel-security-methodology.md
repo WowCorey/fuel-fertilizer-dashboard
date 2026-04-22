@@ -108,6 +108,36 @@ not publish vessel identities, AIS positions or ETAs.
 
 The placeholder envelope `fuel_security_live_vessel_tracking` records this gap.
 
+### Shipping visibility layout
+
+The fuel-security page may present PM&C aggregate tanker counts in a
+ship-tracking-style layout, but the layout must preserve these limits:
+
+- counts are aggregate PM&C/DCCEEW public snapshot values,
+- route lines are illustrative public supply-lane context, not vessel tracks,
+- no vessel name, IMO/MMSI, ETA, live position, cargo inference or port-call
+  schedule may be shown unless a source-safe vessel feed is loaded,
+- every aggregate shipping panel must carry `Partial coverage` or
+  `Unavailable` where appropriate.
+
+This gives public readers the "Australia supply inbound" shape without implying
+that the repo has live vessel intelligence.
+
+### Vessel-data gate
+
+Live AIS or vessel API data must stay out of the public dashboard until all of
+these are true:
+
+- the provider permits public redistribution/display for this use,
+- API credentials and rate limits are documented,
+- source rights are represented in `data/sources.yml`,
+- a vessel-envelope schema is defined and validated,
+- the UI labels confidence for confirmed, likely and scheduled vessels,
+- inferred cargo/product types are either source-provided or visibly labelled
+  as estimates with a documented method.
+
+Until then, the live vessel layer remains `Unavailable`.
+
 ## Storage And Terminal Visibility
 
 The page uses:

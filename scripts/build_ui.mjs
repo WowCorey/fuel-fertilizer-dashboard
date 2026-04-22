@@ -11,6 +11,7 @@ const checkOnly = process.argv.includes('--check');
 const sharedFiles = [
   'ui_kits/shared/DataCoverage.jsx',
   'ui_kits/shared/TrustBadge.jsx',
+  'ui_kits/shared/ShippingVisibility.jsx',
   'ui_kits/shared/Header.jsx',
   'ui_kits/shared/MetricCard.jsx',
   'ui_kits/shared/ChartCard.jsx',
