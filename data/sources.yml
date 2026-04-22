@@ -154,7 +154,7 @@ sources:
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
-    fetch_url: https://api.data.abs.gov.au/data/MERCH_IMP/33.TOT.TOT.M?format=jsondata&startPeriod=2021-01
+    fetch_url: https://data.api.abs.gov.au/rest/data/MERCH_IMP/33.TOT.TOT.M?format=jsondata&startPeriod=2021-01
     fetch_dataflow: MERCH_IMP
     fetch_key: 33.TOT.TOT.M
     fetch_start_period: 2021-01
@@ -190,7 +190,7 @@ sources:
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
-    fetch_url: https://api.data.abs.gov.au/data/MERCH_IMP/562.TOT.TOT.M?format=jsondata&startPeriod=2021-01
+    fetch_url: https://data.api.abs.gov.au/rest/data/MERCH_IMP/562.TOT.TOT.M?format=jsondata&startPeriod=2021-01
     fetch_dataflow: MERCH_IMP
     fetch_key: 562.TOT.TOT.M
     fetch_start_period: 2021-01

@@ -184,15 +184,19 @@ def fetch_abs_sdmx(
     key: str,
     start_period: str | None = None,
     classification_note: str | None = None,
+    fetch_url: str | None = None,
 ) -> dict[str, Any]:
     """Fetch one ABS SDMX-JSON time series from the ABS Data API."""
     if not dataflow or not key:
         raise RuntimeError("ABS SDMX fetch requires dataflow and key")
 
-    query = {"format": "jsondata"}
-    if start_period:
-        query["startPeriod"] = start_period
-    url = f"https://api.data.abs.gov.au/data/{dataflow}/{key}?{urllib.parse.urlencode(query)}"
+    if fetch_url:
+        url = fetch_url
+    else:
+        query = {"format": "jsondata"}
+        if start_period:
+            query["startPeriod"] = start_period
+        url = f"https://data.api.abs.gov.au/rest/data/{dataflow}/{key}?{urllib.parse.urlencode(query)}"
 
     r = requests.get(
         url,
@@ -838,6 +842,7 @@ FETCHERS: dict[str, Fetcher] = {
         source["fetch_key"],
         source.get("fetch_start_period"),
         source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
     ),
     "abs_petroleum_imports_yoy": fetch_abs_petroleum_imports_yoy,
     "abs_fertiliser_imports": lambda source: fetch_abs_sdmx(
@@ -845,6 +850,7 @@ FETCHERS: dict[str, Fetcher] = {
         source["fetch_key"],
         source.get("fetch_start_period"),
         source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
     ),
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
