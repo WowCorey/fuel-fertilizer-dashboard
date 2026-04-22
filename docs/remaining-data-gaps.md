@@ -44,14 +44,14 @@ JSON envelope.
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Company net profit | deferred | ATO tax fields are now populated, but net profit must come from each company's own annual report or ASIC-lodged statements and may not map one-to-one to the ATO entity. | Populate one company at a time with `scripts/enter_manual.py --field net_profit=...`, preserving fiscal year, entity scope, and source URL. |
+| Company net profit | partial | ATO tax fields are populated. Ampol, Viva Energy, Woodside and Santos now have annual-report net profit/loss fields. Private Australian subsidiary profit remains blank because a public annual financial statement or ASIC-lodged report has not been verified for those rows. | Continue one company at a time with `scripts/enter_manual.py --field net_profit=...`, preserving fiscal year, entity scope, source URL and reported currency. |
 | ACCC pure excise/GST/retailer-profit split | intentionally not published | The latest ACCC petrol snapshot publishes combined excise/GST, other costs and margins, and GIRD. It does not publish pure GST, pure excise, and pure retailer profit as separate dashboard-safe components. | Keep the current ACCC taxonomy unless a later report publishes more granular components. |
 
 ## Resource Value
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| PRRT and royalty receipts | partial | The page now loads Commonwealth Budget "resource rent taxes" and WA petroleum/North West Shelf receipt context. These are not project-level PRRT receipts and do not cover every Australian royalty channel. | Keep receipt cards labelled as context. Add more state/Commonwealth receipt envelopes only when exact source rows, scope and periods are documented. |
+| PRRT and royalty receipts | partial | The page now loads Commonwealth Budget "resource rent taxes", WA petroleum/North West Shelf receipt context, and Queensland petroleum royalty receipts. These are not project-level PRRT receipts and do not cover every Australian royalty channel. | Keep receipt cards labelled as context. Add more state/Commonwealth receipt envelopes only when exact source rows, scope and periods are documented. |
 | Production by state, basin and project | partial | The page now loads AES state/territory production rows plus AECR national/basin context. It is not yet a project-level or company-level production map. | Add project/company flow data only if a public source publishes exact fields with compatible units and reuse rights. |
 | Domestic vs export price comparison | partial | ACCC domestic contract-price and LNG netback envelopes are shown side by side with a non-equivalence caveat. They are not delivered consumer prices and not a leakage calculation. | Keep the comparison contextual. Add more buyer segments or regional rows only when the ACCC source supports them cleanly. |
 | 25% export-tax scenario | partial | The calculator now uses loaded LNG and oil export-value envelopes and shows loaded receipt context separately. It is not current law and not a PRRT model. | Keep the scenario labelled as a hypothetical gross-export calculation; do not expand it into policy analysis until receipt and incidence assumptions are documented. |
@@ -67,3 +67,19 @@ Do not start the Fuel Stress Index until:
 - the deferred gaps above are either populated or intentionally excluded from
   the index formula,
 - the index methodology includes component coverage and confidence.
+
+Locked candidate inputs before any scoring work:
+
+- Include only verified envelopes for retail pump prices, ABS petroleum imports
+  and YoY, APS net-import cover, APS stocks/imports/exports/production, and
+  public national-status snapshot fields.
+- Exclude fertiliser from a fuel-only score unless the index is explicitly
+  renamed and the source coverage rules are expanded.
+- Exclude Tapis, refinery utilisation, AIP national retail reports,
+  project-level PRRT, "value leaked" and vessel-level tanker movement until
+  each has a verified source and methodology.
+- Treat manual sources as lower-confidence than programmatic sources unless
+  the page is a dated public snapshot, such as PM&C national status.
+- Treat stale sources as loaded but confidence-reducing, not as fresh signal.
+- Publish no 0-100 score unless the visible page can show component coverage,
+  missing inputs and stale/manual status beside the score.

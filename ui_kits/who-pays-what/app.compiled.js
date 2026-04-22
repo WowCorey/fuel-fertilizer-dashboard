@@ -12,7 +12,7 @@ function DataCoverage({
     className: "coverage-strip__inner"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.")), React.createElement("div", {
+  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Verified means copied or fetched from a named source; derived means calculated from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
     className: "coverage-badges"
   }, React.createElement("span", {
     className: "status-pill status-pill--verified"
@@ -654,8 +654,13 @@ function pick(env, key) {
 function money(v, unit = 'A$m') {
   if (v == null) return null;
   if (typeof v === 'number') {
-    if (unit === 'A$m') return 'A$' + v.toLocaleString('en-AU', {
-      maximumFractionDigits: 0
+    const sign = v < 0 ? '-' : '';
+    const abs = Math.abs(v);
+    if (unit === 'A$m') return sign + 'A$' + abs.toLocaleString('en-AU', {
+      maximumFractionDigits: 1
+    }) + 'm';
+    if (unit === 'US$m') return sign + 'US$' + abs.toLocaleString('en-AU', {
+      maximumFractionDigits: 1
     }) + 'm';
     if (unit === '%') return v.toFixed(1) + '%';
     if (unit === 'A$/L') return 'A$' + v.toFixed(3);
@@ -679,11 +684,12 @@ function Cell({
   const atoFields = new Set(['total_income', 'taxable_income', 'income_tax_paid', 'fiscal_year']);
   const linkEnv = atoFields.has(fieldKey) ? atoEnv || env : env;
   const href = linkEnv && linkEnv.source_url;
+  const displayUnit = fieldKey === 'net_profit' ? pick(env, 'net_profit_unit') || unit : unit;
   return React.createElement("td", null, href ? React.createElement("a", {
     href: href,
     rel: "noopener",
     title: `Source: ${linkEnv.source_name}`
-  }, money(v, unit)) : money(v, unit));
+  }, money(v, displayUnit)) : money(v, displayUnit));
 }
 function SourceCell({
   env
@@ -736,6 +742,7 @@ function App() {
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const populatedCompanyCount = COMPANIES.filter(c => TAX_FIELDS.some(field => pick(data[c.id], field) != null)).length;
+  const profitCompanyCount = COMPANIES.filter(c => pick(data[c.id], 'net_profit') != null).length;
   const verifiedPumpComponents = PUMP_COMPONENTS.filter(c => data[c.id]?.status === 'ok').length;
   const allPumpComponentsVerified = verifiedPumpComponents === PUMP_COMPONENTS.length;
   const pumpSeriesVerified = data.accc_petrol_breakdown_series?.status === 'ok';
@@ -798,7 +805,7 @@ function App() {
     className: "source-card"
   }, React.createElement("h4", null, "Company rows awaiting manual verification"), React.createElement("p", {
     className: "body-sm"
-  }, populatedCompanyCount, " of ", COMPANIES.length, " company envelopes currently contain verified tax/profit fields. Values should be entered only after checking the ATO release and the company's annual report or ASIC-lodged statements."))), React.createElement("div", {
+  }, populatedCompanyCount, " of ", COMPANIES.length, " company envelopes currently contain verified ATO tax fields. ", profitCompanyCount, " of ", COMPANIES.length, " contain verified net-profit fields. Values should be entered only after checking the ATO release and the company's annual report or ASIC-lodged statements."))), React.createElement("div", {
     className: "data-table-wrap",
     role: "region",
     "aria-label": "Company tax and profit table"

@@ -19,6 +19,8 @@ source cannot safely be fetched programmatically.
 ## Entry Rules
 
 - Use `python scripts/enter_manual.py` where the helper supports the source.
+- Use `docs/manual-entry-templates.md` or `python scripts/enter_manual.py --examples`
+  for source-specific command templates before editing any public snapshot.
 - Set `status` to `ok` only when every displayed value is verified.
 - Set `retrieved_at` to the data-entry timestamp.
 - Set `last_data_point` to the publisher reporting date or reporting-period end,
@@ -70,6 +72,7 @@ Run these before committing:
 ```sh
 python scripts/validate_data.py --json
 python scripts/build_source_manifest.py --check
+python scripts/review_due.py
 python -m unittest discover -s tests
 ```
 

@@ -668,7 +668,7 @@
       "used_by": [
         "who_pays_what"
       ],
-      "canonical_url": "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
+      "canonical_url": "https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf",
       "rights": "Company copyright",
       "citation": "Ampol annual report.",
       "preferred_dir": "manual",
@@ -732,7 +732,7 @@
       "used_by": [
         "who_pays_what"
       ],
-      "canonical_url": "https://www.santos.com/investors/results-reports-and-presentations/",
+      "canonical_url": "https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf",
       "rights": "Company copyright",
       "citation": "Santos annual report.",
       "preferred_dir": "manual",
@@ -764,7 +764,7 @@
       "used_by": [
         "who_pays_what"
       ],
-      "canonical_url": "https://www.vivaenergy.com.au/investors/financial-results-reports",
+      "canonical_url": "https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx",
       "rights": "Company copyright",
       "citation": "Viva Energy Group annual report.",
       "preferred_dir": "manual",
@@ -780,7 +780,7 @@
       "used_by": [
         "who_pays_what"
       ],
-      "canonical_url": "https://www.woodside.com/investors/reports-investor-briefings",
+      "canonical_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
       "rights": "Company copyright",
       "citation": "Woodside Energy annual report.",
       "preferred_dir": "manual",
@@ -1184,6 +1184,22 @@
       "canonical_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax",
       "rights": "Commonwealth copyright; ATO website terms apply",
       "citation": "Australian Taxation Office, Petroleum resource rent tax.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "resource_qld_petroleum_royalty_receipts": {
+      "id": "resource_qld_petroleum_royalty_receipts",
+      "human_name": "Queensland petroleum royalty receipts",
+      "publisher": "Queensland Treasury",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "resource_value"
+      ],
+      "canonical_url": "https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf",
+      "rights": "Queensland Government copyright and budget website terms",
+      "citation": "Queensland Government, Budget Strategy and Outlook 2025-26, BP2 Revenue, Table 3.4 Royalty revenue.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

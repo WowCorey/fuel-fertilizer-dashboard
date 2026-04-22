@@ -2,12 +2,12 @@
   "series_id": "company_woodside",
   "source_id": "company_woodside",
   "source_name": "Woodside Energy annual report (ASX:WDS)",
-  "source_url": "https://www.woodside.com/investors/reports-investor-briefings",
+  "source_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
   "unit": "",
-  "retrieved_at": "2026-04-21T14:44:08+00:00",
-  "last_data_point": "2024-06-30",
+  "retrieved_at": "2026-04-22T12:20:02+00:00",
+  "last_data_point": "2025-12-31",
   "values": [],
-  "notes": "ATO 2023-24 Corporate Report of Entity Tax Information workbook, Income tax details sheet. ATO dollar amounts converted to A$m for dashboard display; blank ATO fields are omitted rather than treated as zero.",
+  "notes": "ATO 2023-24 Corporate Report of Entity Tax Information workbook for tax fields. Net profit copied from Woodside Energy Annual Report 2025 Appendix 4E. Amount is reported in US$m and is not converted to A$m.",
   "status": "ok",
   "manual_entry": true,
   "source_rights": "Company copyright",
@@ -20,7 +20,11 @@
       "abn": 55004898962,
       "total_income": 19834.595,
       "taxable_income": 7517.012,
-      "income_tax_paid": 1720.802
+      "income_tax_paid": 1720.802,
+      "net_profit": 2718,
+      "net_profit_unit": "US$m",
+      "net_profit_period_end": "2025-12-31",
+      "net_profit_basis": "net profit for the period attributable to members"
     }
   }
 }
