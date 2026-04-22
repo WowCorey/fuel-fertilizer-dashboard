@@ -1,6 +1,6 @@
 # Remaining Data Gaps
 
-Last reviewed: 2026-04-22
+Last reviewed: 2026-04-23
 
 This register records the known dashboard gaps that should not be filled with
 estimates. A gap can move to "ready to populate" only when a named public source
@@ -14,6 +14,16 @@ JSON envelope.
 | Programmatic PM&C/DCCEEW public fuel-supply snapshot | deferred | The PM&C public fuel-supply page is readable in a browser, but direct pipeline requests return an Incapsula challenge. DCCEEW and energy.gov.au page requests currently time out from the local pipeline environment. | Keep the PM&C snapshot manual and source-linked. Move to `fetch: programmatic` only if PM&C/DCCEEW publishes a stable machine-readable endpoint or an accessible static data file. |
 | Vessel-level tanker movements | intentionally not published | The public PM&C page reports aggregate tanker counts and equivalent days only. It does not publish vessel identities or live AIS movements. | Keep aggregate "ships on water" counts only. Do not add vessel-level movement displays without a public, licence-compatible source and clear public-interest rationale. |
 | Daily stock-out updates | deferred | The current PM&C stock-out table is a dated public snapshot with seven-day changes. It is not a daily API. | Hand-key dated snapshots when reviewed, or add ingestion only when a stable state/territory or PM&C endpoint is found. |
+
+## Fuel security
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Fuel Security Status model | unavailable by design | The new fuel-security page shows official public snapshot fields and derived product-day cards, but it does not have enough complete, fresh operational coverage to publish a Stable/Tight/Disrupted/Critical model. Live station outages, live vessel tracking and terminal-level capacity are not loaded. | Keep `fuel_security_status_model` unavailable until the methodology has explicit coverage thresholds and every contributing input can be shown beside the output. |
+| Product days remaining | populated as derived | PM&C/DCCEEW publish product-specific days in the public fuel-supply snapshot. The dashboard stores each product as a derived envelope selected from the typed PM&C parent envelope so each card can carry its own status and source line. | Keep these visibly labelled as derived from the PM&C/DCCEEW snapshot, not independently calculated from hidden assumptions. |
+| Live national station outage feed | unavailable | The current public material exposes dated stock-out counts by state/territory. It does not expose a live national station outage API with station-level status. | Keep `fuel_security_live_station_outage_feed` unavailable. Add partial state modules only when a public source exposes outage status with stable terms. |
+| Live vessel/shipment tracking | unavailable | PM&C publishes aggregate tanker counts and equivalent days. It does not publish vessel identities, ETA-level flows or a licence-safe live AIS feed. | Keep `fuel_security_live_vessel_tracking` unavailable and use aggregate PM&C tanker counts only. |
+| Terminal-level storage/capacity | unavailable | APS and MSO sources support national/product stock context, but no terminal-by-terminal public capacity dataset has been verified for this repo. | Keep `fuel_security_terminal_capacity` unavailable. Add terminal capacity only from an official or clearly reusable source with units and date. |
 
 ## Fuel
 

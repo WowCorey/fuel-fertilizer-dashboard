@@ -37,6 +37,69 @@ Object.assign(window, {
   DataCoverage,
   StatusPill
 });
+function TrustBadge({
+  kind,
+  children
+}) {
+  const key = String(kind || 'observed').toLowerCase().replace(/\s+/g, '-');
+  const labels = {
+    observed: 'Observed',
+    derived: 'Derived',
+    scenario: 'Scenario',
+    estimated: 'Estimated',
+    manual: 'Manual',
+    stale: 'Stale',
+    unavailable: 'Unavailable',
+    partial: 'Partial coverage'
+  };
+  return React.createElement("span", {
+    className: `trust-badge trust-badge--${key}`
+  }, children || labels[key] || kind);
+}
+function EnvTrustBadges({
+  env,
+  partial = false
+}) {
+  if (!env || env.status !== 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(TrustBadge, {
+      kind: "unavailable"
+    }));
+  }
+  const f = window.FR.freshness(env);
+  const badges = [];
+  if (env._meta?.fetch === 'derived') {
+    badges.push(React.createElement(TrustBadge, {
+      key: "derived",
+      kind: "derived"
+    }));
+  } else {
+    badges.push(React.createElement(TrustBadge, {
+      key: "observed",
+      kind: "observed"
+    }));
+  }
+  if (env.manual_entry || env.extra?.fields?.parent_manual_entry) badges.push(React.createElement(TrustBadge, {
+    key: "manual",
+    kind: "manual"
+  }));
+  if (f.state === 'stale') badges.push(React.createElement(TrustBadge, {
+    key: "stale",
+    kind: "stale"
+  }));
+  if (partial) badges.push(React.createElement(TrustBadge, {
+    key: "partial",
+    kind: "partial"
+  }));
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, badges);
+}
+Object.assign(window, {
+  TrustBadge,
+  EnvTrustBadges
+});
 function Header({
   active = 'fuel',
   updated = ''
@@ -45,6 +108,10 @@ function Header({
     id: 'national_status',
     label: 'National status',
     href: '../national-status-dashboard/index.html'
+  }, {
+    id: 'fuel_security',
+    label: 'Fuel security',
+    href: '../fuel-security-dashboard/index.html'
   }, {
     id: 'resource_value',
     label: 'Resource value',

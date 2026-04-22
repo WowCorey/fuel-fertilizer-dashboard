@@ -116,6 +116,35 @@ a.skip-link:focus, a.skip-link:focus-visible {
 .status-pill--stale { color: var(--caution); background: var(--caution-tint); border-color: transparent; }
 .status-pill--awaiting { color: var(--ink-3); background: var(--paper-sunk); }
 
+.trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-1);
+  padding: 3px 7px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--ink-3);
+  background: var(--paper-sunk);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.trust-badge--observed { color: var(--surplus); background: var(--surplus-tint); border-color: transparent; }
+.trust-badge--derived { color: var(--accent); background: var(--accent-tint); border-color: transparent; }
+.trust-badge--scenario { color: var(--caution); background: var(--caution-tint); border-color: transparent; }
+.trust-badge--estimated { color: var(--deficit); background: var(--deficit-tint); border-color: transparent; }
+.trust-badge--manual { color: var(--ink-2); background: var(--paper); }
+.trust-badge--stale { color: var(--caution); background: var(--caution-tint); border-color: transparent; }
+.trust-badge--unavailable { color: var(--ink-3); background: var(--paper-sunk); }
+.trust-badge--partial { color: var(--accent); background: var(--accent-tint); border-color: transparent; }
+
 .coverage-strip {
   background: var(--paper-sunk); border-bottom: 1px solid var(--rule);
 }

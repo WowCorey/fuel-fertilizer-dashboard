@@ -3,6 +3,7 @@
 function Header({ active = 'fuel', updated = '' }) {
   const nav = [
     { id: 'national_status', label: 'National status',      href: '../national-status-dashboard/index.html' },
+    { id: 'fuel_security',   label: 'Fuel security',        href: '../fuel-security-dashboard/index.html' },
     { id: 'resource_value',  label: 'Resource value',       href: '../resource-value-dashboard/index.html' },
     { id: 'fuel',          label: 'Fuel',                  href: '../fuel-dashboard/index.html' },
     { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },

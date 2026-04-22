@@ -3,6 +3,7 @@ const { test, expect } = require('@playwright/test');
 const routes = [
   { path: '/', heading: "Australia's fuel and fertiliser data, without estimates." },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
+  { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What Australia can see from public fuel-security data.' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
   { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's fertiliser, in plain English." },

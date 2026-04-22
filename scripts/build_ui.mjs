@@ -10,6 +10,7 @@ const checkOnly = process.argv.includes('--check');
 
 const sharedFiles = [
   'ui_kits/shared/DataCoverage.jsx',
+  'ui_kits/shared/TrustBadge.jsx',
   'ui_kits/shared/Header.jsx',
   'ui_kits/shared/MetricCard.jsx',
   'ui_kits/shared/ChartCard.jsx',
@@ -19,6 +20,7 @@ const sharedFiles = [
 
 const dashboards = [
   'national-status-dashboard',
+  'fuel-security-dashboard',
   'resource-value-dashboard',
   'fuel-dashboard',
   'fertilizer-dashboard',

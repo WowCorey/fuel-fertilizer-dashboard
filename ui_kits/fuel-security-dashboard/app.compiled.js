@@ -658,33 +658,113 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['eia_brent', 'eia_wti', 'eia_diesel_retail_us', 'eia_jet_spot_usgc', 'aps_production_petrol', 'aps_production_diesel', 'aps_production_jet', 'aps_production_fuel_oil', 'aps_sales_diesel', 'aps_stocks_diesel', 'aps_imports_diesel', 'aps_exports_crude_feedstocks', 'iea_90day', 'fuel_security_payment', 'offshore_ticket_volumes', 'rba_aud_usd'];
-function toAud(usdEnv, fxEnv) {
-  if (!usdEnv || usdEnv.status !== 'ok' || !usdEnv.values?.length) return {
-    ...usdEnv,
-    status: 'unavailable',
-    values: []
-  };
-  if (!fxEnv || fxEnv.status !== 'ok' || !fxEnv.values?.length) return {
-    ...usdEnv,
-    status: 'unavailable',
-    values: [],
-    notes: 'AUD/USD series unavailable; AUD conversion pending.'
-  };
-  const fxByMonth = Object.fromEntries(fxEnv.values.map(p => [p.t, p.v]));
-  const values = usdEnv.values.map(p => {
-    const fx = fxByMonth[p.t];
-    return fx ? {
-      t: p.t,
-      v: +(p.v / fx).toFixed(2)
-    } : null;
-  }).filter(Boolean);
-  return {
-    ...usdEnv,
-    unit: 'AUD per barrel',
-    values,
-    notes: 'Converted from USD using RBA monthly AUD/USD.'
-  };
+const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'fuel_security_petrol_days_remaining', 'fuel_security_diesel_days_remaining', 'fuel_security_jet_days_remaining', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts', 'aps_monthly', 'aps_stocks_petrol', 'aps_stocks_diesel', 'aps_sales_petrol', 'aps_sales_diesel', 'aps_sales_jet', 'aps_imports_petrol', 'aps_imports_diesel', 'abs_petroleum_imports', 'aus_retail_fuel_multistate', 'fuel_security_status_model', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking', 'fuel_security_terminal_capacity'];
+const PRODUCTS = [{
+  name: 'Petrol',
+  daysId: 'fuel_security_petrol_days_remaining',
+  reserveField: 'petrol_ml',
+  stockId: 'aps_stocks_petrol',
+  salesId: 'aps_sales_petrol',
+  importId: 'aps_imports_petrol'
+}, {
+  name: 'Diesel',
+  daysId: 'fuel_security_diesel_days_remaining',
+  reserveField: 'diesel_ml',
+  stockId: 'aps_stocks_diesel',
+  salesId: 'aps_sales_diesel',
+  importId: 'aps_imports_diesel'
+}, {
+  name: 'Jet fuel',
+  daysId: 'fuel_security_jet_days_remaining',
+  reserveField: 'jet_fuel_ml',
+  stockId: null,
+  salesId: 'aps_sales_jet',
+  importId: null
+}];
+function latest(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1).v;
+}
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function fmtNumber(value, digits = 0) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+  return Number(value).toLocaleString('en-AU', {
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits
+  });
+}
+function fmtMetric(value, unit, digits = 0) {
+  if (value === null || value === undefined) return '-';
+  return `${fmtNumber(value, digits)}${unit ? ` ${unit}` : ''}`;
+}
+function SecurityCard({
+  eyebrow,
+  title,
+  value,
+  unit,
+  env,
+  children,
+  partial = false,
+  unavailable = false
+}) {
+  const isUnavailable = unavailable || !env || env.status !== 'ok' || value === null || value === undefined;
+  return React.createElement("article", {
+    className: `metric-card ${isUnavailable ? 'metric-card--unavailable' : ''}`
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, eyebrow), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("h3", {
+    className: "metric-card__label"
+  }, title), isUnavailable ? React.createElement("div", {
+    className: "metric-card__unavail"
+  }, React.createElement(Icon, {
+    name: "alert",
+    size: 18
+  }), React.createElement("span", null, children || 'No verified source is currently loaded for this metric.')) : React.createElement(React.Fragment, null, React.createElement("div", {
+    className: "metric-card__row"
+  }, React.createElement("span", {
+    className: "metric-numeral"
+  }, value), unit && React.createElement("span", {
+    className: "metric-unit"
+  }, unit)), children && React.createElement("p", {
+    className: "metric-card__plain"
+  }, children)), React.createElement("footer", {
+    className: "metric-card__foot"
+  }, env && React.createElement("span", {
+    className: "metric-card__source"
+  }, window.FR.sourceLine(env))));
+}
+function SourceCard({
+  id,
+  env,
+  partial = false
+}) {
+  const f = window.FR.freshness(env);
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, env.source_name), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, env.status === 'ok' ? `Loaded envelope. Latest data point ${env.last_data_point || 'unknown'}; status ${f.label.toLowerCase()}.` : env.notes), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), env.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })));
 }
 function App() {
   const [data, setData] = React.useState(null);
@@ -695,7 +775,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "oil"
+      active: "fuel_security"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -704,36 +784,45 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const brentAud = toAud(data.eia_brent, data.rba_aud_usd);
-  const wtiAud = toAud(data.eia_wti, data.rba_aud_usd);
+  const level = data.pmc_fuel_security_level;
+  const levelFields = fields(level);
+  const reserves = fields(data.pmc_mso_fuel_reserves);
+  const tankers = fields(data.pmc_tankers_on_water);
+  const stockouts = fields(data.pmc_retail_stockouts);
+  const officialLevel = levelFields.level_label || (latest(level) ? `Level ${latest(level)}` : 'Unavailable');
+  const coreOk = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts'].every(id => data[id]?.status === 'ok');
+  const modelUnavailableReason = coreOk ? 'Official snapshots are loaded, but live national outage, vessel-level shipment and terminal-capacity feeds are not. The dashboard therefore does not publish its own Stable/Tight/Disrupted/Critical status.' : 'Core public-source coverage is incomplete, so the dashboard status model is unavailable.';
+  const stockoutRows = [['ACT', stockouts.act_petrol, stockouts.act_diesel], ['NSW', stockouts.nsw_petrol, stockouts.nsw_diesel], ['VIC', stockouts.vic_petrol, stockouts.vic_diesel], ['QLD', stockouts.qld_petrol, stockouts.qld_diesel], ['SA', stockouts.sa_petrol, stockouts.sa_diesel], ['TAS', stockouts.tas_petrol, stockouts.tas_diesel], ['NT', stockouts.nt_petrol, stockouts.nt_diesel], ['WA', stockouts.wa_petrol, stockouts.wa_diesel], ['Australia', stockouts.australia_petrol, stockouts.australia_diesel]];
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "oil",
+    active: "fuel_security",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "oil"
+    id: "fuel-security"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Oil & production \xB7 v1.2"), React.createElement("h1", {
+  }, "Australia fuel security dashboard"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What crude costs, what we refine, and what the government pays."), React.createElement("p", {
+  }, "What Australia can see from public fuel-security data."), React.createElement("p", {
     className: "intro__lede"
-  }, "Three views: the global crude benchmarks that set the floor on pump prices; Australia's refined-fuel production; and the public stockholding benchmark. Values appear only when the named source envelope is verified.")), React.createElement("aside", {
+  }, "This page separates observed public signals from derived, partial and unavailable operational layers. It shows PM&C/DCCEEW status, product days, stock context, import/shipping context and the blind spots that are not yet public-source safe.")), React.createElement("aside", {
     className: "intro__meta",
-    "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+    "aria-label": "Fuel security status"
+  }, React.createElement("strong", null, "Official public level"), React.createElement("span", {
     className: "mono"
-  }, updatedDisplay), React.createElement("div", {
+  }, officialLevel), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Dashboard status model"), React.createElement("span", {
+    className: "mono"
+  }, "Status unavailable"))), React.createElement(DataCoverage, {
     data: data
   }), React.createElement("section", {
     className: "section section--why"
@@ -741,305 +830,248 @@ function App() {
     className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
+  }, "Fail-closed status engine"), React.createElement("h2", {
     style: {
       marginTop: 8
     }
-  }, "What this page shows")), React.createElement("div", {
+  }, "No national status score yet")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Crude oil is the raw input for petrol, diesel and jet fuel. Australia buys most of its crude on global markets, priced in US dollars per barrel. This page currently shows licence-compatible public series for ", React.createElement("b", null, "Brent"), " (North Sea) and ", React.createElement("b", null, "WTI"), "(US). Tapis remains pending until a reusable public series is identified."), React.createElement("p", null, "Australia still refines a share of the fuel it consumes, but refineries have closed steadily for 15 years. APS production series are loaded from the public workbook; DCCEEW payment and offshore stockholding disclosures are shown where verified. Refinery utilisation stays out of the main dashboard until exact public source fields are verified."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms: ", React.createElement("b", null, "WTI"), " = West Texas Intermediate. ", React.createElement("b", null, "APS"), " = Australian Petroleum Statistics.", React.createElement("b", null, " IEA"), " = International Energy Agency. ", React.createElement("b", null, "FSSP"), " = Fuel Security Services Payment.")))), React.createElement("section", {
+  }, React.createElement("p", null, modelUnavailableReason), React.createElement("p", null, "The page keeps the observed PM&C level visible and labels the missing operational layers instead of collapsing weak evidence into a score."), React.createElement("div", {
+    className: "trust-badges",
+    "aria-label": "Trust label examples"
+  }, React.createElement(TrustBadge, {
+    kind: "observed"
+  }), React.createElement(TrustBadge, {
+    kind: "derived"
+  }), React.createElement(TrustBadge, {
+    kind: "manual"
+  }), React.createElement(TrustBadge, {
+    kind: "partial"
+  }), React.createElement(TrustBadge, {
+    kind: "unavailable"
+  }))))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "h-crude"
+    "aria-labelledby": "national-summary"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Section 1"), React.createElement("h2", {
-    id: "h-crude"
-  }, "Crude oil price \u2014 the floor beneath the pump"), React.createElement("p", {
+  }, "1. National status"), React.createElement("h2", {
+    id: "national-summary"
+  }, "Public national fuel signals"), React.createElement("p", {
     className: "section__lede"
-  }, "Monthly averages over the last five years where verified public source envelopes are available. Brent and WTI each have US$ and A$ slots. Tapis is not charted until a licence-compatible public source is identified."))), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "US$",
-    title: "Brent crude \u2014 US$/barrel",
-    unit: "USD per barrel",
-    fromEnvelope: data.eia_brent,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Brent is the North Sea benchmark and the most-quoted global crude price. Higher Brent, higher Australian pump prices \u2014 usually within 2\u20134 weeks.",
-    yAxisLabel: "US dollars per barrel"
-  }), React.createElement(ChartCard, {
-    eyebrow: "A$",
-    title: "Brent crude \u2014 A$/barrel",
-    unit: "AUD per barrel",
-    fromEnvelope: brentAud,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Same Brent series converted using the RBA monthly AUD/USD. A weakening Australian dollar makes crude more expensive even when the US$ price is flat.",
-    yAxisLabel: "Australian dollars per barrel"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "US$",
-    title: "WTI crude \u2014 US$/barrel",
-    unit: "USD per barrel",
-    fromEnvelope: data.eia_wti,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#B45309",
-    takeaway: "WTI is the US benchmark. Shown here for comparison \u2014 Brent is the more relevant benchmark for Asian-sourced fuel.",
-    yAxisLabel: "US dollars per barrel"
-  }), React.createElement(ChartCard, {
-    eyebrow: "A$",
-    title: "WTI crude \u2014 A$/barrel",
-    unit: "AUD per barrel",
-    fromEnvelope: wtiAud,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Same WTI series converted using the RBA monthly AUD/USD where both source envelopes are verified.",
-    yAxisLabel: "Australian dollars per barrel"
-  })), false && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "US$",
-    title: "Tapis crude \u2014 US$/barrel",
-    unit: "USD per barrel",
-    fromEnvelope: data.tapis_crude,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Tapis is the Malaysian light-sweet crude benchmark most relevant to Asian refineries supplying Australia. This slot stays unavailable until a licence-compatible public source is identified.",
-    yAxisLabel: "US dollars per barrel"
-  }), React.createElement(ChartCard, {
-    eyebrow: "A$",
-    title: "Tapis crude \u2014 A$/barrel",
-    unit: "AUD per barrel",
-    fromEnvelope: tapisAud,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#991B1B",
-    takeaway: "Tapis converted to A$ will populate only if both a licence-compatible Tapis series and the AUD/USD source envelope are verified.",
-    yAxisLabel: "Australian dollars per barrel"
-  }))), React.createElement("div", {
-    style: {
-      height: 32
-    }
-  }), React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Refined benchmarks"), React.createElement("h3", {
-    id: "h-refined-benchmarks"
-  }, "U.S. reference prices for diesel and jet fuel"), React.createElement("p", {
-    className: "section__lede"
-  }, "Published U.S. reference prices for refined fuels. These are not Australian pump prices; they are the closest free public benchmarks for tracking refined-product markets that feed Australian import costs. Values are monthly means of the weekly (diesel) or daily (jet) observations mirrored by FRED from the U.S. Energy Information Administration."))), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "US$",
-    title: "U.S. retail diesel \u2014 US$/gallon",
-    unit: "USD per gallon",
-    fromEnvelope: data.eia_diesel_retail_us,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "U.S. weekly retail diesel price, all types. A reference for refined-product costs; Australian diesel is priced at the pump in cents per litre and is not directly comparable.",
-    yAxisLabel: "US dollars per gallon"
-  }), React.createElement(ChartCard, {
-    eyebrow: "US$",
-    title: "Jet fuel \u2014 U.S. Gulf Coast spot, US$/gallon",
-    unit: "USD per gallon",
-    fromEnvelope: data.eia_jet_spot_usgc,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "3Y",
-    accent: "#B45309",
-    takeaway: "Daily kerosene-type jet fuel spot price at the U.S. Gulf Coast, aggregated to monthly means. A widely cited reference for refined-product cost feeding import parity.",
-    yAxisLabel: "US dollars per gallon"
-  }))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-prod"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Section 2"), React.createElement("h2", {
-    id: "h-prod"
-  }, "Australian refined fuel production"), React.createElement("p", {
-    className: "section__lede"
-  }, "Monthly output of petrol, diesel, jet fuel and fuel oil from the public Australian Petroleum Statistics workbook. Refinery utilisation remains pending until the exact numerator and denominator can be sourced without assumptions."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Petrol",
-    label: "Motor spirit production",
-    plain: "Volume refined domestically in the latest month.",
-    fromEnvelope: data.aps_production_petrol,
-    unit: " ML"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Diesel",
-    label: "Diesel production",
-    plain: "Volume refined domestically in the latest month.",
-    fromEnvelope: data.aps_production_diesel,
-    unit: " ML"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Jet",
-    label: "Jet fuel production",
-    plain: "Volume refined domestically in the latest month.",
-    fromEnvelope: data.aps_production_jet,
-    unit: " ML"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Fuel oil",
-    label: "Fuel oil production",
-    plain: "Volume refined domestically in the latest month.",
-    fromEnvelope: data.aps_production_fuel_oil,
-    unit: " ML"
-  })), false && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Utilisation",
-    title: "Refinery utilisation rate",
-    unit: "%",
-    fromEnvelope: data.aps_refinery_utilisation,
-    accent: "#1F3A8A",
-    takeaway: "Share of installed capacity actually running. Falls during maintenance and when margins are thin.",
-    yAxisLabel: "Percent of installed capacity"
-  })))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-flows"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Section 2B"), React.createElement("h2", {
-    id: "h-flows"
-  }, "Demand, stocks, imports and exports"), React.createElement("p", {
-    className: "section__lede"
-  }, "Additional Australian Petroleum Statistics series from the same public workbook. These are monthly product-flow indicators, not live outage signals."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Demand",
-    label: "Diesel sales",
-    plain: "Reported diesel sales volume in the latest APS month.",
-    fromEnvelope: data.aps_sales_diesel,
-    unit: " ML"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Stocks",
-    label: "Diesel stocks",
-    plain: "Reported diesel stock volume at month end.",
-    fromEnvelope: data.aps_stocks_diesel,
-    unit: " ML"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Imports",
-    label: "Diesel imports",
-    plain: "Reported diesel import volume in the latest APS month.",
-    fromEnvelope: data.aps_imports_diesel,
-    unit: " ML"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Exports",
-    label: "Crude/feedstock exports",
-    plain: "Reported exports of crude oil and other refinery feedstocks.",
-    fromEnvelope: data.aps_exports_crude_feedstocks,
-    unit: " ML"
-  }))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-gov"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Section 3"), React.createElement("h2", {
-    id: "h-gov"
-  }, "Policy benchmark and government disclosures"), React.createElement("p", {
-    className: "section__lede"
-  }, "Australia is an IEA member and is obliged to hold 90 days of net imports. The treaty benchmark is shown below alongside verified DCCEEW disclosures for the Fuel Security Services Payment and offshore stockholding arrangements."))), React.createElement("div", {
+  }, "These are observed public snapshot values. Manual means the page value was copied from a named public page because no stable machine-readable endpoint is loaded."))), React.createElement("div", {
     className: "metric-grid"
-  }, React.createElement(MetricCard, {
-    eyebrow: "IEA benchmark",
-    label: "Stockholding obligation",
-    plain: "Treaty benchmark for IEA members; this is not Australia's current compliance figure.",
-    fromEnvelope: data.iea_90day,
-    unit: " days",
-    threshold: {
-      state: 'near',
-      text: 'Policy constant'
-    },
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Cost",
-    label: "Fuel Security Services Payment \u2014 latest quarter",
-    plain: "GST-exclusive quarterly amount disclosed by DCCEEW.",
-    fromEnvelope: data.fuel_security_payment,
-    unit: " A$m"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Contracts",
-    label: "Offshore ticket volumes",
-    plain: "Public disclosure of oil stocks held overseas under Australian Government agreement.",
-    fromEnvelope: data.offshore_ticket_volumes,
-    unit: " kL"
-  })), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending oil source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
-    className: "body-sm"
-  }, "Refinery utilisation and Tapis stay out of the main dashboard until their public source fields are verified without assumptions.")))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: [],
-    title: "What changed",
-    lede: "Populated as verified APS / IEA / DCCEEW releases land.",
-    emptyMessage: "Awaiting verified release notes for the loaded oil and production source envelopes."
-  })), React.createElement("section", {
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "PM&C National Fuel Security Plan",
+    value: officialLevel,
+    env: level
+  }, "Official public level. This dashboard does not reinterpret the level into its own risk score."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "MSO fuel reserves",
+    value: fmtNumber(latest(data.pmc_mso_fuel_reserves)),
+    unit: "ML",
+    env: data.pmc_mso_fuel_reserves
+  }, "Petrol, diesel and jet fuel reserves summed from the PM&C/DCCEEW table."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Dashboard status model",
+    env: data.fuel_security_status_model,
+    unavailable: true
+  }, data.fuel_security_status_model.notes))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "days-remaining"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "2. Days remaining"), React.createElement("h2", {
+    id: "days-remaining"
+  }, "Product days from the public MSO table"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards are derived by reshaping the product-specific PM&C/DCCEEW MSO days table into first-class envelopes. They are not independently calculated from private terminal stocks or hidden demand assumptions."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Derived",
+    title: "Petrol days remaining",
+    value: fmtNumber(latest(data.fuel_security_petrol_days_remaining)),
+    unit: "days",
+    env: data.fuel_security_petrol_days_remaining
+  }, "Derived from the PM&C petrol MSO days field."), React.createElement(SecurityCard, {
+    eyebrow: "Derived",
+    title: "Diesel days remaining",
+    value: fmtNumber(latest(data.fuel_security_diesel_days_remaining)),
+    unit: "days",
+    env: data.fuel_security_diesel_days_remaining
+  }, "Derived from the PM&C diesel MSO days field."), React.createElement(SecurityCard, {
+    eyebrow: "Derived",
+    title: "Jet fuel days remaining",
+    value: fmtNumber(latest(data.fuel_security_jet_days_remaining)),
+    unit: "days",
+    env: data.fuel_security_jet_days_remaining
+  }, "Derived from the PM&C jet fuel MSO days field."))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "product-position"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "3. Product supply position"), React.createElement("h2", {
+    id: "product-position"
+  }, "Stocks and demand context"), React.createElement("p", {
+    className: "section__lede"
+  }, "PM&C gives product MSO reserve volumes. APS gives monthly stock, sales and import context where the workbook exposes those product series."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Product"), React.createElement("th", null, "Days remaining"), React.createElement("th", null, "PM&C MSO reserves"), React.createElement("th", null, "APS stocks"), React.createElement("th", null, "APS sales/demand context"), React.createElement("th", null, "APS imports"))), React.createElement("tbody", null, PRODUCTS.map(product => React.createElement("tr", {
+    key: product.name
+  }, React.createElement("td", null, product.name), React.createElement("td", null, fmtMetric(latest(data[product.daysId]), 'days')), React.createElement("td", null, fmtMetric(reserves[product.reserveField], 'ML')), React.createElement("td", {
+    className: product.stockId ? '' : 'unavail'
+  }, product.stockId ? fmtMetric(latest(data[product.stockId]), 'ML', 1) : '-'), React.createElement("td", null, fmtMetric(latest(data[product.salesId]), 'ML', 1)), React.createElement("td", {
+    className: product.importId ? '' : 'unavail'
+  }, product.importId ? fmtMetric(latest(data[product.importId]), 'ML', 1) : '-')))))), React.createElement("p", {
+    className: "caption mono"
+  }, "Derived days: PM&C MSO table. APS context: monthly public APS workbook. Blank cells mean no loaded defensible product series.")), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "import-risk"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "4. Import and shipping risk"), React.createElement("h2", {
+    id: "import-risk"
+  }, "Aggregate import visibility only"), React.createElement("p", {
+    className: "section__lede"
+  }, "This repo does not load live AIS, vessel ETAs or shipment-level Kpler data. It uses aggregate PM&C tanker counts and public import-value/volume context."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "Forward import orders",
+    value: fmtNumber(latest(data.pmc_forward_import_orders), 1),
+    unit: "billion L",
+    env: data.pmc_forward_import_orders,
+    partial: true
+  }, "Reported crude, diesel, jet and petrol scheduled to arrive from overseas in the next four weeks."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "Ships on water",
+    value: fmtNumber(latest(data.pmc_tankers_on_water)),
+    unit: "tankers",
+    env: data.pmc_tankers_on_water,
+    partial: true
+  }, "Aggregate crude and clean-product tanker counts. Not live vessel tracking."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "ABS petroleum import value",
+    value: fmtNumber(latest(data.abs_petroleum_imports)),
+    unit: "AUD thousands",
+    env: data.abs_petroleum_imports
+  }, "Monthly public merchandise-import value for petroleum-related products."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Live vessel tracking",
+    env: data.fuel_security_live_vessel_tracking,
+    unavailable: true
+  }, data.fuel_security_live_vessel_tracking.notes)), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Shipment context"), React.createElement("th", null, "Current"), React.createElement("th", null, "Previous"), React.createElement("th", null, "Equivalent days"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Crude oil tankers"), React.createElement("td", null, fmtMetric(tankers.crude_oil_tankers, 'tankers')), React.createElement("td", null, fmtMetric(tankers.previous_crude_oil_tankers, 'tankers')), React.createElement("td", null, fmtMetric(tankers.crude_oil_equivalent_days, 'days'))), React.createElement("tr", null, React.createElement("td", null, "Clean refined product tankers"), React.createElement("td", null, fmtMetric(tankers.clean_refined_product_tankers, 'tankers')), React.createElement("td", null, fmtMetric(tankers.previous_clean_refined_product_tankers, 'tankers')), React.createElement("td", null, fmtMetric(tankers.clean_refined_product_equivalent_days, 'days'))))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "outages"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "5. Outage and disruption visibility"), React.createElement("h2", {
+    id: "outages"
+  }, "Retail stock-outs are a dated partial snapshot"), React.createElement("p", {
+    className: "section__lede"
+  }, "PM&C publishes state/territory retail stock-out counts. This is not a live national dry-station feed and it does not publish an Australia-wide petrol total in the current table."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Partial coverage",
+    title: "Australia diesel stock-outs",
+    value: fmtNumber(latest(data.pmc_retail_stockouts)),
+    unit: "sites",
+    env: data.pmc_retail_stockouts,
+    partial: true
+  }, "Australia-wide diesel stock-out count from the PM&C table."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Live national outage feed",
+    env: data.fuel_security_live_station_outage_feed,
+    unavailable: true
+  }, data.fuel_security_live_station_outage_feed.notes)), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Petrol stock-outs"), React.createElement("th", null, "Diesel stock-outs"))), React.createElement("tbody", null, stockoutRows.map(row => React.createElement("tr", {
+    key: row[0]
+  }, React.createElement("td", null, row[0]), React.createElement("td", {
+    className: row[1] === null || row[1] === undefined ? 'unavail' : ''
+  }, fmtNumber(row[1])), React.createElement("td", {
+    className: row[2] === null || row[2] === undefined ? 'unavail' : ''
+  }, fmtNumber(row[2])))))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "storage"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "6. Storage and terminal visibility"), React.createElement("h2", {
+    id: "storage"
+  }, "National stock context, not terminal telemetry"), React.createElement("p", {
+    className: "section__lede"
+  }, "The dashboard can show national/product stock context from PM&C and APS. It does not show terminal-by-terminal capacity because no defensible public dataset is loaded."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "APS net-import cover",
+    value: fmtNumber(latest(data.aps_monthly)),
+    unit: "days",
+    env: data.aps_monthly
+  }, "Monthly APS IEA days of net import coverage. Different concept from PM&C MSO product days."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "Petrol APS stocks",
+    value: fmtNumber(latest(data.aps_stocks_petrol), 1),
+    unit: "ML",
+    env: data.aps_stocks_petrol
+  }, "Monthly APS automotive gasoline stock volume."), React.createElement(SecurityCard, {
+    eyebrow: "Observed",
+    title: "Diesel APS stocks",
+    value: fmtNumber(latest(data.aps_stocks_diesel), 1),
+    unit: "ML",
+    env: data.aps_stocks_diesel
+  }, "Monthly APS diesel stock volume."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Terminal-level capacity",
+    env: data.fuel_security_terminal_capacity,
+    unavailable: true
+  }, data.fuel_security_terminal_capacity.notes))), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+  }, "7. Source coverage and caveats"), React.createElement("h2", null, "Every envelope used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values."))), React.createElement("div", {
+  }, "Observed means copied or fetched from a named public source. Derived means reshaped from a verified envelope. Partial coverage and unavailable labels are intentionally visible."))), React.createElement("div", {
     className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+  }, Object.entries(data).map(([id, env]) => React.createElement(SourceCard, {
     key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+    id: id,
+    env: env,
+    partial: ['pmc_tankers_on_water', 'pmc_retail_stockouts', 'pmc_forward_import_orders'].includes(id)
+  }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Crude A$ conversion"), React.createElement("dd", null, "USD-denominated monthly spot series divided by the RBA monthly average AUD/USD for the same month. No hedging or lag applied."), React.createElement("dt", null, "Stockholding obligation"), React.createElement("dd", null, "The IEA treaty benchmark is 90 days of net imports. This dashboard does not present an Australian compliance gap unless a current public compliance series is wired into an envelope."), React.createElement("dt", null, "Policy disclosures"), React.createElement("dd", null, "Fuel Security Services Payment values are GST-exclusive DCCEEW quarterly amounts converted to A$m. Offshore ticket volumes use the latest DCCEEW public disclosure of stocks held overseas under government agreement."), React.createElement("dt", null, "APS product flows"), React.createElement("dd", null, "Sales, stocks, imports and exports use the named columns in the Australian Petroleum Statistics XLSX data extract. These are publisher-reported monthly product-flow series and are not used to infer real-time shortages.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "What this dashboard does not currently know"), React.createElement("dl", null, React.createElement("dt", null, "Live station outages"), React.createElement("dd", null, "No public national live dry-site feed is loaded. PM&C stock-outs are a dated public snapshot."), React.createElement("dt", null, "Shipment-level visibility"), React.createElement("dd", null, "No source-safe live vessel or ETA feed is loaded. PM&C tanker numbers are aggregate counts."), React.createElement("dt", null, "Terminal capacity"), React.createElement("dd", null, "No terminal-by-terminal public capacity dataset is loaded. The page uses national/product stock context only."), React.createElement("dt", null, "Status score"), React.createElement("dd", null, "No Stable/Tight/Disrupted/Critical label is published until the status method has enough observed coverage.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

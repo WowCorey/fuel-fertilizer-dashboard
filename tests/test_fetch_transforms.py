@@ -98,6 +98,48 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(out["values"][-1], {"t": "2026-01", "v": 25.0})
         self.assertEqual(out["last_data_point"], "2026-01-31")
 
+    def test_extra_field_derivation_reads_manual_parent(self):
+        source = {
+            "id": "fuel_security_petrol_days_remaining",
+            "derived_from": "pmc_mso_days_cover",
+            "derived_field": "petrol_days",
+            "derived_label": "Petrol",
+            "fetch_unit": "days",
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            manual = pathlib.Path(tmp)
+            parent = {
+                "status": "ok",
+                "manual_entry": True,
+                "last_data_point": "2026-04-14",
+                "source_url": "https://example.test/pmc",
+                "unit": "days",
+                "values": [{"t": "2026-04-14", "v": 30}],
+                "extra": {
+                    "schema": "pmc_mso_days_cover.v1",
+                    "fields": {
+                        "as_at": "2026-04-14",
+                        "petrol_days": 46,
+                    },
+                },
+            }
+            (manual / "pmc_mso_days_cover.json").write_text(json.dumps(parent), encoding="utf-8")
+            old_manual = fetch_data.MANUAL_DIR
+            old_generated = fetch_data.GENERATED_DIR
+            fetch_data.MANUAL_DIR = manual
+            fetch_data.GENERATED_DIR = pathlib.Path(tmp) / "generated"
+            try:
+                out = fetch_data.fetch_extra_field_derived(source)
+            finally:
+                fetch_data.MANUAL_DIR = old_manual
+                fetch_data.GENERATED_DIR = old_generated
+
+        self.assertEqual(out["unit"], "days")
+        self.assertEqual(out["values"], [{"t": "2026-04-14", "v": 46.0}])
+        self.assertEqual(out["last_data_point"], "2026-04-14")
+        self.assertEqual(out["extra"]["fields"]["parent_source_id"], "pmc_mso_days_cover")
+        self.assertTrue(out["extra"]["fields"]["parent_manual_entry"])
+
     def test_abs_fertiliser_source_concentration(self):
         countries = [
             ("TOT", "Total"),

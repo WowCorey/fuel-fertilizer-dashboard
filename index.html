@@ -172,6 +172,7 @@
       <nav class="site-nav" aria-label="Primary">
         <a class="active" aria-current="page" href="index.html">Home</a>
         <a href="ui_kits/national-status-dashboard/index.html">National status</a>
+        <a href="ui_kits/fuel-security-dashboard/index.html">Fuel security</a>
         <a href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
         <a href="ui_kits/fuel-dashboard/index.html">Fuel</a>
         <a href="ui_kits/fertilizer-dashboard/index.html">Fertilizer</a>
@@ -188,7 +189,7 @@
         <h1 id="home-title">Australia's fuel and fertiliser data, without estimates.</h1>
         <p class="home-hero__lede">
           This static site collects source-linked dashboard pages for liquid fuel, fertiliser,
-          oil production, national fuel status, resource value and retail-price breakdowns.
+          oil production, fuel security, national fuel status, resource value and retail-price breakdowns.
           Values appear only when they flow through a verified JSON envelope; unavailable
           values remain visible as placeholders.
         </p>
@@ -210,7 +211,7 @@
           <p class="section__lede">
             Programmatic envelopes now cover ABS trade, APS petroleum statistics, AIP terminal
             gate prices, RBA AUD/USD, EIA/FRED benchmarks and public-feed retail fuel by product. The national
-            status and resource-value pages add manually verified public policy and supply snapshots.
+            status, fuel-security and resource-value pages add manually verified public policy and supply snapshots.
           </p>
         </div>
       </div>
@@ -220,6 +221,12 @@
           <p>Public fuel-security level, MSO reserves, incoming tankers and retail stock-outs.</p>
           <a class="home-card__link" href="ui_kits/national-status-dashboard/index.html">Open national status</a>
           <div class="home-card__status">Status: PM&C/DCCEEW public supply snapshot hand-keyed; direct programmatic fetch is deferred until a stable machine-readable endpoint is available.</div>
+        </article>
+        <article class="home-card">
+          <h3>Fuel security</h3>
+          <p>Operational public-source view of product days, stocks, imports, outage visibility and missing feeds.</p>
+          <a class="home-card__link" href="ui_kits/fuel-security-dashboard/index.html">Open fuel security</a>
+          <div class="home-card__status">Status: PM&C/DCCEEW product days and stocks, APS context and import/tanker snapshots are labelled observed, derived, partial or unavailable. No national risk score is published yet.</div>
         </article>
         <article class="home-card">
           <h3>Resource value</h3>
