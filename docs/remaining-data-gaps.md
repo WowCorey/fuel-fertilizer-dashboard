@@ -19,7 +19,7 @@ JSON envelope.
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| AIP national average retail petrol/diesel | deferred | Existing live fuel page already has AIP terminal gate price and multi-state public retail fuel. AIP retail needs a clean public workbook/table source before hand-entry or ingestion. | Verify AIP retail source format and licence, then either add a fetcher or populate with `scripts/enter_manual.py`. |
+| AIP national average retail petrol/diesel | deferred after re-check | Existing live fuel page has AIP terminal gate price plus public-feed retail averages by product. AIP retail reports remain PDF/report oriented; no stable public historical CSV/XLSX/JSON feed with verified reuse terms has been confirmed. | Keep manual. Populate only from a reviewed AIP report or add a fetcher if AIP publishes a deterministic reusable data file. |
 | IEA obligation/current compliance distinction | deferred | The dashboard has APS net-import cover and an IEA 90-day benchmark constant. It does not yet publish a current official compliance-gap series. | Keep showing APS cover vs 90-day benchmark unless DCCEEW publishes a current compliance series. |
 
 ## Fertiliser
@@ -35,10 +35,10 @@ JSON envelope.
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Tapis crude benchmark | deferred | No licence-compatible public reusable Tapis series has been verified. | Keep unavailable until a public source with acceptable reuse rights is found. |
-| Refinery utilisation | deferred | APS exposes production/input fields, but not a direct utilisation percentage. Deriving utilisation would require capacity assumptions that are not yet sourced in the repo. | Populate only if APS or another public source provides utilisation directly, or if a documented capacity denominator is added and clearly labelled. |
+| Tapis crude benchmark | explicitly deferred | EIA's public spot-price table exposes WTI and Brent, but not Tapis. Public API vendors found during review require accounts or paid historical access and do not provide a licence-safe open Tapis time series for this repo. | Keep unavailable until an official or clearly reusable public Tapis source is confirmed. |
+| Refinery utilisation | explicitly deferred | APS exposes refinery total input and production fields, but not a direct utilisation percentage or a refinery-capacity denominator. Deriving utilisation would require capacity assumptions that are not yet sourced in the repo. | Populate only if APS or another public source provides utilisation directly, or if a documented capacity denominator is added and clearly labelled. |
 | EIA jet fuel freshness | warning | The generated envelope is structurally valid, but the upstream daily mirror is lagging relative to the validator's daily freshness window. | Leave as warning unless the source refresh catches up or a better public refined-product benchmark is added. |
-| FSSP freshness | warning | DCCEEW labels the FSSP table quarterly, but the latest public row is still 2025-26 Q1. | Keep the stale warning because it accurately tells users the verified public table has not advanced. |
+| FSSP freshness | warning with manual workflow | DCCEEW labels the FSSP table quarterly, but the latest public row is still 2025-26 Q1. | Use `docs/manual-data-review-checklist.md` for quarterly review. Keep the stale warning when the verified public table has not advanced. |
 
 ## Who Pays What
 

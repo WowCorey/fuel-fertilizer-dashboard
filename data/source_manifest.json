@@ -354,6 +354,54 @@
       "has_generated": true,
       "has_manual": false
     },
+    "aps_exports_crude_feedstocks": {
+      "id": "aps_exports_crude_feedstocks",
+      "human_name": "Australian Petroleum Statistics - crude and refinery feedstock exports",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, exports volume.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_imports_diesel": {
+      "id": "aps_imports_diesel",
+      "human_name": "Australian Petroleum Statistics - diesel imports",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_imports_petrol": {
+      "id": "aps_imports_petrol",
+      "human_name": "Australian Petroleum Statistics - automotive gasoline imports",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
     "aps_monthly": {
       "id": "aps_monthly",
       "human_name": "Australian Petroleum Statistics (monthly)",
@@ -451,6 +499,86 @@
       "has_generated": false,
       "has_manual": true
     },
+    "aps_sales_diesel": {
+      "id": "aps_sales_diesel",
+      "human_name": "Australian Petroleum Statistics - diesel sales",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_sales_jet": {
+      "id": "aps_sales_jet",
+      "human_name": "Australian Petroleum Statistics - jet fuel sales",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_sales_petrol": {
+      "id": "aps_sales_petrol",
+      "human_name": "Australian Petroleum Statistics - automotive gasoline sales",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_stocks_diesel": {
+      "id": "aps_stocks_diesel",
+      "human_name": "Australian Petroleum Statistics - diesel stocks",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aps_stocks_petrol": {
+      "id": "aps_stocks_petrol",
+      "human_name": "Australian Petroleum Statistics - automotive gasoline stocks",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "oil"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
     "ato_corporate_tax": {
       "id": "ato_corporate_tax",
       "human_name": "ATO Corporate Tax Transparency Report (latest year)",
@@ -469,7 +597,7 @@
     },
     "aus_retail_fuel_multistate": {
       "id": "aus_retail_fuel_multistate",
-      "human_name": "Retail pump price — multi-state average",
+      "human_name": "Retail pump price - ULP 91 multi-state average",
       "publisher": "NSW FuelCheck / Queensland Government Open Data / WA FuelWatch",
       "fetch": "programmatic",
       "update_cadence": "daily",
@@ -477,6 +605,54 @@
         "fuel"
       ],
       "canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
+      "rights": "Mixed state government terms; verify each source before reuse",
+      "citation": "NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aus_retail_fuel_multistate_diesel": {
+      "id": "aus_retail_fuel_multistate_diesel",
+      "human_name": "Retail pump price - diesel multi-state average",
+      "publisher": "NSW FuelCheck / Queensland Government Open Data / WA FuelWatch",
+      "fetch": "programmatic",
+      "update_cadence": "daily",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today",
+      "rights": "Mixed state government terms; verify each source before reuse",
+      "citation": "NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aus_retail_fuel_multistate_e10": {
+      "id": "aus_retail_fuel_multistate_e10",
+      "human_name": "Retail pump price - E10 public-feed average",
+      "publisher": "NSW FuelCheck / Queensland Government Open Data",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+      "rights": "Mixed state government terms; verify each source before reuse",
+      "citation": "NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aus_retail_fuel_multistate_premium95": {
+      "id": "aus_retail_fuel_multistate_premium95",
+      "human_name": "Retail pump price - premium 95 multi-state average",
+      "publisher": "NSW FuelCheck / Queensland Government Open Data / WA FuelWatch",
+      "fetch": "programmatic",
+      "update_cadence": "daily",
+      "used_by": [
+        "fuel"
+      ],
+      "canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today",
       "rights": "Mixed state government terms; verify each source before reuse",
       "citation": "NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.",
       "preferred_dir": "generated",

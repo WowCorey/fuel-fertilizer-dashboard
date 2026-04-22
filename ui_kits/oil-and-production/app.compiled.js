@@ -591,7 +591,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['eia_brent', 'eia_wti', 'eia_diesel_retail_us', 'eia_jet_spot_usgc', 'aps_production_petrol', 'aps_production_diesel', 'aps_production_jet', 'aps_production_fuel_oil', 'iea_90day', 'fuel_security_payment', 'offshore_ticket_volumes', 'rba_aud_usd'];
+const SERIES = ['eia_brent', 'eia_wti', 'eia_diesel_retail_us', 'eia_jet_spot_usgc', 'aps_production_petrol', 'aps_production_diesel', 'aps_production_jet', 'aps_production_fuel_oil', 'aps_sales_diesel', 'aps_stocks_diesel', 'aps_imports_diesel', 'aps_exports_crude_feedstocks', 'iea_90day', 'fuel_security_payment', 'offshore_ticket_volumes', 'rba_aud_usd'];
 function toAud(usdEnv, fxEnv) {
   if (!usdEnv || usdEnv.status !== 'ok' || !usdEnv.values?.length) return {
     ...usdEnv,
@@ -858,6 +858,43 @@ function App() {
     yAxisLabel: "Percent of installed capacity"
   })))), React.createElement("section", {
     className: "section",
+    "aria-labelledby": "h-flows"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Section 2B"), React.createElement("h2", {
+    id: "h-flows"
+  }, "Demand, stocks, imports and exports"), React.createElement("p", {
+    className: "section__lede"
+  }, "Additional Australian Petroleum Statistics series from the same public workbook. These are monthly product-flow indicators, not live outage signals."))), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Demand",
+    label: "Diesel sales",
+    plain: "Reported diesel sales volume in the latest APS month.",
+    fromEnvelope: data.aps_sales_diesel,
+    unit: " ML"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Stocks",
+    label: "Diesel stocks",
+    plain: "Reported diesel stock volume at month end.",
+    fromEnvelope: data.aps_stocks_diesel,
+    unit: " ML"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Imports",
+    label: "Diesel imports",
+    plain: "Reported diesel import volume in the latest APS month.",
+    fromEnvelope: data.aps_imports_diesel,
+    unit: " ML"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Exports",
+    label: "Crude/feedstock exports",
+    plain: "Reported exports of crude oil and other refinery feedstocks.",
+    fromEnvelope: data.aps_exports_crude_feedstocks,
+    unit: " ML"
+  }))), React.createElement("section", {
+    className: "section",
     "aria-labelledby": "h-gov"
   }, React.createElement("div", {
     className: "section__head"
@@ -935,7 +972,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Crude A$ conversion"), React.createElement("dd", null, "USD-denominated monthly spot series divided by the RBA monthly average AUD/USD for the same month. No hedging or lag applied."), React.createElement("dt", null, "Stockholding obligation"), React.createElement("dd", null, "The IEA treaty benchmark is 90 days of net imports. This dashboard does not present an Australian compliance gap unless a current public compliance series is wired into an envelope."), React.createElement("dt", null, "Policy disclosures"), React.createElement("dd", null, "Fuel Security Services Payment values are GST-exclusive DCCEEW quarterly amounts converted to A$m. Offshore ticket volumes use the latest DCCEEW public disclosure of stocks held overseas under government agreement.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Crude A$ conversion"), React.createElement("dd", null, "USD-denominated monthly spot series divided by the RBA monthly average AUD/USD for the same month. No hedging or lag applied."), React.createElement("dt", null, "Stockholding obligation"), React.createElement("dd", null, "The IEA treaty benchmark is 90 days of net imports. This dashboard does not present an Australian compliance gap unless a current public compliance series is wired into an envelope."), React.createElement("dt", null, "Policy disclosures"), React.createElement("dd", null, "Fuel Security Services Payment values are GST-exclusive DCCEEW quarterly amounts converted to A$m. Offshore ticket volumes use the latest DCCEEW public disclosure of stocks held overseas under government agreement."), React.createElement("dt", null, "APS product flows"), React.createElement("dd", null, "Sales, stocks, imports and exports use the named columns in the Australian Petroleum Statistics XLSX data extract. These are publisher-reported monthly product-flow series and are not used to infer real-time shortages.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

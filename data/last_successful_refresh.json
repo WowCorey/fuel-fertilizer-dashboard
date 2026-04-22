@@ -1,0 +1,9 @@
+{
+  "schema": "fuel_resilience_refresh_status.v1",
+  "status": "pending",
+  "refreshed_at": null,
+  "git_sha": null,
+  "workflow": null,
+  "run_id": null,
+  "run_attempt": null
+}

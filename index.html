@@ -73,6 +73,18 @@
     align-self: flex-start;
     font-weight: 600;
   }
+  .refresh-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: var(--s-4);
+    padding: 6px 8px;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-1);
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+  }
   .home-note {
     background: var(--paper-sunk);
     border-top: 1px solid var(--rule);
@@ -160,6 +172,7 @@
           Values appear only when they flow through a verified JSON envelope; unavailable
           values remain visible as placeholders.
         </p>
+        <span class="refresh-badge" id="refresh-badge">Last data refresh: not recorded yet</span>
       </div>
       <img class="home-hero__art" src="assets/au-outline.svg" alt="Outline map of Australia">
     </section>
@@ -171,7 +184,7 @@
           <h2 id="dashboards-title">Choose a dashboard</h2>
           <p class="section__lede">
             Programmatic envelopes now cover ABS trade, APS petroleum statistics, AIP terminal
-            gate prices, RBA AUD/USD, EIA/FRED benchmarks and multi-state retail fuel. The national
+            gate prices, RBA AUD/USD, EIA/FRED benchmarks and public-feed retail fuel by product. The national
             status and resource-value pages add manually verified public policy and supply snapshots.
           </p>
         </div>
@@ -193,7 +206,7 @@
           <h3>Fuel</h3>
           <p>Imports, pump prices and days of net import cover.</p>
           <a class="home-card__link" href="ui_kits/fuel-dashboard/index.html">Open fuel dashboard</a>
-          <div class="home-card__status">Status: ABS imports, APS cover, AIP TGP and multi-state retail average live; AIP retail remains manual.</div>
+          <div class="home-card__status">Status: ABS imports, APS cover, AIP TGP and ULP 91, diesel, premium 95 and E10 public-feed retail averages live; AIP national retail reports remain manual.</div>
         </article>
         <article class="home-card">
           <h3>Fertilizer</h3>
@@ -205,7 +218,7 @@
           <h3>Oil &amp; production</h3>
           <p>Crude benchmarks, domestic production and fuel-security disclosures.</p>
           <a class="home-card__link" href="ui_kits/oil-and-production/index.html">Open oil dashboard</a>
-          <div class="home-card__status">Status: Brent, WTI, RBA AUD/USD, EIA refined fuels and APS production live; DCCEEW FSSP/offshore disclosures hand-keyed; Tapis and refinery utilisation remain pending.</div>
+          <div class="home-card__status">Status: Brent, WTI, RBA AUD/USD, EIA refined fuels, APS production and APS product-flow series live; DCCEEW FSSP/offshore disclosures hand-keyed; Tapis and refinery utilisation remain pending.</div>
         </article>
         <article class="home-card">
           <h3>Who pays what</h3>
@@ -244,5 +257,16 @@
     <a href="data/sources.yml">Open source registry</a>
   </footer>
 </div>
+<script>
+  fetch('data/last_successful_refresh.json')
+    .then(response => response.ok ? response.json() : null)
+    .then(status => {
+      const badge = document.getElementById('refresh-badge');
+      if (!badge || !status || !status.refreshed_at) return;
+      const when = new Date(status.refreshed_at);
+      badge.textContent = `Last successful refresh: ${when.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' })}`;
+    })
+    .catch(() => {});
+</script>
 </body>
 </html>

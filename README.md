@@ -35,9 +35,9 @@ interpolate or estimate missing numbers.
 |---|---|---|---|
 | [National status](ui_kits/national-status-dashboard/index.html) | v1.4 | National Fuel Security Plan level, MSO reserves, ships on water and retail stock-outs | PM&C/DCCEEW public fuel-supply snapshot hand-keyed; direct scripted access is blocked/deferred until a stable machine-readable endpoint exists |
 | [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources; value-leakage estimate remains unavailable until a documented denominator and method exist |
-| [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and multi-state retail average fetched; AIP retail and IEA obligation remain manual |
+| [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | ABS SITC 562 total imports fetched; nutrient subseries, ABARES and concentration slots remain manual/unavailable |
-| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet and APS production fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
+| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
 | [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields and ACCC December quarter 2025 petrol components are hand-keyed; company profit remains unavailable |
 
 Every page cross-links to the others in the header nav.
@@ -150,6 +150,7 @@ Run the validator before opening or merging a PR:
 pip install -r requirements.txt
 npm ci
 npm run check:ui
+npm run smoke:ui
 python3 scripts/validate_data.py
 python3 scripts/validate_data.py --json
 python3 scripts/build_source_manifest.py --check
@@ -240,10 +241,12 @@ scripts/
   fetch_data.py                Pipeline entry point
   init_manual_stubs.py         Creates missing data/manual/*.json stubs
   validate_data.py             Validates registry, envelopes and dashboard refs
+  write_refresh_status.py      Writes data/last_successful_refresh.json after refresh
 
 tests/
   test_fetch_transforms.py     Fetch/derivation transform coverage
   test_enter_manual.py         Manual-entry helper coverage
+  ui-smoke.spec.js             Playwright smoke tests for every dashboard route
 
 .github/workflows/
   ci.yml                       PR/push validation

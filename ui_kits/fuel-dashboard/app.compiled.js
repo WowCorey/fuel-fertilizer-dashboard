@@ -609,8 +609,12 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const retailStates = data.aus_retail_fuel_multistate?.extra?.fields?.states?.map(state => state.state)?.join(', ');
-  const retailPlain = retailStates ? `${retailStates} ULP 91 average weighted by station count.` : 'WA, QLD and NSW public feeds where available.';
+  const retailPlainFor = (env, fallbackLabel) => {
+    const fields = env?.extra?.fields || {};
+    const states = fields.states?.map(state => state.state)?.join(', ');
+    const label = fields.label || fallbackLabel;
+    return states ? `${states} ${label} average weighted by station count.` : `${fallbackLabel} from public state feeds where available.`;
+  };
   const insights = [];
   for (const [id, env] of Object.entries(data)) {
     if (env.status === 'ok' && env.last_data_point) {
@@ -705,8 +709,8 @@ function App() {
     highlight: true
   }), React.createElement(MetricCard, {
     eyebrow: "Pump",
-    label: "Retail pump price - multi-state average",
-    plain: retailPlain,
+    label: "Retail pump price - ULP 91",
+    plain: retailPlainFor(data.aus_retail_fuel_multistate, 'ULP 91'),
     fromEnvelope: data.aus_retail_fuel_multistate,
     unit: " c/L"
   }), React.createElement(MetricCard, {
@@ -725,6 +729,30 @@ function App() {
       return `${v > 0 ? '+' : ''}${v}`;
     },
     unit: "%"
+  })), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Pump",
+    label: "Retail diesel",
+    plain: retailPlainFor(data.aus_retail_fuel_multistate_diesel, 'diesel'),
+    fromEnvelope: data.aus_retail_fuel_multistate_diesel,
+    unit: " c/L"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Pump",
+    label: "Retail premium 95",
+    plain: retailPlainFor(data.aus_retail_fuel_multistate_premium95, 'premium 95'),
+    fromEnvelope: data.aus_retail_fuel_multistate_premium95,
+    unit: " c/L"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Pump",
+    label: "Retail E10",
+    plain: retailPlainFor(data.aus_retail_fuel_multistate_e10, 'E10'),
+    fromEnvelope: data.aus_retail_fuel_multistate_e10,
+    unit: " c/L"
   }))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
@@ -811,7 +839,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Days of Net Import Cover"), React.createElement("dd", null, "Total petroleum stocks (on land and in transit) divided by the prior 12-month average of net imports, expressed in days. Follows the IEA methodology used by DCCEEW."), React.createElement("dt", null, "Retail pump price - multi-state average"), React.createElement("dd", null, "Daily ULP 91 average across the public state feeds that returned usable observations, weighted by station count."), React.createElement("dt", null, "Terminal gate price"), React.createElement("dd", null, "Monthly mean of AIP daily national average unleaded petrol terminal gate prices from the historical TGP workbook."), React.createElement("dt", null, "Monthly Imports (year-on-year)"), React.createElement("dd", null, "Percent change in petroleum import value vs. the same calendar month one year earlier, derived from ABS International Merchandise Trade.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Days of Net Import Cover"), React.createElement("dd", null, "Total petroleum stocks (on land and in transit) divided by the prior 12-month average of net imports, expressed in days. Follows the IEA methodology used by DCCEEW."), React.createElement("dt", null, "Retail pump prices"), React.createElement("dd", null, "Average across the public state feeds that returned usable observations for each product, weighted by station count. NSW contributes only when the FuelCheck secret is configured; WA does not expose E10 through the active public RSS product-code list."), React.createElement("dt", null, "Terminal gate price"), React.createElement("dd", null, "Monthly mean of AIP daily national average unleaded petrol terminal gate prices from the historical TGP workbook."), React.createElement("dt", null, "Monthly Imports (year-on-year)"), React.createElement("dd", null, "Percent change in petroleum import value vs. the same calendar month one year earlier, derived from ABS International Merchandise Trade.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
