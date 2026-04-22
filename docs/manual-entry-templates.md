@@ -30,6 +30,12 @@ financial statement or ASIC-lodged report can be cited.
 Review all PM&C sources together so the national page stays internally
 consistent.
 
+The PM&C public page currently remains manual. Recheck the browser page, then
+update all affected snapshot envelopes together:
+`pmc_fuel_security_level`, `pmc_mso_days_cover`,
+`pmc_mso_fuel_reserves`, `pmc_forward_import_orders`,
+`pmc_tankers_on_water` and `pmc_retail_stockouts`.
+
 ```sh
 python scripts/enter_manual.py ^
   --source pmc_tankers_on_water ^

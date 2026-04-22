@@ -50,6 +50,10 @@ Every page cross-links to the others in the header nav.
 Known missing data is tracked in
 [`docs/remaining-data-gaps.md`](docs/remaining-data-gaps.md). Those gaps stay
 unavailable until a named public source supports the exact value.
+Fuel-security source investigations are recorded in
+[`docs/fuel-security-source-investigation.md`](docs/fuel-security-source-investigation.md),
+including the current PM&C/DCCEEW access result, station-outage limits,
+shipping limits and terminal-capacity decision.
 
 ## Run locally
 
@@ -339,6 +343,8 @@ ui_kits/
   document, the card renders "Source unavailable" — never an estimate.
 - Do not describe a page as live or current unless the referenced envelopes have
   `status: "ok"` and valid freshness metadata.
+- On the fuel-security surfaces, "shipping" means aggregate public PM&C tanker
+  counts unless a future source-safe vessel feed is explicitly registered.
 
 ## Deployment (suggested, not configured)
 

@@ -73,6 +73,24 @@ function fmtMetric(value, unit, digits = 0) {
   return `${fmtNumber(value, digits)}${unit ? ` ${unit}` : ''}`;
 }
 
+function fmtChange(value) {
+  if (value === null || value === undefined) return '-';
+  if (Number(value) === 0) return 'no change';
+  return `${Number(value) > 0 ? '+' : ''}${value}`;
+}
+
+function StatusBlockers({ env }) {
+  const blockers = env?.extra?.fields?.blockers || [];
+  if (!blockers.length) return null;
+  return (
+    <ul className="gap-list">
+      {blockers.map(blocker => (
+        <li key={blocker}>{blocker}</li>
+      ))}
+    </ul>
+  );
+}
+
 function SecurityCard({ eyebrow, title, value, unit, env, children, partial = false, unavailable = false }) {
   const isUnavailable = unavailable || !env || env.status !== 'ok' || value === null || value === undefined;
   return (
@@ -122,6 +140,44 @@ function SourceCard({ id, env, partial = false }) {
   );
 }
 
+function SourceInvestigationSummary() {
+  const rows = [
+    {
+      title: 'PM&C/DCCEEW snapshot',
+      label: 'Manual',
+      body: 'The public PM&C page is the authoritative public snapshot, but local pipeline requests return an Incapsula challenge and the page does not expose a CSV, JSON or XLSX data file. Manual review remains the safe mode.',
+    },
+    {
+      title: 'Station outage visibility',
+      label: 'Partial coverage',
+      body: 'The loaded public source is the PM&C dated stock-out table by state and territory. No national live dry-station API or reusable station-level availability feed is loaded.',
+    },
+    {
+      title: 'Inbound vessels',
+      label: 'Partial coverage',
+      body: 'PM&C publishes aggregate tanker counts and equivalent days. The dashboard does not publish vessel names, AIS positions, ETAs or cargo inference.',
+    },
+    {
+      title: 'Terminal storage',
+      label: 'Unavailable',
+      body: 'APS and PM&C support national/product stock context. A public terminal-location dataset was found, but it does not provide terminal-by-terminal capacity or live inventory for this dashboard.',
+    },
+  ];
+  return (
+    <div className="sources-grid">
+      {rows.map(row => (
+        <article key={row.title} className="source-card">
+          <div className="card-status-row">
+            <h4>{row.title}</h4>
+            <TrustBadge kind={row.label.toLowerCase().replace(' coverage', '')}>{row.label}</TrustBadge>
+          </div>
+          <p className="body-sm">{row.body}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
@@ -156,15 +212,15 @@ function App() {
     : 'Core public-source coverage is incomplete, so the dashboard status model is unavailable.';
 
   const stockoutRows = [
-    ['ACT', stockouts.act_petrol, stockouts.act_diesel],
-    ['NSW', stockouts.nsw_petrol, stockouts.nsw_diesel],
-    ['VIC', stockouts.vic_petrol, stockouts.vic_diesel],
-    ['QLD', stockouts.qld_petrol, stockouts.qld_diesel],
-    ['SA', stockouts.sa_petrol, stockouts.sa_diesel],
-    ['TAS', stockouts.tas_petrol, stockouts.tas_diesel],
-    ['NT', stockouts.nt_petrol, stockouts.nt_diesel],
-    ['WA', stockouts.wa_petrol, stockouts.wa_diesel],
-    ['Australia', stockouts.australia_petrol, stockouts.australia_diesel],
+    ['ACT', stockouts.act_petrol, stockouts.act_petrol_change_7d, stockouts.act_diesel, stockouts.act_diesel_change_7d],
+    ['NSW', stockouts.nsw_petrol, stockouts.nsw_petrol_change_7d, stockouts.nsw_diesel, stockouts.nsw_diesel_change_7d],
+    ['VIC', stockouts.vic_petrol, stockouts.vic_petrol_change_7d, stockouts.vic_diesel, stockouts.vic_diesel_change_7d],
+    ['QLD', stockouts.qld_petrol, stockouts.qld_petrol_change_7d, stockouts.qld_diesel, stockouts.qld_diesel_change_7d],
+    ['SA', stockouts.sa_petrol, stockouts.sa_petrol_change_7d, stockouts.sa_diesel, stockouts.sa_diesel_change_7d],
+    ['TAS', stockouts.tas_petrol, stockouts.tas_petrol_change_7d, stockouts.tas_diesel, stockouts.tas_diesel_change_7d],
+    ['NT', stockouts.nt_petrol, stockouts.nt_petrol_change_7d, stockouts.nt_diesel, stockouts.nt_diesel_change_7d],
+    ['WA', stockouts.wa_petrol, stockouts.wa_petrol_change_7d, stockouts.wa_diesel, stockouts.wa_diesel_change_7d],
+    ['Australia', stockouts.australia_petrol, null, stockouts.australia_diesel, stockouts.australia_diesel_change_7d],
   ];
 
   return (
@@ -205,6 +261,7 @@ function App() {
                 The page keeps the observed PM&C level visible and labels the missing operational
                 layers instead of collapsing weak evidence into a score.
               </p>
+              <StatusBlockers env={data.fuel_security_status_model}/>
               <div className="trust-badges" aria-label="Trust label examples">
                 <TrustBadge kind="observed"/>
                 <TrustBadge kind="derived"/>
@@ -325,6 +382,15 @@ function App() {
             importsEnv={data.abs_petroleum_imports}
             liveVesselEnv={data.fuel_security_live_vessel_tracking}
           />
+          <div className="methodology">
+            <h3>Import visibility boundary</h3>
+            <dl>
+              <dt>Loaded</dt>
+              <dd>PM&C aggregate tankers and four-week import orders, APS monthly product imports, and ABS petroleum import value.</dd>
+              <dt>Not loaded</dt>
+              <dd>Vessel names, AIS positions, ETA-level port calls and cargo inference. The route graphic is context only.</dd>
+            </dl>
+          </div>
         </section>
 
         <section className="section" aria-labelledby="outages">
@@ -353,7 +419,9 @@ function App() {
                 <tr>
                   <th>State</th>
                   <th>Petrol stock-outs</th>
+                  <th>7-day change</th>
                   <th>Diesel stock-outs</th>
+                  <th>7-day change</th>
                 </tr>
               </thead>
               <tbody>
@@ -361,12 +429,18 @@ function App() {
                   <tr key={row[0]}>
                     <td>{row[0]}</td>
                     <td className={row[1] === null || row[1] === undefined ? 'unavail' : ''}>{fmtNumber(row[1])}</td>
-                    <td className={row[2] === null || row[2] === undefined ? 'unavail' : ''}>{fmtNumber(row[2])}</td>
+                    <td className={row[2] === null || row[2] === undefined ? 'unavail' : ''}>{fmtChange(row[2])}</td>
+                    <td className={row[3] === null || row[3] === undefined ? 'unavail' : ''}>{fmtNumber(row[3])}</td>
+                    <td className={row[4] === null || row[4] === undefined ? 'unavail' : ''}>{fmtChange(row[4])}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p className="caption mono">
+            Geographic coverage: state and territory rows plus an Australia-wide diesel total from PM&C.
+            The source table does not publish an Australia-wide petrol total, so that cell remains blank.
+          </p>
         </section>
 
         <section className="section" aria-labelledby="storage">
@@ -394,6 +468,15 @@ function App() {
               {data.fuel_security_terminal_capacity.notes}
             </SecurityCard>
           </div>
+          <div className="methodology">
+            <h3>Terminal visibility boundary</h3>
+            <dl>
+              <dt>Loaded</dt>
+              <dd>National and product stock context from PM&C MSO reserve volumes and APS stock series.</dd>
+              <dt>Investigated but not loaded as capacity</dt>
+              <dd>Geoscience Australia's National Liquid Fuel Terminals 2015 dataset describes terminal locations, not terminal-by-terminal capacity or live inventory.</dd>
+            </dl>
+          </div>
         </section>
 
         <section className="section section--sources" id="sources">
@@ -416,6 +499,10 @@ function App() {
                 partial={['pmc_tankers_on_water', 'pmc_retail_stockouts', 'pmc_forward_import_orders'].includes(id)}
               />
             ))}
+          </div>
+          <div className="methodology">
+            <h3>Source investigation result</h3>
+            <SourceInvestigationSummary/>
           </div>
           <div className="methodology">
             <h3>What this dashboard does not currently know</h3>

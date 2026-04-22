@@ -12,13 +12,15 @@ function DataCoverage({
     className: "coverage-strip__inner"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Verified means copied or fetched from a named source; derived means calculated from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
+  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Manual means copied from a named public source; derived means calculated or selected from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
     className: "coverage-badges"
   }, React.createElement("span", {
     className: "status-pill status-pill--verified"
   }, "Verified ", c.verified), React.createElement("span", {
     className: "status-pill status-pill--derived"
   }, "Derived ", c.derived), React.createElement("span", {
+    className: "status-pill status-pill--manual"
+  }, "Manual ", c.manual), React.createElement("span", {
     className: "status-pill status-pill--stale"
   }, "Stale ", c.stale), React.createElement("span", {
     className: "status-pill status-pill--awaiting"
@@ -121,6 +123,13 @@ function ShippingVisibility({
       minimumFractionDigits: digits
     });
   }
+  function fmtAudThousands(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 1
+    })}bn`;
+  }
   const tankerFields = fields(tankersEnv);
   const groups = [{
     key: 'crude',
@@ -159,7 +168,9 @@ function ShippingVisibility({
     className: "shipping-stat"
   }, React.createElement("span", null, fmt(latest(forwardOrdersEnv), 1)), React.createElement("small", null, "billion L ordered")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "AUD thousands imports")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "ABS imports, AUD thousands")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmtAudThousands(latest(importsEnv))), React.createElement("small", null, "same value rounded to A$bn")), React.createElement("div", {
     className: "shipping-stat shipping-stat--unavailable"
   }, React.createElement("span", null, "0"), React.createElement("small", null, "live vessel feeds")))), React.createElement("div", {
     className: "shipping-tabs",
@@ -422,7 +433,8 @@ function MetricCard({
   jargonHint,
   fromEnvelope,
   valueFn,
-  unitFn
+  unitFn,
+  partial = false
 }) {
   if (fromEnvelope !== undefined) {
     const env = fromEnvelope;
@@ -435,7 +447,10 @@ function MetricCard({
         className: "card-status-row"
       }, eyebrow && React.createElement("span", {
         className: "eyebrow"
-      }, eyebrow), window.StatusPill && React.createElement(StatusPill, {
+      }, eyebrow), window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+        env: env,
+        partial: partial
+      }) : window.StatusPill && React.createElement(StatusPill, {
         env: env
       })), React.createElement("h3", {
         className: "metric-card__label"
@@ -468,9 +483,12 @@ function MetricCard({
     className: "card-status-row"
   }, eyebrow && React.createElement("span", {
     className: "eyebrow"
-  }, eyebrow), fromEnvelope !== undefined && window.StatusPill && React.createElement(StatusPill, {
+  }, eyebrow), fromEnvelope !== undefined && (window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+    env: fromEnvelope,
+    partial: partial
+  }) : window.StatusPill && React.createElement(StatusPill, {
     env: fromEnvelope
-  })), React.createElement("h3", {
+  }))), React.createElement("h3", {
     className: "metric-card__label"
   }, jargonHint ? React.createElement(React.Fragment, null, label.replace(jargonHint.term, ''), React.createElement("span", {
     className: "jargon",
@@ -892,6 +910,22 @@ function fmtMetric(value, unit, digits = 0) {
   if (value === null || value === undefined) return '-';
   return `${fmtNumber(value, digits)}${unit ? ` ${unit}` : ''}`;
 }
+function fmtChange(value) {
+  if (value === null || value === undefined) return '-';
+  if (Number(value) === 0) return 'no change';
+  return `${Number(value) > 0 ? '+' : ''}${value}`;
+}
+function StatusBlockers({
+  env
+}) {
+  const blockers = env?.extra?.fields?.blockers || [];
+  if (!blockers.length) return null;
+  return React.createElement("ul", {
+    className: "gap-list"
+  }, blockers.map(blocker => React.createElement("li", {
+    key: blocker
+  }, blocker)));
+}
 function SecurityCard({
   eyebrow,
   title,
@@ -959,6 +993,37 @@ function SourceCard({
     size: 12
   })));
 }
+function SourceInvestigationSummary() {
+  const rows = [{
+    title: 'PM&C/DCCEEW snapshot',
+    label: 'Manual',
+    body: 'The public PM&C page is the authoritative public snapshot, but local pipeline requests return an Incapsula challenge and the page does not expose a CSV, JSON or XLSX data file. Manual review remains the safe mode.'
+  }, {
+    title: 'Station outage visibility',
+    label: 'Partial coverage',
+    body: 'The loaded public source is the PM&C dated stock-out table by state and territory. No national live dry-station API or reusable station-level availability feed is loaded.'
+  }, {
+    title: 'Inbound vessels',
+    label: 'Partial coverage',
+    body: 'PM&C publishes aggregate tanker counts and equivalent days. The dashboard does not publish vessel names, AIS positions, ETAs or cargo inference.'
+  }, {
+    title: 'Terminal storage',
+    label: 'Unavailable',
+    body: 'APS and PM&C support national/product stock context. A public terminal-location dataset was found, but it does not provide terminal-by-terminal capacity or live inventory for this dashboard.'
+  }];
+  return React.createElement("div", {
+    className: "sources-grid"
+  }, rows.map(row => React.createElement("article", {
+    key: row.title,
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, row.title), React.createElement(TrustBadge, {
+    kind: row.label.toLowerCase().replace(' coverage', '')
+  }, row.label)), React.createElement("p", {
+    className: "body-sm"
+  }, row.body))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -985,7 +1050,7 @@ function App() {
   const officialLevel = levelFields.level_label || (latest(level) ? `Level ${latest(level)}` : 'Unavailable');
   const coreOk = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts'].every(id => data[id]?.status === 'ok');
   const modelUnavailableReason = coreOk ? 'Official snapshots are loaded, but live national outage, vessel-level shipment and terminal-capacity feeds are not. The dashboard therefore does not publish its own Stable/Tight/Disrupted/Critical status.' : 'Core public-source coverage is incomplete, so the dashboard status model is unavailable.';
-  const stockoutRows = [['ACT', stockouts.act_petrol, stockouts.act_diesel], ['NSW', stockouts.nsw_petrol, stockouts.nsw_diesel], ['VIC', stockouts.vic_petrol, stockouts.vic_diesel], ['QLD', stockouts.qld_petrol, stockouts.qld_diesel], ['SA', stockouts.sa_petrol, stockouts.sa_diesel], ['TAS', stockouts.tas_petrol, stockouts.tas_diesel], ['NT', stockouts.nt_petrol, stockouts.nt_diesel], ['WA', stockouts.wa_petrol, stockouts.wa_diesel], ['Australia', stockouts.australia_petrol, stockouts.australia_diesel]];
+  const stockoutRows = [['ACT', stockouts.act_petrol, stockouts.act_petrol_change_7d, stockouts.act_diesel, stockouts.act_diesel_change_7d], ['NSW', stockouts.nsw_petrol, stockouts.nsw_petrol_change_7d, stockouts.nsw_diesel, stockouts.nsw_diesel_change_7d], ['VIC', stockouts.vic_petrol, stockouts.vic_petrol_change_7d, stockouts.vic_diesel, stockouts.vic_diesel_change_7d], ['QLD', stockouts.qld_petrol, stockouts.qld_petrol_change_7d, stockouts.qld_diesel, stockouts.qld_diesel_change_7d], ['SA', stockouts.sa_petrol, stockouts.sa_petrol_change_7d, stockouts.sa_diesel, stockouts.sa_diesel_change_7d], ['TAS', stockouts.tas_petrol, stockouts.tas_petrol_change_7d, stockouts.tas_diesel, stockouts.tas_diesel_change_7d], ['NT', stockouts.nt_petrol, stockouts.nt_petrol_change_7d, stockouts.nt_diesel, stockouts.nt_diesel_change_7d], ['WA', stockouts.wa_petrol, stockouts.wa_petrol_change_7d, stockouts.wa_diesel, stockouts.wa_diesel_change_7d], ['Australia', stockouts.australia_petrol, null, stockouts.australia_diesel, stockouts.australia_diesel_change_7d]];
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
@@ -1029,7 +1094,9 @@ function App() {
     }
   }, "No national status score yet")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, modelUnavailableReason), React.createElement("p", null, "The page keeps the observed PM&C level visible and labels the missing operational layers instead of collapsing weak evidence into a score."), React.createElement("div", {
+  }, React.createElement("p", null, modelUnavailableReason), React.createElement("p", null, "The page keeps the observed PM&C level visible and labels the missing operational layers instead of collapsing weak evidence into a score."), React.createElement(StatusBlockers, {
+    env: data.fuel_security_status_model
+  }), React.createElement("div", {
     className: "trust-badges",
     "aria-label": "Trust label examples"
   }, React.createElement(TrustBadge, {
@@ -1141,7 +1208,9 @@ function App() {
     forwardOrdersEnv: data.pmc_forward_import_orders,
     importsEnv: data.abs_petroleum_imports,
     liveVesselEnv: data.fuel_security_live_vessel_tracking
-  })), React.createElement("section", {
+  }), React.createElement("div", {
+    className: "methodology"
+  }, React.createElement("h3", null, "Import visibility boundary"), React.createElement("dl", null, React.createElement("dt", null, "Loaded"), React.createElement("dd", null, "PM&C aggregate tankers and four-week import orders, APS monthly product imports, and ABS petroleum import value."), React.createElement("dt", null, "Not loaded"), React.createElement("dd", null, "Vessel names, AIS positions, ETA-level port calls and cargo inference. The route graphic is context only.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "outages"
   }, React.createElement("div", {
@@ -1174,13 +1243,19 @@ function App() {
     className: "data-table-wrap"
   }, React.createElement("table", {
     className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Petrol stock-outs"), React.createElement("th", null, "Diesel stock-outs"))), React.createElement("tbody", null, stockoutRows.map(row => React.createElement("tr", {
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Petrol stock-outs"), React.createElement("th", null, "7-day change"), React.createElement("th", null, "Diesel stock-outs"), React.createElement("th", null, "7-day change"))), React.createElement("tbody", null, stockoutRows.map(row => React.createElement("tr", {
     key: row[0]
   }, React.createElement("td", null, row[0]), React.createElement("td", {
     className: row[1] === null || row[1] === undefined ? 'unavail' : ''
   }, fmtNumber(row[1])), React.createElement("td", {
     className: row[2] === null || row[2] === undefined ? 'unavail' : ''
-  }, fmtNumber(row[2])))))))), React.createElement("section", {
+  }, fmtChange(row[2])), React.createElement("td", {
+    className: row[3] === null || row[3] === undefined ? 'unavail' : ''
+  }, fmtNumber(row[3])), React.createElement("td", {
+    className: row[4] === null || row[4] === undefined ? 'unavail' : ''
+  }, fmtChange(row[4]))))))), React.createElement("p", {
+    className: "caption mono"
+  }, "Geographic coverage: state and territory rows plus an Australia-wide diesel total from PM&C. The source table does not publish an Australia-wide petrol total, so that cell remains blank.")), React.createElement("section", {
     className: "section",
     "aria-labelledby": "storage"
   }, React.createElement("div", {
@@ -1216,7 +1291,9 @@ function App() {
     title: "Terminal-level capacity",
     env: data.fuel_security_terminal_capacity,
     unavailable: true
-  }, data.fuel_security_terminal_capacity.notes))), React.createElement("section", {
+  }, data.fuel_security_terminal_capacity.notes)), React.createElement("div", {
+    className: "methodology"
+  }, React.createElement("h3", null, "Terminal visibility boundary"), React.createElement("dl", null, React.createElement("dt", null, "Loaded"), React.createElement("dd", null, "National and product stock context from PM&C MSO reserve volumes and APS stock series."), React.createElement("dt", null, "Investigated but not loaded as capacity"), React.createElement("dd", null, "Geoscience Australia's National Liquid Fuel Terminals 2015 dataset describes terminal locations, not terminal-by-terminal capacity or live inventory.")))), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
   }, React.createElement("div", {
@@ -1233,6 +1310,8 @@ function App() {
     env: env,
     partial: ['pmc_tankers_on_water', 'pmc_retail_stockouts', 'pmc_forward_import_orders'].includes(id)
   }))), React.createElement("div", {
+    className: "methodology"
+  }, React.createElement("h3", null, "Source investigation result"), React.createElement(SourceInvestigationSummary, null)), React.createElement("div", {
     className: "methodology"
   }, React.createElement("h3", null, "What this dashboard does not currently know"), React.createElement("dl", null, React.createElement("dt", null, "Live station outages"), React.createElement("dd", null, "No public national live dry-site feed is loaded. PM&C stock-outs are a dated public snapshot."), React.createElement("dt", null, "Shipment-level visibility"), React.createElement("dd", null, "No source-safe live vessel or ETA feed is loaded. PM&C tanker numbers are aggregate counts."), React.createElement("dt", null, "Terminal capacity"), React.createElement("dd", null, "No terminal-by-terminal public capacity dataset is loaded. The page uses national/product stock context only."), React.createElement("dt", null, "Status score"), React.createElement("dd", null, "No Stable/Tight/Disrupted/Critical label is published until the status method has enough observed coverage.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''

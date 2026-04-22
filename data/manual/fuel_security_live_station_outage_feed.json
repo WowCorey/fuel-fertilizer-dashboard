@@ -12,5 +12,20 @@
   "status": "unavailable",
   "manual_entry": true,
   "source_rights": "Not applicable; unavailable placeholder",
-  "citation": "Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source."
+  "citation": "Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.",
+  "extra": {
+    "schema": "fuel_security_source_investigation.v1",
+    "fields": {
+      "decision": "unavailable",
+      "reviewed_at": "2026-04-23",
+      "loaded_partial_source": "pmc_retail_stockouts",
+      "loaded_partial_coverage": "State and territory petrol/diesel stock-out counts plus an Australia-wide diesel total as a dated PM&C public snapshot.",
+      "missing_coverage": [
+        "station-level live outage records",
+        "regional shortage polygons or alerts",
+        "Australia-wide petrol total in the PM&C table",
+        "reusable national API for dry-site status"
+      ]
+    }
+  }
 }

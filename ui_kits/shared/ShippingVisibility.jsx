@@ -19,6 +19,14 @@ function ShippingVisibility({ tankersEnv, forwardOrdersEnv, importsEnv, liveVess
     });
   }
 
+  function fmtAudThousands(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 1,
+    })}bn`;
+  }
+
   const tankerFields = fields(tankersEnv);
   const groups = [
     {
@@ -72,7 +80,11 @@ function ShippingVisibility({ tankersEnv, forwardOrdersEnv, importsEnv, liveVess
           </div>
           <div className="shipping-stat">
             <span>{fmt(latest(importsEnv))}</span>
-            <small>AUD thousands imports</small>
+            <small>ABS imports, AUD thousands</small>
+          </div>
+          <div className="shipping-stat">
+            <span>{fmtAudThousands(latest(importsEnv))}</span>
+            <small>same value rounded to A$bn</small>
           </div>
           <div className="shipping-stat shipping-stat--unavailable">
             <span>0</span>
