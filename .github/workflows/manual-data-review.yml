@@ -1,0 +1,55 @@
+name: Manual data review
+
+on:
+  schedule:
+    # 08:00 AEST each Wednesday = 22:00 UTC each Tuesday.
+    - cron: "0 22 * * 2"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-data-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate source registry and envelopes
+        run: python scripts/validate_data.py
+
+      - name: Build manual review report
+        run: |
+          python scripts/review_due.py --json > manual-data-review.json
+          python scripts/review_due.py > manual-data-review.txt
+
+      - name: Write summary
+        run: |
+          {
+            echo "## Manual data review"
+            echo
+            cat manual-data-review.txt
+            echo
+            echo "This report is advisory. It should stay loud about stale or unavailable sources, but it must not invent values."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload review report
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-data-review
+          path: |
+            manual-data-review.json
+            manual-data-review.txt

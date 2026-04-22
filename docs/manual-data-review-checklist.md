@@ -82,3 +82,8 @@ If a dashboard page changed, also run:
 npm run build:ui
 npm run smoke:ui
 ```
+
+The same stale-source review can be run from GitHub Actions with the
+**Manual data review** workflow. Treat the workflow summary as an advisory queue:
+it can confirm that a source is stale, unavailable or intentionally deferred, but
+it does not justify filling a number without a named public source.

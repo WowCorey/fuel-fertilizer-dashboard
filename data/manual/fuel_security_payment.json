@@ -3,8 +3,8 @@
   "source_id": "fuel_security_payment",
   "source_name": "Fuel Security Services Payment — recipients & payments",
   "source_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment",
-  "unit": "A$m",
-  "retrieved_at": "2026-04-21T14:46:57+00:00",
+  "unit": "A",
+  "retrieved_at": "2026-04-22T12:47:43+00:00",
   "last_data_point": "2025-09-30",
   "values": [
     {
@@ -76,7 +76,7 @@
       "v": 0.0
     }
   ],
-  "notes": "DCCEEW Fuel Security Services Payment page, FSSP amounts paid table, last updated 28 November 2025. GST-exclusive quarterly payments converted from dollars to A$m.",
+  "notes": "DCCEEW Fuel Security Services Payment page checked 22 Apr 2026. The public FSSP amounts-paid table is still last updated 28 Nov 2025 and still ends at Quarter 1 2025-26 with  paid. GST-exclusive quarterly payments converted from dollars to A.",
   "status": "ok",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 where stated by publisher",

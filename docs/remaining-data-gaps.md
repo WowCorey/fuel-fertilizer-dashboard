@@ -37,21 +37,21 @@ JSON envelope.
 |---|---|---|---|
 | Tapis crude benchmark | explicitly deferred | EIA's public spot-price table exposes WTI and Brent, but not Tapis. Public API vendors found during review require accounts or paid historical access and do not provide a licence-safe open Tapis time series for this repo. | Keep unavailable until an official or clearly reusable public Tapis source is confirmed. |
 | Refinery utilisation | explicitly deferred | APS exposes refinery total input and production fields, but not a direct utilisation percentage or a refinery-capacity denominator. Deriving utilisation would require capacity assumptions that are not yet sourced in the repo. | Populate only if APS or another public source provides utilisation directly, or if a documented capacity denominator is added and clearly labelled. |
-| EIA jet fuel freshness | warning | The generated envelope is structurally valid, but the upstream daily mirror is lagging relative to the validator's daily freshness window. | Leave as warning unless the source refresh catches up or a better public refined-product benchmark is added. |
-| FSSP freshness | warning with manual workflow | DCCEEW labels the FSSP table quarterly, but the latest public row is still 2025-26 Q1. | Use `docs/manual-data-review-checklist.md` for quarterly review. Keep the stale warning when the verified public table has not advanced. |
+| EIA jet fuel freshness | resolved metadata issue | The raw FRED/EIA mirror is daily, but the dashboard envelope stores monthly means. The registry now assesses freshness as a monthly dashboard series while the source notes still identify the raw daily mirror. | Keep the source note explicit so users understand the stored value is a monthly mean, not a daily quote. |
+| FSSP freshness | warning with manual workflow | DCCEEW labels the FSSP table quarterly. The public page was checked on 22 Apr 2026 and still ends at 2025-26 Q1, with the page last updated 28 Nov 2025. | Use `docs/manual-data-review-checklist.md` for quarterly review. Keep the stale warning when the verified public table has not advanced. |
 
 ## Who Pays What
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Company net profit | partial | ATO tax fields are populated. Ampol, Viva Energy, Woodside and Santos now have annual-report net profit/loss fields. Private Australian subsidiary profit remains blank because a public annual financial statement or ASIC-lodged report has not been verified for those rows. | Continue one company at a time with `scripts/enter_manual.py --field net_profit=...`, preserving fiscal year, entity scope, source URL and reported currency. |
+| Company net profit | partial | ATO tax fields are populated. Ampol, Viva Energy, Woodside, Santos and Chevron Australia now have annual-report or audited-report-extract profit/loss fields. ExxonMobil Australia, BP Australia and Shell Australia remain blank because exact public subsidiary financial statements have not been verified for those rows. | Continue one company at a time with `scripts/enter_manual.py --field net_profit=...`, preserving fiscal year, entity scope, source URL and reported currency. |
 | ACCC pure excise/GST/retailer-profit split | intentionally not published | The latest ACCC petrol snapshot publishes combined excise/GST, other costs and margins, and GIRD. It does not publish pure GST, pure excise, and pure retailer profit as separate dashboard-safe components. | Keep the current ACCC taxonomy unless a later report publishes more granular components. |
 
 ## Resource Value
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| PRRT and royalty receipts | partial | The page now loads Commonwealth Budget "resource rent taxes", WA petroleum/North West Shelf receipt context, and Queensland petroleum royalty receipts. These are not project-level PRRT receipts and do not cover every Australian royalty channel. | Keep receipt cards labelled as context. Add more state/Commonwealth receipt envelopes only when exact source rows, scope and periods are documented. |
+| PRRT and royalty receipts | partial | The page now loads Commonwealth Budget "resource rent taxes", WA petroleum/North West Shelf receipt context, and Queensland petroleum royalty receipts. These are not project-level PRRT receipts and do not cover every Australian royalty channel. Quick checks of NT and SA budget material found combined mining/petroleum or all-resource royalty rows, not dashboard-safe petroleum-only receipts. | Keep receipt cards labelled as context. Add more state/Commonwealth receipt envelopes only when exact petroleum source rows, scope and periods are documented. |
 | Production by state, basin and project | partial | The page now loads AES state/territory production rows plus AECR national/basin context. It is not yet a project-level or company-level production map. | Add project/company flow data only if a public source publishes exact fields with compatible units and reuse rights. |
 | Domestic vs export price comparison | partial | ACCC domestic contract-price and LNG netback envelopes are shown side by side with a non-equivalence caveat. They are not delivered consumer prices and not a leakage calculation. | Keep the comparison contextual. Add more buyer segments or regional rows only when the ACCC source supports them cleanly. |
 | 25% export-tax scenario | partial | The calculator now uses loaded LNG and oil export-value envelopes and shows loaded receipt context separately. It is not current law and not a PRRT model. | Keep the scenario labelled as a hypothetical gross-export calculation; do not expand it into policy analysis until receipt and incidence assumptions are documented. |
@@ -60,13 +60,15 @@ JSON envelope.
 
 ## Fuel Stress Index Gate
 
-Do not start the Fuel Stress Index until:
+Do not start the Fuel Stress Index implementation until:
 
 - the public site is deployed and visible,
 - every visible card has verified, stale, derived, or awaiting status,
 - the deferred gaps above are either populated or intentionally excluded from
   the index formula,
 - the index methodology includes component coverage and confidence.
+
+The locked methodology gate now lives in `docs/fuel-stress-index-spec.md`.
 
 Locked candidate inputs before any scoring work:
 

@@ -40,7 +40,7 @@ interpolate or estimate missing numbers.
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by fertiliser category, price index, supplier concentration | ABS SITC 562 total imports and source-country top-3 concentration fetched; nutrient subseries, ABARES price and stock cover remain manual/unavailable |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
-| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields, four ASX annual-report profit rows and ACCC December quarter 2025 petrol components are hand-keyed; private Australian subsidiary profit remains unavailable until source filings are verified |
+| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields, five company profit rows and ACCC December quarter 2025 petrol components are hand-keyed; remaining private Australian subsidiary profit stays unavailable until source filings are verified |
 
 Every page cross-links to the others in the header nav.
 
@@ -171,6 +171,12 @@ dependencies in `package-lock.json`, checks that compiled dashboard JS is fresh,
 compile-checks scripts, runs the data validator, checks the browser source
 manifest, and runs unit tests for the fetch/data-entry transforms.
 
+`.github/workflows/manual-data-review.yml` runs weekly and on demand. It runs
+the validator, writes a `scripts/review_due.py` summary to the Actions job
+summary, and uploads JSON/text review artifacts. The workflow is advisory: a
+source can be due or intentionally unavailable without inventing a replacement
+number.
+
 ## Run the pipeline locally
 
 ```sh
@@ -206,6 +212,11 @@ That refresh only updates programmatic envelopes and stubs. Manual public
 snapshot sources, such as PM&C national status, FSSP disclosures, company
 profits and resource-value receipts, still need a human review before changing
 their JSON.
+
+To run the manual review report from GitHub, open Actions, choose
+**Manual data review**, then use **Run workflow** on `main`. Read the summary
+before editing manual JSON; stale and unavailable items are prompts for review,
+not permission to estimate.
 
 ### Add or update a source
 
@@ -248,6 +259,14 @@ unavailable or stale manual envelopes. It does not fail CI by default because
 some public sources legitimately lag; use `--fail-on-due` only for an
 intentional manual-data review workflow.
 
+## Fuel Stress Index gate
+
+The Fuel Stress Index has not been implemented. Its input, exclusion,
+freshness, confidence and coverage rules are locked in
+`docs/fuel-stress-index-spec.md`. Do not add scoring code or public labels until
+the score can show missing inputs, stale/manual status and component coverage
+beside the number.
+
 ## Repo layout
 
 ```
@@ -279,6 +298,7 @@ tests/
 
 .github/workflows/
   ci.yml                       PR/push validation
+  manual-data-review.yml       Weekly/manual advisory stale-source report
   refresh-data.yml             Weekly Monday 02:00 AEST data refresh
 
 ui_kits/

@@ -694,15 +694,15 @@
     "company_chevron_au": {
       "id": "company_chevron_au",
       "human_name": "Chevron Australia annual financial statements",
-      "publisher": "Chevron Australia Pty Ltd (ASIC lodgement)",
+      "publisher": "Chevron Australia Holdings Pty Ltd",
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
         "who_pays_what"
       ],
-      "canonical_url": "https://australia.chevron.com/",
+      "canonical_url": "https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf",
       "rights": "Company copyright",
-      "citation": "Chevron Australia annual financial statements.",
+      "citation": "Chevron Australia Holdings Pty Ltd Tax Transparency Report, year ended 31 December 2024.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -821,10 +821,10 @@
     },
     "eia_jet_spot_usgc": {
       "id": "eia_jet_spot_usgc",
-      "human_name": "U.S. Gulf Coast jet fuel spot price (EIA, daily)",
+      "human_name": "U.S. Gulf Coast jet fuel spot price (EIA/FRED monthly mean)",
       "publisher": "U.S. Energy Information Administration via FRED mirror",
       "fetch": "programmatic",
-      "update_cadence": "daily",
+      "update_cadence": "monthly",
       "used_by": [
         "oil"
       ],
