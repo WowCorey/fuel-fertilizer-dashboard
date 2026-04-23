@@ -1,0 +1,268 @@
+{
+  "series_id": "state_petroleum_nopta_counts",
+  "source_id": "state_petroleum_nopta_counts",
+  "source_name": "NOPTA petroleum title and well coverage counts",
+  "source_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+  "unit": "structured counts",
+  "retrieved_at": "2026-04-23T11:54:03+00:00",
+  "last_data_point": "2026-04-23",
+  "values": [],
+  "notes": "Fetched from NOPTA ArcGIS REST FeatureServer public endpoints. Counts keep titles/permits, title types, status and petroleum-wells layer records separate. Greenhouse Gas Assessment Permits are excluded from petroleum title counts. Well records are not presented as active or producing wells.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted",
+  "citation": "NOPTA, Spatial data; Titles and Permits Current FeatureServer; Petroleum Wells FeatureServer.",
+  "extra": {
+    "schema": "state_petroleum_nopta_counts.v1",
+    "fields": {
+      "as_at": "2026-04-23",
+      "state_rows": [
+        {
+          "state_code": "WA",
+          "state_name": "Western Australia",
+          "title_records": {
+            "total_current_non_ghg": 151,
+            "active": 131,
+            "pending_application": 20,
+            "by_title_type": [
+              {
+                "title_type": "Exploration Permit",
+                "count": 30
+              },
+              {
+                "title_type": "Infrastructure Licence",
+                "count": 3
+              },
+              {
+                "title_type": "Production Licence",
+                "count": 58
+              },
+              {
+                "title_type": "Retention Lease",
+                "count": 60
+              }
+            ]
+          },
+          "well_records": {
+            "total_layer_records": 3312,
+            "known_petroleum_type_records": 2160,
+            "offshore_records": 2273,
+            "onshore_or_unspecified_records": 1039
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        },
+        {
+          "state_code": "QLD",
+          "state_name": "Queensland",
+          "title_records": {
+            "total_current_non_ghg": 1,
+            "active": 0,
+            "pending_application": 1,
+            "by_title_type": [
+              {
+                "title_type": "Exploration Permit",
+                "count": 1
+              }
+            ]
+          },
+          "well_records": {
+            "total_layer_records": 1439,
+            "known_petroleum_type_records": 164,
+            "offshore_records": 5,
+            "onshore_or_unspecified_records": 1434
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        },
+        {
+          "state_code": "VIC",
+          "state_name": "Victoria",
+          "title_records": {
+            "total_current_non_ghg": 46,
+            "active": 44,
+            "pending_application": 2,
+            "by_title_type": [
+              {
+                "title_type": "Exploration Permit",
+                "count": 11
+              },
+              {
+                "title_type": "Production Licence",
+                "count": 29
+              },
+              {
+                "title_type": "Retention Lease",
+                "count": 6
+              }
+            ]
+          },
+          "well_records": {
+            "total_layer_records": 1104,
+            "known_petroleum_type_records": 1020,
+            "offshore_records": 993,
+            "onshore_or_unspecified_records": 111
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        },
+        {
+          "state_code": "SA",
+          "state_name": "South Australia",
+          "title_records": {
+            "total_current_non_ghg": 0,
+            "active": 0,
+            "pending_application": 0,
+            "by_title_type": []
+          },
+          "well_records": {
+            "total_layer_records": 364,
+            "known_petroleum_type_records": 70,
+            "offshore_records": 34,
+            "onshore_or_unspecified_records": 330
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        },
+        {
+          "state_code": "NT",
+          "state_name": "Northern Territory",
+          "title_records": {
+            "total_current_non_ghg": 9,
+            "active": 8,
+            "pending_application": 1,
+            "by_title_type": [
+              {
+                "title_type": "Exploration Permit",
+                "count": 2
+              },
+              {
+                "title_type": "Production Licence",
+                "count": 1
+              },
+              {
+                "title_type": "Retention Lease",
+                "count": 6
+              }
+            ]
+          },
+          "well_records": {
+            "total_layer_records": 1018,
+            "known_petroleum_type_records": 101,
+            "offshore_records": 91,
+            "onshore_or_unspecified_records": 927
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        },
+        {
+          "state_code": "NSW",
+          "state_name": "New South Wales",
+          "title_records": {
+            "total_current_non_ghg": 1,
+            "active": 1,
+            "pending_application": 0,
+            "by_title_type": [
+              {
+                "title_type": "Exploration Permit",
+                "count": 1
+              }
+            ]
+          },
+          "well_records": {
+            "total_layer_records": 243,
+            "known_petroleum_type_records": 7,
+            "offshore_records": 1,
+            "onshore_or_unspecified_records": 242
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        },
+        {
+          "state_code": "TAS",
+          "state_name": "Tasmania",
+          "title_records": {
+            "total_current_non_ghg": 10,
+            "active": 10,
+            "pending_application": 0,
+            "by_title_type": [
+              {
+                "title_type": "Exploration Permit",
+                "count": 3
+              },
+              {
+                "title_type": "Production Licence",
+                "count": 5
+              },
+              {
+                "title_type": "Retention Lease",
+                "count": 2
+              }
+            ]
+          },
+          "well_records": {
+            "total_layer_records": 67,
+            "known_petroleum_type_records": 67,
+            "offshore_records": 67,
+            "onshore_or_unspecified_records": 0
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        },
+        {
+          "state_code": "ACT",
+          "state_name": "Australian Capital Territory",
+          "title_records": {
+            "total_current_non_ghg": 0,
+            "active": 0,
+            "pending_application": 0,
+            "by_title_type": []
+          },
+          "well_records": {
+            "total_layer_records": 36,
+            "known_petroleum_type_records": 0,
+            "offshore_records": 0,
+            "onshore_or_unspecified_records": 36
+          },
+          "labels": {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count."
+          }
+        }
+      ],
+      "external_or_unallocated": {
+        "title_records": {
+          "Territory of Ashmore and Cartier Islands": 13
+        },
+        "well_records": {
+          "Outside of Australia": 73,
+          "Territory of Ashmore and Cartier Islands": 373,
+          "UNK": 1
+        }
+      },
+      "title_source_url": "https://arcgis.nopta.gov.au/arcgis/rest/services/Public/TitlesCompany_NOPTA/FeatureServer/0/query",
+      "wells_source_url": "https://arcgis.nopta.gov.au/arcgis/rest/services/Public/Petroleum_Wells/FeatureServer/0/query",
+      "object_definitions": {
+        "title_records": "Current NOPTA Titles and Permits FeatureServer records, excluding Greenhouse Gas Assessment Permits.",
+        "active_title_records": "Rows where Status is Active.",
+        "pending_application_records": "Rows where Status is Pending Application.",
+        "well_records": "Rows in the NOPTA Petroleum Wells FeatureServer grouped by OffshoreArea.",
+        "known_petroleum_type_records": "Well-layer rows where Type equals Petroleum."
+      }
+    }
+  }
+}

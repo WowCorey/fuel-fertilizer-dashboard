@@ -1116,7 +1116,7 @@ sources:
     citation: Australian Taxation Office, Company tax rates.
     reuse_notes: Policy-rate source only. The dashboard uses the full company tax rate as the headline and records the base-rate entity rate separately in structured extra fields. Do not treat this as tax actually paid by any oil or gas company.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_prrt_policy
     human_name: ATO Petroleum Resource Rent Tax policy
@@ -1131,7 +1131,7 @@ sources:
     citation: Australian Taxation Office, Petroleum resource rent tax.
     reuse_notes: Policy-rate source only. PRRT is a profits-based tax on project taxable profit, not a royalty and not a gross export-value tax. Receipts and company/project-level liabilities require separate official data before display.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_resource_rent_tax_receipts_budget
     human_name: Australian Government Budget - resource rent tax receipts
@@ -1147,7 +1147,7 @@ sources:
     citation: Australian Government, Budget Paper No. 1, Statement 4, Online Table 1, Australian Government cash receipts.
     reuse_notes: Budget Paper No. 1 labels this line as resource rent taxes. Use it as Commonwealth resource-rent receipt context only; do not describe it as project-level PRRT, company-level tax paid, or a leakage denominator.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_wa_petroleum_royalties
     human_name: WA petroleum royalties
@@ -1162,7 +1162,7 @@ sources:
     citation: Government of Western Australia, Petroleum royalties.
     reuse_notes: Explainer source for petroleum royalty mechanisms. The headline metric uses the Barrow Island Resource Rent Royalty rate; North West Shelf royalty rates and shares are stored as structured fields. This does not represent total royalty receipts.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_wa_petroleum_royalty_receipts
     human_name: WA petroleum royalty and North West Shelf grant receipts
@@ -1177,7 +1177,7 @@ sources:
     citation: Government of Western Australia, Overview of State Taxes and Royalties 2025-26, summary tables.
     reuse_notes: Receipt context only. The envelope sums WA petroleum state component royalties and North West Shelf grants, and explicitly excludes non-petroleum iron ore lease rentals shown near the same source table.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_qld_petroleum_royalty_receipts
     human_name: Queensland petroleum royalty receipts
@@ -1192,7 +1192,7 @@ sources:
     citation: Queensland Government, Budget Strategy and Outlook 2025-26, BP2 Revenue, Table 3.4 Royalty revenue.
     reuse_notes: Receipt context only. Table 3.4 reports petroleum royalties separately and notes that petroleum includes gas converted into LNG. Use actual-year rows for display; keep estimates and projections in typed extra fields.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_lng_export_value_req
     human_name: Resources and Energy Quarterly - LNG export earnings
@@ -1252,7 +1252,7 @@ sources:
     citation: "Geoscience Australia, Australia's Energy Commodity Resources 2025: Gas."
     reuse_notes: National gas origin and production context only. This source does not provide a complete state-by-state or project-by-project export-flow map for the dashboard.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_oil_origin_aecr
     human_name: Geoscience Australia AECR - oil production and exports
@@ -1267,7 +1267,7 @@ sources:
     citation: "Geoscience Australia, Australia's Energy Commodity Resources 2025: Oil."
     reuse_notes: National oil production, trade and basin context only. Production and export definitions differ between AECR calendar-year headline figures and Australian Energy Statistics financial-year flow figures; preserve both labels and do not combine them silently.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_domestic_gas_prices_accc
     human_name: ACCC Gas Inquiry - domestic gas prices
@@ -1312,10 +1312,10 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics 2025, Tables I and Q.
     reuse_notes: Manual extract from AES Table I physical primary-fuel production and Table Q gas production by state/territory. Units differ by product; preserve units per field and do not combine oil, LPG and gas without a documented conversion method.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: state_resource_contribution_profiles
-    human_name: State fuel and resource contribution profiles
+    human_name: State petroleum ledger profiles
     publisher: Fuel Resilience AU, compiled from official public sources
     url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md
     canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md
@@ -1324,10 +1324,87 @@ sources:
     last_verified: 2026-04-23
     rights: Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Fuel Resilience AU state contribution methodology; DCCEEW Australian Energy Statistics 2025; Geoscience Australia AECR 2025; WA and Queensland budget/royalty sources.
-    reuse_notes: Manual companion profile compiled only from loaded official source envelopes. Do not treat as a state-level federal tax allocation, complete infrastructure inventory, terminal-capacity dataset, project map or raw site count.
+    citation: Fuel Resilience AU state petroleum ledger methodology; DCCEEW Australian Energy Statistics 2025; Geoscience Australia AECR 2025; NOPTA spatial data; WA and Queensland budget/royalty sources.
+    reuse_notes: Manual companion profile compiled only from loaded official source envelopes. Do not treat as a state-level federal tax allocation, complete infrastructure inventory, terminal-capacity dataset, project map or raw site count. NOPTA counts and refinery counts are separate object classes and must not be summed as a site total.
     fetch: manual
     used_by: [state_contribution]
+
+  - id: state_nsw_minerals_petroleum_royalty_context
+    human_name: NSW minerals and petroleum royalty context
+    publisher: NSW Resources
+    url: https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties
+    canonical_url: https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties
+    format: HTML_TABLE
+    update_cadence: annual
+    last_verified: 2026-04-23
+    rights: NSW Government copyright and website terms apply
+    rights_url: https://www.nsw.gov.au/copyright
+    citation: NSW Resources, Royalties page, checked 2026-04-23.
+    reuse_notes: Combined minerals-and-petroleum context only. Do not show as petroleum-only royalty receipts, and do not use as a state petroleum revenue denominator.
+    fetch: manual
+    used_by: [state_contribution]
+
+  - id: state_nt_mining_petroleum_royalty_context
+    human_name: Northern Territory mining and petroleum royalty context
+    publisher: Northern Territory Government
+    url: https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf
+    canonical_url: https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-23
+    rights: Northern Territory Government copyright and budget website terms apply
+    rights_url: https://nt.gov.au/page/copyright-disclaimer-and-privacy
+    citation: Northern Territory Government, Budget 2025-26 Budget Paper No. 2, taxation and royalty revenue sections.
+    reuse_notes: Combined mining-and-petroleum context only. Do not show as petroleum-only royalty receipts; preserve revised-budget and forecast caveats.
+    fetch: manual
+    used_by: [state_contribution]
+
+  - id: state_petroleum_ledger_source_gates
+    human_name: National petroleum ledger source gates
+    publisher: Fuel Resilience AU source review
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU petroleum ledger source-gate review, 2026-04-23.
+    reuse_notes: Gate/status metadata only. Do not convert blocked source gates into production, revenue, permit, terminal or outage values.
+    fetch: manual
+    used_by: [state_contribution, fuel_security]
+
+  - id: state_petroleum_nopta_counts
+    human_name: NOPTA petroleum title and well coverage counts
+    publisher: National Offshore Petroleum Titles Administrator
+    url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    canonical_url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    fetch_url: https://arcgis.nopta.gov.au/arcgis/rest/services/Public/TitlesCompany_NOPTA/FeatureServer/0/query
+    nopta_wells_query_url: https://arcgis.nopta.gov.au/arcgis/rest/services/Public/Petroleum_Wells/FeatureServer/0/query
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted
+    rights_url: https://www.nopta.gov.au/copyright.html
+    citation: NOPTA, Spatial data; Titles and Permits Current FeatureServer; Petroleum Wells FeatureServer.
+    reuse_notes: Programmatic counts from official NOPTA public ArcGIS REST endpoints. Count title/permit records, title types, status, and petroleum-wells layer records separately. Do not combine these into a generic site count, do not treat well-layer records as active or producing wells, and do not count Greenhouse Gas Assessment Permits as petroleum titles.
+    fetch: programmatic
+    used_by: [state_contribution]
+
+  - id: state_operating_refinery_counts
+    human_name: Operating refinery count by state
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty
+    canonical_url: https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Commonwealth copyright and DCCEEW website terms apply
+    rights_url: https://www.dcceew.gov.au/about/copyright
+    citation: Minister for Climate Change and Energy, Securing Australia's fuel sovereignty, 20 March 2026.
+    reuse_notes: Manual official count of the two operating Australian refineries named by the source as Viva in Geelong and Ampol in Brisbane. This is a facility count only; it is not refinery throughput, capacity, uptime or utilisation.
+    fetch: manual
+    used_by: [state_contribution, fuel_security]
 
   - id: resource_norway_petroleum_tax_model
     human_name: Norwegian petroleum tax system

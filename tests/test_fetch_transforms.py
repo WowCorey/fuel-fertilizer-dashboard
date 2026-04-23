@@ -364,6 +364,95 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(out["values"][0]["v"], 200.0)
         self.assertEqual(out["extra"]["fields"]["states"], contributors)
 
+    def test_nopta_petroleum_counts_keep_object_classes_separate(self):
+        calls = []
+
+        def fake_get(url, params=None, **_kwargs):
+            calls.append((url, params))
+            if "TitlesCompany" in url:
+                return FakeResponse(
+                    json_doc={
+                        "features": [
+                            {
+                                "attributes": {
+                                    "OffShoreAr": "Western Australia",
+                                    "TitleType": "Production Licence",
+                                    "Status": "Active",
+                                    "record_count": 2,
+                                }
+                            },
+                            {
+                                "attributes": {
+                                    "OffShoreAr": "Western Australia",
+                                    "TitleType": "Exploration Permit",
+                                    "Status": "Pending Application",
+                                    "record_count": 1,
+                                }
+                            },
+                            {
+                                "attributes": {
+                                    "OffShoreAr": "Territory of Ashmore and Cartier Islands",
+                                    "TitleType": "Retention Lease",
+                                    "Status": "Active",
+                                    "record_count": 3,
+                                }
+                            },
+                        ]
+                    }
+                )
+            return FakeResponse(
+                json_doc={
+                    "features": [
+                        {
+                            "attributes": {
+                                "OffshoreArea": "Western Australia",
+                                "Type": "Petroleum",
+                                "IsOffshore": "Yes",
+                                "record_count": 5,
+                            }
+                        },
+                        {
+                            "attributes": {
+                                "OffshoreArea": "Queensland",
+                                "Type": None,
+                                "IsOffshore": "No",
+                                "record_count": 7,
+                            }
+                        },
+                        {
+                            "attributes": {
+                                "OffshoreArea": "Outside of Australia",
+                                "Type": "Petroleum",
+                                "IsOffshore": "Yes",
+                                "record_count": 1,
+                            }
+                        },
+                    ]
+                }
+            )
+
+        source = {
+            "id": "state_petroleum_nopta_counts",
+            "fetch_url": "https://example.test/TitlesCompany/query",
+            "nopta_wells_query_url": "https://example.test/Petroleum_Wells/query",
+        }
+        with mock.patch.object(fetch_data.requests, "get", side_effect=fake_get):
+            out = fetch_data.fetch_nopta_petroleum_counts(source)
+
+        self.assertEqual(out["unit"], "structured counts")
+        self.assertEqual(out["values"], [])
+        fields = out["extra"]["fields"]
+        wa = next(row for row in fields["state_rows"] if row["state_code"] == "WA")
+        qld = next(row for row in fields["state_rows"] if row["state_code"] == "QLD")
+        self.assertEqual(wa["title_records"]["active"], 2)
+        self.assertEqual(wa["title_records"]["pending_application"], 1)
+        self.assertEqual(wa["well_records"]["total_layer_records"], 5)
+        self.assertEqual(wa["well_records"]["known_petroleum_type_records"], 5)
+        self.assertEqual(qld["well_records"]["total_layer_records"], 7)
+        self.assertEqual(fields["external_or_unallocated"]["title_records"]["Territory of Ashmore and Cartier Islands"], 3)
+        self.assertEqual(fields["external_or_unallocated"]["well_records"]["Outside of Australia"], 1)
+        self.assertIn("Greenhouse Gas Assessment Permit", calls[0][1]["where"])
+
 
 if __name__ == "__main__":
     unittest.main()

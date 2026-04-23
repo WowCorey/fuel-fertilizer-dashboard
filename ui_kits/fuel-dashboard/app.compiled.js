@@ -322,7 +322,7 @@ function Header({
     href: '../resource-value-dashboard/index.html'
   }, {
     id: 'state_contribution',
-    label: 'State contribution',
+    label: 'State ledger',
     href: '../state-contribution-dashboard/index.html'
   }, {
     id: 'fuel',
