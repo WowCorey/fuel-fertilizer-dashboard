@@ -92,9 +92,18 @@ count and station denominator. The dashboard stores that as
 `wa_fuel_security_stockouts` and labels it `Partial coverage`. It is WA-only,
 manual, and not a live station-level feed.
 
+Queensland Government Open Data publishes monthly Fuel Price Reporting change
+files. The official column explanation says `Price = 9999` denotes fuel stock
+temporarily unavailable, such as a tank empty and awaiting new stock. The
+dashboard stores a programmatic monthly count as
+`qld_fuel_security_unavailable_reports` and labels it `Partial coverage`. This
+is a count of unavailable fuel-type report rows in the monthly Open Data file,
+not a live statewide station outage count or national dry-site feed.
+
 The dashboard displays seven-day changes when PM&C publishes them, but the
 counts remain dated snapshot coverage. WA stockouts also remain a dated
-snapshot. Neither source is a live station outage feed.
+snapshot. QLD unavailable fuel reports remain monthly change-report coverage.
+None of these sources is a live national station outage feed.
 
 The dashboard does not currently load:
 

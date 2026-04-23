@@ -277,6 +277,77 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(out["values"], [{"t": "2026-01", "v": 182.0}, {"t": "2026-02", "v": 190.0}])
         self.assertEqual(out["last_data_point"], "2026-02-01")
 
+    def test_qld_unavailable_reports_counts_price_9999(self):
+        def fake_get(url, **_kwargs):
+            if "package_show" in url:
+                return FakeResponse(
+                    json_doc={
+                        "success": True,
+                        "result": {
+                            "resources": [
+                                {
+                                    "id": "res-jan",
+                                    "name": "Queensland Fuel Prices January 2026",
+                                    "format": "CSV",
+                                    "datastore_active": True,
+                                    "url": "https://example.test/jan.csv",
+                                },
+                                {
+                                    "id": "res-feb",
+                                    "name": "Queensland Fuel Prices February 2026",
+                                    "format": "CSV",
+                                    "datastore_active": True,
+                                    "url": "https://example.test/feb.csv",
+                                },
+                            ]
+                        },
+                    }
+                )
+            sql = url
+            if "GROUP+BY" in sql or "GROUP%20BY" in sql:
+                return FakeResponse(
+                    json_doc={
+                        "success": True,
+                        "result": {
+                            "records": [
+                                {"Fuel_Type": "Unleaded", "reports": 2, "sites": 2},
+                                {"Fuel_Type": "Diesel", "reports": 1, "sites": 1},
+                            ]
+                        },
+                    }
+                )
+            if "res-jan" in sql:
+                record = {
+                    "reports": 1,
+                    "sites": 1,
+                    "latest": "2026-01-12T00:00:00",
+                    "earliest": "2026-01-12T00:00:00",
+                }
+            else:
+                record = {
+                    "reports": 3,
+                    "sites": 2,
+                    "latest": "2026-02-10T01:00:00",
+                    "earliest": "2026-02-01T00:00:00",
+                }
+            return FakeResponse(json_doc={"success": True, "result": {"records": [record]}})
+
+        source = {
+            "id": "qld_fuel_security_unavailable_reports",
+            "qld_ckan_base": "https://example.test",
+            "qld_package_id": "fuel-price-reporting-2026",
+        }
+        with mock.patch.object(fetch_data.requests, "get", side_effect=fake_get):
+            out = fetch_data.fetch_qld_unavailable_reports(source)
+
+        self.assertEqual(out["unit"], "unavailable fuel-type reports")
+        self.assertEqual(out["values"], [{"t": "2026-01", "v": 1}, {"t": "2026-02", "v": 3}])
+        self.assertEqual(out["last_data_point"], "2026-02-10")
+        fields = out["extra"]["fields"]
+        self.assertEqual(fields["latest_resource_id"], "res-feb")
+        self.assertEqual(fields["distinct_sites_with_unavailable_fuel"], 2)
+        self.assertEqual(fields["fuel_type_breakdown"][0]["fuel_type"], "Unleaded")
+
     def test_retail_multistate_weighted_average(self):
         contributors = [
             {"state": "NSW", "average": 190.0, "stations": 10, "date": "2026-04-20"},

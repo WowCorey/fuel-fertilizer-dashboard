@@ -1,0 +1,80 @@
+{
+  "series_id": "qld_fuel_security_unavailable_reports",
+  "source_id": "qld_fuel_security_unavailable_reports",
+  "source_name": "Queensland Fuel Price Reporting - unavailable fuel reports",
+  "source_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+  "unit": "unavailable fuel-type reports",
+  "retrieved_at": "2026-04-23T08:03:23+00:00",
+  "last_data_point": "2026-02-28",
+  "values": [
+    {
+      "t": "2026-01",
+      "v": 345
+    },
+    {
+      "t": "2026-02",
+      "v": 279
+    }
+  ],
+  "notes": "Counts rows in the latest monthly Queensland Open Data Fuel Price Reporting resource where Price = 9999. The official column explanation says 9999 denotes fuel stock temporarily unavailable, such as a tank empty and awaiting new stock. This is monthly change-report coverage, not a live statewide station outage count.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "Creative Commons Attribution 4.0",
+  "citation": "Queensland Government Open Data, Fuel Price Reporting 2026.",
+  "extra": {
+    "schema": "qld_fuel_security_unavailable_reports.v1",
+    "fields": {
+      "coverage": "Queensland monthly Open Data fuel-price reporting resources",
+      "metric": "Rows where Price = 9999",
+      "latest_resource_name": "Queensland Fuel Prices February 2026",
+      "latest_resource_id": "f013457b-fd77-4cf0-91e7-28ef983d8c3c",
+      "latest_resource_url": "https://www.data.qld.gov.au/dataset/0dfad294-f852-45a5-b86f-986773745fe2/resource/f013457b-fd77-4cf0-91e7-28ef983d8c3c/download/fuel-prices-2026-02-changes-only.csv",
+      "earliest_unavailable_report_date": "2026-01-31",
+      "latest_unavailable_report_date": "2026-02-28",
+      "unavailable_fuel_type_reports": 279,
+      "distinct_sites_with_unavailable_fuel": 124,
+      "fuel_type_breakdown": [
+        {
+          "fuel_type": "Unleaded",
+          "reports": 59,
+          "sites": 52
+        },
+        {
+          "fuel_type": "Premium Diesel",
+          "reports": 57,
+          "sites": 42
+        },
+        {
+          "fuel_type": "PULP 98 RON",
+          "reports": 43,
+          "sites": 33
+        },
+        {
+          "fuel_type": "Diesel",
+          "reports": 42,
+          "sites": 31
+        },
+        {
+          "fuel_type": "e10",
+          "reports": 34,
+          "sites": 31
+        },
+        {
+          "fuel_type": "PULP 95/96 RON",
+          "reports": 30,
+          "sites": 26
+        },
+        {
+          "fuel_type": "LPG",
+          "reports": 14,
+          "sites": 13
+        }
+      ],
+      "not_covered": [
+        "live station-level outage status",
+        "national coverage",
+        "stations with no fuel of any product unless all products are reported unavailable"
+      ]
+    }
+  }
+}
