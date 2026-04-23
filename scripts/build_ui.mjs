@@ -23,6 +23,7 @@ const dashboards = [
   'national-status-dashboard',
   'fuel-security-dashboard',
   'resource-value-dashboard',
+  'state-contribution-dashboard',
   'fuel-dashboard',
   'fertilizer-dashboard',
   'oil-and-production',

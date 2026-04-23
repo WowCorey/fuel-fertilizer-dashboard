@@ -873,16 +873,208 @@ function Footer({
 Object.assign(window, {
   Footer
 });
+const SERIES = ['state_resource_contribution_profiles', 'resource_state_production_aes', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_wa_petroleum_royalty_receipts', 'resource_qld_petroleum_royalty_receipts', 'resource_resource_rent_tax_receipts_budget', 'resource_prrt_policy', 'resource_company_tax_rate'];
+const STATE_ORDER = ['WA', 'QLD', 'VIC', 'SA', 'NT', 'NSW', 'TAS', 'ACT'];
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function latestValue(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1).v;
+}
+function valuePeriod(env) {
+  return env?.values?.at(-1)?.t || env?.last_data_point || '-';
+}
+function hasNumber(value) {
+  return value !== null && value !== undefined && Number.isFinite(Number(value));
+}
+function sumLoaded(values) {
+  const loaded = values.filter(hasNumber).map(Number);
+  return loaded.length ? loaded.reduce((sum, value) => sum + value, 0) : null;
+}
+function formatNumber(value, digits = 1) {
+  if (!hasNumber(value)) return 'Unavailable';
+  return Number(value).toLocaleString('en-AU', {
+    maximumFractionDigits: digits
+  });
+}
+function formatProduction(value, unit) {
+  if (!hasNumber(value)) return 'Not loaded';
+  return `${formatNumber(value)} ${unit}`;
+}
+function formatRoyalty(env) {
+  const value = latestValue(env);
+  if (!hasNumber(value)) return 'Unavailable';
+  return `A$${Number(value).toLocaleString('en-AU', {
+    maximumFractionDigits: 1
+  })}m`;
+}
+function coverageKind(label) {
+  return String(label || '').toLowerCase().includes('limited') ? 'unavailable' : 'partial';
+}
+function sourceStatus(env) {
+  if (!env || env.status !== 'ok') return 'Awaiting a verified method or value before publication.';
+  return `Verified envelope. ${env.values?.length || 0} data point${env.values?.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'unknown'}.`;
+}
+function productionFor(profile, aesRows) {
+  const row = aesRows.find(item => item.state === profile.state_name);
+  if (!row) return {
+    gasPj: null,
+    liquidsMl: null,
+    naturalGasMcm: null,
+    summary: 'No loaded AES state production row.'
+  };
+  const gasPj = sumLoaded([row.conventional_gas_pj, row.coal_seam_gas_pj]);
+  const liquidsMl = sumLoaded([row.crude_oil_and_ngl_ml, row.naturally_occurring_lpg_ml]);
+  const naturalGasMcm = hasNumber(row.natural_gas_mcm) ? Number(row.natural_gas_mcm) : null;
+  const bits = [];
+  if (hasNumber(gasPj)) bits.push(`${formatNumber(gasPj)} PJ gas`);
+  if (hasNumber(liquidsMl)) bits.push(`${formatNumber(liquidsMl)} ML crude/NGL/LPG`);
+  return {
+    gasPj,
+    liquidsMl,
+    naturalGasMcm,
+    summary: bits.length ? bits.join('; ') : 'No loaded petroleum production value.'
+  };
+}
+function royaltyEnv(profile, data) {
+  return profile.royalty_source_id ? data[profile.royalty_source_id] : null;
+}
+function SourceCard({
+  id,
+  env,
+  partial = false
+}) {
+  const meta = env?._meta || {};
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, env?.source_name || id), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, sourceStatus(env)), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), meta.rights && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })));
+}
+function StateSummaryCard({
+  profile,
+  production,
+  royalty
+}) {
+  const royaltyValue = latestValue(royalty);
+  return React.createElement("article", {
+    className: "metric-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, profile.state_code), React.createElement("div", {
+    className: "trust-badges"
+  }, React.createElement(TrustBadge, {
+    kind: "manual"
+  }), React.createElement(TrustBadge, {
+    kind: coverageKind(profile.source_coverage_label)
+  }, profile.source_coverage_label))), React.createElement("h3", {
+    className: "metric-card__label"
+  }, profile.state_name), React.createElement("p", {
+    className: "metric-card__plain"
+  }, profile.primary_role), React.createElement("div", {
+    className: "data-table-wrap",
+    style: {
+      marginTop: 12
+    }
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Loaded production"), React.createElement("td", null, production.summary)), React.createElement("tr", null, React.createElement("td", null, "State revenue"), React.createElement("td", {
+    className: hasNumber(royaltyValue) ? '' : 'unavail'
+  }, formatRoyalty(royalty))), React.createElement("tr", null, React.createElement("td", null, "Federal attribution"), React.createElement("td", {
+    className: "unavail"
+  }, profile.federal_tax_attribution_status))))), React.createElement("footer", {
+    className: "metric-card__foot"
+  }, React.createElement("span", {
+    className: "metric-card__source"
+  }, profile.notes)));
+}
+function StateDetailPanel({
+  profile,
+  production,
+  royalty
+}) {
+  const royaltyValue = latestValue(royalty);
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, profile.state_name), React.createElement("div", {
+    className: "trust-badges"
+  }, React.createElement(TrustBadge, {
+    kind: "manual"
+  }), React.createElement(TrustBadge, {
+    kind: coverageKind(profile.source_coverage_label)
+  }, profile.source_coverage_label))), React.createElement("p", {
+    className: "body-sm"
+  }, React.createElement("b", null, "Production role:"), " ", profile.production_role), React.createElement("p", {
+    className: "body-sm"
+  }, React.createElement("b", null, "Loaded production:"), " ", production.summary), React.createElement("p", {
+    className: "body-sm"
+  }, React.createElement("b", null, "Refining/import role:"), " ", profile.refining_role, " ", profile.import_role), React.createElement("p", {
+    className: "body-sm"
+  }, React.createElement("b", null, "State revenue:"), " ", hasNumber(royaltyValue) ? `${formatRoyalty(royalty)} (${valuePeriod(royalty)})` : profile.royalties_label), React.createElement("p", {
+    className: "body-sm"
+  }, React.createElement("b", null, "Commonwealth revenue:"), " ", profile.federal_tax_note), React.createElement("ul", {
+    className: "gap-list"
+  }, (profile.infrastructure_summary || []).map(item => React.createElement("li", {
+    key: item
+  }, item))));
+}
+function ComparisonTable({
+  profiles,
+  data,
+  aesRows
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "Crude/gas/LNG relevance"), React.createElement("th", null, "Refining/import role"), React.createElement("th", null, "Loaded production"), React.createElement("th", null, "State royalties"), React.createElement("th", null, "Federal revenue status"), React.createElement("th", null, "Coverage"))), React.createElement("tbody", null, profiles.map(profile => {
+    const production = productionFor(profile, aesRows);
+    const royalty = royaltyEnv(profile, data);
+    const royaltyValue = latestValue(royalty);
+    return React.createElement("tr", {
+      key: profile.state_code
+    }, React.createElement("td", null, React.createElement("b", null, profile.state_code), React.createElement("br", null), profile.state_name), React.createElement("td", null, "Crude: ", profile.crude_relevance, React.createElement("br", null), "Gas: ", profile.gas_relevance, React.createElement("br", null), "LNG: ", profile.lng_relevance), React.createElement("td", null, profile.refining_role, React.createElement("br", null), profile.import_role), React.createElement("td", null, production.summary), React.createElement("td", {
+      className: hasNumber(royaltyValue) ? '' : 'unavail'
+    }, hasNumber(royaltyValue) ? `${formatRoyalty(royalty)} (${valuePeriod(royalty)})` : profile.royalties_label), React.createElement("td", {
+      className: "unavail"
+    }, profile.federal_tax_attribution_status), React.createElement("td", null, React.createElement(TrustBadge, {
+      kind: coverageKind(profile.source_coverage_label)
+    }, profile.source_coverage_label)));
+  }))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
-    window.FR.load(window.FUEL_SERIES).then(setData);
+    window.FR.load(SERIES).then(setData);
   }, []);
   if (!data) {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fuel"
+      active: "state_contribution"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -891,46 +1083,33 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const retailPlainFor = (env, fallbackLabel) => {
-    const fields = env?.extra?.fields || {};
-    const states = fields.states?.map(state => state.state)?.join(', ');
-    const label = fields.label || fallbackLabel;
-    return states ? `${states} ${label} average weighted by station count.` : `${fallbackLabel} from public state feeds where available.`;
-  };
-  const insights = [];
-  for (const [id, env] of Object.entries(data)) {
-    if (env.status === 'ok' && env.last_data_point) {
-      insights.push({
-        date: env.last_data_point,
-        body: `${env.source_name} — latest observation ${env.last_data_point}, ${env.values.length} data points available.`,
-        tag: 'Data',
-        tagKind: 'imports',
-        link: env.source_url ? {
-          href: env.source_url,
-          text: 'Publisher page'
-        } : null
-      });
-    }
-  }
+  const profiles = (fields(data.state_resource_contribution_profiles).states || []).slice().sort((a, b) => STATE_ORDER.indexOf(a.state_code) - STATE_ORDER.indexOf(b.state_code));
+  const aesFields = fields(data.resource_state_production_aes);
+  const aesRows = aesFields.state_rows || [];
+  const waRoyalty = latestValue(data.resource_wa_petroleum_royalty_receipts);
+  const qldRoyalty = latestValue(data.resource_qld_petroleum_royalty_receipts);
+  const loadedRoyaltyTotal = hasNumber(waRoyalty) && hasNumber(qldRoyalty) ? waRoyalty + qldRoyalty : null;
+  const statesWithLoadedProduction = profiles.filter(profile => hasNumber(productionFor(profile, aesRows).gasPj) || hasNumber(productionFor(profile, aesRows).liquidsMl)).length;
+  const statesWithRoyalty = profiles.filter(profile => hasNumber(latestValue(royaltyEnv(profile, data)))).length;
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fuel",
+    active: "state_contribution",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "fuel"
+    id: "state-contribution"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Fuel"), React.createElement("h1", {
+  }, "State fuel & resource contribution"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's liquid fuel, in plain English."), React.createElement("p", {
+  }, "What each state contributes to Australia's fuel and resource system."), React.createElement("p", {
     className: "intro__lede"
-  }, "Petrol, diesel and jet fuel power almost every truck, tractor and aircraft in the country. Most of it is imported. This page tracks how much we bring in, what it costs at the pump, and how long our stockpile would last if imports stopped.")), React.createElement("aside", {
+  }, "This companion page separates state production and infrastructure roles from public revenue. State royalties are not the same as Commonwealth PRRT, company tax, excise or GST. Where a source does not publish a defensible state split, the field stays unavailable.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -939,190 +1118,168 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "No state-level federal tax allocation is estimated."))), React.createElement(DataCoverage, {
     data: data
   }), React.createElement("section", {
-    className: "section section--why",
-    "aria-labelledby": "why"
+    className: "section section--why"
   }, React.createElement("div", {
     className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
-    id: "why",
+  }, "Read this first"), React.createElement("h2", {
     style: {
       marginTop: 8
     }
-  }, "Why this matters to you")), React.createElement("div", {
+  }, "What the page shows and what it refuses to guess")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Australia imports around 90% of its refined fuel. When overseas supply wobbles \u2014 a refinery outage, a shipping disruption, a price spike in Asia \u2014 it shows up at our pumps within days."), React.createElement("p", null, "This dashboard exists because most of the raw numbers are public, but scattered across government reports and trade databases. It loads verified source envelopes where available and leaves unavailable values visible, rather than filling gaps with estimates."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics. ", React.createElement("b", null, "APS"), " = Australian Petroleum Statistics.", React.createElement("b", null, " IEA"), " = International Energy Agency. ", React.createElement("b", null, "AIP"), " = Australian Institute of Petroleum.")))), React.createElement("section", {
+  }, React.createElement("p", null, "It shows loaded state/territory production rows, qualitative infrastructure roles and the state-collected royalty receipts that already exist as verified envelopes."), React.createElement("p", null, "It does not allocate PRRT, company tax, fuel excise or GST by state. Those are Commonwealth channels and the loaded sources do not publish a state-attributable receipt table."), React.createElement("p", null, "It also avoids raw \"site counts\" because that becomes misleading unless a public source defines exactly which title, field, terminal, facility or licence is being counted.")))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "metrics-h"
+    "aria-labelledby": "headline-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Four headline numbers"), React.createElement("h2", {
-    id: "metrics-h"
-  }, "As of the latest publisher update"), React.createElement("p", {
+  }, "Headline coverage"), React.createElement("h2", {
+    id: "headline-h"
+  }, "Loaded state coverage, not a complete fiscal map"), React.createElement("p", {
     className: "section__lede"
-  }, "Any card marked \"Source unavailable\" is waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
+  }, "These cards summarise the data coverage on this page. They are not estimates of total public value."))), React.createElement("div", {
+    className: "metric-grid"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Production",
+    label: "States with loaded petroleum production rows",
+    value: `${statesWithLoadedProduction} / ${profiles.length}`,
+    plain: "AES state rows are loaded for gas and/or liquid petroleum products where the official table provides them.",
+    source: window.FR.sourceLine(data.resource_state_production_aes)
+  }), React.createElement(MetricCard, {
+    eyebrow: "State revenue",
+    label: "States with loaded petroleum royalty receipts",
+    value: `${statesWithRoyalty} / ${profiles.length}`,
+    plain: "WA/North West Shelf and Queensland petroleum royalty receipt context is loaded. Other state revenue stays unavailable.",
+    source: "Source envelopes: resource_wa_petroleum_royalty_receipts; resource_qld_petroleum_royalty_receipts."
+  }), React.createElement(MetricCard, {
+    eyebrow: "Loaded receipts",
+    label: "WA + Queensland petroleum receipt context",
+    value: hasNumber(loadedRoyaltyTotal) ? formatNumber(loadedRoyaltyTotal, 1) : 'Unavailable',
+    unit: hasNumber(loadedRoyaltyTotal) ? 'A$m' : '',
+    plain: "Mixed state/public receipt context only; periods and collection channels are shown in source lines.",
+    source: "Not an all-Australia royalty total."
+  }), React.createElement(MetricCard, {
+    eyebrow: "Commonwealth tax",
+    label: "State-level federal tax attribution",
+    value: "Unavailable",
+    plain: "PRRT, company tax, fuel excise and GST are not allocated by state in the loaded sources.",
+    source: "No estimate is published."
+  }))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "state-cards-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "State summaries"), React.createElement("h2", {
+    id: "state-cards-h"
+  }, "Production, infrastructure and revenue boundaries"))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Most watched",
-    label: "Days of Net Import Cover",
-    jargonHint: {
-      term: 'Days of Net Import Cover',
-      definition: 'How many days Australia could keep going on its fuel stockpile if imports stopped today.'
-    },
-    plain: "If imports stopped today, how long the national stockpile would last.",
-    fromEnvelope: data.aps_monthly,
-    unit: " days",
-    threshold: {
-      state: 'below',
-      text: 'IEA benchmark: 90 days'
-    },
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail pump price - ULP 91",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate, 'ULP 91'),
-    fromEnvelope: data.aus_retail_fuel_multistate,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Wholesale",
-    label: "Terminal gate price",
-    plain: "AIP national average unleaded petrol terminal gate price.",
-    fromEnvelope: data.aip_tgp,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Trade",
-    label: "Monthly Imports (year-on-year)",
-    plain: "How the latest month compared to the same month a year earlier.",
-    fromEnvelope: data.abs_petroleum_imports_yoy,
-    valueFn: env => {
-      const v = env.values.at(-1).v;
-      return `${v > 0 ? '+' : ''}${v}`;
-    },
-    unit: "%"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "metric-grid metric-grid--3"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail diesel",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_diesel, 'diesel'),
-    fromEnvelope: data.aus_retail_fuel_multistate_diesel,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail premium 95",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_premium95, 'premium 95'),
-    fromEnvelope: data.aus_retail_fuel_multistate_premium95,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail E10",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_e10, 'E10'),
-    fromEnvelope: data.aus_retail_fuel_multistate_e10,
-    unit: " c/L"
-  }))), React.createElement("section", {
+  }, profiles.map(profile => React.createElement(StateSummaryCard, {
+    key: profile.state_code,
+    profile: profile,
+    production: productionFor(profile, aesRows),
+    royalty: royaltyEnv(profile, data)
+  })))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "charts-h"
+    "aria-labelledby": "comparison-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "How it's changed"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Imports, prices and stockpile over time"), React.createElement("p", {
+  }, "Comparison table"), React.createElement("h2", {
+    id: "comparison-h"
+  }, "State contribution matrix"), React.createElement("p", {
     className: "section__lede"
-  }, "Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Volume",
-    title: "Monthly petroleum imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_petroleum_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly petroleum imports from ABS International Merchandise Trade. Chart populates when the latest month is verified.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Wholesale",
-    title: "Terminal gate price",
-    unit: "cents per litre",
-    fromEnvelope: data.aip_tgp,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Monthly mean of AIP daily national average unleaded petrol terminal gate prices.",
-    yAxisLabel: "Cents per litre (c/L)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Resilience",
-    title: "Days of Net Import Cover vs. 90-day benchmark",
-    unit: " days",
-    fromEnvelope: data.aps_monthly,
-    baseline: 90,
-    baselineLabel: "IEA 90-day benchmark",
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Days of cover = petroleum stocks on land and in transit divided by average net imports. The 90-day benchmark is an IEA obligation for member countries.",
-    yAxisLabel: "Days of cover"
-  }))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: insights,
-    lede: "Notes synthesised from the envelope metadata on each source. Populated as verified data arrives.",
-    emptyMessage: "Awaiting verified publisher release notes for the loaded source envelopes."
+  }, "The table keeps production, infrastructure context, state revenue and Commonwealth tax attribution in separate columns so the page does not blur collection channels."))), React.createElement(ComparisonTable, {
+    profiles: profiles,
+    data: data,
+    aesRows: aesRows
   })), React.createElement("section", {
-    className: "section section--sources",
-    id: "sources"
+    className: "section",
+    "aria-labelledby": "details-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+  }, "State detail"), React.createElement("h2", {
+    id: "details-h"
+  }, "What is known, and what remains unavailable"))), React.createElement("div", {
+    className: "source-grid"
+  }, profiles.map(profile => React.createElement(StateDetailPanel, {
+    key: profile.state_code,
+    profile: profile,
+    production: productionFor(profile, aesRows),
+    royalty: royaltyEnv(profile, data)
+  })))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "method-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Methodology"), React.createElement("h2", {
+    id: "method-h",
+    style: {
+      marginTop: 8
+    }
+  }, "Why federal tax stays national-only here")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Royalties are easier to attribute because state budget papers can publish named petroleum royalty or North West Shelf receipt lines. Commonwealth taxes are collected under different legal channels and are usually published nationally, by taxpayer, or by project concept."), React.createElement("p", null, "Allocating Commonwealth receipts to a state by production volume, company address, port, project geography or consumer spend would be a model. This first-pass page only publishes observed public rows and explicitly unavailable fields."), React.createElement("p", null, "See ", React.createElement("a", {
+    href: "../../docs/state-contribution-methodology.md"
+  }, "state contribution methodology"), "for the data contract, attribution rules and current source gaps.")))), React.createElement("section", {
+    className: "section section--sources",
+    id: "sources",
+    "aria-labelledby": "sources-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Sources & methodology"), React.createElement("h2", {
+    id: "sources-h"
+  }, "Every source used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. When a figure cannot yet be verified, the card reads \"Source unavailable\" \u2014 we do not fill in estimates."))), React.createElement("div", {
-    className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
-    key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
-    className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Days of Net Import Cover"), React.createElement("dd", null, "Total petroleum stocks (on land and in transit) divided by the prior 12-month average of net imports, expressed in days. Follows the IEA methodology used by DCCEEW."), React.createElement("dt", null, "Retail pump prices"), React.createElement("dd", null, "Average across the public state feeds that returned usable observations for each product, weighted by station count. NSW contributes only when the FuelCheck secret is configured; WA does not expose E10 through the active public RSS product-code list."), React.createElement("dt", null, "Terminal gate price"), React.createElement("dd", null, "Monthly mean of AIP daily national average unleaded petrol terminal gate prices from the historical TGP workbook."), React.createElement("dt", null, "Monthly Imports (year-on-year)"), React.createElement("dd", null, "Percent change in petroleum import value vs. the same calendar month one year earlier, derived from ABS International Merchandise Trade.")))), React.createElement(Footer, {
-    updated: latestRetrieved ? updatedDisplay : ''
-  })));
+  }, "Source cards show what is actually loaded. Unavailable rows remain unavailable until a named source publishes the exact field, period and unit needed."))), React.createElement("div", {
+    className: "source-grid"
+  }, React.createElement(SourceCard, {
+    id: "state_resource_contribution_profiles",
+    env: data.state_resource_contribution_profiles,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "resource_state_production_aes",
+    env: data.resource_state_production_aes,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "resource_gas_origin_aecr",
+    env: data.resource_gas_origin_aecr,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "resource_oil_origin_aecr",
+    env: data.resource_oil_origin_aecr,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "resource_wa_petroleum_royalty_receipts",
+    env: data.resource_wa_petroleum_royalty_receipts,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "resource_qld_petroleum_royalty_receipts",
+    env: data.resource_qld_petroleum_royalty_receipts,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "resource_resource_rent_tax_receipts_budget",
+    env: data.resource_resource_rent_tax_receipts_budget
+  }), React.createElement(SourceCard, {
+    id: "resource_prrt_policy",
+    env: data.resource_prrt_policy
+  }), React.createElement(SourceCard, {
+    id: "resource_company_tax_rate",
+    env: data.resource_company_tax_rate
+  })))), React.createElement(Footer, null));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App, null));

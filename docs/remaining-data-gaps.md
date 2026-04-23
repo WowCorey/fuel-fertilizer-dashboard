@@ -68,6 +68,16 @@ JSON envelope.
 | Norway retained-value comparison | partial | Norway's official tax and state-revenue sources are registered, but Australia lacks a matched capture-channel denominator. | Add Australian receipts and export values on the same period basis before publishing a retained/leaked comparison. |
 | Value leakage estimate | intentionally unavailable | The dashboard has no verified denominator or full receipt model. Publishing a leakage number now would be fabricated. | Keep `resource_value_leakage_model` unavailable until the methodology and all source envelopes exist. |
 
+## State Contribution
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| State petroleum royalty coverage beyond WA and Queensland | partial | WA/North West Shelf and Queensland petroleum receipt envelopes are loaded. Other state budget material has not yet been reduced to exact petroleum-only receipt rows with period, unit and source notes. | Add one state at a time only when the petroleum-specific revenue row is verified. Keep combined all-minerals or all-resource rows out unless clearly labelled and separated. |
+| State-level Commonwealth tax attribution | unavailable by design | Loaded PRRT, company tax, excise/GST and Commonwealth resource-rent sources do not publish defensible state-attributable receipt rows. | Keep federal tax attribution unavailable by state. Add only if an official source publishes a state split or a separately documented model is approved as a scenario, not observed data. |
+| Terminal, pipeline and storage capacity by state | unavailable | Fuel-security work confirmed that terminal-location snapshots are not the same as live capacity or inventory. No official state capacity dataset with units and date is loaded. | Keep infrastructure role notes qualitative until a source publishes capacity or inventory fields. |
+| Project/company production by state | unavailable | Current AES and AECR envelopes support state and basin context, not company/project-level flows or tax paid by state. | Add project/company rows only from a public source with exact product, location, period, unit and reuse terms. |
+| Raw resource/fuel site counts | intentionally avoided | A raw site count is misleading unless a source defines whether it counts titles, fields, wells, terminals, plants, storage assets or licences. | Prefer producing basins, named major facilities and verified production metrics over vague counts. |
+
 ## Fuel Stress Index Gate
 
 Do not start the Fuel Stress Index implementation until:

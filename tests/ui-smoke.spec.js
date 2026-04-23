@@ -5,6 +5,7 @@ const routes = [
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What Australia can see from public fuel-security data.' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
+  { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's fuel and resource system." },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
   { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's fertiliser, in plain English." },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
@@ -43,4 +44,12 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByText('Live vessel identities and ETAs')).toBeVisible();
   await expect(page.getByText('Terminal visibility boundary')).toBeVisible();
   await expect(page.getByText('Source investigation result')).toBeVisible();
+});
+
+test('state contribution page keeps tax attribution boundaries explicit', async ({ page }) => {
+  await page.goto('/ui_kits/state-contribution-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: "What each state contributes to Australia's fuel and resource system." })).toBeVisible();
+  await expect(page.getByText('No state-level federal tax allocation is estimated.')).toBeVisible();
+  await expect(page.getByText('State royalties are not the same as Commonwealth PRRT, company tax, excise or GST.')).toBeVisible();
+  await expect(page.getByText('Federal tax attribution').first()).toBeVisible();
 });

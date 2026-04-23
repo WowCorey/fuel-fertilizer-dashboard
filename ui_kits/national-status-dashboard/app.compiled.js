@@ -321,6 +321,10 @@ function Header({
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
   }, {
+    id: 'state_contribution',
+    label: 'State contribution',
+    href: '../state-contribution-dashboard/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
