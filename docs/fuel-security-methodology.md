@@ -87,8 +87,14 @@ PM&C publishes state/territory retail stock-out counts as a dated public
 snapshot. The current table does not publish an Australia-wide petrol total.
 That absence must remain visible.
 
+The WA Government weekly fuel update also publishes a dated statewide stockout
+count and station denominator. The dashboard stores that as
+`wa_fuel_security_stockouts` and labels it `Partial coverage`. It is WA-only,
+manual, and not a live station-level feed.
+
 The dashboard displays seven-day changes when PM&C publishes them, but the
-counts remain dated snapshot coverage. They are not a live station outage feed.
+counts remain dated snapshot coverage. WA stockouts also remain a dated
+snapshot. Neither source is a live station outage feed.
 
 The dashboard does not currently load:
 

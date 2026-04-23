@@ -36,6 +36,8 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'What Australia can see from public fuel-security data.' })).toBeVisible();
   await expect(page.getByText('Status unavailable').first()).toBeVisible();
   await expect(page.getByText('No public national live station outage feed is loaded.')).toBeVisible();
+  await expect(page.getByText('WA weekly stockouts')).toBeVisible();
+  await expect(page.getByText('WA-only dated public update')).toBeVisible();
   await expect(page.getByText('Live vessel identities and ETAs')).toBeVisible();
   await expect(page.getByText('Terminal visibility boundary')).toBeVisible();
   await expect(page.getByText('Source investigation result')).toBeVisible();

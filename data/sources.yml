@@ -948,6 +948,21 @@ sources:
     fetch: manual
     used_by: [national_status, fuel_security]
 
+  - id: wa_fuel_security_stockouts
+    human_name: WA Government weekly fuel update - statewide stockouts
+    publisher: Government of Western Australia
+    url: https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update
+    canonical_url: https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: Government of Western Australia copyright; WA.gov.au terms of use apply
+    rights_url: https://www.wa.gov.au/terms-of-use
+    citation: Government of Western Australia, WA Government Weekly Fuel Update.
+    reuse_notes: Hand-key the statewide stockout count and statewide station denominator from the official weekly update. This is WA-only dated partial coverage; it is not a national live outage feed, station-level availability feed, product-specific split, or terminal-stock measure.
+    fetch: manual
+    used_by: [fuel_security]
+
   - id: fuel_security_petrol_days_remaining
     human_name: Fuel security - petrol days remaining
     publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply

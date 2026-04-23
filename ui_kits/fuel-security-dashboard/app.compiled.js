@@ -869,7 +869,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'fuel_security_petrol_days_remaining', 'fuel_security_diesel_days_remaining', 'fuel_security_jet_days_remaining', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts', 'aps_monthly', 'aps_stocks_petrol', 'aps_stocks_diesel', 'aps_sales_petrol', 'aps_sales_diesel', 'aps_sales_jet', 'aps_imports_petrol', 'aps_imports_diesel', 'abs_petroleum_imports', 'aus_retail_fuel_multistate', 'fuel_security_status_model', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking', 'fuel_security_terminal_capacity'];
+const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'fuel_security_petrol_days_remaining', 'fuel_security_diesel_days_remaining', 'fuel_security_jet_days_remaining', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts', 'wa_fuel_security_stockouts', 'aps_monthly', 'aps_stocks_petrol', 'aps_stocks_diesel', 'aps_sales_petrol', 'aps_sales_diesel', 'aps_sales_jet', 'aps_imports_petrol', 'aps_imports_diesel', 'abs_petroleum_imports', 'aus_retail_fuel_multistate', 'fuel_security_status_model', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking', 'fuel_security_terminal_capacity'];
 const PRODUCTS = [{
   name: 'Petrol',
   daysId: 'fuel_security_petrol_days_remaining',
@@ -1001,7 +1001,7 @@ function SourceInvestigationSummary() {
   }, {
     title: 'Station outage visibility',
     label: 'Partial coverage',
-    body: 'The loaded public source is the PM&C dated stock-out table by state and territory. No national live dry-station API or reusable station-level availability feed is loaded.'
+    body: 'The loaded public sources are the PM&C dated stock-out table by state and territory plus a WA-only weekly stockout snapshot. No national live dry-station API or reusable station-level availability feed is loaded.'
   }, {
     title: 'Inbound vessels',
     label: 'Partial coverage',
@@ -1231,6 +1231,13 @@ function App() {
     env: data.pmc_retail_stockouts,
     partial: true
   }, "Australia-wide diesel stock-out count from the PM&C table."), React.createElement(SecurityCard, {
+    eyebrow: "Partial coverage",
+    title: "WA weekly stockouts",
+    value: fmtNumber(latest(data.wa_fuel_security_stockouts)),
+    unit: "sites",
+    env: data.wa_fuel_security_stockouts,
+    partial: true
+  }, "WA-only dated public update. The source reports 10 stockouts out of 771 stations statewide, not station-level live availability."), React.createElement(SecurityCard, {
     eyebrow: "Unavailable",
     title: "Live national outage feed",
     env: data.fuel_security_live_station_outage_feed,
@@ -1308,12 +1315,12 @@ function App() {
     key: id,
     id: id,
     env: env,
-    partial: ['pmc_tankers_on_water', 'pmc_retail_stockouts', 'pmc_forward_import_orders'].includes(id)
+    partial: ['pmc_tankers_on_water', 'pmc_retail_stockouts', 'wa_fuel_security_stockouts', 'pmc_forward_import_orders'].includes(id)
   }))), React.createElement("div", {
     className: "methodology"
   }, React.createElement("h3", null, "Source investigation result"), React.createElement(SourceInvestigationSummary, null)), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "What this dashboard does not currently know"), React.createElement("dl", null, React.createElement("dt", null, "Live station outages"), React.createElement("dd", null, "No public national live dry-site feed is loaded. PM&C stock-outs are a dated public snapshot."), React.createElement("dt", null, "Shipment-level visibility"), React.createElement("dd", null, "No source-safe live vessel or ETA feed is loaded. PM&C tanker numbers are aggregate counts."), React.createElement("dt", null, "Terminal capacity"), React.createElement("dd", null, "No terminal-by-terminal public capacity dataset is loaded. The page uses national/product stock context only."), React.createElement("dt", null, "Status score"), React.createElement("dd", null, "No Stable/Tight/Disrupted/Critical label is published until the status method has enough observed coverage.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "What this dashboard does not currently know"), React.createElement("dl", null, React.createElement("dt", null, "Live station outages"), React.createElement("dd", null, "No public national live dry-site feed is loaded. PM&C stock-outs and the WA weekly update are dated public snapshots."), React.createElement("dt", null, "Shipment-level visibility"), React.createElement("dd", null, "No source-safe live vessel or ETA feed is loaded. PM&C tanker numbers are aggregate counts."), React.createElement("dt", null, "Terminal capacity"), React.createElement("dd", null, "No terminal-by-terminal public capacity dataset is loaded. The page uses national/product stock context only."), React.createElement("dt", null, "Status score"), React.createElement("dd", null, "No Stable/Tight/Disrupted/Critical label is published until the status method has enough observed coverage.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

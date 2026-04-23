@@ -1431,6 +1431,22 @@
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
+    },
+    "wa_fuel_security_stockouts": {
+      "id": "wa_fuel_security_stockouts",
+      "human_name": "WA Government weekly fuel update - statewide stockouts",
+      "publisher": "Government of Western Australia",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update",
+      "rights": "Government of Western Australia copyright; WA.gov.au terms of use apply",
+      "citation": "Government of Western Australia, WA Government Weekly Fuel Update.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     }
   }
 }
