@@ -9,6 +9,7 @@ const SERIES = [
   'pmc_tankers_on_water',
   'pmc_retail_stockouts',
   'wa_fuel_security_stockouts',
+  'qld_fuel_security_unavailable_reports',
   'aps_monthly',
   'aps_stocks_petrol',
   'aps_stocks_diesel',
@@ -151,7 +152,7 @@ function SourceInvestigationSummary() {
     {
       title: 'Station outage visibility',
       label: 'Partial coverage',
-      body: 'The loaded public sources are the PM&C dated stock-out table by state and territory plus a WA-only weekly stockout snapshot. No national live dry-station API or reusable station-level availability feed is loaded.',
+      body: 'The loaded public sources are the PM&C dated stock-out table by state and territory, a WA-only weekly stockout snapshot, and QLD monthly Open Data rows where Price = 9999 means temporarily unavailable fuel stock. No national live dry-station API or reusable station-level availability feed is loaded.',
     },
     {
       title: 'Inbound vessels',
@@ -400,8 +401,9 @@ function App() {
               <span className="eyebrow">5. Outage and disruption visibility</span>
               <h2 id="outages">Retail stock-outs are a dated partial snapshot</h2>
               <p className="section__lede">
-                PM&C publishes state/territory retail stock-out counts. This is not a live national
-                dry-station feed and it does not publish an Australia-wide petrol total in the current table.
+                PM&C publishes state/territory retail stock-out counts. WA publishes a weekly statewide
+                stockout snapshot. QLD Open Data exposes monthly unavailable-fuel reports. None of
+                these are a live national dry-station feed.
               </p>
             </div>
           </div>
@@ -411,6 +413,9 @@ function App() {
             </SecurityCard>
             <SecurityCard eyebrow="Partial coverage" title="WA weekly stockouts" value={fmtNumber(latest(data.wa_fuel_security_stockouts))} unit="sites" env={data.wa_fuel_security_stockouts} partial>
               WA-only dated public update. The source reports 10 stockouts out of 771 stations statewide, not station-level live availability.
+            </SecurityCard>
+            <SecurityCard eyebrow="Partial coverage" title="QLD unavailable fuel reports" value={fmtNumber(latest(data.qld_fuel_security_unavailable_reports))} unit="reports" env={data.qld_fuel_security_unavailable_reports} partial>
+              Monthly Queensland Open Data rows where Price = 9999. The source says this means temporarily unavailable fuel stock; it is not a live station outage count.
             </SecurityCard>
             <SecurityCard eyebrow="Unavailable" title="Live national outage feed" env={data.fuel_security_live_station_outage_feed} unavailable>
               {data.fuel_security_live_station_outage_feed.notes}
@@ -500,7 +505,7 @@ function App() {
                 key={id}
                 id={id}
                 env={env}
-                partial={['pmc_tankers_on_water', 'pmc_retail_stockouts', 'wa_fuel_security_stockouts', 'pmc_forward_import_orders'].includes(id)}
+                partial={['pmc_tankers_on_water', 'pmc_retail_stockouts', 'wa_fuel_security_stockouts', 'qld_fuel_security_unavailable_reports', 'pmc_forward_import_orders'].includes(id)}
               />
             ))}
           </div>
@@ -512,7 +517,7 @@ function App() {
             <h3>What this dashboard does not currently know</h3>
             <dl>
               <dt>Live station outages</dt>
-              <dd>No public national live dry-site feed is loaded. PM&C stock-outs and the WA weekly update are dated public snapshots.</dd>
+              <dd>No public national live dry-site feed is loaded. PM&C stock-outs, the WA weekly update and QLD monthly unavailable-fuel reports are partial public coverage, not live national availability.</dd>
               <dt>Shipment-level visibility</dt>
               <dd>No source-safe live vessel or ETA feed is loaded. PM&C tanker numbers are aggregate counts.</dd>
               <dt>Terminal capacity</dt>

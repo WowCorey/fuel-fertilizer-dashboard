@@ -1128,6 +1128,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "qld_fuel_security_unavailable_reports": {
+      "id": "qld_fuel_security_unavailable_reports",
+      "human_name": "Queensland Fuel Price Reporting - unavailable fuel reports",
+      "publisher": "Queensland Government Open Data",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+      "rights": "Creative Commons Attribution 4.0",
+      "citation": "Queensland Government Open Data, Fuel Price Reporting 2026.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
     "rba_aud_usd": {
       "id": "rba_aud_usd",
       "human_name": "Reserve Bank of Australia — AUD/USD exchange rate",

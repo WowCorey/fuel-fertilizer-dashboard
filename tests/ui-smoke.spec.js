@@ -38,6 +38,8 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByText('No public national live station outage feed is loaded.')).toBeVisible();
   await expect(page.getByText('WA weekly stockouts')).toBeVisible();
   await expect(page.getByText('WA-only dated public update')).toBeVisible();
+  await expect(page.getByText('QLD unavailable fuel reports')).toBeVisible();
+  await expect(page.getByText('Monthly Queensland Open Data rows where Price = 9999')).toBeVisible();
   await expect(page.getByText('Live vessel identities and ETAs')).toBeVisible();
   await expect(page.getByText('Terminal visibility boundary')).toBeVisible();
   await expect(page.getByText('Source investigation result')).toBeVisible();

@@ -906,7 +906,44 @@ def fetch_wa_fuelwatch(url: str, label: str = "ULP 91") -> dict[str, Any] | None
     return retail_result("WA", prices, source_date, f"FuelWatch {label} RSS feed")
 
 
-def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | None:
+QLD_MONTH_NAMES = {
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12,
+}
+
+
+def qld_resource_period(resource: dict[str, Any]) -> tuple[int, int] | None:
+    text = f"{resource.get('name', '')} {resource.get('url', '')}".lower()
+    year = None
+    month = None
+    if found := re.search(r"20\d{2}[-_](\d{2})", text):
+        year_match = re.search(r"(20\d{2})[-_]\d{2}", text)
+        if year_match:
+            year = int(year_match.group(1))
+            month = int(found.group(1))
+    if year is None:
+        if year_match := re.search(r"20\d{2}", text):
+            year = int(year_match.group(0))
+        for name, value in QLD_MONTH_NAMES.items():
+            if name in text:
+                month = value
+                break
+    if year and month:
+        return year, month
+    return None
+
+
+def qld_datastore_resources(package_id: str, ckan_base: str) -> list[dict[str, Any]] | None:
     url = f"{ckan_base.rstrip('/')}/api/3/action/package_show?id={urllib.parse.quote(package_id)}"
     try:
         r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
@@ -918,31 +955,23 @@ def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | Non
         warn_skip("QLD Fuel Prices", f"package lookup {type(exc).__name__}: {exc}")
         return None
 
-    month_names = {
-        "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
-        "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
-    }
+    return [
+        resource
+        for resource in package.get("resources", [])
+        if str(resource.get("format", "")).upper() == "CSV" and resource.get("datastore_active")
+    ]
+
+
+def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | None:
+    resources = qld_datastore_resources(package_id, ckan_base)
+    if resources is None:
+        return None
+
     candidates: list[tuple[tuple[int, int], dict[str, Any]]] = []
-    for resource in package.get("resources", []):
-        if str(resource.get("format", "")).upper() != "CSV" or not resource.get("datastore_active"):
-            continue
-        text = f"{resource.get('name', '')} {resource.get('url', '')}".lower()
-        year = None
-        month = None
-        if found := re.search(r"20\d{2}[-_](\d{2})", text):
-            year_match = re.search(r"(20\d{2})[-_]\d{2}", text)
-            if year_match:
-                year = int(year_match.group(1))
-                month = int(found.group(1))
-        if year is None:
-            if year_match := re.search(r"20\d{2}", text):
-                year = int(year_match.group(0))
-            for name, value in month_names.items():
-                if name in text:
-                    month = value
-                    break
-        if year and month:
-            candidates.append(((year, month), resource))
+    for resource in resources:
+        period = qld_resource_period(resource)
+        if period:
+            candidates.append((period, resource))
 
     if not candidates:
         warn_skip("QLD Fuel Prices", "no datastore-backed monthly CSV resource found")
@@ -1001,6 +1030,131 @@ def fetch_qld_open_data(
     latest_date = max(date_text[:10] for date_text, _ in latest_by_site.values())
     detail = f"Queensland Open Data {label} latest public monthly file: {resource.get('name', rid)}"
     return retail_result("QLD", [price for _, price in latest_by_site.values()], latest_date, detail)
+
+
+def qld_datastore_sql(ckan_base: str, sql: str) -> list[dict[str, Any]]:
+    url = f"{ckan_base.rstrip('/')}/api/3/action/datastore_search_sql?{urllib.parse.urlencode({'sql': sql})}"
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=60)
+    r.raise_for_status()
+    doc = r.json()
+    if not doc.get("success", True):
+        raise RuntimeError(f"Queensland datastore query failed: {doc}")
+    records = doc.get("result", {}).get("records", [])
+    if not isinstance(records, list):
+        raise RuntimeError("Queensland datastore query returned malformed records")
+    return records
+
+
+def fetch_qld_unavailable_reports(source: dict[str, Any]) -> dict[str, Any]:
+    """Count QLD monthly fuel-price rows where Price = 9999.
+
+    The Queensland Open Data column explanation defines 9999 as fuel stock
+    temporarily unavailable. This is a partial monthly reporting signal, not a
+    live station outage feed.
+    """
+    ckan_base = source.get("qld_ckan_base", "https://www.data.qld.gov.au")
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date()
+    package_id = source.get("qld_package_id", f"fuel-price-reporting-{today.year}")
+    resources = qld_datastore_resources(package_id, ckan_base)
+    if not resources:
+        raise RuntimeError(f"{source['id']}: no datastore-backed QLD monthly resources found")
+
+    monthly: list[tuple[tuple[int, int], dict[str, Any], dict[str, Any]]] = []
+    for resource in resources:
+        period = qld_resource_period(resource)
+        rid = resource.get("id")
+        if not period or not rid:
+            continue
+        sql = (
+            'SELECT COUNT(*) AS reports, COUNT(DISTINCT "SiteId") AS sites, '
+            'MAX("TransactionDateutc") AS latest, MIN("TransactionDateutc") AS earliest '
+            f'FROM "{rid}" WHERE "Price" = 9999'
+        )
+        records = qld_datastore_sql(ckan_base, sql)
+        record = records[0] if records else {}
+        monthly.append((period, resource, record))
+
+    if not monthly:
+        raise RuntimeError(f"{source['id']}: no dated QLD monthly resources could be queried")
+
+    monthly = sorted(monthly, key=lambda item: item[0])[-60:]
+    values = []
+    for (year, month), _, record in monthly:
+        try:
+            reports = int(record.get("reports") or 0)
+        except (TypeError, ValueError):
+            raise RuntimeError(f"{source['id']}: malformed report count in QLD datastore response")
+        values.append({"t": f"{year:04d}-{month:02d}", "v": reports})
+
+    latest_period, latest_resource, latest_record = monthly[-1]
+    latest_rid = latest_resource.get("id")
+    latest_date = str(latest_record.get("latest") or "")[:10]
+    if not latest_date:
+        latest_date = month_end_iso(dt.date(latest_period[0], latest_period[1], 1))
+
+    breakdown_records = []
+    if latest_rid:
+        sql = (
+            'SELECT "Fuel_Type", COUNT(*) AS reports, COUNT(DISTINCT "SiteId") AS sites '
+            f'FROM "{latest_rid}" WHERE "Price" = 9999 '
+            'GROUP BY "Fuel_Type" ORDER BY reports DESC'
+        )
+        breakdown_records = qld_datastore_sql(ckan_base, sql)
+
+    breakdown = []
+    for record in breakdown_records:
+        try:
+            reports = int(record.get("reports") or 0)
+            sites = int(record.get("sites") or 0)
+        except (TypeError, ValueError):
+            continue
+        breakdown.append(
+            {
+                "fuel_type": str(record.get("Fuel_Type") or "Unknown"),
+                "reports": reports,
+                "sites": sites,
+            }
+        )
+
+    try:
+        latest_sites = int(latest_record.get("sites") or 0)
+        latest_reports = int(latest_record.get("reports") or 0)
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(f"{source['id']}: malformed latest QLD stockout counts") from exc
+
+    return {
+        "unit": "unavailable fuel-type reports",
+        "values": values,
+        "last_data_point": latest_date,
+        "notes": (
+            "Counts rows in the latest monthly Queensland Open Data Fuel Price Reporting "
+            "resource where Price = 9999. The official column explanation says 9999 "
+            "denotes fuel stock temporarily unavailable, such as a tank empty and "
+            "awaiting new stock. This is monthly change-report coverage, not a live "
+            "statewide station outage count."
+        ),
+        "source_url_resolved": latest_resource.get("url") or source.get("url"),
+        "extra": {
+            "schema": "qld_fuel_security_unavailable_reports.v1",
+            "fields": {
+                "coverage": "Queensland monthly Open Data fuel-price reporting resources",
+                "metric": "Rows where Price = 9999",
+                "latest_resource_name": latest_resource.get("name"),
+                "latest_resource_id": latest_rid,
+                "latest_resource_url": latest_resource.get("url"),
+                "earliest_unavailable_report_date": str(latest_record.get("earliest") or "")[:10] or None,
+                "latest_unavailable_report_date": latest_date,
+                "unavailable_fuel_type_reports": latest_reports,
+                "distinct_sites_with_unavailable_fuel": latest_sites,
+                "fuel_type_breakdown": breakdown,
+                "not_covered": [
+                    "live station-level outage status",
+                    "national coverage",
+                    "stations with no fuel of any product unless all products are reported unavailable",
+                ],
+            },
+        },
+    }
 
 
 def fetch_nsw_fuelcheck(url: str, fuel_types: set[str] | None = None, label: str = "ULP 91") -> dict[str, Any] | None:
@@ -1147,6 +1301,7 @@ FETCHERS: dict[str, Fetcher] = {
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
     "aip_tgp": fetch_aip_tgp,
+    "qld_fuel_security_unavailable_reports": fetch_qld_unavailable_reports,
 }
 
 

@@ -45,8 +45,12 @@ Why it matters:
 
 Current blocker:
 
-- Most jurisdictions expose either price apps, narrative pages, key-gated APIs,
-  or app-only availability rather than a reusable public outage feed.
+- WA now has a dated manual partial layer, and QLD now has a monthly
+  programmatic unavailable-fuel report layer from Open Data rows where
+  `Price = 9999`.
+- Other jurisdictions still expose either price apps, narrative pages,
+  key-gated APIs, or app-only availability rather than a reusable public
+  outage feed.
 
 Source requirements:
 

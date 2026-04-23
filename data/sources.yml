@@ -963,6 +963,25 @@ sources:
     fetch: manual
     used_by: [fuel_security]
 
+  - id: qld_fuel_security_unavailable_reports
+    human_name: Queensland Fuel Price Reporting - unavailable fuel reports
+    publisher: Queensland Government Open Data
+    url: https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026
+    canonical_url: https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026
+    fetch_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
+    qld_ckan_base: https://www.data.qld.gov.au
+    qld_package_id: fuel-price-reporting-2026
+    qld_column_explanation_url: https://www.data.qld.gov.au/dataset/0dfad294-f852-45a5-b86f-986773745fe2/resource/2fc7161e-cf1f-4228-a1c7-141f0df99b4c/download/dataset-column-explanation-for-fuel-price-reporting.txt
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-23
+    rights: Creative Commons Attribution 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Queensland Government Open Data, Fuel Price Reporting 2026.
+    reuse_notes: Programmatic partial outage/availability signal. In the official column explanation, Price = 9999 denotes fuel stock temporarily unavailable, such as a tank empty and awaiting new stock. Use as monthly unavailable fuel-type report coverage only; do not describe as live station outage coverage, a complete current statewide stockout count, or national coverage.
+    fetch: programmatic
+    used_by: [fuel_security]
+
   - id: fuel_security_petrol_days_remaining
     human_name: Fuel security - petrol days remaining
     publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply
