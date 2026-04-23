@@ -1432,6 +1432,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "state_resource_contribution_profiles": {
+      "id": "state_resource_contribution_profiles",
+      "human_name": "State fuel and resource contribution profiles",
+      "publisher": "Fuel Resilience AU, compiled from official public sources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "state_contribution"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md",
+      "rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers",
+      "citation": "Fuel Resilience AU state contribution methodology; DCCEEW Australian Energy Statistics 2025; Geoscience Australia AECR 2025; WA and Queensland budget/royalty sources.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "tapis_crude": {
       "id": "tapis_crude",
       "human_name": "Tapis crude benchmark",
