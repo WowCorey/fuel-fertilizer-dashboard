@@ -38,7 +38,7 @@ interpolate or estimate missing numbers.
 | Page | Version | What it covers | Current data state |
 |---|---|---|---|
 | [National status](ui_kits/national-status-dashboard/index.html) | v1.4 | National Fuel Security Plan level, MSO reserves, ships on water and retail stock-outs | PM&C/DCCEEW public fuel-supply snapshot hand-keyed; direct scripted access is blocked/deferred until a stable machine-readable endpoint exists |
-| [Fuel security](ui_kits/fuel-security-dashboard/index.html) | v1.6 | Product days remaining, PM&C/DCCEEW fuel-supply snapshot, APS stocks/sales/imports, import/shipping risk context and unavailable operational feeds | Product days are derived from the named PM&C/DCCEEW snapshot; APS/ABS and public retail feeds are loaded where available; live station outage, vessel tracking, terminal capacity and status-score feeds remain unavailable |
+| [Fuel security](ui_kits/fuel-security-dashboard/index.html) | v1.6 | Product days remaining, PM&C/DCCEEW fuel-supply snapshot, APS stocks/sales/imports, import/shipping risk context, WA weekly stockout context and unavailable operational feeds | Product days are derived from the named PM&C/DCCEEW snapshot; APS/ABS, public retail feeds and a WA-only weekly stockout snapshot are loaded where available; live national station outage, vessel tracking, terminal capacity and status-score feeds remain unavailable |
 | [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources, including WA/NWS and Queensland petroleum royalty receipt context; value-leakage estimate remains unavailable until a documented denominator and method exist |
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by fertiliser category, price index, supplier concentration | ABS SITC 562 total imports and source-country top-3 concentration fetched; nutrient subseries, ABARES price and stock cover remain manual/unavailable |
@@ -53,7 +53,8 @@ unavailable until a named public source supports the exact value.
 Fuel-security source investigations are recorded in
 [`docs/fuel-security-source-investigation.md`](docs/fuel-security-source-investigation.md),
 including the current PM&C/DCCEEW access result, station-outage limits,
-shipping limits and terminal-capacity decision.
+shipping limits and terminal-capacity decision. Issue-ready source gates are in
+[`docs/fuel-security-backlog.md`](docs/fuel-security-backlog.md).
 
 ## Run locally
 
