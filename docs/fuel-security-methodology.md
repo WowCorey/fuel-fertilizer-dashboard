@@ -7,6 +7,9 @@ It is intentionally conservative: values are shown only when they are observed
 from a named public source or derived mechanically from an existing verified
 envelope.
 
+The source investigation log for operational gaps lives in
+`docs/fuel-security-source-investigation.md`.
+
 ## Source Priority
 
 Priority 1 sources are official Australian public sources already aligned with
@@ -84,6 +87,9 @@ PM&C publishes state/territory retail stock-out counts as a dated public
 snapshot. The current table does not publish an Australia-wide petrol total.
 That absence must remain visible.
 
+The dashboard displays seven-day changes when PM&C publishes them, but the
+counts remain dated snapshot coverage. They are not a live station outage feed.
+
 The dashboard does not currently load:
 
 - a live national dry-station feed,
@@ -148,6 +154,11 @@ The page uses:
 The dashboard does not publish terminal-by-terminal capacity, terminal outage
 status or private inventory telemetry. The placeholder envelope
 `fuel_security_terminal_capacity` records this gap.
+
+Geoscience Australia's National Liquid Fuel Terminals 2015 dataset was checked
+as a possible storage source. It describes terminal locations, not terminal
+capacity, product stock, outage status or live inventory, so it is not loaded as
+a capacity source.
 
 ## Trust Labels
 

@@ -34,6 +34,9 @@ source cannot safely be fetched programmatically.
   `pmc_fuel_security_level`, `pmc_mso_days_cover`,
   `pmc_mso_fuel_reserves`, `pmc_forward_import_orders`,
   `pmc_tankers_on_water` and `pmc_retail_stockouts`.
+- Check `docs/fuel-security-source-investigation.md` before changing the
+  source mode. The current decision is manual because local pipeline requests
+  return an Incapsula challenge and no stable CSV/JSON/XLSX endpoint is loaded.
 - Preserve the source table date for each envelope. The PM&C page can publish
   different dates for stock coverage and stock-out tables.
 - Do not add vessel names, AIS data or inferred tanker movements. The dashboard

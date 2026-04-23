@@ -12,13 +12,15 @@ function DataCoverage({
     className: "coverage-strip__inner"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Verified means copied or fetched from a named source; derived means calculated from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
+  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Manual means copied from a named public source; derived means calculated or selected from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
     className: "coverage-badges"
   }, React.createElement("span", {
     className: "status-pill status-pill--verified"
   }, "Verified ", c.verified), React.createElement("span", {
     className: "status-pill status-pill--derived"
   }, "Derived ", c.derived), React.createElement("span", {
+    className: "status-pill status-pill--manual"
+  }, "Manual ", c.manual), React.createElement("span", {
     className: "status-pill status-pill--stale"
   }, "Stale ", c.stale), React.createElement("span", {
     className: "status-pill status-pill--awaiting"
@@ -121,6 +123,13 @@ function ShippingVisibility({
       minimumFractionDigits: digits
     });
   }
+  function fmtAudThousands(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 1
+    })}bn`;
+  }
   const tankerFields = fields(tankersEnv);
   const groups = [{
     key: 'crude',
@@ -159,7 +168,9 @@ function ShippingVisibility({
     className: "shipping-stat"
   }, React.createElement("span", null, fmt(latest(forwardOrdersEnv), 1)), React.createElement("small", null, "billion L ordered")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "AUD thousands imports")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "ABS imports, AUD thousands")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmtAudThousands(latest(importsEnv))), React.createElement("small", null, "same value rounded to A$bn")), React.createElement("div", {
     className: "shipping-stat shipping-stat--unavailable"
   }, React.createElement("span", null, "0"), React.createElement("small", null, "live vessel feeds")))), React.createElement("div", {
     className: "shipping-tabs",
@@ -422,7 +433,8 @@ function MetricCard({
   jargonHint,
   fromEnvelope,
   valueFn,
-  unitFn
+  unitFn,
+  partial = false
 }) {
   if (fromEnvelope !== undefined) {
     const env = fromEnvelope;
@@ -435,7 +447,10 @@ function MetricCard({
         className: "card-status-row"
       }, eyebrow && React.createElement("span", {
         className: "eyebrow"
-      }, eyebrow), window.StatusPill && React.createElement(StatusPill, {
+      }, eyebrow), window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+        env: env,
+        partial: partial
+      }) : window.StatusPill && React.createElement(StatusPill, {
         env: env
       })), React.createElement("h3", {
         className: "metric-card__label"
@@ -468,9 +483,12 @@ function MetricCard({
     className: "card-status-row"
   }, eyebrow && React.createElement("span", {
     className: "eyebrow"
-  }, eyebrow), fromEnvelope !== undefined && window.StatusPill && React.createElement(StatusPill, {
+  }, eyebrow), fromEnvelope !== undefined && (window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+    env: fromEnvelope,
+    partial: partial
+  }) : window.StatusPill && React.createElement(StatusPill, {
     env: fromEnvelope
-  })), React.createElement("h3", {
+  }))), React.createElement("h3", {
     className: "metric-card__label"
   }, jargonHint ? React.createElement(React.Fragment, null, label.replace(jargonHint.term, ''), React.createElement("span", {
     className: "jargon",

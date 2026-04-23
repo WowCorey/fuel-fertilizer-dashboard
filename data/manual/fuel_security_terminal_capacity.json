@@ -12,5 +12,30 @@
   "status": "unavailable",
   "manual_entry": true,
   "source_rights": "Not applicable; unavailable placeholder",
-  "citation": "Fuel Resilience AU source review; PM&C reserve volumes and APS stock series remain the loaded public storage context."
+  "citation": "Fuel Resilience AU source review; PM&C reserve volumes and APS stock series remain the loaded public storage context.",
+  "extra": {
+    "schema": "fuel_security_source_investigation.v1",
+    "fields": {
+      "decision": "unavailable",
+      "reviewed_at": "2026-04-23",
+      "loaded_context_sources": [
+        "pmc_mso_fuel_reserves",
+        "aps_stocks_petrol",
+        "aps_stocks_diesel"
+      ],
+      "investigated_sources": [
+        {
+          "name": "Geoscience Australia - National Liquid Fuel Terminals 2015",
+          "url": "https://data.gov.au/data/dataset/au-govt-ga-national-liquid-fuel-terminals-2015-na",
+          "result": "Location snapshot only; does not provide terminal-by-terminal capacity, product stock, outage status or live inventory."
+        }
+      ],
+      "missing_coverage": [
+        "terminal-by-terminal storage capacity",
+        "terminal outage or constraint status",
+        "live private inventory telemetry",
+        "state/product terminal capacity with date and units"
+      ]
+    }
+  }
 }

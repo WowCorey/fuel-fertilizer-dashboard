@@ -869,7 +869,7 @@ sources:
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; data compiled by DCCEEW.
-    reuse_notes: Hand-key from the public PM&C fuel supply page. Local pipeline requests to this page return an Incapsula challenge, so this source remains manual until a stable machine-readable endpoint is found.
+    reuse_notes: Hand-key from the public PM&C fuel supply page. Rechecked 2026-04-23; local pipeline requests return an Incapsula challenge page and the public page exposes no stable CSV, JSON or XLSX data file. Keep manual until PM&C/DCCEEW publishes a stable machine-readable endpoint.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -884,7 +884,7 @@ sources:
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
-    reuse_notes: Hand-key from the PM&C table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover.
+    reuse_notes: Hand-key from the PM&C table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -899,7 +899,7 @@ sources:
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO reserves table.
-    reuse_notes: Hand-key from the PM&C table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page.
+    reuse_notes: Hand-key from the PM&C table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -914,7 +914,7 @@ sources:
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; current and anticipated national supplies text.
-    reuse_notes: Hand-key only when PM&C publishes the reported four-week forward import-order volume. Do not infer from tanker counts or other sources.
+    reuse_notes: Hand-key only when PM&C publishes the reported four-week forward import-order volume. Do not infer from tanker counts or other sources. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -929,7 +929,7 @@ sources:
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW estimate using Kpler commodity terminal.
-    reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and should not be presented as individual tanker movement data.
+    reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and should not be presented as individual tanker movement data. Rechecked 2026-04-23; no public vessel identities, ETAs or stable CSV/JSON/XLSX endpoint were exposed.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -944,7 +944,7 @@ sources:
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; retail stock-outs table provided by state and territory governments.
-    reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one.
+    reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one. Rechecked 2026-04-23; no live station-level outage API or stable CSV/JSON/XLSX endpoint was exposed.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -1016,7 +1016,7 @@ sources:
     rights: Project metadata/prose CC BY 4.0
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Fuel Resilience AU, Fuel security methodology.
-    reuse_notes: Fail-closed status model placeholder. Do not publish Stable/Tight/Disrupted/Critical until the methodology has enough observed coverage across days, stock, import, outage and disruption signals.
+    reuse_notes: Fail-closed status model placeholder. Do not publish Stable/Tight/Disrupted/Critical until the methodology has enough observed coverage across days, stock, import, outage and disruption signals, and all blockers listed in data/manual/fuel_security_status_model.json are resolved.
     fetch: unavailable
     used_by: [fuel_security]
 
@@ -1031,7 +1031,7 @@ sources:
     rights: Not applicable; unavailable placeholder
     rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
     citation: Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.
-    reuse_notes: Do not imply live national station outage visibility. Use PM&C retail stock-outs for the dated partial public snapshot until a stable, licence-safe public feed exists.
+    reuse_notes: Do not imply live national station outage visibility. Use PM&C retail stock-outs for the dated partial public snapshot until a stable, licence-safe public feed exists. Rechecked 2026-04-23; no national live dry-station feed was verified.
     fetch: unavailable
     used_by: [fuel_security]
 
@@ -1046,7 +1046,7 @@ sources:
     rights: Not applicable; unavailable placeholder
     rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
     citation: Fuel Resilience AU source review; PM&C aggregate ships-on-water counts remain the loaded partial public source.
-    reuse_notes: Do not scrape or infer live vessel movements. PM&C publishes aggregate tanker counts estimated by DCCEEW using Kpler; this repo does not publish individual vessel identities or ETAs.
+    reuse_notes: Do not scrape or infer live vessel movements. PM&C publishes aggregate tanker counts estimated by DCCEEW using Kpler; this repo does not publish individual vessel identities or ETAs. Rechecked 2026-04-23; no redistribution-safe live vessel feed was verified.
     fetch: unavailable
     used_by: [fuel_security]
 
@@ -1061,7 +1061,7 @@ sources:
     rights: Not applicable; unavailable placeholder
     rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
     citation: Fuel Resilience AU source review; PM&C MSO reserve volumes and APS stock series remain the loaded public storage context.
-    reuse_notes: Do not fabricate terminal-by-terminal capacity. Publish only national/product stock context until a public, reusable terminal-capacity dataset is verified.
+    reuse_notes: Do not fabricate terminal-by-terminal capacity. Publish only national/product stock context until a public, reusable terminal-capacity dataset is verified. Rechecked 2026-04-23; Geoscience Australia's National Liquid Fuel Terminals 2015 dataset is a location snapshot, not capacity or live inventory.
     fetch: unavailable
     used_by: [fuel_security]
 

@@ -113,6 +113,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
 }
 .status-pill--verified { color: var(--surplus); background: var(--surplus-tint); border-color: transparent; }
 .status-pill--derived { color: var(--accent); background: var(--accent-tint); border-color: transparent; }
+.status-pill--manual { color: var(--ink-2); background: var(--paper); }
 .status-pill--stale { color: var(--caution); background: var(--caution-tint); border-color: transparent; }
 .status-pill--awaiting { color: var(--ink-3); background: var(--paper-sunk); }
 
@@ -154,6 +155,8 @@ a.skip-link:focus, a.skip-link:focus-visible {
 }
 .coverage-strip p { color: var(--ink-2); margin-top: 2px; }
 .coverage-badges { display: flex; flex-wrap: wrap; gap: var(--s-2); justify-content: flex-end; }
+.gap-list { margin: var(--s-3) 0 0; padding-left: 1.1rem; color: var(--ink-2); }
+.gap-list li + li { margin-top: 4px; }
 
 /* Intro */
 .intro {
@@ -262,7 +265,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
 .shipping-visibility__summary p { color: var(--ink-2); max-width: 62ch; margin-top: var(--s-2); }
 .shipping-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
   gap: var(--s-3);
 }
 .shipping-stat {
