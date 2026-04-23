@@ -12,16 +12,16 @@
       "v": 8
     }
   ],
-  "notes": "Manual state/territory profile scaffold compiled only from loaded official-source envelopes and methodology notes. It is qualitative context plus links to verified production, royalty, petroleum object-count and source-gate envelopes; it does not allocate Commonwealth tax by state.",
+  "notes": "Manual state/territory profile scaffold compiled only from loaded official-source envelopes and methodology notes. It is qualitative context plus links to verified production, royalty, petroleum object-count, production-mapping and source-gate envelopes; it does not allocate Commonwealth tax by state.",
   "status": "ok",
   "manual_entry": true,
-  "source_rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with DCCEEW, Geoscience Australia, NOPTA, WA Government, Queensland Government and Commonwealth Budget sources.",
-  "citation": "Fuel Resilience AU state petroleum ledger methodology; DCCEEW Australian Energy Statistics 2025; Geoscience Australia AECR 2025; NOPTA spatial data; WA and Queensland budget/royalty sources.",
+  "source_rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with DCCEEW, Department of Industry, Geoscience Australia, NOPTA, WA Government, Queensland Government and Commonwealth Budget sources.",
+  "citation": "Fuel Resilience AU state petroleum ledger methodology; DCCEEW Australian Energy Statistics 2025; Department of Industry Resources and Energy Major Projects 2024; Geoscience Australia AECR 2025; NOPTA spatial data; WA and Queensland budget/royalty sources.",
   "extra": {
     "schema": "state_resource_contribution_profiles.v1",
     "fields": {
       "profile_date": "2026-04-23",
-      "method": "State roles are descriptive and anchored to loaded official production, royalty, petroleum object-count, source-gate and policy envelopes. Federal tax allocation remains unavailable unless a source publishes state-attributable Commonwealth receipts.",
+      "method": "State roles are descriptive and anchored to loaded official production, royalty, petroleum object-count, production-mapping, source-gate and policy envelopes. Federal tax allocation remains unavailable unless a source publishes state-attributable Commonwealth receipts.",
       "states": [
         {
           "state_code": "WA",
@@ -45,7 +45,7 @@
           "federal_tax_note": "Loaded Commonwealth resource-rent and PRRT policy envelopes are national/project concepts, not WA-attributed receipt rows.",
           "project_count_status": "Unavailable - no current official project-count export is loaded.",
           "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; onshore/state title systems are not complete.",
-          "production_mapping_status": "Partial - AES state rows and AECR basin context are loaded; project/company production remains unavailable.",
+          "production_mapping_status": "Partial - AES state rows, AECR basin context, NOPTA active offshore production-licence rows and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
           "source_coverage_label": "Strong partial coverage",
           "notes": "Strongest loaded state coverage because production and WA petroleum/NWS receipt context are both present."
         },
@@ -71,7 +71,7 @@
           "federal_tax_note": "Loaded Commonwealth tax sources do not split PRRT, company tax or excise receipts by Queensland production.",
           "project_count_status": "Unavailable - no current official project-count export is loaded.",
           "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; Queensland onshore/state title systems are not complete.",
-          "production_mapping_status": "Partial - AES coal seam gas rows and AECR Bowen/Surat context are loaded; project/company production remains unavailable.",
+          "production_mapping_status": "Partial - AES coal seam gas rows, AECR Bowen/Surat context and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
           "source_coverage_label": "Strong partial coverage",
           "notes": "Strong loaded coverage for gas production and petroleum royalty receipts; federal revenue attribution remains unavailable."
         },
@@ -97,7 +97,7 @@
           "federal_tax_note": "No loaded source attributes Commonwealth receipts to Victorian production or refining.",
           "project_count_status": "Unavailable - no current official project-count export is loaded.",
           "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; Victorian onshore/state title systems are not complete.",
-          "production_mapping_status": "Partial - AES state rows and AECR Gippsland context are loaded; project/company production remains unavailable.",
+          "production_mapping_status": "Partial - AES state rows, AECR Gippsland context, NOPTA active offshore production-licence rows and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
           "source_coverage_label": "Partial coverage",
           "notes": "Production context is loaded; revenue context remains unavailable."
         },
@@ -123,7 +123,7 @@
           "federal_tax_note": "No loaded source attributes Commonwealth receipts to South Australian production.",
           "project_count_status": "Unavailable - no current official project-count export is loaded.",
           "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; South Australian onshore/state title systems are not complete.",
-          "production_mapping_status": "Partial - AES state rows and AECR Cooper/Eromanga context are loaded; project/company production remains unavailable.",
+          "production_mapping_status": "Partial - AES state rows, AECR Cooper/Eromanga context and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
           "source_coverage_label": "Partial coverage",
           "notes": "Production context is loaded; petroleum-specific royalty receipts are not yet loaded."
         },
@@ -149,7 +149,7 @@
           "federal_tax_note": "No loaded source attributes Commonwealth receipts to Northern Territory production or LNG infrastructure.",
           "project_count_status": "Unavailable - no current official project-count export is loaded.",
           "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; Northern Territory onshore/state title systems are not complete.",
-          "production_mapping_status": "Partial - AES state rows and AECR Bonaparte context are loaded; project/company production remains unavailable.",
+          "production_mapping_status": "Partial - AES state rows, AECR Bonaparte context, NOPTA active offshore production-licence rows and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
           "source_coverage_label": "Partial coverage",
           "notes": "Production context is loaded; revenue context remains unavailable."
         },
@@ -175,7 +175,7 @@
           "federal_tax_note": "No loaded source attributes Commonwealth receipts to NSW production or consumption.",
           "project_count_status": "Unavailable - no current official project-count export is loaded.",
           "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; NSW onshore/state title systems are not complete.",
-          "production_mapping_status": "Limited - AES state gas row is loaded; project/company production remains unavailable.",
+          "production_mapping_status": "Limited - AES state gas row and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
           "source_coverage_label": "Limited coverage",
           "notes": "Only a small loaded production signal is present; revenue and infrastructure fields remain limited."
         },
@@ -201,7 +201,7 @@
           "federal_tax_note": "No loaded source attributes Commonwealth receipts to Tasmanian petroleum activity.",
           "project_count_status": "Unavailable - no current official project-count export is loaded.",
           "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded where present; Tasmanian onshore/state title systems are not complete.",
-          "production_mapping_status": "Unavailable - no loaded AES petroleum production row for Tasmania.",
+          "production_mapping_status": "Partial - NOPTA active offshore production-licence rows are loaded; no AES petroleum production row or REMP major-project row is loaded for Tasmania.",
           "source_coverage_label": "Limited coverage",
           "notes": "Left limited rather than implying production or revenue that is not in the loaded sources."
         },
@@ -247,7 +247,7 @@
         "reason": "Loaded Commonwealth sources do not provide defensible state-level allocation. Allocating by production, company address, project location or consumption would be a model, not an observed public receipt."
       },
       "not_captured": [
-        "field-level production",
+        "field-level production volumes",
         "company-level state tax paid",
         "terminal capacity",
         "pipeline capacity",

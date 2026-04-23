@@ -671,13 +671,16 @@ def month_end_iso(month: dt.date) -> str:
     return dt.date(month.year, month.month, last_day).isoformat()
 
 
-def load_xlsx_from_url(url: str):
+def load_xlsx_from_url(url: str, extra_headers: dict[str, str] | None = None):
     try:
         import openpyxl
     except ImportError as exc:
         raise RuntimeError("openpyxl is required for XLSX fetchers. Install with: pip install openpyxl") from exc
 
-    r = requests.get(url, headers={"User-Agent": UA}, timeout=90)
+    headers = {"User-Agent": UA}
+    if extra_headers:
+        headers.update(extra_headers)
+    r = requests.get(url, headers=headers, timeout=90)
     r.raise_for_status()
     return openpyxl.load_workbook(io.BytesIO(r.content), read_only=True, data_only=True)
 
@@ -1321,6 +1324,78 @@ def arcgis_group_count(query_url: str, group_fields: list[str], where: str = "1=
     return [feature.get("attributes", {}) for feature in features if isinstance(feature, dict)]
 
 
+def arcgis_features(query_url: str, where: str, out_fields: list[str]) -> list[dict[str, Any]]:
+    features: list[dict[str, Any]] = []
+    offset = 0
+    page_size = 2000
+    while True:
+        params = {
+            "f": "json",
+            "where": where,
+            "returnGeometry": "false",
+            "outFields": ",".join(out_fields),
+            "resultRecordCount": page_size,
+            "resultOffset": offset,
+            "orderByFields": out_fields[0],
+        }
+        r = requests.get(query_url, params=params, headers={"User-Agent": UA}, timeout=45)
+        r.raise_for_status()
+        doc = r.json()
+        if "error" in doc:
+            raise RuntimeError(f"ArcGIS query failed for {query_url}: {doc['error']}")
+        page = doc.get("features")
+        if not isinstance(page, list):
+            raise RuntimeError(f"ArcGIS query for {query_url} did not return features")
+        features.extend(feature.get("attributes", {}) for feature in page if isinstance(feature, dict))
+        if not doc.get("exceededTransferLimit") or len(page) < page_size:
+            break
+        offset += len(page)
+    return features
+
+
+def arcgis_date(value: Any) -> str | None:
+    if isinstance(value, (int, float)):
+        return (dt.datetime(1970, 1, 1, tzinfo=dt.timezone.utc) + dt.timedelta(milliseconds=value)).date().isoformat()
+    return None
+
+
+def clean_text(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text or text.lower() in {"n/a", "na", "none", "null"}:
+        return None
+    return text
+
+
+def clean_number(value: Any) -> float | None:
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).replace(",", "").strip()
+    if not text or text.lower() in {"n/a", "na", "other"}:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def product_class(resource: str | None) -> str:
+    text = (resource or "").lower()
+    classes = []
+    if "lng" in text:
+        classes.append("LNG")
+    if "gas" in text:
+        classes.append("gas")
+    if "oil" in text:
+        classes.append("crude/oil")
+    if "condensate" in text:
+        classes.append("condensate")
+    return " / ".join(dict.fromkeys(classes)) or (resource or "Unavailable")
+
+
 def fetch_nopta_petroleum_counts(source: dict[str, Any]) -> dict[str, Any]:
     title_url = source.get("fetch_url")
     wells_url = source.get("nopta_wells_query_url")
@@ -1442,6 +1517,272 @@ def fetch_nopta_petroleum_counts(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def fetch_nopta_production_licence_map(source: dict[str, Any]) -> dict[str, Any]:
+    title_url = source.get("fetch_url")
+    if not title_url:
+        raise RuntimeError(f"{source['id']}: fetch_url is required")
+
+    rows = arcgis_features(
+        title_url,
+        "TitleType = 'Production Licence' AND Status = 'Active'",
+        [
+            "Title",
+            "RelTitle",
+            "TitleType",
+            "ExpiryDate",
+            "GrantDate",
+            "Status",
+            "FieldName",
+            "BasinName",
+            "SubBasin",
+            "OffShoreAr",
+            "TitleOprat",
+            "TitleHold",
+            "NoOfBlocks",
+            "AreaKM2",
+            "NEATS_Links",
+        ],
+    )
+
+    state_rows = {
+        code: {
+            "state_code": code,
+            "state_name": STATE_CODE_TO_NAME[code],
+            "production_licence_records": 0,
+            "mapped_field_records": 0,
+            "mapped_operator_records": 0,
+            "basins": set(),
+            "operators": set(),
+        }
+        for code in ["WA", "QLD", "VIC", "SA", "NT", "NSW", "TAS", "ACT"]
+    }
+    mapped_rows: list[dict[str, Any]] = []
+    external_or_unallocated: list[dict[str, Any]] = []
+
+    for row in rows:
+        offshore_area = clean_text(row.get("OffShoreAr"))
+        state_code = STATE_NAME_TO_CODE.get(offshore_area)
+        title_holders_raw = clean_text(row.get("TitleHold"))
+        item = {
+            "state_code": state_code,
+            "state_name": STATE_CODE_TO_NAME.get(state_code) if state_code else offshore_area,
+            "offshore_area": offshore_area,
+            "basin_name": clean_text(row.get("BasinName")),
+            "sub_basin": clean_text(row.get("SubBasin")),
+            "title": clean_text(row.get("Title")),
+            "related_title": clean_text(row.get("RelTitle")),
+            "field_name": clean_text(row.get("FieldName")),
+            "title_operator": clean_text(row.get("TitleOprat")),
+            "title_holders_raw": title_holders_raw,
+            "title_holders": [part.strip() for part in title_holders_raw.split(",") if part.strip()] if title_holders_raw else [],
+            "title_type": clean_text(row.get("TitleType")),
+            "status": clean_text(row.get("Status")),
+            "grant_date": arcgis_date(row.get("GrantDate")),
+            "expiry_date": arcgis_date(row.get("ExpiryDate")),
+            "blocks": int(row["NoOfBlocks"]) if clean_number(row.get("NoOfBlocks")) is not None else None,
+            "area_km2": round(clean_number(row.get("AreaKM2")), 2) if clean_number(row.get("AreaKM2")) is not None else None,
+            "neats_url": clean_text(row.get("NEATS_Links")),
+            "product_class": "petroleum",
+            "production_metric_name": "Active offshore petroleum production licence record",
+            "production_metric_value": None,
+            "production_unit": None,
+            "production_period": "current NOPTA title record",
+            "trust_label": "Observed",
+            "mapping_status": "Mapped active production licence; source does not publish production volume in this layer.",
+            "notes": "NOPTA title/operator/field metadata. This is not a production-volume, revenue or project-output measure.",
+        }
+        if state_code:
+            target = state_rows[state_code]
+            target["production_licence_records"] += 1
+            if item["field_name"]:
+                target["mapped_field_records"] += 1
+            if item["title_operator"]:
+                target["mapped_operator_records"] += 1
+                target["operators"].add(item["title_operator"])
+            if item["basin_name"]:
+                target["basins"].add(item["basin_name"])
+            mapped_rows.append(item)
+        else:
+            external_or_unallocated.append(item)
+
+    summary_rows = []
+    for row in state_rows.values():
+        summary = dict(row)
+        summary["basins"] = sorted(summary["basins"])
+        summary["operators"] = sorted(summary["operators"])
+        summary_rows.append(summary)
+
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date().isoformat()
+    return {
+        "unit": "active offshore petroleum production licence records",
+        "values": [{"t": today, "v": len(mapped_rows)}],
+        "last_data_point": today,
+        "notes": (
+            "Fetched from the NOPTA Titles and Permits Current FeatureServer for active "
+            "petroleum production licence records. Rows map offshore area/state, basin, "
+            "field name, title, title operator and title holders where published. This "
+            "is partial offshore regulatory mapping and does not contain production volumes."
+        ),
+        "extra": {
+            "schema": "state_petroleum_production_licence_map.v1",
+            "fields": {
+                "as_at": today,
+                "source_scope": "Active NOPTA Production Licence rows only.",
+                "state_rows": summary_rows,
+                "production_licence_rows": mapped_rows,
+                "external_or_unallocated": external_or_unallocated,
+                "title_source_url": title_url,
+                "mapping_definitions": {
+                    "state": "Derived from NOPTA OffShoreAr where it matches an Australian state or territory.",
+                    "basin": "NOPTA BasinName field.",
+                    "field_name": "NOPTA FieldName field. It can contain one or multiple fields and is not split or inferred.",
+                    "operator": "NOPTA TitleOprat field.",
+                    "title_holders": "NOPTA TitleHold field, preserved as raw text and a best-effort split list.",
+                    "production_metric_value": "Unavailable. The source layer publishes regulatory title metadata, not production volume.",
+                },
+            },
+        },
+    }
+
+
+def find_workbook_header(rows: list[tuple[Any, ...]], required: list[str]) -> tuple[int, list[str]]:
+    normalized_required = {item.lower() for item in required}
+    for idx, row in enumerate(rows):
+        header = [str(cell).strip() if cell is not None else "" for cell in row]
+        normalized = {cell.lower() for cell in header if cell}
+        if normalized_required.issubset(normalized):
+            return idx, header
+    raise RuntimeError(f"Workbook sheet did not contain required columns: {', '.join(required)}")
+
+
+def fetch_remp_oil_gas_projects(source: dict[str, Any]) -> dict[str, Any]:
+    url = source.get("fetch_url")
+    if not url:
+        raise RuntimeError(f"{source['id']}: fetch_url is required")
+    user_agent = source.get("fetch_user_agent")
+    if user_agent == "browser-compatible":
+        user_agent = "Mozilla/5.0"
+    wb = load_xlsx_from_url(
+        url,
+        {
+            "User-Agent": user_agent or "Mozilla/5.0",
+            "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,*/*",
+        },
+    )
+    sheet_name = source.get("remp_sheet", "Oil & gas")
+    if sheet_name not in wb.sheetnames:
+        raise RuntimeError(f"REMP workbook did not contain sheet {sheet_name!r}")
+    rows = list(wb[sheet_name].iter_rows(values_only=True))
+    header_idx, header = find_workbook_header(rows, ["Project", "Company", "State", "Resource"])
+    header_map = {name: idx for idx, name in enumerate(header) if name}
+
+    project_rows: list[dict[str, Any]] = []
+    state_rows = {
+        code: {
+            "state_code": code,
+            "state_name": STATE_CODE_TO_NAME[code],
+            "project_rows": 0,
+            "committed_rows": 0,
+            "publicly_announced_rows": 0,
+            "mapped_company_rows": 0,
+            "product_classes": set(),
+        }
+        for code in ["WA", "QLD", "VIC", "SA", "NT", "NSW", "TAS", "ACT"]
+    }
+
+    def cell(row: tuple[Any, ...], name: str) -> Any:
+        idx = header_map.get(name)
+        return row[idx] if idx is not None and idx < len(row) else None
+
+    for raw in rows[header_idx + 1:]:
+        project_name = clean_text(cell(raw, "Project"))
+        if not project_name:
+            continue
+        state_code = clean_text(cell(raw, "State"))
+        if state_code not in state_rows:
+            continue
+        resource = clean_text(cell(raw, "Resource"))
+        status = clean_text(cell(raw, "Status"))
+        capacity_value = clean_number(cell(raw, "Annual Estimated New Capacity"))
+        capacity_unit = clean_text(cell(raw, "Capacity Unit"))
+        cost_value = clean_number(cell(raw, "Cost Estimate A$m"))
+        row = {
+            "state_code": state_code,
+            "state_name": STATE_CODE_TO_NAME[state_code],
+            "basin_name": None,
+            "project_name": project_name,
+            "field_name": None,
+            "operator_name": None,
+            "company_name": clean_text(cell(raw, "Company")),
+            "product_class": product_class(resource),
+            "resource": resource,
+            "project_type": clean_text(cell(raw, "Type")),
+            "status": status,
+            "latitude": clean_number(cell(raw, "Latitude")),
+            "longitude": clean_number(cell(raw, "Longitude")),
+            "production_metric_name": "Annual estimated new capacity (not current production)",
+            "production_metric_value": capacity_value,
+            "production_unit": capacity_unit,
+            "production_period": "Resources and Energy Major Projects 2024",
+            "cost_estimate_aud_m": cost_value,
+            "estimated_start_commercial_operation": clean_text(cell(raw, "Estimated Start Commercial Operation")),
+            "trust_label": "Partial coverage",
+            "mapping_status": "Major project/development row; not a current production-volume row.",
+            "notes": "REMP maps project, company, state, resource and estimated new capacity where published. It does not publish basin, operator role or current production volume.",
+        }
+        project_rows.append(row)
+        summary = state_rows[state_code]
+        summary["project_rows"] += 1
+        if status == "Committed":
+            summary["committed_rows"] += 1
+        elif status == "Publicly_announced":
+            summary["publicly_announced_rows"] += 1
+        if row["company_name"]:
+            summary["mapped_company_rows"] += 1
+        summary["product_classes"].add(row["product_class"])
+
+    if not project_rows:
+        raise RuntimeError("REMP Oil & gas sheet contained no project rows")
+
+    summary_rows = []
+    for row in state_rows.values():
+        summary = dict(row)
+        summary["product_classes"] = sorted(summary["product_classes"])
+        summary_rows.append(summary)
+
+    return {
+        "unit": "oil and gas major project rows",
+        "values": [{"t": "2024-12-20", "v": len(project_rows)}],
+        "last_data_point": "2024-12-20",
+        "notes": (
+            "Parsed the Department of Industry, Science and Resources Resources and Energy "
+            "Major Projects 2024 data workbook, Oil & gas sheet. Rows map project, company, "
+            "state, resource, status and annual estimated new capacity where published. "
+            "This is a major-project/development list, not current production by company."
+        ),
+        "source_url_resolved": url,
+        "extra": {
+            "schema": "state_oil_gas_major_projects_remp.v1",
+            "fields": {
+                "report": "Resources and Energy Major Projects 2024",
+                "publication_date": "2024-12-20",
+                "source_period_note": "Publication page states the 2024 report updates project developments from November 2023 to October 2024; the workbook table-of-contents text still refers to project data as at 31 October 2023.",
+                "sheet": sheet_name,
+                "state_rows": summary_rows,
+                "project_rows": project_rows,
+                "mapping_definitions": {
+                    "project": "REMP Project column.",
+                    "company": "REMP Company column. The row does not distinguish operator, owner, proponent or joint-venture role.",
+                    "state": "REMP State column.",
+                    "product_class": "Derived only from the REMP Resource text for display grouping.",
+                    "production_metric_value": "Annual Estimated New Capacity where numeric. It is not current production.",
+                    "basin_name": "Unavailable; the REMP Oil & gas sheet does not publish a basin column.",
+                },
+            },
+        },
+    }
+
+
 Fetcher = Callable[[dict[str, Any]], dict[str, Any]]
 FETCHERS: dict[str, Fetcher] = {
     "eia_brent": lambda source: fetch_eia_series("RBRTE", source.get("fetch_url")),
@@ -1474,6 +1815,8 @@ FETCHERS: dict[str, Fetcher] = {
     "aip_tgp": fetch_aip_tgp,
     "qld_fuel_security_unavailable_reports": fetch_qld_unavailable_reports,
     "state_petroleum_nopta_counts": fetch_nopta_petroleum_counts,
+    "state_petroleum_production_licence_map": fetch_nopta_production_licence_map,
+    "state_oil_gas_major_projects_remp": fetch_remp_oil_gas_projects,
 }
 
 

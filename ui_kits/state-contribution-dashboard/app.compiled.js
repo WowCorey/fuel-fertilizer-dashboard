@@ -873,7 +873,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['state_resource_contribution_profiles', 'resource_state_production_aes', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_wa_petroleum_royalty_receipts', 'resource_qld_petroleum_royalty_receipts', 'state_nsw_minerals_petroleum_royalty_context', 'state_nt_mining_petroleum_royalty_context', 'state_petroleum_ledger_source_gates', 'state_petroleum_nopta_counts', 'state_operating_refinery_counts', 'resource_resource_rent_tax_receipts_budget', 'resource_prrt_policy', 'resource_company_tax_rate'];
+const SERIES = ['state_resource_contribution_profiles', 'resource_state_production_aes', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_wa_petroleum_royalty_receipts', 'resource_qld_petroleum_royalty_receipts', 'state_nsw_minerals_petroleum_royalty_context', 'state_nt_mining_petroleum_royalty_context', 'state_petroleum_ledger_source_gates', 'state_petroleum_nopta_counts', 'state_petroleum_production_licence_map', 'state_oil_gas_major_projects_remp', 'state_operating_refinery_counts', 'resource_resource_rent_tax_receipts_budget', 'resource_prrt_policy', 'resource_company_tax_rate'];
 const STATE_ORDER = ['WA', 'QLD', 'VIC', 'SA', 'NT', 'NSW', 'TAS', 'ACT'];
 function fields(env) {
   return env?.extra?.fields || {};
@@ -1010,6 +1010,108 @@ function objectCoverage(profile, data) {
     refineryFacilities: refinery?.facilities || []
   };
 }
+function productionLicenceSummary(profile, data) {
+  const rows = fields(data.state_petroleum_production_licence_map).state_rows || [];
+  return rows.find(row => row.state_code === profile.state_code) || null;
+}
+function rempProjectSummary(profile, data) {
+  const rows = fields(data.state_oil_gas_major_projects_remp).state_rows || [];
+  return rows.find(row => row.state_code === profile.state_code) || null;
+}
+function productionMappingRows(data) {
+  const noptaRows = fields(data.state_petroleum_production_licence_map).production_licence_rows || [];
+  const rempRows = fields(data.state_oil_gas_major_projects_remp).project_rows || [];
+  const mappedNopta = noptaRows.map(row => ({
+    key: `nopta-${row.title}-${row.field_name || ''}`,
+    source: 'NOPTA production licence',
+    state_code: row.state_code,
+    state_name: row.state_name,
+    basin_name: row.basin_name,
+    project_name: row.field_name || row.title,
+    field_name: row.field_name,
+    operator_name: row.title_operator,
+    company_name: row.title_holders_raw,
+    product_class: row.product_class || 'petroleum',
+    metric: 'Active production licence record',
+    period: row.production_period || fields(data.state_petroleum_production_licence_map).as_at,
+    status: row.status,
+    trust: 'Observed',
+    caveat: 'Offshore regulatory title mapping; no production volume.'
+  }));
+  const mappedRemp = rempRows.map(row => ({
+    key: `remp-${row.state_code}-${row.project_name}`,
+    source: 'REMP oil & gas project',
+    state_code: row.state_code,
+    state_name: row.state_name,
+    basin_name: row.basin_name,
+    project_name: row.project_name,
+    field_name: row.field_name,
+    operator_name: row.operator_name,
+    company_name: row.company_name,
+    product_class: row.product_class || row.resource,
+    metric: hasNumber(row.production_metric_value) ? `${formatNumber(row.production_metric_value, 1)} ${row.production_unit || ''} estimated new capacity` : 'Estimated new capacity unavailable',
+    period: row.production_period,
+    status: row.status,
+    trust: 'Partial coverage',
+    caveat: 'Major-project/development row; not current production.'
+  }));
+  return [...mappedNopta, ...mappedRemp].filter(row => row.state_code);
+}
+function ProductionMappingMini({
+  profile,
+  data
+}) {
+  const licences = productionLicenceSummary(profile, data);
+  const remp = rempProjectSummary(profile, data);
+  return React.createElement("div", {
+    className: "caption"
+  }, React.createElement("b", null, "Active production licence rows:"), " ", integerCount(licences?.production_licence_records), React.createElement("br", null), React.createElement("b", null, "REMP oil/gas project rows:"), " ", integerCount(remp?.project_rows), React.createElement("br", null), React.createElement("b", null, "Mapped companies/operators:"), " ", integerCount((licences?.mapped_operator_records || 0) + (remp?.mapped_company_rows || 0)));
+}
+function ProductionMappingTable({
+  rows
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Basin"), React.createElement("th", null, "Project / field / title"), React.createElement("th", null, "Operator / company"), React.createElement("th", null, "Product class"), React.createElement("th", null, "Metric / period"), React.createElement("th", null, "Trust"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.key
+  }, React.createElement("td", null, React.createElement("b", null, row.state_code), React.createElement("br", null), row.source), React.createElement("td", null, row.basin_name || React.createElement("span", {
+    className: "unavail"
+  }, "Unavailable")), React.createElement("td", null, row.project_name || React.createElement("span", {
+    className: "unavail"
+  }, "Unavailable"), React.createElement("br", null), React.createElement("span", {
+    className: "caption"
+  }, row.status || '')), React.createElement("td", null, row.operator_name || row.company_name || React.createElement("span", {
+    className: "unavail"
+  }, "Unavailable")), React.createElement("td", null, row.product_class || 'Unavailable'), React.createElement("td", null, row.metric, React.createElement("br", null), React.createElement("span", {
+    className: "caption"
+  }, row.period || 'Period unavailable')), React.createElement("td", null, React.createElement(TrustBadge, {
+    kind: row.trust === 'Observed' ? 'observed' : 'partial'
+  }, row.trust), React.createElement("br", null), React.createElement("span", {
+    className: "caption"
+  }, row.caveat)))))));
+}
+function ProductionMappingDetail({
+  profile,
+  data
+}) {
+  const rows = productionMappingRows(data).filter(row => row.state_code === profile.state_code);
+  if (!rows.length) {
+    return React.createElement("p", {
+      className: "body-sm unavail"
+    }, React.createElement("b", null, "Production mapping:"), " No project, field or company row is loaded for this state.");
+  }
+  return React.createElement("div", {
+    style: {
+      marginTop: 12
+    }
+  }, React.createElement("p", {
+    className: "body-sm"
+  }, React.createElement("b", null, "Loaded production mapping rows:"), " ", rows.length), React.createElement(ProductionMappingTable, {
+    rows: rows
+  }));
+}
 function ObjectCoverageMini({
   profile,
   data
@@ -1141,7 +1243,10 @@ function StateSummaryCard({
     className: "unavail"
   }, profile.federal_tax_attribution_status)), React.createElement("tr", null, React.createElement("td", null, "Project/company map"), React.createElement("td", {
     className: String(profile.production_mapping_status || '').startsWith('Partial') ? '' : 'unavail'
-  }, profile.production_mapping_status || 'Unavailable')), React.createElement("tr", null, React.createElement("td", null, "Defined counts"), React.createElement("td", null, React.createElement(ObjectCoverageMini, {
+  }, profile.production_mapping_status || 'Unavailable')), React.createElement("tr", null, React.createElement("td", null, "Mapped production rows"), React.createElement("td", null, React.createElement(ProductionMappingMini, {
+    profile: profile,
+    data: data
+  }))), React.createElement("tr", null, React.createElement("td", null, "Defined counts"), React.createElement("td", null, React.createElement(ObjectCoverageMini, {
     profile: profile,
     data: data
   })))))), React.createElement("footer", {
@@ -1180,7 +1285,10 @@ function StateDetailPanel({
     className: "body-sm"
   }, React.createElement("b", null, "Permit/title counts:"), " ", profile.permit_count_status || 'Unavailable'), React.createElement("p", {
     className: "body-sm"
-  }, React.createElement("b", null, "Project/company production:"), " ", profile.production_mapping_status || 'Unavailable'), React.createElement(ObjectCoverageDetail, {
+  }, React.createElement("b", null, "Project/company production:"), " ", profile.production_mapping_status || 'Unavailable'), React.createElement(ProductionMappingDetail, {
+    profile: profile,
+    data: data
+  }), React.createElement(ObjectCoverageDetail, {
     profile: profile,
     data: data
   }), React.createElement("ul", {
@@ -1245,6 +1353,11 @@ function App() {
   const statesWithActiveTitleRecords = profiles.filter(profile => hasNumber(objectCoverage(profile, data).activeTitles) && objectCoverage(profile, data).activeTitles > 0).length;
   const statesWithWellLayerRecords = profiles.filter(profile => hasNumber(objectCoverage(profile, data).wellLayerRecords) && objectCoverage(profile, data).wellLayerRecords > 0).length;
   const statesWithRefineries = profiles.filter(profile => objectCoverage(profile, data).refineryCount > 0).length;
+  const mappedRows = productionMappingRows(data);
+  const productionLicenceFields = fields(data.state_petroleum_production_licence_map);
+  const rempFields = fields(data.state_oil_gas_major_projects_remp);
+  const statesWithProductionLicenceRows = profiles.filter(profile => (productionLicenceSummary(profile, data)?.production_licence_records || 0) > 0).length;
+  const statesWithRempRows = profiles.filter(profile => (rempProjectSummary(profile, data)?.project_rows || 0) > 0).length;
   const gateFields = fields(data.state_petroleum_ledger_source_gates);
   const workstreamRows = gateFields.workstreams || [];
   const candidateSources = gateFields.candidate_sources || [];
@@ -1351,6 +1464,18 @@ function App() {
     value: `${statesWithRefineries} / ${profiles.length}`,
     plain: "Official source identifies Ampol Brisbane/Lytton and Viva Energy Geelong as Australia's two operating refineries.",
     source: window.FR.sourceLine(data.state_operating_refinery_counts)
+  }), React.createElement(MetricCard, {
+    eyebrow: "Production mapping",
+    label: "Mapped NOPTA active production licence rows",
+    value: formatNumber(latestValue(data.state_petroleum_production_licence_map), 0),
+    plain: `${statesWithProductionLicenceRows} states/territories have active offshore production-licence rows with basin, field and title-operator metadata.`,
+    source: window.FR.sourceLine(data.state_petroleum_production_licence_map)
+  }), React.createElement(MetricCard, {
+    eyebrow: "Major projects",
+    label: "Mapped REMP oil and gas project rows",
+    value: formatNumber(latestValue(data.state_oil_gas_major_projects_remp), 0),
+    plain: `${statesWithRempRows} states have REMP oil/gas project-company rows. Capacity fields are not current production.`,
+    source: window.FR.sourceLine(data.state_oil_gas_major_projects_remp)
   }))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "state-cards-h"
@@ -1368,6 +1493,24 @@ function App() {
     production: productionFor(profile, aesRows),
     data: data
   })))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "mapping-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Production mapping"), React.createElement("h2", {
+    id: "mapping-h"
+  }, "State to basin to project/company, where sources publish it"), React.createElement("p", {
+    className: "section__lede"
+  }, "NOPTA rows map active offshore production licences to basin, field and title operator. REMP rows map oil and gas major projects to company, state, resource and estimated new capacity. Neither source is a complete company production-volume table."))), React.createElement(ProductionMappingTable, {
+    rows: mappedRows
+  }), React.createElement("p", {
+    className: "caption",
+    style: {
+      marginTop: 12
+    }
+  }, "NOPTA source scope: ", productionLicenceFields.source_scope, ". REMP caveat: ", rempFields.source_period_note)), React.createElement("section", {
     className: "section",
     "aria-labelledby": "objects-h"
   }, React.createElement("div", {
@@ -1520,6 +1663,14 @@ function App() {
   }), React.createElement(SourceCard, {
     id: "state_petroleum_nopta_counts",
     env: data.state_petroleum_nopta_counts,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "state_petroleum_production_licence_map",
+    env: data.state_petroleum_production_licence_map,
+    partial: true
+  }), React.createElement(SourceCard, {
+    id: "state_oil_gas_major_projects_remp",
+    env: data.state_oil_gas_major_projects_remp,
     partial: true
   }), React.createElement(SourceCard, {
     id: "state_operating_refinery_counts",

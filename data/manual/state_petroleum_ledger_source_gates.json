@@ -46,9 +46,9 @@
         {
           "id": "D",
           "name": "Project/company production mapping",
-          "status": "partial",
+          "status": "implemented_partial",
           "trust_label": "Partial coverage",
-          "result": "AES state rows and AECR basin rows support state/basin context. No company/project production split is loaded."
+          "result": "NOPTA active offshore production licences map basin, field, title operator and title holders where published. REMP 2024 oil and gas rows map major projects to companies and estimated new capacity. Current project/company production volumes remain unavailable."
         },
         {
           "id": "E",
@@ -118,9 +118,16 @@
         {
           "source": "NOPTA spatial data FeatureServers",
           "publisher": "National Offshore Petroleum Titles Administrator",
-          "supports": "Current offshore title/permit records and Petroleum Wells layer records",
+          "supports": "Current offshore title/permit records, Petroleum Wells layer records and active production licence field/operator mapping",
           "decision": "usable_partial",
-          "caveat": "Counts are separate object classes. Well-layer records are not active or producing wells; Greenhouse Gas Assessment Permits are excluded from petroleum title counts."
+          "caveat": "Counts and mapping rows are separate object classes. Production licence mapping is regulatory title metadata, not production volume; well-layer records are not active or producing wells; Greenhouse Gas Assessment Permits are excluded from petroleum title counts."
+        },
+        {
+          "source": "Resources and Energy Major Projects 2024 data workbook",
+          "publisher": "Department of Industry, Science and Resources",
+          "supports": "Oil and gas project, company, state, resource, status and estimated new capacity rows",
+          "decision": "usable_partial",
+          "caveat": "Major-project/development mapping only. Company names are publisher-supplied project company/proponent text, basin names are not published, and annual estimated new capacity is not current production."
         },
         {
           "source": "DCCEEW ministerial release: Securing Australia's fuel sovereignty",

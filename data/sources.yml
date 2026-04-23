@@ -1391,6 +1391,40 @@ sources:
     fetch: programmatic
     used_by: [state_contribution]
 
+  - id: state_petroleum_production_licence_map
+    human_name: NOPTA active petroleum production licence map
+    publisher: National Offshore Petroleum Titles Administrator
+    url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    canonical_url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    fetch_url: https://arcgis.nopta.gov.au/arcgis/rest/services/Public/TitlesCompany_NOPTA/FeatureServer/0/query
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted
+    rights_url: https://www.nopta.gov.au/copyright.html
+    citation: NOPTA, Spatial data; Titles and Permits Current FeatureServer.
+    reuse_notes: Programmatic active Production Licence rows from the official NOPTA public ArcGIS REST endpoint. Use only as offshore regulatory field/title/operator mapping. The layer does not publish production volumes, company tax, revenue, terminal capacity or complete onshore/state petroleum coverage.
+    fetch: programmatic
+    used_by: [state_contribution]
+
+  - id: state_oil_gas_major_projects_remp
+    human_name: Resources and Energy Major Projects - oil and gas project map
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
+    fetch_url: https://www.industry.gov.au/sites/default/files/2024-12/resources-and-energy-major-projects-2024-data.xlsx
+    fetch_user_agent: browser-compatible
+    remp_sheet: Oil & gas
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-23
+    rights: CC BY 4.0 except logos, third-party content, trademarks and otherwise-noted material
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Industry, Science and Resources, Commonwealth of Australia, Resources and Energy Major Projects 2024.
+    reuse_notes: Programmatic extract from the REMP 2024 data workbook, Oil & gas sheet. Use as major-project/development mapping only. Company names are publisher-supplied project company/proponent text, not necessarily legal operators. Annual Estimated New Capacity is not current production, and basin names are not published in the workbook.
+    fetch: programmatic
+    used_by: [state_contribution]
+
   - id: state_operating_refinery_counts
     human_name: Operating refinery count by state
     publisher: Department of Climate Change, Energy, the Environment and Water

@@ -13,7 +13,7 @@ paths are solved.
 | A. State-by-state petroleum ledger | Implemented as partial coverage using loaded production, revenue-context and source-gate envelopes. | Partial coverage |
 | B. Royalty and receipt coverage by state | WA and Queensland petroleum receipt rows are loaded. NSW and NT combined royalty context is loaded with non-petroleum-only caveats. | Partial coverage |
 | C. Project/site/permit counts by state | Implemented as partial coverage. NOPTA current offshore title/permit records and Petroleum Wells layer records are loaded as separate object classes; operating refinery counts are loaded for QLD/VIC. | Partial coverage |
-| D. Project/company production mapping | Partial. AES state rows and AECR basin rows support context only. | Partial coverage |
+| D. Project/company production mapping | Implemented as partial coverage. NOPTA active offshore production licences map basin/field/title operator/title holders; REMP oil-and-gas rows map major projects to company/proponent text and estimated new capacity. Current production volumes remain unavailable. | Partial coverage |
 | E. Live or near-live national outage coverage | Partial. WA weekly manual and QLD monthly programmatic layers exist; no national live feed. | Partial coverage |
 | F. Terminal and shipping visibility | Partial. PM&C aggregate tanker counts and APS/MSO stock context exist; no terminal capacity or live vessel layer. | Partial coverage |
 | G. Defensible national status model | Blocked. The gate exists, but source coverage and thresholds are not sufficient. | Unavailable |
@@ -25,7 +25,10 @@ paths are solved.
 - Australian Energy Statistics 2025: state/territory production rows.
 - Geoscience Australia AECR 2025 gas and oil: national and basin context.
 - NOPTA spatial data FeatureServers: current offshore petroleum title/permit
-  records and Petroleum Wells feature-layer records.
+  records, Petroleum Wells feature-layer records, and active production-licence
+  field/operator mapping.
+- Resources and Energy Major Projects 2024 data workbook: oil-and-gas project,
+  company/proponent, state, resource, status and estimated-new-capacity rows.
 - DCCEEW ministerial release "Securing Australia's fuel sovereignty": official
   operating refinery count and named QLD/VIC refinery locations.
 - WA Overview of State Taxes and Royalties 2025-26: WA petroleum state
@@ -43,6 +46,9 @@ paths are solved.
 
 - Producing-field counts by state: no loaded source currently defines a clean
   count separate from title records and field-name text.
+- Current project/company production volumes: NOPTA production licences publish
+  title metadata, not production volume. REMP publishes major-project estimated
+  new capacity, not current production.
 - LNG plant/train counts by state: no loaded official current state/trains table.
 - Gas-processing plant counts by state: no loaded official current state/facility
   table.
