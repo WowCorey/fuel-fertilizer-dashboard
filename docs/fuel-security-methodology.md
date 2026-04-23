@@ -45,6 +45,26 @@ The dashboard status model may only be enabled when all of these are true:
 
 Until then, the model fails closed and displays `Status unavailable`.
 
+### Publishable status gate
+
+The repo now treats a Stable/Tight/Disrupted/Critical model as a gated output,
+not a styling choice. The model must remain unavailable until the dashboard can
+show all required inputs beside the label:
+
+| Gate | Minimum requirement before launch |
+|---|---|
+| National snapshot | PM&C/DCCEEW national level and product-day fields loaded from the latest reviewed public snapshot. |
+| Product coverage | Petrol, diesel and jet must each have visible days/reserve context and stale handling. |
+| Outage coverage | Either a national live outage feed, or a documented threshold rule that explicitly treats WA/QLD/state partial layers as incomplete. |
+| Import/shipping coverage | PM&C aggregate ships-on-water and forward import-order context loaded with no vessel-level claims. |
+| Storage/terminal coverage | Terminal-level capacity remains excluded unless an official capacity source is loaded; if excluded, the model must document that exclusion. |
+| Freshness | Every contributing source has a visible reviewed/retrieved date and a stale rule. |
+| Tests | Threshold rules are implemented in code and covered by unit tests before the public label is shown. |
+
+If any gate is not met, `fuel_security_status_model` must stay `status:
+"unavailable"` and the page should show the blocker list instead of a national
+status label.
+
 ## Days Remaining
 
 The first product days envelopes are:

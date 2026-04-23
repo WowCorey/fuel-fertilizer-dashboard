@@ -1,0 +1,149 @@
+{
+  "series_id": "state_petroleum_ledger_source_gates",
+  "source_id": "state_petroleum_ledger_source_gates",
+  "source_name": "National petroleum ledger source gates",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md",
+  "unit": "workstreams",
+  "retrieved_at": "2026-04-23T21:35:00+10:00",
+  "last_data_point": "2026-04-23",
+  "values": [
+    {
+      "t": "2026-04-23",
+      "v": 7
+    }
+  ],
+  "notes": "Fail-closed source-gate register for the national petroleum ledger program. It records what is usable, partial or blocked without converting blocked workstreams into values.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers.",
+  "citation": "Fuel Resilience AU petroleum ledger source-gate review, 2026-04-23.",
+  "extra": {
+    "schema": "petroleum_ledger_source_gates.v1",
+    "fields": {
+      "reviewed_at": "2026-04-23",
+      "workstreams": [
+        {
+          "id": "A",
+          "name": "State-by-state petroleum ledger",
+          "status": "implemented_partial",
+          "trust_label": "Partial coverage",
+          "result": "State ledger surface exists with production, role, revenue context and attribution-boundary fields."
+        },
+        {
+          "id": "B",
+          "name": "Royalty and receipt coverage by state",
+          "status": "implemented_partial",
+          "trust_label": "Partial coverage",
+          "result": "WA and Queensland petroleum receipt rows are loaded. NSW and NT combined royalty context is loaded with non-petroleum-only caveats. Other states remain unavailable."
+        },
+        {
+          "id": "C",
+          "name": "Project/site/permit counts by state",
+          "status": "implemented_partial",
+          "trust_label": "Partial coverage",
+          "result": "NOPTA current offshore title/permit records and Petroleum Wells layer records are loaded as separate object classes. Onshore/state title systems, producing-field counts, LNG trains, processing plants and terminal counts remain unavailable."
+        },
+        {
+          "id": "D",
+          "name": "Project/company production mapping",
+          "status": "partial",
+          "trust_label": "Partial coverage",
+          "result": "AES state rows and AECR basin rows support state/basin context. No company/project production split is loaded."
+        },
+        {
+          "id": "E",
+          "name": "Live or near-live national outage coverage",
+          "status": "partial_blocked",
+          "trust_label": "Partial coverage",
+          "result": "WA weekly manual and QLD monthly programmatic partial layers exist. No national live station outage feed is loaded."
+        },
+        {
+          "id": "F",
+          "name": "Terminal and shipping visibility",
+          "status": "partial_blocked",
+          "trust_label": "Partial coverage",
+          "result": "PM&C aggregate tanker counts and APS/MSO stock context are loaded. Terminal-capacity and live vessel-level feeds remain unavailable."
+        },
+        {
+          "id": "G",
+          "name": "Defensible national status model",
+          "status": "blocked",
+          "trust_label": "Unavailable",
+          "result": "The model gate exists, but source coverage and threshold rules are not sufficient to publish Stable/Tight/Disrupted/Critical."
+        }
+      ],
+      "candidate_sources": [
+        {
+          "source": "Australian Energy Statistics 2025",
+          "publisher": "DCCEEW",
+          "supports": "State production rows",
+          "decision": "usable",
+          "caveat": "State/territory production only; not project/company mapping."
+        },
+        {
+          "source": "Geoscience Australia AECR 2025 gas and oil",
+          "publisher": "Geoscience Australia",
+          "supports": "National and basin production context",
+          "decision": "usable_partial",
+          "caveat": "Basin rows are not a complete state/project/company ledger."
+        },
+        {
+          "source": "WA Overview of State Taxes and Royalties 2025-26",
+          "publisher": "Government of Western Australia",
+          "supports": "WA petroleum/North West Shelf receipt context",
+          "decision": "usable",
+          "caveat": "Receipt context only; collection channels and period must stay visible."
+        },
+        {
+          "source": "Queensland Budget BP2 Revenue 2025-26",
+          "publisher": "Queensland Treasury",
+          "supports": "Queensland petroleum royalty receipts",
+          "decision": "usable",
+          "caveat": "Source notes petroleum includes gas converted into LNG."
+        },
+        {
+          "source": "NSW Resources royalties page",
+          "publisher": "NSW Government",
+          "supports": "Combined minerals and petroleum royalty context plus petroleum royalty rate",
+          "decision": "usable_context_only",
+          "caveat": "Not petroleum-only; do not display as petroleum receipts."
+        },
+        {
+          "source": "Northern Territory Budget 2025-26 BP2",
+          "publisher": "Northern Territory Government",
+          "supports": "Combined mining and petroleum royalty context plus petroleum royalty rate",
+          "decision": "usable_context_only",
+          "caveat": "Not petroleum-only; revised budget/forecast context, not actual petroleum receipts."
+        },
+        {
+          "source": "NOPTA spatial data FeatureServers",
+          "publisher": "National Offshore Petroleum Titles Administrator",
+          "supports": "Current offshore title/permit records and Petroleum Wells layer records",
+          "decision": "usable_partial",
+          "caveat": "Counts are separate object classes. Well-layer records are not active or producing wells; Greenhouse Gas Assessment Permits are excluded from petroleum title counts."
+        },
+        {
+          "source": "DCCEEW ministerial release: Securing Australia's fuel sovereignty",
+          "publisher": "Department of Climate Change, Energy, the Environment and Water",
+          "supports": "Operating refinery count and named refinery locations",
+          "decision": "usable_partial",
+          "caveat": "Facility count only; no throughput, capacity, utilisation or outage status."
+        },
+        {
+          "source": "Petroleum Titles, Australia 2016",
+          "publisher": "CSIRO Marlin / data.gov.au",
+          "supports": "Historical petroleum title locations",
+          "decision": "blocked_for_counts",
+          "caveat": "Dataset is old and licence is listed as not specified on data.gov.au."
+        },
+        {
+          "source": "Geoscience Australia National Liquid Fuel Terminals 2015",
+          "publisher": "Geoscience Australia via data.gov.au/AURIN",
+          "supports": "Historical terminal locations",
+          "decision": "blocked_for_capacity",
+          "caveat": "Location snapshot only; no terminal capacity, inventory or live operational status."
+        }
+      ]
+    }
+  }
+}

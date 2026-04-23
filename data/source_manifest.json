@@ -1167,7 +1167,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates",
       "rights": "Commonwealth copyright; ATO website terms apply",
@@ -1199,7 +1200,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://www.ga.gov.au/aecr2025/gas",
       "rights": "Commonwealth copyright; Geoscience Australia copyright terms apply",
@@ -1311,7 +1313,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://www.ga.gov.au/aecr2025/oil",
       "rights": "Commonwealth copyright; Geoscience Australia copyright terms apply",
@@ -1327,7 +1330,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax",
       "rights": "Commonwealth copyright; ATO website terms apply",
@@ -1343,7 +1347,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf",
       "rights": "Queensland Government copyright and budget website terms",
@@ -1359,7 +1364,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://budget.gov.au/content/bp1/",
       "rights": "Commonwealth copyright; Budget website terms apply",
@@ -1375,7 +1381,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -1407,7 +1414,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties",
       "rights": "Government of Western Australia copyright and website terms",
@@ -1423,7 +1431,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "resource_value"
+        "resource_value",
+        "state_contribution"
       ],
       "canonical_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
       "rights": "Government of Western Australia copyright and website terms",
@@ -1432,9 +1441,91 @@
       "has_generated": false,
       "has_manual": true
     },
+    "state_nsw_minerals_petroleum_royalty_context": {
+      "id": "state_nsw_minerals_petroleum_royalty_context",
+      "human_name": "NSW minerals and petroleum royalty context",
+      "publisher": "NSW Resources",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "state_contribution"
+      ],
+      "canonical_url": "https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties",
+      "rights": "NSW Government copyright and website terms apply",
+      "citation": "NSW Resources, Royalties page, checked 2026-04-23.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "state_nt_mining_petroleum_royalty_context": {
+      "id": "state_nt_mining_petroleum_royalty_context",
+      "human_name": "Northern Territory mining and petroleum royalty context",
+      "publisher": "Northern Territory Government",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "state_contribution"
+      ],
+      "canonical_url": "https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf",
+      "rights": "Northern Territory Government copyright and budget website terms apply",
+      "citation": "Northern Territory Government, Budget 2025-26 Budget Paper No. 2, taxation and royalty revenue sections.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "state_operating_refinery_counts": {
+      "id": "state_operating_refinery_counts",
+      "human_name": "Operating refinery count by state",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "state_contribution",
+        "fuel_security"
+      ],
+      "canonical_url": "https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty",
+      "rights": "Commonwealth copyright and DCCEEW website terms apply",
+      "citation": "Minister for Climate Change and Energy, Securing Australia's fuel sovereignty, 20 March 2026.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "state_petroleum_ledger_source_gates": {
+      "id": "state_petroleum_ledger_source_gates",
+      "human_name": "National petroleum ledger source gates",
+      "publisher": "Fuel Resilience AU source review",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "state_contribution",
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md",
+      "rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers",
+      "citation": "Fuel Resilience AU petroleum ledger source-gate review, 2026-04-23.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "state_petroleum_nopta_counts": {
+      "id": "state_petroleum_nopta_counts",
+      "human_name": "NOPTA petroleum title and well coverage counts",
+      "publisher": "National Offshore Petroleum Titles Administrator",
+      "fetch": "programmatic",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "state_contribution"
+      ],
+      "canonical_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+      "rights": "Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted",
+      "citation": "NOPTA, Spatial data; Titles and Permits Current FeatureServer; Petroleum Wells FeatureServer.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
     "state_resource_contribution_profiles": {
       "id": "state_resource_contribution_profiles",
-      "human_name": "State fuel and resource contribution profiles",
+      "human_name": "State petroleum ledger profiles",
       "publisher": "Fuel Resilience AU, compiled from official public sources",
       "fetch": "manual",
       "update_cadence": "ad-hoc",
@@ -1443,7 +1534,7 @@
       ],
       "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md",
       "rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers",
-      "citation": "Fuel Resilience AU state contribution methodology; DCCEEW Australian Energy Statistics 2025; Geoscience Australia AECR 2025; WA and Queensland budget/royalty sources.",
+      "citation": "Fuel Resilience AU state petroleum ledger methodology; DCCEEW Australian Energy Statistics 2025; Geoscience Australia AECR 2025; NOPTA spatial data; WA and Queensland budget/royalty sources.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

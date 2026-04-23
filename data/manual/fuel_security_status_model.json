@@ -25,7 +25,19 @@
         "No terminal-by-terminal public storage capacity or live inventory feed is loaded.",
         "PM&C/DCCEEW public fuel-supply snapshot remains manual because local pipeline requests return an Incapsula challenge and no stable CSV/JSON/XLSX endpoint is exposed.",
         "No documented, tested thresholds exist for mapping public snapshot fields into Stable/Tight/Disrupted/Critical labels."
-      ]
+      ],
+      "publishable_now": false,
+      "required_inputs": [
+        "Latest reviewed PM&C/DCCEEW national fuel-supply snapshot.",
+        "Product-level petrol, diesel and jet days/reserve context.",
+        "Outage coverage with visible geographic limits.",
+        "Import/shipping aggregate context with no vessel-level claims.",
+        "Storage/terminal inclusion or explicit exclusion rule.",
+        "Freshness/stale rule for every contributing source."
+      ],
+      "minimum_geographic_coverage": "No Stable/Tight/Disrupted/Critical label until the model either has national outage coverage or visibly treats WA/QLD partial layers as incomplete inputs.",
+      "minimum_freshness": "Every contributing source must carry a reviewed/retrieved date and source-specific stale threshold before the model can publish a label.",
+      "test_requirement": "Threshold rules must be implemented in code and covered by unit tests before a public national status label is displayed."
     }
   }
 }

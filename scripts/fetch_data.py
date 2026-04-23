@@ -1271,6 +1271,177 @@ def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+STATE_NAME_TO_CODE = {
+    "Western Australia": "WA",
+    "Queensland": "QLD",
+    "Victoria": "VIC",
+    "South Australia": "SA",
+    "Northern Territory": "NT",
+    "New South Wales": "NSW",
+    "Tasmania": "TAS",
+    "ACT": "ACT",
+}
+
+STATE_CODE_TO_NAME = {
+    "WA": "Western Australia",
+    "QLD": "Queensland",
+    "VIC": "Victoria",
+    "SA": "South Australia",
+    "NT": "Northern Territory",
+    "NSW": "New South Wales",
+    "TAS": "Tasmania",
+    "ACT": "Australian Capital Territory",
+}
+
+
+def arcgis_group_count(query_url: str, group_fields: list[str], where: str = "1=1") -> list[dict[str, Any]]:
+    params = {
+        "f": "json",
+        "where": where,
+        "returnGeometry": "false",
+        "groupByFieldsForStatistics": ",".join(group_fields),
+        "outStatistics": json.dumps(
+            [
+                {
+                    "statisticType": "count",
+                    "onStatisticField": "OBJECTID",
+                    "outStatisticFieldName": "record_count",
+                }
+            ]
+        ),
+    }
+    r = requests.get(query_url, params=params, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    doc = r.json()
+    if "error" in doc:
+        raise RuntimeError(f"ArcGIS query failed for {query_url}: {doc['error']}")
+    features = doc.get("features")
+    if not isinstance(features, list):
+        raise RuntimeError(f"ArcGIS query for {query_url} did not return features")
+    return [feature.get("attributes", {}) for feature in features if isinstance(feature, dict)]
+
+
+def fetch_nopta_petroleum_counts(source: dict[str, Any]) -> dict[str, Any]:
+    title_url = source.get("fetch_url")
+    wells_url = source.get("nopta_wells_query_url")
+    if not title_url or not wells_url:
+        raise RuntimeError(f"{source['id']}: fetch_url and nopta_wells_query_url are required")
+
+    title_rows = arcgis_group_count(
+        title_url,
+        ["OffShoreAr", "TitleType", "Status"],
+        "TitleType <> 'Greenhouse Gas Assessment Permit'",
+    )
+    well_rows = arcgis_group_count(wells_url, ["OffshoreArea", "Type", "IsOffshore"])
+
+    states = {
+        code: {
+            "state_code": code,
+            "state_name": STATE_CODE_TO_NAME[code],
+            "title_records": {
+                "total_current_non_ghg": 0,
+                "active": 0,
+                "pending_application": 0,
+                "by_title_type": {},
+            },
+            "well_records": {
+                "total_layer_records": 0,
+                "known_petroleum_type_records": 0,
+                "offshore_records": 0,
+                "onshore_or_unspecified_records": 0,
+            },
+        }
+        for code in ["WA", "QLD", "VIC", "SA", "NT", "NSW", "TAS", "ACT"]
+    }
+    external_or_unallocated = {
+        "title_records": {},
+        "well_records": {},
+    }
+
+    for row in title_rows:
+        area = row.get("OffShoreAr")
+        count = int(row.get("record_count") or 0)
+        title_type = row.get("TitleType") or "Unspecified"
+        status = row.get("Status") or "Unspecified"
+        code = STATE_NAME_TO_CODE.get(area)
+        if code:
+            target = states[code]["title_records"]
+            target["total_current_non_ghg"] += count
+            target["by_title_type"][title_type] = target["by_title_type"].get(title_type, 0) + count
+            if status == "Active":
+                target["active"] += count
+            elif status == "Pending Application":
+                target["pending_application"] += count
+        else:
+            key = area or "Unallocated"
+            external_or_unallocated["title_records"][key] = (
+                external_or_unallocated["title_records"].get(key, 0) + count
+            )
+
+    for row in well_rows:
+        area = row.get("OffshoreArea")
+        count = int(row.get("record_count") or 0)
+        well_type = row.get("Type")
+        is_offshore = row.get("IsOffshore")
+        code = STATE_NAME_TO_CODE.get(area)
+        if code:
+            target = states[code]["well_records"]
+            target["total_layer_records"] += count
+            if well_type == "Petroleum":
+                target["known_petroleum_type_records"] += count
+            if is_offshore == "Yes":
+                target["offshore_records"] += count
+            else:
+                target["onshore_or_unspecified_records"] += count
+        else:
+            key = area or "Unallocated"
+            external_or_unallocated["well_records"][key] = (
+                external_or_unallocated["well_records"].get(key, 0) + count
+            )
+
+    state_rows = []
+    for code, row in states.items():
+        row["title_records"]["by_title_type"] = [
+            {"title_type": title_type, "count": count}
+            for title_type, count in sorted(row["title_records"]["by_title_type"].items())
+        ]
+        row["labels"] = {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count.",
+        }
+        state_rows.append(row)
+
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date().isoformat()
+    return {
+        "unit": "structured counts",
+        "values": [],
+        "last_data_point": today,
+        "notes": (
+            "Fetched from NOPTA ArcGIS REST FeatureServer public endpoints. Counts keep "
+            "titles/permits, title types, status and petroleum-wells layer records separate. "
+            "Greenhouse Gas Assessment Permits are excluded from petroleum title counts. "
+            "Well records are not presented as active or producing wells."
+        ),
+        "extra": {
+            "schema": "state_petroleum_nopta_counts.v1",
+            "fields": {
+                "as_at": today,
+                "state_rows": state_rows,
+                "external_or_unallocated": external_or_unallocated,
+                "title_source_url": title_url,
+                "wells_source_url": wells_url,
+                "object_definitions": {
+                    "title_records": "Current NOPTA Titles and Permits FeatureServer records, excluding Greenhouse Gas Assessment Permits.",
+                    "active_title_records": "Rows where Status is Active.",
+                    "pending_application_records": "Rows where Status is Pending Application.",
+                    "well_records": "Rows in the NOPTA Petroleum Wells FeatureServer grouped by OffshoreArea.",
+                    "known_petroleum_type_records": "Well-layer rows where Type equals Petroleum.",
+                },
+            },
+        },
+    }
+
+
 Fetcher = Callable[[dict[str, Any]], dict[str, Any]]
 FETCHERS: dict[str, Fetcher] = {
     "eia_brent": lambda source: fetch_eia_series("RBRTE", source.get("fetch_url")),
@@ -1302,6 +1473,7 @@ FETCHERS: dict[str, Fetcher] = {
     "aus_retail_fuel_multistate": fetch_retail_multistate,
     "aip_tgp": fetch_aip_tgp,
     "qld_fuel_security_unavailable_reports": fetch_qld_unavailable_reports,
+    "state_petroleum_nopta_counts": fetch_nopta_petroleum_counts,
 }
 
 

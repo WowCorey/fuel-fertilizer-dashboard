@@ -15,8 +15,8 @@ and the multi-state retail fuel average. The national status page adds a
 manually verified PM&C/DCCEEW public fuel-supply snapshot. The resource value
 page adds official tax, PRRT, WA/NWS and Queensland royalty receipts,
 export-value and Norway comparison envelopes, while leaving unsupported leakage and price-comparison claims
-unavailable. The state contribution page separates state production,
-infrastructure roles and revenue attribution boundaries. The fuel-security page reuses the public PM&C/DCCEEW snapshot,
+unavailable. The state petroleum ledger separates state production,
+infrastructure roles, revenue context and source gates. The fuel-security page reuses the public PM&C/DCCEEW snapshot,
 APS product-flow envelopes and ABS import data to show what is observable,
 derived, partial or unavailable. Other sources remain manual or unavailable
 until a named public source can support the value.
@@ -41,7 +41,7 @@ interpolate or estimate missing numbers.
 | [National status](ui_kits/national-status-dashboard/index.html) | v1.4 | National Fuel Security Plan level, MSO reserves, ships on water and retail stock-outs | PM&C/DCCEEW public fuel-supply snapshot hand-keyed; direct scripted access is blocked/deferred until a stable machine-readable endpoint exists |
 | [Fuel security](ui_kits/fuel-security-dashboard/index.html) | v1.6 | Product days remaining, PM&C/DCCEEW fuel-supply snapshot, APS stocks/sales/imports, import/shipping risk context, WA weekly stockout context, QLD monthly unavailable-fuel reports and unavailable operational feeds | Product days are derived from the named PM&C/DCCEEW snapshot; APS/ABS, public retail feeds, a WA-only weekly stockout snapshot and QLD Open Data unavailable-fuel reports are loaded where available; live national station outage, vessel tracking, terminal capacity and status-score feeds remain unavailable |
 | [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources, including WA/NWS and Queensland petroleum royalty receipt context; value-leakage estimate remains unavailable until a documented denominator and method exist |
-| [State contribution](ui_kits/state-contribution-dashboard/index.html) | v1.0 | State/territory petroleum and gas production roles, infrastructure context, state royalty receipts and federal-tax attribution boundaries | AES state production rows plus WA/NWS and Queensland petroleum receipt context are loaded; Commonwealth tax attribution by state, terminal capacity, project flows and raw site counts remain unavailable |
+| [State petroleum ledger](ui_kits/state-contribution-dashboard/index.html) | v1.2 | State/territory petroleum and gas production roles, defined object counts, infrastructure context, state royalty receipts, combined royalty context and source gates | AES state production rows, NOPTA offshore title/well-layer counts, QLD/VIC operating refinery counts, WA/NWS and Queensland petroleum receipts, NSW/NT combined royalty context and source-gate workstreams are loaded; Commonwealth tax attribution by state, terminal capacity, project flows, LNG train counts and raw site totals remain unavailable |
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by fertiliser category, price index, supplier concentration | ABS SITC 562 total imports and source-country top-3 concentration fetched; nutrient subseries, ABARES price and stock cover remain manual/unavailable |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
@@ -57,8 +57,10 @@ Fuel-security source investigations are recorded in
 including the current PM&C/DCCEEW access result, station-outage limits,
 shipping limits and terminal-capacity decision. Issue-ready source gates are in
 [`docs/fuel-security-backlog.md`](docs/fuel-security-backlog.md).
-State contribution attribution rules are documented in
-[`docs/state-contribution-methodology.md`](docs/state-contribution-methodology.md).
+State petroleum ledger attribution rules are documented in
+[`docs/state-contribution-methodology.md`](docs/state-contribution-methodology.md),
+with source-gate decisions in
+[`docs/petroleum-ledger-source-gates.md`](docs/petroleum-ledger-source-gates.md).
 
 ## Run locally
 
@@ -324,7 +326,7 @@ ui_kits/
   national-status-dashboard/   v1.4 — public fuel-status snapshot
   fuel-security-dashboard/     v1.6 — fuel-security visibility and gaps
   resource-value-dashboard/    v1.5 — tax, PRRT, royalties, export value
-  state-contribution-dashboard/ v1.0 - state production and revenue boundaries
+  state-contribution-dashboard/ v1.2 - state petroleum ledger, source gates and defined object counts
   fuel-dashboard/              v1.0 — liquid fuel
   fertilizer-dashboard/        v1.1 — fertiliser
   oil-and-production/          v1.2 — crude, refining, government spending

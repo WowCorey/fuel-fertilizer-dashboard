@@ -1,0 +1,33 @@
+{
+  "series_id": "state_nsw_minerals_petroleum_royalty_context",
+  "source_id": "state_nsw_minerals_petroleum_royalty_context",
+  "source_name": "NSW minerals and petroleum royalty context",
+  "source_url": "https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-23T21:35:00+10:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 250.0
+    }
+  ],
+  "notes": "Official NSW Resources page says minerals and petroleum provided about $250 million in royalties in 2024-25. This is combined minerals-and-petroleum context, not a petroleum-only receipt row.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "NSW Government copyright and website terms apply",
+  "citation": "NSW Resources, Royalties page, checked 2026-04-23.",
+  "extra": {
+    "schema": "state_royalty_context.v1",
+    "fields": {
+      "state_code": "NSW",
+      "period": "2024-25",
+      "amount_type": "official approximate combined context",
+      "reported_scope": "minerals and petroleum",
+      "petroleum_only": false,
+      "display_caveat": "Do not show as petroleum-only royalties. The source combines minerals and petroleum.",
+      "royalty_policy_rate_petroleum_percent": 10,
+      "trust_label": "Partial coverage"
+    }
+  }
+}
