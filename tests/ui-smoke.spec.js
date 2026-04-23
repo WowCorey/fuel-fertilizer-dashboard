@@ -54,6 +54,9 @@ test('state contribution page keeps tax attribution boundaries explicit', async 
   await expect(page.getByText('Federal tax attribution').first()).toBeVisible();
   await expect(page.getByText('Combined context').first()).toBeVisible();
   await expect(page.getByText('Project/site/permit counts by state')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'State to basin to project/company, where sources publish it' })).toBeVisible();
+  await expect(page.getByText('NOPTA production licence').first()).toBeVisible();
+  await expect(page.getByText('REMP oil & gas project').first()).toBeVisible();
   await expect(page.getByText('Separate petroleum object classes, not one vague site count')).toBeVisible();
   await expect(page.getByText('Operating refineries').first()).toBeVisible();
 });

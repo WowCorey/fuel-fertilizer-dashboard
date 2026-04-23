@@ -25,6 +25,14 @@ terminal-capacity dataset or company/project production map.
 - Official NOPTA public spatial-data counts for current non-GHG offshore
   title/permit records and Petroleum Wells feature-layer records, stored in
   `state_petroleum_nopta_counts`.
+- Official NOPTA active petroleum production-licence rows that map offshore
+  area/state, basin, field name, title, title operator and title holders where
+  those fields are published, stored in
+  `state_petroleum_production_licence_map`.
+- Department of Industry Resources and Energy Major Projects 2024 oil and gas
+  rows that map project, company/proponent text, state, resource, status and
+  annual estimated new capacity where published, stored in
+  `state_oil_gas_major_projects_remp`.
 - Official operating refinery facility counts from DCCEEW ministerial material,
   stored in `state_operating_refinery_counts`.
 - Qualitative state role notes compiled from the loaded source envelopes.
@@ -91,11 +99,37 @@ The current page can now show these separately defined object classes:
 - Operating refinery facility counts for Queensland and Victoria, from an
   official DCCEEW source naming Ampol Brisbane/Lytton and Viva Energy Geelong.
 
+## Production mapping treatment
+
+The page now has two partial production-mapping layers:
+
+- `state_petroleum_production_licence_map` reads active NOPTA offshore
+  petroleum production licences. This supports state to basin to field/title to
+  title-operator and title-holder mapping where the NOPTA layer publishes those
+  fields. It does not publish production volumes, field output, tax paid,
+  ownership shares or onshore/state title systems.
+- `state_oil_gas_major_projects_remp` reads the Department of Industry Resources
+  and Energy Major Projects 2024 workbook, Oil & gas sheet. This supports
+  project to company/proponent to state/resource/status mapping and estimated
+  new capacity where numeric. It is a major-project/development list, not a
+  current production table, and it does not publish basin names or legal
+  operator roles.
+
+The page uses "project/company mapping" cautiously. A NOPTA title operator is
+shown as an operator because the source field is explicitly `TitleOprat`.
+A REMP company is shown as company/proponent text only because the workbook
+does not identify whether the company is an operator, owner, joint-venture
+participant or sponsor.
+
+No row from either source is used as a current production value. If a source
+does not publish a production volume by field/project/company, the production
+value remains unavailable.
+
 The page still does not publish:
 
 - terminal capacity
 - pipeline capacity
-- field-level production
+- field-level production volumes
 - company-level state tax paid
 - state-by-state fuel excise or GST
 - producing-field counts
@@ -150,6 +184,17 @@ contains structured `extra.fields.state_rows`; the top-level `values` array is
 intentionally empty so the page cannot collapse different object classes into a
 single mixed count.
 
+The NOPTA production-licence map envelope is
+`state_petroleum_production_licence_map`. It contains structured
+`extra.fields.production_licence_rows` and `extra.fields.state_rows`. The
+top-level value is only the count of loaded active production-licence records.
+It must not be read as production volume.
+
+The REMP oil-and-gas major-project map envelope is
+`state_oil_gas_major_projects_remp`. It contains structured
+`extra.fields.project_rows` and `extra.fields.state_rows`. Its capacity fields
+are annual estimated new capacity where published, not current production.
+
 The refinery-count envelope is `state_operating_refinery_counts`. It contains
 state rows for the two named operating refineries only; it does not contain
 throughput, capacity, utilisation or outage data.
@@ -162,8 +207,9 @@ throughput, capacity, utilisation or outage data.
 - Terminal, storage and pipeline capacity remain unavailable.
 - Onshore/state petroleum title systems remain unavailable; the current NOPTA
   count covers offshore/Commonwealth spatial-data records only.
-- Project/company production flows remain unavailable except for partial
-  state/basin production context from AES and AECR.
+- Current project/company production volumes remain unavailable. The page now
+  shows partial NOPTA production-licence mapping and REMP oil/gas major-project
+  mapping, but neither source is a field/project production-volume table.
 - Producing fields, LNG trains, gas-processing plants and import/storage
   terminal counts remain unavailable until an official source defines those
   objects clearly by state.

@@ -453,6 +453,82 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(fields["external_or_unallocated"]["well_records"]["Outside of Australia"], 1)
         self.assertIn("Greenhouse Gas Assessment Permit", calls[0][1]["where"])
 
+    def test_nopta_production_licence_map_keeps_volume_unavailable(self):
+        def fake_get(_url, params=None, **_kwargs):
+            self.assertIn("Production Licence", params["where"])
+            return FakeResponse(
+                json_doc={
+                    "features": [
+                        {
+                            "attributes": {
+                                "Title": "WA-1-L",
+                                "RelTitle": "WA-1-P",
+                                "TitleType": "Production Licence",
+                                "ExpiryDate": None,
+                                "GrantDate": 0,
+                                "Status": "Active",
+                                "FieldName": "Example Field",
+                                "BasinName": "Northern Carnarvon Basin",
+                                "SubBasin": None,
+                                "OffShoreAr": "Western Australia",
+                                "TitleOprat": "Example Operator Pty Ltd",
+                                "TitleHold": "Example Operator Pty Ltd, Example Partner Pty Ltd",
+                                "NoOfBlocks": 2,
+                                "AreaKM2": 123.456,
+                                "NEATS_Links": "https://example.test/title",
+                            }
+                        }
+                    ]
+                }
+            )
+
+        source = {
+            "id": "state_petroleum_production_licence_map",
+            "fetch_url": "https://example.test/TitlesCompany/query",
+        }
+        with mock.patch.object(fetch_data.requests, "get", side_effect=fake_get):
+            out = fetch_data.fetch_nopta_production_licence_map(source)
+
+        self.assertEqual(out["unit"], "active offshore petroleum production licence records")
+        self.assertEqual(out["values"][0]["v"], 1)
+        fields = out["extra"]["fields"]
+        wa = next(row for row in fields["state_rows"] if row["state_code"] == "WA")
+        self.assertEqual(wa["production_licence_records"], 1)
+        mapped = fields["production_licence_rows"][0]
+        self.assertEqual(mapped["field_name"], "Example Field")
+        self.assertEqual(mapped["title_operator"], "Example Operator Pty Ltd")
+        self.assertIsNone(mapped["production_metric_value"])
+        self.assertIn("not a production-volume", mapped["notes"])
+
+    def test_remp_oil_gas_projects_marks_capacity_not_production(self):
+        import openpyxl
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Oil & gas"
+        ws.append(["intro"])
+        ws.append(["Project", "Company", "State", "Latitude", "Longitude", "Type", "Status", "Annual Estimated New Capacity", "Capacity Unit", "Resource", "Construction Employment Estimate", "Operating Employment Estimate", "Cost Estimate A$m", "Estimated Start Commercial Operation"])
+        ws.append(["Gas Project", "Example Energy", "QLD", -27.0, 150.0, "New project", "Committed", "82", "TJ/d", "Gas", 1, 2, "500", "2026"])
+
+        source = {
+            "id": "state_oil_gas_major_projects_remp",
+            "fetch_url": "https://example.test/remp.xlsx",
+            "remp_sheet": "Oil & gas",
+        }
+        with mock.patch.object(fetch_data, "load_xlsx_from_url", return_value=wb):
+            out = fetch_data.fetch_remp_oil_gas_projects(source)
+
+        self.assertEqual(out["unit"], "oil and gas major project rows")
+        self.assertEqual(out["values"], [{"t": "2024-12-20", "v": 1}])
+        fields = out["extra"]["fields"]
+        self.assertEqual(fields["state_rows"][1]["project_rows"], 1)
+        project = fields["project_rows"][0]
+        self.assertEqual(project["project_name"], "Gas Project")
+        self.assertEqual(project["company_name"], "Example Energy")
+        self.assertEqual(project["production_metric_value"], 82.0)
+        self.assertIn("not current production", project["production_metric_name"])
+        self.assertIn("current production volume", project["notes"])
+
 
 if __name__ == "__main__":
     unittest.main()

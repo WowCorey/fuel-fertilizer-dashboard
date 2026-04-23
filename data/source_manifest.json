@@ -1473,6 +1473,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "state_oil_gas_major_projects_remp": {
+      "id": "state_oil_gas_major_projects_remp",
+      "human_name": "Resources and Energy Major Projects - oil and gas project map",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "programmatic",
+      "update_cadence": "annual",
+      "used_by": [
+        "state_contribution"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024",
+      "rights": "CC BY 4.0 except logos, third-party content, trademarks and otherwise-noted material",
+      "citation": "Department of Industry, Science and Resources, Commonwealth of Australia, Resources and Energy Major Projects 2024.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
     "state_operating_refinery_counts": {
       "id": "state_operating_refinery_counts",
       "human_name": "Operating refinery count by state",
@@ -1519,6 +1535,22 @@
       "canonical_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
       "rights": "Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted",
       "citation": "NOPTA, Spatial data; Titles and Permits Current FeatureServer; Petroleum Wells FeatureServer.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "state_petroleum_production_licence_map": {
+      "id": "state_petroleum_production_licence_map",
+      "human_name": "NOPTA active petroleum production licence map",
+      "publisher": "National Offshore Petroleum Titles Administrator",
+      "fetch": "programmatic",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "state_contribution"
+      ],
+      "canonical_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+      "rights": "Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted",
+      "citation": "NOPTA, Spatial data; Titles and Permits Current FeatureServer.",
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
