@@ -1,0 +1,25 @@
+{
+  "series_id": "dcceew_aes_generation_by_state",
+  "source_id": "dcceew_aes_generation_by_state",
+  "source_name": "DCCEEW Australian Energy Statistics — generation by state",
+  "source_url": "https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics",
+  "unit": "GWh",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "aes_generation_by_state.v1",
+    "fields": {
+      "states_covered": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
+      "scope_note": "Australian Energy Statistics covers ALL Australian generation (NEM + SWIS + DKIS + off-grid + behind-the-meter rooftop solar). This is the authoritative whole-of-Australia by-state series. AEMO covers NEM and WEM but not behind-the-meter rooftop and not NT DKIS uniformly.",
+      "primary_source_document": "DCCEEW Australian Energy Update / Australian Energy Statistics — Table O (electricity generation by fuel and state).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual GWh per state from Table O. Include both grid-connected and off-grid where reported. Annual lag of ~12 months."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual electricity generation GWh per state from DCCEEW Australian Energy Statistics Table O. This is the authoritative whole-of-Australia state breakdown — it includes NEM, SWIS, DKIS and rooftop solar.",
+  "citation": "DCCEEW, Australian Energy Update and Australian Energy Statistics (energy.gov.au), Table O.",
+  "status": "unavailable",
+  "manual_entry": true
+}

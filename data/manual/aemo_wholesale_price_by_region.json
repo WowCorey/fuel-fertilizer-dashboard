@@ -1,0 +1,25 @@
+{
+  "series_id": "aemo_wholesale_price_by_region",
+  "source_id": "aemo_wholesale_price_by_region",
+  "source_name": "AEMO NEM wholesale spot price by region",
+  "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+  "unit": "A$/MWh",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "aemo_spot_price_by_region.v1",
+    "fields": {
+      "regions": ["NSW1", "VIC1", "QLD1", "SA1", "TAS1"],
+      "price_basis": "Volume-weighted average spot price for the financial year, A$/MWh. NEM spot price is half-hourly (5-minute settlement from October 2021); the annual VWAP is published in AEMO QED.",
+      "primary_source_document": "AEMO QED — Annual report and quarterly editions.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the volume-weighted spot for each region from AEMO QED full-year edition. Note that contract / hedge prices (ASX 24) differ from spot; spot is the headline number."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual VWAP spot prices per NEM region. Five NEM regions only; WA WEM has its own balancing market price reported separately.",
+  "citation": "AEMO Quarterly Energy Dynamics; AEMO Data Dashboard.",
+  "status": "unavailable",
+  "manual_entry": true
+}

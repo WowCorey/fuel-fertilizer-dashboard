@@ -9,6 +9,7 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'fuel',          label: 'Fuel',                  href: '../fuel-dashboard/index.html' },
     { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },
+    { id: 'electricity',   label: 'Electricity',           href: '../electricity-dashboard/index.html' },
     { id: 'who_pays_what', label: 'Who pays what',         href: '../who-pays-what/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];

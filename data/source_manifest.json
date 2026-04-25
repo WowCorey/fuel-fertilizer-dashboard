@@ -33,6 +33,38 @@
       "has_generated": false,
       "has_manual": true
     },
+    "abs_energy_business_use": {
+      "id": "abs_energy_business_use",
+      "human_name": "ABS Energy Account Australia — business / industry consumption",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia",
+      "rights": "Creative Commons Attribution 4.0",
+      "citation": "Australian Bureau of Statistics, Energy Account Australia (abs.gov.au).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_energy_household_use": {
+      "id": "abs_energy_household_use",
+      "human_name": "ABS Energy Account Australia — household consumption",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia",
+      "rights": "Creative Commons Attribution 4.0",
+      "citation": "Australian Bureau of Statistics, Energy Account Australia (abs.gov.au).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "abs_fertiliser_imports": {
       "id": "abs_fertiliser_imports",
       "human_name": "ABS International Merchandise Trade — fertiliser imports (SITC 562)",
@@ -320,6 +352,86 @@
       "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Australian Competition and Consumer Commission, Petroleum Monitoring Report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_capacity_outlook": {
+      "id": "aemo_capacity_outlook",
+      "human_name": "AEMO Electricity Statement of Opportunities (ESOO)",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/electricity-statement-of-opportunities-esoo",
+      "rights": "AEMO data terms",
+      "citation": "AEMO, Electricity Statement of Opportunities (annual).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_demand_by_state": {
+      "id": "aemo_demand_by_state",
+      "human_name": "AEMO NEM operational demand by region",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+      "rights": "AEMO data terms",
+      "citation": "AEMO, Quarterly Energy Dynamics; AEMO Data Dashboard.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_generation_by_fuel": {
+      "id": "aemo_generation_by_fuel",
+      "human_name": "AEMO NEM generation by fuel type",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+      "rights": "AEMO data terms; OpenNEM republishes the same dispatch under CC-BY 4.0",
+      "citation": "AEMO, Quarterly Energy Dynamics; OpenNEM (opennem.org.au).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_generation_by_state": {
+      "id": "aemo_generation_by_state",
+      "human_name": "AEMO NEM generation by region",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+      "rights": "AEMO data terms; OpenNEM republishes under CC-BY 4.0",
+      "citation": "AEMO, Quarterly Energy Dynamics; AEMO WEM Data Dashboard.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_wholesale_price_by_region": {
+      "id": "aemo_wholesale_price_by_region",
+      "human_name": "AEMO NEM wholesale spot price by region",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+      "rights": "AEMO data terms",
+      "citation": "AEMO, Quarterly Energy Dynamics.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -673,6 +785,22 @@
       "has_generated": true,
       "has_manual": false
     },
+    "coal_thermal_exports": {
+      "id": "coal_thermal_exports",
+      "human_name": "Australian thermal coal exports (DISR Resources and Energy Quarterly)",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+      "rights": "Commonwealth copyright; CC BY 4.0 unless otherwise noted",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "company_ampol": {
       "id": "company_ampol",
       "human_name": "Ampol annual report (ASX:ALD)",
@@ -797,6 +925,54 @@
       "canonical_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
       "rights": "Company copyright",
       "citation": "Woodside Energy annual report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "dcceew_aes_consumption_by_sector": {
+      "id": "dcceew_aes_consumption_by_sector",
+      "human_name": "DCCEEW Australian Energy Statistics — consumption by sector",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics",
+      "rights": "Commonwealth copyright; DCCEEW website material is CC BY 4.0 unless otherwise noted",
+      "citation": "DCCEEW, Australian Energy Update and Australian Energy Statistics (energy.gov.au).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "dcceew_aes_generation_by_state": {
+      "id": "dcceew_aes_generation_by_state",
+      "human_name": "DCCEEW Australian Energy Statistics — generation by state",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "DCCEEW, Australian Energy Update and Australian Energy Statistics (energy.gov.au), Table O.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "dcceew_aes_renewable_share": {
+      "id": "dcceew_aes_renewable_share",
+      "human_name": "DCCEEW Australian Energy Statistics — renewable share of generation",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "electricity"
+      ],
+      "canonical_url": "https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "DCCEEW, Australian Energy Update (energy.gov.au).",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

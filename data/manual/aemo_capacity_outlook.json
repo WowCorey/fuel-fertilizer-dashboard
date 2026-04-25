@@ -1,0 +1,25 @@
+{
+  "series_id": "aemo_capacity_outlook",
+  "source_id": "aemo_capacity_outlook",
+  "source_name": "AEMO Electricity Statement of Opportunities (ESOO)",
+  "source_url": "https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/electricity-statement-of-opportunities-esoo",
+  "unit": "MW",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "aemo_esoo_outlook.v1",
+    "fields": {
+      "fields_to_key": ["installed_capacity_mw_by_fuel_year", "scheduled_retirements_mw_year", "committed_new_capacity_mw_year", "reliability_standard_breach_years", "unserved_energy_pct_forecast"],
+      "scope": "10-year NEM reliability outlook. Published annually by AEMO around August/September. WA SWIS has a separate ESOO under AEMO WA.",
+      "primary_source_document": "AEMO ESOO PDF and supporting workbook (Excel) released annually.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the headline reliability standard, scheduled retirements (Eraring, Yallourn, Bayswater dates), committed new capacity, and any forecast unserved-energy breach years. Cite report year and table number."
+    }
+  },
+  "notes": "Awaiting hand-keyed ESOO headline figures: scheduled retirements, committed new builds, reliability outlook. Update annually when AEMO releases the new ESOO.",
+  "citation": "AEMO Electricity Statement of Opportunities (annual).",
+  "status": "unavailable",
+  "manual_entry": true
+}

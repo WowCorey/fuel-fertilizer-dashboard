@@ -1,0 +1,25 @@
+{
+  "series_id": "aemo_generation_by_state",
+  "source_id": "aemo_generation_by_state",
+  "source_name": "AEMO NEM generation by region",
+  "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+  "unit": "TWh",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "aemo_generation_by_state.v1",
+    "fields": {
+      "states_covered": ["NSW + ACT", "VIC", "QLD", "SA", "TAS"],
+      "scope_note": "WA (SWIS) and NT (DKIS) are not in the NEM. For whole-of-Australia state generation totals include AEMO WEM data (WA) and DCCEEW Australian Energy Statistics (NT and totals).",
+      "primary_source_document": "AEMO Data Dashboard NEM and WEM; OpenNEM Annual reports per region.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual TWh per region from AEMO QED full-year edition. WA SWIS values from AEMO WEM dashboard. NT from DCCEEW Australian Energy Statistics Table O."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual generation TWh per NEM region plus SWIS and DKIS. The NEM has five regions (NSW+ACT, VIC, QLD, SA, TAS); WA and NT are separate.",
+  "citation": "AEMO Quarterly Energy Dynamics; AEMO WEM Data Dashboard; DCCEEW Australian Energy Statistics.",
+  "status": "unavailable",
+  "manual_entry": true
+}

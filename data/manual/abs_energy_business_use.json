@@ -1,0 +1,25 @@
+{
+  "series_id": "abs_energy_business_use",
+  "source_id": "abs_energy_business_use",
+  "source_name": "ABS Energy Account Australia — business / industry consumption",
+  "source_url": "https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia",
+  "unit": "PJ",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "abs_business_energy.v1",
+    "fields": {
+      "fields_to_key": ["mining_electricity_pj", "manufacturing_electricity_pj", "commercial_services_electricity_pj", "agriculture_electricity_pj", "construction_electricity_pj", "transport_electricity_pj"],
+      "scope_note": "ABS Energy Account Australia reports business-sector final energy by ANZSIC division. Mining and manufacturing are typically the largest electricity-using sectors in PJ terms.",
+      "primary_source_document": "ABS Energy Account Australia (annual) — Tables 6 and 7 (final energy use by industry).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual electricity PJ per ANZSIC sector. Reconcile against DCCEEW Australian Energy Statistics Table E (energy by industry) — methodology differs slightly."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual business / industry electricity consumption per ANZSIC sector from ABS Energy Account Australia. Mining is typically the largest single industrial electricity consumer in Australia.",
+  "citation": "Australian Bureau of Statistics, Energy Account Australia (abs.gov.au).",
+  "status": "unavailable",
+  "manual_entry": true
+}

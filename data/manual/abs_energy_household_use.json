@@ -1,0 +1,25 @@
+{
+  "series_id": "abs_energy_household_use",
+  "source_id": "abs_energy_household_use",
+  "source_name": "ABS Energy Account Australia — household consumption",
+  "source_url": "https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia",
+  "unit": "PJ",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "abs_household_energy.v1",
+    "fields": {
+      "fields_to_key": ["household_electricity_pj_annual", "household_gas_pj_annual", "average_residential_kwh_per_household", "share_of_national_electricity_pct"],
+      "scope_note": "ABS Energy Account Australia (cat. 4604.0) reports household final energy consumption by fuel. Cross-reference DCCEEW Australian Energy Statistics for grid-side totals (the two should reconcile but use slightly different methodologies).",
+      "primary_source_document": "ABS Energy Account Australia (annual). Also: ABS Household Energy Consumption Survey (less frequent).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual household electricity PJ and household gas PJ. Optionally key the average kWh/household figure that is widely cited in retail-pricing context."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual household electricity and gas consumption from ABS Energy Account Australia. Households are typically ~25-30% of national electricity end-use; cite the exact year and methodology.",
+  "citation": "Australian Bureau of Statistics, Energy Account Australia (abs.gov.au).",
+  "status": "unavailable",
+  "manual_entry": true
+}

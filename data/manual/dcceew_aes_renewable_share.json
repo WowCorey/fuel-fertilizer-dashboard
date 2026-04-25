@@ -1,0 +1,25 @@
+{
+  "series_id": "dcceew_aes_renewable_share",
+  "source_id": "dcceew_aes_renewable_share",
+  "source_name": "DCCEEW Australian Energy Statistics — renewable share of generation",
+  "source_url": "https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics",
+  "unit": "% of total generation",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "aes_renewable_share.v1",
+    "fields": {
+      "renewable_definition": "Hydro + wind + solar (utility + rooftop) + bioenergy. DCCEEW Australian Energy Statistics publishes this as the headline renewable-electricity share. Distinct from the Renewable Energy Target accounting basis.",
+      "scope": "Whole-of-Australia electricity generation, all networks plus behind-the-meter.",
+      "primary_source_document": "DCCEEW Australian Energy Update — figure 'Renewable share of electricity generation' and Table O underlying data.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the headline % for the most recent fiscal year. Optionally key the trailing 5-year series so the page can show trend. Annual lag of ~12 months."
+    }
+  },
+  "notes": "Awaiting hand-keyed renewable share % from DCCEEW Australian Energy Update headline figure. Australia's renewable share has been rising rapidly (>30% by mid-2020s); cite the exact year keyed.",
+  "citation": "DCCEEW, Australian Energy Update (energy.gov.au).",
+  "status": "unavailable",
+  "manual_entry": true
+}

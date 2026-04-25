@@ -1,0 +1,25 @@
+{
+  "series_id": "aemo_demand_by_state",
+  "source_id": "aemo_demand_by_state",
+  "source_name": "AEMO NEM operational demand by region",
+  "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+  "unit": "TWh",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "aemo_demand_by_state.v1",
+    "fields": {
+      "demand_basis": "Operational demand = total scheduled and semi-scheduled generation plus net imports, less transmission losses. Excludes behind-the-meter rooftop solar self-consumption (which is netted off operational demand). Cross-reference DCCEEW total final consumption for end-use comparable totals.",
+      "states_covered": ["NSW + ACT", "VIC", "QLD", "SA", "TAS", "WA SWIS", "NT DKIS"],
+      "primary_source_document": "AEMO Data Dashboard; QED full-year edition; OpenNEM regional pages.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual operational-demand TWh per region from AEMO QED. Key peak demand MW separately and label clearly (peak ≠ annual)."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual operational demand TWh per region plus peak MW. Operational demand and total final consumption are different metrics; do not conflate.",
+  "citation": "AEMO Quarterly Energy Dynamics; AEMO Data Dashboard.",
+  "status": "unavailable",
+  "manual_entry": true
+}

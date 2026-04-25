@@ -1638,3 +1638,172 @@ sources:
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: manual
     used_by: [who_pays_what]
+
+  # ---------------------------------------------------------------------------
+  # Electricity dashboard — generation, demand, prices, capacity, end-use
+  # ---------------------------------------------------------------------------
+
+  - id: aemo_generation_by_fuel
+    human_name: AEMO NEM generation by fuel type
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: AEMO data terms; OpenNEM republishes the same dispatch under CC-BY 4.0
+    rights_url: https://aemo.com.au/privacy-and-legal-notices
+    citation: AEMO, Quarterly Energy Dynamics; OpenNEM (opennem.org.au).
+    reuse_notes: Hand-key annual TWh per fuel from QED full-year edition. NEM only; SWIS (WA) and DKIS (NT) require separate sourcing. OpenNEM provides clean CSV access if a programmatic fetcher is later added.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: aemo_generation_by_state
+    human_name: AEMO NEM generation by region
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: AEMO data terms; OpenNEM republishes under CC-BY 4.0
+    rights_url: https://aemo.com.au/privacy-and-legal-notices
+    citation: AEMO, Quarterly Energy Dynamics; AEMO WEM Data Dashboard.
+    reuse_notes: Five NEM regions (NSW+ACT, VIC, QLD, SA, TAS). For whole-of-Australia state totals add WA SWIS and NT DKIS from DCCEEW Australian Energy Statistics.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: aemo_demand_by_state
+    human_name: AEMO NEM operational demand by region
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: AEMO data terms
+    rights_url: https://aemo.com.au/privacy-and-legal-notices
+    citation: AEMO, Quarterly Energy Dynamics; AEMO Data Dashboard.
+    reuse_notes: Operational demand excludes behind-the-meter rooftop self-consumption. Distinct from total final consumption reported by DCCEEW.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: aemo_wholesale_price_by_region
+    human_name: AEMO NEM wholesale spot price by region
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: AEMO data terms
+    rights_url: https://aemo.com.au/privacy-and-legal-notices
+    citation: AEMO, Quarterly Energy Dynamics.
+    reuse_notes: Volume-weighted annual spot price A$/MWh per NEM region. Spot price is half-hourly (5-minute settlement from October 2021); contract / hedge prices on ASX 24 differ.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: aemo_capacity_outlook
+    human_name: AEMO Electricity Statement of Opportunities (ESOO)
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/electricity-statement-of-opportunities-esoo
+    canonical_url: https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/electricity-statement-of-opportunities-esoo
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: AEMO data terms
+    rights_url: https://aemo.com.au/privacy-and-legal-notices
+    citation: AEMO, Electricity Statement of Opportunities (annual).
+    reuse_notes: "Headline ESOO figures (scheduled retirements, committed new builds, reliability standard breach years). Cite the report year and table number explicitly."
+    fetch: manual
+    used_by: [electricity]
+
+  - id: dcceew_aes_consumption_by_sector
+    human_name: DCCEEW Australian Energy Statistics — consumption by sector
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; DCCEEW website material is CC BY 4.0 unless otherwise noted
+    rights_url: https://www.dcceew.gov.au/about/website/copyright
+    citation: DCCEEW, Australian Energy Update and Australian Energy Statistics (energy.gov.au).
+    reuse_notes: End-use electricity consumption by sector in PJ, from Australian Energy Statistics Tables E and F. Data lag is ~12 months. Largest sectors are typically manufacturing, residential, mining, and commercial services.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: dcceew_aes_generation_by_state
+    human_name: DCCEEW Australian Energy Statistics — generation by state
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.dcceew.gov.au/about/website/copyright
+    citation: DCCEEW, Australian Energy Update and Australian Energy Statistics (energy.gov.au), Table O.
+    reuse_notes: Whole-of-Australia generation by state and fuel from Table O. Authoritative because it includes NEM, SWIS, DKIS and behind-the-meter rooftop. Annual lag ~12 months.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: dcceew_aes_renewable_share
+    human_name: DCCEEW Australian Energy Statistics — renewable share of generation
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics
+    canonical_url: https://www.energy.gov.au/publications/australian-energy-update-and-australian-energy-statistics
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.dcceew.gov.au/about/website/copyright
+    citation: DCCEEW, Australian Energy Update (energy.gov.au).
+    reuse_notes: Headline renewable share % of total generation. Renewables = hydro + wind + solar + bioenergy. Distinct from RET accounting basis. Cite year keyed.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: abs_energy_household_use
+    human_name: ABS Energy Account Australia — household consumption
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia
+    canonical_url: https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Creative Commons Attribution 4.0
+    rights_url: https://www.abs.gov.au/website-privacy-copyright-and-disclaimer
+    citation: Australian Bureau of Statistics, Energy Account Australia (abs.gov.au).
+    reuse_notes: Household final electricity and gas consumption in PJ, plus average kWh/household. Reconcile against DCCEEW residential PJ.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: abs_energy_business_use
+    human_name: ABS Energy Account Australia — business / industry consumption
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia
+    canonical_url: https://www.abs.gov.au/statistics/environment/environmental-management/energy-account-australia
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Creative Commons Attribution 4.0
+    rights_url: https://www.abs.gov.au/website-privacy-copyright-and-disclaimer
+    citation: Australian Bureau of Statistics, Energy Account Australia (abs.gov.au).
+    reuse_notes: Business / industry final electricity by ANZSIC division. Mining is typically the largest single industrial electricity consumer.
+    fetch: manual
+    used_by: [electricity]
+
+  - id: coal_thermal_exports
+    human_name: Australian thermal coal exports (DISR Resources and Energy Quarterly)
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0 unless otherwise noted
+    rights_url: https://www.industry.gov.au/copyright
+    citation: Department of Industry, Science and Resources, Resources and Energy Quarterly (industry.gov.au).
+    reuse_notes: Annual thermal coal export volume (Mt) and value (A$bn). Distinguish thermal (electricity) from metallurgical (steelmaking) coal. Do not synthesize a TWh-equivalent on the page.
+    fetch: manual
+    used_by: [electricity]

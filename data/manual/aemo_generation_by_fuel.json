@@ -1,0 +1,25 @@
+{
+  "series_id": "aemo_generation_by_fuel",
+  "source_id": "aemo_generation_by_fuel",
+  "source_name": "AEMO NEM generation by fuel type",
+  "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+  "unit": "TWh",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "aemo_generation_mix.v1",
+    "fields": {
+      "fuel_categories": ["black coal", "brown coal", "gas", "hydro", "wind", "rooftop solar", "utility solar", "battery", "biomass", "distillate"],
+      "scope": "National Electricity Market (NEM) — covers QLD, NSW, ACT, VIC, TAS, SA. Excludes SWIS (WA) and NT (DKIS / regulated). Cross-reference DCCEEW Australian Energy Statistics for whole-of-Australia generation including SWIS and NT.",
+      "primary_source_document": "AEMO Data Dashboard / Quarterly Energy Dynamics report. OpenNEM (opennem.org.au) republishes the same dispatch data with cleaner CSV access under CC-BY.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual TWh totals per fuel from AEMO QED (Q4 + full-year edition) or OpenNEM 'Annual' report. Record the financial-year-vs-calendar-year basis explicitly."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual NEM generation mix (TWh per fuel) from AEMO Quarterly Energy Dynamics. OpenNEM provides clean CSV access. Keep WA SWIS and NT DKIS clearly separate.",
+  "citation": "AEMO, Quarterly Energy Dynamics; OpenNEM (opennem.org.au).",
+  "status": "unavailable",
+  "manual_entry": true
+}
