@@ -33,6 +33,38 @@
       "has_generated": false,
       "has_manual": true
     },
+    "abs_employment_by_state_resources": {
+      "id": "abs_employment_by_state_resources",
+      "human_name": "ABS Labour Force - resources employment by state",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "workforce"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "rights": "Creative Commons Attribution 4.0",
+      "citation": "Australian Bureau of Statistics, Labour Force, Australia, Detailed.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_employment_energy_resources": {
+      "id": "abs_employment_energy_resources",
+      "human_name": "ABS Labour Force - energy and resources sector employment",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "workforce"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "rights": "Creative Commons Attribution 4.0",
+      "citation": "Australian Bureau of Statistics, Labour Force, Australia, Detailed.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "abs_energy_business_use": {
       "id": "abs_energy_business_use",
       "human_name": "ABS Energy Account Australia — business / industry consumption",
@@ -160,6 +192,22 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "abs_motor_vehicle_census_ev": {
+      "id": "abs_motor_vehicle_census_ev",
+      "human_name": "ABS Motor Vehicle Census - EV fleet share",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "ev"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/industry/tourism-and-transport/motor-vehicle-census-australia",
+      "rights": "Creative Commons Attribution 4.0",
+      "citation": "Australian Bureau of Statistics, Motor Vehicle Census, Australia.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "abs_petroleum_imports": {
       "id": "abs_petroleum_imports",
@@ -416,6 +464,22 @@
       "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
       "rights": "AEMO data terms; OpenNEM republishes under CC-BY 4.0",
       "citation": "AEMO, Quarterly Energy Dynamics; AEMO WEM Data Dashboard.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_isp_progress": {
+      "id": "aemo_isp_progress",
+      "human_name": "AEMO Integrated System Plan - transmission build-out progress",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "grid_storage"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp",
+      "rights": "AEMO data terms",
+      "citation": "AEMO, Integrated System Plan.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -785,6 +849,54 @@
       "has_generated": true,
       "has_manual": false
     },
+    "cec_battery_storage_installed": {
+      "id": "cec_battery_storage_installed",
+      "human_name": "Clean Energy Council - battery storage installed and committed",
+      "publisher": "Clean Energy Council",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "grid_storage"
+      ],
+      "canonical_url": "https://www.cleanenergycouncil.org.au/resources/resources-hub/clean-energy-australia-report",
+      "rights": "CEC publication terms",
+      "citation": "Clean Energy Council, Clean Energy Australia and Quarterly Project Tracker.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "cec_renewable_capacity_pipeline": {
+      "id": "cec_renewable_capacity_pipeline",
+      "human_name": "Clean Energy Council - renewable capacity pipeline",
+      "publisher": "Clean Energy Council",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "grid_storage"
+      ],
+      "canonical_url": "https://www.cleanenergycouncil.org.au/resources/project-tracker",
+      "rights": "CEC publication terms",
+      "citation": "Clean Energy Council, Project Tracker; Clean Energy Regulator, SRES reports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "cer_safeguard_mechanism": {
+      "id": "cer_safeguard_mechanism",
+      "human_name": "Clean Energy Regulator - Safeguard Mechanism dataset",
+      "publisher": "Clean Energy Regulator",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "emissions"
+      ],
+      "canonical_url": "https://cer.gov.au/markets/reports-and-data/safeguard-mechanism-data",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "Clean Energy Regulator, Safeguard Mechanism reported emissions dataset.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "coal_thermal_exports": {
       "id": "coal_thermal_exports",
       "human_name": "Australian thermal coal exports (DISR Resources and Energy Quarterly)",
@@ -977,6 +1089,102 @@
       "has_generated": false,
       "has_manual": true
     },
+    "dcceew_nggi_emissions_by_sector": {
+      "id": "dcceew_nggi_emissions_by_sector",
+      "human_name": "DCCEEW National Greenhouse Gas Inventory - emissions by sector",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "emissions"
+      ],
+      "canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "DCCEEW, Quarterly Update of Australia's National Greenhouse Gas Inventory.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "dcceew_nggi_emissions_by_state": {
+      "id": "dcceew_nggi_emissions_by_state",
+      "human_name": "DCCEEW State and Territory Greenhouse Gas Inventories",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "emissions"
+      ],
+      "canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts/state-and-territory-greenhouse-gas-inventories",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "DCCEEW, State and Territory Greenhouse Gas Inventories.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "dcceew_nggi_emissions_total": {
+      "id": "dcceew_nggi_emissions_total",
+      "human_name": "DCCEEW National Greenhouse Gas Inventory - total emissions",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "emissions"
+      ],
+      "canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "DCCEEW, Quarterly Update of Australia's National Greenhouse Gas Inventory.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "disr_critical_minerals_exports": {
+      "id": "disr_critical_minerals_exports",
+      "human_name": "DISR Resources and Energy Quarterly - critical minerals export value",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "critical_minerals"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "DISR, Resources and Energy Quarterly; Australian Bureau of Statistics, International Merchandise Trade.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "disr_critical_minerals_pipeline": {
+      "id": "disr_critical_minerals_pipeline",
+      "human_name": "DISR Resources and Energy Major Projects - critical minerals pipeline",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "critical_minerals"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-major-projects",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "DISR, Resources and Energy Major Projects.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "disr_critical_minerals_production": {
+      "id": "disr_critical_minerals_production",
+      "human_name": "DISR Resources and Energy Quarterly - critical minerals production",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "critical_minerals"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+      "rights": "Commonwealth copyright; CC BY 4.0 unless otherwise noted",
+      "citation": "DISR, Resources and Energy Quarterly; Geoscience Australia.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "eia_brent": {
       "id": "eia_brent",
       "human_name": "Brent crude spot price (EIA)",
@@ -1040,6 +1248,38 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "evc_charging_infrastructure": {
+      "id": "evc_charging_infrastructure",
+      "human_name": "Electric Vehicle Council - public charging infrastructure",
+      "publisher": "Electric Vehicle Council",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "ev"
+      ],
+      "canonical_url": "https://electricvehiclecouncil.com.au/reports/state-of-evs-2024/",
+      "rights": "EVC publication terms",
+      "citation": "Electric Vehicle Council, State of Electric Vehicles.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fcai_ev_sales_share": {
+      "id": "fcai_ev_sales_share",
+      "human_name": "FCAI VFACTS - EV share of new vehicle sales",
+      "publisher": "Federal Chamber of Automotive Industries",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "ev"
+      ],
+      "canonical_url": "https://www.fcai.com.au/sales/sales-results",
+      "rights": "FCAI publication terms; cite VFACTS as source",
+      "citation": "Federal Chamber of Automotive Industries, VFACTS monthly sales results.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "fuel_security_diesel_days_remaining": {
       "id": "fuel_security_diesel_days_remaining",
@@ -1169,6 +1409,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "ga_critical_minerals_resources": {
+      "id": "ga_critical_minerals_resources",
+      "human_name": "Geoscience Australia - Australia's Identified Mineral Resources",
+      "publisher": "Geoscience Australia",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "critical_minerals"
+      ],
+      "canonical_url": "https://www.ga.gov.au/digital-publication/aimr2024",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "Geoscience Australia, Australia's Identified Mineral Resources.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "iea_90day": {
       "id": "iea_90day",
       "human_name": "IEA 90-day oil stockholding obligation",
@@ -1182,6 +1438,22 @@
       "canonical_url": "https://www.iea.org/reports/oil-stockholding",
       "rights": "IEA terms of use",
       "citation": "International Energy Agency, Agreement on an International Energy Program (1974), 90-day stockholding obligation.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "jsa_workforce_outlook": {
+      "id": "jsa_workforce_outlook",
+      "human_name": "Jobs and Skills Australia - energy and resources workforce outlook",
+      "publisher": "Jobs and Skills Australia",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "workforce"
+      ],
+      "canonical_url": "https://www.jobsandskills.gov.au/data/workforce-projections",
+      "rights": "Commonwealth copyright; CC BY 4.0",
+      "citation": "Jobs and Skills Australia, Workforce Projections; Skills Priority List.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

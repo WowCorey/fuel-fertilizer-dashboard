@@ -1,0 +1,31 @@
+{
+  "series_id": "fcai_ev_sales_share",
+  "source_id": "fcai_ev_sales_share",
+  "source_name": "FCAI VFACTS - EV share of new vehicle sales",
+  "source_url": "https://www.fcai.com.au/sales/sales-results",
+  "unit": "% of new light vehicle sales",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "ev_sales_share.v1",
+    "fields": {
+      "fields_to_key": [
+        "bev_share_pct_monthly",
+        "phev_share_pct_monthly",
+        "hev_share_pct_monthly",
+        "ice_share_pct_monthly",
+        "total_new_vehicle_sales_count"
+      ],
+      "scope": "FCAI VFACTS reports monthly new light vehicle sales by powertrain. BEV = battery electric, PHEV = plug-in hybrid, HEV = hybrid (no plug). Heavy vehicles tracked separately.",
+      "primary_source_document": "FCAI VFACTS monthly sales results (Federal Chamber of Automotive Industries).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key monthly BEV / PHEV / HEV / ICE share for the latest 13 months so the page can show year-on-year. Cross-check Electric Vehicle Council quarterly summary."
+    }
+  },
+  "notes": "Awaiting hand-keyed monthly EV share. Australia's BEV share of new light vehicle sales has risen rapidly (from <1% in 2020 to ~8-10% by 2024-25); penetration lags Norway/EU/UK/China but is growing. The New Vehicle Efficiency Standard from January 2025 is the main policy driver.",
+  "citation": "Federal Chamber of Automotive Industries, VFACTS monthly sales results.",
+  "status": "unavailable",
+  "manual_entry": true
+}

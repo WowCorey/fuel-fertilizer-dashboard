@@ -1,0 +1,31 @@
+{
+  "series_id": "cer_safeguard_mechanism",
+  "source_id": "cer_safeguard_mechanism",
+  "source_name": "Clean Energy Regulator - Safeguard Mechanism dataset",
+  "source_url": "https://cer.gov.au/markets/reports-and-data/safeguard-mechanism-data",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "safeguard_mechanism.v1",
+    "fields": {
+      "fields_to_key": [
+        "covered_facility_count",
+        "total_baseline_mtco2e",
+        "total_emissions_mtco2e",
+        "facilities_above_baseline_count",
+        "accu_units_surrendered"
+      ],
+      "scope": "Safeguard Mechanism applies to facilities emitting >100,000 t CO2-e/year. Reformed from 1 July 2023 with declining baselines and ACCU surrender obligations.",
+      "primary_source_document": "Clean Energy Regulator Safeguard Mechanism reported emissions dataset (annual, published in Q1 of the following financial year).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the count of covered facilities, aggregate baseline, aggregate reported emissions, count of above-baseline facilities, ACCU surrender total. Cross-reference the safeguard outcomes annual report."
+    }
+  },
+  "notes": "Awaiting hand-keyed Safeguard Mechanism aggregates. Approximately 215 facilities covered as at the 2023-24 reform; coverage spans LNG, mining, manufacturing, aviation. The mechanism is the main pricing instrument for industrial emissions in Australia.",
+  "citation": "Clean Energy Regulator, Safeguard Mechanism reported emissions dataset.",
+  "status": "unavailable",
+  "manual_entry": true
+}

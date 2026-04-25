@@ -1,0 +1,33 @@
+{
+  "series_id": "dcceew_nggi_emissions_by_state",
+  "source_id": "dcceew_nggi_emissions_by_state",
+  "source_name": "DCCEEW State and Territory Greenhouse Gas Inventories",
+  "source_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts/state-and-territory-greenhouse-gas-inventories",
+  "unit": "Mt CO2-e",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "nggi_emissions_by_state.v1",
+    "fields": {
+      "states": [
+        "NSW",
+        "VIC",
+        "QLD",
+        "SA",
+        "WA",
+        "TAS",
+        "NT",
+        "ACT"
+      ],
+      "primary_source_document": "DCCEEW State and Territory Greenhouse Gas Inventories (annual).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key Mt CO2-e per state for the most recent year. NSW and QLD are typically the largest emitters (electricity-driven); WA's profile is gas/LNG-fugitive-heavy. Annual lag ~12-18 months."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual state emissions Mt CO2-e. Each state has its own net-zero target alongside the federal 2050 commitment; the federal STGGI gives a comparable baseline.",
+  "citation": "DCCEEW, State and Territory Greenhouse Gas Inventories.",
+  "status": "unavailable",
+  "manual_entry": true
+}

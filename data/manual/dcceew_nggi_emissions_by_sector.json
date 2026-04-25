@@ -1,0 +1,33 @@
+{
+  "series_id": "dcceew_nggi_emissions_by_sector",
+  "source_id": "dcceew_nggi_emissions_by_sector",
+  "source_name": "DCCEEW National Greenhouse Gas Inventory - emissions by sector",
+  "source_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update",
+  "unit": "Mt CO2-e",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "nggi_emissions_by_sector.v1",
+    "fields": {
+      "sectors": [
+        "electricity",
+        "stationary energy ex-electricity",
+        "transport",
+        "fugitive emissions",
+        "industrial processes and product use",
+        "agriculture",
+        "waste",
+        "LULUCF"
+      ],
+      "primary_source_document": "DCCEEW Quarterly Update \u2014 Table 1 'Emissions by sector'.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key Mt CO2-e per sector for the latest quarter and the same quarter five years prior so the page can show direction. Note that LULUCF is often a net sink and is reported separately."
+    }
+  },
+  "notes": "Awaiting hand-keyed sectoral emissions Mt CO2-e. Electricity has historically been the largest single sector (~30%); transport is second (~20%). Sector definitions follow IPCC categories used in the National Inventory Report.",
+  "citation": "DCCEEW, Quarterly Update of Australia's National Greenhouse Gas Inventory.",
+  "status": "unavailable",
+  "manual_entry": true
+}

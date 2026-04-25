@@ -10,6 +10,11 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },
     { id: 'electricity',   label: 'Electricity',           href: '../electricity-dashboard/index.html' },
+    { id: 'emissions',     label: 'Emissions',             href: '../emissions-dashboard/index.html' },
+    { id: 'critical_minerals', label: 'Critical minerals', href: '../critical-minerals-dashboard/index.html' },
+    { id: 'workforce',     label: 'Workforce',             href: '../workforce-dashboard/index.html' },
+    { id: 'ev',            label: 'EV transition',         href: '../ev-dashboard/index.html' },
+    { id: 'grid_storage',  label: 'Grid & storage',        href: '../grid-storage-dashboard/index.html' },
     { id: 'who_pays_what', label: 'Who pays what',         href: '../who-pays-what/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];

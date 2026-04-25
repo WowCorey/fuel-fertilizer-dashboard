@@ -1,0 +1,32 @@
+{
+  "series_id": "disr_critical_minerals_exports",
+  "source_id": "disr_critical_minerals_exports",
+  "source_name": "DISR Resources and Energy Quarterly - critical minerals export value",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+  "unit": "A$bn nominal, financial year",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "critical_minerals_exports.v1",
+    "fields": {
+      "fields_to_key": [
+        "lithium_value_abn",
+        "nickel_value_abn",
+        "copper_value_abn",
+        "rare_earths_value_abn",
+        "cobalt_value_abn",
+        "total_critical_minerals_value_abn"
+      ],
+      "top_destinations_framing": "Top destinations for Australian critical minerals are typically China (refining hub for spodumene \u2192 lithium chemicals), South Korea, Japan, and the US. The Critical Minerals Facility / NRF aim to onshore more midstream processing.",
+      "primary_source_document": "DISR Resources and Energy Quarterly \u2014 Critical minerals chapter; ABS International Merchandise Trade for ABS-reconciled values.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual export value A$bn per critical mineral. Pick volume basis (refined vs concentrate vs ore) and cite explicitly. Cross-check ABS at HS-code level."
+    }
+  },
+  "notes": "Awaiting hand-keyed export values per critical mineral. Lithium spodumene exports peaked at >A$20bn during the 2022-23 boom and have moderated; rare earths and copper are growing. Most Australian lithium exports are unrefined spodumene concentrate.",
+  "citation": "DISR Resources and Energy Quarterly; Australian Bureau of Statistics, International Merchandise Trade.",
+  "status": "unavailable",
+  "manual_entry": true
+}

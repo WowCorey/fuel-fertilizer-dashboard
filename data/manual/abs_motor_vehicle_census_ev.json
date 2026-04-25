@@ -1,0 +1,30 @@
+{
+  "series_id": "abs_motor_vehicle_census_ev",
+  "source_id": "abs_motor_vehicle_census_ev",
+  "source_name": "ABS Motor Vehicle Census - EV fleet share",
+  "source_url": "https://www.abs.gov.au/statistics/industry/tourism-and-transport/motor-vehicle-census-australia",
+  "unit": "registered vehicles",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "ev_fleet_share.v1",
+    "fields": {
+      "fields_to_key": [
+        "registered_bev_count_national",
+        "registered_phev_count_national",
+        "registered_hev_count_national",
+        "ev_share_of_total_fleet_pct"
+      ],
+      "scope": "ABS Motor Vehicle Census is the annual snapshot of all registered motor vehicles by fuel type as at 31 January. Released around mid-year.",
+      "primary_source_document": "ABS Motor Vehicle Census, Australia (Cat. 9309.0).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the BEV / PHEV / HEV / total counts and the EV share of total fleet. Compare against the annual sales share to show fleet turnover lag."
+    }
+  },
+  "notes": "Awaiting hand-keyed Motor Vehicle Census EV counts. Sales-share leads fleet-share by ~10-15 years given vehicle turnover; this means transport emissions decline lags the EV sales transition.",
+  "citation": "Australian Bureau of Statistics, Motor Vehicle Census, Australia.",
+  "status": "unavailable",
+  "manual_entry": true
+}

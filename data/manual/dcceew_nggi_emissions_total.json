@@ -1,0 +1,30 @@
+{
+  "series_id": "dcceew_nggi_emissions_total",
+  "source_id": "dcceew_nggi_emissions_total",
+  "source_name": "DCCEEW National Greenhouse Gas Inventory - total emissions",
+  "source_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update",
+  "unit": "Mt CO2-e",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "nggi_emissions_total.v1",
+    "fields": {
+      "scope": "Total Australian net greenhouse gas emissions, Mt CO2-equivalent, financial year. Includes LULUCF (land-use, land-use change and forestry).",
+      "fields_to_key": [
+        "latest_total_mtco2e",
+        "vs_2005_baseline_pct",
+        "vs_2030_target_pct",
+        "vs_2050_net_zero_target_pct"
+      ],
+      "primary_source_document": "DCCEEW Quarterly Update of Australia's National Greenhouse Gas Inventory; National Inventory Report (annual).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the most recent quarterly total. Headline comparisons: 2005 baseline (Paris), 2030 target (43% below 2005), 2050 net zero. Cite report edition explicitly."
+    }
+  },
+  "notes": "Awaiting hand-keyed total emissions Mt CO2-e. Australia's 2030 target is 43% below 2005 levels (~440 Mt CO2-e); 2005 was ~622 Mt CO2-e. The DCCEEW Quarterly Update is the canonical near-real-time figure; the National Inventory Report (annual) is the UNFCCC submission.",
+  "citation": "DCCEEW, Quarterly Update of Australia's National Greenhouse Gas Inventory; National Inventory Report.",
+  "status": "unavailable",
+  "manual_entry": true
+}

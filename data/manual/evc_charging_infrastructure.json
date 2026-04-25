@@ -1,0 +1,31 @@
+{
+  "series_id": "evc_charging_infrastructure",
+  "source_id": "evc_charging_infrastructure",
+  "source_name": "Electric Vehicle Council - public charging infrastructure",
+  "source_url": "https://electricvehiclecouncil.com.au/reports/state-of-evs-2024/",
+  "unit": "count",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "ev_charging.v1",
+    "fields": {
+      "fields_to_key": [
+        "public_chargers_total",
+        "fast_chargers_50kw_plus_count",
+        "ultra_fast_chargers_150kw_plus_count",
+        "highway_corridor_coverage_pct",
+        "chargers_per_1000_evs"
+      ],
+      "scope": "Public charging count nationally, with breakdown by power class. Highway corridor coverage = % of national highway corridors with rapid chargers spaced <150 km.",
+      "primary_source_document": "Electric Vehicle Council, State of Electric Vehicles (annual). PlugShare and ChargeFox can be cross-references.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the headline public charger count, fast and ultra-fast subsets, and chargers-per-1000-EVs ratio. Note that fleet uptake outpaces public charging in some states."
+    }
+  },
+  "notes": "Awaiting hand-keyed public charger counts. By the mid-2020s Australia had ~3,500-4,500 public chargers with a fast-charger subset of ~700-900. Charger-to-EV ratio is a useful indicator of infrastructure adequacy.",
+  "citation": "Electric Vehicle Council, State of Electric Vehicles.",
+  "status": "unavailable",
+  "manual_entry": true
+}

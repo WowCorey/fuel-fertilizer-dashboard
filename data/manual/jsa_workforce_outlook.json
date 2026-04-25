@@ -1,0 +1,30 @@
+{
+  "series_id": "jsa_workforce_outlook",
+  "source_id": "jsa_workforce_outlook",
+  "source_name": "Jobs and Skills Australia - energy and resources workforce outlook",
+  "source_url": "https://www.jobsandskills.gov.au/data/workforce-projections",
+  "unit": "persons employed",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "jsa_outlook.v1",
+    "fields": {
+      "fields_to_key": [
+        "projected_growth_pct_5yr_mining",
+        "projected_growth_pct_5yr_electricity_supply",
+        "projected_growth_pct_5yr_renewables",
+        "skills_in_critical_shortage_count_energy"
+      ],
+      "scope": "Jobs and Skills Australia produces 5-year industry employment projections and the Skills Priority List. Energy transition workforce sits across multiple ANZSIC divisions.",
+      "primary_source_document": "Jobs and Skills Australia, Workforce Projections; Skills Priority List (annual).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the 5-year projected growth percentage and the Skills Priority List flags for energy-relevant occupations (electricians, electrical engineers, mining engineers, geologists, wind turbine technicians)."
+    }
+  },
+  "notes": "Awaiting hand-keyed JSA projections and skills-shortage flags. Workforce is the pinch point for the energy transition: rooftop solar electricians, transmission line crews and offshore wind technicians are all in shortage. Cite the report year keyed.",
+  "citation": "Jobs and Skills Australia, Workforce Projections; Skills Priority List.",
+  "status": "unavailable",
+  "manual_entry": true
+}

@@ -1807,3 +1807,278 @@ sources:
     reuse_notes: Annual thermal coal export volume (Mt) and value (A$bn). Distinguish thermal (electricity) from metallurgical (steelmaking) coal. Do not synthesize a TWh-equivalent on the page.
     fetch: manual
     used_by: [electricity]
+
+  # ---------------------------------------------------------------------------
+  # Emissions dashboard - National Greenhouse Gas Inventory + Safeguard Mechanism
+  # ---------------------------------------------------------------------------
+
+  - id: dcceew_nggi_emissions_total
+    human_name: DCCEEW National Greenhouse Gas Inventory - total emissions
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update
+    canonical_url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.dcceew.gov.au/about/website/copyright
+    citation: DCCEEW, Quarterly Update of Australia's National Greenhouse Gas Inventory.
+    reuse_notes: Total Australian net Mt CO2-e (incl. LULUCF). Quarterly Update is near-real-time; National Inventory Report (annual) is the UNFCCC submission.
+    fetch: manual
+    used_by: [emissions]
+
+  - id: dcceew_nggi_emissions_by_sector
+    human_name: DCCEEW National Greenhouse Gas Inventory - emissions by sector
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update
+    canonical_url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts-quarterly-update
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.dcceew.gov.au/about/website/copyright
+    citation: DCCEEW, Quarterly Update of Australia's National Greenhouse Gas Inventory.
+    reuse_notes: Emissions by IPCC sector (electricity, transport, industry, agriculture, fugitive, LULUCF). LULUCF is reported separately.
+    fetch: manual
+    used_by: [emissions]
+
+  - id: dcceew_nggi_emissions_by_state
+    human_name: DCCEEW State and Territory Greenhouse Gas Inventories
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts/state-and-territory-greenhouse-gas-inventories
+    canonical_url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts/state-and-territory-greenhouse-gas-inventories
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.dcceew.gov.au/about/website/copyright
+    citation: DCCEEW, State and Territory Greenhouse Gas Inventories.
+    reuse_notes: Annual Mt CO2-e per state and territory. Each state has its own net-zero target alongside federal commitments.
+    fetch: manual
+    used_by: [emissions]
+
+  - id: cer_safeguard_mechanism
+    human_name: Clean Energy Regulator - Safeguard Mechanism dataset
+    publisher: Clean Energy Regulator
+    url: https://cer.gov.au/markets/reports-and-data/safeguard-mechanism-data
+    canonical_url: https://cer.gov.au/markets/reports-and-data/safeguard-mechanism-data
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://cer.gov.au/copyright
+    citation: Clean Energy Regulator, Safeguard Mechanism reported emissions dataset.
+    reuse_notes: Covered facilities (>100 kt CO2-e/y), aggregate baseline, reported emissions, ACCU surrenders. Reformed 1 July 2023 with declining baselines.
+    fetch: manual
+    used_by: [emissions]
+
+  # ---------------------------------------------------------------------------
+  # Critical minerals dashboard - DISR + Geoscience Australia
+  # ---------------------------------------------------------------------------
+
+  - id: disr_critical_minerals_production
+    human_name: DISR Resources and Energy Quarterly - critical minerals production
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0 unless otherwise noted
+    rights_url: https://www.industry.gov.au/copyright
+    citation: DISR, Resources and Energy Quarterly; Geoscience Australia.
+    reuse_notes: Annual production tonnes for Critical Minerals List items. Lithium reported as kt LCE or kt spodumene; pick a basis and label.
+    fetch: manual
+    used_by: [critical_minerals]
+
+  - id: disr_critical_minerals_exports
+    human_name: DISR Resources and Energy Quarterly - critical minerals export value
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.industry.gov.au/copyright
+    citation: DISR, Resources and Energy Quarterly; Australian Bureau of Statistics, International Merchandise Trade.
+    reuse_notes: Annual export value A$bn per critical mineral. Reconcile against ABS HS-code level.
+    fetch: manual
+    used_by: [critical_minerals]
+
+  - id: ga_critical_minerals_resources
+    human_name: Geoscience Australia - Australia's Identified Mineral Resources
+    publisher: Geoscience Australia
+    url: https://www.ga.gov.au/digital-publication/aimr2024
+    canonical_url: https://www.ga.gov.au/digital-publication/aimr2024
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.ga.gov.au/copyright
+    citation: Geoscience Australia, Australia's Identified Mineral Resources.
+    reuse_notes: Economic Demonstrated Resources (EDR) per critical mineral. Annual AIMR publication.
+    fetch: manual
+    used_by: [critical_minerals]
+
+  - id: disr_critical_minerals_pipeline
+    human_name: DISR Resources and Energy Major Projects - critical minerals pipeline
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-major-projects
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-major-projects
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.industry.gov.au/copyright
+    citation: DISR, Resources and Energy Major Projects.
+    reuse_notes: Project pipeline lifecycle counts and capex aggregates for critical minerals only.
+    fetch: manual
+    used_by: [critical_minerals]
+
+  # ---------------------------------------------------------------------------
+  # Workforce dashboard - ABS Labour Force + Jobs and Skills Australia
+  # ---------------------------------------------------------------------------
+
+  - id: abs_employment_energy_resources
+    human_name: ABS Labour Force - energy and resources sector employment
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: Creative Commons Attribution 4.0
+    rights_url: https://www.abs.gov.au/website-privacy-copyright-and-disclaimer
+    citation: Australian Bureau of Statistics, Labour Force, Australia, Detailed.
+    reuse_notes: Persons-employed by ANZSIC division (mining, oil and gas extraction, electricity, gas supply). Quarterly cadence.
+    fetch: manual
+    used_by: [workforce]
+
+  - id: abs_employment_by_state_resources
+    human_name: ABS Labour Force - resources employment by state
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: Creative Commons Attribution 4.0
+    rights_url: https://www.abs.gov.au/website-privacy-copyright-and-disclaimer
+    citation: Australian Bureau of Statistics, Labour Force, Australia, Detailed.
+    reuse_notes: State-level mining and electricity employment. Concentrated in WA, QLD (mining); NSW, VIC (electricity).
+    fetch: manual
+    used_by: [workforce]
+
+  - id: jsa_workforce_outlook
+    human_name: Jobs and Skills Australia - energy and resources workforce outlook
+    publisher: Jobs and Skills Australia
+    url: https://www.jobsandskills.gov.au/data/workforce-projections
+    canonical_url: https://www.jobsandskills.gov.au/data/workforce-projections
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Commonwealth copyright; CC BY 4.0
+    rights_url: https://www.jobsandskills.gov.au/copyright
+    citation: Jobs and Skills Australia, Workforce Projections; Skills Priority List.
+    reuse_notes: 5-year projected growth and Skills Priority List flags for energy occupations.
+    fetch: manual
+    used_by: [workforce]
+
+  # ---------------------------------------------------------------------------
+  # EV dashboard - FCAI VFACTS + Electric Vehicle Council + ABS MVC
+  # ---------------------------------------------------------------------------
+
+  - id: fcai_ev_sales_share
+    human_name: FCAI VFACTS - EV share of new vehicle sales
+    publisher: Federal Chamber of Automotive Industries
+    url: https://www.fcai.com.au/sales/sales-results
+    canonical_url: https://www.fcai.com.au/sales/sales-results
+    format: MIXED
+    update_cadence: monthly
+    last_verified: 2026-04-25
+    rights: FCAI publication terms; cite VFACTS as source
+    rights_url: https://www.fcai.com.au/
+    citation: Federal Chamber of Automotive Industries, VFACTS monthly sales results.
+    reuse_notes: BEV / PHEV / HEV / ICE share of monthly new light vehicle sales.
+    fetch: manual
+    used_by: [ev]
+
+  - id: evc_charging_infrastructure
+    human_name: Electric Vehicle Council - public charging infrastructure
+    publisher: Electric Vehicle Council
+    url: https://electricvehiclecouncil.com.au/reports/state-of-evs-2024/
+    canonical_url: https://electricvehiclecouncil.com.au/reports/state-of-evs-2024/
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: EVC publication terms
+    rights_url: https://electricvehiclecouncil.com.au/
+    citation: Electric Vehicle Council, State of Electric Vehicles.
+    reuse_notes: National public charger count, fast and ultra-fast subsets, highway corridor coverage.
+    fetch: manual
+    used_by: [ev]
+
+  - id: abs_motor_vehicle_census_ev
+    human_name: ABS Motor Vehicle Census - EV fleet share
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/industry/tourism-and-transport/motor-vehicle-census-australia
+    canonical_url: https://www.abs.gov.au/statistics/industry/tourism-and-transport/motor-vehicle-census-australia
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: Creative Commons Attribution 4.0
+    rights_url: https://www.abs.gov.au/website-privacy-copyright-and-disclaimer
+    citation: Australian Bureau of Statistics, Motor Vehicle Census, Australia.
+    reuse_notes: Annual snapshot of registered EVs (BEV / PHEV / HEV) as at 31 January. Sales-share leads fleet-share by 10-15 years.
+    fetch: manual
+    used_by: [ev]
+
+  # ---------------------------------------------------------------------------
+  # Grid storage and transmission - AEMO ISP + Clean Energy Council
+  # ---------------------------------------------------------------------------
+
+  - id: cec_battery_storage_installed
+    human_name: Clean Energy Council - battery storage installed and committed
+    publisher: Clean Energy Council
+    url: https://www.cleanenergycouncil.org.au/resources/resources-hub/clean-energy-australia-report
+    canonical_url: https://www.cleanenergycouncil.org.au/resources/resources-hub/clean-energy-australia-report
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: CEC publication terms
+    rights_url: https://www.cleanenergycouncil.org.au/
+    citation: Clean Energy Council, Clean Energy Australia and Quarterly Project Tracker.
+    reuse_notes: Grid-scale BESS in MW and MWh; household battery installs; average duration MWh/MW.
+    fetch: manual
+    used_by: [grid_storage]
+
+  - id: aemo_isp_progress
+    human_name: AEMO Integrated System Plan - transmission build-out progress
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp
+    canonical_url: https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-04-25
+    rights: AEMO data terms
+    rights_url: https://aemo.com.au/privacy-and-legal-notices
+    citation: AEMO, Integrated System Plan.
+    reuse_notes: Actionable ISP project counts, transmission km committed and under construction, REZ count.
+    fetch: manual
+    used_by: [grid_storage]
+
+  - id: cec_renewable_capacity_pipeline
+    human_name: Clean Energy Council - renewable capacity pipeline
+    publisher: Clean Energy Council
+    url: https://www.cleanenergycouncil.org.au/resources/project-tracker
+    canonical_url: https://www.cleanenergycouncil.org.au/resources/project-tracker
+    format: MIXED
+    update_cadence: quarterly
+    last_verified: 2026-04-25
+    rights: CEC publication terms
+    rights_url: https://www.cleanenergycouncil.org.au/
+    citation: Clean Energy Council, Project Tracker; Clean Energy Regulator, SRES reports.
+    reuse_notes: Grid-scale wind, solar, pumped hydro under construction or committed, plus rooftop solar cumulative installed.
+    fetch: manual
+    used_by: [grid_storage]

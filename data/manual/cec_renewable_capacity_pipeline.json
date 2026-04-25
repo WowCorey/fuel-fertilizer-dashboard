@@ -1,0 +1,31 @@
+{
+  "series_id": "cec_renewable_capacity_pipeline",
+  "source_id": "cec_renewable_capacity_pipeline",
+  "source_name": "Clean Energy Council - renewable capacity pipeline",
+  "source_url": "https://www.cleanenergycouncil.org.au/resources/project-tracker",
+  "unit": "MW",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "renewable_pipeline.v1",
+    "fields": {
+      "fields_to_key": [
+        "wind_mw_under_construction",
+        "utility_solar_mw_under_construction",
+        "rooftop_solar_mw_installed_to_date",
+        "pumped_hydro_mw_committed",
+        "total_committed_capex_abn"
+      ],
+      "scope": "Clean Energy Council Project Tracker covers grid-scale renewables under construction or financially committed. Rooftop solar tracked separately via Clean Energy Regulator STC register.",
+      "primary_source_document": "Clean Energy Council, Project Tracker (quarterly); Clean Energy Regulator, Small-scale Renewable Energy Scheme reports.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key wind and utility solar under construction (MW), rooftop solar cumulative installed (MW DC), and pumped hydro committed (MW). Snowy 2.0 (2,200 MW) and Pioneer-Burdekin (proposed) are the pumped-hydro anchors."
+    }
+  },
+  "notes": "Awaiting hand-keyed renewable pipeline figures. Australia's rooftop solar penetration is among the world's highest (>3.5M households). Utility-scale build-out is constrained by transmission and connection delays as much as project economics.",
+  "citation": "Clean Energy Council, Project Tracker; Clean Energy Regulator, Small-scale Renewable Energy Scheme reports.",
+  "status": "unavailable",
+  "manual_entry": true
+}

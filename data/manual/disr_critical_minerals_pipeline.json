@@ -1,0 +1,31 @@
+{
+  "series_id": "disr_critical_minerals_pipeline",
+  "source_id": "disr_critical_minerals_pipeline",
+  "source_name": "DISR Resources and Energy Major Projects - critical minerals pipeline",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-major-projects",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "critical_minerals_pipeline.v1",
+    "fields": {
+      "fields_to_key": [
+        "projects_at_publicly_announced_count",
+        "projects_at_feasibility_count",
+        "projects_at_committed_count",
+        "projects_at_completed_count",
+        "total_pipeline_capex_abn"
+      ],
+      "scope": "DISR Resources and Energy Major Projects (RE-Major Projects) catalogue tracks all projects above a capex threshold across resource commodities including critical minerals.",
+      "primary_source_document": "DISR, Resources and Energy Major Projects (annual database, December edition typical).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key counts and capex aggregates by lifecycle stage for critical minerals projects only. Distinguish onshore midstream processing capex from upstream extraction."
+    }
+  },
+  "notes": "Awaiting hand-keyed project pipeline counts and capex from the DISR RE-Major Projects database. The pipeline is the main forward-looking indicator for whether Australia is moving up the value chain into refining and battery components.",
+  "citation": "DISR, Resources and Energy Major Projects.",
+  "status": "unavailable",
+  "manual_entry": true
+}

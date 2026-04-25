@@ -1,0 +1,31 @@
+{
+  "series_id": "cec_battery_storage_installed",
+  "source_id": "cec_battery_storage_installed",
+  "source_name": "Clean Energy Council - battery storage installed and committed",
+  "source_url": "https://www.cleanenergycouncil.org.au/resources/resources-hub/clean-energy-australia-report",
+  "unit": "MW / MWh",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "battery_storage.v1",
+    "fields": {
+      "fields_to_key": [
+        "installed_grid_battery_mw",
+        "installed_grid_battery_mwh",
+        "committed_grid_battery_mw",
+        "installed_household_battery_mwh",
+        "duration_hours_average"
+      ],
+      "scope": "Grid-scale battery storage capacity (utility BESS), separate from distributed household batteries. Pumped hydro is tracked separately because of long-duration characteristics.",
+      "primary_source_document": "Clean Energy Council, Clean Energy Australia (annual); CEC Quarterly Project Tracker.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key installed and committed grid-scale BESS in MW and MWh. Average duration (MWh/MW) is a key indicator of whether storage is sized for evening peak (1-2 hr) or longer dispatch (4+ hr)."
+    }
+  },
+  "notes": "Awaiting hand-keyed grid-scale battery installed and committed capacity. Australia became the world's largest grid-battery installer per capita in 2023-24. The shift from short-duration FCAS-focused batteries to 4-hour dispatch batteries is the key qualitative trend.",
+  "citation": "Clean Energy Council, Clean Energy Australia and Quarterly Project Tracker.",
+  "status": "unavailable",
+  "manual_entry": true
+}

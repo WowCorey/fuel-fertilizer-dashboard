@@ -1,0 +1,37 @@
+{
+  "series_id": "disr_critical_minerals_production",
+  "source_id": "disr_critical_minerals_production",
+  "source_name": "DISR Resources and Energy Quarterly - critical minerals production",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly",
+  "unit": "kt or t per commodity",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "critical_minerals_production.v1",
+    "fields": {
+      "minerals": [
+        "lithium (spodumene + brine)",
+        "rare earths (NdPr, Dy)",
+        "cobalt",
+        "nickel (Class I)",
+        "copper",
+        "vanadium",
+        "tungsten",
+        "manganese",
+        "graphite",
+        "zircon",
+        "titanium minerals (rutile, ilmenite)"
+      ],
+      "scope": "Australia is the world's largest lithium producer (spodumene), a top-5 rare earths producer, and a major nickel/copper producer. The Critical Minerals List is maintained by DISR and updated periodically.",
+      "primary_source_document": "DISR Resources and Energy Quarterly \u2014 Critical minerals chapter; Geoscience Australia Australian Mineral Statistics; Australia's Identified Mineral Resources.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key annual production tonnes per critical mineral. Lithium is reported as kt LCE (lithium carbonate equivalent) or kt spodumene concentrate; pick a basis and label clearly."
+    }
+  },
+  "notes": "Awaiting hand-keyed annual production for the strategic critical minerals list. Australia's National Reconstruction Fund and Critical Minerals Strategy elevate these as a strategic supply parallel to oil and gas. Cite the unit basis (LCE vs spodumene, REO vs total rare earths) explicitly.",
+  "citation": "DISR Resources and Energy Quarterly; Geoscience Australia.",
+  "status": "unavailable",
+  "manual_entry": true
+}

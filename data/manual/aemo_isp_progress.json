@@ -1,0 +1,31 @@
+{
+  "series_id": "aemo_isp_progress",
+  "source_id": "aemo_isp_progress",
+  "source_name": "AEMO Integrated System Plan - transmission build-out progress",
+  "source_url": "https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp",
+  "unit": "km transmission line",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "isp_progress.v1",
+    "fields": {
+      "fields_to_key": [
+        "actionable_isp_projects_count",
+        "transmission_km_committed",
+        "transmission_km_under_construction",
+        "transmission_km_in_service_2030_pathway",
+        "renewable_energy_zones_declared_count"
+      ],
+      "scope": "AEMO Integrated System Plan is the 30-year electricity blueprint published every two years. Identifies 'actionable' transmission projects required for the optimal pathway.",
+      "primary_source_document": "AEMO, Integrated System Plan (biennial); state Renewable Energy Zone declarations from NSW, VIC, QLD, SA energy ministers.",
+      "evidence_tier": "primary",
+      "keying_plan": "Key the count of actionable ISP projects, km of transmission committed/under construction, and REZ count. This is the central forward-looking electricity-infrastructure indicator."
+    }
+  },
+  "notes": "Awaiting hand-keyed ISP project counts and km committed. Major actionable projects include EnergyConnect (NSW-SA), HumeLink (NSW), VNI West (VIC-NSW), Marinus Link (TAS-VIC), Western Renewables Link (VIC), CopperString 2032 (QLD). Schedule slippage on these is a primary risk to the renewable transition.",
+  "citation": "AEMO, Integrated System Plan.",
+  "status": "unavailable",
+  "manual_entry": true
+}

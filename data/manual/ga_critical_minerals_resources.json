@@ -1,0 +1,31 @@
+{
+  "series_id": "ga_critical_minerals_resources",
+  "source_id": "ga_critical_minerals_resources",
+  "source_name": "Geoscience Australia - Australia's Identified Mineral Resources",
+  "source_url": "https://www.ga.gov.au/digital-publication/aimr2024",
+  "unit": "Mt or kt per commodity",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-25T00:00:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "extra": {
+    "schema": "ga_aimr_resources.v1",
+    "fields": {
+      "fields_to_key": [
+        "lithium_economic_demonstrated_resources_mt_lce",
+        "rare_earths_edr_kt_reo",
+        "copper_edr_mt",
+        "nickel_edr_mt",
+        "australia_share_global_economic_resources_pct"
+      ],
+      "scope": "Geoscience Australia's annual Australia's Identified Mineral Resources (AIMR) report quantifies Economic Demonstrated Resources (EDR) \u2014 the JORC-equivalent national-scale resource base.",
+      "primary_source_document": "Geoscience Australia, Australia's Identified Mineral Resources (annual).",
+      "evidence_tier": "primary",
+      "keying_plan": "Key EDR figures and Australia's share of global economic resources for the strategic critical minerals. AIMR reports a fresh edition in early Q4 each year."
+    }
+  },
+  "notes": "Awaiting hand-keyed Economic Demonstrated Resources for the strategic critical minerals. Australia holds the world's largest economic resources of nickel, second-largest of copper and lithium, and very large rare earths reserves. AIMR is the canonical national audit.",
+  "citation": "Geoscience Australia, Australia's Identified Mineral Resources.",
+  "status": "unavailable",
+  "manual_entry": true
+}
