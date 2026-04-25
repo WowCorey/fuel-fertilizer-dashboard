@@ -4,11 +4,11 @@
   "source_name": "NOPTA active petroleum production licence map",
   "source_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
   "unit": "active offshore petroleum production licence records",
-  "retrieved_at": "2026-04-23T12:21:41+00:00",
-  "last_data_point": "2026-04-23",
+  "retrieved_at": "2026-04-25T08:05:27+00:00",
+  "last_data_point": "2026-04-25",
   "values": [
     {
-      "t": "2026-04-23",
+      "t": "2026-04-25",
       "v": 93
     }
   ],
@@ -20,7 +20,7 @@
   "extra": {
     "schema": "state_petroleum_production_licence_map.v1",
     "fields": {
-      "as_at": "2026-04-23",
+      "as_at": "2026-04-25",
       "source_scope": "Active NOPTA Production Licence rows only.",
       "state_rows": [
         {

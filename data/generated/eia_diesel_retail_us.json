@@ -4,8 +4,8 @@
   "source_name": "U.S. retail diesel price (EIA, weekly)",
   "source_url": "https://www.eia.gov/petroleum/gasdiesel/",
   "unit": "USD per gallon",
-  "retrieved_at": "2026-04-20T15:31:27+00:00",
-  "last_data_point": "2026-04-13",
+  "retrieved_at": "2026-04-25T08:05:46+00:00",
+  "last_data_point": "2026-04-20",
   "values": [
     {
       "t": "2021-05",
@@ -245,7 +245,7 @@
     },
     {
       "t": "2026-04",
-      "v": 5.625
+      "v": 5.551
     }
   ],
   "notes": "Monthly mean of FRED series GASDESW (mirror of EIA). Trimmed to last 60 months; last_data_point reflects the latest raw observation.",
