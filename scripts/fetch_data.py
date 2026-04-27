@@ -761,6 +761,124 @@ def fetch_rba_csv_column(
     }
 
 
+def fetch_aemo_nem_price_demand(metric: str) -> dict[str, Any]:
+    """Fetch AEMO NEM monthly price/demand CSVs across all 5 regions.
+
+    Pulls the static CSVs at
+    aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv
+    for the last 12 complete months across NSW1, VIC1, QLD1, SA1, TAS1, then
+    reduces 5-minute TRADE intervals to monthly means per region. The NEM-wide
+    series is the simple mean of region means for ``metric == "price"`` and the
+    sum of region means for ``metric == "demand"``. Per-region latest-month
+    values land in ``extra.fields``.
+    """
+    if metric not in {"price", "demand"}:
+        raise RuntimeError(f"fetch_aemo_nem_price_demand: unsupported metric {metric!r}")
+
+    regions = ["NSW1", "VIC1", "QLD1", "SA1", "TAS1"]
+    today = dt.date.today()
+    months: list[dt.date] = []
+    cursor = dt.date(today.year, today.month, 1)
+    for _ in range(13):
+        cursor = cursor.replace(day=1) - dt.timedelta(days=1)
+        cursor = cursor.replace(day=1)
+        months.append(cursor)
+    months.reverse()
+
+    base = "https://aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_{ym}_{region}.csv"
+    region_monthly: dict[str, dict[str, float]] = {r: {} for r in regions}
+
+    for month in months:
+        ym = month.strftime("%Y%m")
+        for region in regions:
+            url = base.format(ym=ym, region=region)
+            r = requests.get(url, headers={"User-Agent": UA}, timeout=60)
+            if r.status_code == 404:
+                continue
+            r.raise_for_status()
+            reader = csv.DictReader(io.StringIO(r.content.decode("utf-8-sig")))
+            sum_v = 0.0
+            n_v = 0
+            for row in reader:
+                if row.get("PERIODTYPE") != "TRADE":
+                    continue
+                try:
+                    if metric == "price":
+                        v = float(row["RRP"])
+                    else:
+                        v = float(row["TOTALDEMAND"])
+                except (KeyError, ValueError, TypeError):
+                    continue
+                sum_v += v
+                n_v += 1
+            if n_v == 0:
+                continue
+            region_monthly[region][month.strftime("%Y-%m")] = sum_v / n_v
+
+    all_months: set[str] = set()
+    for region in regions:
+        all_months.update(region_monthly[region].keys())
+    if not all_months:
+        raise RuntimeError("AEMO NEM price/demand fetch returned no monthly observations")
+
+    sorted_months = sorted(all_months)
+    values: list[dict[str, Any]] = []
+    for ym in sorted_months:
+        per_region = [region_monthly[r][ym] for r in regions if ym in region_monthly[r]]
+        if not per_region:
+            continue
+        if metric == "price":
+            agg = sum(per_region) / len(per_region)
+            values.append({"t": ym, "v": round(agg, 2)})
+        else:
+            agg = sum(per_region)
+            values.append({"t": ym, "v": round(agg, 0)})
+
+    if not values:
+        raise RuntimeError("AEMO NEM price/demand aggregation produced no values")
+
+    latest_month = values[-1]["t"]
+    region_latest: dict[str, Any] = {}
+    for region in regions:
+        v = region_monthly[region].get(latest_month)
+        if v is None:
+            region_latest[region] = None
+        else:
+            region_latest[region] = round(v, 2 if metric == "price" else 0)
+
+    last_year, last_month = latest_month.split("-")
+    last_day = calendar.monthrange(int(last_year), int(last_month))[1]
+    last_data_point = f"{last_year}-{last_month}-{last_day:02d}"
+
+    if metric == "price":
+        unit = "AUD per MWh"
+        notes = (
+            "Monthly mean of 5-minute TRADE-interval Regional Reference Price across NSW1, VIC1, QLD1, SA1 and TAS1. "
+            "Aggregate is the simple mean of the five regional monthly means. extra.fields holds the latest-month value per region."
+        )
+    else:
+        unit = "MW"
+        notes = (
+            "Monthly mean of 5-minute TRADE-interval TOTALDEMAND across NSW1, VIC1, QLD1, SA1 and TAS1, then summed across regions. "
+            "extra.fields holds the latest-month region-mean value per region."
+        )
+
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": notes,
+        "extra": {
+            "schema": "fuel_resilience_typed_fields.v1",
+            "fields": {
+                "latest_month": latest_month,
+                **{f"region_{r.lower()}_latest": region_latest[r] for r in regions},
+            },
+        },
+        "source_url_resolved": base.format(ym=latest_month.replace("-", ""), region="NSW1"),
+    }
+
+
 def month_end_iso(month: dt.date) -> str:
     last_day = calendar.monthrange(month.year, month.month)[1]
     return dt.date(month.year, month.month, last_day).isoformat()
@@ -1922,6 +2040,8 @@ FETCHERS: dict[str, Fetcher] = {
         notes="Quarter-end value of household debt as a per cent of annualised household disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
         ndigits=1,
     ),
+    "aemo_nem_average_wholesale_price": lambda source: fetch_aemo_nem_price_demand("price"),
+    "aemo_nem_total_demand": lambda source: fetch_aemo_nem_price_demand("demand"),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
     "aip_tgp": fetch_aip_tgp,
     "qld_fuel_security_unavailable_reports": fetch_qld_unavailable_reports,

@@ -1888,3 +1888,144 @@ sources:
     reuse_notes: The Department of Industry publishes named manufacturing capability profiles ad-hoc. Hand-key only verified factual headcounts and revenue values from named publications, never aggregated estimates.
     fetch: manual
     used_by: [manufacturing]
+
+  # =========================================================
+  # POWER GRID - v1.0 (AEMO NEM, AER, CER, DCCEEW)
+  # =========================================================
+
+  - id: aemo_nem_average_wholesale_price
+    human_name: AEMO NEM regional wholesale price (RRP), monthly mean
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data
+    fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
+    reuse_notes: AEMO publishes 5-minute interval price (RRP, AUD per MWh) and demand (MW) per NEM region (NSW1, VIC1, QLD1, SA1, TAS1) at the static URL pattern aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv. The fetcher pulls the last several full months across all five regions, averages RRP across all 5-minute TRADE intervals to a monthly mean per region, then computes a NEM-wide mean of region means. Per-region latest-month values are kept in extra.fields.
+    fetch: programmatic
+    used_by: [power_grid]
+
+  - id: aemo_nem_total_demand
+    human_name: AEMO NEM total operational demand, monthly mean MW
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data
+    fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
+    reuse_notes: Same source files as aemo_nem_average_wholesale_price. The fetcher averages TOTALDEMAND (MW) across all 5-minute TRADE intervals to a monthly mean per region, then sums region means to a NEM-wide monthly mean total operational demand. Per-region latest-month values are kept in extra.fields.
+    fetch: programmatic
+    used_by: [power_grid]
+
+  - id: aemo_nem_fuel_mix
+    human_name: AEMO NEM generation fuel mix (% by source)
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-27
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Data Dashboard fuel-mix snapshot.
+    reuse_notes: AEMO publishes a NEM fuel-mix breakdown (black coal, brown coal, gas, hydro, wind, solar, battery) on its data dashboard. There is no stable public CSV/JSON endpoint for the aggregate fuel-mix snapshot - the dashboard renders client-side from the AEMO MMS. Hand-key the latest published fuel-mix percentages from a named AEMO Quarterly Energy Dynamics report (the QED publishes the previous quarter's fuel mix in its summary tables).
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_generation_information_register
+    human_name: AEMO Generation Information register - capacity by fuel type
+    publisher: Australian Energy Market Operator
+    url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    canonical_url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Generation Information.
+    reuse_notes: AEMO publishes a monthly NEM Generation Information workbook listing every existing, committed and proposed generator by name, fuel type, region, MW capacity, and expected closure date. The landing page returned 403 to scripted access in initial probing; hand-key the totals (count of plants and total MW capacity) per fuel type from the latest workbook until a stable XLSX URL pattern is confirmed.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_coal_retirement_timeline
+    human_name: AEMO scheduled and announced coal generator retirement timeline
+    publisher: Australian Energy Market Operator
+    url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    canonical_url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Generation Information - expected closure year column.
+    reuse_notes: Derived from the same NEM Generation Information workbook. Hand-key each scheduled retirement (plant name, fuel type, MW capacity, expected closure year) when the latest workbook is reviewed.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: cer_renewable_energy_target_progress
+    human_name: CER Renewable Energy Target progress, annual
+    publisher: Clean Energy Regulator
+    url: https://cer.gov.au/schemes/renewable-energy-target
+    canonical_url: https://cer.gov.au/schemes/renewable-energy-target
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Clean Energy Regulator, Renewable Energy Target administrative report.
+    reuse_notes: The Clean Energy Regulator publishes annual statistics on the Large-scale Renewable Energy Target (LRET) and Small-scale Renewable Energy Scheme (SRES). Hand-key the headline annual achieved-vs-target value from the named CER administrative report.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: dcceew_electricity_emissions
+    human_name: DCCEEW national greenhouse accounts - electricity sector emissions
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts
+    canonical_url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, National Greenhouse Gas Inventory - Quarterly Update, electricity sector.
+    reuse_notes: DCCEEW publishes quarterly inventory updates with electricity-sector emissions in megatonnes CO2-equivalent. The DCCEEW website is Akamai/Incapsula-protected; hand-key from the named quarterly update PDF when reviewed.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_2024_isp_summary
+    human_name: AEMO Integrated System Plan - headline forecasts
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp
+    canonical_url: https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-27
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, Integrated System Plan (ISP).
+    reuse_notes: The AEMO ISP is the (roughly every-two-years) whole-of-NEM transmission and generation development plan. Hand-key only headline figures (e.g. 2050 generation capacity by source under the optimal development path) from the named ISP report.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_wem_summary
+    human_name: AEMO Western Australian Wholesale Electricity Market - capacity and price
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/wholesale-electricity-market-wem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/wholesale-electricity-market-wem
+    format: HTML_TABLE
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, Wholesale Electricity Market (WEM) for Western Australia.
+    reuse_notes: Western Australia operates a separate Wholesale Electricity Market (WEM) - it is not part of the NEM. Hand-key headline capacity and average wholesale price from named AEMO WEM monthly reports.
+    fetch: manual
+    used_by: [power_grid]
