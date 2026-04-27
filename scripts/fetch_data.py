@@ -2022,6 +2022,27 @@ FETCHERS: dict[str, Fetcher] = {
         source.get("sdmx_note_suffix"),
         source.get("fetch_url"),
     ),
+    "abs_unemployment_rate": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_cpi_inflation": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_gdp_real_growth": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "rba_cash_rate": lambda source: fetch_rba_csv_column(

@@ -35,19 +35,19 @@
     },
     "abs_cpi_inflation": {
       "id": "abs_cpi_inflation",
-      "human_name": "ABS Consumer Price Index - all groups annual change, quarterly",
+      "human_name": "ABS Consumer Price Index - all groups annual change, monthly",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
-      "update_cadence": "quarterly",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
       "used_by": [
         "au_economics"
       ],
       "canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
       "rights": "CC BY 4.0 where stated by publisher",
-      "citation": "Australian Bureau of Statistics, Consumer Price Index Australia (Cat. 6401.0), all groups annual percentage change.",
-      "preferred_dir": "manual",
-      "has_generated": false,
-      "has_manual": true
+      "citation": "Australian Bureau of Statistics, Consumer Price Index Australia (Cat. 6401.0), all-groups annual percentage change.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
     },
     "abs_fertiliser_imports": {
       "id": "abs_fertiliser_imports",
@@ -165,17 +165,17 @@
       "id": "abs_gdp_real_growth",
       "human_name": "ABS National Accounts - real GDP growth, quarterly",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "quarterly",
       "used_by": [
         "au_economics"
       ],
       "canonical_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
       "rights": "CC BY 4.0 where stated by publisher",
-      "citation": "Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0).",
-      "preferred_dir": "manual",
-      "has_generated": false,
-      "has_manual": true
+      "citation": "Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0), seasonally adjusted real GDP percentage change.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
     },
     "abs_manufactured_exports_total": {
       "id": "abs_manufactured_exports_total",
@@ -295,7 +295,7 @@
       "id": "abs_unemployment_rate",
       "human_name": "ABS Labour Force - unemployment rate, monthly seasonally adjusted",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
         "au_economics"
@@ -303,9 +303,9 @@
       "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), seasonally adjusted unemployment rate.",
-      "preferred_dir": "manual",
-      "has_generated": false,
-      "has_manual": true
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
     },
     "accc_petrol_breakdown_series": {
       "id": "accc_petrol_breakdown_series",

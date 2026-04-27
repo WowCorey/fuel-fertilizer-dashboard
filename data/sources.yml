@@ -1740,14 +1740,19 @@ sources:
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
     canonical_url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
-    format: XLSX
+    fetch_url: https://data.api.abs.gov.au/rest/data/ANA_AGG/M2.GPM.20.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: ANA_AGG
+    fetch_key: M2.GPM.20.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS ANA_AGG dataflow MEASURE M2 (Chain volume measures - Percentage changes), DATA_ITEM GPM (Gross domestic product), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns the seasonally adjusted percentage change in real GDP, quarter on quarter.
+    format: JSON
     update_cadence: quarterly
     last_verified: 2026-04-27
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0).
-    reuse_notes: ABS publishes seasonally adjusted real GDP series in the quarterly National Accounts release. The ABS Data API exposes National Accounts via SDMX (dataflow ANA_AGG); key shape requires human verification against the latest dataflow structure before automating. Manual stub until SDMX key is verified.
-    fetch: manual
+    citation: Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0), seasonally adjusted real GDP percentage change.
+    reuse_notes: Fetched from the live ABS Data API ANA_AGG dataflow. Returns seasonally adjusted quarter-on-quarter percentage change in real GDP (chain volume measure).
+    fetch: programmatic
     used_by: [au_economics]
 
   - id: abs_unemployment_rate
@@ -1755,29 +1760,39 @@ sources:
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
     canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
-    format: XLSX
+    fetch_url: https://data.api.abs.gov.au/rest/data/LF/M13.3.1599.20.AUS.M?format=jsondata&startPeriod=2020-01
+    fetch_dataflow: LF
+    fetch_key: M13.3.1599.20.AUS.M
+    fetch_start_period: 2020-01
+    sdmx_note_suffix: ABS LF dataflow MEASURE M13 (Unemployment rate), SEX 3 (Persons), AGE 1599 (Total), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ M. Returns the headline national monthly unemployment rate, seasonally adjusted.
+    format: JSON
     update_cadence: monthly
     last_verified: 2026-04-27
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), seasonally adjusted unemployment rate.
-    reuse_notes: ABS publishes the headline unemployment rate in the monthly Labour Force release. The ABS Data API exposes Labour Force via SDMX (dataflow LF); key shape requires human verification against the latest dataflow structure before automating. Manual stub until SDMX key is verified.
-    fetch: manual
+    reuse_notes: Fetched from the live ABS Data API LF dataflow. Returns the seasonally adjusted national headline unemployment rate, monthly.
+    fetch: programmatic
     used_by: [au_economics]
 
   - id: abs_cpi_inflation
-    human_name: ABS Consumer Price Index - all groups annual change, quarterly
+    human_name: ABS Consumer Price Index - all groups annual change, monthly
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia
     canonical_url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia
-    format: XLSX
-    update_cadence: quarterly
+    fetch_url: https://data.api.abs.gov.au/rest/data/CPI/3.10001.10.50.M?format=jsondata&startPeriod=2020-01
+    fetch_dataflow: CPI
+    fetch_key: 3.10001.10.50.M
+    fetch_start_period: 2020-01
+    sdmx_note_suffix: ABS CPI dataflow MEASURE 3 (Percentage change from previous year), INDEX 10001 (All groups CPI), TSEST 10 (Original), REGION 50 (Australia weighted average of eight capital cities), FREQ M. Returns the headline all-groups annual percentage change, monthly.
+    format: JSON
+    update_cadence: monthly
     last_verified: 2026-04-27
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, Consumer Price Index Australia (Cat. 6401.0), all groups annual percentage change.
-    reuse_notes: ABS publishes CPI quarterly. The ABS Data API exposes CPI via SDMX (dataflow CPI); key shape requires human verification against the latest dataflow structure before automating. Manual stub until SDMX key is verified.
-    fetch: manual
+    citation: Australian Bureau of Statistics, Consumer Price Index Australia (Cat. 6401.0), all-groups annual percentage change.
+    reuse_notes: Fetched from the live ABS Data API CPI dataflow. Returns the headline all-groups annual CPI percentage change for the Australia weighted average of eight capital cities, now published monthly.
+    fetch: programmatic
     used_by: [au_economics]
 
   # =========================================================
