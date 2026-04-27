@@ -666,6 +666,101 @@ def fetch_rba_f11(url: str) -> dict[str, Any]:
     }
 
 
+def fetch_rba_csv_column(
+    url: str,
+    title_substring: str,
+    *,
+    aggregate: str = "monthly_mean",
+    unit: str,
+    notes: str,
+    ndigits: int = 4,
+) -> dict[str, Any]:
+    """Generic RBA Statistical Table CSV fetcher.
+
+    RBA tables share a layout: a metadata block (rows starting with "Title",
+    "Description", "Frequency", ..., "Series ID"), then date+value rows where
+    column 0 is the observation date in DD-MMM-YYYY format. We pick the column
+    whose Title row contains ``title_substring`` (case-insensitive substring
+    match) and aggregate either to monthly mean or quarter-end.
+    """
+    if aggregate not in {"monthly_mean", "quarter_end"}:
+        raise RuntimeError(f"fetch_rba_csv_column: unsupported aggregate {aggregate!r}")
+
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    reader = list(csv.reader(io.StringIO(r.content.decode("utf-8-sig"))))
+    if len(reader) < 12:
+        raise RuntimeError(f"RBA CSV {url} was too short")
+
+    target = title_substring.strip().lower()
+    title_row_idx = None
+    col_idx = None
+    for idx, row in enumerate(reader):
+        if not row or row[0] != "Title":
+            continue
+        title_row_idx = idx
+        for ci, cell in enumerate(row[1:], start=1):
+            if cell and target in cell.strip().lower():
+                col_idx = ci
+                break
+        if col_idx is not None:
+            break
+    if title_row_idx is None or col_idx is None:
+        raise RuntimeError(f"RBA CSV {url} did not contain a Title column matching {title_substring!r}")
+
+    data_start = None
+    for idx, row in enumerate(reader[title_row_idx + 1 :], start=title_row_idx + 1):
+        if row and row[0] == "Series ID":
+            data_start = idx + 1
+            break
+    if data_start is None:
+        raise RuntimeError(f"RBA CSV {url} did not contain a Series ID row")
+
+    by_period: dict[str, list[float]] = {}
+    period_end_dates: dict[str, dt.date] = {}
+    latest_date: dt.date | None = None
+    for row in reader[data_start:]:
+        if not row or len(row) <= col_idx or not row[0].strip():
+            continue
+        try:
+            obs_date = dt.datetime.strptime(row[0].strip(), "%d-%b-%Y").date()
+            value = float(row[col_idx])
+        except (ValueError, TypeError):
+            continue
+        latest_date = max(latest_date, obs_date) if latest_date else obs_date
+        if aggregate == "monthly_mean":
+            key = obs_date.strftime("%Y-%m")
+        else:
+            quarter = (obs_date.month - 1) // 3 + 1
+            key = f"{obs_date.year}-Q{quarter}"
+        by_period.setdefault(key, []).append(value)
+        prior = period_end_dates.get(key)
+        if prior is None or obs_date > prior:
+            period_end_dates[key] = obs_date
+
+    if not by_period or latest_date is None:
+        raise RuntimeError(f"RBA CSV {url} contained no numeric observations for column {title_substring!r}")
+
+    if aggregate == "monthly_mean":
+        values = [
+            {"t": period, "v": round(sum(obs) / len(obs), ndigits)}
+            for period, obs in sorted(by_period.items())
+        ][-60:]
+    else:
+        values = [
+            {"t": period, "v": round(obs[-1], ndigits)}
+            for period, obs in sorted(by_period.items())
+        ][-40:]
+
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": latest_date.isoformat(),
+        "notes": notes,
+        "source_url_resolved": url,
+    }
+
+
 def month_end_iso(month: dt.date) -> str:
     last_day = calendar.monthrange(month.year, month.month)[1]
     return dt.date(month.year, month.month, last_day).isoformat()
@@ -1811,6 +1906,22 @@ FETCHERS: dict[str, Fetcher] = {
     ),
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
+    "rba_cash_rate": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Cash Rate Target",
+        aggregate="monthly_mean",
+        unit="per cent",
+        notes="Monthly mean of daily RBA cash-rate target observations from Statistical Table F1.1. Trimmed to last 60 months.",
+        ndigits=2,
+    ),
+    "rba_household_debt_to_income": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Household debt to income",
+        aggregate="quarter_end",
+        unit="per cent",
+        notes="Quarter-end value of household debt as a per cent of annualised household disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
+        ndigits=1,
+    ),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
     "aip_tgp": fetch_aip_tgp,
     "qld_fuel_security_unavailable_reports": fetch_qld_unavailable_reports,

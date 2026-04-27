@@ -1,0 +1,16 @@
+{
+  "series_id": "rba_cash_rate",
+  "source_id": "rba_cash_rate",
+  "source_name": "RBA Cash Rate Target (F1.1)",
+  "source_url": "https://www.rba.gov.au/statistics/cash-rate/",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-27T09:19:49+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Programmatic fetcher registered; awaiting first successful CI run after upstream rate-limit window. The fetcher reads RBA CSV statistical tables and aggregates to monthly mean (cash rate) or quarter end (household debt).",
+  "status": "unavailable",
+  "manual_entry": false,
+  "source_rights": "RBA terms of use for tabular data",
+  "citation": "Reserve Bank of Australia statistical tables."
+}

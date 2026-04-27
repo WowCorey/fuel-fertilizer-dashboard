@@ -33,6 +33,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "abs_cpi_inflation": {
+      "id": "abs_cpi_inflation",
+      "human_name": "ABS Consumer Price Index - all groups annual change, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Consumer Price Index Australia (Cat. 6401.0), all groups annual percentage change.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "abs_fertiliser_imports": {
       "id": "abs_fertiliser_imports",
       "human_name": "ABS International Merchandise Trade — fertiliser imports (SITC 562)",
@@ -129,6 +145,118 @@
       "has_generated": true,
       "has_manual": false
     },
+    "abs_food_beverage_employment": {
+      "id": "abs_food_beverage_employment",
+      "human_name": "ABS Food and beverage manufacturing employment, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "manufacturing"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), food product manufacturing (ANZSIC 11) and beverage and tobacco product manufacturing (ANZSIC 12).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_gdp_real_growth": {
+      "id": "abs_gdp_real_growth",
+      "human_name": "ABS National Accounts - real GDP growth, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_manufactured_exports_total": {
+      "id": "abs_manufactured_exports_total",
+      "human_name": "ABS International Trade - manufactured exports (SITC 5-8), monthly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "manufacturing"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods, SITC 5-8 manufactured exports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_manufacturing_capex": {
+      "id": "abs_manufacturing_capex",
+      "human_name": "ABS Private new capital expenditure - manufacturing, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "manufacturing"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing industry.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_manufacturing_employment": {
+      "id": "abs_manufacturing_employment",
+      "human_name": "ABS Manufacturing employment, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "manufacturing"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), employed persons by industry.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_manufacturing_gdp_share": {
+      "id": "abs_manufacturing_gdp_share",
+      "human_name": "ABS Manufacturing share of GDP, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "manufacturing"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Australian National Accounts - industry gross value added (Cat. 5206.0).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_manufacturing_output_index": {
+      "id": "abs_manufacturing_output_index",
+      "human_name": "ABS Manufacturing production index, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "manufacturing"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), manufacturing sales of goods produced.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "abs_petroleum_imports": {
       "id": "abs_petroleum_imports",
       "human_name": "ABS International Merchandise Trade — petroleum imports",
@@ -162,6 +290,22 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "abs_unemployment_rate": {
+      "id": "abs_unemployment_rate",
+      "human_name": "ABS Labour Force - unemployment rate, monthly seasonally adjusted",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), seasonally adjusted unemployment rate.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "accc_petrol_breakdown_series": {
       "id": "accc_petrol_breakdown_series",
@@ -355,6 +499,22 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "aofm_gov_gross_debt": {
+      "id": "aofm_gov_gross_debt",
+      "human_name": "AOFM Australian Government Securities outstanding",
+      "publisher": "Australian Office of Financial Management",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.aofm.gov.au/data",
+      "rights": "CC BY 3.0 AU (Commonwealth of Australia)",
+      "citation": "Australian Office of Financial Management, Australian Government Securities Outstanding.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "aps_exports_crude_feedstocks": {
       "id": "aps_exports_crude_feedstocks",
@@ -801,6 +961,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "doe_industry_growth_centres_summary": {
+      "id": "doe_industry_growth_centres_summary",
+      "human_name": "Australian Government Industry Growth Centres Initiative - summary",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "manufacturing"
+      ],
+      "canonical_url": "https://www.industry.gov.au/",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Department of Industry, Science and Resources, manufacturing industry profiles.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "eia_brent": {
       "id": "eia_brent",
       "human_name": "Brent crude spot price (EIA)",
@@ -1160,6 +1336,70 @@
       "has_generated": true,
       "has_manual": false
     },
+    "rba_cash_rate": {
+      "id": "rba_cash_rate",
+      "human_name": "RBA Cash Rate Target (F1.1)",
+      "publisher": "Reserve Bank of Australia",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.rba.gov.au/statistics/cash-rate/",
+      "rights": "RBA terms of use for tabular data",
+      "citation": "Reserve Bank of Australia, Statistical Table F1.1 (Cash Rate Target).",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "rba_credit_card_debt_accruing_interest": {
+      "id": "rba_credit_card_debt_accruing_interest",
+      "human_name": "RBA credit card balances accruing interest (C1.1)",
+      "publisher": "Reserve Bank of Australia",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.rba.gov.au/statistics/tables/#credit-cards",
+      "rights": "RBA terms of use for tabular data",
+      "citation": "Reserve Bank of Australia, Statistical Table C1.1 (Credit and Charge Card Statistics - Original).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "rba_household_debt_to_income": {
+      "id": "rba_household_debt_to_income",
+      "human_name": "RBA Household Finances - Debt to disposable income (E2)",
+      "publisher": "Reserve Bank of Australia",
+      "fetch": "programmatic",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.rba.gov.au/statistics/tables/#household",
+      "rights": "RBA terms of use for tabular data",
+      "citation": "Reserve Bank of Australia, Statistical Table E2 (Selected Household Finances Ratios).",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "rba_standard_variable_mortgage_rate": {
+      "id": "rba_standard_variable_mortgage_rate",
+      "human_name": "RBA standard variable owner-occupier home loan rate (F5/F6)",
+      "publisher": "Reserve Bank of Australia",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.rba.gov.au/statistics/tables/#interest-rates",
+      "rights": "RBA terms of use for tabular data",
+      "citation": "Reserve Bank of Australia, Statistical Tables F5 and F6 (Indicator Lending Rates).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "resource_company_tax_rate": {
       "id": "resource_company_tax_rate",
       "human_name": "ATO company tax rates",
@@ -1437,6 +1677,22 @@
       "canonical_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
       "rights": "Government of Western Australia copyright and website terms",
       "citation": "Government of Western Australia, Overview of State Taxes and Royalties 2025-26, summary tables.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "state_government_debt_summary": {
+      "id": "state_government_debt_summary",
+      "human_name": "State and territory government net debt (Treasury budget papers)",
+      "publisher": "State and territory Treasury departments",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.budget.gov.au/",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "State and territory budget papers (Budget Paper 2 fiscal aggregates).",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
