@@ -1779,3 +1779,112 @@ sources:
     reuse_notes: ABS publishes CPI quarterly. The ABS Data API exposes CPI via SDMX (dataflow CPI); key shape requires human verification against the latest dataflow structure before automating. Manual stub until SDMX key is verified.
     fetch: manual
     used_by: [au_economics]
+
+  # =========================================================
+  # MANUFACTURING - v1.0 (what gets made in Australia)
+  # =========================================================
+
+  - id: abs_manufacturing_gdp_share
+    human_name: ABS Manufacturing share of GDP, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    canonical_url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Australian National Accounts - industry gross value added (Cat. 5206.0).
+    reuse_notes: ABS publishes industry gross value added (chain volume measure) by ANZSIC industry division in the quarterly National Accounts. Manufacturing is ANZSIC division C. Compute share as manufacturing GVA divided by total industry GVA. Manual stub until SDMX dataflow key is verified.
+    fetch: manual
+    used_by: [manufacturing]
+
+  - id: abs_manufacturing_employment
+    human_name: ABS Manufacturing employment, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), employed persons by industry.
+    reuse_notes: ABS publishes employed-persons by ANZSIC industry division quarterly. Manufacturing is ANZSIC division C. Manual stub until SDMX dataflow key is verified.
+    fetch: manual
+    used_by: [manufacturing]
+
+  - id: abs_manufacturing_output_index
+    human_name: ABS Manufacturing production index, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia
+    canonical_url: https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), manufacturing sales of goods produced.
+    reuse_notes: ABS Business Indicators publishes seasonally adjusted manufacturing sales by industry subdivision. Manual stub until SDMX dataflow key is verified.
+    fetch: manual
+    used_by: [manufacturing]
+
+  - id: abs_manufactured_exports_total
+    human_name: ABS International Trade - manufactured exports (SITC 5-8), monthly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods, SITC 5-8 manufactured exports.
+    reuse_notes: ABS publishes manufactured exports under SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles). The ABS Data API MERCH_EXP dataflow exposes 2- and 3-digit SITC commodity codes. Manual stub until the per-section SDMX query is verified.
+    fetch: manual
+    used_by: [manufacturing]
+
+  - id: abs_manufacturing_capex
+    human_name: ABS Private new capital expenditure - manufacturing, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia
+    canonical_url: https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing industry.
+    reuse_notes: ABS Cat. 5625.0 publishes actual and expected private new capex by ANZSIC industry, quarterly. Manufacturing is ANZSIC division C. Manual stub until SDMX dataflow key is verified.
+    fetch: manual
+    used_by: [manufacturing]
+
+  - id: abs_food_beverage_employment
+    human_name: ABS Food and beverage manufacturing employment, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), food product manufacturing (ANZSIC 11) and beverage and tobacco product manufacturing (ANZSIC 12).
+    reuse_notes: ABS publishes employed-persons by ANZSIC subdivision in the quarterly Labour Force Detailed release. Food product manufacturing is ANZSIC subdivision 11; beverage and tobacco is ANZSIC subdivision 12. Manual stub until SDMX dataflow key for these subdivisions is verified.
+    fetch: manual
+    used_by: [manufacturing]
+
+  - id: doe_industry_growth_centres_summary
+    human_name: Australian Government Industry Growth Centres Initiative - summary
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/
+    canonical_url: https://www.industry.gov.au/
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Industry, Science and Resources, manufacturing industry profiles.
+    reuse_notes: The Department of Industry publishes named manufacturing capability profiles ad-hoc. Hand-key only verified factual headcounts and revenue values from named publications, never aggregated estimates.
+    fetch: manual
+    used_by: [manufacturing]

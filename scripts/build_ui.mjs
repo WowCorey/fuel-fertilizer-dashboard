@@ -29,6 +29,7 @@ const dashboards = [
   'oil-and-production',
   'who-pays-what',
   'au-economics-dashboard',
+  'manufacturing-dashboard',
 ];
 
 function normalizeNewlines(text) {

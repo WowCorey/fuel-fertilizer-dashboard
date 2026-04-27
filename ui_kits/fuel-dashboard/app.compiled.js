@@ -345,6 +345,10 @@ function Header({
     label: 'AU economics',
     href: '../au-economics-dashboard/index.html'
   }, {
+    id: 'manufacturing',
+    label: 'Manufacturing',
+    href: '../manufacturing-dashboard/index.html'
+  }, {
     id: 'sources',
     label: 'Sources & methodology',
     href: '#sources'
