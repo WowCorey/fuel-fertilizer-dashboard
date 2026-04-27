@@ -468,6 +468,118 @@
       "has_generated": false,
       "has_manual": true
     },
+    "aemo_2024_isp_summary": {
+      "id": "aemo_2024_isp_summary",
+      "human_name": "AEMO Integrated System Plan - headline forecasts",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp",
+      "rights": "AEMO terms of use for tabular data",
+      "citation": "Australian Energy Market Operator, Integrated System Plan (ISP).",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_coal_retirement_timeline": {
+      "id": "aemo_coal_retirement_timeline",
+      "human_name": "AEMO scheduled and announced coal generator retirement timeline",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+      "rights": "AEMO terms of use for tabular data",
+      "citation": "Australian Energy Market Operator, NEM Generation Information - expected closure year column.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_generation_information_register": {
+      "id": "aemo_generation_information_register",
+      "human_name": "AEMO Generation Information register - capacity by fuel type",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+      "rights": "AEMO terms of use for tabular data",
+      "citation": "Australian Energy Market Operator, NEM Generation Information.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_nem_average_wholesale_price": {
+      "id": "aemo_nem_average_wholesale_price",
+      "human_name": "AEMO NEM regional wholesale price (RRP), monthly mean",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+      "rights": "AEMO terms of use for tabular data",
+      "citation": "Australian Energy Market Operator, NEM Price and Demand monthly archives.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aemo_nem_fuel_mix": {
+      "id": "aemo_nem_fuel_mix",
+      "human_name": "AEMO NEM generation fuel mix (% by source)",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem",
+      "rights": "AEMO terms of use for tabular data",
+      "citation": "Australian Energy Market Operator, NEM Data Dashboard fuel-mix snapshot.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "aemo_nem_total_demand": {
+      "id": "aemo_nem_total_demand",
+      "human_name": "AEMO NEM total operational demand, monthly mean MW",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+      "rights": "AEMO terms of use for tabular data",
+      "citation": "Australian Energy Market Operator, NEM Price and Demand monthly archives.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "aemo_wem_summary": {
+      "id": "aemo_wem_summary",
+      "human_name": "AEMO Western Australian Wholesale Electricity Market - capacity and price",
+      "publisher": "Australian Energy Market Operator",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://aemo.com.au/energy-systems/electricity/wholesale-electricity-market-wem",
+      "rights": "AEMO terms of use for tabular data",
+      "citation": "Australian Energy Market Operator, Wholesale Electricity Market (WEM) for Western Australia.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "aip_retail": {
       "id": "aip_retail",
       "human_name": "AIP national average retail petrol/diesel",
@@ -833,6 +945,22 @@
       "has_generated": true,
       "has_manual": false
     },
+    "cer_renewable_energy_target_progress": {
+      "id": "cer_renewable_energy_target_progress",
+      "human_name": "CER Renewable Energy Target progress, annual",
+      "publisher": "Clean Energy Regulator",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://cer.gov.au/schemes/renewable-energy-target",
+      "rights": "CC BY 4.0 (Commonwealth of Australia)",
+      "citation": "Clean Energy Regulator, Renewable Energy Target administrative report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "company_ampol": {
       "id": "company_ampol",
       "human_name": "Ampol annual report (ASX:ALD)",
@@ -957,6 +1085,22 @@
       "canonical_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
       "rights": "Company copyright",
       "citation": "Woodside Energy annual report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "dcceew_electricity_emissions": {
+      "id": "dcceew_electricity_emissions",
+      "human_name": "DCCEEW national greenhouse accounts - electricity sector emissions",
+      "publisher": "Department of Climate Change, Energy, the Environment and Water",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "power_grid"
+      ],
+      "canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts",
+      "rights": "CC BY 4.0 (Commonwealth of Australia)",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, National Greenhouse Gas Inventory - Quarterly Update, electricity sector.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

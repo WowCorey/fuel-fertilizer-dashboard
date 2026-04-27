@@ -885,7 +885,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_fertiliser_imports', 'abs_fertiliser_imports_urea', 'abs_fertiliser_imports_potash', 'abs_fertiliser_imports_phosphate', 'abs_fertiliser_imports_compound', 'abs_fertiliser_source_concentration', 'abares_fertiliser_price', 'abares_fertiliser_stock_cover'];
+const SERIES = ['aemo_nem_average_wholesale_price', 'aemo_nem_total_demand', 'aemo_nem_fuel_mix', 'aemo_generation_information_register', 'aemo_coal_retirement_timeline', 'cer_renewable_energy_target_progress', 'dcceew_electricity_emissions', 'aemo_2024_isp_summary', 'aemo_wem_summary'];
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -895,7 +895,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fertilizer"
+      active: "power_grid"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -904,25 +904,45 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const priceFields = data.aemo_nem_average_wholesale_price && data.aemo_nem_average_wholesale_price.extra && data.aemo_nem_average_wholesale_price.extra.fields || {};
+  const demandFields = data.aemo_nem_total_demand && data.aemo_nem_total_demand.extra && data.aemo_nem_total_demand.extra.fields || {};
+  const region = key => {
+    const px = priceFields[`region_${key}_latest`];
+    const dx = demandFields[`region_${key}_latest`];
+    return {
+      price: typeof px === 'number' ? px : null,
+      demand: typeof dx === 'number' ? dx : null
+    };
+  };
+  const NSW = region('nsw1');
+  const VIC = region('vic1');
+  const QLD = region('qld1');
+  const SA = region('sa1');
+  const TAS = region('tas1');
+  const fmt = (n, dp) => n === null ? '—' : n.toLocaleString('en-AU', {
+    minimumFractionDigits: dp,
+    maximumFractionDigits: dp
+  });
+  const haveRegional = priceFields.latest_month && Object.keys(priceFields).length > 1;
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fertilizer",
+    active: "power_grid",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "fertilizer"
+    id: "power-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Fertilizer \xB7 v1.1"), React.createElement("h1", {
+  }, "Power grid \xB7 v1.0"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's fertiliser, in plain English."), React.createElement("p", {
+  }, "Australia's power grid, in plain English."), React.createElement("p", {
     className: "intro__lede"
-  }, "Australia imports the majority of its fertiliser \u2014 the stuff that keeps wheat, canola and pasture growing. When overseas supply gets tight, it shows up as higher farm-gate prices within a season, and higher food costs not long after.")), React.createElement("aside", {
+  }, "How much electricity Australia uses, what it costs at the wholesale level, what fuels generate it, where the plants are, and which ones are scheduled to retire. The National Electricity Market (NEM) covers the eastern states and South Australia; Western Australia runs its own separate market (the WEM).")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -947,13 +967,13 @@ function App() {
     }
   }, "Why this matters to you")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Nearly everything grown commercially in Australia depends on imported fertiliser. Urea, potash and phosphates come in by the boatload, mostly from a short list of supplier countries. That makes the supply chain efficient, but also exposed: a single disruption at one end can push up farm costs across the country."), React.createElement("p", null, "This page is structured to track how much we import each month, what it costs, and how concentrated the supplier list is. Values appear only when the named public source has been verified in a JSON envelope."), React.createElement("p", {
+  }, React.createElement("p", null, "Wholesale electricity prices flow through to retail bills with a lag of months to a year. The fuel mix decides emissions, vulnerability to coal-plant outages, and how much firming the grid needs as more solar and wind come on. Coal retirement timing drives every transmission and battery decision in the AEMO Integrated System Plan."), React.createElement("p", null, "This page tracks the public numbers behind those choices: NEM-wide and per-state wholesale price, total operational demand, fuel mix, the AEMO Generation Information register (every plant in the country with capacity and expected closure year), and headline forecasts from AEMO's Integrated System Plan. Values appear only when the named publisher has been verified."), React.createElement("p", {
     className: "body-sm",
     style: {
       color: 'var(--ink-3)',
       marginTop: 12
     }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ABARES"), " = Australian Bureau of Agricultural and Resource Economics and Sciences.", React.createElement("b", null, " DCCEEW"), " = Department of Climate Change, Energy, the Environment and Water.", React.createElement("b", null, " HS 31"), " = the Harmonised System trade code for fertiliser.")))), React.createElement("section", {
+  }, "Acronyms used here: ", React.createElement("b", null, "NEM"), " = National Electricity Market (NSW, VIC, QLD, SA, TAS).", React.createElement("b", null, " WEM"), " = Wholesale Electricity Market (Western Australia, separate).", React.createElement("b", null, " RRP"), " = Regional Reference Price (wholesale price per region).", React.createElement("b", null, " AEMO"), " = Australian Energy Market Operator.", React.createElement("b", null, " AER"), " = Australian Energy Regulator.", React.createElement("b", null, " CER"), " = Clean Energy Regulator.", React.createElement("b", null, " ISP"), " = Integrated System Plan.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "metrics-h"
   }, React.createElement("div", {
@@ -967,42 +987,150 @@ function App() {
   }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
-    eyebrow: "Value",
-    label: "Monthly fertiliser imports",
-    plain: "Total value of manufactured fertiliser (SITC 562) cleared into Australia in the latest month, from the ABS Data API.",
-    fromEnvelope: data.abs_fertiliser_imports,
-    unit: " AUD thousands",
+    eyebrow: "Wholesale price",
+    label: "NEM average wholesale price",
+    plain: "Mean of the five NEM regional reference prices, computed from 5-minute TRADE intervals across the latest full month.",
+    fromEnvelope: data.aemo_nem_average_wholesale_price,
+    unit: " AUD per MWh",
     highlight: true
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Price",
-    label: "Fertiliser price index",
-    plain: "ABARES index. 100 = long-run average.",
-    fromEnvelope: data.abares_fertiliser_price,
-    unit: " index"
   }), React.createElement(MetricCard, {
-    eyebrow: "Concentration",
-    label: "Top-3 source countries",
-    plain: "Share of monthly SITC 562 manufactured fertiliser import value coming from the three largest source countries.",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
+    eyebrow: "Demand",
+    label: "NEM total operational demand",
+    plain: "Sum of mean operational demand across NSW, VIC, QLD, SA and TAS for the latest full month.",
+    fromEnvelope: data.aemo_nem_total_demand,
+    unit: " MW"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Fuel mix",
+    label: "Latest published NEM fuel mix",
+    plain: "Share of generation by black coal, brown coal, gas, hydro, wind, solar and battery, from the latest AEMO Quarterly Energy Dynamics report.",
+    fromEnvelope: data.aemo_nem_fuel_mix,
+    unit: ""
+  }), React.createElement(MetricCard, {
+    eyebrow: "Renewables",
+    label: "CER Renewable Energy Target progress",
+    plain: "Annual achieved-vs-target percentage from the Clean Energy Regulator's RET administrative report.",
+    fromEnvelope: data.cer_renewable_energy_target_progress,
     unit: "%"
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Resilience",
-    label: "Months of cover",
-    jargonHint: {
-      term: 'Months of cover',
-      definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.'
-    },
-    plain: "How long Australia's fertiliser stockpile would last if imports stopped.",
-    fromEnvelope: data.abares_fertiliser_stock_cover,
-    unit: " months"
+  })), React.createElement("div", {
+    style: {
+      height: 16
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Capacity",
+    label: "NEM Generation Information register - total",
+    plain: "Total capacity (MW) across every existing, committed and proposed generator listed in the AEMO Generation Information workbook.",
+    fromEnvelope: data.aemo_generation_information_register,
+    unit: " MW"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Coal retirement",
+    label: "Scheduled coal retirements",
+    plain: "Capacity (MW) of coal plants with announced closure dates in the AEMO Generation Information register.",
+    fromEnvelope: data.aemo_coal_retirement_timeline,
+    unit: " MW"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Emissions",
+    label: "Electricity sector emissions",
+    plain: "Quarterly electricity-sector emissions in megatonnes of CO2-equivalent, DCCEEW national greenhouse accounts.",
+    fromEnvelope: data.dcceew_electricity_emissions,
+    unit: " Mt CO2-e"
+  }), React.createElement(MetricCard, {
+    eyebrow: "WA",
+    label: "WEM headline (Western Australia)",
+    plain: "Latest published WA Wholesale Electricity Market capacity or wholesale-price headline. WA is not part of the NEM.",
+    fromEnvelope: data.aemo_wem_summary,
+    unit: ""
+  })), React.createElement("div", {
+    style: {
+      height: 16
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Forecast",
+    label: "AEMO Integrated System Plan headline",
+    plain: "Headline figure from the latest biennial Integrated System Plan, e.g. 2050 generation capacity by source under the optimal development path.",
+    fromEnvelope: data.aemo_2024_isp_summary,
+    unit: ""
   })), React.createElement("div", {
     className: "pending-list",
-    "aria-label": "Pending fertiliser source coverage"
+    "aria-label": "Pending power-grid source coverage"
   }, React.createElement("article", {
     className: "source-card"
   }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "Nutrient subseries, ABARES price index and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.")))), React.createElement("section", {
+  }, "Fuel mix, generation register totals, coal retirement schedule, RET progress, emissions, ISP forecast and WEM summary stay on manual until each AEMO, AER, CER or DCCEEW publication is verified by a human. Programmatic access is wired for the AEMO NEM regional price and demand series only.")))), haveRegional && React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "per-state-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "By state"), React.createElement("h2", {
+    id: "per-state-h"
+  }, "Wholesale price and demand, per NEM region"), React.createElement("p", {
+    className: "section__lede"
+  }, "Mean of all 5-minute TRADE intervals in the latest full month, per region. Western Australia (WEM) is a separate market and is not in this table."))), React.createElement("div", {
+    className: "table-wrap"
+  }, React.createElement("table", {
+    className: "ledger"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Region"), React.createElement("th", {
+    style: {
+      textAlign: 'right'
+    }
+  }, "Wholesale price (AUD/MWh)"), React.createElement("th", {
+    style: {
+      textAlign: 'right'
+    }
+  }, "Operational demand (MW)"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "New South Wales (NSW1)"), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(NSW.price, 2)), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(NSW.demand, 0))), React.createElement("tr", null, React.createElement("td", null, "Victoria (VIC1)"), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(VIC.price, 2)), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(VIC.demand, 0))), React.createElement("tr", null, React.createElement("td", null, "Queensland (QLD1)"), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(QLD.price, 2)), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(QLD.demand, 0))), React.createElement("tr", null, React.createElement("td", null, "South Australia (SA1)"), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(SA.price, 2)), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(SA.demand, 0))), React.createElement("tr", null, React.createElement("td", null, "Tasmania (TAS1)"), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(TAS.price, 2)), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, fmt(TAS.demand, 0)))))), React.createElement("p", {
+    className: "caption",
+    style: {
+      marginTop: 8
+    }
+  }, "Latest month: ", React.createElement("span", {
+    className: "mono"
+  }, priceFields.latest_month || '—'))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1011,107 +1139,37 @@ function App() {
     className: "eyebrow"
   }, "How it's changed"), React.createElement("h2", {
     id: "charts-h"
-  }, "Imports by type and source country, over time"), React.createElement("p", {
+  }, "NEM-wide price and demand over time"), React.createElement("p", {
     className: "section__lede"
-  }, "Charts populate when verified monthly source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Value",
-    title: "Monthly fertiliser imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_fertiliser_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Supplier mix",
-    title: "Top-3 source countries' combined share, over time",
-    unit: "%",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Share of monthly SITC 562 manufactured fertiliser import value from the three largest non-total source countries.",
-    yAxisLabel: "Top-3 share of SITC 562 import value (%)"
-  })), false && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
+  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
     className: "charts-grid"
   }, React.createElement(ChartCard, {
-    eyebrow: "Urea",
-    title: "Monthly urea imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_urea,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
+    eyebrow: "Wholesale price",
+    title: "NEM average wholesale price, monthly",
+    unit: "AUD per MWh",
+    fromEnvelope: data.aemo_nem_average_wholesale_price,
+    ranges: ['1Y'],
+    defaultRange: "1Y",
     accent: "#1F3A8A",
-    takeaway: "Urea (HS 3102) is the largest-volume nitrogen fertiliser. Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
+    takeaway: "Mean of the five NEM regional reference prices, computed from 5-minute TRADE intervals.",
+    yAxisLabel: "Wholesale price (AUD/MWh)"
   }), React.createElement(ChartCard, {
-    eyebrow: "Potash",
-    title: "Monthly potash imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_potash,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
+    eyebrow: "Demand",
+    title: "NEM total operational demand, monthly",
+    unit: "MW",
+    fromEnvelope: data.aemo_nem_total_demand,
+    ranges: ['1Y'],
+    defaultRange: "1Y",
     accent: "#0F766E",
-    takeaway: "Potassium fertilisers (HS 3104). Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Phosphates",
-    title: "Monthly phosphate imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_phosphate,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#B45309",
-    takeaway: "Phosphate fertilisers (HS 3103 + DAP/MAP under HS 3105). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Compound",
-    title: "Monthly compound fertiliser imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_compound,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Mixed NPK compound fertilisers (HS 3105, excluding DAP/MAP). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Prices",
-    title: "ABARES fertiliser price index",
-    unit: "index",
-    fromEnvelope: data.abares_fertiliser_price,
-    ranges: ['1Y', '3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#1F3A8A",
-    takeaway: "ABARES publishes an Australian fertiliser price index alongside its quarterly Agricultural Commodities release. 100 = long-run average.",
-    yAxisLabel: "Index (long-run average = 100)"
-  })))), React.createElement("section", {
+    takeaway: "Sum of mean operational demand across NSW, VIC, QLD, SA and TAS.",
+    yAxisLabel: "Total operational demand (MW)"
+  }))), React.createElement("section", {
     className: "section"
   }, React.createElement(InsightFeed, {
     items: [],
     title: "What changed",
-    lede: "Populated from DCCEEW / ABS / ABARES release notes as verified data arrives.",
-    emptyMessage: "Awaiting verified release notes for the loaded fertiliser source envelopes."
+    lede: "Populated from AEMO / AER / CER / DCCEEW release notes as verified data arrives.",
+    emptyMessage: "Awaiting verified release notes for the loaded power-grid source envelopes."
   })), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
@@ -1141,7 +1199,9 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Monthly fertiliser imports"), React.createElement("dd", null, "Total import value (AUD thousands) of manufactured fertilisers, fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; the four-digit SITC subdivisions (5621 nitrogenous, 5622 potassic, 5623 phosphatic, 5629 other) are not exposed via the live API, so per-nutrient monthly series remain hand-keyed from the ABS International Trade release tables."), React.createElement("dt", null, "Top-3 source countries"), React.createElement("dd", null, "Sum of import value from the three largest non-total source countries in the latest month, divided by total SITC 562 manufactured fertiliser imports in the same month, fetched from the ABS Data API MERCH_IMP dataflow using country-of-origin detail. Nutrient-level monthly subseries remain unavailable because the checked live ABS API paths for HS 3102/3103/3104/3105 and SITC 5621/5622/5623/5629 return no usable monthly series, and the checked ABS latest-release workbooks did not expose a dashboard-safe monthly nutrient-level value table."), React.createElement("dt", null, "Fertiliser price index"), React.createElement("dd", null, "Published by ABARES in the quarterly Agricultural Commodities report. Re-based so that the long-run average equals 100."), React.createElement("dt", null, "Months of cover"), React.createElement("dd", null, "Stockpile (tonnes) divided by the prior 12-month average monthly usage, expressed in months. Only published when DCCEEW or ABARES makes stockpile figures public.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "NEM average wholesale price"), React.createElement("dd", null, "For each of the five NEM regions (NSW1, VIC1, QLD1, SA1, TAS1), the AEMO Price and Demand monthly archive is fetched from ", React.createElement("span", {
+    className: "mono"
+  }, "aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv"), ". All 5-minute TRADE intervals in each month are averaged to a regional monthly mean, then the five regional means are averaged to a NEM-wide series. Per-region latest-month values are kept in extra.fields."), React.createElement("dt", null, "NEM total operational demand"), React.createElement("dd", null, "Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand."), React.createElement("dt", null, "NEM fuel mix"), React.createElement("dd", null, "Hand-keyed from the latest AEMO Quarterly Energy Dynamics summary tables, which publish the percentage share of generation by black coal, brown coal, gas, hydro, wind, solar and battery for the previous quarter."), React.createElement("dt", null, "NEM Generation Information register"), React.createElement("dd", null, "Hand-keyed from the latest monthly AEMO Generation Information workbook, which lists every existing, committed and proposed NEM generator with name, fuel type, region, MW capacity and expected closure year."), React.createElement("dt", null, "Scheduled coal retirements"), React.createElement("dd", null, "Subset of the NEM Generation Information register where fuel type is coal and an expected closure year is listed."), React.createElement("dt", null, "RET progress"), React.createElement("dd", null, "Annual achieved-vs-target percentage from the Clean Energy Regulator's Renewable Energy Target administrative report."), React.createElement("dt", null, "Electricity sector emissions"), React.createElement("dd", null, "Quarterly electricity-sector emissions in megatonnes of CO2-equivalent from the DCCEEW National Greenhouse Gas Inventory Quarterly Update, hand-keyed from the named PDF."), React.createElement("dt", null, "AEMO ISP headline"), React.createElement("dd", null, "Hand-keyed from the latest biennial AEMO Integrated System Plan; only headline scenario figures (e.g. 2050 generation capacity by source under the optimal development path) are recorded."), React.createElement("dt", null, "WEM summary"), React.createElement("dd", null, "Hand-keyed from named AEMO Wholesale Electricity Market monthly reports for Western Australia. The WEM is a separate market and is not part of the NEM.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

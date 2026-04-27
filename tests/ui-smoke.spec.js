@@ -12,6 +12,7 @@ const routes = [
   { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
   { path: '/ui_kits/au-economics-dashboard/index.html', heading: "Australia's economy, in plain English." },
   { path: '/ui_kits/manufacturing-dashboard/index.html', heading: 'What Australia still makes, in plain English.' },
+  { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
 ];
 
 for (const route of routes) {

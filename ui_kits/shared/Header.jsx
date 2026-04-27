@@ -12,6 +12,7 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'who_pays_what', label: 'Who pays what',         href: '../who-pays-what/index.html' },
     { id: 'au_economics',  label: 'AU economics',          href: '../au-economics-dashboard/index.html' },
     { id: 'manufacturing', label: 'Manufacturing',         href: '../manufacturing-dashboard/index.html' },
+    { id: 'power_grid',    label: 'Power grid',            href: '../power-grid-dashboard/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];
   return (

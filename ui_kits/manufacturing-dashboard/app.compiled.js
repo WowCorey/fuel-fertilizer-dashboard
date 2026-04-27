@@ -349,6 +349,10 @@ function Header({
     label: 'Manufacturing',
     href: '../manufacturing-dashboard/index.html'
   }, {
+    id: 'power_grid',
+    label: 'Power grid',
+    href: '../power-grid-dashboard/index.html'
+  }, {
     id: 'sources',
     label: 'Sources & methodology',
     href: '#sources'

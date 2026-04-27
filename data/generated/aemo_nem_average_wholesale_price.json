@@ -1,0 +1,16 @@
+{
+  "series_id": "aemo_nem_average_wholesale_price",
+  "source_id": "aemo_nem_average_wholesale_price",
+  "source_name": "AEMO NEM regional wholesale price (RRP), monthly mean",
+  "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+  "unit": "AUD per MWh",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-27T18:21:29+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Programmatic AEMO NEM fetcher registered; awaiting first successful CI run after upstream rate-limit window. The fetcher pulls 5-minute TRADE intervals across NSW1, VIC1, QLD1, SA1 and TAS1 from the AEMO public price/demand archive and aggregates to monthly means.",
+  "status": "unavailable",
+  "manual_entry": false,
+  "source_rights": "AEMO terms of use for tabular data",
+  "citation": "Australian Energy Market Operator, NEM Price and Demand monthly archives."
+}

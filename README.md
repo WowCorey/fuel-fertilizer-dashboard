@@ -7,7 +7,7 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Ten dashboard surfaces read from a shared JSON-envelope data
+**Status:** Eleven dashboard surfaces read from a shared JSON-envelope data
 pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
 ABS fertiliser imports, APS net-import cover, APS refinery production series,
 AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
@@ -48,6 +48,7 @@ interpolate or estimate missing numbers.
 | [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields, five company profit rows and ACCC December quarter 2025 petrol components are hand-keyed; remaining private Australian subsidiary profit stays unavailable until source filings are verified |
 | [AU economics](ui_kits/au-economics-dashboard/index.html) | v1.0 | RBA cash rate, household and government debt, mortgages, unemployment and inflation | RBA cash rate (F1.1) and household debt-to-income (E2) fetched programmatically from RBA statistical tables; standard variable mortgage rate, credit card balances, AOFM Commonwealth debt, state-level net debt, ABS GDP/unemployment/CPI remain manual until each publisher endpoint or column is verified |
 | [Manufacturing](ui_kits/manufacturing-dashboard/index.html) | v1.0 | Manufacturing share of GDP, employment, sales, exports, capex and food/beverage subsector | ABS National Accounts industry GVA, Labour Force Detailed industry employment, Business Indicators sales, International Trade SITC 5-8 manufactured exports and Private New Capex (Cat. 5625.0) sources declared; all stay on manual until each ABS SDMX dataflow key is verified |
+| [Power grid](ui_kits/power-grid-dashboard/index.html) | v1.0 | NEM wholesale price and demand by state, fuel mix, generation register, coal retirement timeline, emissions and ISP forecasts | AEMO NEM regional wholesale price and total operational demand fetched programmatically from the AEMO 5-minute Price and Demand archive across NSW1, VIC1, QLD1, SA1 and TAS1; fuel mix, AEMO Generation Information register, coal retirement timeline, CER RET progress, DCCEEW electricity emissions, AEMO ISP headline and WEM summary remain manual until each named publication is verified |
 
 Every page cross-links to the others in the header nav.
 

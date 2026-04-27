@@ -30,6 +30,7 @@ const dashboards = [
   'who-pays-what',
   'au-economics-dashboard',
   'manufacturing-dashboard',
+  'power-grid-dashboard',
 ];
 
 function normalizeNewlines(text) {
