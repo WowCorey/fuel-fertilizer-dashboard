@@ -341,6 +341,10 @@ function Header({
     label: 'Who pays what',
     href: '../who-pays-what/index.html'
   }, {
+    id: 'au_economics',
+    label: 'AU economics',
+    href: '../au-economics-dashboard/index.html'
+  }, {
     id: 'sources',
     label: 'Sources & methodology',
     href: '#sources'

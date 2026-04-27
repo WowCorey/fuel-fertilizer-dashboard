@@ -10,6 +10,7 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },
     { id: 'who_pays_what', label: 'Who pays what',         href: '../who-pays-what/index.html' },
+    { id: 'au_economics',  label: 'AU economics',          href: '../au-economics-dashboard/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];
   return (

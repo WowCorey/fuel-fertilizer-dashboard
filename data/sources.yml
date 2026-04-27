@@ -1638,3 +1638,144 @@ sources:
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: manual
     used_by: [who_pays_what]
+
+  # =========================================================
+  # AU ECONOMICS - v1.0 (RBA, AOFM, ABS macro indicators)
+  # =========================================================
+
+  - id: rba_cash_rate
+    human_name: RBA Cash Rate Target (F1.1)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/cash-rate/
+    fetch_url: https://www.rba.gov.au/statistics/tables/csv/f1.1-data.csv
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table F1.1 (Cash Rate Target).
+    reuse_notes: RBA publishes the cash-rate target series as a CSV. First column is observation date in DD-MMM-YYYY format. Pick the column whose Title contains "Cash Rate Target". Aggregated to monthly mean.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: rba_household_debt_to_income
+    human_name: RBA Household Finances - Debt to disposable income (E2)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/tables/#household
+    fetch_url: https://www.rba.gov.au/statistics/tables/csv/e2-data.csv
+    format: CSV
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table E2 (Selected Household Finances Ratios).
+    reuse_notes: RBA Table E2 publishes selected household finance ratios quarterly. Pick the column whose Title contains "Household debt to disposable income". Quarter-end dates only.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: rba_standard_variable_mortgage_rate
+    human_name: RBA standard variable owner-occupier home loan rate (F5/F6)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/tables/#interest-rates
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Tables F5 and F6 (Indicator Lending Rates).
+    reuse_notes: RBA Tables F5/F6 publish indicator lending rates including the standard variable owner-occupier home loan rate. CSV column names depend on table version; verify column header before automating. Manual stub until column ID is verified by a human.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: rba_credit_card_debt_accruing_interest
+    human_name: RBA credit card balances accruing interest (C1.1)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/tables/#credit-cards
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table C1.1 (Credit and Charge Card Statistics - Original).
+    reuse_notes: RBA Table C1.1 publishes credit card balances accruing interest. The upstream URL returned 503 in initial probing; manual stub until a stable CSV endpoint pattern is confirmed.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: aofm_gov_gross_debt
+    human_name: AOFM Australian Government Securities outstanding
+    publisher: Australian Office of Financial Management
+    url: https://www.aofm.gov.au/data
+    canonical_url: https://www.aofm.gov.au/data
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: CC BY 3.0 AU (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/3.0/au/
+    citation: Australian Office of Financial Management, Australian Government Securities Outstanding.
+    reuse_notes: AOFM publishes the face value of Treasury Bonds, Treasury Indexed Bonds and Treasury Notes on issue. The AOFM data hub URL returned 503 in initial probing; manual stub until a stable CSV endpoint pattern is confirmed.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: state_government_debt_summary
+    human_name: State and territory government net debt (Treasury budget papers)
+    publisher: State and territory Treasury departments
+    url: https://www.budget.gov.au/
+    canonical_url: https://www.budget.gov.au/
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: State and territory budget papers (Budget Paper 2 fiscal aggregates).
+    reuse_notes: Each state and territory publishes general government net debt in its annual budget papers (typically Budget Paper 2 or Budget Statement 1). No single Commonwealth dataset consolidates these on a comparable basis. Hand-key per jurisdiction once a year from named budget paper page references.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: abs_gdp_real_growth
+    human_name: ABS National Accounts - real GDP growth, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    canonical_url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0).
+    reuse_notes: ABS publishes seasonally adjusted real GDP series in the quarterly National Accounts release. The ABS Data API exposes National Accounts via SDMX (dataflow ANA_AGG); key shape requires human verification against the latest dataflow structure before automating. Manual stub until SDMX key is verified.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: abs_unemployment_rate
+    human_name: ABS Labour Force - unemployment rate, monthly seasonally adjusted
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), seasonally adjusted unemployment rate.
+    reuse_notes: ABS publishes the headline unemployment rate in the monthly Labour Force release. The ABS Data API exposes Labour Force via SDMX (dataflow LF); key shape requires human verification against the latest dataflow structure before automating. Manual stub until SDMX key is verified.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: abs_cpi_inflation
+    human_name: ABS Consumer Price Index - all groups annual change, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia
+    canonical_url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Consumer Price Index Australia (Cat. 6401.0), all groups annual percentage change.
+    reuse_notes: ABS publishes CPI quarterly. The ABS Data API exposes CPI via SDMX (dataflow CPI); key shape requires human verification against the latest dataflow structure before automating. Manual stub until SDMX key is verified.
+    fetch: manual
+    used_by: [au_economics]

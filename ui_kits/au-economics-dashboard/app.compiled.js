@@ -877,16 +877,17 @@ function Footer({
 Object.assign(window, {
   Footer
 });
+const SERIES = ['rba_cash_rate', 'rba_household_debt_to_income', 'rba_standard_variable_mortgage_rate', 'rba_credit_card_debt_accruing_interest', 'aofm_gov_gross_debt', 'state_government_debt_summary', 'abs_gdp_real_growth', 'abs_unemployment_rate', 'abs_cpi_inflation'];
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
-    window.FR.load(window.FUEL_SERIES).then(setData);
+    window.FR.load(SERIES).then(setData);
   }, []);
   if (!data) {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fuel"
+      active: "au_economics"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -895,46 +896,25 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const retailPlainFor = (env, fallbackLabel) => {
-    const fields = env?.extra?.fields || {};
-    const states = fields.states?.map(state => state.state)?.join(', ');
-    const label = fields.label || fallbackLabel;
-    return states ? `${states} ${label} average weighted by station count.` : `${fallbackLabel} from public state feeds where available.`;
-  };
-  const insights = [];
-  for (const [id, env] of Object.entries(data)) {
-    if (env.status === 'ok' && env.last_data_point) {
-      insights.push({
-        date: env.last_data_point,
-        body: `${env.source_name} — latest observation ${env.last_data_point}, ${env.values.length} data points available.`,
-        tag: 'Data',
-        tagKind: 'imports',
-        link: env.source_url ? {
-          href: env.source_url,
-          text: 'Publisher page'
-        } : null
-      });
-    }
-  }
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fuel",
+    active: "au_economics",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "fuel"
+    id: "au-economics"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Fuel"), React.createElement("h1", {
+  }, "AU economics \xB7 v1.0"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's liquid fuel, in plain English."), React.createElement("p", {
+  }, "Australia's economy, in plain English."), React.createElement("p", {
     className: "intro__lede"
-  }, "Petrol, diesel and jet fuel power almost every truck, tractor and aircraft in the country. Most of it is imported. This page tracks how much we bring in, what it costs at the pump, and how long our stockpile would last if imports stopped.")), React.createElement("aside", {
+  }, "The cost of money, the size of the debts the country and its households carry, and the rate at which people are working or losing work. These are the public numbers that decide how much your mortgage costs, how hard it is to get a job, and whether the government has room to spend.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -959,87 +939,100 @@ function App() {
     }
   }, "Why this matters to you")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Australia imports around 90% of its refined fuel. When overseas supply wobbles \u2014 a refinery outage, a shipping disruption, a price spike in Asia \u2014 it shows up at our pumps within days."), React.createElement("p", null, "This dashboard exists because most of the raw numbers are public, but scattered across government reports and trade databases. It loads verified source envelopes where available and leaves unavailable values visible, rather than filling gaps with estimates."), React.createElement("p", {
+  }, React.createElement("p", null, "The cash rate set by the Reserve Bank flows through to every variable mortgage, every business loan, and every credit card balance accruing interest. When debt is high relative to income \u2014 for households, for the federal government, or for the states \u2014 even small moves in the cash rate change a lot of household budgets and a lot of public budgets."), React.createElement("p", null, "This page tracks the public numbers that drive those decisions: the RBA cash rate, household debt-to-income, headline mortgage rates, credit card balances, Commonwealth and state debt, GDP growth, unemployment and CPI. Values appear only when the named publisher has been verified."), React.createElement("p", {
     className: "body-sm",
     style: {
       color: 'var(--ink-3)',
       marginTop: 12
     }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics. ", React.createElement("b", null, "APS"), " = Australian Petroleum Statistics.", React.createElement("b", null, " IEA"), " = International Energy Agency. ", React.createElement("b", null, "AIP"), " = Australian Institute of Petroleum.")))), React.createElement("section", {
+  }, "Acronyms used here: ", React.createElement("b", null, "RBA"), " = Reserve Bank of Australia.", React.createElement("b", null, " AOFM"), " = Australian Office of Financial Management (issues Commonwealth debt).", React.createElement("b", null, " ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " CPI"), " = Consumer Price Index.", React.createElement("b", null, " GDP"), " = Gross Domestic Product.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "metrics-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Four headline numbers"), React.createElement("h2", {
+  }, "Headline numbers"), React.createElement("h2", {
     id: "metrics-h"
   }, "As of the latest publisher update"), React.createElement("p", {
     className: "section__lede"
-  }, "Any card marked \"Source unavailable\" is waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
+  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
-    eyebrow: "Most watched",
-    label: "Days of Net Import Cover",
-    jargonHint: {
-      term: 'Days of Net Import Cover',
-      definition: 'How many days Australia could keep going on its fuel stockpile if imports stopped today.'
-    },
-    plain: "If imports stopped today, how long the national stockpile would last.",
-    fromEnvelope: data.aps_monthly,
-    unit: " days",
-    threshold: {
-      state: 'below',
-      text: 'IEA benchmark: 90 days'
-    },
+    eyebrow: "Interest rate",
+    label: "RBA cash rate target",
+    plain: "The headline policy interest rate set by the Reserve Bank, from RBA Statistical Table F1.1.",
+    fromEnvelope: data.rba_cash_rate,
+    unit: "%",
     highlight: true
   }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail pump price - ULP 91",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate, 'ULP 91'),
-    fromEnvelope: data.aus_retail_fuel_multistate,
-    unit: " c/L"
+    eyebrow: "Mortgages",
+    label: "Standard variable home loan rate",
+    plain: "The indicator standard variable owner-occupier rate published by the RBA in Tables F5/F6.",
+    fromEnvelope: data.rba_standard_variable_mortgage_rate,
+    unit: "%"
   }), React.createElement(MetricCard, {
-    eyebrow: "Wholesale",
-    label: "Terminal gate price",
-    plain: "AIP national average unleaded petrol terminal gate price.",
-    fromEnvelope: data.aip_tgp,
-    unit: " c/L"
+    eyebrow: "Household debt",
+    label: "Household debt to disposable income",
+    plain: "Total household debt as a per cent of household disposable income, RBA Statistical Table E2.",
+    fromEnvelope: data.rba_household_debt_to_income,
+    unit: "%"
   }), React.createElement(MetricCard, {
-    eyebrow: "Trade",
-    label: "Monthly Imports (year-on-year)",
-    plain: "How the latest month compared to the same month a year earlier.",
-    fromEnvelope: data.abs_petroleum_imports_yoy,
-    valueFn: env => {
-      const v = env.values.at(-1).v;
-      return `${v > 0 ? '+' : ''}${v}`;
-    },
+    eyebrow: "Credit cards",
+    label: "Card balances accruing interest",
+    plain: "Total credit and charge card balances on which households are paying interest, RBA Table C1.1.",
+    fromEnvelope: data.rba_credit_card_debt_accruing_interest,
+    unit: " AUD millions"
+  })), React.createElement("div", {
+    style: {
+      height: 16
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Federal debt",
+    label: "Australian Government Securities outstanding",
+    plain: "Face-value total of Treasury Bonds, Indexed Bonds and Treasury Notes on issue, from AOFM.",
+    fromEnvelope: data.aofm_gov_gross_debt,
+    unit: " AUD billions"
+  }), React.createElement(MetricCard, {
+    eyebrow: "State debt",
+    label: "State & territory net debt",
+    plain: "General government net debt by state and territory, hand-keyed from each Treasury's annual budget paper.",
+    fromEnvelope: data.state_government_debt_summary,
+    unit: " AUD billions"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Activity",
+    label: "Real GDP growth",
+    plain: "Quarterly seasonally adjusted change in real Gross Domestic Product, ABS National Accounts.",
+    fromEnvelope: data.abs_gdp_real_growth,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Jobs",
+    label: "Unemployment rate",
+    plain: "Monthly seasonally adjusted unemployment rate, ABS Labour Force release.",
+    fromEnvelope: data.abs_unemployment_rate,
     unit: "%"
   })), React.createElement("div", {
     style: {
-      height: 24
+      height: 16
     }
   }), React.createElement("div", {
-    className: "metric-grid metric-grid--3"
+    className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail diesel",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_diesel, 'diesel'),
-    fromEnvelope: data.aus_retail_fuel_multistate_diesel,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail premium 95",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_premium95, 'premium 95'),
-    fromEnvelope: data.aus_retail_fuel_multistate_premium95,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail E10",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_e10, 'E10'),
-    fromEnvelope: data.aus_retail_fuel_multistate_e10,
-    unit: " c/L"
-  }))), React.createElement("section", {
+    eyebrow: "Prices",
+    label: "CPI inflation, annual",
+    plain: "All-groups Consumer Price Index annual percentage change, ABS Cat. 6401.0.",
+    fromEnvelope: data.abs_cpi_inflation,
+    unit: "%"
+  })), React.createElement("div", {
+    className: "pending-list",
+    "aria-label": "Pending economics source coverage"
+  }, React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
+    className: "body-sm"
+  }, "Mortgage rate, credit card balances, AOFM federal debt, state net debt, GDP, unemployment and CPI sources stay on manual until each publisher endpoint or workbook column is verified by a human. Programmatic access is wired for the RBA cash rate and household debt-to-income series only.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1048,54 +1041,79 @@ function App() {
     className: "eyebrow"
   }, "How it's changed"), React.createElement("h2", {
     id: "charts-h"
-  }, "Imports, prices and stockpile over time"), React.createElement("p", {
+  }, "The cash rate, debt and prices over time"), React.createElement("p", {
     className: "section__lede"
-  }, "Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid"
+  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
+    className: "charts-grid charts-grid--full"
   }, React.createElement(ChartCard, {
-    eyebrow: "Volume",
-    title: "Monthly petroleum imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_petroleum_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
+    eyebrow: "Interest rate",
+    title: "RBA cash rate target",
+    unit: "%",
+    fromEnvelope: data.rba_cash_rate,
+    ranges: ['1Y', '3Y', '5Y'],
+    defaultRange: "5Y",
     accent: "#1F3A8A",
-    takeaway: "Monthly petroleum imports from ABS International Merchandise Trade. Chart populates when the latest month is verified.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Wholesale",
-    title: "Terminal gate price",
-    unit: "cents per litre",
-    fromEnvelope: data.aip_tgp,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Monthly mean of AIP daily national average unleaded petrol terminal gate prices.",
-    yAxisLabel: "Cents per litre (c/L)"
+    takeaway: "Monthly mean of the daily RBA cash rate target, from Statistical Table F1.1.",
+    yAxisLabel: "Cash rate target (%)"
   })), React.createElement("div", {
     style: {
       height: 24
     }
   }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
+    className: "charts-grid"
   }, React.createElement(ChartCard, {
-    eyebrow: "Resilience",
-    title: "Days of Net Import Cover vs. 90-day benchmark",
-    unit: " days",
-    fromEnvelope: data.aps_monthly,
-    baseline: 90,
-    baselineLabel: "IEA 90-day benchmark",
-    ranges: ['1Y', '3Y'],
+    eyebrow: "Household debt",
+    title: "Household debt to disposable income",
+    unit: "%",
+    fromEnvelope: data.rba_household_debt_to_income,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#0F766E",
+    takeaway: "Quarter-end ratio of household debt to disposable income, from RBA Table E2.",
+    yAxisLabel: "Household debt to income (%)"
+  }), React.createElement(ChartCard, {
+    eyebrow: "Jobs",
+    title: "Unemployment rate, seasonally adjusted",
+    unit: "%",
+    fromEnvelope: data.abs_unemployment_rate,
+    ranges: ['1Y', '3Y', '5Y'],
     defaultRange: "3Y",
+    accent: "#B45309",
+    takeaway: "Headline seasonally adjusted unemployment rate from the ABS Labour Force release.",
+    yAxisLabel: "Unemployment rate (%)"
+  })), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "charts-grid"
+  }, React.createElement(ChartCard, {
+    eyebrow: "Prices",
+    title: "CPI inflation, annual",
+    unit: "%",
+    fromEnvelope: data.abs_cpi_inflation,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#6B7280",
+    takeaway: "Annual percentage change in the all-groups Consumer Price Index, ABS Cat. 6401.0.",
+    yAxisLabel: "CPI annual change (%)"
+  }), React.createElement(ChartCard, {
+    eyebrow: "Activity",
+    title: "Real GDP growth, quarterly",
+    unit: "%",
+    fromEnvelope: data.abs_gdp_real_growth,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
     accent: "#1F3A8A",
-    takeaway: "Days of cover = petroleum stocks on land and in transit divided by average net imports. The 90-day benchmark is an IEA obligation for member countries.",
-    yAxisLabel: "Days of cover"
+    takeaway: "Seasonally adjusted percentage change in real GDP, from the ABS quarterly National Accounts.",
+    yAxisLabel: "Real GDP growth (%)"
   }))), React.createElement("section", {
     className: "section"
   }, React.createElement(InsightFeed, {
-    items: insights,
-    lede: "Notes synthesised from the envelope metadata on each source. Populated as verified data arrives.",
-    emptyMessage: "Awaiting verified publisher release notes for the loaded source envelopes."
+    items: [],
+    title: "What changed",
+    lede: "Populated from RBA / AOFM / ABS release notes as verified data arrives.",
+    emptyMessage: "Awaiting verified release notes for the loaded economics source envelopes."
   })), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
@@ -1105,7 +1123,7 @@ function App() {
     className: "eyebrow"
   }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. When a figure cannot yet be verified, the card reads \"Source unavailable\" \u2014 we do not fill in estimates."))), React.createElement("div", {
+  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
@@ -1125,7 +1143,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Days of Net Import Cover"), React.createElement("dd", null, "Total petroleum stocks (on land and in transit) divided by the prior 12-month average of net imports, expressed in days. Follows the IEA methodology used by DCCEEW."), React.createElement("dt", null, "Retail pump prices"), React.createElement("dd", null, "Average across the public state feeds that returned usable observations for each product, weighted by station count. NSW contributes only when the FuelCheck secret is configured; WA does not expose E10 through the active public RSS product-code list."), React.createElement("dt", null, "Terminal gate price"), React.createElement("dd", null, "Monthly mean of AIP daily national average unleaded petrol terminal gate prices from the historical TGP workbook."), React.createElement("dt", null, "Monthly Imports (year-on-year)"), React.createElement("dd", null, "Percent change in petroleum import value vs. the same calendar month one year earlier, derived from ABS International Merchandise Trade.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "RBA cash rate target"), React.createElement("dd", null, "Monthly mean of daily observations from RBA Statistical Table F1.1, fetched as CSV. The value is the headline policy interest rate the RBA Board sets at each Monetary Policy meeting."), React.createElement("dt", null, "Standard variable home loan rate"), React.createElement("dd", null, "Indicator standard variable owner-occupier rate from RBA Statistical Tables F5 and F6. Manual entry until the column header in the latest CSV release is verified."), React.createElement("dt", null, "Household debt to disposable income"), React.createElement("dd", null, "Total household debt expressed as a per cent of household disposable income, from RBA Statistical Table E2 (Selected Household Finances Ratios). Quarter-end values."), React.createElement("dt", null, "Credit card balances accruing interest"), React.createElement("dd", null, "Total credit and charge card balances on which interest is being charged, from RBA Statistical Table C1.1. Manual entry until a stable CSV endpoint is confirmed."), React.createElement("dt", null, "Australian Government Securities outstanding"), React.createElement("dd", null, "Face value of Treasury Bonds, Treasury Indexed Bonds and Treasury Notes on issue, from the Australian Office of Financial Management. Manual entry until a stable CSV endpoint is confirmed."), React.createElement("dt", null, "State and territory net debt"), React.createElement("dd", null, "General government net debt for each state and territory, hand-keyed once a year from the named Budget Paper or Budget Statement (typically Budget Paper 2). No single Commonwealth dataset consolidates these on a comparable basis."), React.createElement("dt", null, "Real GDP growth"), React.createElement("dd", null, "Seasonally adjusted percentage change in real Gross Domestic Product, from the ABS quarterly National Accounts release (Cat. 5206.0). Manual until the ABS SDMX dataflow key for this series is verified."), React.createElement("dt", null, "Unemployment rate"), React.createElement("dd", null, "Headline monthly seasonally adjusted unemployment rate, from ABS Labour Force Australia (Cat. 6202.0). Manual until the ABS SDMX dataflow key for this series is verified."), React.createElement("dt", null, "CPI inflation"), React.createElement("dd", null, "All-groups Consumer Price Index annual percentage change, from ABS Consumer Price Index Australia (Cat. 6401.0). Manual until the ABS SDMX dataflow key for this series is verified.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
