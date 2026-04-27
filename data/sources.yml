@@ -1671,7 +1671,7 @@ sources:
     rights: RBA terms of use for tabular data
     rights_url: https://www.rba.gov.au/copyright/
     citation: Reserve Bank of Australia, Statistical Table E2 (Selected Household Finances Ratios).
-    reuse_notes: RBA Table E2 publishes selected household finance ratios quarterly. Pick the column whose Title contains "Household debt to disposable income". Quarter-end dates only.
+    reuse_notes: RBA Table E2 publishes selected household finance ratios quarterly. The Title row column to pick is "Household debt to income" (Description row clarifies "Ratio of household debt to annualised household disposable income"). Quarter-end dates only.
     fetch: programmatic
     used_by: [au_economics]
 

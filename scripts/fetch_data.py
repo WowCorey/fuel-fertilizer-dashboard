@@ -1916,10 +1916,10 @@ FETCHERS: dict[str, Fetcher] = {
     ),
     "rba_household_debt_to_income": lambda source: fetch_rba_csv_column(
         source["fetch_url"],
-        title_substring="Household debt to disposable income",
+        title_substring="Household debt to income",
         aggregate="quarter_end",
         unit="per cent",
-        notes="Quarter-end value of household debt as a per cent of disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
+        notes="Quarter-end value of household debt as a per cent of annualised household disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
         ndigits=1,
     ),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
