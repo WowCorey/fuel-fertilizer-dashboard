@@ -7,6 +7,7 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'resource_value',  label: 'Resource value',       href: '../resource-value-dashboard/index.html' },
     { id: 'state_contribution', label: 'State ledger', href: '../state-contribution-dashboard/index.html' },
     { id: 'strategic_resources', label: 'Strategic resources', href: '../strategic-resources-dashboard/index.html' },
+    { id: 'defence_posture', label: 'Defence posture', href: '../defence-alliances-dashboard/index.html' },
     { id: 'fuel',          label: 'Fuel',                  href: '../fuel-dashboard/index.html' },
     { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },

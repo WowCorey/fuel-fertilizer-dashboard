@@ -905,317 +905,240 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['state_resource_contribution_profiles', 'resource_state_production_aes', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_wa_petroleum_royalty_receipts', 'resource_qld_petroleum_royalty_receipts', 'state_nsw_minerals_petroleum_royalty_context', 'state_nt_mining_petroleum_royalty_context', 'state_petroleum_ledger_source_gates', 'state_petroleum_nopta_counts', 'state_petroleum_production_licence_map', 'state_oil_gas_major_projects_remp', 'state_operating_refinery_counts', 'resource_resource_rent_tax_receipts_budget', 'resource_prrt_policy', 'resource_company_tax_rate'];
-const STATE_ORDER = ['WA', 'QLD', 'VIC', 'SA', 'NT', 'NSW', 'TAS', 'ACT'];
+const SERIES = ['defence_posture_profiles', 'defence_budget_2026_nds', 'defence_workforce_annual_report_2024_25', 'defence_public_capability_assets', 'defence_alliance_frameworks', 'defence_sovereign_industry_context', 'defence_readiness_gap'];
 function fields(env) {
   return env?.extra?.fields || {};
 }
-function latestValue(env) {
-  if (!env || env.status !== 'ok' || !env.values?.length) return null;
-  return env.values.at(-1).v;
+function hasRows(env) {
+  return env && env.status === 'ok' && env.extra?.fields;
 }
-function valuePeriod(env) {
-  return env?.values?.at(-1)?.t || env?.last_data_point || '-';
+function trustKind(label) {
+  const text = String(label || '').toLowerCase();
+  if (text.includes('unavailable')) return 'unavailable';
+  if (text.includes('partial')) return 'partial';
+  if (text.includes('derived')) return 'derived';
+  if (text.includes('manual')) return 'manual';
+  if (text.includes('stale')) return 'stale';
+  return 'observed';
 }
-function hasNumber(value) {
-  return value !== null && value !== undefined && Number.isFinite(Number(value));
+function sourceLineFor(data, sourceId) {
+  const env = data?.[sourceId];
+  return env ? window.FR.sourceLine(env) : `Source id not loaded: ${sourceId}.`;
 }
-function sumLoaded(values) {
-  const loaded = values.filter(hasNumber).map(Number);
-  return loaded.length ? loaded.reduce((sum, value) => sum + value, 0) : null;
-}
-function formatNumber(value, digits = 1) {
-  if (!hasNumber(value)) return 'Unavailable';
-  return Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: digits
-  });
-}
-function formatProduction(value, unit) {
-  if (!hasNumber(value)) return 'Not loaded';
-  return `${formatNumber(value)} ${unit}`;
-}
-function formatRoyalty(env) {
-  const value = latestValue(env);
-  if (!hasNumber(value)) return 'Unavailable';
-  return `A$${Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: 1
-  })}m`;
-}
-function formatRoyaltyContext(env) {
-  const value = latestValue(env);
-  if (!hasNumber(value)) return 'Unavailable';
-  const scope = fields(env).reported_scope || 'combined context';
-  return `A$${Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: 1
-  })}m ${scope}`;
-}
-function coverageKind(label) {
-  return String(label || '').toLowerCase().includes('limited') ? 'unavailable' : 'partial';
-}
-function sourceStatus(env) {
-  if (!env || env.status !== 'ok') return 'Awaiting a verified method or value before publication.';
-  return `Verified envelope. ${env.values?.length || 0} data point${env.values?.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'unknown'}.`;
-}
-function productionFor(profile, aesRows) {
-  const row = aesRows.find(item => item.state === profile.state_name);
-  if (!row) return {
-    gasPj: null,
-    liquidsMl: null,
-    naturalGasMcm: null,
-    summary: 'No loaded AES state production row.'
-  };
-  const gasPj = sumLoaded([row.conventional_gas_pj, row.coal_seam_gas_pj]);
-  const liquidsMl = sumLoaded([row.crude_oil_and_ngl_ml, row.naturally_occurring_lpg_ml]);
-  const naturalGasMcm = hasNumber(row.natural_gas_mcm) ? Number(row.natural_gas_mcm) : null;
-  const bits = [];
-  if (hasNumber(gasPj)) bits.push(`${formatNumber(gasPj)} PJ gas`);
-  if (hasNumber(liquidsMl)) bits.push(`${formatNumber(liquidsMl)} ML crude/NGL/LPG`);
-  return {
-    gasPj,
-    liquidsMl,
-    naturalGasMcm,
-    summary: bits.length ? bits.join('; ') : 'No loaded petroleum production value.'
-  };
-}
-function royaltyEnv(profile, data) {
-  return profile.royalty_source_id ? data[profile.royalty_source_id] : null;
-}
-function royaltyContextEnv(profile, data) {
-  return profile.royalty_context_source_id ? data[profile.royalty_context_source_id] : null;
-}
-function revenueDisplay(profile, data) {
-  const royalty = royaltyEnv(profile, data);
-  const royaltyValue = latestValue(royalty);
-  if (hasNumber(royaltyValue)) {
-    return {
-      text: `${formatRoyalty(royalty)} (${valuePeriod(royalty)})`,
-      className: '',
-      badge: React.createElement(TrustBadge, {
-        kind: "observed"
-      }, "Petroleum receipt")
-    };
-  }
-  const context = royaltyContextEnv(profile, data);
-  const contextValue = latestValue(context);
-  if (hasNumber(contextValue)) {
-    return {
-      text: `${formatRoyaltyContext(context)} (${valuePeriod(context)})`,
-      className: '',
-      badge: React.createElement(TrustBadge, {
-        kind: "partial"
-      }, "Combined context")
-    };
-  }
-  return {
-    text: profile.royalties_label || 'Unavailable',
-    className: 'unavail',
-    badge: React.createElement(TrustBadge, {
-      kind: "unavailable"
-    })
-  };
-}
-function noptaCoverage(profile, data) {
-  const rows = fields(data.state_petroleum_nopta_counts).state_rows || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function refineryCoverage(profile, data) {
-  const rows = fields(data.state_operating_refinery_counts).states || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function integerCount(value) {
-  if (!hasNumber(value)) return 'Unavailable';
-  return Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: 0
-  });
-}
-function objectCoverage(profile, data) {
-  const nopta = noptaCoverage(profile, data);
-  const refinery = refineryCoverage(profile, data);
-  return {
-    activeTitles: nopta?.title_records?.active ?? null,
-    pendingTitles: nopta?.title_records?.pending_application ?? null,
-    productionLicences: (nopta?.title_records?.by_title_type || []).find(row => row.title_type === 'Production Licence')?.count ?? null,
-    infrastructureLicences: (nopta?.title_records?.by_title_type || []).find(row => row.title_type === 'Infrastructure Licence')?.count ?? null,
-    wellLayerRecords: nopta?.well_records?.total_layer_records ?? null,
-    knownPetroleumWellRecords: nopta?.well_records?.known_petroleum_type_records ?? null,
-    refineryCount: refinery?.count ?? 0,
-    refineryFacilities: refinery?.facilities || []
-  };
-}
-function productionLicenceSummary(profile, data) {
-  const rows = fields(data.state_petroleum_production_licence_map).state_rows || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function rempProjectSummary(profile, data) {
-  const rows = fields(data.state_oil_gas_major_projects_remp).state_rows || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function productionMappingRows(data) {
-  const noptaRows = fields(data.state_petroleum_production_licence_map).production_licence_rows || [];
-  const rempRows = fields(data.state_oil_gas_major_projects_remp).project_rows || [];
-  const mappedNopta = noptaRows.map(row => ({
-    key: `nopta-${row.title}-${row.field_name || ''}`,
-    source: 'NOPTA production licence',
-    state_code: row.state_code,
-    state_name: row.state_name,
-    basin_name: row.basin_name,
-    project_name: row.field_name || row.title,
-    field_name: row.field_name,
-    operator_name: row.title_operator,
-    company_name: row.title_holders_raw,
-    product_class: row.product_class || 'petroleum',
-    metric: 'Active production licence record',
-    period: row.production_period || fields(data.state_petroleum_production_licence_map).as_at,
-    status: row.status,
-    trust: 'Observed',
-    caveat: 'Offshore regulatory title mapping; no production volume.'
+function SourceAnchor({
+  href,
+  children
+}) {
+  if (!href) return React.createElement("span", null, children || 'No source URL loaded');
+  return React.createElement("a", {
+    href: href
+  }, children || href.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
   }));
-  const mappedRemp = rempRows.map(row => ({
-    key: `remp-${row.state_code}-${row.project_name}`,
-    source: 'REMP oil & gas project',
-    state_code: row.state_code,
-    state_name: row.state_name,
-    basin_name: row.basin_name,
-    project_name: row.project_name,
-    field_name: row.field_name,
-    operator_name: row.operator_name,
-    company_name: row.company_name,
-    product_class: row.product_class || row.resource,
-    metric: hasNumber(row.production_metric_value) ? `${formatNumber(row.production_metric_value, 1)} ${row.production_unit || ''} estimated new capacity` : 'Estimated new capacity unavailable',
-    period: row.production_period,
-    status: row.status,
-    trust: 'Partial coverage',
-    caveat: 'Major-project/development row; not current production.'
-  }));
-  return [...mappedNopta, ...mappedRemp].filter(row => row.state_code);
 }
-function ProductionMappingMini({
-  profile,
+function MetricStatus({
+  label
+}) {
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, React.createElement(TrustBadge, {
+    kind: trustKind(label)
+  }, label || 'Observed'));
+}
+function ProfileCard({
+  item,
   data
 }) {
-  const licences = productionLicenceSummary(profile, data);
-  const remp = rempProjectSummary(profile, data);
-  return React.createElement("div", {
-    className: "caption"
-  }, React.createElement("b", null, "Active production licence rows:"), " ", integerCount(licences?.production_licence_records), React.createElement("br", null), React.createElement("b", null, "REMP oil/gas project rows:"), " ", integerCount(remp?.project_rows), React.createElement("br", null), React.createElement("b", null, "Mapped companies/operators:"), " ", integerCount((licences?.mapped_operator_records || 0) + (remp?.mapped_company_rows || 0)));
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, item.title), React.createElement(MetricStatus, {
+    label: item.trust_label
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, item.text), React.createElement("p", {
+    className: "caption mono"
+  }, sourceLineFor(data, item.source_id)));
 }
-function ProductionMappingTable({
+function BudgetMetricCard({
+  metric,
+  data
+}) {
+  const unavailable = metric.source_coverage_label === 'Unavailable';
+  return React.createElement("article", {
+    className: `metric-card ${unavailable ? 'metric-card--unavailable' : ''}`
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, metric.category), React.createElement(MetricStatus, {
+    label: metric.trust_label
+  })), React.createElement("h3", {
+    className: "metric-card__label"
+  }, metric.metric_name), React.createElement("p", {
+    className: "metric-card__plain"
+  }, metric.notes), unavailable ? React.createElement("div", {
+    className: "metric-card__unavail"
+  }, React.createElement(Icon, {
+    name: "alert",
+    size: 18
+  }), React.createElement("span", null, metric.metric_display)) : React.createElement("div", {
+    className: "metric-card__row"
+  }, React.createElement("span", {
+    className: "metric-numeral"
+  }, metric.metric_display)), React.createElement("footer", {
+    className: "metric-card__foot"
+  }, React.createElement("span", {
+    className: "metric-card__source"
+  }, metric.metric_period, ". ", sourceLineFor(data, metric.source_id))));
+}
+function BudgetTable({
+  rows,
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Metric"), React.createElement("th", null, "Period"), React.createElement("th", null, "Value"), React.createElement("th", null, "Type"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.metric_id
+  }, React.createElement("td", null, React.createElement("b", null, row.metric_name), React.createElement("br", null), React.createElement("span", {
+    className: "caption mono"
+  }, row.metric_id)), React.createElement("td", null, row.metric_period), React.createElement("td", {
+    className: row.source_coverage_label === 'Unavailable' ? 'unavail' : ''
+  }, row.metric_display), React.createElement("td", null, row.category), React.createElement("td", null, React.createElement(MetricStatus, {
+    label: row.trust_label
+  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
+    className: "caption mono"
+  }, sourceLineFor(data, row.source_id))))))));
+}
+function ForceStructureTable({
+  rows,
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Row"), React.createElement("th", null, "Type"), React.createElement("th", null, "What the public source supports"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.name
+  }, React.createElement("td", null, React.createElement("b", null, row.name)), React.createElement("td", null, row.type), React.createElement("td", null, row.summary, React.createElement("br", null), React.createElement(SourceAnchor, {
+    href: row.source_url
+  })), React.createElement("td", null, React.createElement(MetricStatus, {
+    label: row.trust_label
+  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
+    className: "caption mono"
+  }, sourceLineFor(data, row.source_id))))))));
+}
+function CapabilitySection({
+  rows
+}) {
+  const groups = ['Navy', 'Air Force', 'Army', 'Joint'];
+  return React.createElement("div", {
+    className: "sources-grid"
+  }, groups.map(branch => {
+    const branchRows = rows.filter(row => row.branch === branch);
+    if (!branchRows.length) return null;
+    return React.createElement("article", {
+      className: "source-card",
+      key: branch
+    }, React.createElement("div", {
+      className: "card-status-row"
+    }, React.createElement("h4", null, branch), React.createElement(TrustBadge, {
+      kind: branch === 'Joint' ? 'unavailable' : 'partial'
+    }, branch === 'Joint' ? 'Unavailable' : 'Partial coverage')), React.createElement("div", {
+      className: "data-table-wrap"
+    }, React.createElement("table", {
+      className: "data-table"
+    }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Capability"), React.createElement("th", null, "Public row"), React.createElement("th", null, "Status"))), React.createElement("tbody", null, branchRows.map(row => React.createElement("tr", {
+      key: row.capability_id
+    }, React.createElement("td", null, React.createElement("b", null, row.capability_name), React.createElement("br", null), React.createElement("span", {
+      className: "caption"
+    }, row.capability_type)), React.createElement("td", {
+      className: row.trust_label === 'Unavailable' ? 'unavail' : ''
+    }, row.quantity_or_status, React.createElement("br", null), React.createElement("span", {
+      className: "caption"
+    }, row.notes), React.createElement("br", null), React.createElement(SourceAnchor, {
+      href: row.source_url
+    })), React.createElement("td", null, React.createElement(MetricStatus, {
+      label: row.trust_label
+    }))))))));
+  }));
+}
+function AllianceSection({
+  frameworks
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Framework"), React.createElement("th", null, "Type"), React.createElement("th", null, "Members"), React.createElement("th", null, "Public status"), React.createElement("th", null, "Purpose"), React.createElement("th", null, "Trust"))), React.createElement("tbody", null, frameworks.map(row => React.createElement("tr", {
+    key: row.framework_id
+  }, React.createElement("td", null, React.createElement("b", null, row.framework_name), React.createElement("br", null), React.createElement(SourceAnchor, {
+    href: row.source_url
+  })), React.createElement("td", null, row.framework_type), React.createElement("td", null, row.member_countries.join(', ')), React.createElement("td", null, row.formal_status), React.createElement("td", null, row.purpose_summary, React.createElement("br", null), React.createElement("span", {
+    className: "caption"
+  }, row.notes)), React.createElement("td", null, React.createElement(MetricStatus, {
+    label: row.trust_label
+  })))))));
+}
+function IndustrySection({
+  fields
+}) {
+  const programRows = fields.program_rows || [];
+  return React.createElement("div", null, React.createElement("div", {
+    className: "sources-grid"
+  }, React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, "Sovereign Defence Industrial Priorities"), React.createElement(TrustBadge, {
+    kind: "observed"
+  }, "Observed")), React.createElement("p", {
+    className: "body-sm"
+  }, "Defence lists ", fields.sdip_count, " Sovereign Defence Industrial Priorities. The page treats them as industrial capability categories, not readiness."), React.createElement("ul", {
+    className: "gap-list"
+  }, (fields.sdip_priorities || []).map(item => React.createElement("li", {
+    key: item
+  }, item)))), programRows.map(row => React.createElement("article", {
+    className: "source-card",
+    key: row.program_id
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, row.name), React.createElement(MetricStatus, {
+    label: row.trust_label
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, row.headline), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Boundary:"), " ", row.boundary), React.createElement(SourceAnchor, {
+    href: row.source_url
+  })))), React.createElement("p", {
+    className: "caption"
+  }, fields.boundary));
+}
+function CoverageTable({
   rows
 }) {
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
     className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Basin"), React.createElement("th", null, "Project / field / title"), React.createElement("th", null, "Operator / company"), React.createElement("th", null, "Product class"), React.createElement("th", null, "Metric / period"), React.createElement("th", null, "Trust"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.key
-  }, React.createElement("td", null, React.createElement("b", null, row.state_code), React.createElement("br", null), row.source), React.createElement("td", null, row.basin_name || React.createElement("span", {
-    className: "unavail"
-  }, "Unavailable")), React.createElement("td", null, row.project_name || React.createElement("span", {
-    className: "unavail"
-  }, "Unavailable"), React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.status || '')), React.createElement("td", null, row.operator_name || row.company_name || React.createElement("span", {
-    className: "unavail"
-  }, "Unavailable")), React.createElement("td", null, row.product_class || 'Unavailable'), React.createElement("td", null, row.metric, React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.period || 'Period unavailable')), React.createElement("td", null, React.createElement(TrustBadge, {
-    kind: row.trust === 'Observed' ? 'observed' : 'partial'
-  }, row.trust), React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.caveat)))))));
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Section"), React.createElement("th", null, "Coverage"), React.createElement("th", null, "What that means"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.section
+  }, React.createElement("td", null, React.createElement("b", null, row.section)), React.createElement("td", null, React.createElement(MetricStatus, {
+    label: row.coverage
+  })), React.createElement("td", null, row.notes))))));
 }
-function ProductionMappingDetail({
-  profile,
-  data
-}) {
-  const rows = productionMappingRows(data).filter(row => row.state_code === profile.state_code);
-  if (!rows.length) {
-    return React.createElement("p", {
-      className: "body-sm unavail"
-    }, React.createElement("b", null, "Production mapping:"), " No project, field or company row is loaded for this state.");
-  }
-  return React.createElement("div", {
-    style: {
-      marginTop: 12
-    }
-  }, React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Loaded production mapping rows:"), " ", rows.length), React.createElement(ProductionMappingTable, {
-    rows: rows
-  }));
-}
-function ObjectCoverageMini({
-  profile,
-  data
-}) {
-  const counts = objectCoverage(profile, data);
-  return React.createElement("div", {
-    className: "caption"
-  }, React.createElement("b", null, "NOPTA active titles:"), " ", integerCount(counts.activeTitles), React.createElement("br", null), React.createElement("b", null, "Well-layer records:"), " ", integerCount(counts.wellLayerRecords), React.createElement("br", null), React.createElement("b", null, "Operating refineries:"), " ", integerCount(counts.refineryCount));
-}
-function ObjectCoverageDetail({
-  profile,
-  data
-}) {
-  const counts = objectCoverage(profile, data);
-  return React.createElement("div", {
-    className: "data-table-wrap",
-    style: {
-      marginTop: 12
-    }
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Active NOPTA title records"), React.createElement("td", null, integerCount(counts.activeTitles), " ", React.createElement(TrustBadge, {
-    kind: "observed"
-  }, "Observed"))), React.createElement("tr", null, React.createElement("td", null, "Pending title applications"), React.createElement("td", null, integerCount(counts.pendingTitles), " ", React.createElement(TrustBadge, {
-    kind: "partial"
-  }, "Separate from active"))), React.createElement("tr", null, React.createElement("td", null, "Production licence records"), React.createElement("td", null, integerCount(counts.productionLicences), " ", React.createElement(TrustBadge, {
-    kind: "observed"
-  }, "Title type"))), React.createElement("tr", null, React.createElement("td", null, "Infrastructure licence records"), React.createElement("td", null, integerCount(counts.infrastructureLicences), " ", React.createElement(TrustBadge, {
-    kind: "observed"
-  }, "Title type"))), React.createElement("tr", null, React.createElement("td", null, "Petroleum Wells layer records"), React.createElement("td", null, integerCount(counts.wellLayerRecords), " ", React.createElement(TrustBadge, {
-    kind: "partial"
-  }, "Not active wells"))), React.createElement("tr", null, React.createElement("td", null, "Known Type=Petroleum records"), React.createElement("td", null, integerCount(counts.knownPetroleumWellRecords), " ", React.createElement(TrustBadge, {
-    kind: "partial"
-  }, "Typed subset"))), React.createElement("tr", null, React.createElement("td", null, "Operating refinery count"), React.createElement("td", null, integerCount(counts.refineryCount), " ", React.createElement(TrustBadge, {
-    kind: counts.refineryCount ? 'observed' : 'unavailable'
-  }, counts.refineryCount ? 'Observed' : 'Unavailable'))))), counts.refineryFacilities.length > 0 && React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Named refinery facilities:"), " ", counts.refineryFacilities.join('; ')));
-}
-function ObjectCoverageTable({
-  profiles,
-  data
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "NOPTA active titles"), React.createElement("th", null, "Production licence records"), React.createElement("th", null, "Infrastructure licence records"), React.createElement("th", null, "Petroleum Wells layer records"), React.createElement("th", null, "Operating refineries"), React.createElement("th", null, "Unavailable classes"))), React.createElement("tbody", null, profiles.map(profile => {
-    const counts = objectCoverage(profile, data);
-    return React.createElement("tr", {
-      key: profile.state_code
-    }, React.createElement("td", null, React.createElement("b", null, profile.state_code), React.createElement("br", null), profile.state_name), React.createElement("td", null, integerCount(counts.activeTitles), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "observed"
-    }, "Observed")), React.createElement("td", null, integerCount(counts.productionLicences), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "observed"
-    }, "Title type")), React.createElement("td", null, integerCount(counts.infrastructureLicences), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "observed"
-    }, "Title type")), React.createElement("td", null, integerCount(counts.wellLayerRecords), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "partial"
-    }, "Not active wells")), React.createElement("td", null, integerCount(counts.refineryCount), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: counts.refineryCount ? 'observed' : 'unavailable'
-    }, counts.refineryCount ? 'Observed' : 'Unavailable')), React.createElement("td", {
-      className: "unavail"
-    }, "Producing fields; LNG plants/trains; gas processing plants; import/storage terminal counts."));
-  }))));
-}
-function SourceCard({
+function SourceSummary({
   id,
   env,
   partial = false
 }) {
   const meta = env?._meta || {};
+  const ok = env?.status === 'ok';
   return React.createElement("article", {
     className: "source-card"
   }, React.createElement("div", {
@@ -1225,7 +1148,7 @@ function SourceCard({
     partial: partial
   })), React.createElement("p", {
     className: "body-sm"
-  }, sourceStatus(env)), React.createElement("p", {
+  }, ok ? `Verified envelope. ${env.values?.length || 0} headline point${env.values?.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'source period listed in notes'}.` : 'Source gate intentionally unavailable until a public, source-safe field exists.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
@@ -1233,124 +1156,11 @@ function SourceCard({
     className: "caption"
   }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
     className: "caption"
-  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.source_url && React.createElement("a", {
+  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.notes && React.createElement("p", {
+    className: "caption"
+  }, env.notes), env?.source_url && React.createElement(SourceAnchor, {
     href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })));
-}
-function StateSummaryCard({
-  profile,
-  production,
-  data
-}) {
-  const revenue = revenueDisplay(profile, data);
-  return React.createElement("article", {
-    className: "metric-card"
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("span", {
-    className: "eyebrow"
-  }, profile.state_code), React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: "manual"
-  }), React.createElement(TrustBadge, {
-    kind: coverageKind(profile.source_coverage_label)
-  }, profile.source_coverage_label))), React.createElement("h3", {
-    className: "metric-card__label"
-  }, profile.state_name), React.createElement("p", {
-    className: "metric-card__plain"
-  }, profile.primary_role), React.createElement("div", {
-    className: "data-table-wrap",
-    style: {
-      marginTop: 12
-    }
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Loaded production"), React.createElement("td", null, production.summary)), React.createElement("tr", null, React.createElement("td", null, "State revenue"), React.createElement("td", {
-    className: revenue.className
-  }, revenue.text)), React.createElement("tr", null, React.createElement("td", null, "Federal attribution"), React.createElement("td", {
-    className: "unavail"
-  }, profile.federal_tax_attribution_status)), React.createElement("tr", null, React.createElement("td", null, "Project/company map"), React.createElement("td", {
-    className: String(profile.production_mapping_status || '').startsWith('Partial') ? '' : 'unavail'
-  }, profile.production_mapping_status || 'Unavailable')), React.createElement("tr", null, React.createElement("td", null, "Mapped production rows"), React.createElement("td", null, React.createElement(ProductionMappingMini, {
-    profile: profile,
-    data: data
-  }))), React.createElement("tr", null, React.createElement("td", null, "Defined counts"), React.createElement("td", null, React.createElement(ObjectCoverageMini, {
-    profile: profile,
-    data: data
-  })))))), React.createElement("footer", {
-    className: "metric-card__foot"
-  }, React.createElement("span", {
-    className: "metric-card__source"
-  }, profile.notes)));
-}
-function StateDetailPanel({
-  profile,
-  production,
-  data
-}) {
-  const revenue = revenueDisplay(profile, data);
-  return React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, profile.state_name), React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: "manual"
-  }), React.createElement(TrustBadge, {
-    kind: coverageKind(profile.source_coverage_label)
-  }, profile.source_coverage_label))), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Production role:"), " ", profile.production_role), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Loaded production:"), " ", production.summary), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Refining/import role:"), " ", profile.refining_role, " ", profile.import_role), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "State revenue:"), " ", revenue.text, " ", revenue.badge), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Commonwealth revenue:"), " ", profile.federal_tax_note), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Permit/title counts:"), " ", profile.permit_count_status || 'Unavailable'), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Project/company production:"), " ", profile.production_mapping_status || 'Unavailable'), React.createElement(ProductionMappingDetail, {
-    profile: profile,
-    data: data
-  }), React.createElement(ObjectCoverageDetail, {
-    profile: profile,
-    data: data
-  }), React.createElement("ul", {
-    className: "gap-list"
-  }, (profile.infrastructure_summary || []).map(item => React.createElement("li", {
-    key: item
-  }, item))));
-}
-function ComparisonTable({
-  profiles,
-  data,
-  aesRows
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "Crude/gas/LNG relevance"), React.createElement("th", null, "Refining/import role"), React.createElement("th", null, "Loaded production"), React.createElement("th", null, "State royalties"), React.createElement("th", null, "Federal revenue status"), React.createElement("th", null, "Permit/project status"), React.createElement("th", null, "Coverage"))), React.createElement("tbody", null, profiles.map(profile => {
-    const production = productionFor(profile, aesRows);
-    const revenue = revenueDisplay(profile, data);
-    return React.createElement("tr", {
-      key: profile.state_code
-    }, React.createElement("td", null, React.createElement("b", null, profile.state_code), React.createElement("br", null), profile.state_name), React.createElement("td", null, "Crude: ", profile.crude_relevance, React.createElement("br", null), "Gas: ", profile.gas_relevance, React.createElement("br", null), "LNG: ", profile.lng_relevance), React.createElement("td", null, profile.refining_role, React.createElement("br", null), profile.import_role), React.createElement("td", null, production.summary), React.createElement("td", {
-      className: revenue.className
-    }, revenue.text, React.createElement("br", null), revenue.badge), React.createElement("td", {
-      className: "unavail"
-    }, profile.federal_tax_attribution_status), React.createElement("td", null, profile.permit_count_status || 'Unavailable', React.createElement("br", null), profile.production_mapping_status || 'Unavailable'), React.createElement("td", null, React.createElement(TrustBadge, {
-      kind: coverageKind(profile.source_coverage_label)
-    }, profile.source_coverage_label)));
-  }))));
+  }));
 }
 function App() {
   const [data, setData] = React.useState(null);
@@ -1361,57 +1171,44 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "state_contribution"
+      active: "defence_posture"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
       className: "loading-wrap"
     }, "Loading source envelopes...")));
   }
+  const profile = fields(data.defence_posture_profiles);
+  const budget = profile.budget_metrics || [];
+  const forceStructure = profile.force_structure || [];
+  const capabilityRows = fields(data.defence_public_capability_assets).capability_rows || [];
+  const frameworks = fields(data.defence_alliance_frameworks).frameworks || [];
+  const industry = fields(data.defence_sovereign_industry_context);
+  const takeaways = hasRows(data.defence_posture_profiles) ? profile.takeaways || [] : [];
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const profiles = (fields(data.state_resource_contribution_profiles).states || []).slice().sort((a, b) => STATE_ORDER.indexOf(a.state_code) - STATE_ORDER.indexOf(b.state_code));
-  const aesFields = fields(data.resource_state_production_aes);
-  const aesRows = aesFields.state_rows || [];
-  const waRoyalty = latestValue(data.resource_wa_petroleum_royalty_receipts);
-  const qldRoyalty = latestValue(data.resource_qld_petroleum_royalty_receipts);
-  const loadedRoyaltyTotal = hasNumber(waRoyalty) && hasNumber(qldRoyalty) ? waRoyalty + qldRoyalty : null;
-  const statesWithLoadedProduction = profiles.filter(profile => hasNumber(productionFor(profile, aesRows).gasPj) || hasNumber(productionFor(profile, aesRows).liquidsMl)).length;
-  const statesWithRoyalty = profiles.filter(profile => hasNumber(latestValue(royaltyEnv(profile, data)))).length;
-  const statesWithRevenueContext = profiles.filter(profile => {
-    const revenue = revenueDisplay(profile, data);
-    return revenue.className !== 'unavail';
-  }).length;
-  const statesWithActiveTitleRecords = profiles.filter(profile => hasNumber(objectCoverage(profile, data).activeTitles) && objectCoverage(profile, data).activeTitles > 0).length;
-  const statesWithWellLayerRecords = profiles.filter(profile => hasNumber(objectCoverage(profile, data).wellLayerRecords) && objectCoverage(profile, data).wellLayerRecords > 0).length;
-  const statesWithRefineries = profiles.filter(profile => objectCoverage(profile, data).refineryCount > 0).length;
-  const mappedRows = productionMappingRows(data);
-  const productionLicenceFields = fields(data.state_petroleum_production_licence_map);
-  const rempFields = fields(data.state_oil_gas_major_projects_remp);
-  const statesWithProductionLicenceRows = profiles.filter(profile => (productionLicenceSummary(profile, data)?.production_licence_records || 0) > 0).length;
-  const statesWithRempRows = profiles.filter(profile => (rempProjectSummary(profile, data)?.project_rows || 0) > 0).length;
-  const gateFields = fields(data.state_petroleum_ledger_source_gates);
-  const workstreamRows = gateFields.workstreams || [];
-  const candidateSources = gateFields.candidate_sources || [];
+  const strongCoverage = (profile.section_coverage || []).filter(row => row.coverage === 'Strong coverage').length;
+  const partialCoverage = (profile.section_coverage || []).filter(row => String(row.coverage).includes('Partial')).length;
+  const unavailableCoverage = (profile.section_coverage || []).filter(row => String(row.coverage).includes('Unavailable')).length;
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "state_contribution",
+    active: "defence_posture",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "state-contribution"
+    id: "defence-posture"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "State petroleum ledger"), React.createElement("h1", {
+  }, "Defence, alliances and strategic posture"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What each state contributes to Australia's petroleum system."), React.createElement("p", {
+  }, "Australia's defence posture, in plain English."), React.createElement("p", {
     className: "intro__lede"
-  }, "This companion page separates state production and infrastructure roles from public revenue. State royalties are not the same as Commonwealth PRRT, company tax, excise or GST. Where a source does not publish a defensible state split, the field stays unavailable.")), React.createElement("aside", {
+  }, "This page puts public defence spending, selected ADF capability rows, force-structure context, alliances, strategic frameworks and sovereign industry in one place. It does not publish secret, live or readiness-sensitive data.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1420,7 +1217,7 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "No state-level federal tax allocation is estimated."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "Budget, public assets, alliances and readiness are separate fields."))), React.createElement(DataCoverage, {
     data: data
   }), React.createElement("section", {
     className: "section section--why"
@@ -1432,201 +1229,138 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "What the page shows and what it refuses to guess")), React.createElement("div", {
+  }, "What this page measures")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "It shows loaded state/territory production rows, qualitative infrastructure roles and the state-collected royalty receipts that already exist as verified envelopes."), React.createElement("p", null, "It does not allocate PRRT, company tax, fuel excise or GST by state. Those are Commonwealth channels and the loaded sources do not publish a state-attributable receipt table."), React.createElement("p", null, "It also avoids raw \"site counts\" because that becomes misleading unless a public source defines exactly which title, field, terminal, facility or licence is being counted.")))), React.createElement("section", {
+  }, React.createElement("p", null, "Defence capability and alliances are shown together because Australia's posture depends on both public force structure and formal or practical international arrangements. The page keeps those concepts separate instead of turning them into one score."), React.createElement("p", null, "Budget rows describe money and planned expenditure. Capability rows describe selected public counts or acquisition statuses. Alliance rows describe framework type and purpose. No readiness, mission-capable or live operational availability metric is loaded."), React.createElement("p", null, "The page avoids secret, live and operationally sensitive data. It also avoids \"Australia can beat X\" framing and does not rank adversaries or predict conflict outcomes.")))), takeaways.length > 0 && React.createElement("section", {
     className: "section",
-    "aria-labelledby": "headline-h"
+    "aria-labelledby": "takeaway-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Headline coverage"), React.createElement("h2", {
-    id: "headline-h"
-  }, "Loaded state coverage, not a complete fiscal map"), React.createElement("p", {
+  }, "If you only read one thing"), React.createElement("h2", {
+    id: "takeaway-h"
+  }, "Loaded source takeaways"))), React.createElement("div", {
+    className: "sources-grid"
+  }, takeaways.map(item => React.createElement(ProfileCard, {
+    key: item.title,
+    item: item,
+    data: data
+  })))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "budget-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Defence spending"), React.createElement("h2", {
+    id: "budget-h"
+  }, "Budget rows stay money rows"), React.createElement("p", {
     className: "section__lede"
-  }, "These cards summarise the data coverage on this page. They are not estimates of total public value."))), React.createElement("div", {
+  }, "The strongest current coverage is the public 2026 National Defence Strategy budget factsheet. Spending as share of GDP is left unavailable until a source-safe official row or denominator is loaded."))), React.createElement("div", {
     className: "metric-grid"
+  }, budget.slice(0, 3).map(metric => React.createElement(BudgetMetricCard, {
+    key: metric.metric_id,
+    metric: metric,
+    data: data
+  }))), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement(BudgetTable, {
+    rows: budget,
+    data: data
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "force-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Force structure"), React.createElement("h2", {
+    id: "force-h"
+  }, "Public structure and workforce context"), React.createElement("p", {
+    className: "section__lede"
+  }, "These rows explain high-level public structure and workforce reporting. They are not deployable strength or readiness rows."))), React.createElement(ForceStructureTable, {
+    rows: forceStructure,
+    data: data
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "capability-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Capabilities and assets"), React.createElement("h2", {
+    id: "capability-h"
+  }, "Selected public capability rows"), React.createElement("p", {
+    className: "section__lede"
+  }, "The first pass loads selected official public rows across Navy, Air Force and Army. This is not a complete inventory, and it does not show readiness."))), React.createElement(CapabilitySection, {
+    rows: capabilityRows
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "industry-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Sovereign capability and industry"), React.createElement("h2", {
+    id: "industry-h"
+  }, "Official industrial resilience context"), React.createElement("p", {
+    className: "section__lede"
+  }, "These rows show public program and industrial-priority context. They do not publish private supply-chain depth, stockpile adequacy or classified facilities."))), React.createElement(IndustrySection, {
+    fields: industry
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "alliances-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Alliances and strategic commitments"), React.createElement("h2", {
+    id: "alliances-h"
+  }, "Treaties, partnerships and forums are separate"), React.createElement("p", {
+    className: "section__lede"
+  }, "ANZUS, AUKUS, Five Eyes, Quad and AUSMIN are deliberately not collapsed into one alliance blob. Quad is shown as a diplomatic partnership, not a formal alliance."))), React.createElement(AllianceSection, {
+    frameworks: frameworks
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "coverage-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Coverage result"), React.createElement("h2", {
+    id: "coverage-h"
+  }, "Strong, partial and unavailable areas"), React.createElement("p", {
+    className: "section__lede"
+  }, "The page is useful where official public sources are strong, and explicit where public coverage is partial or blocked."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
   }, React.createElement(MetricCard, {
-    eyebrow: "Production",
-    label: "States with loaded petroleum production rows",
-    value: `${statesWithLoadedProduction} / ${profiles.length}`,
-    plain: "AES state rows are loaded for gas and/or liquid petroleum products where the official table provides them.",
-    source: window.FR.sourceLine(data.resource_state_production_aes)
+    eyebrow: "Coverage",
+    label: "Strong sections",
+    value: `${strongCoverage}`,
+    plain: "Budget and alliance/framework rows have the clearest first-pass coverage.",
+    source: "Computed from section_coverage labels in the compiled defence posture envelope."
   }), React.createElement(MetricCard, {
-    eyebrow: "State revenue",
-    label: "States with loaded petroleum royalty receipts",
-    value: `${statesWithRoyalty} / ${profiles.length}`,
-    plain: "WA/North West Shelf and Queensland petroleum royalty receipt context is loaded. Other state revenue stays unavailable.",
-    source: "Source envelopes: resource_wa_petroleum_royalty_receipts; resource_qld_petroleum_royalty_receipts."
+    eyebrow: "Coverage",
+    label: "Partial sections",
+    value: `${partialCoverage}`,
+    plain: "Force structure, selected capabilities and industry context have useful but incomplete public coverage.",
+    source: "Computed from explicit section coverage labels."
   }), React.createElement(MetricCard, {
-    eyebrow: "Revenue context",
-    label: "States with any loaded revenue context",
-    value: `${statesWithRevenueContext} / ${profiles.length}`,
-    plain: "Includes petroleum-only receipt envelopes plus clearly marked combined minerals/petroleum context for NSW and NT.",
-    source: "Combined context is not petroleum-only revenue."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Loaded receipts",
-    label: "WA + Queensland petroleum receipt context",
-    value: hasNumber(loadedRoyaltyTotal) ? formatNumber(loadedRoyaltyTotal, 1) : 'Unavailable',
-    unit: hasNumber(loadedRoyaltyTotal) ? 'A$m' : '',
-    plain: "Mixed state/public receipt context only; periods and collection channels are shown in source lines.",
-    source: "Not an all-Australia royalty total."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Commonwealth tax",
-    label: "State-level federal tax attribution",
-    value: "Unavailable",
-    plain: "PRRT, company tax, fuel excise and GST are not allocated by state in the loaded sources.",
-    source: "No estimate is published."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Titles",
-    label: "States with active NOPTA petroleum title records",
-    value: `${statesWithActiveTitleRecords} / ${profiles.length}`,
-    plain: "Counts are current NOPTA non-GHG offshore title/permit records. Pending applications stay separate.",
-    source: window.FR.sourceLine(data.state_petroleum_nopta_counts)
-  }), React.createElement(MetricCard, {
-    eyebrow: "Wells layer",
-    label: "States with Petroleum Wells layer records",
-    value: `${statesWithWellLayerRecords} / ${profiles.length}`,
-    plain: "This is a public feature-layer record count, not an active-producing-well count.",
-    source: "Source envelope: state_petroleum_nopta_counts."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Refineries",
-    label: "States with operating refinery count",
-    value: `${statesWithRefineries} / ${profiles.length}`,
-    plain: "Official source identifies Ampol Brisbane/Lytton and Viva Energy Geelong as Australia's two operating refineries.",
-    source: window.FR.sourceLine(data.state_operating_refinery_counts)
-  }), React.createElement(MetricCard, {
-    eyebrow: "Production mapping",
-    label: "Mapped NOPTA active production licence rows",
-    value: formatNumber(latestValue(data.state_petroleum_production_licence_map), 0),
-    plain: `${statesWithProductionLicenceRows} states/territories have active offshore production-licence rows with basin, field and title-operator metadata.`,
-    source: window.FR.sourceLine(data.state_petroleum_production_licence_map)
-  }), React.createElement(MetricCard, {
-    eyebrow: "Major projects",
-    label: "Mapped REMP oil and gas project rows",
-    value: formatNumber(latestValue(data.state_oil_gas_major_projects_remp), 0),
-    plain: `${statesWithRempRows} states have REMP oil/gas project-company rows. Capacity fields are not current production.`,
-    source: window.FR.sourceLine(data.state_oil_gas_major_projects_remp)
-  }))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "state-cards-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "State summaries"), React.createElement("h2", {
-    id: "state-cards-h"
-  }, "Production, infrastructure and revenue boundaries"))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, profiles.map(profile => React.createElement(StateSummaryCard, {
-    key: profile.state_code,
-    profile: profile,
-    production: productionFor(profile, aesRows),
-    data: data
-  })))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "mapping-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Production mapping"), React.createElement("h2", {
-    id: "mapping-h"
-  }, "State to basin to project/company, where sources publish it"), React.createElement("p", {
-    className: "section__lede"
-  }, "NOPTA rows map active offshore production licences to basin, field and title operator. REMP rows map oil and gas major projects to company, state, resource and estimated new capacity. Neither source is a complete company production-volume table."))), React.createElement(ProductionMappingTable, {
-    rows: mappedRows
-  }), React.createElement("p", {
-    className: "caption",
+    eyebrow: "Coverage",
+    label: "Unavailable sections",
+    value: `${unavailableCoverage}`,
+    plain: "Readiness and live posture fields are intentionally unavailable.",
+    source: "No readiness source envelope carries display values."
+  })), React.createElement("div", {
     style: {
-      marginTop: 12
+      height: 24
     }
-  }, "NOPTA source scope: ", productionLicenceFields.source_scope, ". REMP caveat: ", rempFields.source_period_note)), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "objects-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Defined object counts"), React.createElement("h2", {
-    id: "objects-h"
-  }, "Separate petroleum object classes, not one vague site count"), React.createElement("p", {
-    className: "section__lede"
-  }, "NOPTA title, licence and well-layer records are shown separately from refinery facilities. Producing fields, LNG trains, processing plants and terminal counts remain unavailable until a source defines those objects cleanly by state."))), React.createElement(ObjectCoverageTable, {
-    profiles: profiles,
-    data: data
+  }), React.createElement(CoverageTable, {
+    rows: profile.section_coverage || []
   })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "comparison-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Comparison table"), React.createElement("h2", {
-    id: "comparison-h"
-  }, "State petroleum ledger matrix"), React.createElement("p", {
-    className: "section__lede"
-  }, "The table keeps production, infrastructure context, state revenue and Commonwealth tax attribution in separate columns so the page does not blur collection channels."))), React.createElement(ComparisonTable, {
-    profiles: profiles,
-    data: data,
-    aesRows: aesRows
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "details-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "State detail"), React.createElement("h2", {
-    id: "details-h"
-  }, "What is known, and what remains unavailable"))), React.createElement("div", {
-    className: "source-grid"
-  }, profiles.map(profile => React.createElement(StateDetailPanel, {
-    key: profile.state_code,
-    profile: profile,
-    production: productionFor(profile, aesRows),
-    data: data
-  })))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "gates-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Source gates"), React.createElement("h2", {
-    id: "gates-h"
-  }, "What the national petroleum ledger can and cannot publish yet"), React.createElement("p", {
-    className: "section__lede"
-  }, "This table records the seven target workstreams. Blocked rows remain explicit instead of being turned into weak counts, live maps or status labels."))), React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Workstream"), React.createElement("th", null, "Status"), React.createElement("th", null, "Result"))), React.createElement("tbody", null, workstreamRows.map(row => React.createElement("tr", {
-    key: row.id
-  }, React.createElement("td", null, React.createElement("b", null, row.id, ". ", row.name)), React.createElement("td", null, React.createElement(TrustBadge, {
-    kind: row.trust_label === 'Unavailable' ? 'unavailable' : 'partial'
-  }, row.trust_label), React.createElement("br", null), React.createElement("span", {
-    className: "mono"
-  }, row.status)), React.createElement("td", null, row.result)))))), React.createElement("div", {
-    className: "source-grid",
-    style: {
-      marginTop: 20
-    }
-  }, candidateSources.map(source => React.createElement("article", {
-    className: "source-card",
-    key: `${source.source}-${source.decision}`
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, source.source), React.createElement(TrustBadge, {
-    kind: String(source.decision).includes('blocked') ? 'unavailable' : 'partial'
-  }, source.decision)), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Publisher:"), " ", source.publisher), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Supports:"), " ", source.supports), React.createElement("p", {
-    className: "caption"
-  }, source.caveat))))), React.createElement("section", {
     className: "section section--why",
     "aria-labelledby": "method-h"
   }, React.createElement("div", {
@@ -1638,11 +1372,13 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "Why federal tax stays national-only here")), React.createElement("div", {
+  }, "Why the page is fail-closed")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Royalties are easier to attribute because state budget papers can publish named petroleum royalty or North West Shelf receipt lines. Commonwealth taxes are collected under different legal channels and are usually published nationally, by taxpayer, or by project concept."), React.createElement("p", null, "Allocating Commonwealth receipts to a state by production volume, company address, port, project geography or consumer spend would be a model. This first-pass page only publishes observed public rows and explicitly unavailable fields."), React.createElement("p", null, "See ", React.createElement("a", {
-    href: "../../docs/state-contribution-methodology.md"
-  }, "state petroleum ledger methodology"), "for the data contract, source gates, attribution rules and current source gaps.")))), React.createElement("section", {
+  }, React.createElement("p", null, "Budget, assets, force structure, alliances and sovereign industry are different evidence types. A dollar value is not a platform count, a platform count is not readiness, and a diplomatic forum is not a mutual defence treaty."), React.createElement("p", null, "Framework rows preserve formal status: treaty, intelligence partnership, security and technology partnership, diplomatic forum, or consultation process. That prevents vague alliance/treaty mixing."), React.createElement("p", null, "Readiness-sensitive and unavailable fields stay unavailable. The dashboard does not estimate mission-capable rates, stockpile depth, classified basing posture or live operational availability from public budget or asset rows."), React.createElement("ul", {
+    className: "gap-list"
+  }, (profile.methodology_caveats || []).map(item => React.createElement("li", {
+    key: item
+  }, item)))))), React.createElement("section", {
     className: "section section--sources",
     id: "sources",
     "aria-labelledby": "sources-h"
@@ -1652,71 +1388,37 @@ function App() {
     className: "eyebrow"
   }, "Sources & methodology"), React.createElement("h2", {
     id: "sources-h"
-  }, "Every source used on this page"), React.createElement("p", {
+  }, "Every source envelope used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "Source cards show what is actually loaded. Unavailable rows remain unavailable until a named source publishes the exact field, period and unit needed."))), React.createElement("div", {
-    className: "source-grid"
-  }, React.createElement(SourceCard, {
-    id: "state_resource_contribution_profiles",
-    env: data.state_resource_contribution_profiles,
+  }, "Source cards show envelope status, rights and citation. Candidate or sensitive areas are documented as gaps instead of being converted into values."))), React.createElement("div", {
+    className: "sources-grid"
+  }, React.createElement(SourceSummary, {
+    id: "defence_posture_profiles",
+    env: data.defence_posture_profiles,
     partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_state_production_aes",
-    env: data.resource_state_production_aes,
+  }), React.createElement(SourceSummary, {
+    id: "defence_budget_2026_nds",
+    env: data.defence_budget_2026_nds
+  }), React.createElement(SourceSummary, {
+    id: "defence_workforce_annual_report_2024_25",
+    env: data.defence_workforce_annual_report_2024_25
+  }), React.createElement(SourceSummary, {
+    id: "defence_public_capability_assets",
+    env: data.defence_public_capability_assets,
     partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_gas_origin_aecr",
-    env: data.resource_gas_origin_aecr,
+  }), React.createElement(SourceSummary, {
+    id: "defence_alliance_frameworks",
+    env: data.defence_alliance_frameworks,
     partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_oil_origin_aecr",
-    env: data.resource_oil_origin_aecr,
+  }), React.createElement(SourceSummary, {
+    id: "defence_sovereign_industry_context",
+    env: data.defence_sovereign_industry_context,
     partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_wa_petroleum_royalty_receipts",
-    env: data.resource_wa_petroleum_royalty_receipts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_qld_petroleum_royalty_receipts",
-    env: data.resource_qld_petroleum_royalty_receipts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_nsw_minerals_petroleum_royalty_context",
-    env: data.state_nsw_minerals_petroleum_royalty_context,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_nt_mining_petroleum_royalty_context",
-    env: data.state_nt_mining_petroleum_royalty_context,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_petroleum_ledger_source_gates",
-    env: data.state_petroleum_ledger_source_gates,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_petroleum_nopta_counts",
-    env: data.state_petroleum_nopta_counts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_petroleum_production_licence_map",
-    env: data.state_petroleum_production_licence_map,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_oil_gas_major_projects_remp",
-    env: data.state_oil_gas_major_projects_remp,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_operating_refinery_counts",
-    env: data.state_operating_refinery_counts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_resource_rent_tax_receipts_budget",
-    env: data.resource_resource_rent_tax_receipts_budget
-  }), React.createElement(SourceCard, {
-    id: "resource_prrt_policy",
-    env: data.resource_prrt_policy
-  }), React.createElement(SourceCard, {
-    id: "resource_company_tax_rate",
-    env: data.resource_company_tax_rate
-  })))), React.createElement(Footer, null));
+  }), React.createElement(SourceSummary, {
+    id: "defence_readiness_gap",
+    env: data.defence_readiness_gap
+  }))), React.createElement(Footer, {
+    updated: latestRetrieved ? updatedDisplay : ''
+  })));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App, null));

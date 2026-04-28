@@ -329,6 +329,10 @@ function Header({
     label: 'Strategic resources',
     href: '../strategic-resources-dashboard/index.html'
   }, {
+    id: 'defence_posture',
+    label: 'Defence posture',
+    href: '../defence-alliances-dashboard/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -865,6 +869,8 @@ function Footer({
   }, "State ledger")), React.createElement("li", null, React.createElement("a", {
     href: "../strategic-resources-dashboard/index.html"
   }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-alliances-dashboard/index.html"
+  }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"

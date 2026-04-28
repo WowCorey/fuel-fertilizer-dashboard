@@ -7,6 +7,7 @@ const routes = [
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
+  { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: "Australia's defence posture, in plain English." },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
   { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's fertiliser, in plain English." },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
@@ -75,4 +76,15 @@ test('strategic resources page keeps metric types and gaps explicit', async ({ p
   await expect(page.getByText('Rare earths').first()).toBeVisible();
   await expect(page.getByText('Sulphur').first()).toBeVisible();
   await expect(page.getByText('No official national sulphur production or export row is loaded.', { exact: true })).toBeVisible();
+});
+
+test('defence posture page keeps readiness and alliance boundaries explicit', async ({ page }) => {
+  await page.goto('/ui_kits/defence-alliances-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: "Australia's defence posture, in plain English." })).toBeVisible();
+  await expect(page.getByText('No readiness, mission-capable or live operational availability metric is loaded.')).toBeVisible();
+  await expect(page.getByText('Budget, public assets, alliances and readiness are separate fields.')).toBeVisible();
+  await expect(page.getByText('Defence spending as share of GDP')).toBeVisible();
+  await expect(page.getByText('Quad').first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Diplomatic partnership, not a formal alliance' })).toBeVisible();
+  await expect(page.getByText('Unavailable').first()).toBeVisible();
 });

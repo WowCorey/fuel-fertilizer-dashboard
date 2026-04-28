@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fuel Resilience AU</title>
-<meta name="description" content="Static dashboard hub for Australian fuel, fertiliser, oil production, strategic resources, national status and resource-value source envelopes.">
+<meta name="description" content="Static dashboard hub for Australian fuel, fertiliser, oil production, strategic resources, defence posture, national status and resource-value source envelopes.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="colors_and_type.css">
 <link rel="stylesheet" href="ui_kits/shared/styles.css">
@@ -176,6 +176,7 @@
         <a href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
         <a href="ui_kits/state-contribution-dashboard/index.html">State ledger</a>
         <a href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
+        <a href="ui_kits/defence-alliances-dashboard/index.html">Defence posture</a>
         <a href="ui_kits/fuel-dashboard/index.html">Fuel</a>
         <a href="ui_kits/fertilizer-dashboard/index.html">Fertilizer</a>
         <a href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
@@ -195,7 +196,7 @@
         <h1 id="home-title">Australia's fuel and fertiliser data, without estimates.</h1>
           <p class="home-hero__lede">
             This static site collects source-linked dashboard pages for liquid fuel, fertiliser,
-            oil production, fuel security, national fuel status, resource value, state petroleum ledger, strategic resources and retail-price breakdowns.
+            oil production, fuel security, national fuel status, resource value, state petroleum ledger, strategic resources, defence posture and retail-price breakdowns.
             Values appear only when they flow through a verified JSON envelope; unavailable
             values remain visible as placeholders.
         </p>
@@ -218,7 +219,8 @@
             Programmatic envelopes now cover ABS trade, APS petroleum statistics, AIP terminal
             gate prices, RBA AUD/USD, EIA/FRED benchmarks and public-feed retail fuel by product. The national
             status, fuel-security and resource-value pages add manually verified public policy and supply snapshots.
-            Strategic resources adds official mineral production, export and footprint context without underground-wealth estimates.
+            Strategic resources adds official mineral production, export and footprint context without underground-wealth estimates;
+            defence posture adds public budget, capability, alliance and industry context without readiness claims.
           </p>
         </div>
       </div>
@@ -252,6 +254,12 @@
           <p>Critical minerals and strategic resources: production, exports, reserves/resources, state footprint and strategic role.</p>
           <a class="home-card__link" href="ui_kits/strategic-resources-dashboard/index.html">Open strategic resources</a>
           <div class="home-card__status">Status: DISR REQ export rows, GA AIMR 2025 production/reserve rows and GA/Digital Atlas operating-mines footprint rows are loaded; rare-earth individual export value and sulphur stay unavailable.</div>
+        </article>
+        <article class="home-card">
+          <h3>Defence posture</h3>
+          <p>Defence spending, selected public ADF capability rows, alliances, strategic frameworks and sovereign-industry context.</p>
+          <a class="home-card__link" href="ui_kits/defence-alliances-dashboard/index.html">Open defence posture</a>
+          <div class="home-card__status">Status: 2026 NDS budget rows, Defence annual-report workforce rows, selected public capability rows and alliance/framework profiles are loaded; readiness, live availability, stockpile depth, classified posture and GDP-share fields stay unavailable.</div>
         </article>
         <article class="home-card">
           <h3>Fuel</h3>
