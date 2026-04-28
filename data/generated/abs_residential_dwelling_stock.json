@@ -1,0 +1,144 @@
+{
+  "series_id": "abs_residential_dwelling_stock",
+  "source_id": "abs_residential_dwelling_stock",
+  "source_name": "ABS residential dwelling stock - Australia, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings",
+  "unit": "NUM (unit multiplier 3)",
+  "retrieved_at": "2026-04-28T13:01:44+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2018-Q1",
+      "v": 10111.7
+    },
+    {
+      "t": "2018-Q2",
+      "v": 10161.4
+    },
+    {
+      "t": "2018-Q3",
+      "v": 10213.6
+    },
+    {
+      "t": "2018-Q4",
+      "v": 10264.4
+    },
+    {
+      "t": "2019-Q1",
+      "v": 10303.8
+    },
+    {
+      "t": "2019-Q2",
+      "v": 10350.2
+    },
+    {
+      "t": "2019-Q3",
+      "v": 10393.9
+    },
+    {
+      "t": "2019-Q4",
+      "v": 10441.4
+    },
+    {
+      "t": "2020-Q1",
+      "v": 10476.6
+    },
+    {
+      "t": "2020-Q2",
+      "v": 10518.3
+    },
+    {
+      "t": "2020-Q3",
+      "v": 10568.9
+    },
+    {
+      "t": "2020-Q4",
+      "v": 10622.3
+    },
+    {
+      "t": "2021-Q1",
+      "v": 10667.7
+    },
+    {
+      "t": "2021-Q2",
+      "v": 10720.7
+    },
+    {
+      "t": "2021-Q3",
+      "v": 10772.1
+    },
+    {
+      "t": "2021-Q4",
+      "v": 10813.9
+    },
+    {
+      "t": "2022-Q1",
+      "v": 10847.2
+    },
+    {
+      "t": "2022-Q2",
+      "v": 10886.3
+    },
+    {
+      "t": "2022-Q3",
+      "v": 10926.5
+    },
+    {
+      "t": "2022-Q4",
+      "v": 10969
+    },
+    {
+      "t": "2023-Q1",
+      "v": 11003.5
+    },
+    {
+      "t": "2023-Q2",
+      "v": 11041.2
+    },
+    {
+      "t": "2023-Q3",
+      "v": 11081.5
+    },
+    {
+      "t": "2023-Q4",
+      "v": 11126.3
+    },
+    {
+      "t": "2024-Q1",
+      "v": 11158.6
+    },
+    {
+      "t": "2024-Q2",
+      "v": 11200.1
+    },
+    {
+      "t": "2024-Q3",
+      "v": 11241.1
+    },
+    {
+      "t": "2024-Q4",
+      "v": 11286.7
+    },
+    {
+      "t": "2025-Q1",
+      "v": 11320.7
+    },
+    {
+      "t": "2025-Q2",
+      "v": 11357.5
+    },
+    {
+      "t": "2025-Q3",
+      "v": 11398.1
+    },
+    {
+      "t": "2025-Q4",
+      "v": 11452.2
+    }
+  ],
+  "notes": "Fetched from ABS Data API dataflow RES_DWELL_ST, key 4.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS RES_DWELL_ST dataflow MEASURE 4 (Number of residential dwellings), REGION AUS, FREQ Q. Total residential dwelling count, in thousands.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Total Value of Dwellings (Cat. 6432.0), number of residential dwellings."
+}
