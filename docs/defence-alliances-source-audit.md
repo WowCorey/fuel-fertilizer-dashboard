@@ -51,3 +51,29 @@ The dashboard must not:
 - treat Five Eyes as a mutual defence treaty,
 - infer secret, live or readiness-sensitive fields from public asset counts.
 
+
+## Pass 2: Uncrewed systems and counter-drone sources
+
+| Source | Publisher | What it supports | Trust handling |
+|---|---|---|---|
+| Project AIR 7000 Phase 1B (MQ-4C Triton) | Department of Defence | In-service / introduced row, RAAF maritime patrol UAS | Manual |
+| Project AIR 6014 Phase 1 (MQ-28A Ghost Bat) | Department of Defence | Development / prototype row, sovereign-developed Airpower Teaming System | Manual |
+| Project LAND 129 Phase 3 (Insitu Integrator) | Department of Defence | In-service tactical UAS row for Australian Army | Manual |
+| Project LAND 156 (counter-small UAS) | Department of Defence | Counter-drone capability row (Army c-sUAS) | Manual |
+| Ghost Shark Extra-Large Autonomous Undersea Vehicle | Department of Defence / Australian Submarine Agency / Defence Ministers | Sovereign development / prototype maritime autonomous row | Manual |
+| Sovereign Defence Industrial Priorities — autonomous systems | Department of Defence | Industrial priority category context | Manual |
+| Defence Industry Development Strategy 2024 | Department of Defence | Strategy-level autonomous-systems context | Manual |
+| 2024 Integrated Investment Program | Department of Defence | Capability investment envelope context | Partial coverage |
+| 2026 National Defence Strategy budget factsheet | Department of Defence | Capability investment envelope context | Partial coverage |
+| Royal Australian Navy public pages | Royal Australian Navy | Broader RAN maritime autonomous context | Partial coverage |
+
+**Rights**: Commonwealth copyright; Defence and service-specific website copyright terms apply.
+
+**What is intentionally not loaded as primary source**: Wikipedia, news articles, military blogs, fan databases, manufacturer marketing decks, third-party aggregators. The dashboard cites the named Defence project page or named ministerial release as the authoritative source for each row.
+
+**Why some rows stay partial or unavailable**:
+
+- The 2024 IIP and the 2026 NDS budget factsheet group uncrewed and autonomous capability inside broader investment lines that also fund crewed platforms, sustainment and infrastructure. There is no source-safe "drone-only" budget line to extract.
+- RAN maritime autonomous coverage is loaded as Partial coverage because no single public RAN page consolidates every uncrewed maritime program with a consistent definition.
+- All readiness, deployability, mission-capable, sortie-rate and live-availability data is excluded because it is not on a public Defence page in a source-safe form.
+- Classified or sensitive systems are excluded.

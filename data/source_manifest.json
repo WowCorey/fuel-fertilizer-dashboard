@@ -1380,6 +1380,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "defence_uncrewed_systems": {
+      "id": "defence_uncrewed_systems",
+      "human_name": "Australian Defence uncrewed systems and counter-drone public posture",
+      "publisher": "Department of Defence and Australian Submarine Agency",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "rights": "Commonwealth copyright; Defence copyright terms apply",
+      "citation": "Department of Defence project pages (AIR 7000 Phase 1B Triton; AIR 6014 Phase 1 MQ-28A Ghost Bat; LAND 129 Phase 3 Integrator; LAND 156 counter-small UAS); Department of Defence / Australian Submarine Agency Ghost Shark public announcements; Sovereign Defence Industrial Priorities; Defence Industry Development Strategy 2024; 2024 Integrated Investment Program; 2026 National Defence Strategy budget factsheet.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "defence_workforce_annual_report_2024_25": {
       "id": "defence_workforce_annual_report_2024_25",
       "human_name": "Defence Annual Report 2024-25 workforce figures",

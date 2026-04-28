@@ -5,6 +5,7 @@ const SERIES = [
   'defence_public_capability_assets',
   'defence_alliance_frameworks',
   'defence_sovereign_industry_context',
+  'defence_uncrewed_systems',
   'defence_readiness_gap',
 ];
 
@@ -225,6 +226,105 @@ function AllianceSection({ frameworks }) {
   );
 }
 
+function UncrewedSystemsTable({ rows, data }) {
+  if (!rows.length) return null;
+  return (
+    <div className="data-table-wrap">
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th>System</th>
+            <th>Domain</th>
+            <th>Public status</th>
+            <th>Operator / program</th>
+            <th>Status</th>
+            <th>Boundary</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(row => (
+            <tr key={row.system_id}>
+              <td><b>{row.system_name}</b><br/><span className="caption">{row.capability_type}</span></td>
+              <td>{row.domain}</td>
+              <td>{row.public_status}<br/>
+                <span className="caption">{row.quantity_or_status}</span><br/>
+                <SourceAnchor href={row.source_url}/>
+              </td>
+              <td>{row.operator_or_program}</td>
+              <td><MetricStatus label={row.trust_label}/></td>
+              <td>{row.notes}<br/><span className="caption mono">{sourceLineFor(data, row.source_id)}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function UncrewedProgramsTable({ rows, data }) {
+  if (!rows.length) return null;
+  return (
+    <div className="data-table-wrap">
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th>Program</th>
+            <th>Type</th>
+            <th>Public headline</th>
+            <th>Status</th>
+            <th>Boundary</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(row => (
+            <tr key={row.program_id}>
+              <td><b>{row.program_name}</b><br/><SourceAnchor href={row.source_url}/></td>
+              <td>{row.program_type}</td>
+              <td>{row.headline}</td>
+              <td><MetricStatus label={row.trust_label}/></td>
+              <td>{row.notes}<br/><span className="caption mono">{sourceLineFor(data, row.source_id)}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function UncrewedFundingTable({ rows, data }) {
+  if (!rows.length) return null;
+  return (
+    <div className="data-table-wrap">
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th>Funding row</th>
+            <th>Status</th>
+            <th>Value</th>
+            <th>Period</th>
+            <th>Boundary</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(row => (
+            <tr key={row.funding_id}>
+              <td><b>{row.program_name}</b><br/><SourceAnchor href={row.source_url}/></td>
+              <td><MetricStatus label={row.trust_label}/></td>
+              <td className={row.funding_status === 'Unavailable' ? 'unavail' : ''}>
+                {row.funding_value == null
+                  ? 'Not separately published'
+                  : `${row.funding_value} ${row.funding_unit || ''}`.trim()}
+              </td>
+              <td>{row.funding_period || '—'}</td>
+              <td>{row.boundary_note}<br/><span className="caption mono">{sourceLineFor(data, row.source_id)}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 function IndustrySection({ fields }) {
   const programRows = fields.program_rows || [];
   return (
@@ -327,6 +427,11 @@ function App() {
   const capabilityRows = fields(data.defence_public_capability_assets).capability_rows || [];
   const frameworks = fields(data.defence_alliance_frameworks).frameworks || [];
   const industry = fields(data.defence_sovereign_industry_context);
+  const uncrewed = fields(data.defence_uncrewed_systems);
+  const uncrewedSystems = uncrewed.systems_rows || [];
+  const uncrewedPrograms = uncrewed.program_rows || [];
+  const uncrewedFunding = uncrewed.funding_rows || [];
+  const uncrewedCaveats = uncrewed.methodology_caveats || [];
   const takeaways = hasRows(data.defence_posture_profiles) ? (profile.takeaways || []) : [];
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
@@ -448,6 +553,39 @@ function App() {
           <CapabilitySection rows={capabilityRows}/>
         </section>
 
+        <section className="section" aria-labelledby="uncrewed-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Uncrewed systems and counter-drone</span>
+              <h2 id="uncrewed-h">Drones, autonomous systems and counter-drone, kept separate</h2>
+              <p className="section__lede">
+                {uncrewed.section_intro || 'Selected publicly stated uncrewed-systems rows. In-service, acquisition, development, sovereign program and counter-drone rows are kept separate. This page does not publish a complete ADF drone inventory or readiness data.'}
+              </p>
+            </div>
+          </div>
+          <UncrewedSystemsTable rows={uncrewedSystems} data={data}/>
+          {uncrewedPrograms.length > 0 && (
+            <>
+              <div style={{ height: 24 }}/>
+              <h3>Domestic / sovereign programs and strategy context</h3>
+              <UncrewedProgramsTable rows={uncrewedPrograms} data={data}/>
+            </>
+          )}
+          {uncrewedFunding.length > 0 && (
+            <>
+              <div style={{ height: 24 }}/>
+              <h3>Funding boundaries</h3>
+              <UncrewedFundingTable rows={uncrewedFunding} data={data}/>
+            </>
+          )}
+          {uncrewedCaveats.length > 0 && (
+            <p className="caption" style={{ marginTop: 16 }}>
+              <b>Boundary:</b> {uncrewed.boundary || ''}{' '}
+              {uncrewedCaveats.join(' ')}
+            </p>
+          )}
+        </section>
+
         <section className="section" aria-labelledby="industry-h">
           <div className="section__head">
             <div>
@@ -561,6 +699,7 @@ function App() {
             <SourceSummary id="defence_public_capability_assets" env={data.defence_public_capability_assets} partial/>
             <SourceSummary id="defence_alliance_frameworks" env={data.defence_alliance_frameworks} partial/>
             <SourceSummary id="defence_sovereign_industry_context" env={data.defence_sovereign_industry_context} partial/>
+            <SourceSummary id="defence_uncrewed_systems" env={data.defence_uncrewed_systems} partial/>
             <SourceSummary id="defence_readiness_gap" env={data.defence_readiness_gap}/>
           </div>
         </section>
