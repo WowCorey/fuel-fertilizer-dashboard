@@ -2182,6 +2182,102 @@
       "has_generated": false,
       "has_manual": true
     },
+    "strategic_resources_aimr_2025": {
+      "id": "strategic_resources_aimr_2025",
+      "human_name": "Geoscience Australia AIMR 2025 preliminary tables",
+      "publisher": "Geoscience Australia",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "strategic_resources"
+      ],
+      "canonical_url": "https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables",
+      "rights": "CC BY 4.0 (Commonwealth of Australia) where stated by publisher",
+      "citation": "Geoscience Australia, Australia's Identified Mineral Resources 2025 preliminary tables.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "strategic_resources_critical_minerals_context": {
+      "id": "strategic_resources_critical_minerals_context",
+      "human_name": "Australian critical minerals and strategic materials context",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "strategic_resources"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list",
+      "rights": "Commonwealth copyright; DISR copyright terms apply",
+      "citation": "Department of Industry, Science and Resources, Australia's Critical Minerals List and Strategic Materials List; Critical minerals sector page; Critical Minerals Strategic Reserve page.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "strategic_resources_operating_mines_2024": {
+      "id": "strategic_resources_operating_mines_2024",
+      "human_name": "Australian Operating Mines Map 2024 feature layer",
+      "publisher": "Geoscience Australia / Digital Atlas of Australia",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "strategic_resources"
+      ],
+      "canonical_url": "https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer",
+      "rights": "CC BY 4.0 (Commonwealth of Australia / Geoscience Australia) where stated in item metadata",
+      "citation": "Commonwealth of Australia (Geoscience Australia), Australian Operating Mines Map 2024, hosted through the Digital Atlas of Australia.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "strategic_resources_profiles": {
+      "id": "strategic_resources_profiles",
+      "human_name": "Strategic resources compiled profiles",
+      "publisher": "Fuel Resilience AU, compiled from named public sources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "strategic_resources"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md",
+      "rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher",
+      "citation": "Fuel Resilience AU strategic resources methodology; Department of Industry, Science and Resources; Geoscience Australia.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "strategic_resources_req_dec2025": {
+      "id": "strategic_resources_req_dec2025",
+      "human_name": "Resources and Energy Quarterly December 2025 - strategic resource exports",
+      "publisher": "Department of Industry, Science and Resources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "strategic_resources"
+      ],
+      "canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "rights": "Commonwealth copyright; DISR copyright terms apply",
+      "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025, forecast data workbook and publication page.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "strategic_resources_sulphur_gap": {
+      "id": "strategic_resources_sulphur_gap",
+      "human_name": "Strategic resources sulphur source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "strategic_resources"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU strategic resources source audit, sulphur source gate.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "tapis_crude": {
       "id": "tapis_crude",
       "human_name": "Tapis crude benchmark",

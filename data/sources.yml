@@ -2259,3 +2259,97 @@ sources:
     reuse_notes: Western Australia operates a separate Wholesale Electricity Market (WEM) - it is not part of the NEM. Hand-key headline capacity and average wholesale price from named AEMO WEM monthly reports.
     fetch: manual
     used_by: [power_grid]
+
+  # =========================================================
+  # STRATEGIC RESOURCES - first-pass critical minerals surface
+  # =========================================================
+
+  - id: strategic_resources_profiles
+    human_name: Strategic resources compiled profiles
+    publisher: Fuel Resilience AU, compiled from named public sources
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU strategic resources methodology; Department of Industry, Science and Resources; Geoscience Australia.
+    reuse_notes: Manual compiled profile envelope. It references official source envelopes for production, export, reserve/resource, state-footprint and strategic-role fields. Do not add values here unless a named source envelope supports the exact metric, period and unit.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_req_dec2025
+    human_name: Resources and Energy Quarterly December 2025 - strategic resource exports
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    format: XLSX
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Commonwealth copyright; DISR copyright terms apply
+    rights_url: https://www.industry.gov.au/about-us/copyright
+    citation: "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025, forecast data workbook and publication page."
+    reuse_notes: Manual extract from the official December 2025 REQ publication and forecast data workbook. Export value and export volume rows are kept separate, preserve nominal/current-dollar notes, and must not be added to production or reserve/resource rows.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_aimr_2025
+    human_name: Geoscience Australia AIMR 2025 preliminary tables
+    publisher: Geoscience Australia
+    url: https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables
+    canonical_url: https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables
+    format: HTML_TABLE
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia) where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Geoscience Australia, Australia's Identified Mineral Resources 2025 preliminary tables.
+    reuse_notes: Manual extract from Table 1 for selected operating-mine production, Ore Reserves, Measured and Indicated Mineral Resources, Inferred Mineral Resources, reserve life and resource life. Units differ by commodity and must remain attached to each row.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_operating_mines_2024
+    human_name: Australian Operating Mines Map 2024 feature layer
+    publisher: Geoscience Australia / Digital Atlas of Australia
+    url: https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer
+    canonical_url: https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer
+    format: JSON
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia / Geoscience Australia) where stated in item metadata
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Commonwealth of Australia (Geoscience Australia), Australian Operating Mines Map 2024, hosted through the Digital Atlas of Australia.
+    reuse_notes: Manual summary from the public ArcGIS FeatureServer and data.gov.au metadata. Counts are feature rows by commodity group, state and status as at December 2024. They are not mine production volumes, reserve estimates or export-value allocations by state.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_critical_minerals_context
+    human_name: Australian critical minerals and strategic materials context
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list
+    canonical_url: https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Commonwealth copyright; DISR copyright terms apply
+    rights_url: https://www.industry.gov.au/about-us/copyright
+    citation: Department of Industry, Science and Resources, Australia's Critical Minerals List and Strategic Materials List; Critical minerals sector page; Critical Minerals Strategic Reserve page.
+    reuse_notes: Manual qualitative source for strategic role labels. It supports why critical minerals and strategic materials matter for net zero, advanced manufacturing, defence technologies and broader strategic applications. It does not provide a production, export or reserve metric for every resource.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_sulphur_gap
+    human_name: Strategic resources sulphur source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU strategic resources source audit, sulphur source gate.
+    reuse_notes: Deliberate unavailable placeholder. Add sulphur or sulfur only if an official/public source publishes a national production, export, reserve/resource or industrial-use metric with clear unit, date and reuse terms.
+    fetch: unavailable
+    used_by: [strategic_resources]

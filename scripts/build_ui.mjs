@@ -24,6 +24,7 @@ const dashboards = [
   'fuel-security-dashboard',
   'resource-value-dashboard',
   'state-contribution-dashboard',
+  'strategic-resources-dashboard',
   'fuel-dashboard',
   'fertilizer-dashboard',
   'oil-and-production',

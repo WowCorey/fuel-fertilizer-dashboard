@@ -325,6 +325,10 @@ function Header({
     label: 'State ledger',
     href: '../state-contribution-dashboard/index.html'
   }, {
+    id: 'strategic_resources',
+    label: 'Strategic resources',
+    href: '../strategic-resources-dashboard/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -853,8 +857,14 @@ function Footer({
   }, "Dashboards"), React.createElement("ul", null, React.createElement("li", null, React.createElement("a", {
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
+    href: "../fuel-security-dashboard/index.html"
+  }, "Fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
+    href: "../state-contribution-dashboard/index.html"
+  }, "State ledger")), React.createElement("li", null, React.createElement("a", {
+    href: "../strategic-resources-dashboard/index.html"
+  }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"

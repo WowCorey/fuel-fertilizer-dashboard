@@ -1,6 +1,6 @@
 # Remaining Data Gaps
 
-Last reviewed: 2026-04-23
+Last reviewed: 2026-04-28
 
 This register records the known dashboard gaps that should not be filled with
 estimates. A gap can move to "ready to populate" only when a named public source
@@ -81,6 +81,16 @@ JSON envelope.
 | Producing fields, LNG trains, gas-processing plants and import/storage terminal counts | unavailable | No loaded official source currently defines these objects cleanly by state with current count, period, unit and reuse rights. Geoscience Australia's 2015 liquid fuel terminals dataset remains a location snapshot with licence limitations and no capacity/live inventory. | Add only from official/current source rows that define the object class. Do not count from company pages or media lists. |
 | Project/company production by state | partial | NOPTA active offshore production-licence rows now map basin, field/title, title operator and title holders where published. REMP 2024 oil-and-gas rows now map major projects to company/proponent text, resource, status and estimated new capacity. Neither source publishes current production volumes by project/company, and REMP does not publish basin names or legal operator roles. | Keep the loaded mapping visible as partial. Add current production values only from a public source with exact product, location, period, unit and reuse terms. |
 | Raw resource/fuel site counts | intentionally avoided | A raw site count is misleading unless a source defines whether it counts titles, fields, wells, terminals, plants, storage assets or licences. | Keep separate columns for title records, well-layer records, refinery facilities and any future defined class. Never roll them into one site total. |
+
+## Strategic Resources
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Rare earths individual export value | unavailable | The December 2025 REQ page discusses other critical minerals and rare earth production context, but the loaded source set does not provide an individual rare-earth export value row with period and unit. | Keep rare earth export value unavailable. Add only if DISR, ABS or another official source publishes a source-safe individual value/volume row. |
+| Sulphur production/export/reserve metric | unavailable | No official national sulphur production, export, reserve/resource or state-footprint row is loaded. | Leave `strategic_resources_sulphur_gap` unavailable. Add sulphur only after a named public source supports the exact metric, unit and period. |
+| Alumina refinery footprint by state | partial | The GA operating-mines layer supports bauxite mine footprint rows, not alumina refinery counts or capacities. | Keep bauxite mine footprint separate from alumina export rows. Add refinery footprint only from an official source defining facilities, state, period and capacity/count. |
+| Production/export value by state | unavailable | GA operating-mines rows are feature counts, not production tonnes or export values by state. REQ export rows are national. | Do not allocate national production or export values to states by mine count. Add state splits only if an official source publishes them. |
+| Underground resource wealth estimate | intentionally unavailable | AIMR reserves/resources are physical inventory concepts. Multiplying tonnes by prices would mix reserve/resource definitions, quality, recoverability, cost, timing and price assumptions. | Do not publish a national underground-wealth number. Keep reserve/resource rows physical and source-labelled. |
 
 ## Fuel Stress Index Gate
 

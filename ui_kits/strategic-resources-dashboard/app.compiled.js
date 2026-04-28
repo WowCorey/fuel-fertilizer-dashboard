@@ -899,147 +899,197 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const COMPANIES = [{
-  id: 'company_exxonmobil_au',
-  short: 'ExxonMobil Australia'
-}, {
-  id: 'company_chevron_au',
-  short: 'Chevron Australia'
-}, {
-  id: 'company_viva_energy',
-  short: 'Viva Energy (ASX:VEA)'
-}, {
-  id: 'company_ampol',
-  short: 'Ampol (ASX:ALD)'
-}, {
-  id: 'company_bp_au',
-  short: 'BP Australia'
-}, {
-  id: 'company_shell_au',
-  short: 'Shell Australia'
-}, {
-  id: 'company_woodside',
-  short: 'Woodside Energy (ASX:WDS)'
-}, {
-  id: 'company_santos',
-  short: 'Santos (ASX:STO)'
-}];
-const SERIES = ['ato_corporate_tax', 'ato_prrt_details', 'australia_institute_gas_export_tax_proposal', 'australia_institute_gas_giveaway_analysis', 'accc_petroleum_monitoring', 'accc_petrol_mogas95_component', 'accc_petrol_tax_component', 'accc_petrol_other_costs_margins_component', 'accc_petrol_gird_component', 'accc_petrol_breakdown_series', ...COMPANIES.map(c => c.id)];
-const TAX_FIELDS = ['fiscal_year', 'total_income', 'taxable_income', 'income_tax_paid', 'prrt_paid', 'net_profit'];
-const PUMP_COMPONENTS = [{
-  id: 'accc_petrol_mogas95_component',
-  eyebrow: 'Pump $',
-  label: 'International refined petrol cost',
-  plain: 'Mogas 95 component in the ACCC December quarter 2025 pump-price split.'
-}, {
-  id: 'accc_petrol_tax_component',
-  eyebrow: 'Pump $',
-  label: 'Excise and GST',
-  plain: 'Combined excise and goods and services tax component reported by the ACCC.'
-}, {
-  id: 'accc_petrol_other_costs_margins_component',
-  eyebrow: 'Pump $',
-  label: 'Other costs and margins',
-  plain: 'Other wholesale and retail costs and margins in the ACCC petrol snapshot.'
-}, {
-  id: 'accc_petrol_gird_component',
-  eyebrow: 'Pump $',
-  label: 'Gross indicative retail difference',
-  plain: 'Broad retail costs and margins indicator; not pure retailer profit.'
-}];
-function pick(env, key) {
-  if (!env || env.status !== 'ok') return null;
-  if (env.extra && env.extra.fields && !Array.isArray(env.extra.fields) && env.extra.fields[key] != null) {
-    return env.extra.fields[key];
-  }
-  if (env.extra && env.extra[key] != null) return env.extra[key];
-  if (Array.isArray(env.values)) {
-    const hit = env.values.find(p => p.t === key);
-    if (hit) return hit.v;
-  }
-  return null;
+const SERIES = ['strategic_resources_profiles', 'strategic_resources_req_dec2025', 'strategic_resources_aimr_2025', 'strategic_resources_operating_mines_2024', 'strategic_resources_critical_minerals_context', 'strategic_resources_sulphur_gap'];
+function fields(env) {
+  return env?.extra?.fields || {};
 }
-function money(v, unit = 'A$m') {
-  if (v == null) return null;
-  if (typeof v === 'number') {
-    const sign = v < 0 ? '-' : '';
-    const abs = Math.abs(v);
-    if (unit === 'A$m') return sign + 'A$' + abs.toLocaleString('en-AU', {
-      maximumFractionDigits: 1
-    }) + 'm';
-    if (unit === 'US$m') return sign + 'US$' + abs.toLocaleString('en-AU', {
-      maximumFractionDigits: 1
-    }) + 'm';
-    if (unit === '%') return v.toFixed(1) + '%';
-    if (unit === 'A$/L') return 'A$' + v.toFixed(3);
-    return String(v);
-  }
-  return String(v);
+function hasRows(env) {
+  return env && env.status === 'ok' && env.extra?.fields;
 }
-function Cell({
-  env,
-  fieldKey,
-  unit,
-  atoEnv,
-  prrtEnv
+function trustKind(label) {
+  const text = String(label || '').toLowerCase();
+  if (text.includes('unavailable')) return 'unavailable';
+  if (text.includes('partial')) return 'partial';
+  if (text.includes('derived')) return 'derived';
+  if (text.includes('manual')) return 'manual';
+  if (text.includes('stale')) return 'stale';
+  return 'observed';
+}
+function sourceLineFor(data, sourceId) {
+  const env = data?.[sourceId];
+  return env ? window.FR.sourceLine(env) : `Source id not loaded: ${sourceId}.`;
+}
+function SourceLink({
+  data,
+  sourceId
 }) {
-  const v = pick(env, fieldKey);
-  if (v == null) {
-    if (fieldKey === 'prrt_paid' && pick(env, 'prrt_note')) {
-      return React.createElement("td", {
-        className: "unavail",
-        "aria-label": "Not a PRRT payer",
-        title: pick(env, 'prrt_note')
-      }, "n/a");
-    }
-    return React.createElement("td", {
-      className: "unavail",
-      "aria-label": "Source unavailable"
-    }, "\u2014");
-  }
-  const atoFields = new Set(['total_income', 'taxable_income', 'income_tax_paid', 'fiscal_year']);
-  let linkEnv = env;
-  if (atoFields.has(fieldKey)) linkEnv = atoEnv || env;
-  if (fieldKey === 'prrt_paid') linkEnv = prrtEnv || env;
-  const href = linkEnv && linkEnv.source_url;
-  const displayUnit = fieldKey === 'net_profit' ? pick(env, 'net_profit_unit') || unit : unit;
-  return React.createElement("td", null, href ? React.createElement("a", {
-    href: href,
-    rel: "noopener",
-    title: `Source: ${linkEnv.source_name}`
-  }, money(v, displayUnit)) : money(v, displayUnit));
+  const env = data?.[sourceId];
+  if (!env?.source_url) return React.createElement("span", null, sourceId || 'No source id');
+  return React.createElement("a", {
+    href: env.source_url
+  }, sourceId, " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  }));
 }
-function SourceCell({
-  env
+function MetricStatus({
+  metric
 }) {
-  if (!env || !env.source_url) {
-    return React.createElement("td", {
+  const label = metric?.trust_label || metric?.status || 'Observed';
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, React.createElement(TrustBadge, {
+    kind: trustKind(label)
+  }, label));
+}
+function ResourceCard({
+  row,
+  data
+}) {
+  const metric = row.headline_metric || {};
+  const unavailable = metric.status === 'unavailable';
+  return React.createElement("article", {
+    className: `metric-card ${unavailable ? 'metric-card--unavailable' : ''}`
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, metric.metric_type || row.resource_type), React.createElement(MetricStatus, {
+    metric: metric
+  })), React.createElement("h3", {
+    className: "metric-card__label"
+  }, row.resource_name), React.createElement("p", {
+    className: "metric-card__plain"
+  }, row.strategic_role_line), unavailable ? React.createElement("div", {
+    className: "metric-card__unavail"
+  }, React.createElement(Icon, {
+    name: "alert",
+    size: 18
+  }), React.createElement("span", null, metric.notes || 'No verified metric is loaded.')) : React.createElement("div", {
+    className: "metric-card__row"
+  }, React.createElement("span", {
+    className: "metric-numeral"
+  }, metric.value_display), metric.unit && React.createElement("span", {
+    className: "metric-unit"
+  }, metric.unit)), React.createElement("footer", {
+    className: "metric-card__foot"
+  }, React.createElement("span", {
+    className: "metric-card__source"
+  }, metric.period ? `${metric.metric_name}; ${metric.period}. ` : '', sourceLineFor(data, metric.source_id))));
+}
+function ComparisonTable({
+  rows,
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Resource"), React.createElement("th", null, "Production status"), React.createElement("th", null, "Export status"), React.createElement("th", null, "State footprint"), React.createElement("th", null, "Strategic role"), React.createElement("th", null, "Source coverage"))), React.createElement("tbody", null, rows.map(row => {
+    const production = row.production || {};
+    const exports = row.exports || [];
+    const reserve = row.reserve_or_resource || {};
+    return React.createElement("tr", {
+      key: row.resource_id
+    }, React.createElement("td", null, React.createElement("b", null, row.resource_name), React.createElement("br", null), React.createElement("span", {
+      className: "caption"
+    }, row.resource_type)), React.createElement("td", {
+      className: production.status === 'unavailable' ? 'unavail' : ''
+    }, production.status === 'unavailable' ? production.notes : production.summary, React.createElement("br", null), React.createElement(TrustBadge, {
+      kind: trustKind(production.trust_label)
+    }, production.trust_label), reserve.summary && React.createElement(React.Fragment, null, React.createElement("br", null), React.createElement("span", {
+      className: "caption"
+    }, reserve.summary))), React.createElement("td", {
+      className: exports.every(item => item.status === 'unavailable') ? 'unavail' : ''
+    }, exports.map(item => React.createElement("div", {
+      key: item.metric_name
+    }, item.status === 'unavailable' ? item.notes : item.summary, React.createElement("br", null), React.createElement(TrustBadge, {
+      kind: trustKind(item.trust_label)
+    }, item.trust_label)))), React.createElement("td", null, row.state_footprint_summary), React.createElement("td", null, row.strategic_role_line), React.createElement("td", null, React.createElement(TrustBadge, {
+      kind: trustKind(row.source_coverage_label)
+    }, row.source_coverage_label), React.createElement("br", null), React.createElement("span", {
+      className: "caption"
+    }, row.coverage_notes), React.createElement("br", null), React.createElement(SourceLink, {
+      data: data,
+      sourceId: row.primary_source_id
+    })));
+  }))));
+}
+function StateFootprint({
+  rows,
+  data
+}) {
+  const loaded = rows.filter(row => row.state_footprint?.length);
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Resource"), React.createElement("th", null, "States with operating rows"), React.createElement("th", null, "Developing/care rows"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, loaded.map(row => {
+    const operating = row.state_footprint.filter(item => item.operating > 0).map(item => `${item.state}: ${item.operating}`).join('; ');
+    const other = row.state_footprint.filter(item => (item.developing || item.care_and_maintenance) > 0).map(item => `${item.state}: ${item.developing || 0} developing, ${item.care_and_maintenance || 0} care`).join('; ');
+    return React.createElement("tr", {
+      key: row.resource_id
+    }, React.createElement("td", null, React.createElement("b", null, row.resource_name)), React.createElement("td", null, operating || React.createElement("span", {
       className: "unavail"
-    }, "\u2014");
-  }
-  const label = env.source_name.length > 34 ? env.source_name.slice(0, 32) + '…' : env.source_name;
-  return React.createElement("td", null, React.createElement("a", {
-    href: env.source_url,
-    rel: "noopener"
-  }, label), env.status !== 'ok' && React.createElement("div", {
+    }, "No operating row loaded.")), React.createElement("td", null, other || React.createElement("span", {
+      className: "caption"
+    }, "No developing or care rows in loaded subset.")), React.createElement("td", null, row.state_footprint_boundary, React.createElement("br", null), React.createElement("span", {
+      className: "caption mono"
+    }, sourceLineFor(data, 'strategic_resources_operating_mines_2024'))));
+  }))));
+}
+function RelevanceSection({
+  relevance
+}) {
+  return React.createElement("div", {
+    className: "sources-grid"
+  }, (relevance || []).map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.group
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, item.group), React.createElement(TrustBadge, {
+    kind: "manual"
+  }, "Manual")), React.createElement("p", {
+    className: "body-sm"
+  }, item.summary), React.createElement("p", {
     className: "caption"
-  }, "pending"));
+  }, React.createElement("b", null, "Resources:"), " ", item.resources.join(', ')), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Source boundary:"), " ", item.boundary))));
 }
-function effectiveRate(env) {
-  const paid = pick(env, 'income_tax_paid');
-  const taxable = pick(env, 'taxable_income');
-  if (paid == null || taxable == null || !taxable) return null;
-  return paid / taxable * 100;
-}
-function sourceSummary(env) {
-  if (!env || env.status !== 'ok') {
-    return 'Awaiting hand-keyed values from the named public source.';
-  }
-  const fields = env.extra && env.extra.fields && !Array.isArray(env.extra.fields) ? Object.keys(env.extra.fields).length : 0;
-  if (fields) {
-    return `Verified. ${fields} fields; latest ${env.last_data_point || 'unknown'}.`;
-  }
-  return `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`;
+function SourceSummary({
+  id,
+  env,
+  partial = false
+}) {
+  const meta = env?._meta || {};
+  const ok = env?.status === 'ok';
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, env?.source_name || id), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, ok ? `Verified envelope. ${env.values?.length || 0} headline point${env.values?.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'source period listed in notes'}.` : 'Awaiting a verified public source before publication.'), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), meta.rights && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.notes && React.createElement("p", {
+    className: "caption"
+  }, env.notes), env?.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })));
 }
 function App() {
   const [data, setData] = React.useState(null);
@@ -1050,39 +1100,40 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "who_pays_what"
+      active: "strategic_resources"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
       className: "loading-wrap"
     }, "Loading source envelopes...")));
   }
+  const profileFields = fields(data.strategic_resources_profiles);
+  const resources = profileFields.resources || [];
+  const takeaways = hasRows(data.strategic_resources_profiles) ? profileFields.takeaways || [] : [];
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const populatedCompanyCount = COMPANIES.filter(c => TAX_FIELDS.some(field => pick(data[c.id], field) != null)).length;
-  const profitCompanyCount = COMPANIES.filter(c => pick(data[c.id], 'net_profit') != null).length;
-  const verifiedPumpComponents = PUMP_COMPONENTS.filter(c => data[c.id]?.status === 'ok').length;
-  const allPumpComponentsVerified = verifiedPumpComponents === PUMP_COMPONENTS.length;
-  const pumpSeriesVerified = data.accc_petrol_breakdown_series?.status === 'ok';
+  const strongCoverage = resources.filter(row => row.source_coverage_label === 'Strong coverage').length;
+  const partialCoverage = resources.filter(row => String(row.source_coverage_label).includes('Partial')).length;
+  const unavailable = resources.filter(row => String(row.source_coverage_label).includes('Unavailable')).length;
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "who_pays_what",
+    active: "strategic_resources",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "who-pays-what"
+    id: "strategic-resources"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Who pays what \xB7 v1.3"), React.createElement("h1", {
+  }, "Critical minerals and strategic resources"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What companies earn, what tax they pay, and what consumers pay."), React.createElement("p", {
+  }, "Australia's strategic resources, in plain English."), React.createElement("p", {
     className: "intro__lede"
-  }, "This page shows what major energy companies earn in Australia, what tax they pay, and what consumers pay at the pump \u2014 using figures filed with the ATO, ACCC and ASX. Nothing here is estimated. Populated numbers link to the document they came from.")), React.createElement("aside", {
+  }, "This page shows what Australia extracts from the ground that matters for trade, industry, defence and the energy transition. It separates mine production, export value, export volume, reserves/resources, state footprint and strategic role. No underground-wealth total is published.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1091,7 +1142,7 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Source check"), React.createElement("span", null, "Populated cells link to public reports."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "Production, exports, reserves/resources and strategic role are separate fields."))), React.createElement(DataCoverage, {
     data: data
   }), React.createElement("section", {
     className: "section section--why"
@@ -1099,304 +1150,171 @@ function App() {
     className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Start here"), React.createElement("h2", {
+  }, "Read this first"), React.createElement("h2", {
     style: {
       marginTop: 8
     }
-  }, "How to read this page")), React.createElement("div", {
+  }, "What this page measures")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, React.createElement("b", null, "Total income"), " is the gross revenue a company declares to the ATO. It is not profit. A company can have billions in total income and still record a loss."), React.createElement("p", null, React.createElement("b", null, "Taxable income"), " is what's left after the ATO lets the company deduct costs, depreciation, past losses and some concessions. Corporate tax is charged on this, not on total income."), React.createElement("p", null, React.createElement("b", null, "Income tax paid"), " is what actually landed in Commonwealth coffers for that fiscal year. Zero is legal when taxable income is zero or there are carried-forward losses; it is still worth noting."), React.createElement("p", null, React.createElement("b", null, "PRRT paid"), " is the Petroleum Resource Rent Tax \u2014 a separate Commonwealth tax charged on petroleum project profits, on top of company tax. It is project-level, so it appears against operating subsidiaries (e.g. Esso Australia Resources, several Woodside and Santos subsidiaries) rather than the parent group. Numbers shown here are summed across each corporate group's subsidiaries listed in the ATO PRRT details sheet. \"n/a\" means the company is downstream-only (refining, retail) and does not fall within the PRRT regime; \"\u2014\" means no data."), React.createElement("p", null, React.createElement("b", null, "Net profit"), " comes from the company's own annual report and follows accounting standards, not tax law. It will usually differ from the ATO's taxable income, sometimes by a lot."), React.createElement("p", null, React.createElement("b", null, "Effective tax rate"), " here = income tax paid \xF7 taxable income. Australia's statutory rate is 30%. Lower effective rates typically reflect R&D offsets, past losses, or the Petroleum Resource Rent Tax regime.")))), React.createElement("section", {
+  }, React.createElement("p", null, "Strategic resources are minerals and energy commodities that matter beyond a mine gate: they feed steel, batteries, power systems, defence supply chains, manufacturing and export income."), React.createElement("p", null, "Australia matters globally because official Geoscience Australia material identifies top-five supplier roles across several commodities, while DISR's Resources and Energy Quarterly tracks export volumes and values for major commodities."), React.createElement("p", null, "This page does not value everything still in the ground. Reserve and resource rows are shown only when Geoscience Australia publishes a clear unit and date, and they are not combined with production or exports.")))), takeaways.length > 0 && React.createElement("section", {
     className: "section",
-    "aria-labelledby": "h-tax"
+    "aria-labelledby": "takeaway-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Section 1 \xB7 Who pays"), React.createElement("h2", {
-    id: "h-tax"
-  }, "Revenue, profit and tax \u2014 major energy companies in Australia"), React.createElement("p", {
-    className: "section__lede"
-  }, "Figures are copied directly from ATO Corporate Tax Transparency, ASX annual reports and ASIC-lodged financial statements. Blank cells mean \"Source unavailable\" \u2014 we leave them empty rather than estimate."))), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Company tax source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Company rows awaiting manual verification"), React.createElement("p", {
+  }, "If you only read one thing"), React.createElement("h2", {
+    id: "takeaway-h"
+  }, "Loaded source takeaways"))), React.createElement("div", {
+    className: "sources-grid"
+  }, takeaways.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, item.title), React.createElement(TrustBadge, {
+    kind: trustKind(item.trust_label)
+  }, item.trust_label)), React.createElement("p", {
     className: "body-sm"
-  }, populatedCompanyCount, " of ", COMPANIES.length, " company envelopes currently contain verified ATO tax fields. ", profitCompanyCount, " of ", COMPANIES.length, " contain verified net-profit fields. Values should be entered only after checking the ATO release and the company's annual report or ASIC-lodged statements."))), React.createElement("div", {
-    className: "data-table-wrap",
-    role: "region",
-    "aria-label": "Company tax and profit table"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", {
-    scope: "col"
-  }, "Company"), React.createElement("th", {
-    scope: "col"
-  }, "Fiscal year"), React.createElement("th", {
-    scope: "col"
-  }, "Total income (ATO)"), React.createElement("th", {
-    scope: "col"
-  }, "Taxable income (ATO)"), React.createElement("th", {
-    scope: "col"
-  }, "Income tax paid (ATO)"), React.createElement("th", {
-    scope: "col"
-  }, "PRRT paid (ATO group total)"), React.createElement("th", {
-    scope: "col"
-  }, "Net profit (report)"), React.createElement("th", {
-    scope: "col"
-  }, "Effective tax rate"), React.createElement("th", {
-    scope: "col"
-  }, "Source"))), React.createElement("tbody", null, COMPANIES.map(c => {
-    const env = data[c.id];
-    const er = effectiveRate(env);
-    return React.createElement("tr", {
-      key: c.id
-    }, React.createElement("td", null, React.createElement("b", null, c.short)), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "fiscal_year"
-    }), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "total_income",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "taxable_income",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "income_tax_paid",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      prrtEnv: data.ato_prrt_details,
-      fieldKey: "prrt_paid",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      fieldKey: "net_profit",
-      unit: "A$m"
-    }), er == null ? React.createElement("td", {
-      className: "unavail"
-    }, "\u2014") : React.createElement("td", null, er.toFixed(1), "%"), React.createElement(SourceCell, {
-      env: env
-    }));
-  })))), React.createElement("p", {
-    className: "caption",
-    style: {
-      marginTop: 12
-    }
-  }, "\"\u2014\" means the figure has not yet been hand-keyed from the company's latest filed report. \"n/a\" in the PRRT column means the company is downstream-only and does not fall within the PRRT regime. Cross-check with the ATO Corporate Tax Transparency dataset before publishing:", ' ', React.createElement("a", {
-    href: data.ato_corporate_tax.source_url
-  }, data.ato_corporate_tax.source_name), ".")), data.ato_prrt_details?.status === 'ok' && React.createElement("section", {
+  }, item.text), React.createElement("p", {
+    className: "caption mono"
+  }, sourceLineFor(data, item.source_id)))))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "h-prrt-total"
+    "aria-labelledby": "headline-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Section 1b \xB7 Industry PRRT"), React.createElement("h2", {
-    id: "h-prrt-total"
-  }, "All Petroleum Resource Rent Tax paid in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), React.createElement("p", {
+  }, "Summary cards"), React.createElement("h2", {
+    id: "headline-h"
+  }, "A first-pass subset, not every mineral"), React.createElement("p", {
     className: "section__lede"
-  }, "Across the entire petroleum industry, every entity that paid PRRT and how much, directly from the ATO's PRRT details sheet."))), React.createElement("div", {
+  }, "Each card shows one headline metric with its own type and source boundary. Weaker rows stay partial or unavailable."))), React.createElement("div", {
+    className: "metric-grid"
+  }, resources.map(row => React.createElement(ResourceCard, {
+    key: row.resource_id,
+    row: row,
+    data: data
+  })))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "comparison-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Comparison"), React.createElement("h2", {
+    id: "comparison-h"
+  }, "Resource comparison table"), React.createElement("p", {
+    className: "section__lede"
+  }, "Production, export and reserve/resource rows remain separate so the dashboard does not blur different economic concepts."))), React.createElement(ComparisonTable, {
+    rows: resources,
+    data: data
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "state-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "State footprint"), React.createElement("h2", {
+    id: "state-h"
+  }, "Where the loaded operating-mines source places activity"), React.createElement("p", {
+    className: "section__lede"
+  }, "These are mine/deposit feature counts from the Geoscience Australia/Digital Atlas operating mines layer. They are not production volumes by state."))), React.createElement(StateFootprint, {
+    rows: resources,
+    data: data
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "relevance-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Strategic relevance"), React.createElement("h2", {
+    id: "relevance-h"
+  }, "Why these resources matter"), React.createElement("p", {
+    className: "section__lede"
+  }, "Strategic role is framed from official public strategy and commodity sources. It is not investment advice and not a company promotion."))), React.createElement(RelevanceSection, {
+    relevance: profileFields.strategic_relevance
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "coverage-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Coverage result"), React.createElement("h2", {
+    id: "coverage-h"
+  }, "Strong, partial and unavailable rows"))), React.createElement("div", {
     className: "metric-grid metric-grid--3"
   }, React.createElement(MetricCard, {
-    eyebrow: "Industry total",
-    label: "Total PRRT paid",
-    plain: `Sum of PRRT payable across all ${pick(data.ato_prrt_details, 'entity_count') || 0} entities listed in the ATO PRRT details sheet for ${pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'}.`,
-    value: pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions'),
-    unit: " A$m",
-    source: data.ato_prrt_details.source_name,
-    highlight: true
+    eyebrow: "Coverage",
+    label: "Strong resource rows",
+    value: `${strongCoverage}`,
+    plain: "Production, export and state-footprint context are all defensibly loaded.",
+    source: "Computed from the compiled strategic resources profile envelope."
   }), React.createElement(MetricCard, {
     eyebrow: "Coverage",
-    label: "Entities that paid PRRT",
-    plain: "Number of corporate entities appearing in the ATO PRRT details sheet.",
-    value: pick(data.ato_prrt_details, 'entity_count'),
-    unit: " entities",
-    source: data.ato_prrt_details.source_name
+    label: "Partial resource rows",
+    value: `${partialCoverage}`,
+    plain: "One or more major fields are source-safe, but others stay caveated or unavailable.",
+    source: "Computed from explicit per-resource coverage labels."
   }), React.createElement(MetricCard, {
-    eyebrow: "Statutory rate",
-    label: "PRRT statutory rate",
-    plain: "The headline PRRT rate is 40% of project taxable profit, charged in addition to company tax.",
-    value: 40,
-    unit: "%",
-    source: "PRRT Assessment Act 1987"
-  })), React.createElement("div", {
-    className: "data-table-wrap",
-    role: "region",
-    "aria-label": "PRRT paid by entity, full ATO list"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", {
-    scope: "col"
-  }, "Entity (ATO name)"), React.createElement("th", {
-    scope: "col"
-  }, "ABN"), React.createElement("th", {
-    scope: "col",
-    style: {
-      textAlign: 'right'
-    }
-  }, "PRRT paid (AUD)"))), React.createElement("tbody", null, (pick(data.ato_prrt_details, 'entities') || []).map(row => React.createElement("tr", {
-    key: row.abn
-  }, React.createElement("td", null, row.entity), React.createElement("td", {
-    className: "mono"
-  }, row.abn), React.createElement("td", {
-    style: {
-      textAlign: 'right'
-    }
-  }, row.prrt_paid_aud.toLocaleString('en-AU')))))))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-policy"
-  }, data.ato_prrt_details?.status === 'ok' && data.australia_institute_gas_giveaway_analysis?.status === 'ok' && data.australia_institute_gas_export_tax_proposal?.status === 'ok' && React.createElement("aside", {
-    role: "note",
-    "aria-label": "Headline takeaway",
-    style: {
-      margin: 'var(--s-4) 0 var(--s-6)',
-      padding: 'var(--s-5) var(--s-6)',
-      background: 'var(--paper-sunk)',
-      border: '1px solid var(--rule)',
-      borderLeft: '4px solid var(--accent)',
-      borderRadius: 'var(--r-2)'
-    }
+    eyebrow: "Coverage",
+    label: "Unavailable resource rows",
+    value: `${unavailable}`,
+    plain: "No dashboard-safe national metric is loaded yet.",
+    source: "Sulphur is intentionally left unavailable."
+  }))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "method-h"
   }, React.createElement("div", {
-    className: "eyebrow"
-  }, "If you only read one number"), React.createElement("p", {
-    style: {
-      marginTop: 'var(--s-2)',
-      fontSize: 'var(--fs-18)',
-      lineHeight: 1.5,
-      maxWidth: '70ch'
-    }
-  }, "Australia's entire petroleum industry paid ", React.createElement("b", null, "A$", (pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions') / 1000).toFixed(2), " billion"), " in PRRT in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24', " \u2014 less than the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_giveaway_analysis, 'japan_gas_import_tax_total_aud_billions_per_year'), " billion"), " Japan raises taxing its gas imports each year \u2014 and well under half of the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_export_tax_proposal, 'modelled_revenue_aud_billions'), " billion"), " a 25% gas export tax would have raised since 2022, modelled by The Australia Institute."), React.createElement("p", {
-    className: "caption mono",
-    style: {
-      marginTop: 'var(--s-3)'
-    }
-  }, "Sources: ", React.createElement("a", {
-    href: data.ato_prrt_details.source_url
-  }, "ATO PRRT details ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), " \xB7", ' ', React.createElement("a", {
-    href: data.australia_institute_gas_giveaway_analysis.source_url
-  }, "Australia Institute, \"Taxing gas in Australia and Japan\""), " \xB7", ' ', React.createElement("a", {
-    href: data.australia_institute_gas_export_tax_proposal.source_url
-  }, "Australia Institute, \"We have already missed out on $63.8 billion\""))), React.createElement("div", {
-    className: "section__head"
+    className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Section 1c \xB7 Policy comparisons"), React.createElement("h2", {
-    id: "h-policy"
-  }, "\"What if Australia taxed gas differently?\""), React.createElement("p", {
-    className: "section__lede"
-  }, "Researchers and policy think-tanks publish alternative fiscal regimes \u2014 from Norway's 78% petroleum tax to The Australia Institute's proposal for a 25% gas export tax. These cards link to each named publication; the dashboard does not publish the proposed-revenue figures until they are hand-keyed from the source."))), React.createElement("div", {
-    className: "metric-grid metric-grid--3"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Modelled revenue forgone",
-    label: "25% gas export tax (since 2022)",
-    plain: "The Australia Institute (Denniss & Saunders, 20 Mar 2026) calculates that a 25 per cent Commonwealth tax on the gross value of Australian gas exports, if enacted in 2022, would have already raised A$63.8 billion by March 2026.",
-    fromEnvelope: data.australia_institute_gas_export_tax_proposal,
-    unit: " AUD billions",
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Australia vs Japan, per year",
-    label: "PRRT (AU) vs gas-import tax (Japan)",
-    plain: "The Australia Institute (Denniss, Campbell & Saunders, 21 Apr 2026) reports Australia's PRRT raises about A$1.4 billion per year, while Japan's gas-import tax raises A$1.8 billion per year overall \u2014 including A$710 million per year specifically from Australian gas imports. Japan collects more in gas tax from our exports than our entire national PRRT take.",
-    fromEnvelope: data.australia_institute_gas_giveaway_analysis,
-    unit: " AUD billions/year"
-  }), React.createElement(MetricCard, {
-    eyebrow: "International comparison",
-    label: "Norway - statutory petroleum tax rate",
-    plain: "Norway charges 22% company tax plus a 56% special petroleum tax on offshore profits, for a 78% statutory rate. Comparison only; not directly portable to Australia without also reflecting state ownership and field-level fiscal design. See the Resource value dashboard for full Norway state-revenue context.",
-    value: 78,
-    unit: "%",
-    source: "Norwegian Petroleum Tax Act"
-  })), React.createElement("p", {
-    className: "caption",
+  }, "Methodology"), React.createElement("h2", {
+    id: "method-h",
     style: {
-      marginTop: 12
+      marginTop: 8
     }
-  }, "Each Australia Institute card links to the named, dated report. Headline figures are modelled by The Australia Institute, not by this site. We do not recompute or estimate; we cite. The Norway 78 per cent figure is the statutory rate from the Norwegian Petroleum Tax Act and is shown as comparison context only.")), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-consumer"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Section 2 \xB7 What consumers pay"), React.createElement("h2", {
-    id: "h-consumer"
-  }, "Retail petrol price breakdown"), React.createElement("p", {
-    className: "section__lede"
-  }, "Where each dollar at the pump goes \u2014 international refined petrol cost, taxes, other costs and margins, and the ACCC gross indicative retail difference."))), allPumpComponentsVerified ? React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, PUMP_COMPONENTS.map(component => React.createElement(MetricCard, {
-    key: component.id,
-    eyebrow: component.eyebrow,
-    label: component.label,
-    plain: component.plain,
-    fromEnvelope: data[component.id],
-    unit: " A$/L"
-  }))) : React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending ACCC retail breakdown coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Retail breakdown pending"), React.createElement("p", {
-    className: "body-sm"
-  }, verifiedPumpComponents, " of ", PUMP_COMPONENTS.length, " ACCC petrol-breakdown components are verified. The component cards stay hidden until the ACCC December quarter 2025 petrol-price components are all populated from the same report."), data.accc_petroleum_monitoring?.source_url && React.createElement("a", {
-    href: data.accc_petroleum_monitoring.source_url
-  }, data.accc_petroleum_monitoring.source_name, " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })))), pumpSeriesVerified && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Trailing 12 months",
-    title: "Monthly retail petrol price breakdown",
-    unit: "A$/L",
-    fromEnvelope: data.accc_petrol_breakdown_series,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "1Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly ACCC retail petrol price breakdown from verified component series.",
-    yAxisLabel: "Australian dollars per litre (A$/L)"
-  })))), React.createElement("section", {
+  }, "Why the page is fail-closed")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Mine production is the amount produced in a period. Export value is money earned from exports in a period. Export volume is a traded physical quantity. Ore Reserves and Mineral Resources are in-ground economic or geological inventory concepts as at a date. The dashboard never adds these into one number."), React.createElement("p", null, "State footprint uses the GA/Digital Atlas operating mines layer as a structured qualitative footprint. It counts source rows by status and state; it does not allocate national production or export value to states."), React.createElement("p", null, "Resources with weak source coverage are left partial or unavailable. Sulphur is included as a source-gate row only: no official national sulphur production or export row is loaded.")))), React.createElement("section", {
     className: "section section--sources",
-    id: "sources"
+    id: "sources",
+    "aria-labelledby": "sources-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every source cited on this page"), React.createElement("p", {
+  }, "Sources & methodology"), React.createElement("h2", {
+    id: "sources-h"
+  }, "Every source used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "ATO Corporate Tax Transparency Report, ACCC Petroleum Monitoring Reports, and each company's latest annual report or ASIC-lodged financial statements."))), React.createElement("div", {
+  }, "Source cards show the envelope status, rights and citation. Candidate or weak sources are documented in the methodology instead of being converted into numbers."))), React.createElement("div", {
     className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
-    key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, sourceSummary(env)), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
-    className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Total income / taxable income / income tax paid"), React.createElement("dd", null, "Copied from the ATO Corporate Tax Transparency Report for the relevant fiscal year. The ATO publishes these for every corporate entity with total income above A$100m."), React.createElement("dt", null, "Net profit"), React.createElement("dd", null, "From the company's own annual report (ASX-listed) or ASIC-lodged financial statements (private Australian subsidiaries). Follows accounting standards, not tax law."), React.createElement("dt", null, "Effective tax rate"), React.createElement("dd", null, "Income tax paid divided by taxable income, as a percentage. Australia's statutory rate is 30%. An effective rate below that is not by itself evidence of avoidance \u2014 it often reflects R&D offsets, past losses, or PRRT. Zero is possible when taxable income is zero."), React.createElement("dt", null, "Retail petrol breakdown"), React.createElement("dd", null, "From the ACCC Petroleum Monitoring Report's \"Where does the money go?\" breakdown, converted to Australian dollars per litre.")))), React.createElement(Footer, {
+  }, React.createElement(SourceSummary, {
+    id: "strategic_resources_profiles",
+    env: data.strategic_resources_profiles,
+    partial: true
+  }), React.createElement(SourceSummary, {
+    id: "strategic_resources_req_dec2025",
+    env: data.strategic_resources_req_dec2025
+  }), React.createElement(SourceSummary, {
+    id: "strategic_resources_aimr_2025",
+    env: data.strategic_resources_aimr_2025
+  }), React.createElement(SourceSummary, {
+    id: "strategic_resources_operating_mines_2024",
+    env: data.strategic_resources_operating_mines_2024,
+    partial: true
+  }), React.createElement(SourceSummary, {
+    id: "strategic_resources_critical_minerals_context",
+    env: data.strategic_resources_critical_minerals_context,
+    partial: true
+  }), React.createElement(SourceSummary, {
+    id: "strategic_resources_sulphur_gap",
+    env: data.strategic_resources_sulphur_gap
+  }))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
