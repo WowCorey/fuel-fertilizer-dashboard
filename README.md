@@ -7,7 +7,7 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Thirteen dashboard surfaces read from a shared JSON-envelope data
+**Status:** Fourteen dashboard surfaces read from a shared JSON-envelope data
 pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
 ABS fertiliser imports, APS net-import cover, APS refinery production series,
 AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
@@ -19,7 +19,10 @@ unavailable. The state petroleum ledger separates state production,
 infrastructure roles, revenue context and source gates. The strategic resources
 page adds DISR REQ export rows, Geoscience Australia AIMR production/reserve rows
 and GA/Digital Atlas operating-mines footprint context, while leaving rare-earth
-individual export value and sulphur unavailable. The fuel-security page reuses the public PM&C/DCCEEW snapshot,
+individual export value and sulphur unavailable. The defence posture page adds
+public Defence budget, workforce, selected capability, alliance/framework and
+sovereign-industry context, while leaving readiness-sensitive and unsupported
+fields unavailable. The fuel-security page reuses the public PM&C/DCCEEW snapshot,
 APS product-flow envelopes and ABS import data to show what is observable,
 derived, partial or unavailable. Other sources remain manual or unavailable
 until a named public source can support the value.
@@ -46,6 +49,7 @@ interpolate or estimate missing numbers.
 | [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources, including WA/NWS and Queensland petroleum royalty receipt context; value-leakage estimate remains unavailable until a documented denominator and method exist |
 | [State petroleum ledger](ui_kits/state-contribution-dashboard/index.html) | v1.3 | State/territory petroleum and gas production roles, defined object counts, partial project/operator mapping, infrastructure context, state royalty receipts, combined royalty context and source gates | AES state production rows, NOPTA offshore title/well-layer counts, NOPTA active production-licence field/operator rows, REMP oil/gas major-project rows, QLD/VIC operating refinery counts, WA/NWS and Queensland petroleum receipts, NSW/NT combined royalty context and source-gate workstreams are loaded; Commonwealth tax attribution by state, current project/company production volumes, terminal capacity, LNG train counts and raw site totals remain unavailable |
 | [Strategic resources](ui_kits/strategic-resources-dashboard/index.html) | v1.0 | Iron ore, coal, uranium, bauxite/alumina, copper, nickel, lithium, rare earths, gold, zinc and sulphur source-gate context | DISR REQ export rows, GA AIMR 2025 production/reserve/resource rows and GA/Digital Atlas operating-mines footprint rows are loaded where source-safe; rare-earth individual export value and sulphur production/export/reserve rows remain unavailable |
+| [Defence posture](ui_kits/defence-alliances-dashboard/index.html) | v1.0 | Defence spending, selected public ADF capability rows, force-structure context, alliances/frameworks and sovereign defence-industry context | 2026 NDS budget rows, Defence Annual Report workforce rows, selected Navy/Air Force/Army public capability rows, ANZUS/AUKUS/Five Eyes/Quad/AUSMIN/PNG framework profiles and SDIP/GWEO industry context are loaded; readiness, mission-capable rates, live availability, munitions stockpile depth, classified posture and GDP-share fields remain unavailable |
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by fertiliser category, price index, supplier concentration | ABS SITC 562 total imports and source-country top-3 concentration fetched; nutrient subseries, ABARES price and stock cover remain manual/unavailable |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
@@ -73,6 +77,10 @@ Strategic resources methodology is documented in
 [`docs/strategic-resources-methodology.md`](docs/strategic-resources-methodology.md),
 with source decisions in
 [`docs/strategic-resources-source-audit.md`](docs/strategic-resources-source-audit.md).
+Defence, alliances and strategic posture methodology is documented in
+[`docs/defence-alliances-methodology.md`](docs/defence-alliances-methodology.md),
+with source decisions in
+[`docs/defence-alliances-source-audit.md`](docs/defence-alliances-source-audit.md).
 
 ## Run locally
 
@@ -88,6 +96,7 @@ python3 -m http.server 8000
 #   http://localhost:8000/ui_kits/resource-value-dashboard/index.html
 #   http://localhost:8000/ui_kits/state-contribution-dashboard/index.html
 #   http://localhost:8000/ui_kits/strategic-resources-dashboard/index.html
+#   http://localhost:8000/ui_kits/defence-alliances-dashboard/index.html
 #   http://localhost:8000/ui_kits/fuel-dashboard/index.html
 #   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
 #   http://localhost:8000/ui_kits/oil-and-production/index.html
@@ -341,6 +350,7 @@ ui_kits/
   resource-value-dashboard/    v1.5 — tax, PRRT, royalties, export value
     state-contribution-dashboard/ v1.3 - state petroleum ledger, source gates, defined object counts and partial production mapping
   strategic-resources-dashboard/ v1.0 - critical minerals and strategic resource context
+  defence-alliances-dashboard/ v1.0 - public defence posture, alliances and capability context
   fuel-dashboard/              v1.0 — liquid fuel
   fertilizer-dashboard/        v1.1 — fertiliser
   oil-and-production/          v1.2 — crude, refining, government spending

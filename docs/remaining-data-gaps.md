@@ -1,6 +1,6 @@
 # Remaining Data Gaps
 
-Last reviewed: 2026-04-28
+Last reviewed: 2026-04-29
 
 This register records the known dashboard gaps that should not be filled with
 estimates. A gap can move to "ready to populate" only when a named public source
@@ -91,6 +91,17 @@ JSON envelope.
 | Alumina refinery footprint by state | partial | The GA operating-mines layer supports bauxite mine footprint rows, not alumina refinery counts or capacities. | Keep bauxite mine footprint separate from alumina export rows. Add refinery footprint only from an official source defining facilities, state, period and capacity/count. |
 | Production/export value by state | unavailable | GA operating-mines rows are feature counts, not production tonnes or export values by state. REQ export rows are national. | Do not allocate national production or export values to states by mine count. Add state splits only if an official source publishes them. |
 | Underground resource wealth estimate | intentionally unavailable | AIMR reserves/resources are physical inventory concepts. Multiplying tonnes by prices would mix reserve/resource definitions, quality, recoverability, cost, timing and price assumptions. | Do not publish a national underground-wealth number. Keep reserve/resource rows physical and source-labelled. |
+
+## Defence, Alliances and Strategic Posture
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Mission-capable rates and live operational availability | intentionally unavailable | Public asset counts and acquisition announcements do not show readiness, serviceability, crewing, deployability or live availability. Publishing inferred readiness would be fabricated and may be sensitive. | Keep `defence_readiness_gap` unavailable. Add a metric only if a named public source publishes the exact field and the project decides it is source-safe to show. |
+| Munitions stockpile size or adequacy | unavailable | Defence publishes GWEO funding and program context, but the loaded public sources do not publish stockpile depth or adequacy rows. | Keep stockpile size and adequacy out of the dashboard. Use GWEO only as industry/program context. |
+| Classified basing posture or live deployments | intentionally unavailable | The page is public-facing and does not load classified, sensitive or live posture data. | Do not add live basing, deployment or classified posture rows. |
+| Defence spending as share of GDP | unavailable in first pass | The page has not loaded a current official percentage row or a documented GDP denominator envelope. | Add only from an official row or from a documented derived method with the GDP denominator shown. |
+| Complete ADF platform inventory | partial | The first pass loads selected official public rows across Navy, Air Force and Army. It is not a full equipment catalogue. | Add one capability class at a time from official public sources, preserving acquisition/current-count wording and readiness caveats. |
+| Estate/base capacity | unavailable | No source-safe public estate-capacity table is loaded, and some basing detail can be sensitive. | Keep base/estate rows qualitative or unavailable until an official public source defines exact fields, units and periods. |
 
 ## Fuel Stress Index Gate
 

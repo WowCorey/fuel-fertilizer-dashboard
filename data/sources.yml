@@ -2353,3 +2353,112 @@ sources:
     reuse_notes: Deliberate unavailable placeholder. Add sulphur or sulfur only if an official/public source publishes a national production, export, reserve/resource or industrial-use metric with clear unit, date and reuse terms.
     fetch: unavailable
     used_by: [strategic_resources]
+
+  # =========================================================
+  # DEFENCE, ALLIANCES AND STRATEGIC POSTURE - public source surface
+  # =========================================================
+
+  - id: defence_posture_profiles
+    human_name: Defence alliances and strategic posture compiled profiles
+    publisher: Fuel Resilience AU, compiled from named public sources
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU defence, alliances and strategic posture methodology; Department of Defence; DFAT; Office of National Intelligence; Australian Submarine Agency.
+    reuse_notes: Manual compiled profile envelope. It references official source envelopes for budget, workforce, public capability, alliance/framework, sovereign industry and readiness-boundary fields. Do not add values here unless a named source envelope supports the exact metric, period and unit.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_budget_2026_nds
+    human_name: 2026 National Defence Strategy budget factsheet
+    publisher: Department of Defence
+    url: https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf
+    canonical_url: https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, 2026 National Defence Strategy Budget Factsheet, April 2026.
+    reuse_notes: Manual extract from the official budget factsheet. Funding profile, planned expenditure, additional investment and capability-investment rows must stay separate and must not be converted into readiness, availability or deployability claims.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_workforce_annual_report_2024_25
+    human_name: Defence Annual Report 2024-25 workforce figures
+    publisher: Department of Defence
+    url: https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf
+    canonical_url: https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, Defence Annual Report 2024-25, workforce chapter and annual performance statements.
+    reuse_notes: Manual extract of workforce requirement and achievement rows. Workforce counts and reserve paid-service days are not deployable strength, combat readiness or operational availability.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_public_capability_assets
+    human_name: Selected public ADF capability and asset counts
+    publisher: Department of Defence, Royal Australian Navy, Royal Australian Air Force and Defence Ministers
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; service-specific website copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, Royal Australian Navy, Royal Australian Air Force and Defence Ministers public capability pages, as listed in the defence alliances source audit.
+    reuse_notes: Manual selected public counts and acquisition statuses only. The envelope is not exhaustive and must not be used to infer mission-capable rates, crewing, serviceability, stockpile sufficiency, basing posture or live operational availability.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_alliance_frameworks
+    human_name: Selected Australian defence alliance and strategic frameworks
+    publisher: DFAT, Defence, Office of National Intelligence and Australian Submarine Agency
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; upstream source rights remain with each publisher
+    rights_url: https://www.dfat.gov.au/about-us/copyright
+    citation: DFAT Australian Treaties Database and country/framework pages; Office of National Intelligence Five Eyes partners page; Australian Submarine Agency AUKUS pages.
+    reuse_notes: Manual framework profiles. Formal security treaties, intelligence partnerships, technology partnerships, diplomatic forums and ministerial consultations must stay separate and must not be collapsed into one alliance score.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_sovereign_industry_context
+    human_name: Defence sovereign industry and resilience context
+    publisher: Department of Defence and Australian Submarine Agency
+    url: https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities
+    canonical_url: https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, Sovereign Defence Industrial Priorities; Guided Weapons and Explosive Ordnance Enterprise; Australian Submarine Agency industry pages.
+    reuse_notes: Manual official program context only. Do not infer private supply-chain capacity, classified industrial depth, munitions stockpile size or operational readiness from these program rows.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_readiness_gap
+    human_name: Defence readiness and sensitive-data source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU defence, alliances and strategic posture methodology, readiness source gate.
+    reuse_notes: Deliberate unavailable placeholder. Do not add readiness, mission-capable rates, live operational availability, munitions stockpile depth, classified basing or live posture metrics unless a named public source supports the exact field and publication is assessed as safe.
+    fetch: unavailable
+    used_by: [defence_posture]

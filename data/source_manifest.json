@@ -1284,6 +1284,118 @@
       "has_generated": false,
       "has_manual": true
     },
+    "defence_alliance_frameworks": {
+      "id": "defence_alliance_frameworks",
+      "human_name": "Selected Australian defence alliance and strategic frameworks",
+      "publisher": "DFAT, Defence, Office of National Intelligence and Australian Submarine Agency",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "rights": "Commonwealth copyright; upstream source rights remain with each publisher",
+      "citation": "DFAT Australian Treaties Database and country/framework pages; Office of National Intelligence Five Eyes partners page; Australian Submarine Agency AUKUS pages.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_budget_2026_nds": {
+      "id": "defence_budget_2026_nds",
+      "human_name": "2026 National Defence Strategy budget factsheet",
+      "publisher": "Department of Defence",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf",
+      "rights": "Commonwealth copyright; Defence copyright terms apply",
+      "citation": "Department of Defence, 2026 National Defence Strategy Budget Factsheet, April 2026.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_posture_profiles": {
+      "id": "defence_posture_profiles",
+      "human_name": "Defence alliances and strategic posture compiled profiles",
+      "publisher": "Fuel Resilience AU, compiled from named public sources",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+      "rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher",
+      "citation": "Fuel Resilience AU defence, alliances and strategic posture methodology; Department of Defence; DFAT; Office of National Intelligence; Australian Submarine Agency.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_public_capability_assets": {
+      "id": "defence_public_capability_assets",
+      "human_name": "Selected public ADF capability and asset counts",
+      "publisher": "Department of Defence, Royal Australian Navy, Royal Australian Air Force and Defence Ministers",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "rights": "Commonwealth copyright; service-specific website copyright terms apply",
+      "citation": "Department of Defence, Royal Australian Navy, Royal Australian Air Force and Defence Ministers public capability pages, as listed in the defence alliances source audit.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_readiness_gap": {
+      "id": "defence_readiness_gap",
+      "human_name": "Defence readiness and sensitive-data source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU defence, alliances and strategic posture methodology, readiness source gate.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_sovereign_industry_context": {
+      "id": "defence_sovereign_industry_context",
+      "human_name": "Defence sovereign industry and resilience context",
+      "publisher": "Department of Defence and Australian Submarine Agency",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities",
+      "rights": "Commonwealth copyright; Defence copyright terms apply",
+      "citation": "Department of Defence, Sovereign Defence Industrial Priorities; Guided Weapons and Explosive Ordnance Enterprise; Australian Submarine Agency industry pages.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_workforce_annual_report_2024_25": {
+      "id": "defence_workforce_annual_report_2024_25",
+      "human_name": "Defence Annual Report 2024-25 workforce figures",
+      "publisher": "Department of Defence",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "defence_posture"
+      ],
+      "canonical_url": "https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf",
+      "rights": "Commonwealth copyright; Defence copyright terms apply",
+      "citation": "Department of Defence, Defence Annual Report 2024-25, workforce chapter and annual performance statements.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "doe_industry_growth_centres_summary": {
       "id": "doe_industry_growth_centres_summary",
       "human_name": "Australian Government Industry Growth Centres Initiative - summary",
