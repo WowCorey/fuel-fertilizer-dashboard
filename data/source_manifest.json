@@ -964,7 +964,7 @@
     },
     "australia_institute_gas_export_tax_proposal": {
       "id": "australia_institute_gas_export_tax_proposal",
-      "human_name": "The Australia Institute - 25% gas export tax proposal",
+      "human_name": "The Australia Institute - 25% gas export tax proposal (Denniss & Saunders, Mar 2026)",
       "publisher": "The Australia Institute",
       "fetch": "manual",
       "update_cadence": "ad-hoc",
@@ -972,7 +972,7 @@
         "who_pays_what",
         "resource_value"
       ],
-      "canonical_url": "https://australiainstitute.org.au/",
+      "canonical_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
       "rights": "CC BY 4.0 (The Australia Institute, where stated)",
       "citation": "The Australia Institute, gas export tax / Petroleum Resource Rent Tax reform analysis.",
       "preferred_dir": "manual",
@@ -981,7 +981,7 @@
     },
     "australia_institute_gas_giveaway_analysis": {
       "id": "australia_institute_gas_giveaway_analysis",
-      "human_name": "The Australia Institute - Australian gas-giveaway / Japan resale analysis",
+      "human_name": "The Australia Institute - Taxing gas in Australia and Japan (Denniss, Campbell & Saunders, Apr 2026)",
       "publisher": "The Australia Institute",
       "fetch": "manual",
       "update_cadence": "ad-hoc",
@@ -989,7 +989,7 @@
         "who_pays_what",
         "resource_value"
       ],
-      "canonical_url": "https://australiainstitute.org.au/",
+      "canonical_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
       "rights": "CC BY 4.0 (The Australia Institute, where stated)",
       "citation": "The Australia Institute, Australian LNG export royalty analysis.",
       "preferred_dir": "manual",

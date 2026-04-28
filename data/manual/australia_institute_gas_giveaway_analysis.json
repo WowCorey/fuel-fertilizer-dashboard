@@ -1,16 +1,35 @@
 {
   "series_id": "australia_institute_gas_giveaway_analysis",
   "source_id": "australia_institute_gas_giveaway_analysis",
-  "source_name": "The Australia Institute - Australian gas-giveaway / Japan resale analysis",
-  "source_url": "https://australiainstitute.org.au/",
-  "unit": "",
-  "retrieved_at": null,
+  "source_name": "The Australia Institute - Taxing gas in Australia and Japan (Denniss, Campbell & Saunders, Apr 2026)",
+  "source_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
+  "unit": "AUD billions per year",
+  "retrieved_at": "2026-04-28T08:30:57+00:00",
   "stub_created_at": "2026-04-28T08:22:54+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
+  "last_data_point": "2026-04-21",
+  "values": [
+    {
+      "t": "2026",
+      "v": 1.4
+    }
+  ],
+  "notes": "The Australia Institute report \"Taxing gas in Australia and Japan\" by Richard Denniss, Rod Campbell and Matt Saunders, published 21 April 2026. Headline finding: Japan's gas tax raises more revenue from Australian gas exports than Australia's PRRT does in total. Japan collects A$710 million per year specifically taxing gas imports from Australia, and A$1.8 billion per year on gas imports overall, while Australia's PRRT raises A$1.4 billion per year (matches the canonical ATO 2023-24 PRRT details total of A$1,483.3m).",
+  "status": "ok",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 (The Australia Institute, where stated)",
-  "citation": "The Australia Institute, Australian LNG export royalty analysis."
+  "citation": "The Australia Institute, Australian LNG export royalty analysis.",
+  "extra": {
+    "schema": "manual_extra_fields.v1",
+    "fields": {
+      "report_title": "Taxing gas in Australia and Japan",
+      "authors": "Richard Denniss; Rod Campbell; Matt Saunders",
+      "publication_date": "2026-04-21",
+      "publisher": "The Australia Institute",
+      "australia_prrt_total_aud_billions_per_year": 1.4,
+      "japan_gas_import_tax_total_aud_billions_per_year": 1.8,
+      "japan_tax_on_australian_gas_aud_millions_per_year": 710,
+      "comparison_finding": "Japan raises more revenue taxing Australian gas imports than Australia raises from PRRT in total",
+      "report_pdf": "https://australiainstitute.org.au/wp-content/uploads/2026/04/P2006-Taxing-gas-in-Australia-and-Japan-Web-002.pdf"
+    }
+  }
 }
