@@ -1639,6 +1639,52 @@ sources:
     fetch: manual
     used_by: [who_pays_what]
 
+  - id: ato_prrt_details
+    human_name: ATO Corporate Tax Transparency - PRRT details (latest year)
+    publisher: Australian Taxation Office
+    url: https://data.gov.au/data/dataset/corporate-transparency
+    canonical_url: https://data.gov.au/data/dataset/corporate-transparency
+    fetch_url: https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26/resource/491b366b-aa6f-4b1c-b39d-cebaeeb6f874/download/2023-24-corporate-report-of-entity-tax-information.xlsx
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 3.0 AU (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/3.0/au/
+    citation: Australian Taxation Office, Corporate Tax Transparency Report - PRRT details sheet.
+    reuse_notes: PRRT (Petroleum Resource Rent Tax) is a profits-based Commonwealth tax on petroleum project taxable profits. The ATO 2023-24 release lists 16 entities that paid PRRT with the entity name, ABN and PRRT payable in AUD on the PRRT details sheet of the same XLSX file as the income tax details. Per-corporate-group totals on the who-pays-what page are computed by summing the PRRT-paying subsidiaries documented in extra.fields.prrt_subsidiaries on each company envelope.
+    fetch: manual
+    used_by: [who_pays_what, resource_value]
+
+  - id: australia_institute_gas_export_tax_proposal
+    human_name: The Australia Institute - 25% gas export tax proposal
+    publisher: The Australia Institute
+    url: https://australiainstitute.org.au/
+    canonical_url: https://australiainstitute.org.au/
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (The Australia Institute, where stated)
+    rights_url: https://australiainstitute.org.au/
+    citation: The Australia Institute, gas export tax / Petroleum Resource Rent Tax reform analysis.
+    reuse_notes: The Australia Institute periodically argues for a Commonwealth-level gas export tax (the most-cited proposal is a 25 per cent tax on the gross value of gas exports, modelled on Norway's offshore tax base) as an alternative to PRRT. The proposed rate, modelled revenue and policy mechanism vary by report year; only hand-key headline figures from a named, dated Australia Institute publication. Do not present this as an Australian government policy.
+    fetch: manual
+    used_by: [who_pays_what, resource_value]
+
+  - id: australia_institute_gas_giveaway_analysis
+    human_name: The Australia Institute - Australian gas-giveaway / Japan resale analysis
+    publisher: The Australia Institute
+    url: https://australiainstitute.org.au/
+    canonical_url: https://australiainstitute.org.au/
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (The Australia Institute, where stated)
+    rights_url: https://australiainstitute.org.au/
+    citation: The Australia Institute, Australian LNG export royalty analysis.
+    reuse_notes: The Australia Institute publishes ad-hoc analyses comparing the price Australian LNG producers receive for exported gas with the price Japanese and other importers resell or trade Australian gas at, and the implied loss to Australian government revenue under different fiscal regimes. Only hand-key headline figures from a named, dated Australia Institute publication. Numbers vary across publications and over time; use only with the report-year and page reference cited.
+    fetch: manual
+    used_by: [who_pays_what, resource_value]
+
   # =========================================================
   # AU ECONOMICS - v1.0 (RBA, AOFM, ABS macro indicators)
   # =========================================================

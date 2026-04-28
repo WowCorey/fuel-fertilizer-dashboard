@@ -910,8 +910,8 @@ const COMPANIES = [{
   id: 'company_santos',
   short: 'Santos (ASX:STO)'
 }];
-const SERIES = ['ato_corporate_tax', 'accc_petroleum_monitoring', 'accc_petrol_mogas95_component', 'accc_petrol_tax_component', 'accc_petrol_other_costs_margins_component', 'accc_petrol_gird_component', 'accc_petrol_breakdown_series', ...COMPANIES.map(c => c.id)];
-const TAX_FIELDS = ['fiscal_year', 'total_income', 'taxable_income', 'income_tax_paid', 'net_profit'];
+const SERIES = ['ato_corporate_tax', 'ato_prrt_details', 'australia_institute_gas_export_tax_proposal', 'australia_institute_gas_giveaway_analysis', 'accc_petroleum_monitoring', 'accc_petrol_mogas95_component', 'accc_petrol_tax_component', 'accc_petrol_other_costs_margins_component', 'accc_petrol_gird_component', 'accc_petrol_breakdown_series', ...COMPANIES.map(c => c.id)];
+const TAX_FIELDS = ['fiscal_year', 'total_income', 'taxable_income', 'income_tax_paid', 'prrt_paid', 'net_profit'];
 const PUMP_COMPONENTS = [{
   id: 'accc_petrol_mogas95_component',
   eyebrow: 'Pump $',
@@ -966,17 +966,27 @@ function Cell({
   env,
   fieldKey,
   unit,
-  atoEnv
+  atoEnv,
+  prrtEnv
 }) {
   const v = pick(env, fieldKey);
   if (v == null) {
+    if (fieldKey === 'prrt_paid' && pick(env, 'prrt_note')) {
+      return React.createElement("td", {
+        className: "unavail",
+        "aria-label": "Not a PRRT payer",
+        title: pick(env, 'prrt_note')
+      }, "n/a");
+    }
     return React.createElement("td", {
       className: "unavail",
       "aria-label": "Source unavailable"
     }, "\u2014");
   }
   const atoFields = new Set(['total_income', 'taxable_income', 'income_tax_paid', 'fiscal_year']);
-  const linkEnv = atoFields.has(fieldKey) ? atoEnv || env : env;
+  let linkEnv = env;
+  if (atoFields.has(fieldKey)) linkEnv = atoEnv || env;
+  if (fieldKey === 'prrt_paid') linkEnv = prrtEnv || env;
   const href = linkEnv && linkEnv.source_url;
   const displayUnit = fieldKey === 'net_profit' ? pick(env, 'net_profit_unit') || unit : unit;
   return React.createElement("td", null, href ? React.createElement("a", {
@@ -1081,7 +1091,7 @@ function App() {
     }
   }, "How to read this page")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, React.createElement("b", null, "Total income"), " is the gross revenue a company declares to the ATO. It is not profit. A company can have billions in total income and still record a loss."), React.createElement("p", null, React.createElement("b", null, "Taxable income"), " is what's left after the ATO lets the company deduct costs, depreciation, past losses and some concessions. Corporate tax is charged on this, not on total income."), React.createElement("p", null, React.createElement("b", null, "Income tax paid"), " is what actually landed in Commonwealth coffers for that fiscal year. Zero is legal when taxable income is zero or there are carried-forward losses; it is still worth noting."), React.createElement("p", null, React.createElement("b", null, "Net profit"), " comes from the company's own annual report and follows accounting standards, not tax law. It will usually differ from the ATO's taxable income, sometimes by a lot."), React.createElement("p", null, React.createElement("b", null, "Effective tax rate"), " here = income tax paid \xF7 taxable income. Australia's statutory rate is 30%. Lower effective rates typically reflect R&D offsets, past losses, or the Petroleum Resource Rent Tax regime.")))), React.createElement("section", {
+  }, React.createElement("p", null, React.createElement("b", null, "Total income"), " is the gross revenue a company declares to the ATO. It is not profit. A company can have billions in total income and still record a loss."), React.createElement("p", null, React.createElement("b", null, "Taxable income"), " is what's left after the ATO lets the company deduct costs, depreciation, past losses and some concessions. Corporate tax is charged on this, not on total income."), React.createElement("p", null, React.createElement("b", null, "Income tax paid"), " is what actually landed in Commonwealth coffers for that fiscal year. Zero is legal when taxable income is zero or there are carried-forward losses; it is still worth noting."), React.createElement("p", null, React.createElement("b", null, "PRRT paid"), " is the Petroleum Resource Rent Tax \u2014 a separate Commonwealth tax charged on petroleum project profits, on top of company tax. It is project-level, so it appears against operating subsidiaries (e.g. Esso Australia Resources, several Woodside and Santos subsidiaries) rather than the parent group. Numbers shown here are summed across each corporate group's subsidiaries listed in the ATO PRRT details sheet. \"n/a\" means the company is downstream-only (refining, retail) and does not fall within the PRRT regime; \"\u2014\" means no data."), React.createElement("p", null, React.createElement("b", null, "Net profit"), " comes from the company's own annual report and follows accounting standards, not tax law. It will usually differ from the ATO's taxable income, sometimes by a lot."), React.createElement("p", null, React.createElement("b", null, "Effective tax rate"), " here = income tax paid \xF7 taxable income. Australia's statutory rate is 30%. Lower effective rates typically reflect R&D offsets, past losses, or the Petroleum Resource Rent Tax regime.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "h-tax"
   }, React.createElement("div", {
@@ -1117,6 +1127,8 @@ function App() {
     scope: "col"
   }, "Income tax paid (ATO)"), React.createElement("th", {
     scope: "col"
+  }, "PRRT paid (ATO group total)"), React.createElement("th", {
+    scope: "col"
   }, "Net profit (report)"), React.createElement("th", {
     scope: "col"
   }, "Effective tax rate"), React.createElement("th", {
@@ -1147,6 +1159,11 @@ function App() {
       unit: "A$m"
     }), React.createElement(Cell, {
       env: env,
+      prrtEnv: data.ato_prrt_details,
+      fieldKey: "prrt_paid",
+      unit: "A$m"
+    }), React.createElement(Cell, {
+      env: env,
       fieldKey: "net_profit",
       unit: "A$m"
     }), er == null ? React.createElement("td", {
@@ -1159,9 +1176,99 @@ function App() {
     style: {
       marginTop: 12
     }
-  }, "\"\u2014\" means the figure has not yet been hand-keyed from the company's latest filed report. Cross-check with the ATO Corporate Tax Transparency dataset before publishing:", ' ', React.createElement("a", {
+  }, "\"\u2014\" means the figure has not yet been hand-keyed from the company's latest filed report. \"n/a\" in the PRRT column means the company is downstream-only and does not fall within the PRRT regime. Cross-check with the ATO Corporate Tax Transparency dataset before publishing:", ' ', React.createElement("a", {
     href: data.ato_corporate_tax.source_url
-  }, data.ato_corporate_tax.source_name), ".")), React.createElement("section", {
+  }, data.ato_corporate_tax.source_name), ".")), data.ato_prrt_details?.status === 'ok' && React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "h-prrt-total"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Section 1b \xB7 Industry PRRT"), React.createElement("h2", {
+    id: "h-prrt-total"
+  }, "All Petroleum Resource Rent Tax paid in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), React.createElement("p", {
+    className: "section__lede"
+  }, "Across the entire petroleum industry, every entity that paid PRRT and how much, directly from the ATO's PRRT details sheet."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Industry total",
+    label: "Total PRRT paid",
+    plain: `Sum of PRRT payable across all ${pick(data.ato_prrt_details, 'entity_count') || 0} entities listed in the ATO PRRT details sheet for ${pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'}.`,
+    value: pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions'),
+    unit: " A$m",
+    source: data.ato_prrt_details.source_name,
+    highlight: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "Coverage",
+    label: "Entities that paid PRRT",
+    plain: "Number of corporate entities appearing in the ATO PRRT details sheet.",
+    value: pick(data.ato_prrt_details, 'entity_count'),
+    unit: " entities",
+    source: data.ato_prrt_details.source_name
+  }), React.createElement(MetricCard, {
+    eyebrow: "Statutory rate",
+    label: "PRRT statutory rate",
+    plain: "The headline PRRT rate is 40% of project taxable profit, charged in addition to company tax.",
+    value: 40,
+    unit: "%",
+    source: "PRRT Assessment Act 1987"
+  })), React.createElement("div", {
+    className: "data-table-wrap",
+    role: "region",
+    "aria-label": "PRRT paid by entity, full ATO list"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", {
+    scope: "col"
+  }, "Entity (ATO name)"), React.createElement("th", {
+    scope: "col"
+  }, "ABN"), React.createElement("th", {
+    scope: "col",
+    style: {
+      textAlign: 'right'
+    }
+  }, "PRRT paid (AUD)"))), React.createElement("tbody", null, (pick(data.ato_prrt_details, 'entities') || []).map(row => React.createElement("tr", {
+    key: row.abn
+  }, React.createElement("td", null, row.entity), React.createElement("td", {
+    className: "mono"
+  }, row.abn), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, row.prrt_paid_aud.toLocaleString('en-AU')))))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "h-policy"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Section 1c \xB7 Policy comparisons"), React.createElement("h2", {
+    id: "h-policy"
+  }, "\"What if Australia taxed gas differently?\""), React.createElement("p", {
+    className: "section__lede"
+  }, "Researchers and policy think-tanks publish alternative fiscal regimes \u2014 from Norway's 78% petroleum tax to The Australia Institute's proposal for a 25% gas export tax. These cards link to each named publication; the dashboard does not publish the proposed-revenue figures until they are hand-keyed from the source."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Policy proposal",
+    label: "Australia Institute - proposed gas export tax",
+    plain: "The Australia Institute periodically proposes a Commonwealth tax on the gross value of LNG exports (the most-cited rate is 25 per cent). The headline modelled revenue figure is hand-keyed from a named, dated Australia Institute publication.",
+    fromEnvelope: data.australia_institute_gas_export_tax_proposal,
+    unit: ""
+  }), React.createElement(MetricCard, {
+    eyebrow: "Policy analysis",
+    label: "Australia Institute - Australian gas-giveaway analysis",
+    plain: "Analyses comparing the price Australian LNG producers receive with the price Japan and other importers resell or trade Australian gas at, and the implied revenue forgone.",
+    fromEnvelope: data.australia_institute_gas_giveaway_analysis,
+    unit: ""
+  }), React.createElement(MetricCard, {
+    eyebrow: "International comparison",
+    label: "Norway - statutory petroleum tax rate",
+    plain: "Norway charges 22% company tax plus a 56% special petroleum tax on offshore profits, for a 78% statutory rate. Comparison only; not directly portable to Australia without also reflecting state ownership and field-level fiscal design. See Resource value dashboard for full Norway state-revenue context.",
+    value: 78,
+    unit: "%",
+    source: "Norwegian Petroleum Tax Act"
+  }))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "h-consumer"
   }, React.createElement("div", {

@@ -24,7 +24,37 @@
       "net_profit": 2718,
       "net_profit_unit": "US$m",
       "net_profit_period_end": "2025-12-31",
-      "net_profit_basis": "net profit for the period attributable to members"
+      "net_profit_basis": "net profit for the period attributable to members",
+      "prrt_paid": 795.511511,
+      "prrt_subsidiaries": [
+        {
+          "entity": "WOODSIDE BURRUP PTY. LTD.",
+          "abn": "20120237416",
+          "paid_aud": 150896061
+        },
+        {
+          "entity": "WOODSIDE ENERGY (AUSTRALIA) PTY LTD",
+          "abn": "39006923879",
+          "paid_aud": 113183482
+        },
+        {
+          "entity": "WOODSIDE ENERGY (BASS STRAIT) PTY LTD",
+          "abn": "29004228004",
+          "paid_aud": 390477620
+        },
+        {
+          "entity": "WOODSIDE ENERGY JULIMAR PTY LTD",
+          "abn": "56130391365",
+          "paid_aud": 38447922
+        },
+        {
+          "entity": "WOODSIDE ENERGY LTD.",
+          "abn": "63005482986",
+          "paid_aud": 102506426
+        }
+      ],
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }
