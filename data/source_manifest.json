@@ -541,9 +541,9 @@
       "used_by": [
         "power_grid"
       ],
-      "canonical_url": "https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp",
+      "canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp",
       "rights": "AEMO terms of use for tabular data",
-      "citation": "Australian Energy Market Operator, Integrated System Plan (ISP).",
+      "citation": "Australian Energy Market Operator, 2024 Integrated System Plan for the National Electricity Market.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -553,7 +553,7 @@
       "human_name": "AEMO scheduled and announced coal generator retirement timeline",
       "publisher": "Australian Energy Market Operator",
       "fetch": "manual",
-      "update_cadence": "monthly",
+      "update_cadence": "quarterly",
       "used_by": [
         "power_grid"
       ],
@@ -569,7 +569,7 @@
       "human_name": "AEMO Generation Information register - capacity by fuel type",
       "publisher": "Australian Energy Market Operator",
       "fetch": "manual",
-      "update_cadence": "monthly",
+      "update_cadence": "quarterly",
       "used_by": [
         "power_grid"
       ],
@@ -601,13 +601,13 @@
       "human_name": "AEMO NEM generation fuel mix (% by source)",
       "publisher": "Australian Energy Market Operator",
       "fetch": "manual",
-      "update_cadence": "ad-hoc",
+      "update_cadence": "quarterly",
       "used_by": [
         "power_grid"
       ],
-      "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem",
+      "canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
       "rights": "AEMO terms of use for tabular data",
-      "citation": "Australian Energy Market Operator, NEM Data Dashboard fuel-mix snapshot.",
+      "citation": "Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, Table 3 NEM supply mix contribution by fuel type.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -633,13 +633,13 @@
       "human_name": "AEMO Western Australian Wholesale Electricity Market - capacity and price",
       "publisher": "Australian Energy Market Operator",
       "fetch": "manual",
-      "update_cadence": "monthly",
+      "update_cadence": "quarterly",
       "used_by": [
         "power_grid"
       ],
-      "canonical_url": "https://aemo.com.au/energy-systems/electricity/wholesale-electricity-market-wem",
+      "canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
       "rights": "AEMO terms of use for tabular data",
-      "citation": "Australian Energy Market Operator, Wholesale Electricity Market (WEM) for Western Australia.",
+      "citation": "Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, WEM market dynamics.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1133,9 +1133,9 @@
       "used_by": [
         "power_grid"
       ],
-      "canonical_url": "https://cer.gov.au/schemes/renewable-energy-target",
+      "canonical_url": "https://cer.gov.au/document/renewable-energy-target-administrative-report-2024",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
-      "citation": "Clean Energy Regulator, Renewable Energy Target administrative report.",
+      "citation": "Clean Energy Regulator, Renewable Energy Target Administrative Report 2024.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1277,9 +1277,9 @@
       "used_by": [
         "power_grid"
       ],
-      "canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts",
+      "canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
-      "citation": "Department of Climate Change, Energy, the Environment and Water, National Greenhouse Gas Inventory - Quarterly Update, electricity sector.",
+      "citation": "Department of Climate Change, Energy, the Environment and Water, Quarterly Update of Australia's National Greenhouse Gas Inventory, September 2025.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

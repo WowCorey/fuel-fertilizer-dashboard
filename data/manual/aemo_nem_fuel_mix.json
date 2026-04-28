@@ -2,15 +2,37 @@
   "series_id": "aemo_nem_fuel_mix",
   "source_id": "aemo_nem_fuel_mix",
   "source_name": "AEMO NEM generation fuel mix (% by source)",
-  "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-27T18:21:13+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
+  "source_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+  "unit": "%",
+  "retrieved_at": "2026-04-28T18:53:01+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2025-Q4",
+      "v": 51.0
+    }
+  ],
+  "notes": "AEMO Quarterly Energy Dynamics Q4 2025 Table 3 reports NEM supply mix contributions by fuel type for Q4 2025. The headline value is total renewable-plus-battery share from the table: distributed PV 17.6%, wind 16.3%, grid solar 10.1%, hydro 5.7%, biomass 0.2% and battery 1.1%. Fossil-fuel shares remain separate in extra.fields.",
+  "status": "ok",
   "manual_entry": true,
   "source_rights": "AEMO terms of use for tabular data",
-  "citation": "Australian Energy Market Operator, NEM Data Dashboard fuel-mix snapshot."
+  "citation": "Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, Table 3 NEM supply mix contribution by fuel type.",
+  "extra": {
+    "schema": "fuel_resilience_typed_fields.v1",
+    "fields": {
+      "period": "Q4 2025",
+      "black_coal_share_pct": 34.8,
+      "brown_coal_share_pct": 11.2,
+      "gas_share_pct": 3.0,
+      "liquid_fuel_share_pct": 0.0,
+      "distributed_pv_share_pct": 17.6,
+      "wind_share_pct": 16.3,
+      "grid_solar_share_pct": 10.1,
+      "hydro_share_pct": 5.7,
+      "biomass_share_pct": 0.2,
+      "battery_share_pct": 1.1,
+      "fossil_fuel_share_pct": 49.0,
+      "storage_adjusted_renewable_share_pct": 50.1
+    }
+  }
 }

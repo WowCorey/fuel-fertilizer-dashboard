@@ -2131,7 +2131,7 @@ sources:
     fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
     format: CSV
     update_cadence: monthly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: AEMO terms of use for tabular data
     rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
     citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
@@ -2147,7 +2147,7 @@ sources:
     fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
     format: CSV
     update_cadence: monthly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: AEMO terms of use for tabular data
     rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
     citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
@@ -2158,15 +2158,15 @@ sources:
   - id: aemo_nem_fuel_mix
     human_name: AEMO NEM generation fuel mix (% by source)
     publisher: Australian Energy Market Operator
-    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
-    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem
-    format: HTML_TABLE
-    update_cadence: ad-hoc
-    last_verified: 2026-04-27
+    url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    canonical_url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-29
     rights: AEMO terms of use for tabular data
     rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
-    citation: Australian Energy Market Operator, NEM Data Dashboard fuel-mix snapshot.
-    reuse_notes: AEMO publishes a NEM fuel-mix breakdown (black coal, brown coal, gas, hydro, wind, solar, battery) on its data dashboard. There is no stable public CSV/JSON endpoint for the aggregate fuel-mix snapshot - the dashboard renders client-side from the AEMO MMS. Hand-key the latest published fuel-mix percentages from a named AEMO Quarterly Energy Dynamics report (the QED publishes the previous quarter's fuel mix in its summary tables).
+    citation: Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, Table 3 NEM supply mix contribution by fuel type.
+    reuse_notes: AEMO Quarterly Energy Dynamics Q4 2025 Table 3 publishes the NEM supply mix contribution by fuel type for Q4 2025. The dashboard headline records the renewable-plus-battery share and keeps black coal, brown coal, gas and other shares separated in typed extra fields. This remains manual because no stable dashboard-safe aggregate fuel-mix endpoint is wired.
     fetch: manual
     used_by: [power_grid]
 
@@ -2176,12 +2176,12 @@ sources:
     url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
     canonical_url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
     format: XLSX
-    update_cadence: monthly
-    last_verified: 2026-04-27
+    update_cadence: quarterly
+    last_verified: 2026-04-29
     rights: AEMO terms of use for tabular data
     rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
     citation: Australian Energy Market Operator, NEM Generation Information.
-    reuse_notes: AEMO publishes a monthly NEM Generation Information workbook listing every existing, committed and proposed generator by name, fuel type, region, MW capacity, and expected closure date. The landing page returned 403 to scripted access in initial probing; hand-key the totals (count of plants and total MW capacity) per fuel type from the latest workbook until a stable XLSX URL pattern is confirmed.
+    reuse_notes: AEMO publishes a NEM Generation Information workbook listing existing and new-development generation rows. January 2026 Summary sheet totals are hand-keyed as listed nameplate capacity across existing, committed, anticipated and publicly announced rows. This is not available capacity, reliability, dispatchability or a construction guarantee.
     fetch: manual
     used_by: [power_grid]
 
@@ -2191,72 +2191,72 @@ sources:
     url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
     canonical_url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
     format: XLSX
-    update_cadence: monthly
-    last_verified: 2026-04-27
+    update_cadence: quarterly
+    last_verified: 2026-04-29
     rights: AEMO terms of use for tabular data
     rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
     citation: Australian Energy Market Operator, NEM Generation Information - expected closure year column.
-    reuse_notes: Derived from the same NEM Generation Information workbook. Hand-key each scheduled retirement (plant name, fuel type, MW capacity, expected closure year) when the latest workbook is reviewed.
+    reuse_notes: Derived from the January 2026 NEM Generation Information workbook and the Generating Unit Expected Closure Year workbook. The headline is coal capacity with an explicit closure date only; coal units with an expected closure year but no explicit closure date remain separate in typed extra fields and notes.
     fetch: manual
     used_by: [power_grid]
 
   - id: cer_renewable_energy_target_progress
     human_name: CER Renewable Energy Target progress, annual
     publisher: Clean Energy Regulator
-    url: https://cer.gov.au/schemes/renewable-energy-target
-    canonical_url: https://cer.gov.au/schemes/renewable-energy-target
+    url: https://cer.gov.au/document/renewable-energy-target-administrative-report-2024
+    canonical_url: https://cer.gov.au/document/renewable-energy-target-administrative-report-2024
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Clean Energy Regulator, Renewable Energy Target administrative report.
-    reuse_notes: The Clean Energy Regulator publishes annual statistics on the Large-scale Renewable Energy Target (LRET) and Small-scale Renewable Energy Scheme (SRES). Hand-key the headline annual achieved-vs-target value from the named CER administrative report.
+    citation: Clean Energy Regulator, Renewable Energy Target Administrative Report 2024.
+    reuse_notes: The Clean Energy Regulator's 2024 RET Administrative Report publishes 2024 NEM+SWIS renewable generation share, renewable generation, capacity added and RET emissions-reduction context. The dashboard headline records the NEM+SWIS renewable generation share; it is not an LRET compliance percentage.
     fetch: manual
     used_by: [power_grid]
 
   - id: dcceew_electricity_emissions
     human_name: DCCEEW national greenhouse accounts - electricity sector emissions
     publisher: Department of Climate Change, Energy, the Environment and Water
-    url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts
-    canonical_url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-accounts
+    url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025
+    canonical_url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025
     format: PDF
     update_cadence: quarterly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Department of Climate Change, Energy, the Environment and Water, National Greenhouse Gas Inventory - Quarterly Update, electricity sector.
-    reuse_notes: DCCEEW publishes quarterly inventory updates with electricity-sector emissions in megatonnes CO2-equivalent. The DCCEEW website is Akamai/Incapsula-protected; hand-key from the named quarterly update PDF when reviewed.
+    citation: Department of Climate Change, Energy, the Environment and Water, Quarterly Update of Australia's National Greenhouse Gas Inventory, September 2025.
+    reuse_notes: DCCEEW's September 2025 quarterly update Table 3 publishes actual annual emissions by sector for the year to September 2025. The dashboard headline records the Energy - Electricity annual value and keeps the previous-year and change fields separated. It is not a single-quarter emissions value.
     fetch: manual
     used_by: [power_grid]
 
   - id: aemo_2024_isp_summary
     human_name: AEMO Integrated System Plan - headline forecasts
     publisher: Australian Energy Market Operator
-    url: https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp
-    canonical_url: https://aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp
+    url: https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp
+    canonical_url: https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp
     format: PDF
     update_cadence: ad-hoc
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: AEMO terms of use for tabular data
     rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
-    citation: Australian Energy Market Operator, Integrated System Plan (ISP).
-    reuse_notes: The AEMO ISP is the (roughly every-two-years) whole-of-NEM transmission and generation development plan. Hand-key only headline figures (e.g. 2050 generation capacity by source under the optimal development path) from the named ISP report.
+    citation: Australian Energy Market Operator, 2024 Integrated System Plan for the National Electricity Market.
+    reuse_notes: The AEMO 2024 ISP states that around 10,000 km of transmission will be needed by 2050 under Step Change and Progressive Change scenarios, with around 5,000 km in the next decade. The dashboard records this rounded planning headline only; it is not current built transmission.
     fetch: manual
     used_by: [power_grid]
 
   - id: aemo_wem_summary
     human_name: AEMO Western Australian Wholesale Electricity Market - capacity and price
     publisher: Australian Energy Market Operator
-    url: https://aemo.com.au/energy-systems/electricity/wholesale-electricity-market-wem
-    canonical_url: https://aemo.com.au/energy-systems/electricity/wholesale-electricity-market-wem
-    format: HTML_TABLE
-    update_cadence: monthly
-    last_verified: 2026-04-27
+    url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    canonical_url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-29
     rights: AEMO terms of use for tabular data
     rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
-    citation: Australian Energy Market Operator, Wholesale Electricity Market (WEM) for Western Australia.
-    reuse_notes: Western Australia operates a separate Wholesale Electricity Market (WEM) - it is not part of the NEM. Hand-key headline capacity and average wholesale price from named AEMO WEM monthly reports.
+    citation: Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, WEM market dynamics.
+    reuse_notes: Western Australia operates a separate Wholesale Electricity Market (WEM) and is not part of the NEM. AEMO Quarterly Energy Dynamics Q4 2025 publishes the average WEM energy price and other WEM market-dynamics fields; the dashboard records the quarterly price headline.
     fetch: manual
     used_by: [power_grid]
 

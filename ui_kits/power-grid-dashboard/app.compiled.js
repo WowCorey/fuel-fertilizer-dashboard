@@ -939,6 +939,10 @@ function App() {
   const QLD = region('qld1');
   const SA = region('sa1');
   const TAS = region('tas1');
+  const cardNumber = (env, dp = 0) => env.values.at(-1).v.toLocaleString('en-AU', {
+    minimumFractionDigits: dp,
+    maximumFractionDigits: dp
+  });
   const fmt = (n, dp) => n === null ? '—' : n.toLocaleString('en-AU', {
     minimumFractionDigits: dp,
     maximumFractionDigits: dp
@@ -1021,15 +1025,17 @@ function App() {
     unit: " MW"
   }), React.createElement(MetricCard, {
     eyebrow: "Fuel mix",
-    label: "Latest published NEM fuel mix",
-    plain: "Share of generation by black coal, brown coal, gas, hydro, wind, solar and battery, from the latest AEMO Quarterly Energy Dynamics report.",
+    label: "NEM renewable share of supply mix",
+    plain: "Q4 2025 share of NEM supply from distributed PV, wind, grid solar, hydro, biomass and battery, from AEMO Quarterly Energy Dynamics Table 3.",
     fromEnvelope: data.aemo_nem_fuel_mix,
-    unit: ""
+    valueFn: env => cardNumber(env, 1),
+    unit: "%"
   }), React.createElement(MetricCard, {
     eyebrow: "Renewables",
-    label: "CER Renewable Energy Target progress",
-    plain: "Annual achieved-vs-target percentage from the Clean Energy Regulator's RET administrative report.",
+    label: "NEM+SWIS renewable generation share",
+    plain: "2024 renewable generation share across the NEM and Western Australia's SWIS from the Clean Energy Regulator's RET administrative report.",
     fromEnvelope: data.cer_renewable_energy_target_progress,
+    valueFn: env => cardNumber(env, 0),
     unit: "%"
   })), React.createElement("div", {
     style: {
@@ -1039,28 +1045,32 @@ function App() {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Capacity",
-    label: "NEM Generation Information register - total",
-    plain: "Total capacity (MW) across every existing, committed and proposed generator listed in the AEMO Generation Information workbook.",
+    label: "AEMO Generation Information listed capacity",
+    plain: "Listed NEM existing and development capacity in the January 2026 workbook. Includes anticipated and publicly announced projects; it is not available capacity.",
     fromEnvelope: data.aemo_generation_information_register,
+    valueFn: env => cardNumber(env, 0),
     unit: " MW"
   }), React.createElement(MetricCard, {
     eyebrow: "Coal retirement",
-    label: "Scheduled coal retirements",
-    plain: "Capacity (MW) of coal plants with announced closure dates in the AEMO Generation Information register.",
+    label: "Coal capacity with explicit closure dates",
+    plain: "Coal capacity in the January 2026 AEMO workbooks with an explicit closure date. Expected-year-only coal rows are kept separate in the notes.",
     fromEnvelope: data.aemo_coal_retirement_timeline,
+    valueFn: env => cardNumber(env, 0),
     unit: " MW"
   }), React.createElement(MetricCard, {
     eyebrow: "Emissions",
-    label: "Electricity sector emissions",
-    plain: "Quarterly electricity-sector emissions in megatonnes of CO2-equivalent, DCCEEW national greenhouse accounts.",
+    label: "Electricity-sector annual emissions",
+    plain: "Actual Energy - Electricity emissions for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory quarterly update.",
     fromEnvelope: data.dcceew_electricity_emissions,
+    valueFn: env => cardNumber(env, 1),
     unit: " Mt CO2-e"
   }), React.createElement(MetricCard, {
     eyebrow: "WA",
-    label: "WEM headline (Western Australia)",
-    plain: "Latest published WA Wholesale Electricity Market capacity or wholesale-price headline. WA is not part of the NEM.",
+    label: "WEM quarterly average energy price",
+    plain: "Q4 2025 average energy price in Western Australia's separate Wholesale Electricity Market, from AEMO Quarterly Energy Dynamics.",
     fromEnvelope: data.aemo_wem_summary,
-    unit: ""
+    valueFn: env => cardNumber(env, 2),
+    unit: " AUD/MWh"
   })), React.createElement("div", {
     style: {
       height: 16
@@ -1069,18 +1079,19 @@ function App() {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Forecast",
-    label: "AEMO Integrated System Plan headline",
-    plain: "Headline figure from the latest biennial Integrated System Plan, e.g. 2050 generation capacity by source under the optimal development path.",
+    label: "AEMO 2024 ISP transmission headline",
+    plain: "Rounded transmission need by 2050 under the 2024 ISP Step Change and Progressive Change scenarios. This is not current built transmission.",
     fromEnvelope: data.aemo_2024_isp_summary,
-    unit: ""
+    valueFn: env => cardNumber(env, 0),
+    unit: " km"
   })), React.createElement("div", {
     className: "pending-list",
-    "aria-label": "Pending power-grid source coverage"
+    "aria-label": "Manual power-grid source coverage"
   }, React.createElement("article", {
     className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
+  }, React.createElement("h4", null, "Manual source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "Fuel mix, generation register totals, coal retirement schedule, RET progress, emissions, ISP forecast and WEM summary stay on manual until each AEMO, AER, CER or DCCEEW publication is verified by a human. Programmatic access is wired for the AEMO NEM regional price and demand series only.")))), haveRegional && React.createElement("section", {
+  }, "Fuel mix, generation register totals, coal closure dates, RET context, emissions, ISP forecast and WEM summary are hand-keyed from named official publications. They remain manual because the page only has stable programmatic access for AEMO NEM regional price and demand.")))), haveRegional && React.createElement("section", {
     className: "section",
     "aria-labelledby": "per-state-h"
   }, React.createElement("div", {
@@ -1221,7 +1232,7 @@ function App() {
     className: "methodology"
   }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "NEM average wholesale price"), React.createElement("dd", null, "For each of the five NEM regions (NSW1, VIC1, QLD1, SA1, TAS1), the AEMO Price and Demand monthly archive is fetched from ", React.createElement("span", {
     className: "mono"
-  }, "aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv"), ". All 5-minute TRADE intervals in each month are averaged to a regional monthly mean, then the five regional means are averaged to a NEM-wide series. Per-region latest-month values are kept in extra.fields."), React.createElement("dt", null, "NEM total operational demand"), React.createElement("dd", null, "Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand."), React.createElement("dt", null, "NEM fuel mix"), React.createElement("dd", null, "Hand-keyed from the latest AEMO Quarterly Energy Dynamics summary tables, which publish the percentage share of generation by black coal, brown coal, gas, hydro, wind, solar and battery for the previous quarter."), React.createElement("dt", null, "NEM Generation Information register"), React.createElement("dd", null, "Hand-keyed from the latest monthly AEMO Generation Information workbook, which lists every existing, committed and proposed NEM generator with name, fuel type, region, MW capacity and expected closure year."), React.createElement("dt", null, "Scheduled coal retirements"), React.createElement("dd", null, "Subset of the NEM Generation Information register where fuel type is coal and an expected closure year is listed."), React.createElement("dt", null, "RET progress"), React.createElement("dd", null, "Annual achieved-vs-target percentage from the Clean Energy Regulator's Renewable Energy Target administrative report."), React.createElement("dt", null, "Electricity sector emissions"), React.createElement("dd", null, "Quarterly electricity-sector emissions in megatonnes of CO2-equivalent from the DCCEEW National Greenhouse Gas Inventory Quarterly Update, hand-keyed from the named PDF."), React.createElement("dt", null, "AEMO ISP headline"), React.createElement("dd", null, "Hand-keyed from the latest biennial AEMO Integrated System Plan; only headline scenario figures (e.g. 2050 generation capacity by source under the optimal development path) are recorded."), React.createElement("dt", null, "WEM summary"), React.createElement("dd", null, "Hand-keyed from named AEMO Wholesale Electricity Market monthly reports for Western Australia. The WEM is a separate market and is not part of the NEM.")))), React.createElement(Footer, {
+  }, "aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv"), ". All 5-minute TRADE intervals in each month are averaged to a regional monthly mean, then the five regional means are averaged to a NEM-wide series. Per-region latest-month values are kept in extra.fields."), React.createElement("dt", null, "NEM total operational demand"), React.createElement("dd", null, "Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand."), React.createElement("dt", null, "NEM fuel mix"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 Table 3, which publishes NEM supply mix contributions by black coal, brown coal, gas, liquid fuel, distributed PV, wind, grid solar, hydro, biomass and battery. The headline card shows the renewable-plus-battery share; fossil-fuel shares remain separate in the envelope fields."), React.createElement("dt", null, "NEM Generation Information register"), React.createElement("dd", null, "Hand-keyed from the January 2026 AEMO Generation Information workbook Summary table. The headline is listed nameplate capacity across existing and new-development rows, including anticipated and publicly announced projects. It is not available capacity, reliability or a construction guarantee."), React.createElement("dt", null, "Scheduled coal retirements"), React.createElement("dd", null, "Subset of January 2026 AEMO coal rows with an explicit closure date. Coal units with an expected closure year but no explicit date are retained in the envelope notes rather than mixed into the headline."), React.createElement("dt", null, "RET progress"), React.createElement("dd", null, "Hand-keyed from the Clean Energy Regulator's 2024 Renewable Energy Target Administrative Report. The headline is the reported 2024 renewable generation share across the NEM and Western Australia's SWIS, not an LRET compliance percentage."), React.createElement("dt", null, "Electricity sector emissions"), React.createElement("dd", null, "Annual Energy - Electricity emissions in megatonnes of CO2-equivalent for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory Quarterly Update. It is not a single-quarter value."), React.createElement("dt", null, "AEMO ISP headline"), React.createElement("dd", null, "Hand-keyed from the 2024 AEMO Integrated System Plan. The card shows the rounded transmission need by 2050 under Step Change and Progressive Change scenarios."), React.createElement("dt", null, "WEM summary"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 WEM market dynamics. The card shows Western Australia's quarterly average WEM energy price; the WEM is separate from the NEM.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
