@@ -571,7 +571,7 @@ sources:
     canonical_url: https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/
     format: XLSX
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-28
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Taxation Office, Corporate Tax Transparency Report.
@@ -1526,7 +1526,7 @@ sources:
     canonical_url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
     citation: ExxonMobil Australia annual report and financial statements.
@@ -1541,7 +1541,7 @@ sources:
     canonical_url: https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://australia.chevron.com/
     citation: Chevron Australia Holdings Pty Ltd Tax Transparency Report, year ended 31 December 2024.
@@ -1556,7 +1556,7 @@ sources:
     canonical_url: https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.vivaenergy.com.au/investors/financial-results-reports
     citation: Viva Energy Group annual report.
@@ -1571,7 +1571,7 @@ sources:
     canonical_url: https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
     citation: Ampol annual report.
@@ -1586,7 +1586,7 @@ sources:
     canonical_url: https://www.bp.com/en_au/australia.html
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.bp.com/en_au/australia.html
     citation: BP Australia annual financial statements.
@@ -1601,7 +1601,7 @@ sources:
     canonical_url: https://www.shell.com.au/about-us.html
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.shell.com.au/about-us.html
     citation: Shell Australia financial statements.
@@ -1616,7 +1616,7 @@ sources:
     canonical_url: https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.woodside.com/investors/reports-investor-briefings
     citation: Woodside Energy annual report.
@@ -1631,7 +1631,7 @@ sources:
     canonical_url: https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.santos.com/investors/results-reports-and-presentations/
     citation: Santos annual report.
