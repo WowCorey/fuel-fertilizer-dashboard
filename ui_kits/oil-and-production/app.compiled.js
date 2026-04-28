@@ -353,6 +353,10 @@ function Header({
     label: 'Power grid',
     href: '../power-grid-dashboard/index.html'
   }, {
+    id: 'infrastructure',
+    label: 'Infrastructure',
+    href: '../infrastructure-dashboard/index.html'
+  }, {
     id: 'sources',
     label: 'Sources & methodology',
     href: '#sources'

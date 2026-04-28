@@ -291,6 +291,54 @@
       "has_generated": true,
       "has_manual": false
     },
+    "abs_population_growth_rate": {
+      "id": "abs_population_growth_rate",
+      "human_name": "ABS population growth rate - Australia, year-on-year %, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "programmatic",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), ERP percentage change over previous year.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "abs_population_quarterly": {
+      "id": "abs_population_quarterly",
+      "human_name": "ABS Estimated Resident Population - Australia, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "programmatic",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), Estimated Resident Population.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
+    "abs_residential_dwelling_stock": {
+      "id": "abs_residential_dwelling_stock",
+      "human_name": "ABS residential dwelling stock - Australia, quarterly",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "programmatic",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, Total Value of Dwellings (Cat. 6432.0), number of residential dwellings.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
     "abs_unemployment_rate": {
       "id": "abs_unemployment_rate",
       "human_name": "ABS Labour Force - unemployment rate, monthly seasonally adjusted",
@@ -306,6 +354,22 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "accc_nbn_broadband_speeds": {
+      "id": "accc_nbn_broadband_speeds",
+      "human_name": "ACCC Measuring Broadband Australia - typical speeds",
+      "publisher": "Australian Competition and Consumer Commission",
+      "fetch": "manual",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.accc.gov.au/by-industry/communications/national-broadband-network-nbn/measuring-broadband-australia",
+      "rights": "CC BY 3.0 AU (Commonwealth of Australia)",
+      "citation": "Australian Competition and Consumer Commission, Measuring Broadband Australia program reports.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "accc_petrol_breakdown_series": {
       "id": "accc_petrol_breakdown_series",
@@ -894,6 +958,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "au_data_centre_capacity_register": {
+      "id": "au_data_centre_capacity_register",
+      "human_name": "Australian data centre capacity register",
+      "publisher": "industry-various",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.dcd.com.au/",
+      "rights": "Industry-various; check publisher terms",
+      "citation": "No canonical Australian government register of data centre capacity exists; industry datasets such as DCD or 451 Research are gated.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "aus_retail_fuel_multistate": {
       "id": "aus_retail_fuel_multistate",
       "human_name": "Retail pump price - ULP 91 multi-state average",
@@ -992,6 +1072,54 @@
       "canonical_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
       "rights": "CC BY 4.0 (The Australia Institute, where stated)",
       "citation": "The Australia Institute, Australian LNG export royalty analysis.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "bitre_airport_passenger_movements": {
+      "id": "bitre_airport_passenger_movements",
+      "human_name": "BITRE - airport passenger movements by airport",
+      "publisher": "Bureau of Infrastructure and Transport Research Economics",
+      "fetch": "manual",
+      "update_cadence": "monthly",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.bitre.gov.au/publications/ongoing/airport_traffic_data",
+      "rights": "CC BY 4.0 (Commonwealth of Australia)",
+      "citation": "Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "bitre_freight_volumes": {
+      "id": "bitre_freight_volumes",
+      "human_name": "BITRE - Australian freight volumes by mode",
+      "publisher": "Bureau of Infrastructure and Transport Research Economics",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.bitre.gov.au/statistics/freight",
+      "rights": "CC BY 4.0 (Commonwealth of Australia)",
+      "citation": "Bureau of Infrastructure and Transport Research Economics, Australian aggregate freight forecasts and statistics.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "bitre_public_transport_patronage": {
+      "id": "bitre_public_transport_patronage",
+      "human_name": "BITRE - public transport patronage by capital city",
+      "publisher": "Bureau of Infrastructure and Transport Research Economics",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.bitre.gov.au/publications/ongoing/yearbook",
+      "rights": "CC BY 4.0 (Commonwealth of Australia)",
+      "citation": "Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook, public transport patronage tables.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1377,6 +1505,38 @@
       "canonical_url": "https://www.iea.org/reports/oil-stockholding",
       "rights": "IEA terms of use",
       "citation": "International Energy Agency, Agreement on an International Energy Program (1974), 90-day stockholding obligation.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "infrastructure_australia_priority_list": {
+      "id": "infrastructure_australia_priority_list",
+      "human_name": "Infrastructure Australia - Infrastructure Priority List",
+      "publisher": "Infrastructure Australia",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://www.infrastructureaustralia.gov.au/",
+      "rights": "CC BY 4.0 (Commonwealth of Australia)",
+      "citation": "Infrastructure Australia, Infrastructure Priority List.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "nhsac_housing_target_progress": {
+      "id": "nhsac_housing_target_progress",
+      "human_name": "National Housing Accord - 1.2m new homes target progress",
+      "publisher": "National Housing Supply and Affordability Council",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "infrastructure"
+      ],
+      "canonical_url": "https://nhsac.gov.au/",
+      "rights": "CC BY 4.0 (Commonwealth of Australia)",
+      "citation": "National Housing Supply and Affordability Council, State of the Housing System annual report.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

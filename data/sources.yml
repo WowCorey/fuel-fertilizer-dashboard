@@ -1935,6 +1935,175 @@ sources:
     fetch: manual
     used_by: [manufacturing]
 
+  # =========================================================
+  # INFRASTRUCTURE - v1.0 (population, housing, transport, digital)
+  # =========================================================
+
+  - id: abs_population_quarterly
+    human_name: ABS Estimated Resident Population - Australia, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    canonical_url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    fetch_url: https://data.api.abs.gov.au/rest/data/ERP_Q/1.3.TOT.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: ERP_Q
+    fetch_key: 1.3.TOT.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS ERP_Q dataflow MEASURE 1 (Estimated Resident Population), SEX 3 (Persons), AGE TOT (All ages), REGION AUS (Australia), FREQ Q. Quarterly headline national population estimate.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), Estimated Resident Population.
+    reuse_notes: Fetched from the live ABS Data API ERP_Q dataflow. Returns the headline quarterly national ERP, all ages, both sexes.
+    fetch: programmatic
+    used_by: [infrastructure]
+
+  - id: abs_population_growth_rate
+    human_name: ABS population growth rate - Australia, year-on-year %, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    canonical_url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    fetch_url: https://data.api.abs.gov.au/rest/data/ERP_Q/3.3.TOT.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: ERP_Q
+    fetch_key: 3.3.TOT.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS ERP_Q dataflow MEASURE 3 (ERP Percentage Change Over Previous Year), SEX 3, AGE TOT, REGION AUS, FREQ Q. Year-on-year national population growth rate.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), ERP percentage change over previous year.
+    reuse_notes: Fetched from the live ABS Data API ERP_Q dataflow. Year-on-year national population growth rate, both sexes, all ages.
+    fetch: programmatic
+    used_by: [infrastructure]
+
+  - id: abs_residential_dwelling_stock
+    human_name: ABS residential dwelling stock - Australia, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings
+    canonical_url: https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings
+    fetch_url: https://data.api.abs.gov.au/rest/data/RES_DWELL_ST/4.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: RES_DWELL_ST
+    fetch_key: 4.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS RES_DWELL_ST dataflow MEASURE 4 (Number of residential dwellings), REGION AUS, FREQ Q. Total residential dwelling count, in thousands.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Total Value of Dwellings (Cat. 6432.0), number of residential dwellings.
+    reuse_notes: Fetched from the live ABS Data API RES_DWELL_ST dataflow. Returns the national count of residential dwellings, in thousands.
+    fetch: programmatic
+    used_by: [infrastructure]
+
+  - id: nhsac_housing_target_progress
+    human_name: National Housing Accord - 1.2m new homes target progress
+    publisher: National Housing Supply and Affordability Council
+    url: https://nhsac.gov.au/
+    canonical_url: https://nhsac.gov.au/
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: National Housing Supply and Affordability Council, State of the Housing System annual report.
+    reuse_notes: NHSAC publishes an annual State of the Housing System report tracking progress against the 1.2 million new homes target under the National Housing Accord (1 July 2024 to 30 June 2029). Hand-key the headline cumulative completions, target shortfall and time elapsed from the latest report.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: bitre_public_transport_patronage
+    human_name: BITRE - public transport patronage by capital city
+    publisher: Bureau of Infrastructure and Transport Research Economics
+    url: https://www.bitre.gov.au/publications/ongoing/yearbook
+    canonical_url: https://www.bitre.gov.au/publications/ongoing/yearbook
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook, public transport patronage tables.
+    reuse_notes: BITRE publishes annual public transport patronage by capital city (rail, bus, ferry, light rail) in the Australian Infrastructure and Transport Statistics Yearbook. Hand-key the latest published total annual patronage per capital city.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: bitre_airport_passenger_movements
+    human_name: BITRE - airport passenger movements by airport
+    publisher: Bureau of Infrastructure and Transport Research Economics
+    url: https://www.bitre.gov.au/publications/ongoing/airport_traffic_data
+    canonical_url: https://www.bitre.gov.au/publications/ongoing/airport_traffic_data
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data.
+    reuse_notes: BITRE publishes monthly airport passenger movement statistics (international, domestic, regional) per Australian airport. Hand-key the latest annual total movements at the eight capital city airports.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: bitre_freight_volumes
+    human_name: BITRE - Australian freight volumes by mode
+    publisher: Bureau of Infrastructure and Transport Research Economics
+    url: https://www.bitre.gov.au/statistics/freight
+    canonical_url: https://www.bitre.gov.au/statistics/freight
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Bureau of Infrastructure and Transport Research Economics, Australian aggregate freight forecasts and statistics.
+    reuse_notes: BITRE publishes Australian freight volumes by mode (road, rail, coastal shipping, domestic air) annually. Hand-key the latest published tonne-kilometres or tonnes per mode from a named BITRE statistical report.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: infrastructure_australia_priority_list
+    human_name: Infrastructure Australia - Infrastructure Priority List
+    publisher: Infrastructure Australia
+    url: https://www.infrastructureaustralia.gov.au/
+    canonical_url: https://www.infrastructureaustralia.gov.au/
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Infrastructure Australia, Infrastructure Priority List.
+    reuse_notes: Infrastructure Australia publishes an annual prioritised list of nationally significant infrastructure proposals. Hand-key the count of priority projects by state and the headline capital cost from the latest published list.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: accc_nbn_broadband_speeds
+    human_name: ACCC Measuring Broadband Australia - typical speeds
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/by-industry/communications/national-broadband-network-nbn/measuring-broadband-australia
+    canonical_url: https://www.accc.gov.au/by-industry/communications/national-broadband-network-nbn/measuring-broadband-australia
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-28
+    rights: CC BY 3.0 AU (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/3.0/au/
+    citation: Australian Competition and Consumer Commission, Measuring Broadband Australia program reports.
+    reuse_notes: ACCC publishes quarterly typical busy-hour download speeds, latency and outage rates by NBN technology and retail service provider in the Measuring Broadband Australia program. Hand-key headline median download Mbps and latency from the latest published quarterly report.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: au_data_centre_capacity_register
+    human_name: Australian data centre capacity register
+    publisher: industry-various
+    url: https://www.dcd.com.au/
+    canonical_url: https://www.dcd.com.au/
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Industry-various; check publisher terms
+    rights_url: https://www.dcd.com.au/
+    citation: No canonical Australian government register of data centre capacity exists; industry datasets such as DCD or 451 Research are gated.
+    reuse_notes: There is no public Australian government register of data centre capacity, MW load, or AI-cluster capacity comparable to the AEMO Generation Information register. Industry sources (Datacentre Dynamics, 451 Research, Synergy Research) are gated and do not consistently publish per-site MW figures with reuse rights. Keep this envelope intentionally unavailable until a verifiable named public source publishes a register; do not estimate.
+    fetch: unavailable
+    used_by: [infrastructure]
+
   - id: doe_industry_growth_centres_summary
     human_name: Australian Government Industry Growth Centres Initiative - summary
     publisher: Department of Industry, Science and Resources

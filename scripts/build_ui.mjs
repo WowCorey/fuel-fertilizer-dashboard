@@ -31,6 +31,7 @@ const dashboards = [
   'au-economics-dashboard',
   'manufacturing-dashboard',
   'power-grid-dashboard',
+  'infrastructure-dashboard',
 ];
 
 function normalizeNewlines(text) {

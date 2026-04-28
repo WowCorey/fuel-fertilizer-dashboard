@@ -889,7 +889,11 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_fertiliser_imports', 'abs_fertiliser_imports_urea', 'abs_fertiliser_imports_potash', 'abs_fertiliser_imports_phosphate', 'abs_fertiliser_imports_compound', 'abs_fertiliser_source_concentration', 'abares_fertiliser_price', 'abares_fertiliser_stock_cover'];
+const SERIES = ['abs_population_quarterly', 'abs_population_growth_rate', 'abs_residential_dwelling_stock', 'nhsac_housing_target_progress', 'bitre_public_transport_patronage', 'bitre_airport_passenger_movements', 'bitre_freight_volumes', 'infrastructure_australia_priority_list', 'accc_nbn_broadband_speeds', 'au_data_centre_capacity_register'];
+function latest(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1);
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -899,7 +903,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fertilizer"
+      active: "infrastructure"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
@@ -908,25 +912,28 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const popLatest = latest(data.abs_population_quarterly);
+  const dwellLatest = latest(data.abs_residential_dwelling_stock);
+  const personsPerDwelling = popLatest && dwellLatest && dwellLatest.v ? popLatest.v / (dwellLatest.v * 1000) : null;
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fertilizer",
+    active: "infrastructure",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "fertilizer"
+    id: "infrastructure"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Fertilizer \xB7 v1.1"), React.createElement("h1", {
+  }, "Infrastructure \xB7 v1.0"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's fertiliser, in plain English."), React.createElement("p", {
+  }, "Australia's infrastructure, in plain English."), React.createElement("p", {
     className: "intro__lede"
-  }, "Australia imports the majority of its fertiliser \u2014 the stuff that keeps wheat, canola and pasture growing. When overseas supply gets tight, it shows up as higher farm-gate prices within a season, and higher food costs not long after.")), React.createElement("aside", {
+  }, "How fast Australia's population is growing, how many homes there are, how many people we move on public transport and through airports, how much freight we shift, how fast our internet runs, and what major projects are on the official pipeline. The headline numbers come straight from ABS, BITRE, ACCC and Infrastructure Australia.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -951,13 +958,13 @@ function App() {
     }
   }, "Why this matters to you")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Nearly everything grown commercially in Australia depends on imported fertiliser. Urea, potash and phosphates come in by the boatload, mostly from a short list of supplier countries. That makes the supply chain efficient, but also exposed: a single disruption at one end can push up farm costs across the country."), React.createElement("p", null, "This page is structured to track how much we import each month, what it costs, and how concentrated the supplier list is. Values appear only when the named public source has been verified in a JSON envelope."), React.createElement("p", {
+  }, React.createElement("p", null, "Population growth, not population size, is what stresses infrastructure. Australia is among the fastest-growing wealthy countries \u2014 driven mostly by net overseas migration \u2014 and the housing stock, urban transport, freight system and digital network all have to keep up. They mostly haven't."), React.createElement("p", null, "The headline pairing on this page is ", React.createElement("b", null, "persons per dwelling"), ": total population divided by total residential dwelling count. This is a structural measure of housing pressure that does not depend on price. We pair it with progress against the Commonwealth's 1.2 million-new-homes target, BITRE transport and freight statistics, and the ACCC's measured NBN performance."), React.createElement("p", {
     className: "body-sm",
     style: {
       color: 'var(--ink-3)',
       marginTop: 12
     }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ABARES"), " = Australian Bureau of Agricultural and Resource Economics and Sciences.", React.createElement("b", null, " DCCEEW"), " = Department of Climate Change, Energy, the Environment and Water.", React.createElement("b", null, " HS 31"), " = the Harmonised System trade code for fertiliser.")))), React.createElement("section", {
+  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ERP"), " = Estimated Resident Population.", React.createElement("b", null, " BITRE"), " = Bureau of Infrastructure and Transport Research Economics.", React.createElement("b", null, " NHSAC"), " = National Housing Supply and Affordability Council.", React.createElement("b", null, " ACCC"), " = Australian Competition and Consumer Commission.", React.createElement("b", null, " NBN"), " = National Broadband Network.", React.createElement("b", null, " IA"), " = Infrastructure Australia.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "metrics-h"
   }, React.createElement("div", {
@@ -971,42 +978,102 @@ function App() {
   }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
-    eyebrow: "Value",
-    label: "Monthly fertiliser imports",
-    plain: "Total value of manufactured fertiliser (SITC 562) cleared into Australia in the latest month, from the ABS Data API.",
-    fromEnvelope: data.abs_fertiliser_imports,
-    unit: " AUD thousands",
+    eyebrow: "Population",
+    label: "Estimated Resident Population",
+    plain: "National headline ERP, all ages, both sexes, latest published quarter, from the ABS Data API.",
+    fromEnvelope: data.abs_population_quarterly,
+    unit: " persons",
     highlight: true
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Price",
-    label: "Fertiliser price index",
-    plain: "ABARES index. 100 = long-run average.",
-    fromEnvelope: data.abares_fertiliser_price,
-    unit: " index"
   }), React.createElement(MetricCard, {
-    eyebrow: "Concentration",
-    label: "Top-3 source countries",
-    plain: "Share of monthly SITC 562 manufactured fertiliser import value coming from the three largest source countries.",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
+    eyebrow: "Growth",
+    label: "Population growth, year-on-year",
+    plain: "ERP percentage change over previous year, from the ABS Data API.",
+    fromEnvelope: data.abs_population_growth_rate,
     unit: "%"
-  }), false && React.createElement(MetricCard, {
-    eyebrow: "Resilience",
-    label: "Months of cover",
-    jargonHint: {
-      term: 'Months of cover',
-      definition: 'How many months of fertiliser use the current stockpile would cover if imports stopped today.'
-    },
-    plain: "How long Australia's fertiliser stockpile would last if imports stopped.",
-    fromEnvelope: data.abares_fertiliser_stock_cover,
-    unit: " months"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Housing stock",
+    label: "Residential dwellings",
+    plain: "Number of residential dwellings nationally, in thousands, ABS Total Value of Dwellings (Cat. 6432.0).",
+    fromEnvelope: data.abs_residential_dwelling_stock,
+    unit: " thousand dwellings"
+  }), personsPerDwelling != null ? React.createElement(MetricCard, {
+    eyebrow: "Pressure",
+    label: "Persons per dwelling",
+    plain: "National ERP divided by national residential dwelling count. A structural measure of how tightly the housing stock fits the population.",
+    value: personsPerDwelling,
+    unit: " persons/dwelling",
+    source: "Derived: ABS ERP_Q + ABS RES_DWELL_ST"
+  }) : React.createElement(MetricCard, {
+    eyebrow: "Pressure",
+    label: "Persons per dwelling",
+    plain: "National ERP divided by national residential dwelling count. Computed when both source envelopes are status: ok.",
+    fromEnvelope: {
+      status: 'unavailable',
+      source_name: 'ABS ERP_Q + ABS RES_DWELL_ST',
+      source_url: ''
+    }
+  })), React.createElement("div", {
+    style: {
+      height: 16
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Housing target",
+    label: "National Housing Accord progress",
+    plain: "Progress against the Commonwealth's 1.2 million new homes target (1 July 2024 to 30 June 2029), from the National Housing Supply and Affordability Council annual State of the Housing System report.",
+    fromEnvelope: data.nhsac_housing_target_progress,
+    unit: ""
+  }), React.createElement(MetricCard, {
+    eyebrow: "Public transport",
+    label: "Public transport patronage",
+    plain: "Annual public transport patronage by capital city (rail, bus, ferry, light rail), BITRE Australian Infrastructure and Transport Statistics Yearbook.",
+    fromEnvelope: data.bitre_public_transport_patronage,
+    unit: ""
+  }), React.createElement(MetricCard, {
+    eyebrow: "Aviation",
+    label: "Airport passenger movements",
+    plain: "Monthly passenger movements at the eight capital city airports (international, domestic, regional), BITRE Airport Traffic Data.",
+    fromEnvelope: data.bitre_airport_passenger_movements,
+    unit: ""
+  }), React.createElement(MetricCard, {
+    eyebrow: "Freight",
+    label: "Freight volumes by mode",
+    plain: "Annual freight volumes by mode (road, rail, coastal shipping, domestic air), BITRE freight statistics.",
+    fromEnvelope: data.bitre_freight_volumes,
+    unit: ""
+  })), React.createElement("div", {
+    style: {
+      height: 16
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Digital",
+    label: "NBN typical busy-hour speeds",
+    plain: "Median busy-hour download speed across NBN technologies and retail service providers, from the ACCC Measuring Broadband Australia program quarterly report.",
+    fromEnvelope: data.accc_nbn_broadband_speeds,
+    unit: " Mbps"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Major projects",
+    label: "Infrastructure Australia priority list",
+    plain: "Count of nationally significant priority projects on the latest Infrastructure Australia Priority List, with headline aggregate capital cost.",
+    fromEnvelope: data.infrastructure_australia_priority_list,
+    unit: " projects"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Compute",
+    label: "Australian data centre capacity",
+    plain: "No public Australian government register of data centre capacity exists. This card stays unavailable until a verifiable named public source publishes one.",
+    fromEnvelope: data.au_data_centre_capacity_register,
+    unit: ""
   })), React.createElement("div", {
     className: "pending-list",
-    "aria-label": "Pending fertiliser source coverage"
+    "aria-label": "Pending infrastructure source coverage"
   }, React.createElement("article", {
     className: "source-card"
   }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "Nutrient subseries, ABARES price index and stock cover stay out of the main dashboard until their source tables can be wired into envelopes.")))), React.createElement("section", {
+  }, "NHSAC housing target progress, BITRE transport, airport and freight statistics, ACCC NBN performance and the Infrastructure Australia priority list stay on manual until each named publication is verified by a human. Programmatic access is wired for ABS population, population growth and residential dwelling stock only. The data centre card is intentionally unavailable: there is no canonical public Australian register comparable to the AEMO Generation Information register.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1015,107 +1082,53 @@ function App() {
     className: "eyebrow"
   }, "How it's changed"), React.createElement("h2", {
     id: "charts-h"
-  }, "Imports by type and source country, over time"), React.createElement("p", {
+  }, "Population, growth rate and housing stock over time"), React.createElement("p", {
     className: "section__lede"
-  }, "Charts populate when verified monthly source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
+  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
     className: "charts-grid charts-grid--full"
   }, React.createElement(ChartCard, {
-    eyebrow: "Value",
-    title: "Monthly fertiliser imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_fertiliser_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Supplier mix",
-    title: "Top-3 source countries' combined share, over time",
-    unit: "%",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Share of monthly SITC 562 manufactured fertiliser import value from the three largest non-total source countries.",
-    yAxisLabel: "Top-3 share of SITC 562 import value (%)"
-  })), false && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Urea",
-    title: "Monthly urea imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_urea,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Urea (HS 3102) is the largest-volume nitrogen fertiliser. Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Potash",
-    title: "Monthly potash imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_potash,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Potassium fertilisers (HS 3104). Chart populates when a verified monthly series is available.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Phosphates",
-    title: "Monthly phosphate imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_phosphate,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#B45309",
-    takeaway: "Phosphate fertilisers (HS 3103 + DAP/MAP under HS 3105). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Compound",
-    title: "Monthly compound fertiliser imports",
-    unit: "kt",
-    fromEnvelope: data.abs_fertiliser_imports_compound,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Mixed NPK compound fertilisers (HS 3105, excluding DAP/MAP). Chart populates when verified.",
-    yAxisLabel: "Thousand tonnes per month (kt)"
-  })), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Prices",
-    title: "ABARES fertiliser price index",
-    unit: "index",
-    fromEnvelope: data.abares_fertiliser_price,
-    ranges: ['1Y', '3Y', '5Y'],
+    eyebrow: "Population",
+    title: "Australian Estimated Resident Population, quarterly",
+    unit: "persons",
+    fromEnvelope: data.abs_population_quarterly,
+    ranges: ['3Y', '5Y'],
     defaultRange: "5Y",
     accent: "#1F3A8A",
-    takeaway: "ABARES publishes an Australian fertiliser price index alongside its quarterly Agricultural Commodities release. 100 = long-run average.",
-    yAxisLabel: "Index (long-run average = 100)"
-  })))), React.createElement("section", {
+    takeaway: "Quarterly headline national ERP, both sexes, all ages, from ABS dataflow ERP_Q.",
+    yAxisLabel: "Estimated Resident Population (persons)"
+  })), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "charts-grid"
+  }, React.createElement(ChartCard, {
+    eyebrow: "Growth",
+    title: "Population growth rate, year-on-year",
+    unit: "%",
+    fromEnvelope: data.abs_population_growth_rate,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#0F766E",
+    takeaway: "Quarterly year-on-year national population growth rate from ABS ERP_Q.",
+    yAxisLabel: "Year-on-year change (%)"
+  }), React.createElement(ChartCard, {
+    eyebrow: "Housing stock",
+    title: "Residential dwelling stock, quarterly",
+    unit: "thousand dwellings",
+    fromEnvelope: data.abs_residential_dwelling_stock,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#B45309",
+    takeaway: "Quarterly count of residential dwellings nationally, ABS Total Value of Dwellings.",
+    yAxisLabel: "Number of dwellings (thousands)"
+  }))), React.createElement("section", {
     className: "section"
   }, React.createElement(InsightFeed, {
     items: [],
     title: "What changed",
-    lede: "Populated from DCCEEW / ABS / ABARES release notes as verified data arrives.",
-    emptyMessage: "Awaiting verified release notes for the loaded fertiliser source envelopes."
+    lede: "Populated from ABS / BITRE / ACCC / NHSAC / Infrastructure Australia release notes as verified data arrives.",
+    emptyMessage: "Awaiting verified release notes for the loaded infrastructure source envelopes."
   })), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
@@ -1145,7 +1158,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Monthly fertiliser imports"), React.createElement("dd", null, "Total import value (AUD thousands) of manufactured fertilisers, fetched from the live ABS Data API MERCH_IMP dataflow using SITC 562 (manufactured fertilisers), total country of origin, total state destination, monthly frequency. The ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; the four-digit SITC subdivisions (5621 nitrogenous, 5622 potassic, 5623 phosphatic, 5629 other) are not exposed via the live API, so per-nutrient monthly series remain hand-keyed from the ABS International Trade release tables."), React.createElement("dt", null, "Top-3 source countries"), React.createElement("dd", null, "Sum of import value from the three largest non-total source countries in the latest month, divided by total SITC 562 manufactured fertiliser imports in the same month, fetched from the ABS Data API MERCH_IMP dataflow using country-of-origin detail. Nutrient-level monthly subseries remain unavailable because the checked live ABS API paths for HS 3102/3103/3104/3105 and SITC 5621/5622/5623/5629 return no usable monthly series, and the checked ABS latest-release workbooks did not expose a dashboard-safe monthly nutrient-level value table."), React.createElement("dt", null, "Fertiliser price index"), React.createElement("dd", null, "Published by ABARES in the quarterly Agricultural Commodities report. Re-based so that the long-run average equals 100."), React.createElement("dt", null, "Months of cover"), React.createElement("dd", null, "Stockpile (tonnes) divided by the prior 12-month average monthly usage, expressed in months. Only published when DCCEEW or ABARES makes stockpile figures public.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Estimated Resident Population"), React.createElement("dd", null, "Fetched live from the ABS Data API ERP_Q dataflow with key 1.3.TOT.AUS.Q (MEASURE Estimated Resident Population, SEX Persons, AGE all, REGION Australia, FREQ Quarterly)."), React.createElement("dt", null, "Population growth rate"), React.createElement("dd", null, "Fetched live from ABS ERP_Q with key 3.3.TOT.AUS.Q (MEASURE ERP percentage change over previous year). Year-on-year national growth."), React.createElement("dt", null, "Residential dwelling stock"), React.createElement("dd", null, "Fetched live from the ABS RES_DWELL_ST dataflow with key 4.AUS.Q (MEASURE Number of residential dwellings, REGION Australia, FREQ Quarterly). Reported in thousands."), React.createElement("dt", null, "Persons per dwelling (derived)"), React.createElement("dd", null, "National ERP divided by national residential dwelling count, computed in the dashboard from the two source envelopes. A structural measure of housing pressure that does not depend on price."), React.createElement("dt", null, "National Housing Accord progress"), React.createElement("dd", null, "Hand-keyed from the latest National Housing Supply and Affordability Council State of the Housing System annual report. Tracks progress against the 1.2 million new homes target."), React.createElement("dt", null, "Public transport, airports, freight"), React.createElement("dd", null, "Hand-keyed from the relevant BITRE published statistical reports (Australian Infrastructure and Transport Statistics Yearbook, Airport Traffic Data, freight statistics)."), React.createElement("dt", null, "NBN typical speeds"), React.createElement("dd", null, "Hand-keyed from the latest ACCC Measuring Broadband Australia program quarterly report. Median busy-hour download speed."), React.createElement("dt", null, "Infrastructure Australia priority projects"), React.createElement("dd", null, "Hand-keyed from the latest Infrastructure Australia Priority List - count of nationally significant proposed projects and aggregate capital cost."), React.createElement("dt", null, "Australian data centre capacity"), React.createElement("dd", null, "Intentionally unavailable: there is no canonical Australian government register of data centre capacity. Industry datasets such as DCD or 451 Research are gated and do not consistently publish per-site MW figures with reuse rights. Will not estimate.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
