@@ -378,6 +378,35 @@ function App() {
 
         {/* POLICY COMPARISON */}
         <section className="section" aria-labelledby="h-policy">
+          {data.ato_prrt_details?.status === 'ok' &&
+           data.australia_institute_gas_giveaway_analysis?.status === 'ok' &&
+           data.australia_institute_gas_export_tax_proposal?.status === 'ok' && (
+            <aside
+              role="note"
+              aria-label="Headline takeaway"
+              style={{
+                margin: 'var(--s-4) 0 var(--s-6)',
+                padding: 'var(--s-5) var(--s-6)',
+                background: 'var(--paper-sunk)',
+                border: '1px solid var(--rule)',
+                borderLeft: '4px solid var(--accent)',
+                borderRadius: 'var(--r-2)',
+              }}>
+              <div className="eyebrow">If you only read one number</div>
+              <p style={{ marginTop: 'var(--s-2)', fontSize: 'var(--fs-18)', lineHeight: 1.5, maxWidth: '70ch' }}>
+                Australia's entire petroleum industry paid <b>A${(pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions')/1000).toFixed(2)} billion</b> in PRRT in {pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'} —
+                less than the <b>A${pick(data.australia_institute_gas_giveaway_analysis, 'japan_gas_import_tax_total_aud_billions_per_year')} billion</b> Japan
+                raises taxing its gas imports each year — and well under half of the <b>A${pick(data.australia_institute_gas_export_tax_proposal, 'modelled_revenue_aud_billions')} billion</b> a
+                25% gas export tax would have raised since 2022, modelled by The Australia Institute.
+              </p>
+              <p className="caption mono" style={{ marginTop: 'var(--s-3)' }}>
+                Sources: <a href={data.ato_prrt_details.source_url}>ATO PRRT details {pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'}</a> ·{' '}
+                <a href={data.australia_institute_gas_giveaway_analysis.source_url}>Australia Institute, "Taxing gas in Australia and Japan"</a> ·{' '}
+                <a href={data.australia_institute_gas_export_tax_proposal.source_url}>Australia Institute, "We have already missed out on $63.8 billion"</a>
+              </p>
+            </aside>
+          )}
+
           <div className="section__head">
             <div>
               <span className="eyebrow">Section 1c · Policy comparisons</span>
