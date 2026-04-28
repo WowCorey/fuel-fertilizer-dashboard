@@ -1239,7 +1239,38 @@ function App() {
   }, row.prrt_paid_aud.toLocaleString('en-AU')))))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "h-policy"
+  }, data.ato_prrt_details?.status === 'ok' && data.australia_institute_gas_giveaway_analysis?.status === 'ok' && data.australia_institute_gas_export_tax_proposal?.status === 'ok' && React.createElement("aside", {
+    role: "note",
+    "aria-label": "Headline takeaway",
+    style: {
+      margin: 'var(--s-4) 0 var(--s-6)',
+      padding: 'var(--s-5) var(--s-6)',
+      background: 'var(--paper-sunk)',
+      border: '1px solid var(--rule)',
+      borderLeft: '4px solid var(--accent)',
+      borderRadius: 'var(--r-2)'
+    }
   }, React.createElement("div", {
+    className: "eyebrow"
+  }, "If you only read one number"), React.createElement("p", {
+    style: {
+      marginTop: 'var(--s-2)',
+      fontSize: 'var(--fs-18)',
+      lineHeight: 1.5,
+      maxWidth: '70ch'
+    }
+  }, "Australia's entire petroleum industry paid ", React.createElement("b", null, "A$", (pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions') / 1000).toFixed(2), " billion"), " in PRRT in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24', " \u2014 less than the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_giveaway_analysis, 'japan_gas_import_tax_total_aud_billions_per_year'), " billion"), " Japan raises taxing its gas imports each year \u2014 and well under half of the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_export_tax_proposal, 'modelled_revenue_aud_billions'), " billion"), " a 25% gas export tax would have raised since 2022, modelled by The Australia Institute."), React.createElement("p", {
+    className: "caption mono",
+    style: {
+      marginTop: 'var(--s-3)'
+    }
+  }, "Sources: ", React.createElement("a", {
+    href: data.ato_prrt_details.source_url
+  }, "ATO PRRT details ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), " \xB7", ' ', React.createElement("a", {
+    href: data.australia_institute_gas_giveaway_analysis.source_url
+  }, "Australia Institute, \"Taxing gas in Australia and Japan\""), " \xB7", ' ', React.createElement("a", {
+    href: data.australia_institute_gas_export_tax_proposal.source_url
+  }, "Australia Institute, \"We have already missed out on $63.8 billion\""))), React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
