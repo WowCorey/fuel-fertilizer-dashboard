@@ -82,6 +82,15 @@ JSON envelope.
 | Project/company production by state | partial | NOPTA active offshore production-licence rows now map basin, field/title, title operator and title holders where published. REMP 2024 oil-and-gas rows now map major projects to company/proponent text, resource, status and estimated new capacity. Neither source publishes current production volumes by project/company, and REMP does not publish basin names or legal operator roles. | Keep the loaded mapping visible as partial. Add current production values only from a public source with exact product, location, period, unit and reuse terms. |
 | Raw resource/fuel site counts | intentionally avoided | A raw site count is misleading unless a source defines whether it counts titles, fields, wells, terminals, plants, storage assets or licences. | Keep separate columns for title records, well-layer records, refinery facilities and any future defined class. Never roll them into one site total. |
 
+## Power Grid
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| AEMO NEM price and demand | populated programmatically | The public AEMO Price and Demand CSV archive now fetches successfully for NSW1, VIC1, QLD1, SA1 and TAS1. The dashboard stores monthly mean RRP and operational demand plus latest-month region values. | Keep the fetcher on the static AEMO CSV pattern. Do not replace monthly means with live dispatch data unless methodology and freshness labels change. |
+| Fuel mix, WEM and ISP fields | populated manually | AEMO QED Q4 2025 and the 2024 ISP provide source-safe headline rows, but the repo has not added stable programmatic ingestion for those reports. | Refresh by manual review after each named AEMO release, or add a parser only when the workbook/PDF layout is stable enough to validate. |
+| Generation register and coal retirement timeline | populated manually with caveats | January 2026 AEMO workbooks support listed capacity and explicit coal closure-date capacity. Listed capacity includes anticipated and publicly announced projects, and explicit closure-date capacity excludes expected-year-only coal rows. | Keep those concepts separate. Do not present listed capacity as available capacity, or expected-year-only rows as scheduled closure-date capacity. |
+| DCCEEW electricity emissions | populated manually as annual sector emissions | DCCEEW September 2025 Table 3 supports Energy - Electricity annual emissions for the year to September 2025. It does not make this card a single-quarter electricity emissions value. | Refresh from the next DCCEEW quarterly update only when the annual sector table is verified. Keep preliminary values separate if added later. |
+
 ## Strategic Resources
 
 | Gap | Current status | Why not filled yet | Next action |

@@ -39,6 +39,7 @@ function App() {
   const QLD = region('qld1');
   const SA  = region('sa1');
   const TAS = region('tas1');
+  const cardNumber = (env, dp = 0) => env.values.at(-1).v.toLocaleString('en-AU', { minimumFractionDigits: dp, maximumFractionDigits: dp });
   const fmt = (n, dp) => (n === null ? '—' : n.toLocaleString('en-AU', { minimumFractionDigits: dp, maximumFractionDigits: dp }));
   const haveRegional = priceFields.latest_month && Object.keys(priceFields).length > 1;
 
@@ -135,16 +136,18 @@ function App() {
             />
             <MetricCard
               eyebrow="Fuel mix"
-              label="Latest published NEM fuel mix"
-              plain="Share of generation by black coal, brown coal, gas, hydro, wind, solar and battery, from the latest AEMO Quarterly Energy Dynamics report."
+              label="NEM renewable share of supply mix"
+              plain="Q4 2025 share of NEM supply from distributed PV, wind, grid solar, hydro, biomass and battery, from AEMO Quarterly Energy Dynamics Table 3."
               fromEnvelope={data.aemo_nem_fuel_mix}
-              unit=""
+              valueFn={(env) => cardNumber(env, 1)}
+              unit="%"
             />
             <MetricCard
               eyebrow="Renewables"
-              label="CER Renewable Energy Target progress"
-              plain="Annual achieved-vs-target percentage from the Clean Energy Regulator's RET administrative report."
+              label="NEM+SWIS renewable generation share"
+              plain="2024 renewable generation share across the NEM and Western Australia's SWIS from the Clean Energy Regulator's RET administrative report."
               fromEnvelope={data.cer_renewable_energy_target_progress}
+              valueFn={(env) => cardNumber(env, 0)}
               unit="%"
             />
           </div>
@@ -154,31 +157,35 @@ function App() {
           <div className="metric-grid metric-grid--4">
             <MetricCard
               eyebrow="Capacity"
-              label="NEM Generation Information register - total"
-              plain="Total capacity (MW) across every existing, committed and proposed generator listed in the AEMO Generation Information workbook."
+              label="AEMO Generation Information listed capacity"
+              plain="Listed NEM existing and development capacity in the January 2026 workbook. Includes anticipated and publicly announced projects; it is not available capacity."
               fromEnvelope={data.aemo_generation_information_register}
+              valueFn={(env) => cardNumber(env, 0)}
               unit=" MW"
             />
             <MetricCard
               eyebrow="Coal retirement"
-              label="Scheduled coal retirements"
-              plain="Capacity (MW) of coal plants with announced closure dates in the AEMO Generation Information register."
+              label="Coal capacity with explicit closure dates"
+              plain="Coal capacity in the January 2026 AEMO workbooks with an explicit closure date. Expected-year-only coal rows are kept separate in the notes."
               fromEnvelope={data.aemo_coal_retirement_timeline}
+              valueFn={(env) => cardNumber(env, 0)}
               unit=" MW"
             />
             <MetricCard
               eyebrow="Emissions"
-              label="Electricity sector emissions"
-              plain="Quarterly electricity-sector emissions in megatonnes of CO2-equivalent, DCCEEW national greenhouse accounts."
+              label="Electricity-sector annual emissions"
+              plain="Actual Energy - Electricity emissions for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory quarterly update."
               fromEnvelope={data.dcceew_electricity_emissions}
+              valueFn={(env) => cardNumber(env, 1)}
               unit=" Mt CO2-e"
             />
             <MetricCard
               eyebrow="WA"
-              label="WEM headline (Western Australia)"
-              plain="Latest published WA Wholesale Electricity Market capacity or wholesale-price headline. WA is not part of the NEM."
+              label="WEM quarterly average energy price"
+              plain="Q4 2025 average energy price in Western Australia's separate Wholesale Electricity Market, from AEMO Quarterly Energy Dynamics."
               fromEnvelope={data.aemo_wem_summary}
-              unit=""
+              valueFn={(env) => cardNumber(env, 2)}
+              unit=" AUD/MWh"
             />
           </div>
 
@@ -187,21 +194,22 @@ function App() {
           <div className="metric-grid metric-grid--4">
             <MetricCard
               eyebrow="Forecast"
-              label="AEMO Integrated System Plan headline"
-              plain="Headline figure from the latest biennial Integrated System Plan, e.g. 2050 generation capacity by source under the optimal development path."
+              label="AEMO 2024 ISP transmission headline"
+              plain="Rounded transmission need by 2050 under the 2024 ISP Step Change and Progressive Change scenarios. This is not current built transmission."
               fromEnvelope={data.aemo_2024_isp_summary}
-              unit=""
+              valueFn={(env) => cardNumber(env, 0)}
+              unit=" km"
             />
           </div>
 
-          <div className="pending-list" aria-label="Pending power-grid source coverage">
+          <div className="pending-list" aria-label="Manual power-grid source coverage">
             <article className="source-card">
-              <h4>Pending source coverage</h4>
+              <h4>Manual source coverage</h4>
               <p className="body-sm">
-                Fuel mix, generation register totals, coal retirement schedule, RET progress,
-                emissions, ISP forecast and WEM summary stay on manual until each AEMO,
-                AER, CER or DCCEEW publication is verified by a human. Programmatic access
-                is wired for the AEMO NEM regional price and demand series only.
+                Fuel mix, generation register totals, coal closure dates, RET context,
+                emissions, ISP forecast and WEM summary are hand-keyed from named official
+                publications. They remain manual because the page only has stable programmatic
+                access for AEMO NEM regional price and demand.
               </p>
             </article>
           </div>
@@ -319,19 +327,19 @@ function App() {
               <dt>NEM total operational demand</dt>
               <dd>Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand.</dd>
               <dt>NEM fuel mix</dt>
-              <dd>Hand-keyed from the latest AEMO Quarterly Energy Dynamics summary tables, which publish the percentage share of generation by black coal, brown coal, gas, hydro, wind, solar and battery for the previous quarter.</dd>
+              <dd>Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 Table 3, which publishes NEM supply mix contributions by black coal, brown coal, gas, liquid fuel, distributed PV, wind, grid solar, hydro, biomass and battery. The headline card shows the renewable-plus-battery share; fossil-fuel shares remain separate in the envelope fields.</dd>
               <dt>NEM Generation Information register</dt>
-              <dd>Hand-keyed from the latest monthly AEMO Generation Information workbook, which lists every existing, committed and proposed NEM generator with name, fuel type, region, MW capacity and expected closure year.</dd>
+              <dd>Hand-keyed from the January 2026 AEMO Generation Information workbook Summary table. The headline is listed nameplate capacity across existing and new-development rows, including anticipated and publicly announced projects. It is not available capacity, reliability or a construction guarantee.</dd>
               <dt>Scheduled coal retirements</dt>
-              <dd>Subset of the NEM Generation Information register where fuel type is coal and an expected closure year is listed.</dd>
+              <dd>Subset of January 2026 AEMO coal rows with an explicit closure date. Coal units with an expected closure year but no explicit date are retained in the envelope notes rather than mixed into the headline.</dd>
               <dt>RET progress</dt>
-              <dd>Annual achieved-vs-target percentage from the Clean Energy Regulator's Renewable Energy Target administrative report.</dd>
+              <dd>Hand-keyed from the Clean Energy Regulator's 2024 Renewable Energy Target Administrative Report. The headline is the reported 2024 renewable generation share across the NEM and Western Australia's SWIS, not an LRET compliance percentage.</dd>
               <dt>Electricity sector emissions</dt>
-              <dd>Quarterly electricity-sector emissions in megatonnes of CO2-equivalent from the DCCEEW National Greenhouse Gas Inventory Quarterly Update, hand-keyed from the named PDF.</dd>
+              <dd>Annual Energy - Electricity emissions in megatonnes of CO2-equivalent for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory Quarterly Update. It is not a single-quarter value.</dd>
               <dt>AEMO ISP headline</dt>
-              <dd>Hand-keyed from the latest biennial AEMO Integrated System Plan; only headline scenario figures (e.g. 2050 generation capacity by source under the optimal development path) are recorded.</dd>
+              <dd>Hand-keyed from the 2024 AEMO Integrated System Plan. The card shows the rounded transmission need by 2050 under Step Change and Progressive Change scenarios.</dd>
               <dt>WEM summary</dt>
-              <dd>Hand-keyed from named AEMO Wholesale Electricity Market monthly reports for Western Australia. The WEM is a separate market and is not part of the NEM.</dd>
+              <dd>Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 WEM market dynamics. The card shows Western Australia's quarterly average WEM energy price; the WEM is separate from the NEM.</dd>
             </dl>
           </div>
         </section>

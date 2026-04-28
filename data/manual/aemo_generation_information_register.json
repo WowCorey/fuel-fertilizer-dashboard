@@ -3,14 +3,39 @@
   "source_id": "aemo_generation_information_register",
   "source_name": "AEMO Generation Information register - capacity by fuel type",
   "source_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-27T18:21:13+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
+  "unit": "MW",
+  "retrieved_at": "2026-04-28T18:53:01+00:00",
+  "last_data_point": "2026-01-30",
+  "values": [
+    {
+      "t": "2026-01",
+      "v": 458836.1
+    }
+  ],
+  "notes": "AEMO NEM January 2026 Generation Information workbook Summary table, NEM operational and non-scheduled generators, existing and new developments by fuel-technology category. The headline is listed nameplate capacity across existing, committed, anticipated and publicly announced rows. It is not available capacity, reliability, dispatchability or a construction guarantee.",
+  "status": "ok",
   "manual_entry": true,
   "source_rights": "AEMO terms of use for tabular data",
-  "citation": "Australian Energy Market Operator, NEM Generation Information."
+  "citation": "Australian Energy Market Operator, NEM January 2026 Generation Information workbook, Summary sheet.",
+  "extra": {
+    "schema": "fuel_resilience_typed_fields.v1",
+    "fields": {
+      "period": "January 2026",
+      "existing_total_mw": 73070.32,
+      "announced_withdrawal_mw": 7147.5,
+      "in_service_mw": 61774.63,
+      "in_commissioning_mw": 4148.19,
+      "committed_mw": 12527.41,
+      "committed_star_mw": 2566.36,
+      "anticipated_mw": 23856.96,
+      "publicly_announced_mw": 346815.04,
+      "coal_mw": 21295.0,
+      "gas_turbine_mw": 20468.02,
+      "hydro_mw": 28014.64,
+      "solar_pv_mw": 75523.25,
+      "wind_mw": 141487.76,
+      "battery_storage_mw": 164541.45,
+      "other_mw": 7505.97
+    }
+  }
 }
