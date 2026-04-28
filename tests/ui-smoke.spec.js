@@ -6,6 +6,7 @@ const routes = [
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What Australia can see from public fuel-security data.' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
+  { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
   { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's fertiliser, in plain English." },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
@@ -63,4 +64,15 @@ test('state contribution page keeps tax attribution boundaries explicit', async 
   await expect(page.getByText('REMP oil & gas project').first()).toBeVisible();
   await expect(page.getByText('Separate petroleum object classes, not one vague site count')).toBeVisible();
   await expect(page.getByText('Operating refineries').first()).toBeVisible();
+});
+
+test('strategic resources page keeps metric types and gaps explicit', async ({ page }) => {
+  await page.goto('/ui_kits/strategic-resources-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: "Australia's strategic resources, in plain English." })).toBeVisible();
+  await expect(page.getByText('No underground-wealth total is published.')).toBeVisible();
+  await expect(page.getByText('Production, exports, reserves/resources and strategic role are separate fields.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Resource comparison table' })).toBeVisible();
+  await expect(page.getByText('Rare earths').first()).toBeVisible();
+  await expect(page.getByText('Sulphur').first()).toBeVisible();
+  await expect(page.getByText('No official national sulphur production or export row is loaded.', { exact: true })).toBeVisible();
 });

@@ -7,7 +7,7 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Twelve dashboard surfaces read from a shared JSON-envelope data
+**Status:** Thirteen dashboard surfaces read from a shared JSON-envelope data
 pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
 ABS fertiliser imports, APS net-import cover, APS refinery production series,
 AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
@@ -16,7 +16,10 @@ manually verified PM&C/DCCEEW public fuel-supply snapshot. The resource value
 page adds official tax, PRRT, WA/NWS and Queensland royalty receipts,
 export-value and Norway comparison envelopes, while leaving unsupported leakage and price-comparison claims
 unavailable. The state petroleum ledger separates state production,
-infrastructure roles, revenue context and source gates. The fuel-security page reuses the public PM&C/DCCEEW snapshot,
+infrastructure roles, revenue context and source gates. The strategic resources
+page adds DISR REQ export rows, Geoscience Australia AIMR production/reserve rows
+and GA/Digital Atlas operating-mines footprint context, while leaving rare-earth
+individual export value and sulphur unavailable. The fuel-security page reuses the public PM&C/DCCEEW snapshot,
 APS product-flow envelopes and ABS import data to show what is observable,
 derived, partial or unavailable. Other sources remain manual or unavailable
 until a named public source can support the value.
@@ -42,6 +45,7 @@ interpolate or estimate missing numbers.
 | [Fuel security](ui_kits/fuel-security-dashboard/index.html) | v1.6 | Product days remaining, PM&C/DCCEEW fuel-supply snapshot, APS stocks/sales/imports, import/shipping risk context, WA weekly stockout context, QLD monthly unavailable-fuel reports and unavailable operational feeds | Product days are derived from the named PM&C/DCCEEW snapshot; APS/ABS, public retail feeds, a WA-only weekly stockout snapshot and QLD Open Data unavailable-fuel reports are loaded where available; live national station outage, vessel tracking, terminal capacity and status-score feeds remain unavailable |
 | [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources, including WA/NWS and Queensland petroleum royalty receipt context; value-leakage estimate remains unavailable until a documented denominator and method exist |
 | [State petroleum ledger](ui_kits/state-contribution-dashboard/index.html) | v1.3 | State/territory petroleum and gas production roles, defined object counts, partial project/operator mapping, infrastructure context, state royalty receipts, combined royalty context and source gates | AES state production rows, NOPTA offshore title/well-layer counts, NOPTA active production-licence field/operator rows, REMP oil/gas major-project rows, QLD/VIC operating refinery counts, WA/NWS and Queensland petroleum receipts, NSW/NT combined royalty context and source-gate workstreams are loaded; Commonwealth tax attribution by state, current project/company production volumes, terminal capacity, LNG train counts and raw site totals remain unavailable |
+| [Strategic resources](ui_kits/strategic-resources-dashboard/index.html) | v1.0 | Iron ore, coal, uranium, bauxite/alumina, copper, nickel, lithium, rare earths, gold, zinc and sulphur source-gate context | DISR REQ export rows, GA AIMR 2025 production/reserve/resource rows and GA/Digital Atlas operating-mines footprint rows are loaded where source-safe; rare-earth individual export value and sulphur production/export/reserve rows remain unavailable |
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by fertiliser category, price index, supplier concentration | ABS SITC 562 total imports and source-country top-3 concentration fetched; nutrient subseries, ABARES price and stock cover remain manual/unavailable |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
@@ -65,6 +69,10 @@ State petroleum ledger attribution rules are documented in
 [`docs/state-contribution-methodology.md`](docs/state-contribution-methodology.md),
 with source-gate decisions in
 [`docs/petroleum-ledger-source-gates.md`](docs/petroleum-ledger-source-gates.md).
+Strategic resources methodology is documented in
+[`docs/strategic-resources-methodology.md`](docs/strategic-resources-methodology.md),
+with source decisions in
+[`docs/strategic-resources-source-audit.md`](docs/strategic-resources-source-audit.md).
 
 ## Run locally
 
@@ -79,6 +87,7 @@ python3 -m http.server 8000
 #   http://localhost:8000/ui_kits/fuel-security-dashboard/index.html
 #   http://localhost:8000/ui_kits/resource-value-dashboard/index.html
 #   http://localhost:8000/ui_kits/state-contribution-dashboard/index.html
+#   http://localhost:8000/ui_kits/strategic-resources-dashboard/index.html
 #   http://localhost:8000/ui_kits/fuel-dashboard/index.html
 #   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
 #   http://localhost:8000/ui_kits/oil-and-production/index.html
@@ -331,6 +340,7 @@ ui_kits/
   fuel-security-dashboard/     v1.6 — fuel-security visibility and gaps
   resource-value-dashboard/    v1.5 — tax, PRRT, royalties, export value
     state-contribution-dashboard/ v1.3 - state petroleum ledger, source gates, defined object counts and partial production mapping
+  strategic-resources-dashboard/ v1.0 - critical minerals and strategic resource context
   fuel-dashboard/              v1.0 — liquid fuel
   fertilizer-dashboard/        v1.1 — fertiliser
   oil-and-production/          v1.2 — crude, refining, government spending

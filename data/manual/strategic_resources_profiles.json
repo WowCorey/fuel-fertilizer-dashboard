@@ -1,0 +1,798 @@
+{
+  "series_id": "strategic_resources_profiles",
+  "source_id": "strategic_resources_profiles",
+  "source_name": "Strategic resources compiled profiles",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md",
+  "unit": "resource profiles",
+  "retrieved_at": "2026-04-28T13:40:38+00:00",
+  "last_data_point": "2026-04-28",
+  "values": [
+    {
+      "t": "2026-04-28",
+      "v": 11
+    }
+  ],
+  "notes": "Manual compiled first-pass strategic resources profile. Numeric production, export, reserve/resource and state-footprint rows are copied from the named official source envelopes; unavailable values stay unavailable.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher.",
+  "citation": "Fuel Resilience AU strategic resources methodology; Department of Industry, Science and Resources; Geoscience Australia.",
+  "extra": {
+    "schema": "strategic_resources_profiles.v1",
+    "fields": {
+      "profile_date": "2026-04-28",
+      "method": "Production, export value, export volume, Ore Reserves, Mineral Resources, state footprint and strategic role are separate fields. No underground-wealth total or combined mineral balance-sheet value is published.",
+      "takeaways": [
+        {
+          "title": "Iron ore is the largest loaded individual export-value row",
+          "text": "The loaded REQ workbook row reports iron ore export value of A$116.4b in 2024-25. Gold, metallurgical coal and thermal coal are also large loaded rows, but coal is shown as separate metallurgical and thermal rows rather than a single mixed number.",
+          "trust_label": "Observed",
+          "source_id": "strategic_resources_req_dec2025"
+        },
+        {
+          "title": "Strategic does not mean one category",
+          "text": "The loaded strategic-role source ties critical minerals and strategic materials to net zero, advanced manufacturing, defence technologies and broader strategic applications. Iron ore, coal, gold and uranium add trade, industrial and energy-security roles outside the narrow critical-minerals list.",
+          "trust_label": "Manual",
+          "source_id": "strategic_resources_critical_minerals_context"
+        },
+        {
+          "title": "Coverage is intentionally uneven",
+          "text": "Major bulk and metal commodities have production, export and state-footprint coverage. Rare earths have production/reserve and state-footprint coverage but no individual export-value row is loaded. Sulphur remains unavailable.",
+          "trust_label": "Partial coverage",
+          "source_id": "strategic_resources_profiles"
+        }
+      ],
+      "resources": [
+        {
+          "resource_id": "iron_ore",
+          "resource_name": "Iron ore",
+          "resource_type": "Major bulk export / steelmaking input",
+          "primary_source_id": "strategic_resources_req_dec2025",
+          "headline_metric": {
+            "metric_type": "Export value",
+            "metric_name": "Iron ore export value",
+            "value_display": "A$116.4b",
+            "unit": "",
+            "period": "2024-25 nominal",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_req_dec2025"
+          },
+          "production": {
+            "summary": "954 Mt mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 954,
+            "unit": "Mt",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "A$116.4b export value and 899.9 Mt export volume in 2024-25.",
+              "metric_name": "Iron ore exports",
+              "value": 116376.394755,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 12,330 Mt at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 12330,
+            "unit": "Mt",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "WA dominates loaded operating rows; SA, NT and TAS also have operating rows.",
+          "state_footprint_boundary": "Operating-mine layer counts source feature rows, not tonnes by state.",
+          "state_footprint": [
+            {"state": "WA", "operating": 45, "developing": 2, "care_and_maintenance": 2},
+            {"state": "SA", "operating": 6, "developing": 1, "care_and_maintenance": 1},
+            {"state": "NT", "operating": 2, "developing": 0, "care_and_maintenance": 2},
+            {"state": "TAS", "operating": 2, "developing": 0, "care_and_maintenance": 2},
+            {"state": "QLD", "operating": 0, "developing": 0, "care_and_maintenance": 1}
+          ],
+          "strategic_role_line": "Core steelmaking feedstock and Australia's largest loaded strategic-resource export-value row.",
+          "defence_relevance": "Indirect: steel supply chains, infrastructure and heavy industry.",
+          "energy_transition_relevance": "Enables grid, rail, port and renewable-energy infrastructure steel.",
+          "manufacturing_relevance": "Steelmaking input; downstream value depends on processing and steel capacity.",
+          "trade_relevance": "Largest loaded individual resource export-value row.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier and number one EDR holder for iron ore.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Production, export value, export volume, reserves/resources and state-footprint rows are all loaded."
+        },
+        {
+          "resource_id": "coal",
+          "resource_name": "Coal",
+          "resource_type": "Bulk energy and steelmaking resource",
+          "primary_source_id": "strategic_resources_aimr_2025",
+          "headline_metric": {
+            "metric_type": "Production",
+            "metric_name": "Black coal mine production",
+            "value_display": "424",
+            "unit": "Mt saleable",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "production": {
+            "summary": "424 Mt saleable black coal mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 424,
+            "unit": "Mt saleable coal",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "Metallurgical coal: A$39.3b export value and 147.0 Mt export volume in 2024-25.",
+              "metric_name": "Metallurgical coal exports",
+              "value": 39313.75848,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            },
+            {
+              "summary": "Thermal coal: A$32.0b export value and 205 Mt export volume in 2024-25.",
+              "metric_name": "Thermal coal exports",
+              "value": 31993,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 10,959 Mt at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 10959,
+            "unit": "Mt",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded operating rows are concentrated in QLD and NSW, with smaller counts in TAS, VIC and WA.",
+          "state_footprint_boundary": "The dashboard keeps metallurgical and thermal coal exports separate; the operating-mines layer does not split coal rows by market use.",
+          "state_footprint": [
+            {"state": "QLD", "operating": 54, "developing": 0, "care_and_maintenance": 3},
+            {"state": "NSW", "operating": 40, "developing": 0, "care_and_maintenance": 11},
+            {"state": "TAS", "operating": 3, "developing": 0, "care_and_maintenance": 0},
+            {"state": "VIC", "operating": 3, "developing": 0, "care_and_maintenance": 0},
+            {"state": "WA", "operating": 2, "developing": 0, "care_and_maintenance": 0}
+          ],
+          "strategic_role_line": "Steelmaking coal, export income and domestic energy-system legacy exposure.",
+          "defence_relevance": "Indirect: steel supply chains and energy-system resilience.",
+          "energy_transition_relevance": "Transition exposure: thermal coal demand falls in decarbonisation pathways, while metallurgical coal remains tied to steel.",
+          "manufacturing_relevance": "Metallurgical coal feeds blast-furnace steelmaking.",
+          "trade_relevance": "Two large export-value rows are loaded, but metallurgical and thermal coal are not collapsed into one number.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier of black coal.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Production, export and state-footprint context are loaded; coal sub-type production by state is not loaded."
+        },
+        {
+          "resource_id": "uranium",
+          "resource_name": "Uranium",
+          "resource_type": "Nuclear fuel / export-controlled strategic resource",
+          "primary_source_id": "strategic_resources_req_dec2025",
+          "headline_metric": {
+            "metric_type": "Export value",
+            "metric_name": "Uranium export value",
+            "value_display": "A$1.2b",
+            "unit": "",
+            "period": "2024-25 nominal",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_req_dec2025"
+          },
+          "production": {
+            "summary": "4.656 kt U mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 4.656,
+            "unit": "kt U",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "A$1.17b export value and 5,034 t export volume in 2024-25.",
+              "metric_name": "Uranium exports",
+              "value": 1173.5735153,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 307 kt U at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 307,
+            "unit": "kt U",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded uranium rows are in SA, with a developing row in WA.",
+          "state_footprint_boundary": "Operating-mine feature counts are not uranium tonnes by state and do not include export-control approvals.",
+          "state_footprint": [
+            {"state": "SA", "operating": 2, "developing": 0, "care_and_maintenance": 1},
+            {"state": "WA", "operating": 0, "developing": 1, "care_and_maintenance": 0}
+          ],
+          "strategic_role_line": "Nuclear fuel supply with export controls and national-security sensitivity.",
+          "defence_relevance": "Strategic nuclear-fuel supply chain relevance; not a weapons claim.",
+          "energy_transition_relevance": "Supports nuclear electricity fuel supply for importing countries.",
+          "manufacturing_relevance": "Highly regulated upstream fuel-cycle input.",
+          "trade_relevance": "Smaller export value than bulk commodities, but high strategic sensitivity.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier and number one EDR holder for uranium.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Production, export value, reserves and state footprint are loaded."
+        },
+        {
+          "resource_id": "bauxite_alumina",
+          "resource_name": "Bauxite / alumina",
+          "resource_type": "Aluminium supply-chain resource",
+          "primary_source_id": "strategic_resources_aimr_2025",
+          "headline_metric": {
+            "metric_type": "Production",
+            "metric_name": "Bauxite mine production",
+            "value_display": "100.5",
+            "unit": "Mt bauxite",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "production": {
+            "summary": "100.5 Mt bauxite mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 100.5,
+            "unit": "Mt",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "Bauxite: A$3.3b export value and 43.2 Mt export volume in 2024-25.",
+              "metric_name": "Bauxite exports",
+              "value": 3291.420334,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            },
+            {
+              "summary": "Alumina: A$12.2b export value and 14.7 Mt export volume in 2024-25.",
+              "metric_name": "Alumina exports",
+              "value": 12154.623945,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 1,783 Mt bauxite at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 1783,
+            "unit": "Mt",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded bauxite mine rows are in QLD, WA and NT, with developing rows in QLD and TAS.",
+          "state_footprint_boundary": "State footprint is bauxite mine rows only; alumina refinery footprint is not counted here.",
+          "state_footprint": [
+            {"state": "QLD", "operating": 4, "developing": 1, "care_and_maintenance": 0},
+            {"state": "WA", "operating": 3, "developing": 0, "care_and_maintenance": 0},
+            {"state": "NT", "operating": 2, "developing": 0, "care_and_maintenance": 0},
+            {"state": "TAS", "operating": 0, "developing": 1, "care_and_maintenance": 0}
+          ],
+          "strategic_role_line": "Upstream aluminium supply chain for transport, grid hardware, defence and manufacturing.",
+          "defence_relevance": "Aluminium supply chain input for aerospace, vehicles and equipment.",
+          "energy_transition_relevance": "Aluminium is used in transmission, vehicles, solar frames and lightweight structures.",
+          "manufacturing_relevance": "Bauxite and alumina feed aluminium smelting and fabrication.",
+          "trade_relevance": "Bauxite and alumina export rows are loaded separately.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier of bauxite.",
+          "source_coverage_label": "Partial coverage",
+          "coverage_notes": "Bauxite production/export and alumina export rows are loaded; alumina refinery state footprint is not loaded."
+        },
+        {
+          "resource_id": "copper",
+          "resource_name": "Copper",
+          "resource_type": "Strategic material / electrification metal",
+          "primary_source_id": "strategic_resources_req_dec2025",
+          "headline_metric": {
+            "metric_type": "Export value",
+            "metric_name": "Copper export value",
+            "value_display": "A$12.6b",
+            "unit": "",
+            "period": "2024-25 nominal",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_req_dec2025"
+          },
+          "production": {
+            "summary": "0.75 Mt Cu mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 0.75,
+            "unit": "Mt Cu",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "A$12.6b export value and 765.4 kt total metallic-content export volume in 2024-25.",
+              "metric_name": "Copper exports",
+              "value": 12565.333418,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 19.11 Mt Cu at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 19.11,
+            "unit": "Mt Cu",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded operating rows appear in NSW, WA, QLD and SA, with care/developing rows across several states.",
+          "state_footprint_boundary": "Copper footprint includes source groups where copper is the lead commodity plus the mixed Cu/Au/U/Ag row.",
+          "state_footprint": [
+            {"state": "NSW", "operating": 10, "developing": 0, "care_and_maintenance": 2},
+            {"state": "WA", "operating": 5, "developing": 1, "care_and_maintenance": 4},
+            {"state": "QLD", "operating": 4, "developing": 1, "care_and_maintenance": 9},
+            {"state": "SA", "operating": 4, "developing": 1, "care_and_maintenance": 3},
+            {"state": "NT", "operating": 0, "developing": 2, "care_and_maintenance": 1},
+            {"state": "TAS", "operating": 0, "developing": 0, "care_and_maintenance": 2}
+          ],
+          "strategic_role_line": "Electricity networks, data centres, motors, manufacturing and defence electronics.",
+          "defence_relevance": "Electrical systems, electronics and munitions supply chains.",
+          "energy_transition_relevance": "High relevance for transmission, renewables, electric motors and storage systems.",
+          "manufacturing_relevance": "Base input for wiring, equipment and industrial machinery.",
+          "trade_relevance": "Loaded export row includes ores/concentrates and refined copper metallic content.",
+          "global_significance": "DISR lists copper as an Australian strategic material.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Production, export value, reserve/resource and footprint rows are loaded."
+        },
+        {
+          "resource_id": "nickel",
+          "resource_name": "Nickel",
+          "resource_type": "Critical mineral / stainless steel and battery input",
+          "primary_source_id": "strategic_resources_req_dec2025",
+          "headline_metric": {
+            "metric_type": "Export value",
+            "metric_name": "Nickel export value",
+            "value_display": "A$2.3b",
+            "unit": "",
+            "period": "2024-25 nominal",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_req_dec2025"
+          },
+          "production": {
+            "summary": "0.10 Mt Ni mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 0.10,
+            "unit": "Mt Ni",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "A$2.3b export value and 81.2 kt export volume in 2024-25.",
+              "metric_name": "Nickel exports",
+              "value": 2319.63712730428,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 2.6 Mt Ni at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 2.6,
+            "unit": "Mt Ni",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded operating rows are in WA; many WA nickel rows are care and maintenance.",
+          "state_footprint_boundary": "Feature rows show mine status, not market viability or production volume by site.",
+          "state_footprint": [
+            {"state": "WA", "operating": 2, "developing": 2, "care_and_maintenance": 19},
+            {"state": "NSW", "operating": 0, "developing": 2, "care_and_maintenance": 0},
+            {"state": "QLD", "operating": 0, "developing": 1, "care_and_maintenance": 0},
+            {"state": "TAS", "operating": 0, "developing": 0, "care_and_maintenance": 1}
+          ],
+          "strategic_role_line": "Battery chemistries, stainless steel, alloys and defence supply chains, with current market weakness.",
+          "defence_relevance": "Alloys, stainless steel and battery-adjacent supply chains.",
+          "energy_transition_relevance": "Battery and clean-technology input, depending on chemistry and processing pathway.",
+          "manufacturing_relevance": "Stainless steel, alloys and chemical processing.",
+          "trade_relevance": "Export row is loaded but REQ notes weaker prices and lower domestic production.",
+          "global_significance": "DISR lists nickel as a critical mineral.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Metric coverage is strong; market context is weak and explicitly caveated."
+        },
+        {
+          "resource_id": "lithium",
+          "resource_name": "Lithium",
+          "resource_type": "Critical mineral / battery input",
+          "primary_source_id": "strategic_resources_req_dec2025",
+          "headline_metric": {
+            "metric_type": "Export value",
+            "metric_name": "Lithium export value",
+            "value_display": "A$4.8b",
+            "unit": "",
+            "period": "2024-25 nominal",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_req_dec2025"
+          },
+          "production": {
+            "summary": "108 kt Li mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 108,
+            "unit": "kt Li",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "A$4.8b total export value in 2024-25; REQ separately lists spodumene and lithium hydroxide rows.",
+              "metric_name": "Lithium exports",
+              "value": 4823.52275257291,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 4,601 kt Li at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 4601,
+            "unit": "kt Li",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded operating rows are in WA; NT appears as care and maintenance.",
+          "state_footprint_boundary": "Lithium footprint uses Li/Ta operating-mines feature rows; it is not spodumene tonnage by mine.",
+          "state_footprint": [
+            {"state": "WA", "operating": 7, "developing": 1, "care_and_maintenance": 1},
+            {"state": "NT", "operating": 0, "developing": 0, "care_and_maintenance": 1}
+          ],
+          "strategic_role_line": "Battery supply chain input with strong export and processing-policy relevance.",
+          "defence_relevance": "Energy storage and portable power supply chains.",
+          "energy_transition_relevance": "High relevance for electric vehicles and battery energy storage.",
+          "manufacturing_relevance": "Processing and battery-material value-add opportunity.",
+          "trade_relevance": "REQ reports both spodumene and refined lithium product export rows.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier of lithium.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Production, export, reserve/resource and WA-heavy footprint rows are loaded."
+        },
+        {
+          "resource_id": "rare_earths",
+          "resource_name": "Rare earths",
+          "resource_type": "Critical minerals / magnet and defence-relevant elements",
+          "primary_source_id": "strategic_resources_aimr_2025",
+          "headline_metric": {
+            "metric_type": "Production",
+            "metric_name": "Rare earths mine production",
+            "value_display": "0.031",
+            "unit": "Mt oxide",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "production": {
+            "summary": "0.031 Mt oxide mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 0.031,
+            "unit": "Mt oxide",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "Individual rare earth export value is not loaded; REQ reports an aggregate other-critical-minerals row that is not attributed here.",
+              "metric_name": "Rare earths export value",
+              "unit": "",
+              "period": "",
+              "trust_label": "Unavailable",
+              "status": "unavailable",
+              "source_id": "strategic_resources_req_dec2025",
+              "notes": "No individual rare earth export-value row is loaded."
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 2.05 Mt oxide at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 2.05,
+            "unit": "Mt oxide",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded rare-earth rows include one operating row in WA and developing rows in WA, NSW and NT.",
+          "state_footprint_boundary": "Rare-earth footprint uses the Rare earth elements commodity group only; mineral sands with REE are not added to the headline count.",
+          "state_footprint": [
+            {"state": "WA", "operating": 1, "developing": 1, "care_and_maintenance": 1},
+            {"state": "NSW", "operating": 0, "developing": 1, "care_and_maintenance": 0},
+            {"state": "NT", "operating": 0, "developing": 1, "care_and_maintenance": 0}
+          ],
+          "strategic_role_line": "Permanent magnets, defence systems, wind turbines, electric vehicles and supply-chain diversification.",
+          "defence_relevance": "High-performance magnets, sensors and advanced defence technologies.",
+          "energy_transition_relevance": "Permanent magnets for wind turbines and electric vehicles.",
+          "manufacturing_relevance": "Processing and separation capability is strategically important.",
+          "trade_relevance": "Individual export value is unavailable in this first pass.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier of rare earths; the CMSR initial subset includes light and heavy rare earth elements.",
+          "source_coverage_label": "Partial coverage",
+          "coverage_notes": "Production, reserves/resources and footprint are loaded; individual export value remains unavailable."
+        },
+        {
+          "resource_id": "gold",
+          "resource_name": "Gold",
+          "resource_type": "Precious metal / reserve asset and export resource",
+          "primary_source_id": "strategic_resources_req_dec2025",
+          "headline_metric": {
+            "metric_type": "Export value",
+            "metric_name": "Gold export value",
+            "value_display": "A$46.9b",
+            "unit": "",
+            "period": "2024-25 nominal",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_req_dec2025"
+          },
+          "production": {
+            "summary": "284 t Au mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 284,
+            "unit": "t Au",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "A$46.9b export value and 239.1 t export volume in 2024-25.",
+              "metric_name": "Gold exports",
+              "value": 46895.432455,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 3,369 t Au at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 3369,
+            "unit": "t Au",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded operating rows are concentrated in WA, with operating rows also in VIC, QLD, NSW, NT, SA and TAS.",
+          "state_footprint_boundary": "Precious-metals feature rows are not gold production tonnes by state.",
+          "state_footprint": [
+            {"state": "WA", "operating": 70, "developing": 8, "care_and_maintenance": 34},
+            {"state": "VIC", "operating": 5, "developing": 1, "care_and_maintenance": 2},
+            {"state": "QLD", "operating": 5, "developing": 0, "care_and_maintenance": 2},
+            {"state": "NSW", "operating": 2, "developing": 0, "care_and_maintenance": 4},
+            {"state": "NT", "operating": 1, "developing": 2, "care_and_maintenance": 0},
+            {"state": "SA", "operating": 1, "developing": 0, "care_and_maintenance": 2},
+            {"state": "TAS", "operating": 1, "developing": 0, "care_and_maintenance": 0}
+          ],
+          "strategic_role_line": "Major export row, financial reserve asset and electronics/manufacturing input.",
+          "defence_relevance": "Electronics and secure financial reserve relevance.",
+          "energy_transition_relevance": "Limited direct energy-transition role; industrial electronics use is relevant.",
+          "manufacturing_relevance": "Electronics, specialty uses and refining.",
+          "trade_relevance": "Second-largest loaded individual export-value row on this page.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier and number one EDR holder for gold.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Production, export, reserve/resource and footprint rows are loaded."
+        },
+        {
+          "resource_id": "zinc",
+          "resource_name": "Zinc",
+          "resource_type": "Strategic material / base metal",
+          "primary_source_id": "strategic_resources_req_dec2025",
+          "headline_metric": {
+            "metric_type": "Export value",
+            "metric_name": "Zinc export value",
+            "value_display": "A$4.4b",
+            "unit": "",
+            "period": "2024-25 nominal",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_req_dec2025"
+          },
+          "production": {
+            "summary": "1.10 Mt Zn mine production in 2024.",
+            "metric_name": "Mine production",
+            "value": 1.10,
+            "unit": "Mt Zn",
+            "period": "2024",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "exports": [
+            {
+              "summary": "A$4.4b export value and 1,264.1 kt total metallic-content export volume in 2024-25.",
+              "metric_name": "Zinc exports",
+              "value": 4430.779155,
+              "unit": "A$m",
+              "period": "2024-25 nominal",
+              "trust_label": "Observed",
+              "status": "ok",
+              "source_id": "strategic_resources_req_dec2025"
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "Ore Reserves: 15.56 Mt Zn at operating mines as at 31 Dec 2024.",
+            "metric_name": "Ore Reserves at operating mines",
+            "value": 15.56,
+            "unit": "Mt Zn",
+            "period": "2024-12-31",
+            "trust_label": "Observed",
+            "status": "ok",
+            "source_id": "strategic_resources_aimr_2025"
+          },
+          "state_footprint_summary": "Loaded operating rows are in QLD, NSW, NT and TAS, with developing/care rows in NSW, QLD, SA and WA.",
+          "state_footprint_boundary": "Zinc footprint uses Zn/Pb feature rows and is not a production allocation by state.",
+          "state_footprint": [
+            {"state": "QLD", "operating": 7, "developing": 0, "care_and_maintenance": 4},
+            {"state": "NSW", "operating": 3, "developing": 2, "care_and_maintenance": 0},
+            {"state": "NT", "operating": 1, "developing": 0, "care_and_maintenance": 0},
+            {"state": "TAS", "operating": 1, "developing": 0, "care_and_maintenance": 0},
+            {"state": "WA", "operating": 0, "developing": 2, "care_and_maintenance": 2},
+            {"state": "SA", "operating": 0, "developing": 0, "care_and_maintenance": 1}
+          ],
+          "strategic_role_line": "Galvanising, alloys, batteries and industrial manufacturing supply chains.",
+          "defence_relevance": "Corrosion protection and industrial alloys.",
+          "energy_transition_relevance": "Grid and infrastructure galvanising; emerging battery chemistries.",
+          "manufacturing_relevance": "Galvanised steel and alloy input.",
+          "trade_relevance": "Export row includes ores/concentrates and refined zinc metallic content.",
+          "global_significance": "AIMR 2025 release reports Australia as a top-five global supplier and number one EDR holder for zinc; DISR lists zinc as a strategic material.",
+          "source_coverage_label": "Strong coverage",
+          "coverage_notes": "Production, export, reserve/resource and footprint rows are loaded."
+        },
+        {
+          "resource_id": "sulphur",
+          "resource_name": "Sulphur",
+          "resource_type": "Potential industrial input / source gate only",
+          "primary_source_id": "strategic_resources_sulphur_gap",
+          "headline_metric": {
+            "metric_type": "Unavailable",
+            "metric_name": "Sulphur production or export metric",
+            "value_display": "Unavailable",
+            "unit": "",
+            "period": "",
+            "trust_label": "Unavailable",
+            "status": "unavailable",
+            "source_id": "strategic_resources_sulphur_gap",
+            "notes": "No official national sulphur production or export row is loaded."
+          },
+          "production": {
+            "summary": "",
+            "metric_name": "Sulphur production",
+            "unit": "",
+            "period": "",
+            "trust_label": "Unavailable",
+            "status": "unavailable",
+            "source_id": "strategic_resources_sulphur_gap",
+            "notes": "No official national sulphur production row is loaded."
+          },
+          "exports": [
+            {
+              "summary": "",
+              "metric_name": "Sulphur exports",
+              "unit": "",
+              "period": "",
+              "trust_label": "Unavailable",
+              "status": "unavailable",
+              "source_id": "strategic_resources_sulphur_gap",
+              "notes": "No official national sulphur export row is loaded."
+            }
+          ],
+          "reserve_or_resource": {
+            "summary": "No official national reserve/resource row is loaded.",
+            "metric_name": "Sulphur reserve/resource",
+            "unit": "",
+            "period": "",
+            "trust_label": "Unavailable",
+            "status": "unavailable",
+            "source_id": "strategic_resources_sulphur_gap"
+          },
+          "state_footprint_summary": "Unavailable.",
+          "state_footprint_boundary": "No official/public state footprint source is loaded.",
+          "state_footprint": [],
+          "strategic_role_line": "Potential fertiliser and chemical input, but not source-safe in this first pass.",
+          "defence_relevance": "Unavailable.",
+          "energy_transition_relevance": "Unavailable.",
+          "manufacturing_relevance": "Potential chemical and fertiliser supply-chain relevance, not quantified.",
+          "trade_relevance": "Unavailable.",
+          "global_significance": "Unavailable.",
+          "source_coverage_label": "Unavailable",
+          "coverage_notes": "Left unavailable rather than guessing from weak or non-official sources."
+        }
+      ],
+      "strategic_relevance": [
+        {
+          "group": "Defence relevance",
+          "resources": ["uranium", "rare earths", "nickel", "copper", "aluminium/bauxite", "iron ore", "zinc"],
+          "summary": "Defence relevance is framed as supply-chain input relevance: nuclear fuel export control, rare-earth magnets, electronics, alloys, corrosion protection and steel/aluminium inputs.",
+          "boundary": "The page does not claim direct weapon use, classified demand or defence stockpile quantities."
+        },
+        {
+          "group": "Energy transition relevance",
+          "resources": ["lithium", "rare earths", "copper", "nickel", "aluminium/bauxite", "zinc", "uranium"],
+          "summary": "Energy-transition relevance covers batteries, permanent magnets, electricity networks, lightweight structures, galvanised grid hardware and nuclear fuel supply for importing countries.",
+          "boundary": "Coal is treated as transition exposure rather than a transition mineral."
+        },
+        {
+          "group": "Industrial and manufacturing relevance",
+          "resources": ["iron ore", "coal", "bauxite/alumina", "copper", "nickel", "zinc", "gold"],
+          "summary": "Industrial relevance covers steel, aluminium, galvanising, alloys, wiring, equipment, electronics and processing value-add.",
+          "boundary": "The dashboard does not infer downstream manufacturing value where the source only supports upstream mining or export rows."
+        },
+        {
+          "group": "Export and trade relevance",
+          "resources": ["iron ore", "gold", "coal", "bauxite/alumina", "copper", "lithium", "zinc", "nickel", "uranium"],
+          "summary": "Trade relevance is shown with REQ export-value and export-volume rows where available. Rare earths and sulphur stay unavailable for individual export values.",
+          "boundary": "Export values are not production and are not reserves/resources."
+        }
+      ]
+    }
+  }
+}
