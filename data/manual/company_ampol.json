@@ -24,7 +24,12 @@
       "net_profit": 122.5,
       "net_profit_unit": "A$m",
       "net_profit_period_end": "2024-12-31",
-      "net_profit_basis": "statutory profit after tax attributable to equity holders of the parent entity"
+      "net_profit_basis": "statutory profit after tax attributable to equity holders of the parent entity",
+      "prrt_paid": null,
+      "prrt_subsidiaries": [],
+      "prrt_note": "Ampol is a downstream refiner and retailer; not within the PRRT regime.",
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }

@@ -24,7 +24,12 @@
       "net_profit": -421.1,
       "net_profit_unit": "A$m",
       "net_profit_period_end": "2025-12-31",
-      "net_profit_basis": "statutory net loss after tax on a historical cost basis"
+      "net_profit_basis": "statutory net loss after tax on a historical cost basis",
+      "prrt_paid": null,
+      "prrt_subsidiaries": [],
+      "prrt_note": "Viva Energy is a downstream refiner and retailer; not within the PRRT regime which applies only to upstream petroleum project profits.",
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }

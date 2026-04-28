@@ -877,6 +877,23 @@
       "has_generated": false,
       "has_manual": true
     },
+    "ato_prrt_details": {
+      "id": "ato_prrt_details",
+      "human_name": "ATO Corporate Tax Transparency - PRRT details (latest year)",
+      "publisher": "Australian Taxation Office",
+      "fetch": "manual",
+      "update_cadence": "annual",
+      "used_by": [
+        "who_pays_what",
+        "resource_value"
+      ],
+      "canonical_url": "https://data.gov.au/data/dataset/corporate-transparency",
+      "rights": "CC BY 3.0 AU (Commonwealth of Australia)",
+      "citation": "Australian Taxation Office, Corporate Tax Transparency Report - PRRT details sheet.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "aus_retail_fuel_multistate": {
       "id": "aus_retail_fuel_multistate",
       "human_name": "Retail pump price - ULP 91 multi-state average",
@@ -944,6 +961,40 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "australia_institute_gas_export_tax_proposal": {
+      "id": "australia_institute_gas_export_tax_proposal",
+      "human_name": "The Australia Institute - 25% gas export tax proposal",
+      "publisher": "The Australia Institute",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "who_pays_what",
+        "resource_value"
+      ],
+      "canonical_url": "https://australiainstitute.org.au/",
+      "rights": "CC BY 4.0 (The Australia Institute, where stated)",
+      "citation": "The Australia Institute, gas export tax / Petroleum Resource Rent Tax reform analysis.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "australia_institute_gas_giveaway_analysis": {
+      "id": "australia_institute_gas_giveaway_analysis",
+      "human_name": "The Australia Institute - Australian gas-giveaway / Japan resale analysis",
+      "publisher": "The Australia Institute",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "who_pays_what",
+        "resource_value"
+      ],
+      "canonical_url": "https://australiainstitute.org.au/",
+      "rights": "CC BY 4.0 (The Australia Institute, where stated)",
+      "citation": "The Australia Institute, Australian LNG export royalty analysis.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "cer_renewable_energy_target_progress": {
       "id": "cer_renewable_energy_target_progress",

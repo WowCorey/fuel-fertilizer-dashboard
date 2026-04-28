@@ -24,7 +24,27 @@
       "net_profit": 818,
       "net_profit_unit": "US$m",
       "net_profit_period_end": "2025-12-31",
-      "net_profit_basis": "net profit for the period attributable to members"
+      "net_profit_basis": "net profit for the period attributable to members",
+      "prrt_paid": 213.768474,
+      "prrt_subsidiaries": [
+        {
+          "entity": "SANTOS (BOL) PTY LTD",
+          "abn": "35000670575",
+          "paid_aud": 418029
+        },
+        {
+          "entity": "SANTOS WA NORTHWEST PTY LTD",
+          "abn": "58009140854",
+          "paid_aud": 69330991
+        },
+        {
+          "entity": "SANTOS WA PVG PTY LTD",
+          "abn": "51129604860",
+          "paid_aud": 144019454
+        }
+      ],
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }

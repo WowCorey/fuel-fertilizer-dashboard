@@ -20,7 +20,12 @@
       "abn": 69054260776,
       "total_income": 13318.793,
       "taxable_income": 3440.248,
-      "income_tax_paid": 988.122
+      "income_tax_paid": 988.122,
+      "prrt_paid": null,
+      "prrt_subsidiaries": [],
+      "prrt_note": "No Shell-named entity appears in the 2023-24 ATO PRRT details sheet. Some upstream assets previously held by Shell are now operated under different entities (e.g. Prelude FLNG operatorship).",
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }
