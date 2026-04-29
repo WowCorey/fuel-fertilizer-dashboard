@@ -3,14 +3,174 @@
   "source_id": "rba_household_debt_to_income",
   "source_name": "RBA Household Finances - Debt to disposable income (E2)",
   "source_url": "https://www.rba.gov.au/statistics/tables/#household",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-27T09:19:49+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Programmatic fetcher registered; awaiting first successful CI run after upstream rate-limit window. The fetcher reads RBA CSV statistical tables and aggregates to monthly mean (cash rate) or quarter end (household debt).",
-  "status": "unavailable",
+  "unit": "per cent",
+  "retrieved_at": "2026-04-29T09:50:24+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2016-Q1",
+      "v": 175.5
+    },
+    {
+      "t": "2016-Q2",
+      "v": 178.4
+    },
+    {
+      "t": "2016-Q3",
+      "v": 180.2
+    },
+    {
+      "t": "2016-Q4",
+      "v": 181.1
+    },
+    {
+      "t": "2017-Q1",
+      "v": 182.2
+    },
+    {
+      "t": "2017-Q2",
+      "v": 184.5
+    },
+    {
+      "t": "2017-Q3",
+      "v": 185.6
+    },
+    {
+      "t": "2017-Q4",
+      "v": 186.5
+    },
+    {
+      "t": "2018-Q1",
+      "v": 187.2
+    },
+    {
+      "t": "2018-Q2",
+      "v": 187.7
+    },
+    {
+      "t": "2018-Q3",
+      "v": 186.9
+    },
+    {
+      "t": "2018-Q4",
+      "v": 187.4
+    },
+    {
+      "t": "2019-Q1",
+      "v": 187.1
+    },
+    {
+      "t": "2019-Q2",
+      "v": 186.8
+    },
+    {
+      "t": "2019-Q3",
+      "v": 185.4
+    },
+    {
+      "t": "2019-Q4",
+      "v": 186.0
+    },
+    {
+      "t": "2020-Q1",
+      "v": 186.2
+    },
+    {
+      "t": "2020-Q2",
+      "v": 183.8
+    },
+    {
+      "t": "2020-Q3",
+      "v": 180.8
+    },
+    {
+      "t": "2020-Q4",
+      "v": 180.1
+    },
+    {
+      "t": "2021-Q1",
+      "v": 179.6
+    },
+    {
+      "t": "2021-Q2",
+      "v": 182.3
+    },
+    {
+      "t": "2021-Q3",
+      "v": 183.6
+    },
+    {
+      "t": "2021-Q4",
+      "v": 184.9
+    },
+    {
+      "t": "2022-Q1",
+      "v": 185.0
+    },
+    {
+      "t": "2022-Q2",
+      "v": 185.0
+    },
+    {
+      "t": "2022-Q3",
+      "v": 184.2
+    },
+    {
+      "t": "2022-Q4",
+      "v": 183.8
+    },
+    {
+      "t": "2023-Q1",
+      "v": 183.3
+    },
+    {
+      "t": "2023-Q2",
+      "v": 183.0
+    },
+    {
+      "t": "2023-Q3",
+      "v": 182.5
+    },
+    {
+      "t": "2023-Q4",
+      "v": 181.6
+    },
+    {
+      "t": "2024-Q1",
+      "v": 180.9
+    },
+    {
+      "t": "2024-Q2",
+      "v": 180.8
+    },
+    {
+      "t": "2024-Q3",
+      "v": 179.1
+    },
+    {
+      "t": "2024-Q4",
+      "v": 178.6
+    },
+    {
+      "t": "2025-Q1",
+      "v": 177.3
+    },
+    {
+      "t": "2025-Q2",
+      "v": 177.4
+    },
+    {
+      "t": "2025-Q3",
+      "v": 176.2
+    },
+    {
+      "t": "2025-Q4",
+      "v": 177.0
+    }
+  ],
+  "notes": "Quarter-end value of household debt as a per cent of annualised household disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
+  "status": "ok",
   "manual_entry": false,
   "source_rights": "RBA terms of use for tabular data",
-  "citation": "Reserve Bank of Australia statistical tables."
+  "citation": "Reserve Bank of Australia, Statistical Table E2 (Selected Household Finances Ratios)."
 }
