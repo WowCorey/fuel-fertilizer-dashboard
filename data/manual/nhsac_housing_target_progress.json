@@ -1,16 +1,32 @@
 {
   "series_id": "nhsac_housing_target_progress",
   "source_id": "nhsac_housing_target_progress",
-  "source_name": "National Housing Accord - 1.2m new homes target progress",
-  "source_url": "https://nhsac.gov.au/",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-28T13:01:36+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
+  "source_name": "NHSAC Quarterly Report - National Housing Accord progress",
+  "source_url": "https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026",
+  "unit": "% of target built to date",
+  "retrieved_at": "2026-04-29T14:17:30+00:00",
+  "last_data_point": "2025-09-30",
+  "values": [
+    {
+      "t": "2025-Q3",
+      "v": 18
+    }
+  ],
+  "notes": "Manual entry from the NHSAC Quarterly Report - March 2026. The report states that 219,000 new homes were completed over the first five quarters since the Accord started and gives Australia's share of the Accord target built to date as 18%. Latest building completions data are as at the September 2025 quarter.",
+  "status": "ok",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 (Commonwealth of Australia)",
-  "citation": "National Housing Supply and Affordability Council, State of the Housing System annual report."
+  "citation": "National Housing Supply and Affordability Council, Quarterly Report - March 2026.",
+  "extra": {
+    "schema": "infrastructure_nhsac_housing_target_progress.v1",
+    "fields": {
+      "report": "Quarterly Report - March 2026",
+      "accord_target_dwellings": 1200000,
+      "completed_dwellings_since_accord_started": 219000,
+      "completion_period": "June 2024 quarter to September 2025 quarter",
+      "share_of_accord_target_built_to_date_pct": 18,
+      "expected_accord_completion_date": "June 2030",
+      "source_notes": "NHSAC notes the completion total aggregates gross dwelling units completed since the June 2024 quarter to the September 2025 quarter in seasonally adjusted terms."
+    }
+  }
 }

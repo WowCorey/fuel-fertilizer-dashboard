@@ -1,16 +1,39 @@
 {
   "series_id": "bitre_airport_passenger_movements",
   "source_id": "bitre_airport_passenger_movements",
-  "source_name": "BITRE - airport passenger movements by airport",
+  "source_name": "BITRE Airport Traffic Data - capital city airport passenger movements",
   "source_url": "https://www.bitre.gov.au/publications/ongoing/airport_traffic_data",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-28T13:01:36+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
+  "unit": "million passenger movements",
+  "retrieved_at": "2026-04-29T14:17:30+00:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 131.7
+    }
+  ],
+  "notes": "Manual entry from BITRE Airport Traffic Data 1985-86 to 2024-25 workbook. The value sums total revenue passenger movements for the eight capital city airports in 2024-25. It excludes non-capital airports and is an annual financial-year total, not a monthly total.",
+  "status": "ok",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 (Commonwealth of Australia)",
-  "citation": "Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data."
+  "citation": "Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data 1985-86 to 2024-25.",
+  "extra": {
+    "schema": "infrastructure_bitre_airport_passenger_movements.v1",
+    "fields": {
+      "source_workbook": "Airport Traffic Data 1985-86 to 2024-25 - financial years",
+      "financial_year": "2024-25",
+      "coverage": "Eight capital city airports",
+      "total_capital_city_airports_million_movements": 131.7,
+      "by_airport_million_movements": {
+        "Adelaide": 8.4,
+        "Brisbane": 23.8,
+        "Canberra": 2.8,
+        "Darwin": 1.9,
+        "Hobart": 2.8,
+        "Melbourne": 36.0,
+        "Perth": 14.2,
+        "Sydney": 41.8
+      }
+    }
+  }
 }

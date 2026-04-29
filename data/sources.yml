@@ -571,7 +571,7 @@ sources:
     canonical_url: https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/
     format: XLSX
     update_cadence: annual
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Taxation Office, Corporate Tax Transparency Report.
@@ -1526,7 +1526,7 @@ sources:
     canonical_url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: Company copyright
     rights_url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
     citation: ExxonMobil Australia annual report and financial statements.
@@ -1541,7 +1541,7 @@ sources:
     canonical_url: https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: Company copyright
     rights_url: https://australia.chevron.com/
     citation: Chevron Australia Holdings Pty Ltd Tax Transparency Report, year ended 31 December 2024.
@@ -2062,105 +2062,105 @@ sources:
     used_by: [infrastructure]
 
   - id: nhsac_housing_target_progress
-    human_name: National Housing Accord - 1.2m new homes target progress
+    human_name: NHSAC Quarterly Report - National Housing Accord progress
     publisher: National Housing Supply and Affordability Council
-    url: https://nhsac.gov.au/
-    canonical_url: https://nhsac.gov.au/
-    format: PDF
+    url: https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026
+    canonical_url: https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026
+    format: HTML_TABLE
     update_cadence: annual
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: CC BY 4.0 (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: National Housing Supply and Affordability Council, State of the Housing System annual report.
-    reuse_notes: NHSAC publishes an annual State of the Housing System report tracking progress against the 1.2 million new homes target under the National Housing Accord (1 July 2024 to 30 June 2029). Hand-key the headline cumulative completions, target shortfall and time elapsed from the latest report.
+    citation: National Housing Supply and Affordability Council, Quarterly Report - March 2026.
+    reuse_notes: Hand-key Australia's share of the 1.2 million Accord target built to date from the NHSAC Quarterly Report. The loaded row uses the March 2026 report's 18% national share built to date and 219,000 completions over the first five Accord quarters; do not substitute forecasts for actual completions.
     fetch: manual
     used_by: [infrastructure]
 
   - id: bitre_public_transport_patronage
-    human_name: BITRE - public transport patronage by capital city
+    human_name: BITRE Yearbook 2025 - public transport patronage by capital city
     publisher: Bureau of Infrastructure and Transport Research Economics
-    url: https://www.bitre.gov.au/publications/ongoing/yearbook
-    canonical_url: https://www.bitre.gov.au/publications/ongoing/yearbook
+    url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers
+    canonical_url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers
     format: XLSX
     update_cadence: annual
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: CC BY 4.0 (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook, public transport patronage tables.
-    reuse_notes: BITRE publishes annual public transport patronage by capital city (rail, bus, ferry, light rail) in the Australian Infrastructure and Transport Statistics Yearbook. Hand-key the latest published total annual patronage per capital city.
+    citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, passenger tables.
+    reuse_notes: Hand-key the Australian capital cities total from BITRE Yearbook 2025 Table 2.5i. The loaded value is 2024-25 capital-city public transport patronage in million passenger trips, with city and mode breakdowns in extra fields; it is not all Australian passenger travel.
     fetch: manual
     used_by: [infrastructure]
 
   - id: bitre_airport_passenger_movements
-    human_name: BITRE - airport passenger movements by airport
+    human_name: BITRE Airport Traffic Data - capital city airport passenger movements
     publisher: Bureau of Infrastructure and Transport Research Economics
     url: https://www.bitre.gov.au/publications/ongoing/airport_traffic_data
     canonical_url: https://www.bitre.gov.au/publications/ongoing/airport_traffic_data
     format: XLSX
-    update_cadence: monthly
-    last_verified: 2026-04-28
+    update_cadence: annual
+    last_verified: 2026-04-30
     rights: CC BY 4.0 (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data.
-    reuse_notes: BITRE publishes monthly airport passenger movement statistics (international, domestic, regional) per Australian airport. Hand-key the latest annual total movements at the eight capital city airports.
+    citation: Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data 1985-86 to 2024-25.
+    reuse_notes: Hand-key the annual financial-year workbook total revenue passenger movements for the eight capital city airports. The loaded value is 2024-25 annual movements and excludes non-capital airports; do not describe it as a monthly national total.
     fetch: manual
     used_by: [infrastructure]
 
   - id: bitre_freight_volumes
-    human_name: BITRE - Australian freight volumes by mode
+    human_name: BITRE Yearbook 2025 - domestic freight task by mode
     publisher: Bureau of Infrastructure and Transport Research Economics
-    url: https://www.bitre.gov.au/statistics/freight
-    canonical_url: https://www.bitre.gov.au/statistics/freight
-    format: PDF
+    url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight
+    canonical_url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight
+    format: XLSX
     update_cadence: annual
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: CC BY 4.0 (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Bureau of Infrastructure and Transport Research Economics, Australian aggregate freight forecasts and statistics.
-    reuse_notes: BITRE publishes Australian freight volumes by mode (road, rail, coastal shipping, domestic air) annually. Hand-key the latest published tonne-kilometres or tonnes per mode from a named BITRE statistical report.
+    citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, freight tables.
+    reuse_notes: Hand-key the domestic freight task from BITRE Yearbook 2025 Table 1.1c. The loaded value is 2024-25 total bulk and non-bulk domestic freight in billion tonne-kilometres; do not mix it with tonnes or international freight.
     fetch: manual
     used_by: [infrastructure]
 
   - id: infrastructure_australia_priority_list
-    human_name: Infrastructure Australia - Infrastructure Priority List
+    human_name: Infrastructure Australia - 2026 Infrastructure Priority List
     publisher: Infrastructure Australia
-    url: https://www.infrastructureaustralia.gov.au/
-    canonical_url: https://www.infrastructureaustralia.gov.au/
-    format: PDF
+    url: https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list
+    canonical_url: https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list
+    format: HTML_TABLE
     update_cadence: annual
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: CC BY 4.0 (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Infrastructure Australia, Infrastructure Priority List.
-    reuse_notes: Infrastructure Australia publishes an annual prioritised list of nationally significant infrastructure proposals. Hand-key the count of priority projects by state and the headline capital cost from the latest published list.
+    citation: Infrastructure Australia, 2026 Infrastructure Priority List.
+    reuse_notes: Infrastructure Australia publishes the 2026 Priority List overview publicly, but the proposal search is rendered dynamically. Keep this envelope unavailable until a clean extractable count and any capital-cost field are verified from the official site or publication; do not estimate from page navigation or blocked AJAX output.
     fetch: manual
     used_by: [infrastructure]
 
   - id: accc_nbn_broadband_speeds
-    human_name: ACCC Measuring Broadband Australia - typical speeds
+    human_name: ACCC Measuring Broadband Australia Report 32 - busy-hour download performance
     publisher: Australian Competition and Consumer Commission
-    url: https://www.accc.gov.au/by-industry/communications/national-broadband-network-nbn/measuring-broadband-australia
-    canonical_url: https://www.accc.gov.au/by-industry/communications/national-broadband-network-nbn/measuring-broadband-australia
+    url: https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report
+    canonical_url: https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report
     format: PDF
     update_cadence: quarterly
-    last_verified: 2026-04-28
+    last_verified: 2026-04-30
     rights: CC BY 3.0 AU (Commonwealth of Australia)
     rights_url: https://creativecommons.org/licenses/by/3.0/au/
-    citation: Australian Competition and Consumer Commission, Measuring Broadband Australia program reports.
-    reuse_notes: ACCC publishes quarterly typical busy-hour download speeds, latency and outage rates by NBN technology and retail service provider in the Measuring Broadband Australia program. Hand-key headline median download Mbps and latency from the latest published quarterly report.
+    citation: Australian Competition and Consumer Commission, Measuring Broadband Australia Report 32, April 2026.
+    reuse_notes: Hand-key the ACCC Report 32 state/territory range for average NBN fixed-line download performance during busy hours, expressed as percentage of plan speed. The loaded row is not a median Mbps speed and should not be described as one.
     fetch: manual
     used_by: [infrastructure]
 
   - id: au_data_centre_capacity_register
     human_name: Australian data centre capacity register
-    publisher: industry-various
-    url: https://www.dcd.com.au/
-    canonical_url: https://www.dcd.com.au/
+    publisher: No canonical public Australian government register identified
+    url: ""
+    canonical_url: ""
     format: HTML_TABLE
     update_cadence: ad-hoc
-    last_verified: 2026-04-28
-    rights: Industry-various; check publisher terms
-    rights_url: https://www.dcd.com.au/
+    last_verified: 2026-04-30
+    rights: Unavailable - no canonical public source identified
+    rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: No canonical Australian government register of data centre capacity exists; industry datasets such as DCD or 451 Research are gated.
     reuse_notes: There is no public Australian government register of data centre capacity, MW load, or AI-cluster capacity comparable to the AEMO Generation Information register. Industry sources (Datacentre Dynamics, 451 Research, Synergy Research) are gated and do not consistently publish per-site MW figures with reuse rights. Keep this envelope intentionally unavailable until a verifiable named public source publishes a register; do not estimate.
     fetch: unavailable
