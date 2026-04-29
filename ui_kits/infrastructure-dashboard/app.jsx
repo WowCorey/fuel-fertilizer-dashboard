@@ -142,7 +142,7 @@ function App() {
                   eyebrow="Pressure"
                   label="Persons per dwelling"
                   plain="National ERP divided by national residential dwelling count. A structural measure of how tightly the housing stock fits the population."
-                  value={personsPerDwelling}
+                  value={personsPerDwelling.toFixed(2)}
                   unit=" persons/dwelling"
                   source="Derived: ABS ERP_Q + ABS RES_DWELL_ST"
                 />
@@ -164,30 +164,33 @@ function App() {
             <MetricCard
               eyebrow="Housing target"
               label="National Housing Accord progress"
-              plain="Progress against the Commonwealth's 1.2 million new homes target (1 July 2024 to 30 June 2029), from the National Housing Supply and Affordability Council annual State of the Housing System report."
+              plain="Share of the Commonwealth's 1.2 million new homes target built to date, from NHSAC's March 2026 quarterly report."
               fromEnvelope={data.nhsac_housing_target_progress}
-              unit=""
+              unit="% of target built to date"
             />
             <MetricCard
               eyebrow="Public transport"
               label="Public transport patronage"
               plain="Annual public transport patronage by capital city (rail, bus, ferry, light rail), BITRE Australian Infrastructure and Transport Statistics Yearbook."
               fromEnvelope={data.bitre_public_transport_patronage}
-              unit=""
+              unit=" million passenger trips"
+              partial
             />
             <MetricCard
               eyebrow="Aviation"
               label="Airport passenger movements"
-              plain="Monthly passenger movements at the eight capital city airports (international, domestic, regional), BITRE Airport Traffic Data."
+              plain="Annual passenger movements at the eight capital city airports, from BITRE Airport Traffic Data."
               fromEnvelope={data.bitre_airport_passenger_movements}
-              unit=""
+              unit=" million passenger movements"
+              partial
             />
             <MetricCard
               eyebrow="Freight"
               label="Freight volumes by mode"
-              plain="Annual freight volumes by mode (road, rail, coastal shipping, domestic air), BITRE freight statistics."
+              plain="Annual domestic freight task by mode (road, rail, coastal shipping, domestic air), from BITRE freight statistics."
               fromEnvelope={data.bitre_freight_volumes}
-              unit=""
+              unit=" billion tonne-kilometres"
+              partial
             />
           </div>
 
@@ -196,10 +199,15 @@ function App() {
           <div className="metric-grid metric-grid--4">
             <MetricCard
               eyebrow="Digital"
-              label="NBN typical busy-hour speeds"
-              plain="Median busy-hour download speed across NBN technologies and retail service providers, from the ACCC Measuring Broadband Australia program quarterly report."
+              label="NBN busy-hour download performance"
+              plain="State and territory range for average NBN fixed-line download performance during busy hours, reported as a percentage of plan speed. This is not a median Mbps figure."
               fromEnvelope={data.accc_nbn_broadband_speeds}
-              unit=" Mbps"
+              valueFn={(env) => {
+                const range = env.extra?.fields?.download_busy_hour_percent_of_plan_speed_range;
+                return range ? `${range.min}-${range.max}` : env.values.at(-1).v;
+              }}
+              unit="% of plan speed"
+              partial
             />
             <MetricCard
               eyebrow="Major projects"
@@ -221,12 +229,13 @@ function App() {
             <article className="source-card">
               <h4>Pending source coverage</h4>
               <p className="body-sm">
-                NHSAC housing target progress, BITRE transport, airport and freight statistics,
-                ACCC NBN performance and the Infrastructure Australia priority list stay on
-                manual until each named publication is verified by a human. Programmatic access
-                is wired for ABS population, population growth and residential dwelling stock
-                only. The data centre card is intentionally unavailable: there is no canonical
-                public Australian register comparable to the AEMO Generation Information register.
+                NHSAC target progress, BITRE transport, airport and freight statistics, and
+                ACCC NBN busy-hour performance are now manual, source-backed rows. The
+                Infrastructure Australia priority-list count remains unavailable until a clean
+                extractable proposal count is verified. Programmatic access is wired for ABS
+                population, population growth and residential dwelling stock only. The data
+                centre card is intentionally unavailable: there is no canonical public Australian
+                register comparable to the AEMO Generation Information register.
               </p>
             </article>
           </div>
@@ -332,13 +341,13 @@ function App() {
               <dt>Persons per dwelling (derived)</dt>
               <dd>National ERP divided by national residential dwelling count, computed in the dashboard from the two source envelopes. A structural measure of housing pressure that does not depend on price.</dd>
               <dt>National Housing Accord progress</dt>
-              <dd>Hand-keyed from the latest National Housing Supply and Affordability Council State of the Housing System annual report. Tracks progress against the 1.2 million new homes target.</dd>
+              <dd>Hand-keyed from the National Housing Supply and Affordability Council Quarterly Report - March 2026. Shows Australia's share of the 1.2 million Accord target built to date, using completion data to the September 2025 quarter.</dd>
               <dt>Public transport, airports, freight</dt>
-              <dd>Hand-keyed from the relevant BITRE published statistical reports (Australian Infrastructure and Transport Statistics Yearbook, Airport Traffic Data, freight statistics).</dd>
+              <dd>Hand-keyed from BITRE workbooks: Yearbook 2025 Table 2.5i for capital-city public transport patronage, Airport Traffic Data financial-year workbook for the eight capital city airports, and Yearbook 2025 Table 1.1c for domestic freight task. These are scoped measures, not all possible passenger or freight movements.</dd>
               <dt>NBN typical speeds</dt>
-              <dd>Hand-keyed from the latest ACCC Measuring Broadband Australia program quarterly report. Median busy-hour download speed.</dd>
+              <dd>Hand-keyed from ACCC Measuring Broadband Australia Report 32 and appendix tables. The loaded metric is the state/territory range for average NBN fixed-line busy-hour download performance as a percentage of plan speed. It is not a median Mbps speed.</dd>
               <dt>Infrastructure Australia priority projects</dt>
-              <dd>Hand-keyed from the latest Infrastructure Australia Priority List - count of nationally significant proposed projects and aggregate capital cost.</dd>
+              <dd>Unavailable in this pass. The 2026 Infrastructure Priority List overview is public, but the searchable proposal list is rendered through a dynamic endpoint that could not be cleanly extracted here; no count or aggregate capital cost is published until a source-safe extract is verified.</dd>
               <dt>Australian data centre capacity</dt>
               <dd>Intentionally unavailable: there is no canonical Australian government register of data centre capacity. Industry datasets such as DCD or 451 Research are gated and do not consistently publish per-site MW figures with reuse rights. Will not estimate.</dd>
             </dl>

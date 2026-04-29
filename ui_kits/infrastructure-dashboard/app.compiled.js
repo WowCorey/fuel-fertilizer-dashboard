@@ -1016,7 +1016,7 @@ function App() {
     eyebrow: "Pressure",
     label: "Persons per dwelling",
     plain: "National ERP divided by national residential dwelling count. A structural measure of how tightly the housing stock fits the population.",
-    value: personsPerDwelling,
+    value: personsPerDwelling.toFixed(2),
     unit: " persons/dwelling",
     source: "Derived: ABS ERP_Q + ABS RES_DWELL_ST"
   }) : React.createElement(MetricCard, {
@@ -1037,27 +1037,30 @@ function App() {
   }, React.createElement(MetricCard, {
     eyebrow: "Housing target",
     label: "National Housing Accord progress",
-    plain: "Progress against the Commonwealth's 1.2 million new homes target (1 July 2024 to 30 June 2029), from the National Housing Supply and Affordability Council annual State of the Housing System report.",
+    plain: "Share of the Commonwealth's 1.2 million new homes target built to date, from NHSAC's March 2026 quarterly report.",
     fromEnvelope: data.nhsac_housing_target_progress,
-    unit: ""
+    unit: "% of target built to date"
   }), React.createElement(MetricCard, {
     eyebrow: "Public transport",
     label: "Public transport patronage",
     plain: "Annual public transport patronage by capital city (rail, bus, ferry, light rail), BITRE Australian Infrastructure and Transport Statistics Yearbook.",
     fromEnvelope: data.bitre_public_transport_patronage,
-    unit: ""
+    unit: " million passenger trips",
+    partial: true
   }), React.createElement(MetricCard, {
     eyebrow: "Aviation",
     label: "Airport passenger movements",
-    plain: "Monthly passenger movements at the eight capital city airports (international, domestic, regional), BITRE Airport Traffic Data.",
+    plain: "Annual passenger movements at the eight capital city airports, from BITRE Airport Traffic Data.",
     fromEnvelope: data.bitre_airport_passenger_movements,
-    unit: ""
+    unit: " million passenger movements",
+    partial: true
   }), React.createElement(MetricCard, {
     eyebrow: "Freight",
     label: "Freight volumes by mode",
-    plain: "Annual freight volumes by mode (road, rail, coastal shipping, domestic air), BITRE freight statistics.",
+    plain: "Annual domestic freight task by mode (road, rail, coastal shipping, domestic air), from BITRE freight statistics.",
     fromEnvelope: data.bitre_freight_volumes,
-    unit: ""
+    unit: " billion tonne-kilometres",
+    partial: true
   })), React.createElement("div", {
     style: {
       height: 16
@@ -1066,10 +1069,15 @@ function App() {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Digital",
-    label: "NBN typical busy-hour speeds",
-    plain: "Median busy-hour download speed across NBN technologies and retail service providers, from the ACCC Measuring Broadband Australia program quarterly report.",
+    label: "NBN busy-hour download performance",
+    plain: "State and territory range for average NBN fixed-line download performance during busy hours, reported as a percentage of plan speed. This is not a median Mbps figure.",
     fromEnvelope: data.accc_nbn_broadband_speeds,
-    unit: " Mbps"
+    valueFn: env => {
+      const range = env.extra?.fields?.download_busy_hour_percent_of_plan_speed_range;
+      return range ? `${range.min}-${range.max}` : env.values.at(-1).v;
+    },
+    unit: "% of plan speed",
+    partial: true
   }), React.createElement(MetricCard, {
     eyebrow: "Major projects",
     label: "Infrastructure Australia priority list",
@@ -1089,7 +1097,7 @@ function App() {
     className: "source-card"
   }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "NHSAC housing target progress, BITRE transport, airport and freight statistics, ACCC NBN performance and the Infrastructure Australia priority list stay on manual until each named publication is verified by a human. Programmatic access is wired for ABS population, population growth and residential dwelling stock only. The data centre card is intentionally unavailable: there is no canonical public Australian register comparable to the AEMO Generation Information register.")))), React.createElement("section", {
+  }, "NHSAC target progress, BITRE transport, airport and freight statistics, and ACCC NBN busy-hour performance are now manual, source-backed rows. The Infrastructure Australia priority-list count remains unavailable until a clean extractable proposal count is verified. Programmatic access is wired for ABS population, population growth and residential dwelling stock only. The data centre card is intentionally unavailable: there is no canonical public Australian register comparable to the AEMO Generation Information register.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1174,7 +1182,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Estimated Resident Population"), React.createElement("dd", null, "Fetched live from the ABS Data API ERP_Q dataflow with key 1.3.TOT.AUS.Q (MEASURE Estimated Resident Population, SEX Persons, AGE all, REGION Australia, FREQ Quarterly)."), React.createElement("dt", null, "Population growth rate"), React.createElement("dd", null, "Fetched live from ABS ERP_Q with key 3.3.TOT.AUS.Q (MEASURE ERP percentage change over previous year). Year-on-year national growth."), React.createElement("dt", null, "Residential dwelling stock"), React.createElement("dd", null, "Fetched live from the ABS RES_DWELL_ST dataflow with key 4.AUS.Q (MEASURE Number of residential dwellings, REGION Australia, FREQ Quarterly). Reported in thousands."), React.createElement("dt", null, "Persons per dwelling (derived)"), React.createElement("dd", null, "National ERP divided by national residential dwelling count, computed in the dashboard from the two source envelopes. A structural measure of housing pressure that does not depend on price."), React.createElement("dt", null, "National Housing Accord progress"), React.createElement("dd", null, "Hand-keyed from the latest National Housing Supply and Affordability Council State of the Housing System annual report. Tracks progress against the 1.2 million new homes target."), React.createElement("dt", null, "Public transport, airports, freight"), React.createElement("dd", null, "Hand-keyed from the relevant BITRE published statistical reports (Australian Infrastructure and Transport Statistics Yearbook, Airport Traffic Data, freight statistics)."), React.createElement("dt", null, "NBN typical speeds"), React.createElement("dd", null, "Hand-keyed from the latest ACCC Measuring Broadband Australia program quarterly report. Median busy-hour download speed."), React.createElement("dt", null, "Infrastructure Australia priority projects"), React.createElement("dd", null, "Hand-keyed from the latest Infrastructure Australia Priority List - count of nationally significant proposed projects and aggregate capital cost."), React.createElement("dt", null, "Australian data centre capacity"), React.createElement("dd", null, "Intentionally unavailable: there is no canonical Australian government register of data centre capacity. Industry datasets such as DCD or 451 Research are gated and do not consistently publish per-site MW figures with reuse rights. Will not estimate.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Estimated Resident Population"), React.createElement("dd", null, "Fetched live from the ABS Data API ERP_Q dataflow with key 1.3.TOT.AUS.Q (MEASURE Estimated Resident Population, SEX Persons, AGE all, REGION Australia, FREQ Quarterly)."), React.createElement("dt", null, "Population growth rate"), React.createElement("dd", null, "Fetched live from ABS ERP_Q with key 3.3.TOT.AUS.Q (MEASURE ERP percentage change over previous year). Year-on-year national growth."), React.createElement("dt", null, "Residential dwelling stock"), React.createElement("dd", null, "Fetched live from the ABS RES_DWELL_ST dataflow with key 4.AUS.Q (MEASURE Number of residential dwellings, REGION Australia, FREQ Quarterly). Reported in thousands."), React.createElement("dt", null, "Persons per dwelling (derived)"), React.createElement("dd", null, "National ERP divided by national residential dwelling count, computed in the dashboard from the two source envelopes. A structural measure of housing pressure that does not depend on price."), React.createElement("dt", null, "National Housing Accord progress"), React.createElement("dd", null, "Hand-keyed from the National Housing Supply and Affordability Council Quarterly Report - March 2026. Shows Australia's share of the 1.2 million Accord target built to date, using completion data to the September 2025 quarter."), React.createElement("dt", null, "Public transport, airports, freight"), React.createElement("dd", null, "Hand-keyed from BITRE workbooks: Yearbook 2025 Table 2.5i for capital-city public transport patronage, Airport Traffic Data financial-year workbook for the eight capital city airports, and Yearbook 2025 Table 1.1c for domestic freight task. These are scoped measures, not all possible passenger or freight movements."), React.createElement("dt", null, "NBN typical speeds"), React.createElement("dd", null, "Hand-keyed from ACCC Measuring Broadband Australia Report 32 and appendix tables. The loaded metric is the state/territory range for average NBN fixed-line busy-hour download performance as a percentage of plan speed. It is not a median Mbps speed."), React.createElement("dt", null, "Infrastructure Australia priority projects"), React.createElement("dd", null, "Unavailable in this pass. The 2026 Infrastructure Priority List overview is public, but the searchable proposal list is rendered through a dynamic endpoint that could not be cleanly extracted here; no count or aggregate capital cost is published until a source-safe extract is verified."), React.createElement("dt", null, "Australian data centre capacity"), React.createElement("dd", null, "Intentionally unavailable: there is no canonical Australian government register of data centre capacity. Industry datasets such as DCD or 451 Research are gated and do not consistently publish per-site MW figures with reuse rights. Will not estimate.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

@@ -357,16 +357,16 @@
     },
     "accc_nbn_broadband_speeds": {
       "id": "accc_nbn_broadband_speeds",
-      "human_name": "ACCC Measuring Broadband Australia - typical speeds",
+      "human_name": "ACCC Measuring Broadband Australia Report 32 - busy-hour download performance",
       "publisher": "Australian Competition and Consumer Commission",
       "fetch": "manual",
       "update_cadence": "quarterly",
       "used_by": [
         "infrastructure"
       ],
-      "canonical_url": "https://www.accc.gov.au/by-industry/communications/national-broadband-network-nbn/measuring-broadband-australia",
+      "canonical_url": "https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report",
       "rights": "CC BY 3.0 AU (Commonwealth of Australia)",
-      "citation": "Australian Competition and Consumer Commission, Measuring Broadband Australia program reports.",
+      "citation": "Australian Competition and Consumer Commission, Measuring Broadband Australia Report 32, April 2026.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -961,14 +961,14 @@
     "au_data_centre_capacity_register": {
       "id": "au_data_centre_capacity_register",
       "human_name": "Australian data centre capacity register",
-      "publisher": "industry-various",
+      "publisher": "No canonical public Australian government register identified",
       "fetch": "unavailable",
       "update_cadence": "ad-hoc",
       "used_by": [
         "infrastructure"
       ],
-      "canonical_url": "https://www.dcd.com.au/",
-      "rights": "Industry-various; check publisher terms",
+      "canonical_url": "",
+      "rights": "Unavailable - no canonical public source identified",
       "citation": "No canonical Australian government register of data centre capacity exists; industry datasets such as DCD or 451 Research are gated.",
       "preferred_dir": "manual",
       "has_generated": false,
@@ -1078,48 +1078,48 @@
     },
     "bitre_airport_passenger_movements": {
       "id": "bitre_airport_passenger_movements",
-      "human_name": "BITRE - airport passenger movements by airport",
+      "human_name": "BITRE Airport Traffic Data - capital city airport passenger movements",
       "publisher": "Bureau of Infrastructure and Transport Research Economics",
       "fetch": "manual",
-      "update_cadence": "monthly",
+      "update_cadence": "annual",
       "used_by": [
         "infrastructure"
       ],
       "canonical_url": "https://www.bitre.gov.au/publications/ongoing/airport_traffic_data",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
-      "citation": "Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data.",
+      "citation": "Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data 1985-86 to 2024-25.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
     },
     "bitre_freight_volumes": {
       "id": "bitre_freight_volumes",
-      "human_name": "BITRE - Australian freight volumes by mode",
+      "human_name": "BITRE Yearbook 2025 - domestic freight task by mode",
       "publisher": "Bureau of Infrastructure and Transport Research Economics",
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
         "infrastructure"
       ],
-      "canonical_url": "https://www.bitre.gov.au/statistics/freight",
+      "canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
-      "citation": "Bureau of Infrastructure and Transport Research Economics, Australian aggregate freight forecasts and statistics.",
+      "citation": "Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, freight tables.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
     },
     "bitre_public_transport_patronage": {
       "id": "bitre_public_transport_patronage",
-      "human_name": "BITRE - public transport patronage by capital city",
+      "human_name": "BITRE Yearbook 2025 - public transport patronage by capital city",
       "publisher": "Bureau of Infrastructure and Transport Research Economics",
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
         "infrastructure"
       ],
-      "canonical_url": "https://www.bitre.gov.au/publications/ongoing/yearbook",
+      "canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
-      "citation": "Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook, public transport patronage tables.",
+      "citation": "Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, passenger tables.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1639,32 +1639,32 @@
     },
     "infrastructure_australia_priority_list": {
       "id": "infrastructure_australia_priority_list",
-      "human_name": "Infrastructure Australia - Infrastructure Priority List",
+      "human_name": "Infrastructure Australia - 2026 Infrastructure Priority List",
       "publisher": "Infrastructure Australia",
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
         "infrastructure"
       ],
-      "canonical_url": "https://www.infrastructureaustralia.gov.au/",
+      "canonical_url": "https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
-      "citation": "Infrastructure Australia, Infrastructure Priority List.",
+      "citation": "Infrastructure Australia, 2026 Infrastructure Priority List.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
     },
     "nhsac_housing_target_progress": {
       "id": "nhsac_housing_target_progress",
-      "human_name": "National Housing Accord - 1.2m new homes target progress",
+      "human_name": "NHSAC Quarterly Report - National Housing Accord progress",
       "publisher": "National Housing Supply and Affordability Council",
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
         "infrastructure"
       ],
-      "canonical_url": "https://nhsac.gov.au/",
+      "canonical_url": "https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
-      "citation": "National Housing Supply and Affordability Council, State of the Housing System annual report.",
+      "citation": "National Housing Supply and Affordability Council, Quarterly Report - March 2026.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

@@ -57,6 +57,15 @@ JSON envelope.
 | Manufacturing sales wording | populated with caveat | ABS Business Indicators Table 4 supports manufacturing income from sales of goods and services, chain volume measures. This is a sales/output proxy, not a separate production-index series. | Keep the card and methodology labelled as sales/income from sales of goods and services. Do not relabel it as a production index unless a source-safe production index is added. |
 | Manufactured exports unit | resolved | ABS International Trade Table 12a values for SITC sections 5-8 are published in AUD millions. | Keep generated `abs_manufactured_exports_total` in AUD millions; do not convert as if the source values were AUD thousands. |
 
+## Infrastructure
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Infrastructure Australia priority-list count and capital cost | unavailable | The 2026 Infrastructure Priority List overview is public, but the proposal-count view is rendered through a dynamic search endpoint. Direct endpoint checks in this pass returned a request-blocked page, and the static overview did not expose a clean count or aggregate capital-cost row. | Keep `infrastructure_australia_priority_list` unavailable until an official export, static table or publication row is verified. Do not count navigation items or scrape blocked output. |
+| Australian data centre capacity | intentionally unavailable | No canonical public Australian government register of data centre capacity, MW load or AI-cluster capacity was identified. Vendor, consultancy and private market datasets are not source-safe public register inputs for this dashboard. | Keep `au_data_centre_capacity_register` unavailable unless a named public source publishes comparable capacity fields with date, unit and reuse terms. |
+| ACCC NBN speed concept | populated with caveat | ACCC Report 32 supports a state/territory range for average NBN fixed-line busy-hour download performance as a percentage of plan speed. It does not provide the page with a single source-safe median Mbps figure. | Keep the card labelled as percentage-of-plan busy-hour performance. Add Mbps only if the ACCC source publishes a clean comparable Mbps row. |
+| BITRE passenger and freight coverage | populated with caveat | BITRE public transport is capital-city patronage, airport movements are the eight capital city airports, and freight is domestic freight task in tonne-kilometres. These are scoped indicators, not full national mobility, all-airport or tonnes measures. | Keep partial-coverage trust labels visible and do not merge these concepts into broader totals. |
+
 ## Oil & Production
 
 | Gap | Current status | Why not filled yet | Next action |
