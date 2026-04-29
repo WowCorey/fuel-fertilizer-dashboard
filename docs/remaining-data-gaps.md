@@ -41,6 +41,15 @@ JSON envelope.
 | ABARES fertiliser price index | deferred | ABARES appears to publish this through quarterly workbook/report outputs rather than a stable JSON/CSV API. | Add XLSX ingestion or hand-key values from the named ABARES release table. |
 | Fertiliser stock cover | unavailable | No named public source has been verified for an Australian fertiliser stock-cover indicator. | Leave unavailable unless ABARES, DCCEEW, or another named public source publishes stock and usage inputs or a direct cover figure. |
 
+## Manufacturing
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Manufacturing share of GDP | unavailable | The page defines the intended concept as ANZSIC division C gross value added as a share of total industry GVA, but the exact ABS National Accounts table/API mapping for a repeatable calculation has not been verified in this pass. | Keep `abs_manufacturing_gdp_share` unavailable until the source table, denominator, period and unit are verified together. |
+| Department of Industry profile row | unavailable | No named Department of Industry, Science and Resources publication has been loaded that supports a clean dashboard row with exact period, unit and factual scope. | Keep `doe_industry_growth_centres_summary` unavailable. Add only a named factual row, not a narrative or promotional summary. |
+| Manufacturing sales wording | populated with caveat | ABS Business Indicators Table 4 supports manufacturing income from sales of goods and services, chain volume measures. This is a sales/output proxy, not a separate production-index series. | Keep the card and methodology labelled as sales/income from sales of goods and services. Do not relabel it as a production index unless a source-safe production index is added. |
+| Manufactured exports unit | resolved | ABS International Trade Table 12a values for SITC sections 5-8 are published in AUD millions. | Keep generated `abs_manufactured_exports_total` in AUD millions; do not convert as if the source values were AUD thousands. |
+
 ## Oil & Production
 
 | Gap | Current status | Why not filled yet | Next action |

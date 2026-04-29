@@ -898,6 +898,180 @@ def load_xlsx_from_url(url: str, extra_headers: dict[str, str] | None = None):
     return openpyxl.load_workbook(io.BytesIO(r.content), read_only=True, data_only=True)
 
 
+def normalized_abs_text(value: Any) -> str:
+    text = "" if value is None else str(value)
+    text = text.replace("\xa0", " ").replace("\u2019", "'")
+    text = re.sub(r"\s+", " ", text).strip()
+    return text.lstrip(">").strip().lower()
+
+
+def discover_abs_release_xlsx_url(release_url: str, label_contains: str | list[str]) -> str:
+    """Find a named XLSX download link on an ABS latest-release page."""
+    needles = [label_contains] if isinstance(label_contains, str) else list(label_contains)
+    wanted = [normalized_abs_text(needle) for needle in needles if normalized_abs_text(needle)]
+    if not release_url:
+        raise RuntimeError("ABS release URL is required")
+    if release_url.lower().endswith(".xlsx"):
+        return release_url
+    if not wanted:
+        raise RuntimeError("ABS XLSX discovery requires fetch_xlsx_label_contains")
+
+    r = requests.get(release_url, headers={"User-Agent": UA}, timeout=60)
+    r.raise_for_status()
+
+    candidates: list[tuple[str, str]] = []
+    for match in re.finditer(r"<a[^>]+href=[\"']([^\"']+\.xlsx)[\"'][^>]*>(.*?)</a>", r.text, flags=re.I | re.S):
+        tag = match.group(0)
+        href = urllib.parse.urljoin(r.url, match.group(1))
+        aria = re.search(r"aria-label=[\"']([^\"']+)[\"']", tag, flags=re.I)
+        label = aria.group(1) if aria else re.sub(r"<.*?>", " ", match.group(2), flags=re.S)
+        label_norm = normalized_abs_text(label)
+        candidates.append((label_norm, href))
+        if all(needle in label_norm for needle in wanted):
+            return href
+
+    available = "; ".join(label for label, _ in candidates[:8])
+    raise RuntimeError(f"ABS release page did not contain a matching XLSX link. Wanted {wanted}; saw {available}")
+
+
+def _round_numeric(value: float, ndigits: int) -> int | float:
+    rounded = round(float(value), ndigits)
+    return int(rounded) if ndigits == 0 else rounded
+
+
+def extract_abs_xlsx_series(
+    wb: Any,
+    targets: list[str],
+    *,
+    series_type: str | None,
+    ndigits: int,
+    limit: int,
+) -> tuple[list[dict[str, Any]], str, list[dict[str, Any]], str]:
+    """Extract one or more ABS spreadsheet series and sum them by period."""
+    if not targets:
+        raise RuntimeError("ABS XLSX extraction requires at least one target series description")
+
+    wanted_type = normalized_abs_text(series_type) if series_type else None
+    found: list[dict[str, Any]] = []
+
+    for target in targets:
+        target_norm = normalized_abs_text(target)
+        match_info: dict[str, Any] | None = None
+        for sheet_name in wb.sheetnames:
+            if not str(sheet_name).lower().startswith("data"):
+                continue
+            ws = wb[sheet_name]
+            rows = list(ws.iter_rows(values_only=True))
+            if len(rows) < 11:
+                continue
+            max_cols = max(len(row) for row in rows[:10])
+            for col_idx in range(1, max_cols):
+                desc = rows[0][col_idx] if col_idx < len(rows[0]) else None
+                if not desc:
+                    continue
+                desc_norm = normalized_abs_text(desc)
+                if target_norm not in desc_norm:
+                    continue
+                col_type = normalized_abs_text(rows[2][col_idx] if col_idx < len(rows[2]) else None)
+                if wanted_type and col_type != wanted_type:
+                    continue
+                observations: dict[str, float] = {}
+                for row in rows[10:]:
+                    raw_date = row[0] if row else None
+                    raw_value = row[col_idx] if col_idx < len(row) else None
+                    if isinstance(raw_date, dt.datetime):
+                        obs_date = raw_date.date()
+                    elif isinstance(raw_date, dt.date):
+                        obs_date = raw_date
+                    else:
+                        continue
+                    if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+                        continue
+                    observations[obs_date.strftime("%Y-%m")] = float(raw_value)
+                if observations:
+                    match_info = {
+                        "target": target,
+                        "description": str(desc),
+                        "sheet": sheet_name,
+                        "series_id": rows[9][col_idx] if col_idx < len(rows[9]) else None,
+                        "unit": rows[1][col_idx] if col_idx < len(rows[1]) else None,
+                        "series_type": rows[2][col_idx] if col_idx < len(rows[2]) else None,
+                        "observations": observations,
+                    }
+                    break
+            if match_info:
+                break
+        if not match_info:
+            raise RuntimeError(f"ABS workbook did not contain target series {target!r}")
+        found.append(match_info)
+
+    common_periods = set(found[0]["observations"])
+    for series in found[1:]:
+        common_periods &= set(series["observations"])
+    values: list[dict[str, Any]] = []
+    for period in sorted(common_periods):
+        total = sum(series["observations"][period] for series in found)
+        values.append({"t": period, "v": _round_numeric(total, ndigits)})
+
+    values = values[-limit:]
+    if not values:
+        raise RuntimeError("ABS workbook target series contained no common numeric observations")
+
+    latest_period = values[-1]["t"]
+    latest_date = dt.date.fromisoformat(f"{latest_period}-01")
+    latest_components = [
+        {
+            "description": series["description"],
+            "series_id": series["series_id"],
+            "sheet": series["sheet"],
+            "series_type": series["series_type"],
+            "unit": series["unit"],
+            "value": _round_numeric(series["observations"][latest_period], ndigits),
+        }
+        for series in found
+    ]
+    unit = str(found[0]["unit"] or "").strip()
+    return values, month_end_iso(latest_date), latest_components, unit
+
+
+def fetch_abs_release_xlsx_series(source: dict[str, Any]) -> dict[str, Any]:
+    release_url = source.get("fetch_url") or source.get("canonical_url") or source.get("url")
+    workbook_url = discover_abs_release_xlsx_url(release_url, source.get("fetch_xlsx_label_contains", []))
+    wb = load_xlsx_from_url(workbook_url)
+
+    targets = source.get("fetch_series_descriptions") or []
+    if isinstance(targets, str):
+        targets = [targets]
+    values, last_data_point, components, workbook_unit = extract_abs_xlsx_series(
+        wb,
+        list(targets),
+        series_type=source.get("fetch_series_type"),
+        ndigits=int(source.get("fetch_round_digits", 1)),
+        limit=int(source.get("fetch_trim_observations", 60)),
+    )
+    unit = source.get("fetch_unit") or workbook_unit
+    component_names = "; ".join(str(component["series_id"]) for component in components)
+    notes = source.get("fetch_notes") or (
+        f"Fetched from ABS latest-release XLSX workbook. Series IDs: {component_names}. "
+        f"Workbook unit: {workbook_unit}. Values are trimmed to the last {len(values)} observations."
+    )
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": notes,
+        "source_url_resolved": workbook_url,
+        "extra": {
+            "schema": "abs_xlsx_series.v1",
+            "fields": {
+                "workbook_url": workbook_url,
+                "workbook_unit": workbook_unit,
+                "component_series": components,
+            },
+        },
+    }
+
+
 def discover_aps_workbook_url(package_url: str) -> str:
     r = requests.get(package_url, headers={"User-Agent": UA}, timeout=45)
     r.raise_for_status()
@@ -2064,6 +2238,11 @@ FETCHERS: dict[str, Fetcher] = {
         source.get("sdmx_note_suffix"),
         source.get("fetch_url"),
     ),
+    "abs_manufacturing_employment": fetch_abs_release_xlsx_series,
+    "abs_manufacturing_output_index": fetch_abs_release_xlsx_series,
+    "abs_manufactured_exports_total": fetch_abs_release_xlsx_series,
+    "abs_manufacturing_capex": fetch_abs_release_xlsx_series,
+    "abs_food_beverage_employment": fetch_abs_release_xlsx_series,
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "rba_cash_rate": lambda source: fetch_rba_csv_column(
