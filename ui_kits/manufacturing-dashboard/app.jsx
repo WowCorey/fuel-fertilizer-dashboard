@@ -113,10 +113,10 @@ function App() {
             />
             <MetricCard
               eyebrow="Output"
-              label="Manufacturing sales (production index)"
-              plain="ABS Business Indicators manufacturing sales of goods produced, seasonally adjusted, quarterly."
+              label="Manufacturing sales (chain volume)"
+              plain="ABS Business Indicators income from sales of goods and services for manufacturing, chain volume measures, seasonally adjusted, quarterly."
               fromEnvelope={data.abs_manufacturing_output_index}
-              unit=" AUD millions"
+              unit=" chain volume $m"
             />
             <MetricCard
               eyebrow="Exports"
@@ -157,9 +157,10 @@ function App() {
             <article className="source-card">
               <h4>Pending source coverage</h4>
               <p className="body-sm">
-                All ABS manufacturing series remain on manual until each SDMX dataflow key is
-                verified by a human. The Department of Industry industry profile slot is also
-                manual; values appear only after a named publication is verified.
+                Five ABS manufacturing series now load from verified ABS latest-release XLSX
+                tables. Manufacturing GDP share remains unavailable until the exact National
+                Accounts table/API mapping is verified. The Department of Industry profile slot
+                also stays unavailable until a named factual publication is loaded.
               </p>
             </article>
           </div>
@@ -205,14 +206,14 @@ function App() {
             />
             <ChartCard
               eyebrow="Output"
-              title="Manufacturing sales, quarterly"
-              unit="AUD millions"
+              title="Manufacturing sales, chain volume, quarterly"
+              unit="chain volume $m"
               fromEnvelope={data.abs_manufacturing_output_index}
               ranges={['3Y','5Y']}
               defaultRange="5Y"
               accent="#B45309"
-              takeaway="Seasonally adjusted manufacturing sales of goods produced, ABS Business Indicators."
-              yAxisLabel="Manufacturing sales (AUD millions)"
+              takeaway="Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, ABS Business Indicators."
+              yAxisLabel="Manufacturing sales (chain volume $m)"
             />
           </div>
 
@@ -284,19 +285,19 @@ function App() {
             <h3>How we calculate the numbers</h3>
             <dl>
               <dt>Manufacturing share of GDP</dt>
-              <dd>ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). Manual entry until the ABS SDMX dataflow key for industry GVA is verified.</dd>
+              <dd>ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). This remains unavailable until the exact source table or API mapping for the share calculation is verified.</dd>
               <dt>Manufacturing employment</dt>
-              <dd>Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001), quarterly. Manual entry until the ABS SDMX dataflow key for industry employment is verified.</dd>
+              <dd>Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001) Table 04, seasonally adjusted, quarterly.</dd>
               <dt>Manufacturing sales</dt>
-              <dd>Seasonally adjusted manufacturing sales of goods produced, from ABS Business Indicators Australia (Cat. 5676.0), quarterly. Manual entry until the ABS SDMX dataflow key for manufacturing sales is verified.</dd>
+              <dd>Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, from ABS Business Indicators Australia (Cat. 5676.0) Table 4, quarterly. This is a source-backed sales/output proxy, not a separate production-index series.</dd>
               <dt>Manufactured exports</dt>
-              <dd>Combined SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods. Manual entry until the per-section ABS SDMX query is verified for manufactured exports.</dd>
+              <dd>Combined original FOB export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods Table 12a. The ABS workbook unit is AUD millions.</dd>
               <dt>Manufacturing private new capex</dt>
-              <dd>Actual private new capital expenditure for ANZSIC division C (manufacturing), from ABS Private New Capital Expenditure (Cat. 5625.0), quarterly. Manual entry until the ABS SDMX dataflow key for industry capex is verified.</dd>
+              <dd>Actual total private new capital expenditure for ANZSIC division C (manufacturing), current prices, from ABS Private New Capital Expenditure (Cat. 5625.0) Table 4, seasonally adjusted, quarterly.</dd>
               <dt>Food and beverage manufacturing employment</dt>
-              <dd>Employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed. Manual entry until the ABS SDMX dataflow key for ANZSIC subdivisions is verified.</dd>
+              <dd>Sum of original employed-persons series for ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed Table 06, quarterly.</dd>
               <dt>Industry profile (DoIS)</dt>
-              <dd>Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. Aggregated estimates are never published.</dd>
+              <dd>Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. This remains unavailable until a named publication supports a clean factual row; aggregated estimates are never published.</dd>
             </dl>
           </div>
         </section>

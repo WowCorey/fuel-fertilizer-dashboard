@@ -149,7 +149,7 @@
       "id": "abs_food_beverage_employment",
       "human_name": "ABS Food and beverage manufacturing employment, quarterly",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "quarterly",
       "used_by": [
         "manufacturing"
@@ -157,8 +157,8 @@
       "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), food product manufacturing (ANZSIC 11) and beverage and tobacco product manufacturing (ANZSIC 12).",
-      "preferred_dir": "manual",
-      "has_generated": false,
+      "preferred_dir": "generated",
+      "has_generated": true,
       "has_manual": true
     },
     "abs_gdp_real_growth": {
@@ -181,7 +181,7 @@
       "id": "abs_manufactured_exports_total",
       "human_name": "ABS International Trade - manufactured exports (SITC 5-8), monthly",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
         "manufacturing"
@@ -189,15 +189,15 @@
       "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Australian Bureau of Statistics, International Trade in Goods, SITC 5-8 manufactured exports.",
-      "preferred_dir": "manual",
-      "has_generated": false,
+      "preferred_dir": "generated",
+      "has_generated": true,
       "has_manual": true
     },
     "abs_manufacturing_capex": {
       "id": "abs_manufacturing_capex",
       "human_name": "ABS Private new capital expenditure - manufacturing, quarterly",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "quarterly",
       "used_by": [
         "manufacturing"
@@ -205,15 +205,15 @@
       "canonical_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing industry.",
-      "preferred_dir": "manual",
-      "has_generated": false,
+      "preferred_dir": "generated",
+      "has_generated": true,
       "has_manual": true
     },
     "abs_manufacturing_employment": {
       "id": "abs_manufacturing_employment",
       "human_name": "ABS Manufacturing employment, quarterly",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "quarterly",
       "used_by": [
         "manufacturing"
@@ -221,8 +221,8 @@
       "canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), employed persons by industry.",
-      "preferred_dir": "manual",
-      "has_generated": false,
+      "preferred_dir": "generated",
+      "has_generated": true,
       "has_manual": true
     },
     "abs_manufacturing_gdp_share": {
@@ -243,18 +243,18 @@
     },
     "abs_manufacturing_output_index": {
       "id": "abs_manufacturing_output_index",
-      "human_name": "ABS Manufacturing production index, quarterly",
+      "human_name": "ABS Manufacturing sales, quarterly",
       "publisher": "Australian Bureau of Statistics",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "quarterly",
       "used_by": [
         "manufacturing"
       ],
-      "canonical_url": "https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia",
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia",
       "rights": "CC BY 4.0 where stated by publisher",
-      "citation": "Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), manufacturing sales of goods produced.",
-      "preferred_dir": "manual",
-      "has_generated": false,
+      "citation": "Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), income from sales of goods and services by industry.",
+      "preferred_dir": "generated",
+      "has_generated": true,
       "has_manual": true
     },
     "abs_petroleum_imports": {

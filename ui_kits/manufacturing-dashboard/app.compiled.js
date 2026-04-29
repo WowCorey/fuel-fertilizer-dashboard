@@ -1001,10 +1001,10 @@ function App() {
     unit: " thousand persons"
   }), React.createElement(MetricCard, {
     eyebrow: "Output",
-    label: "Manufacturing sales (production index)",
-    plain: "ABS Business Indicators manufacturing sales of goods produced, seasonally adjusted, quarterly.",
+    label: "Manufacturing sales (chain volume)",
+    plain: "ABS Business Indicators income from sales of goods and services for manufacturing, chain volume measures, seasonally adjusted, quarterly.",
     fromEnvelope: data.abs_manufacturing_output_index,
-    unit: " AUD millions"
+    unit: " chain volume $m"
   }), React.createElement(MetricCard, {
     eyebrow: "Exports",
     label: "Manufactured exports",
@@ -1042,7 +1042,7 @@ function App() {
     className: "source-card"
   }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "All ABS manufacturing series remain on manual until each SDMX dataflow key is verified by a human. The Department of Industry industry profile slot is also manual; values appear only after a named publication is verified.")))), React.createElement("section", {
+  }, "Five ABS manufacturing series now load from verified ABS latest-release XLSX tables. Manufacturing GDP share remains unavailable until the exact National Accounts table/API mapping is verified. The Department of Industry profile slot also stays unavailable until a named factual publication is loaded.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1083,14 +1083,14 @@ function App() {
     yAxisLabel: "Employed persons (thousand)"
   }), React.createElement(ChartCard, {
     eyebrow: "Output",
-    title: "Manufacturing sales, quarterly",
-    unit: "AUD millions",
+    title: "Manufacturing sales, chain volume, quarterly",
+    unit: "chain volume $m",
     fromEnvelope: data.abs_manufacturing_output_index,
     ranges: ['3Y', '5Y'],
     defaultRange: "5Y",
     accent: "#B45309",
-    takeaway: "Seasonally adjusted manufacturing sales of goods produced, ABS Business Indicators.",
-    yAxisLabel: "Manufacturing sales (AUD millions)"
+    takeaway: "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, ABS Business Indicators.",
+    yAxisLabel: "Manufacturing sales (chain volume $m)"
   })), React.createElement("div", {
     style: {
       height: 24
@@ -1153,7 +1153,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). Manual entry until the ABS SDMX dataflow key for industry GVA is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001), quarterly. Manual entry until the ABS SDMX dataflow key for industry employment is verified."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing sales of goods produced, from ABS Business Indicators Australia (Cat. 5676.0), quarterly. Manual entry until the ABS SDMX dataflow key for manufacturing sales is verified."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods. Manual entry until the per-section ABS SDMX query is verified for manufactured exports."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual private new capital expenditure for ANZSIC division C (manufacturing), from ABS Private New Capital Expenditure (Cat. 5625.0), quarterly. Manual entry until the ABS SDMX dataflow key for industry capex is verified."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed. Manual entry until the ABS SDMX dataflow key for ANZSIC subdivisions is verified."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. Aggregated estimates are never published.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). This remains unavailable until the exact source table or API mapping for the share calculation is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001) Table 04, seasonally adjusted, quarterly."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, from ABS Business Indicators Australia (Cat. 5676.0) Table 4, quarterly. This is a source-backed sales/output proxy, not a separate production-index series."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined original FOB export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods Table 12a. The ABS workbook unit is AUD millions."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual total private new capital expenditure for ANZSIC division C (manufacturing), current prices, from ABS Private New Capital Expenditure (Cat. 5625.0) Table 4, seasonally adjusted, quarterly."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Sum of original employed-persons series for ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed Table 06, quarterly."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. This remains unavailable until a named publication supports a clean factual row; aggregated estimates are never published.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

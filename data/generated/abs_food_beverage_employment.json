@@ -1,0 +1,281 @@
+{
+  "series_id": "abs_food_beverage_employment",
+  "source_id": "abs_food_beverage_employment",
+  "source_name": "ABS Food and beverage manufacturing employment, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+  "unit": "thousand persons",
+  "retrieved_at": "2026-04-29T09:00:40+00:00",
+  "last_data_point": "2026-02-28",
+  "values": [
+    {
+      "t": "2011-05",
+      "v": 213.1
+    },
+    {
+      "t": "2011-08",
+      "v": 215.8
+    },
+    {
+      "t": "2011-11",
+      "v": 216.1
+    },
+    {
+      "t": "2012-02",
+      "v": 226.9
+    },
+    {
+      "t": "2012-05",
+      "v": 215.9
+    },
+    {
+      "t": "2012-08",
+      "v": 219.1
+    },
+    {
+      "t": "2012-11",
+      "v": 220.0
+    },
+    {
+      "t": "2013-02",
+      "v": 211.6
+    },
+    {
+      "t": "2013-05",
+      "v": 212.4
+    },
+    {
+      "t": "2013-08",
+      "v": 216.9
+    },
+    {
+      "t": "2013-11",
+      "v": 218.5
+    },
+    {
+      "t": "2014-02",
+      "v": 235.7
+    },
+    {
+      "t": "2014-05",
+      "v": 220.8
+    },
+    {
+      "t": "2014-08",
+      "v": 223.0
+    },
+    {
+      "t": "2014-11",
+      "v": 217.4
+    },
+    {
+      "t": "2015-02",
+      "v": 231.0
+    },
+    {
+      "t": "2015-05",
+      "v": 242.7
+    },
+    {
+      "t": "2015-08",
+      "v": 213.8
+    },
+    {
+      "t": "2015-11",
+      "v": 236.0
+    },
+    {
+      "t": "2016-02",
+      "v": 237.3
+    },
+    {
+      "t": "2016-05",
+      "v": 227.4
+    },
+    {
+      "t": "2016-08",
+      "v": 230.2
+    },
+    {
+      "t": "2016-11",
+      "v": 241.0
+    },
+    {
+      "t": "2017-02",
+      "v": 231.3
+    },
+    {
+      "t": "2017-05",
+      "v": 225.6
+    },
+    {
+      "t": "2017-08",
+      "v": 216.1
+    },
+    {
+      "t": "2017-11",
+      "v": 227.5
+    },
+    {
+      "t": "2018-02",
+      "v": 244.1
+    },
+    {
+      "t": "2018-05",
+      "v": 253.3
+    },
+    {
+      "t": "2018-08",
+      "v": 250.4
+    },
+    {
+      "t": "2018-11",
+      "v": 249.1
+    },
+    {
+      "t": "2019-02",
+      "v": 227.0
+    },
+    {
+      "t": "2019-05",
+      "v": 235.9
+    },
+    {
+      "t": "2019-08",
+      "v": 229.3
+    },
+    {
+      "t": "2019-11",
+      "v": 250.4
+    },
+    {
+      "t": "2020-02",
+      "v": 264.8
+    },
+    {
+      "t": "2020-05",
+      "v": 213.4
+    },
+    {
+      "t": "2020-08",
+      "v": 210.6
+    },
+    {
+      "t": "2020-11",
+      "v": 226.6
+    },
+    {
+      "t": "2021-02",
+      "v": 237.9
+    },
+    {
+      "t": "2021-05",
+      "v": 258.9
+    },
+    {
+      "t": "2021-08",
+      "v": 257.4
+    },
+    {
+      "t": "2021-11",
+      "v": 238.0
+    },
+    {
+      "t": "2022-02",
+      "v": 228.6
+    },
+    {
+      "t": "2022-05",
+      "v": 231.7
+    },
+    {
+      "t": "2022-08",
+      "v": 229.0
+    },
+    {
+      "t": "2022-11",
+      "v": 238.8
+    },
+    {
+      "t": "2023-02",
+      "v": 225.3
+    },
+    {
+      "t": "2023-05",
+      "v": 232.8
+    },
+    {
+      "t": "2023-08",
+      "v": 247.7
+    },
+    {
+      "t": "2023-11",
+      "v": 242.6
+    },
+    {
+      "t": "2024-02",
+      "v": 221.7
+    },
+    {
+      "t": "2024-05",
+      "v": 229.0
+    },
+    {
+      "t": "2024-08",
+      "v": 230.9
+    },
+    {
+      "t": "2024-11",
+      "v": 237.2
+    },
+    {
+      "t": "2025-02",
+      "v": 221.9
+    },
+    {
+      "t": "2025-05",
+      "v": 237.5
+    },
+    {
+      "t": "2025-08",
+      "v": 225.9
+    },
+    {
+      "t": "2025-11",
+      "v": 230.3
+    },
+    {
+      "t": "2026-02",
+      "v": 212.2
+    }
+  ],
+  "notes": "Fetched from ABS Labour Force Australia Detailed latest-release XLSX Table 06. Value is the sum of original employed-persons series for Food Product Manufacturing (ANZSIC 11) and Beverage and Tobacco Product Manufacturing (ANZSIC 12); values are thousands of persons and are trimmed to the last 60 quarterly observations.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), food product manufacturing (ANZSIC 11) and beverage and tobacco product manufacturing (ANZSIC 12).",
+  "extra": {
+    "schema": "abs_xlsx_series.v1",
+    "fields": {
+      "workbook_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed/mar-2026/6291006.xlsx",
+      "workbook_unit": "000",
+      "component_series": [
+        {
+          "description": "> Food Product Manufacturing ;  Employed total ;  Persons ;",
+          "series_id": "A84602298K",
+          "sheet": "Data1",
+          "series_type": "Original",
+          "unit": "000",
+          "value": 189.8
+        },
+        {
+          "description": "> Beverage and Tobacco Product Manufacturing ;  Employed total ;  Persons ;",
+          "series_id": "A84602301L",
+          "sheet": "Data1",
+          "series_type": "Original",
+          "unit": "000",
+          "value": 22.5
+        }
+      ]
+    }
+  }
+}
