@@ -1414,6 +1414,7 @@ sources:
     canonical_url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
     fetch_url: https://www.industry.gov.au/sites/default/files/2024-12/resources-and-energy-major-projects-2024-data.xlsx
     fetch_user_agent: browser-compatible
+    check_timeout_seconds: 90
     remp_sheet: Oil & gas
     format: XLSX
     update_cadence: annual
@@ -2191,6 +2192,7 @@ sources:
     url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
     canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data
     fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
+    check_url: https://aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_202603_NSW1.csv
     format: CSV
     update_cadence: monthly
     last_verified: 2026-04-29
@@ -2207,6 +2209,7 @@ sources:
     url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
     canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data
     fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
+    check_url: https://aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_202603_NSW1.csv
     format: CSV
     update_cadence: monthly
     last_verified: 2026-04-29

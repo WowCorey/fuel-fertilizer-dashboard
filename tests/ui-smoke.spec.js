@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const routes = [
   { path: '/', heading: "Australia's fuel and fertiliser data, without estimates." },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
-  { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What Australia can see from public fuel-security data.' },
+  { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What a transparent Australian fuel dashboard should show.' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
@@ -40,7 +40,10 @@ for (const route of routes) {
 
 test('fuel security page keeps operational gaps fail-closed', async ({ page }) => {
   await page.goto('/ui_kits/fuel-security-dashboard/index.html');
-  await expect(page.getByRole('heading', { name: 'What Australia can see from public fuel-security data.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What a transparent Australian fuel dashboard should show.' })).toBeVisible();
+  await expect(page.getByText('Public calls for a national fuel dashboard are about certainty')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The national fuel dashboard structure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Supply resilience belongs beside price pressure' })).toBeVisible();
   await expect(page.getByText('Status unavailable').first()).toBeVisible();
   await expect(page.getByText('No public national live station outage feed is loaded.')).toBeVisible();
   await expect(page.getByText('WA weekly stockouts')).toBeVisible();
