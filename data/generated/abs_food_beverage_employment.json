@@ -1,0 +1,144 @@
+{
+  "series_id": "abs_food_beverage_employment",
+  "source_id": "abs_food_beverage_employment",
+  "source_name": "ABS Food and beverage manufacturing employment (ANZSIC 11+12, Labour Account quarterly)",
+  "source_url": "https://www.abs.gov.au/statistics/labour/labour-accounts/labour-account-australia",
+  "unit": "NUM (unit multiplier 3)",
+  "retrieved_at": "2026-04-29T08:23:44+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2018-Q1",
+      "v": 253.142
+    },
+    {
+      "t": "2018-Q2",
+      "v": 253.716
+    },
+    {
+      "t": "2018-Q3",
+      "v": 250.476
+    },
+    {
+      "t": "2018-Q4",
+      "v": 252.177
+    },
+    {
+      "t": "2019-Q1",
+      "v": 252.576
+    },
+    {
+      "t": "2019-Q2",
+      "v": 246.271
+    },
+    {
+      "t": "2019-Q3",
+      "v": 252.977
+    },
+    {
+      "t": "2019-Q4",
+      "v": 254.733
+    },
+    {
+      "t": "2020-Q1",
+      "v": 247.921
+    },
+    {
+      "t": "2020-Q2",
+      "v": 241.444
+    },
+    {
+      "t": "2020-Q3",
+      "v": 249.708
+    },
+    {
+      "t": "2020-Q4",
+      "v": 262.005
+    },
+    {
+      "t": "2021-Q1",
+      "v": 259.237
+    },
+    {
+      "t": "2021-Q2",
+      "v": 256.06
+    },
+    {
+      "t": "2021-Q3",
+      "v": 247.339
+    },
+    {
+      "t": "2021-Q4",
+      "v": 257.018
+    },
+    {
+      "t": "2022-Q1",
+      "v": 267.519
+    },
+    {
+      "t": "2022-Q2",
+      "v": 254.13
+    },
+    {
+      "t": "2022-Q3",
+      "v": 260.615
+    },
+    {
+      "t": "2022-Q4",
+      "v": 266.169
+    },
+    {
+      "t": "2023-Q1",
+      "v": 261.251
+    },
+    {
+      "t": "2023-Q2",
+      "v": 265.161
+    },
+    {
+      "t": "2023-Q3",
+      "v": 253.89
+    },
+    {
+      "t": "2023-Q4",
+      "v": 261.097
+    },
+    {
+      "t": "2024-Q1",
+      "v": 267.251
+    },
+    {
+      "t": "2024-Q2",
+      "v": 268.827
+    },
+    {
+      "t": "2024-Q3",
+      "v": 280.592
+    },
+    {
+      "t": "2024-Q4",
+      "v": 289.913
+    },
+    {
+      "t": "2025-Q1",
+      "v": 286.026
+    },
+    {
+      "t": "2025-Q2",
+      "v": 284.92
+    },
+    {
+      "t": "2025-Q3",
+      "v": 297.071
+    },
+    {
+      "t": "2025-Q4",
+      "v": 315.521
+    }
+  ],
+  "notes": "Sum of ABS Data API LABOUR_ACCT_Q queries for LABOURACCT_IND 11XX (Food product manufacturing) and 12XX (Beverage and tobacco product manufacturing); MEASURE M19 (Persons; Labour Account employed persons), ASGS_2016 AUS, TSEST 10 (Original), FREQ Q. Subdivision-level series in this dataflow only expose Original; thousands of employed persons combined.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Labour Account Australia (Cat. 6150.0.55.003), Labour Account employed persons by industry subdivision, ANZSIC subdivisions 11 (Food product manufacturing) and 12 (Beverage and tobacco product manufacturing), original series."
+}

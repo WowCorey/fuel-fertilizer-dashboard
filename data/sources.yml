@@ -1846,93 +1846,118 @@ sources:
   # =========================================================
 
   - id: abs_manufacturing_gdp_share
-    human_name: ABS Manufacturing share of GDP, quarterly
+    human_name: ABS Manufacturing share of industry GVA, quarterly
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
     canonical_url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
     format: XLSX
     update_cadence: quarterly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Bureau of Statistics, Australian National Accounts - industry gross value added (Cat. 5206.0).
-    reuse_notes: ABS publishes industry gross value added (chain volume measure) by ANZSIC industry division in the quarterly National Accounts. Manufacturing is ANZSIC division C. Compute share as manufacturing GVA divided by total industry GVA. Manual stub until SDMX dataflow key is verified.
+    reuse_notes: The ABS Data API ANA_IND_GVA dataflow exposes only chain-volume MEASURE codes (TCH, VCH, PCT_VCH, PCT_RCH); it does not expose a current-price MEASURE for industry GVA. Industry shares computed from chain-volume measures are not methodologically additive across industries. Leave this row unavailable until the ABS publishes a current-price industry GVA dataflow (or a separate published share figure) that supports a clean ratio.
     fetch: manual
     used_by: [manufacturing]
 
   - id: abs_manufacturing_employment
-    human_name: ABS Manufacturing employment, quarterly
+    human_name: ABS Manufacturing employment (Labour Account, quarterly)
     publisher: Australian Bureau of Statistics
-    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
-    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
-    format: XLSX
+    url: https://www.abs.gov.au/statistics/labour/labour-accounts/labour-account-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/labour-accounts/labour-account-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/LABOUR_ACCT_Q/M19.AUS.C.20.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: LABOUR_ACCT_Q
+    fetch_key: M19.AUS.C.20.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS LABOUR_ACCT_Q dataflow MEASURE M19 (Persons; Labour Account employed persons), ASGS_2016 AUS, LABOURACCT_IND C (Manufacturing), TSEST 20 (Seasonally Adjusted), FREQ Q. Returns thousands of employed persons in ANZSIC division C.
+    format: JSON
     update_cadence: quarterly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), employed persons by industry.
-    reuse_notes: ABS publishes employed-persons by ANZSIC industry division quarterly. Manufacturing is ANZSIC division C. Manual stub until SDMX dataflow key is verified.
-    fetch: manual
+    citation: Australian Bureau of Statistics, Labour Account Australia (Cat. 6150.0.55.003), Labour Account employed persons by industry, ANZSIC division C (Manufacturing), seasonally adjusted.
+    reuse_notes: Fetched from the live ABS Data API LABOUR_ACCT_Q dataflow. The Labour Account is the ABS reconciliation series across the Labour Force Survey, business surveys and administrative data; values are in thousands of employed persons.
+    fetch: programmatic
     used_by: [manufacturing]
 
   - id: abs_manufacturing_output_index
-    human_name: ABS Manufacturing production index, quarterly
+    human_name: ABS Manufacturing sales (Business Indicators, quarterly)
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia
     canonical_url: https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia
-    format: XLSX
+    fetch_url: https://data.api.abs.gov.au/rest/data/QBIS/M1.CUR.C.TOT.20.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: QBIS
+    fetch_key: M1.CUR.C.TOT.20.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS QBIS dataflow MEASURE M1 (Sales), PRICE_ADJUSTMENT CUR (Current Price), INDUSTRY C (Manufacturing), SCOPE TOT (All scopes), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns manufacturing sales in current-price A$ millions per quarter.
+    format: JSON
     update_cadence: quarterly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), manufacturing sales of goods produced.
-    reuse_notes: ABS Business Indicators publishes seasonally adjusted manufacturing sales by industry subdivision. Manual stub until SDMX dataflow key is verified.
-    fetch: manual
+    citation: Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), manufacturing sales of goods produced, current price, seasonally adjusted.
+    reuse_notes: Fetched from the live ABS Data API QBIS dataflow. The series is sales (level) for ANZSIC division C in current-price A$ millions; treat as a quarterly sales series, not as a chain-volume production index.
+    fetch: programmatic
     used_by: [manufacturing]
 
   - id: abs_manufactured_exports_total
-    human_name: ABS International Trade - manufactured exports (SITC 5-8), monthly
+    human_name: ABS Manufactured exports (SITC sections 5-8), monthly
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
     canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
-    format: XLSX
+    fetch_url: https://data.api.abs.gov.au/rest/data/MERCH_EXP/.TOT.TOT.M?format=jsondata&startPeriod=2021-01
+    fetch_dataflow: MERCH_EXP
+    fetch_key: .TOT.TOT.M
+    fetch_start_period: 2021-01
+    sdmx_note_suffix: Sum of ABS MERCH_EXP queries for COMMODITY_SITC = 5, 6, 7 and 8; COUNTRY_DEST TOT, STATE_ORIGIN TOT, FREQ M. Combined export value across SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles).
+    format: JSON
     update_cadence: monthly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, International Trade in Goods, SITC 5-8 manufactured exports.
-    reuse_notes: ABS publishes manufactured exports under SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles). The ABS Data API MERCH_EXP dataflow exposes 2- and 3-digit SITC commodity codes. Manual stub until the per-section SDMX query is verified.
-    fetch: manual
+    citation: Australian Bureau of Statistics, International Trade in Goods (Cat. 5368.0), MERCH_EXP dataflow, SITC sections 5-8 combined.
+    reuse_notes: Custom fetcher pulls four SITC-section series (5, 6, 7, 8) at monthly cadence with TOT country and TOT state, then sums them per month. Treat as combined manufactured exports value, not as a single SITC commodity series.
+    fetch: programmatic
     used_by: [manufacturing]
 
   - id: abs_manufacturing_capex
-    human_name: ABS Private new capital expenditure - manufacturing, quarterly
+    human_name: ABS Private new capital expenditure - manufacturing (CAPEX, quarterly)
     publisher: Australian Bureau of Statistics
     url: https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia
     canonical_url: https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia
-    format: XLSX
+    fetch_url: https://data.api.abs.gov.au/rest/data/CAPEX/M1.CUR.TOT.P02.20.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: CAPEX
+    fetch_key: M1.CUR.TOT.P02.20.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS CAPEX dataflow MEASURE M1 (Actual Expenditure), PRICE_ADJUSTMENT CUR (Current Price), ASSET TOT (Total assets), INDUSTRY P02 (Manufacturing), TSEST 20 (Seasonally Adjusted), STATE AUS, FREQ Q. Returns actual private new capital expenditure for manufacturing in current-price A$ millions per quarter.
+    format: JSON
     update_cadence: quarterly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing industry.
-    reuse_notes: ABS Cat. 5625.0 publishes actual and expected private new capex by ANZSIC industry, quarterly. Manufacturing is ANZSIC division C. Manual stub until SDMX dataflow key is verified.
-    fetch: manual
+    citation: Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing actual expenditure, current price, seasonally adjusted.
+    reuse_notes: Fetched from the live ABS Data API CAPEX dataflow. The Manufacturing aggregate uses INDUSTRY code P02 in this dataflow.
+    fetch: programmatic
     used_by: [manufacturing]
 
   - id: abs_food_beverage_employment
-    human_name: ABS Food and beverage manufacturing employment, quarterly
+    human_name: ABS Food and beverage manufacturing employment (ANZSIC 11+12, Labour Account quarterly)
     publisher: Australian Bureau of Statistics
-    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
-    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
-    format: XLSX
+    url: https://www.abs.gov.au/statistics/labour/labour-accounts/labour-account-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/labour-accounts/labour-account-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/LABOUR_ACCT_Q/M19.AUS.11XX+12XX.10.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: LABOUR_ACCT_Q
+    fetch_key: M19.AUS.11XX+12XX.10.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: Sum of ABS LABOUR_ACCT_Q queries for LABOURACCT_IND 11XX (Food product manufacturing) and 12XX (Beverage and tobacco product manufacturing); MEASURE M19 (Persons; Labour Account employed persons), ASGS_2016 AUS, TSEST 10 (Original; subdivision-level series do not expose a seasonally adjusted variant in this dataflow), FREQ Q. Combined thousands of employed persons in ANZSIC subdivisions 11 and 12.
+    format: JSON
     update_cadence: quarterly
-    last_verified: 2026-04-27
+    last_verified: 2026-04-29
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), food product manufacturing (ANZSIC 11) and beverage and tobacco product manufacturing (ANZSIC 12).
-    reuse_notes: ABS publishes employed-persons by ANZSIC subdivision in the quarterly Labour Force Detailed release. Food product manufacturing is ANZSIC subdivision 11; beverage and tobacco is ANZSIC subdivision 12. Manual stub until SDMX dataflow key for these subdivisions is verified.
-    fetch: manual
+    citation: Australian Bureau of Statistics, Labour Account Australia (Cat. 6150.0.55.003), Labour Account employed persons by industry subdivision, ANZSIC subdivisions 11 (Food product manufacturing) and 12 (Beverage and tobacco product manufacturing), original series.
+    reuse_notes: Custom fetcher pulls two LABOUR_ACCT_Q subdivision series and sums per quarter. Original (not seasonally adjusted) because subdivision-level series in this dataflow only expose Original.
+    fetch: programmatic
     used_by: [manufacturing]
 
   # =========================================================

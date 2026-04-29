@@ -1,0 +1,144 @@
+{
+  "series_id": "abs_manufacturing_output_index",
+  "source_id": "abs_manufacturing_output_index",
+  "source_name": "ABS Manufacturing sales (Business Indicators, quarterly)",
+  "source_url": "https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia",
+  "unit": "AUD (unit multiplier 6)",
+  "retrieved_at": "2026-04-29T08:23:32+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2018-Q1",
+      "v": 87888
+    },
+    {
+      "t": "2018-Q2",
+      "v": 89261
+    },
+    {
+      "t": "2018-Q3",
+      "v": 89615
+    },
+    {
+      "t": "2018-Q4",
+      "v": 89092
+    },
+    {
+      "t": "2019-Q1",
+      "v": 87752
+    },
+    {
+      "t": "2019-Q2",
+      "v": 88654
+    },
+    {
+      "t": "2019-Q3",
+      "v": 89244
+    },
+    {
+      "t": "2019-Q4",
+      "v": 90420
+    },
+    {
+      "t": "2020-Q1",
+      "v": 92466
+    },
+    {
+      "t": "2020-Q2",
+      "v": 84883
+    },
+    {
+      "t": "2020-Q3",
+      "v": 87744
+    },
+    {
+      "t": "2020-Q4",
+      "v": 89885
+    },
+    {
+      "t": "2021-Q1",
+      "v": 91868
+    },
+    {
+      "t": "2021-Q2",
+      "v": 94328
+    },
+    {
+      "t": "2021-Q3",
+      "v": 97175
+    },
+    {
+      "t": "2021-Q4",
+      "v": 102140
+    },
+    {
+      "t": "2022-Q1",
+      "v": 103948
+    },
+    {
+      "t": "2022-Q2",
+      "v": 108258
+    },
+    {
+      "t": "2022-Q3",
+      "v": 108434
+    },
+    {
+      "t": "2022-Q4",
+      "v": 108796
+    },
+    {
+      "t": "2023-Q1",
+      "v": 112358
+    },
+    {
+      "t": "2023-Q2",
+      "v": 110393
+    },
+    {
+      "t": "2023-Q3",
+      "v": 110838
+    },
+    {
+      "t": "2023-Q4",
+      "v": 111846
+    },
+    {
+      "t": "2024-Q1",
+      "v": 110827
+    },
+    {
+      "t": "2024-Q2",
+      "v": 112951
+    },
+    {
+      "t": "2024-Q3",
+      "v": 113215
+    },
+    {
+      "t": "2024-Q4",
+      "v": 112269
+    },
+    {
+      "t": "2025-Q1",
+      "v": 115758
+    },
+    {
+      "t": "2025-Q2",
+      "v": 117704
+    },
+    {
+      "t": "2025-Q3",
+      "v": 119597
+    },
+    {
+      "t": "2025-Q4",
+      "v": 124205
+    }
+  ],
+  "notes": "Fetched from ABS Data API dataflow QBIS, key M1.CUR.C.TOT.20.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS QBIS dataflow MEASURE M1 (Sales), PRICE_ADJUSTMENT CUR (Current Price), INDUSTRY C (Manufacturing), SCOPE TOT (All scopes), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns manufacturing sales in current-price A$ millions per quarter.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), manufacturing sales of goods produced, current price, seasonally adjusted."
+}

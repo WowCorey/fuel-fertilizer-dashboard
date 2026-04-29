@@ -107,23 +107,23 @@ function App() {
             <MetricCard
               eyebrow="Jobs"
               label="Manufacturing employment"
-              plain="Employed persons in ANZSIC division C (manufacturing), ABS Labour Force Detailed release, quarterly."
+              plain="Labour Account employed persons in ANZSIC division C (manufacturing), seasonally adjusted, ABS Labour Account Australia (Cat. 6150.0.55.003)."
               fromEnvelope={data.abs_manufacturing_employment}
               unit=" thousand persons"
             />
             <MetricCard
               eyebrow="Output"
-              label="Manufacturing sales (production index)"
-              plain="ABS Business Indicators manufacturing sales of goods produced, seasonally adjusted, quarterly."
+              label="Manufacturing sales (current price)"
+              plain="ABS Business Indicators manufacturing sales (current price, seasonally adjusted), ANZSIC division C, ABS Cat. 5676.0."
               fromEnvelope={data.abs_manufacturing_output_index}
-              unit=" AUD millions"
+              unit=" AUD millions per quarter"
             />
             <MetricCard
               eyebrow="Exports"
-              label="Manufactured exports"
-              plain="Combined SITC sections 5-8 (chemicals, manufactured materials, machinery, miscellaneous manufactures) export value."
+              label="Manufactured exports (SITC 5-8)"
+              plain="Sum of monthly export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), ABS International Trade in Goods."
               fromEnvelope={data.abs_manufactured_exports_total}
-              unit=" AUD millions"
+              unit=" AUD millions per month"
             />
           </div>
 
@@ -133,14 +133,14 @@ function App() {
             <MetricCard
               eyebrow="Investment"
               label="Manufacturing private new capex"
-              plain="ABS Cat. 5625.0 actual private new capital expenditure for ANZSIC division C, quarterly."
+              plain="Actual private new capital expenditure for ANZSIC division C, current price, seasonally adjusted, ABS Cat. 5625.0."
               fromEnvelope={data.abs_manufacturing_capex}
-              unit=" AUD millions"
+              unit=" AUD millions per quarter"
             />
             <MetricCard
               eyebrow="Food sector"
-              label="Food and beverage manufacturing employment"
-              plain="Employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco)."
+              label="Food + beverage manufacturing employment"
+              plain="Sum of Labour Account employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), original (subdivision-level series only expose Original)."
               fromEnvelope={data.abs_food_beverage_employment}
               unit=" thousand persons"
             />
@@ -155,11 +155,18 @@ function App() {
 
           <div className="pending-list" aria-label="Pending manufacturing source coverage">
             <article className="source-card">
-              <h4>Pending source coverage</h4>
+              <h4>Source coverage</h4>
               <p className="body-sm">
-                All ABS manufacturing series remain on manual until each SDMX dataflow key is
-                verified by a human. The Department of Industry industry profile slot is also
-                manual; values appear only after a named publication is verified.
+                Wired live from the ABS Data API: manufacturing employment (Labour Account
+                division C, SA), manufacturing sales (Business Indicators QBIS, current price,
+                SA), private new manufacturing capex (CAPEX, current price, SA), manufactured
+                exports (sum of MERCH_EXP SITC sections 5-8) and food + beverage employment
+                (Labour Account subdivisions 11 + 12, original). Manufacturing share of GDP
+                stays unavailable because the ABS ANA_IND_GVA dataflow exposes only chain-volume
+                measures, which are not methodologically additive across industries; we do not
+                publish a chain-volume share. The Department of Industry profile slot stays
+                unavailable until a named DoIS publication supports a factual headcount or
+                revenue row.
               </p>
             </article>
           </div>
@@ -284,19 +291,19 @@ function App() {
             <h3>How we calculate the numbers</h3>
             <dl>
               <dt>Manufacturing share of GDP</dt>
-              <dd>ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). Manual entry until the ABS SDMX dataflow key for industry GVA is verified.</dd>
+              <dd>Intentionally unavailable. The ABS Data API ANA_IND_GVA dataflow exposes only chain-volume measures (TCH, VCH, PCT_VCH, PCT_RCH); it does not expose a current-price industry GVA measure. Industry shares computed from chain-volume measures are not methodologically additive across industries, so we do not publish a chain-volume share. Will be loaded if the ABS publishes a current-price industry GVA dataflow or a separate published share figure.</dd>
               <dt>Manufacturing employment</dt>
-              <dd>Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001), quarterly. Manual entry until the ABS SDMX dataflow key for industry employment is verified.</dd>
+              <dd>Live ABS Data API LABOUR_ACCT_Q dataflow with key M19.AUS.C.20.Q. M19 = Persons; Labour Account employed persons; INDUSTRY C = Manufacturing; TSEST 20 = Seasonally Adjusted; FREQ Q. ABS Cat. 6150.0.55.003 (Labour Account Australia), quarterly, in thousands of employed persons.</dd>
               <dt>Manufacturing sales</dt>
-              <dd>Seasonally adjusted manufacturing sales of goods produced, from ABS Business Indicators Australia (Cat. 5676.0), quarterly. Manual entry until the ABS SDMX dataflow key for manufacturing sales is verified.</dd>
+              <dd>Live ABS Data API QBIS dataflow with key M1.CUR.C.TOT.20.AUS.Q. M1 = Sales (level), CUR = Current Price, INDUSTRY C = Manufacturing, SCOPE TOT = All scopes, TSEST 20 = SA. ABS Cat. 5676.0 (Business Indicators), quarterly, AUD millions per quarter.</dd>
               <dt>Manufactured exports</dt>
-              <dd>Combined SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods. Manual entry until the per-section ABS SDMX query is verified for manufactured exports.</dd>
+              <dd>Custom fetcher pulls four ABS Data API MERCH_EXP series (SITC commodity sections 5, 6, 7 and 8; COUNTRY_DEST TOT, STATE_ORIGIN TOT, FREQ M) and sums them per month. Source values are AUD thousands; the envelope divides by 1000 so the displayed value is AUD millions per month.</dd>
               <dt>Manufacturing private new capex</dt>
-              <dd>Actual private new capital expenditure for ANZSIC division C (manufacturing), from ABS Private New Capital Expenditure (Cat. 5625.0), quarterly. Manual entry until the ABS SDMX dataflow key for industry capex is verified.</dd>
+              <dd>Live ABS Data API CAPEX dataflow with key M1.CUR.TOT.P02.20.AUS.Q. M1 = Actual Expenditure, CUR = Current Price, ASSET TOT = Total assets, INDUSTRY P02 = Manufacturing, TSEST 20 = SA. ABS Cat. 5625.0, quarterly, AUD millions per quarter.</dd>
               <dt>Food and beverage manufacturing employment</dt>
-              <dd>Employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed. Manual entry until the ABS SDMX dataflow key for ANZSIC subdivisions is verified.</dd>
+              <dd>Custom fetcher pulls two ABS Data API LABOUR_ACCT_Q series (LABOURACCT_IND 11XX = Food product manufacturing, 12XX = Beverage and tobacco product manufacturing; MEASURE M19, ASGS_2016 AUS, TSEST 10 = Original, FREQ Q) and sums them per quarter. Subdivision-level series in this dataflow only expose Original; combined thousands of employed persons.</dd>
               <dt>Industry profile (DoIS)</dt>
-              <dd>Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. Aggregated estimates are never published.</dd>
+              <dd>Intentionally unavailable. No source-safe Department of Industry, Science and Resources publication has been identified yet that supports a factual headcount or revenue row for this slot. Will be loaded only when a named DoIS publication does so; aggregated estimates are never published.</dd>
             </dl>
           </div>
         </section>

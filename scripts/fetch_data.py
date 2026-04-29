@@ -488,6 +488,89 @@ def fetch_abs_fertiliser_source_concentration(source: dict[str, Any]) -> dict[st
     }
 
 
+def _fetch_abs_sdmx_series(dataflow: str, key: str, start_period: str | None) -> dict[str, Any]:
+    """Internal helper: pull a single ABS SDMX series and return its raw values list."""
+    return fetch_abs_sdmx(dataflow, key, start_period, None, None)
+
+
+def fetch_abs_manufactured_exports_total(source: dict[str, Any]) -> dict[str, Any]:
+    """Sum ABS MERCH_EXP SITC sections 5+6+7+8 (TOT country, TOT state, monthly).
+
+    The ABS MERCH_EXP series come back with the AUD (multiplier 3) unit, i.e. thousands
+    of AUD. This fetcher sums the four SITC-section series per month, then divides by
+    1000 so the published envelope value is in millions of AUD, matching the dashboard
+    card label.
+    """
+    start_period = source.get("fetch_start_period") or "2021-01"
+    sections = ["5", "6", "7", "8"]
+    monthly: dict[str, float] = {}
+    for section in sections:
+        block = _fetch_abs_sdmx_series("MERCH_EXP", f"{section}.TOT.TOT.M", start_period)
+        for point in block.get("values", []):
+            t = point.get("t")
+            v = point.get("v")
+            if not isinstance(t, str) or not isinstance(v, (int, float)):
+                continue
+            monthly[t] = monthly.get(t, 0.0) + float(v)
+    if not monthly:
+        raise RuntimeError("ABS MERCH_EXP SITC 5-8 sum produced no values")
+    sorted_keys = sorted(monthly.keys())
+    values = [{"t": t, "v": round(monthly[t] / 1000.0, 2)} for t in sorted_keys]
+    last = sorted_keys[-1]
+    last_year, last_month = last.split("-")
+    last_day = calendar.monthrange(int(last_year), int(last_month))[1]
+    last_data_point = f"{last_year}-{last_month}-{last_day:02d}"
+    return {
+        "unit": "AUD millions",
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": (
+            "Sum of ABS Data API MERCH_EXP queries for SITC sections 5, 6, 7 and 8 "
+            "(COUNTRY_DEST TOT, STATE_ORIGIN TOT, FREQ M). Source values are AUD thousands; "
+            "this envelope divides by 1000 so values are AUD millions."
+        ),
+        "source_url_resolved": "https://data.api.abs.gov.au/rest/data/MERCH_EXP/",
+    }
+
+
+def fetch_abs_food_beverage_employment(source: dict[str, Any]) -> dict[str, Any]:
+    """Sum ABS LABOUR_ACCT_Q M19 (employed persons) for ANZSIC subdivisions 11XX + 12XX (Original, AUS, Q)."""
+    start_period = source.get("fetch_start_period") or "2018-Q1"
+    parts = ["11XX", "12XX"]
+    quarterly: dict[str, float] = {}
+    last_unit = "PSNS"
+    for part in parts:
+        block = _fetch_abs_sdmx_series("LABOUR_ACCT_Q", f"M19.AUS.{part}.10.Q", start_period)
+        last_unit = block.get("unit", last_unit)
+        for point in block.get("values", []):
+            t = point.get("t")
+            v = point.get("v")
+            if not isinstance(t, str) or not isinstance(v, (int, float)):
+                continue
+            quarterly[t] = quarterly.get(t, 0.0) + float(v)
+    if not quarterly:
+        raise RuntimeError("ABS LABOUR_ACCT_Q food/beverage subdivision sum produced no values")
+    sorted_keys = sorted(quarterly.keys())
+    values = [{"t": t, "v": round(quarterly[t], 3)} for t in sorted_keys]
+    last_q = sorted_keys[-1]
+    year, qstr = last_q.split("-Q")
+    last_month = int(qstr) * 3
+    last_day = calendar.monthrange(int(year), last_month)[1]
+    last_data_point = f"{year}-{last_month:02d}-{last_day:02d}"
+    return {
+        "unit": last_unit,
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": (
+            "Sum of ABS Data API LABOUR_ACCT_Q queries for LABOURACCT_IND 11XX (Food product manufacturing) "
+            "and 12XX (Beverage and tobacco product manufacturing); MEASURE M19 (Persons; Labour Account "
+            "employed persons), ASGS_2016 AUS, TSEST 10 (Original), FREQ Q. Subdivision-level series in this "
+            "dataflow only expose Original; thousands of employed persons combined."
+        ),
+        "source_url_resolved": "https://data.api.abs.gov.au/rest/data/LABOUR_ACCT_Q/",
+    }
+
+
 def fetch_abs_petroleum_imports_yoy(source: dict[str, Any]) -> dict[str, Any]:
     """Derive YoY percentage change from the generated ABS petroleum imports envelope."""
     parent_id = source.get("derived_from") or "abs_petroleum_imports"
@@ -2064,6 +2147,29 @@ FETCHERS: dict[str, Fetcher] = {
         source.get("sdmx_note_suffix"),
         source.get("fetch_url"),
     ),
+    "abs_manufacturing_employment": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_manufacturing_output_index": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_manufacturing_capex": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_manufactured_exports_total": fetch_abs_manufactured_exports_total,
+    "abs_food_beverage_employment": fetch_abs_food_beverage_employment,
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "rba_cash_rate": lambda source: fetch_rba_csv_column(

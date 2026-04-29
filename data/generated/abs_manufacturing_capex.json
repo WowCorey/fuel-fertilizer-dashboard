@@ -1,0 +1,144 @@
+{
+  "series_id": "abs_manufacturing_capex",
+  "source_id": "abs_manufacturing_capex",
+  "source_name": "ABS Private new capital expenditure - manufacturing (CAPEX, quarterly)",
+  "source_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
+  "unit": "AUD (unit multiplier 6)",
+  "retrieved_at": "2026-04-29T08:23:35+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2018-Q1",
+      "v": 2373
+    },
+    {
+      "t": "2018-Q2",
+      "v": 2372
+    },
+    {
+      "t": "2018-Q3",
+      "v": 2465
+    },
+    {
+      "t": "2018-Q4",
+      "v": 2422
+    },
+    {
+      "t": "2019-Q1",
+      "v": 2236
+    },
+    {
+      "t": "2019-Q2",
+      "v": 2441
+    },
+    {
+      "t": "2019-Q3",
+      "v": 2620
+    },
+    {
+      "t": "2019-Q4",
+      "v": 2359
+    },
+    {
+      "t": "2020-Q1",
+      "v": 2449
+    },
+    {
+      "t": "2020-Q2",
+      "v": 2345
+    },
+    {
+      "t": "2020-Q3",
+      "v": 2369
+    },
+    {
+      "t": "2020-Q4",
+      "v": 2458
+    },
+    {
+      "t": "2021-Q1",
+      "v": 2832
+    },
+    {
+      "t": "2021-Q2",
+      "v": 2616
+    },
+    {
+      "t": "2021-Q3",
+      "v": 2593
+    },
+    {
+      "t": "2021-Q4",
+      "v": 2808
+    },
+    {
+      "t": "2022-Q1",
+      "v": 2770
+    },
+    {
+      "t": "2022-Q2",
+      "v": 2939
+    },
+    {
+      "t": "2022-Q3",
+      "v": 3068
+    },
+    {
+      "t": "2022-Q4",
+      "v": 3205
+    },
+    {
+      "t": "2023-Q1",
+      "v": 3530
+    },
+    {
+      "t": "2023-Q2",
+      "v": 3749
+    },
+    {
+      "t": "2023-Q3",
+      "v": 3695
+    },
+    {
+      "t": "2023-Q4",
+      "v": 3999
+    },
+    {
+      "t": "2024-Q1",
+      "v": 3713
+    },
+    {
+      "t": "2024-Q2",
+      "v": 3519
+    },
+    {
+      "t": "2024-Q3",
+      "v": 3862
+    },
+    {
+      "t": "2024-Q4",
+      "v": 3603
+    },
+    {
+      "t": "2025-Q1",
+      "v": 3691
+    },
+    {
+      "t": "2025-Q2",
+      "v": 3879
+    },
+    {
+      "t": "2025-Q3",
+      "v": 4130
+    },
+    {
+      "t": "2025-Q4",
+      "v": 4200
+    }
+  ],
+  "notes": "Fetched from ABS Data API dataflow CAPEX, key M1.CUR.TOT.P02.20.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS CAPEX dataflow MEASURE M1 (Actual Expenditure), PRICE_ADJUSTMENT CUR (Current Price), ASSET TOT (Total assets), INDUSTRY P02 (Manufacturing), TSEST 20 (Seasonally Adjusted), STATE AUS, FREQ Q. Returns actual private new capital expenditure for manufacturing in current-price A$ millions per quarter.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing actual expenditure, current price, seasonally adjusted."
+}
