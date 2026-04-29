@@ -25,6 +25,13 @@ JSON envelope.
 | Live vessel/shipment tracking | unavailable | PM&C publishes aggregate tanker counts and equivalent days. It does not publish vessel identities, ETA-level flows or a licence-safe live AIS feed. The fuel-security page now uses a shipping-visibility layout for aggregate counts only; route lines are contextual, not live tracks. | Keep `fuel_security_live_vessel_tracking` unavailable and use aggregate PM&C tanker counts only. Add vessel data only after redistribution rights, API credentials, schema, confidence labels and cargo-inference rules are documented. |
 | Terminal-level storage/capacity | unavailable | APS and MSO sources support national/product stock context. Geoscience Australia's National Liquid Fuel Terminals 2015 dataset was investigated on 2026-04-23; it is a terminal-location snapshot, not a capacity or live-inventory dataset. | Keep `fuel_security_terminal_capacity` unavailable. Add terminal capacity only from an official or clearly reusable source with units and date. |
 
+## AU Economics
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| State and territory net debt | unavailable | No single loaded source consolidates state and territory general-government net debt on a comparable basis. Each jurisdiction's budget papers use their own tables and release structure, so hand-keying without page references would risk mixing definitions. | Populate one annual snapshot only after every jurisdiction row has a named budget paper, page/table reference, period, unit and definition note. |
+| AOFM monthly AGS face value | deferred | AOFM's settlement workbook supports a richer monthly face-value series, but repeated read timeouts made it unsuitable for a programmatic fetch in this pass. The dashboard instead uses the smaller official annual `stock_ags.csv` face-value file. | Retry the settlement workbook later or add a cached/manual monthly row only after the workbook can be fetched reliably and the AOFM boundary note is preserved. |
+
 ## Fuel
 
 | Gap | Current status | Why not filled yet | Next action |

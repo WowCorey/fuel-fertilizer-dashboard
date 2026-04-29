@@ -681,11 +681,11 @@
       "human_name": "AOFM Australian Government Securities outstanding",
       "publisher": "Australian Office of Financial Management",
       "fetch": "manual",
-      "update_cadence": "monthly",
+      "update_cadence": "annual",
       "used_by": [
         "au_economics"
       ],
-      "canonical_url": "https://www.aofm.gov.au/data",
+      "canonical_url": "https://www.aofm.gov.au/data-hub",
       "rights": "CC BY 3.0 AU (Commonwealth of Australia)",
       "citation": "Australian Office of Financial Management, Australian Government Securities Outstanding.",
       "preferred_dir": "manual",
@@ -1839,7 +1839,7 @@
       "id": "rba_credit_card_debt_accruing_interest",
       "human_name": "RBA credit card balances accruing interest (C1.1)",
       "publisher": "Reserve Bank of Australia",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
         "au_economics"
@@ -1847,8 +1847,8 @@
       "canonical_url": "https://www.rba.gov.au/statistics/tables/#credit-cards",
       "rights": "RBA terms of use for tabular data",
       "citation": "Reserve Bank of Australia, Statistical Table C1.1 (Credit and Charge Card Statistics - Original).",
-      "preferred_dir": "manual",
-      "has_generated": false,
+      "preferred_dir": "generated",
+      "has_generated": true,
       "has_manual": true
     },
     "rba_household_debt_to_income": {
@@ -1869,18 +1869,18 @@
     },
     "rba_standard_variable_mortgage_rate": {
       "id": "rba_standard_variable_mortgage_rate",
-      "human_name": "RBA standard variable owner-occupier home loan rate (F5/F6)",
+      "human_name": "RBA standard variable owner-occupier home loan rate (F5)",
       "publisher": "Reserve Bank of Australia",
-      "fetch": "manual",
+      "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
         "au_economics"
       ],
       "canonical_url": "https://www.rba.gov.au/statistics/tables/#interest-rates",
       "rights": "RBA terms of use for tabular data",
-      "citation": "Reserve Bank of Australia, Statistical Tables F5 and F6 (Indicator Lending Rates).",
-      "preferred_dir": "manual",
-      "has_generated": false,
+      "citation": "Reserve Bank of Australia, Statistical Table F5 (Indicator Lending Rates).",
+      "preferred_dir": "generated",
+      "has_generated": true,
       "has_manual": true
     },
     "resource_company_tax_rate": {

@@ -606,6 +606,17 @@ def fetch_extra_field_derived(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def parse_rba_date(value: str) -> dt.date:
+    """Parse date strings used in RBA statistical table CSVs."""
+    cleaned = value.strip()
+    for fmt in ("%d/%m/%Y", "%d-%b-%Y", "%Y-%m-%d"):
+        try:
+            return dt.datetime.strptime(cleaned, fmt).date()
+        except ValueError:
+            continue
+    raise ValueError(f"Unsupported RBA date format: {value!r}")
+
+
 def fetch_rba_f11(url: str) -> dict[str, Any]:
     """Fetch RBA Table F11.1 CSV and return monthly mean AUD/USD values."""
     r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
@@ -642,7 +653,7 @@ def fetch_rba_f11(url: str) -> dict[str, Any]:
         if len(row) <= usd_col or not row or not row[0].strip():
             continue
         try:
-            obs_date = dt.datetime.strptime(row[0].strip(), "%d-%b-%Y").date()
+            obs_date = parse_rba_date(row[0])
             value = float(row[usd_col])
         except (ValueError, TypeError):
             continue
@@ -679,7 +690,8 @@ def fetch_rba_csv_column(
 
     RBA tables share a layout: a metadata block (rows starting with "Title",
     "Description", "Frequency", ..., "Series ID"), then date+value rows where
-    column 0 is the observation date in DD-MMM-YYYY format. We pick the column
+    column 0 is the observation date. RBA CSVs have used both DD/MM/YYYY and
+    DD-MMM-YYYY date strings, so the parser accepts both. We pick the column
     whose Title row contains ``title_substring`` (case-insensitive substring
     match) and aggregate either to monthly mean or quarter-end.
     """
@@ -723,7 +735,7 @@ def fetch_rba_csv_column(
         if not row or len(row) <= col_idx or not row[0].strip():
             continue
         try:
-            obs_date = dt.datetime.strptime(row[0].strip(), "%d-%b-%Y").date()
+            obs_date = parse_rba_date(row[0])
             value = float(row[col_idx])
         except (ValueError, TypeError):
             continue
@@ -757,6 +769,58 @@ def fetch_rba_csv_column(
         "values": values,
         "last_data_point": latest_date.isoformat(),
         "notes": notes,
+        "source_url_resolved": url,
+    }
+
+
+def fetch_aofm_ags_face_value(source: dict[str, Any]) -> dict[str, Any]:
+    """Fetch annual AOFM AGS face value from the compact stock_ags CSV."""
+    url = source.get("fetch_url") or source.get("canonical_url") or source["url"]
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    reader = csv.DictReader(io.StringIO(r.content.decode("utf-8-sig")))
+    if reader.fieldnames != ["FY", "Face Value ($b)"]:
+        raise RuntimeError(f"AOFM stock_ags CSV had unexpected header: {reader.fieldnames!r}")
+
+    def fy_end_date(fy: str) -> dt.date:
+        match = re.fullmatch(r"(\d{4})-(\d{2})", fy.strip())
+        if not match:
+            raise RuntimeError(f"AOFM stock_ags FY value was malformed: {fy!r}")
+        start_year = int(match.group(1))
+        end_suffix = int(match.group(2))
+        century = (start_year // 100) * 100
+        end_year = century + end_suffix
+        if end_year <= start_year:
+            end_year += 100
+        return dt.date(end_year, 6, 30)
+
+    values: list[dict[str, Any]] = []
+    latest_date: dt.date | None = None
+    for row in reader:
+        fy = (row.get("FY") or "").strip()
+        raw_value = (row.get("Face Value ($b)") or "").strip()
+        if not fy or not raw_value:
+            continue
+        try:
+            value = round(float(raw_value), 1)
+        except ValueError as exc:
+            raise RuntimeError(f"AOFM stock_ags value was not numeric for {fy!r}") from exc
+        obs_date = fy_end_date(fy)
+        values.append({"t": fy, "v": value})
+        latest_date = max(latest_date, obs_date) if latest_date else obs_date
+
+    if not values or latest_date is None:
+        raise RuntimeError("AOFM stock_ags CSV contained no annual face-value observations")
+
+    return {
+        "unit": "AUD billions",
+        "values": values,
+        "last_data_point": latest_date.isoformat(),
+        "notes": (
+            "Fetched from the AOFM stock_ags CSV on the AOFM data hub. Values are annual "
+            "Australian Government Securities face value in AUD billions by financial year. "
+            "This is not the same as Commonwealth general government gross debt in Budget Papers."
+        ),
         "source_url_resolved": url,
     }
 
@@ -2261,6 +2325,23 @@ FETCHERS: dict[str, Fetcher] = {
         notes="Quarter-end value of household debt as a per cent of annualised household disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
         ndigits=1,
     ),
+    "rba_standard_variable_mortgage_rate": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier",
+        aggregate="monthly_mean",
+        unit="per cent per annum",
+        notes="Monthly RBA indicator lending rate for banks' standard variable owner-occupier housing loans, from Statistical Table F5. Trimmed to last 60 months.",
+        ndigits=2,
+    ),
+    "rba_credit_card_debt_accruing_interest": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Balances accruing interest",
+        aggregate="monthly_mean",
+        unit="AUD millions",
+        notes="Monthly value of credit and charge card balances accruing interest from RBA Statistical Table C1.1 aggregate credit card statistics. Trimmed to last 60 months.",
+        ndigits=1,
+    ),
+    "aofm_gov_gross_debt": fetch_aofm_ags_face_value,
     "aemo_nem_average_wholesale_price": lambda source: fetch_aemo_nem_price_demand("price"),
     "aemo_nem_total_demand": lambda source: fetch_aemo_nem_price_demand("demand"),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
