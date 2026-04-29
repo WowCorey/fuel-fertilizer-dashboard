@@ -2448,6 +2448,21 @@ sources:
     fetch: manual
     used_by: [defence_posture]
 
+  - id: defence_uncrewed_systems
+    human_name: Australian Defence uncrewed systems and counter-drone public posture
+    publisher: Department of Defence and Australian Submarine Agency
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence project pages (AIR 7000 Phase 1B Triton; AIR 6014 Phase 1 MQ-28A Ghost Bat; LAND 129 Phase 3 Integrator; LAND 156 counter-small UAS); Department of Defence / Australian Submarine Agency Ghost Shark public announcements; Sovereign Defence Industrial Priorities; Defence Industry Development Strategy 2024; 2024 Integrated Investment Program; 2026 National Defence Strategy budget factsheet.
+    reuse_notes: Manual selected public uncrewed-systems rows. The envelope is not a complete ADF drone inventory and must not be used to infer mission-capable rates, deployability, sortie rates or live availability. In-service / acquisition / development / sovereign program / counter-drone rows must stay separate. Drone-only budget rows must remain unavailable until a public Defence budget separates one from broader IIP or NDS envelopes.
+    fetch: manual
+    used_by: [defence_posture]
+
   - id: defence_readiness_gap
     human_name: Defence readiness and sensitive-data source gate
     publisher: Fuel Resilience AU

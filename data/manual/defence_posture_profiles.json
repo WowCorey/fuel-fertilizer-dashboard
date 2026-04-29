@@ -9,10 +9,10 @@
   "values": [
     {
       "t": "dashboard sections",
-      "v": 5
+      "v": 6
     }
   ],
-  "notes": "Manual compiled first-pass Defence, Alliances and Strategic Posture profile. Budget, workforce, capability, alliance and industry rows are copied or summarised from named public source envelopes. Readiness-sensitive values stay unavailable.",
+  "notes": "Manual compiled Defence, Alliances and Strategic Posture profile. Budget, workforce, capability, uncrewed-systems, alliance and industry rows are copied or summarised from named public source envelopes. Readiness-sensitive values stay unavailable.",
   "status": "ok",
   "manual_entry": true,
   "source_rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher.",
@@ -40,6 +40,12 @@
           "text": "ANZUS is a formal security treaty, AUKUS is a trilateral security and technology partnership, Five Eyes is an intelligence partnership, and the Quad is a diplomatic partnership. They are not collapsed into one generic alliance score.",
           "trust_label": "Manual",
           "source_id": "defence_alliance_frameworks"
+        },
+        {
+          "title": "Uncrewed coverage is by category, not by total inventory",
+          "text": "The page shows in-service (Triton, Integrator), development (Ghost Bat, Ghost Shark), counter-drone (LAND 156) and sovereign-program (SDIP autonomous systems, DIDS) rows separately. There is no clean public drone-only Defence budget, so that value stays unavailable.",
+          "trust_label": "Partial coverage",
+          "source_id": "defence_uncrewed_systems"
         }
       ],
       "budget_metrics": [
@@ -147,6 +153,7 @@
         {"section": "Budget", "coverage": "Strong coverage", "notes": "Current 2026 NDS budget factsheet rows loaded for funding, capability investment and expenditure categories."},
         {"section": "Force structure", "coverage": "Partial coverage", "notes": "Public organisation and workforce rows loaded; readiness and deployable-strength fields unavailable."},
         {"section": "Capabilities/assets", "coverage": "Partial coverage", "notes": "Selected official public asset and acquisition rows loaded; not exhaustive and not readiness."},
+        {"section": "Uncrewed systems and counter-drone", "coverage": "Partial coverage", "notes": "Selected official Defence project rows loaded across in-service, development, counter-drone and sovereign-program categories; complete ADF drone inventory and clean drone-only budget remain unavailable."},
         {"section": "Alliances/frameworks", "coverage": "Strong coverage", "notes": "ANZUS, AUKUS, Five Eyes, Quad, AUSMIN and PNG treaty profiles loaded with framework type separation."},
         {"section": "Sovereign capability/industry", "coverage": "Partial coverage", "notes": "Official industrial priorities and program context loaded; sensitive supply-chain depth and stockpile adequacy unavailable."},
         {"section": "Readiness/live posture", "coverage": "Unavailable", "notes": "No readiness, mission-capable, stockpile, classified basing or live operational posture metric is loaded."}

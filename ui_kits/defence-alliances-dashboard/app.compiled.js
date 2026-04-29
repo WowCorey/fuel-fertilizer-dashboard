@@ -905,7 +905,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['defence_posture_profiles', 'defence_budget_2026_nds', 'defence_workforce_annual_report_2024_25', 'defence_public_capability_assets', 'defence_alliance_frameworks', 'defence_sovereign_industry_context', 'defence_readiness_gap'];
+const SERIES = ['defence_posture_profiles', 'defence_budget_2026_nds', 'defence_workforce_annual_report_2024_25', 'defence_public_capability_assets', 'defence_alliance_frameworks', 'defence_sovereign_industry_context', 'defence_uncrewed_systems', 'defence_readiness_gap'];
 function fields(env) {
   return env?.extra?.fields || {};
 }
@@ -1084,6 +1084,69 @@ function AllianceSection({
     label: row.trust_label
   })))))));
 }
+function UncrewedSystemsTable({
+  rows,
+  data
+}) {
+  if (!rows.length) return null;
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "System"), React.createElement("th", null, "Domain"), React.createElement("th", null, "Public status"), React.createElement("th", null, "Operator / program"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.system_id
+  }, React.createElement("td", null, React.createElement("b", null, row.system_name), React.createElement("br", null), React.createElement("span", {
+    className: "caption"
+  }, row.capability_type)), React.createElement("td", null, row.domain), React.createElement("td", null, row.public_status, React.createElement("br", null), React.createElement("span", {
+    className: "caption"
+  }, row.quantity_or_status), React.createElement("br", null), React.createElement(SourceAnchor, {
+    href: row.source_url
+  })), React.createElement("td", null, row.operator_or_program), React.createElement("td", null, React.createElement(MetricStatus, {
+    label: row.trust_label
+  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
+    className: "caption mono"
+  }, sourceLineFor(data, row.source_id))))))));
+}
+function UncrewedProgramsTable({
+  rows,
+  data
+}) {
+  if (!rows.length) return null;
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Program"), React.createElement("th", null, "Type"), React.createElement("th", null, "Public headline"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.program_id
+  }, React.createElement("td", null, React.createElement("b", null, row.program_name), React.createElement("br", null), React.createElement(SourceAnchor, {
+    href: row.source_url
+  })), React.createElement("td", null, row.program_type), React.createElement("td", null, row.headline), React.createElement("td", null, React.createElement(MetricStatus, {
+    label: row.trust_label
+  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
+    className: "caption mono"
+  }, sourceLineFor(data, row.source_id))))))));
+}
+function UncrewedFundingTable({
+  rows,
+  data
+}) {
+  if (!rows.length) return null;
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Funding row"), React.createElement("th", null, "Status"), React.createElement("th", null, "Value"), React.createElement("th", null, "Period"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.funding_id
+  }, React.createElement("td", null, React.createElement("b", null, row.program_name), React.createElement("br", null), React.createElement(SourceAnchor, {
+    href: row.source_url
+  })), React.createElement("td", null, React.createElement(MetricStatus, {
+    label: row.trust_label
+  })), React.createElement("td", {
+    className: row.funding_status === 'Unavailable' ? 'unavail' : ''
+  }, row.funding_value == null ? 'Not separately published' : `${row.funding_value} ${row.funding_unit || ''}`.trim()), React.createElement("td", null, row.funding_period || '—'), React.createElement("td", null, row.boundary_note, React.createElement("br", null), React.createElement("span", {
+    className: "caption mono"
+  }, sourceLineFor(data, row.source_id))))))));
+}
 function IndustrySection({
   fields
 }) {
@@ -1184,6 +1247,11 @@ function App() {
   const capabilityRows = fields(data.defence_public_capability_assets).capability_rows || [];
   const frameworks = fields(data.defence_alliance_frameworks).frameworks || [];
   const industry = fields(data.defence_sovereign_industry_context);
+  const uncrewed = fields(data.defence_uncrewed_systems);
+  const uncrewedSystems = uncrewed.systems_rows || [];
+  const uncrewedPrograms = uncrewed.program_rows || [];
+  const uncrewedFunding = uncrewed.funding_rows || [];
+  const uncrewedCaveats = uncrewed.methodology_caveats || [];
   const takeaways = hasRows(data.defence_posture_profiles) ? profile.takeaways || [] : [];
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
@@ -1299,6 +1367,39 @@ function App() {
     rows: capabilityRows
   })), React.createElement("section", {
     className: "section",
+    "aria-labelledby": "uncrewed-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Uncrewed systems and counter-drone"), React.createElement("h2", {
+    id: "uncrewed-h"
+  }, "Drones, autonomous systems and counter-drone, kept separate"), React.createElement("p", {
+    className: "section__lede"
+  }, uncrewed.section_intro || 'Selected publicly stated uncrewed-systems rows. In-service, acquisition, development, sovereign program and counter-drone rows are kept separate. This page does not publish a complete ADF drone inventory or readiness data.'))), React.createElement(UncrewedSystemsTable, {
+    rows: uncrewedSystems,
+    data: data
+  }), uncrewedPrograms.length > 0 && React.createElement(React.Fragment, null, React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("h3", null, "Domestic / sovereign programs and strategy context"), React.createElement(UncrewedProgramsTable, {
+    rows: uncrewedPrograms,
+    data: data
+  })), uncrewedFunding.length > 0 && React.createElement(React.Fragment, null, React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("h3", null, "Funding boundaries"), React.createElement(UncrewedFundingTable, {
+    rows: uncrewedFunding,
+    data: data
+  })), uncrewedCaveats.length > 0 && React.createElement("p", {
+    className: "caption",
+    style: {
+      marginTop: 16
+    }
+  }, React.createElement("b", null, "Boundary:"), " ", uncrewed.boundary || '', ' ', uncrewedCaveats.join(' '))), React.createElement("section", {
+    className: "section",
     "aria-labelledby": "industry-h"
   }, React.createElement("div", {
     className: "section__head"
@@ -1413,6 +1514,10 @@ function App() {
   }), React.createElement(SourceSummary, {
     id: "defence_sovereign_industry_context",
     env: data.defence_sovereign_industry_context,
+    partial: true
+  }), React.createElement(SourceSummary, {
+    id: "defence_uncrewed_systems",
+    env: data.defence_uncrewed_systems,
     partial: true
   }), React.createElement(SourceSummary, {
     id: "defence_readiness_gap",
