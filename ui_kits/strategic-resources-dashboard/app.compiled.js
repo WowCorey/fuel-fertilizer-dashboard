@@ -314,7 +314,7 @@ function Header({
     href: '../national-status-dashboard/index.html'
   }, {
     id: 'fuel_security',
-    label: 'Fuel security',
+    label: 'National fuel security',
     href: '../fuel-security-dashboard/index.html'
   }, {
     id: 'resource_value',
@@ -862,7 +862,7 @@ function Footer({
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-security-dashboard/index.html"
-  }, "Fuel security")), React.createElement("li", null, React.createElement("a", {
+  }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"

@@ -172,7 +172,7 @@
       <nav class="site-nav" aria-label="Primary">
         <a class="active" aria-current="page" href="index.html">Home</a>
         <a href="ui_kits/national-status-dashboard/index.html">National status</a>
-        <a href="ui_kits/fuel-security-dashboard/index.html">Fuel security</a>
+        <a href="ui_kits/fuel-security-dashboard/index.html">National fuel security</a>
         <a href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
         <a href="ui_kits/state-contribution-dashboard/index.html">State ledger</a>
         <a href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
@@ -196,12 +196,13 @@
         <h1 id="home-title">Australia's fuel and fertiliser data, without estimates.</h1>
           <p class="home-hero__lede">
             This static site collects source-linked dashboard pages for liquid fuel, fertiliser,
-            oil production, fuel security, national fuel status, resource value, state petroleum ledger, strategic resources, defence posture and retail-price breakdowns.
+            oil production, national fuel security, national fuel status, resource value, state petroleum ledger, strategic resources, defence posture and retail-price breakdowns.
             Values appear only when they flow through a verified JSON envelope; unavailable
             values remain visible as placeholders.
+            The National Fuel Security page is the direct fuel-dashboard prototype; the wider site expands the same public-source method across energy, resources, food inputs, infrastructure and national resilience.
         </p>
         <div class="home-badge-row">
-          <span class="refresh-badge" id="refresh-badge">Last data refresh: not recorded yet</span>
+          <span class="refresh-badge" id="refresh-badge">Programmatic refresh: no successful refresh recorded</span>
           <a class="deploy-badge" href="https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml" aria-label="Open GitHub Pages deploy workflow status">
             <img src="https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml/badge.svg" alt="Deploy GitHub Pages workflow status">
           </a>
@@ -218,7 +219,7 @@
           <p class="section__lede">
             Programmatic envelopes now cover ABS trade, APS petroleum statistics, AIP terminal
             gate prices, RBA AUD/USD, EIA/FRED benchmarks and public-feed retail fuel by product. The national
-            status, fuel-security and resource-value pages add manually verified public policy and supply snapshots.
+            status, national fuel-security and resource-value pages add manually verified public policy and supply snapshots.
             Strategic resources adds official mineral production, export and footprint context without underground-wealth estimates;
             defence posture adds public budget, capability, alliance and industry context without readiness claims.
           </p>
@@ -232,9 +233,9 @@
           <div class="home-card__status">Status: PM&C/DCCEEW public supply snapshot hand-keyed; direct programmatic fetch is deferred until a stable machine-readable endpoint is available.</div>
         </article>
         <article class="home-card">
-          <h3>Fuel security</h3>
-          <p>Operational public-source view of product days, stocks, imports, outage visibility and missing feeds.</p>
-          <a class="home-card__link" href="ui_kits/fuel-security-dashboard/index.html">Open fuel security</a>
+          <h3>National fuel security</h3>
+          <p>Public-source view of Australia's fuel cover, reserves, stocks, imports, inbound supply visibility, retail pressure, outages and missing government/industry feeds.</p>
+          <a class="home-card__link" href="ui_kits/fuel-security-dashboard/index.html">Open national fuel security</a>
           <div class="home-card__status">Status: PM&C/DCCEEW product days and stocks, APS context and aggregate import/tanker snapshots are labelled observed, derived, manual, partial or unavailable. No live station feed, vessel feed, terminal-capacity feed or national risk score is published yet.</div>
         </article>
         <article class="home-card">
@@ -345,11 +346,22 @@
     .then(response => response.ok ? response.json() : null)
     .then(status => {
       const badge = document.getElementById('refresh-badge');
-      if (!badge || !status || !status.refreshed_at) return;
+      if (!badge) return;
+      if (!status) {
+        badge.textContent = 'Programmatic refresh: status unavailable';
+        return;
+      }
+      if (status.status !== 'success' || !status.refreshed_at) {
+        badge.textContent = 'Programmatic refresh: no successful refresh recorded';
+        return;
+      }
       const when = new Date(status.refreshed_at);
       badge.textContent = `Last successful refresh: ${when.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' })}`;
     })
-    .catch(() => {});
+    .catch(() => {
+      const badge = document.getElementById('refresh-badge');
+      if (badge) badge.textContent = 'Programmatic refresh: status unavailable';
+    });
 </script>
 </body>
 </html>

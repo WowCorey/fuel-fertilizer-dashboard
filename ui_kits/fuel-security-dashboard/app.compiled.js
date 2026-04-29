@@ -314,7 +314,7 @@ function Header({
     href: '../national-status-dashboard/index.html'
   }, {
     id: 'fuel_security',
-    label: 'Fuel security',
+    label: 'National fuel security',
     href: '../fuel-security-dashboard/index.html'
   }, {
     id: 'resource_value',
@@ -862,7 +862,7 @@ function Footer({
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-security-dashboard/index.html"
-  }, "Fuel security")), React.createElement("li", null, React.createElement("a", {
+  }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"
@@ -1060,6 +1060,106 @@ function SourceInvestigationSummary() {
     className: "body-sm"
   }, row.body))));
 }
+const ANSWER_CARDS = [{
+  title: 'National public fuel status',
+  label: 'Observed',
+  kind: 'observed',
+  body: 'The official public PM&C/DCCEEW level remains visible and is not reinterpreted into a private risk score.'
+}, {
+  title: 'Petrol, diesel and jet fuel days remaining',
+  label: 'Derived',
+  kind: 'derived',
+  body: 'Product-day cards are reshaped from the public MSO table rather than invented from hidden demand assumptions.'
+}, {
+  title: 'MSO reserves and APS stock context',
+  label: 'Observed',
+  kind: 'observed',
+  body: 'The page separates MSO reserve volumes from APS monthly stocks, sales and import context.'
+}, {
+  title: 'Product imports and import dependency',
+  label: 'Observed',
+  kind: 'observed',
+  body: 'APS product imports and ABS petroleum import value are shown as public context, with source boundaries intact.'
+}, {
+  title: 'Inbound tanker visibility',
+  label: 'Partial coverage',
+  kind: 'partial',
+  body: 'Only aggregate public tanker and forward-order counts are shown. Live vessel names, AIS positions and ETAs remain unavailable.'
+}, {
+  title: 'Retail stock-out / outage visibility',
+  label: 'Partial coverage',
+  kind: 'partial',
+  body: 'PM&C, WA and QLD public rows provide partial outage visibility. They are not a live national dry-station feed.'
+}, {
+  title: 'Retail price pressure where available',
+  label: 'Partial coverage',
+  kind: 'partial',
+  body: 'Public-feed retail price rows are treated as price-pressure context, not complete national pump-price coverage.'
+}, {
+  title: 'Missing feeds',
+  label: 'Unavailable',
+  kind: 'unavailable',
+  body: 'Live station outages, live vessel ETAs and terminal-level storage capacity stay labelled unavailable until a named public source is loaded.'
+}];
+function WhatThisPageAnswers() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "answers-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "What this page answers"), React.createElement("h2", {
+    id: "answers-h"
+  }, "The national fuel dashboard structure"), React.createElement("p", {
+    className: "section__lede"
+  }, "A public dashboard should show both the numbers that are visible and the feeds that are missing. Visibility language matters: partial public rows are not full national live coverage."))), React.createElement("div", {
+    className: "sources-grid"
+  }, ANSWER_CARDS.map(card => React.createElement("article", {
+    key: card.title,
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, card.title), React.createElement(TrustBadge, {
+    kind: card.kind
+  }, card.label)), React.createElement("p", {
+    className: "body-sm"
+  }, card.body)))));
+}
+function PublicRequestAlignment() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "public-request-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Public dashboard request"), React.createElement("h2", {
+    id: "public-request-h",
+    style: {
+      marginTop: 8
+    }
+  }, "Certainty means more than a price board")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Public calls for a national fuel dashboard are about certainty: whether fuel is available, how many days of cover remain, what supply is inbound, where outages are visible, and which gaps government or industry still need to publish. This page shows that structure with public-source evidence only."), React.createElement("p", null, "If a value cannot be verified from a named public source, this dashboard labels it partial, unavailable or stale rather than filling the gap with estimates."))));
+}
+function MoreThanPumpPrices() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "more-than-prices-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "More than pump prices"), React.createElement("h2", {
+    id: "more-than-prices-h",
+    style: {
+      marginTop: 8
+    }
+  }, "Supply resilience belongs beside price pressure")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "A useful national fuel dashboard should not only show the price at the bowser. It should connect price pressure to supply resilience: stock cover, import reliance, inbound supply, outages, reserves, terminal visibility and known data gaps."), React.createElement("p", null, "Fuel Resilience AU also links this fuel-security view into broader national resilience dashboards covering fertiliser, oil production, resource value, strategic resources, defence posture, power, infrastructure, manufacturing and the Australian economy."))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -1099,15 +1199,15 @@ function App() {
     id: "fuel-security"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Australia fuel security dashboard"), React.createElement("h1", {
+  }, "National fuel security dashboard"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What Australia can see from public fuel-security data."), React.createElement("p", {
+  }, "What a transparent Australian fuel dashboard should show."), React.createElement("p", {
     className: "intro__lede"
-  }, "This page separates observed public signals from derived, partial and unavailable operational layers. It shows PM&C/DCCEEW status, product days, stock context, import/shipping context and the blind spots that are not yet public-source safe.")), React.createElement("aside", {
+  }, "This public-source prototype shows Australia's fuel security position using only source-linked data: official public status, days of cover, MSO reserves, product stocks, imports, inbound tanker visibility, retail stock-outs, price pressure and known missing feeds. It does not invent live values where government or industry data is not publicly available.")), React.createElement("aside", {
     className: "intro__meta",
-    "aria-label": "Fuel security status"
+    "aria-label": "National fuel security status"
   }, React.createElement("strong", null, "Official public level"), React.createElement("span", {
     className: "mono"
   }, officialLevel), React.createElement("div", {
@@ -1118,7 +1218,7 @@ function App() {
     className: "mono"
   }, "Status unavailable"))), React.createElement(DataCoverage, {
     data: data
-  }), React.createElement("section", {
+  }), React.createElement(PublicRequestAlignment, null), React.createElement(WhatThisPageAnswers, null), React.createElement(MoreThanPumpPrices, null), React.createElement("section", {
     className: "section section--why"
   }, React.createElement("div", {
     className: "why-grid"
@@ -1174,7 +1274,14 @@ function App() {
     title: "Dashboard status model",
     env: data.fuel_security_status_model,
     unavailable: true
-  }, data.fuel_security_status_model.notes))), React.createElement("section", {
+  }, data.fuel_security_status_model.notes), React.createElement(SecurityCard, {
+    eyebrow: "Partial coverage",
+    title: "Public-feed ULP 91 price pressure",
+    value: fmtNumber(latest(data.aus_retail_fuel_multistate), 1),
+    unit: "c/L",
+    env: data.aus_retail_fuel_multistate,
+    partial: true
+  }, "Multi-state public-feed ULP 91 average. This is price-pressure context, not complete national all-product pump-price coverage."))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "days-remaining"
   }, React.createElement("div", {
