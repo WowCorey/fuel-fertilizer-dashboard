@@ -1,6 +1,54 @@
 {
   "schema": "fuel_resilience_source_manifest.v1",
   "sources": {
+    "abares_agricultural_commodities_beef": {
+      "id": "abares_agricultural_commodities_beef",
+      "human_name": "ABARES agricultural commodities - beef source gate",
+      "publisher": "Australian Bureau of Agricultural and Resource Economics and Sciences",
+      "fetch": "unavailable",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+      "rights": "CC BY 4.0 except logos, third-party content and otherwise-noted material",
+      "citation": "ABARES, Agricultural Commodities report and data tables.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abares_agricultural_commodities_wheat": {
+      "id": "abares_agricultural_commodities_wheat",
+      "human_name": "ABARES agricultural commodities - wheat source gate",
+      "publisher": "Australian Bureau of Agricultural and Resource Economics and Sciences",
+      "fetch": "unavailable",
+      "update_cadence": "quarterly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+      "rights": "CC BY 4.0 except logos, third-party content and otherwise-noted material",
+      "citation": "ABARES, Agricultural Commodities report and data tables.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abares_agricultural_exports": {
+      "id": "abares_agricultural_exports",
+      "human_name": "ABARES agricultural export value source gate",
+      "publisher": "Australian Bureau of Agricultural and Resource Economics and Sciences",
+      "fetch": "unavailable",
+      "update_cadence": "annual",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture",
+      "rights": "CC BY 4.0 except logos, third-party content and otherwise-noted material",
+      "citation": "ABARES, Snapshot of Australian Agriculture.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "abares_fertiliser_price": {
       "id": "abares_fertiliser_price",
       "human_name": "ABARES fertiliser price index (Agricultural commodities)",
@@ -29,6 +77,22 @@
       "canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "ABARES, Agricultural commodities data, fertiliser stock-cover indicator if published.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "abs_agricultural_exports": {
+      "id": "abs_agricultural_exports",
+      "human_name": "ABS International Trade in Goods - agricultural exports source gate",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "unavailable",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -159,6 +223,22 @@
       "citation": "Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), food product manufacturing (ANZSIC 11) and beverage and tobacco product manufacturing (ANZSIC 12).",
       "preferred_dir": "generated",
       "has_generated": true,
+      "has_manual": true
+    },
+    "abs_food_imports": {
+      "id": "abs_food_imports",
+      "human_name": "ABS International Trade in Goods - food imports source gate",
+      "publisher": "Australian Bureau of Statistics",
+      "fetch": "unavailable",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "rights": "CC BY 4.0 where stated by publisher",
+      "citation": "Australian Bureau of Statistics, International Trade in Goods.",
+      "preferred_dir": "manual",
+      "has_generated": false,
       "has_manual": true
     },
     "abs_gdp_real_growth": {
@@ -1124,6 +1204,38 @@
       "has_generated": false,
       "has_manual": true
     },
+    "bom_rainfall_deficiency": {
+      "id": "bom_rainfall_deficiency",
+      "human_name": "Bureau of Meteorology rainfall deficiency and drought services source gate",
+      "publisher": "Bureau of Meteorology",
+      "fetch": "unavailable",
+      "update_cadence": "monthly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services",
+      "rights": "Bureau of Meteorology copyright and data-use terms apply; check product-specific terms",
+      "citation": "Bureau of Meteorology, Drought services and rainfall deficiency information.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "bom_water_storage": {
+      "id": "bom_water_storage",
+      "human_name": "Bureau of Meteorology water storage source gate",
+      "publisher": "Bureau of Meteorology",
+      "fetch": "unavailable",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.bom.gov.au/water/",
+      "rights": "Bureau of Meteorology copyright and data-use terms apply; check product-specific terms",
+      "citation": "Bureau of Meteorology, Water Information.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "cer_renewable_energy_target_progress": {
       "id": "cer_renewable_energy_target_progress",
       "human_name": "CER Renewable Energy Target progress, annual",
@@ -1264,6 +1376,22 @@
       "canonical_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
       "rights": "Company copyright",
       "citation": "Woodside Energy annual report.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "daff_agricultural_trade": {
+      "id": "daff_agricultural_trade",
+      "human_name": "DAFF/ABARES agricultural commodities and trade data source gate",
+      "publisher": "Department of Agriculture, Fisheries and Forestry",
+      "fetch": "unavailable",
+      "update_cadence": "annual",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data",
+      "rights": "CC BY 4.0 except logos, third-party content and otherwise-noted material",
+      "citation": "Department of Agriculture, Fisheries and Forestry, ABARES agricultural commodities and trade data.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1649,6 +1777,22 @@
       "canonical_url": "https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
       "citation": "Infrastructure Australia, 2026 Infrastructure Priority List.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "mdba_water_storage": {
+      "id": "mdba_water_storage",
+      "human_name": "MDBA water storage and basin water source gate",
+      "publisher": "Murray-Darling Basin Authority",
+      "fetch": "unavailable",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://library.mdba.gov.au/",
+      "rights": "MDBA Library datasets use resource-specific licences; check each resource before reuse",
+      "citation": "Murray-Darling Basin Authority, MDBA Library and water-storage publications.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

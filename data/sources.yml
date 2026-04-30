@@ -437,6 +437,141 @@ sources:
     fetch: programmatic
     used_by: [fertilizer]
 
+  - id: abares_agricultural_exports
+    human_name: ABARES agricultural export value source gate
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture
+    canonical_url: https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: ABARES, Snapshot of Australian Agriculture.
+    reuse_notes: Source gate only. The page must not publish an agricultural export value until the exact ABARES figure, period, unit, scope and table/figure reference are hand-keyed into an envelope. Do not derive a dashboard total from narrative text.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abares_agricultural_commodities_wheat
+    human_name: ABARES agricultural commodities - wheat source gate
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: ABARES, Agricultural Commodities report and data tables.
+    reuse_notes: Source gate only. Populate only after verifying the exact wheat row, unit and period from ABARES Agricultural Commodities tables. Keep production, exports, domestic use and stocks as separate concepts.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abares_agricultural_commodities_beef
+    human_name: ABARES agricultural commodities - beef source gate
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: ABARES, Agricultural Commodities report and data tables.
+    reuse_notes: Source gate only. Populate only after verifying the exact beef row, unit and period from ABARES Agricultural Commodities tables. Keep production, export value, export volume and prices as separate concepts.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abs_food_imports
+    human_name: ABS International Trade in Goods - food imports source gate
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods.
+    reuse_notes: Source gate only. Do not publish a food-import value until the exact ABS commodity grouping, value basis, frequency and unit are verified. Do not mix food imports with fertiliser imports or broader merchandise imports.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abs_agricultural_exports
+    human_name: ABS International Trade in Goods - agricultural exports source gate
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods.
+    reuse_notes: Source gate only. Do not publish an agricultural export value until the exact ABS commodity grouping, value basis, frequency and unit are verified. Keep ABS goods exports separate from ABARES agricultural production and forecast tables.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: bom_rainfall_deficiency
+    human_name: Bureau of Meteorology rainfall deficiency and drought services source gate
+    publisher: Bureau of Meteorology
+    url: https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services
+    canonical_url: https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services
+    format: MIXED
+    update_cadence: monthly
+    last_verified: 2026-05-01
+    rights: Bureau of Meteorology copyright and data-use terms apply; check product-specific terms
+    rights_url: https://www.bom.gov.au/copyright
+    citation: Bureau of Meteorology, Drought services and rainfall deficiency information.
+    reuse_notes: Source gate only. Do not publish rainfall deficiency, drought or agricultural stress values until the exact BOM product, geography, period, unit/class and reuse terms are verified. Do not infer values by visually reading a map.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: bom_water_storage
+    human_name: Bureau of Meteorology water storage source gate
+    publisher: Bureau of Meteorology
+    url: https://www.bom.gov.au/water/
+    canonical_url: https://www.bom.gov.au/water/
+    format: MIXED
+    update_cadence: weekly
+    last_verified: 2026-05-01
+    rights: Bureau of Meteorology copyright and data-use terms apply; check product-specific terms
+    rights_url: https://www.bom.gov.au/copyright
+    citation: Bureau of Meteorology, Water Information.
+    reuse_notes: Source gate only. Do not publish water storage or allocation values until the exact BOM water product, geography, unit, period and reuse terms are verified. Keep storage, streamflow and allocation as separate concepts.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: mdba_water_storage
+    human_name: MDBA water storage and basin water source gate
+    publisher: Murray-Darling Basin Authority
+    url: https://library.mdba.gov.au/
+    canonical_url: https://library.mdba.gov.au/
+    format: MIXED
+    update_cadence: weekly
+    last_verified: 2026-05-01
+    rights: MDBA Library datasets use resource-specific licences; check each resource before reuse
+    rights_url: https://library.mdba.gov.au/
+    citation: Murray-Darling Basin Authority, MDBA Library and water-storage publications.
+    reuse_notes: Source gate only. Do not publish Basin storage, allocation or irrigation availability values until the exact MDBA source, geography, unit, period and licence are verified. Do not treat Basin totals as national water security.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: daff_agricultural_trade
+    human_name: DAFF/ABARES agricultural commodities and trade data source gate
+    publisher: Department of Agriculture, Fisheries and Forestry
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data
+    canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: Department of Agriculture, Fisheries and Forestry, ABARES agricultural commodities and trade data.
+    reuse_notes: Source gate only. Use this for DAFF/ABARES agricultural trade context only after a specific row, period and unit are verified. Do not duplicate ABS trade rows or convert narrative summaries into values.
+    fetch: unavailable
+    used_by: [fertilizer]
+
   - id: iea_90day
     human_name: IEA 90-day oil stockholding obligation
     publisher: International Energy Agency

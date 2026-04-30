@@ -9,7 +9,7 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'strategic_resources', label: 'Strategic resources', href: '../strategic-resources-dashboard/index.html' },
     { id: 'defence_posture', label: 'Defence posture', href: '../defence-alliances-dashboard/index.html' },
     { id: 'fuel',          label: 'Fuel',                  href: '../fuel-dashboard/index.html' },
-    { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
+    { id: 'fertilizer',    label: 'Food & farms',          href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },
     { id: 'who_pays_what', label: 'Who pays what',         href: '../who-pays-what/index.html' },
     { id: 'au_economics',  label: 'AU economics',          href: '../au-economics-dashboard/index.html' },
