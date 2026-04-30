@@ -2444,6 +2444,10 @@ def source_check_options(source: dict[str, Any]) -> tuple[dict[str, str], int]:
     return headers, timeout_seconds
 
 
+def source_check_required(source: dict[str, Any]) -> bool:
+    return source.get("check_required", True) is not False
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Fetch data for Fuel Resilience AU")
     ap.add_argument("--only", help="Only fetch this source id")
@@ -2504,10 +2508,13 @@ def main() -> int:
             url = source_check_url(source, all_links=args.check_all_links)
             headers, timeout_seconds = source_check_options(source)
             ok, msg = check_url(url, headers=headers, timeout_seconds=timeout_seconds)
-            tag = "OK " if ok else "ERR"
+            required = source_check_required(source)
+            tag = "OK " if ok else ("ERR" if required else "WARN")
             print(f"[{tag}] {sid:<32} {msg}  {url}")
-            if not ok:
+            if not ok and required:
                 errors.append(f"{sid}: {msg}")
+            elif not ok:
+                skipped.append((sid, f"non-blocking fetch check failed: {msg}"))
             continue
 
         if fetch_mode in {"programmatic", "derived"}:
