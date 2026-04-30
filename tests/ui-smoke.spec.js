@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const routes = [
-  { path: '/', heading: "Australia's fuel and fertiliser data, without estimates." },
+  { path: '/', heading: "Australia's fuel, food and resilience data, without estimates." },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What a transparent Australian fuel dashboard should show.' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
@@ -9,7 +9,7 @@ const routes = [
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
   { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: "Australia's defence posture, in plain English." },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
-  { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's fertiliser, in plain English." },
+  { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's food, farm inputs and water pressure, in plain English." },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
   { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
   { path: '/ui_kits/au-economics-dashboard/index.html', heading: "Australia's economy, in plain English." },
@@ -59,6 +59,27 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByText('This dashboard is a public-source fuel-security prototype, not a live service-station finder.')).toBeVisible();
   await expect(page.getByText('Terminal visibility boundary')).toBeVisible();
   await expect(page.getByText('Source investigation result')).toBeVisible();
+});
+
+test('food farms and water page keeps unavailable source gates explicit', async ({ page }) => {
+  await page.goto('/ui_kits/fertilizer-dashboard/index.html');
+  await expect(page.getByText('Food, farms & water security')).toBeVisible();
+  await expect(page.getByRole('heading', { name: "Australia's food, farm inputs and water pressure, in plain English." })).toBeVisible();
+  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(page.getByText('not an official government dashboard')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Verified data retrieved|Programmatic refresh not recorded yet/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source status comes first' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What Australia grows' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What Australia buys' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What Australia sells' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Fertiliser and farm inputs' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Water and seasonal pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What government still needs to publish' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Food import value' })).toBeVisible();
+  await expect(page.getByText('Food-import exposure needs a verified ABS trade concept')).toBeVisible();
+  await expect(page.getByText('No workflow timestamp is invented here.')).toBeVisible();
+  await expect(page.getByText('No public Australian fertiliser cover row is loaded.')).toBeVisible();
+  await expect(page.getByText('This page does not infer drought or farm-level water availability from maps or commentary.')).toBeVisible();
 });
 
 test('state contribution page keeps tax attribution boundaries explicit', async ({ page }) => {
