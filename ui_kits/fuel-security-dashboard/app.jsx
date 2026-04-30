@@ -510,11 +510,11 @@ function App() {
           <div className="section__head">
             <div>
               <span className="eyebrow">4. Inbound fuel visibility</span>
-              <h2 id="import-risk">Aggregate shipping context, no fake vessel layer</h2>
+              <h2 id="import-risk">Inbound fuel evidence board, not a live map</h2>
               <p className="section__lede">
-                This section borrows the readable shape of a ship-tracking dashboard, but only
-                uses source-safe aggregate public data. It does not plot live AIS, vessel ETAs
-                or shipment-level Kpler records.
+                This section uses source-safe aggregate public data only. It does not plot
+                ships, AIS positions, vessel names, port-call ETAs or shipment-level private
+                logistics records.
               </p>
             </div>
           </div>
@@ -530,7 +530,7 @@ function App() {
               <dt>Loaded</dt>
               <dd>PM&C aggregate tankers and four-week import orders, APS monthly product imports, and ABS petroleum import value.</dd>
               <dt>Not loaded</dt>
-              <dd>Vessel names, AIS positions, ETA-level port calls and cargo inference. The route graphic is context only.</dd>
+              <dd>Vessel names, AIS positions, ETA-level port calls, cargo inference, ports, terminals, shipping lanes or vessel locations.</dd>
             </dl>
           </div>
         </section>
