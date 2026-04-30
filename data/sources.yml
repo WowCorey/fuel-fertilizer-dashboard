@@ -491,6 +491,7 @@ sources:
     url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
     canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
     fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
+    check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: ulp91
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
     qld_ckan_base: https://www.data.qld.gov.au
@@ -501,7 +502,7 @@ sources:
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
+    reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
     fetch: programmatic
     used_by: [fuel, fuel_security]
 
@@ -511,6 +512,7 @@ sources:
     url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
     canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
     fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
+    check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: diesel
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
     qld_ckan_base: https://www.data.qld.gov.au
@@ -521,7 +523,7 @@ sources:
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state diesel average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
+    reuse_notes: Programmatic multi-state diesel average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
     fetch: programmatic
     used_by: [fuel, fuel_security]
 
@@ -531,6 +533,7 @@ sources:
     url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
     canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
     fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
+    check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: premium95
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
     qld_ckan_base: https://www.data.qld.gov.au
@@ -541,7 +544,7 @@ sources:
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state premium 95 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem.
+    reuse_notes: Programmatic multi-state premium 95 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem, when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
     fetch: programmatic
     used_by: [fuel, fuel_security]
 
