@@ -109,6 +109,10 @@ function ShippingVisibility({
   liveVesselEnv
 }) {
   const [filter, setFilter] = React.useState('all');
+  const notApplicable = () => React.createElement("span", {
+    className: "unavail",
+    "aria-label": "not applicable"
+  }, "\u2014");
   function latest(env) {
     if (!env || env.status !== 'ok' || !env.values?.length) return null;
     return env.values.at(-1).v;
@@ -116,43 +120,149 @@ function ShippingVisibility({
   function fields(env) {
     return env?.extra?.fields || {};
   }
+  function isNumber(value) {
+    return value !== null && value !== undefined && !Number.isNaN(Number(value));
+  }
   function fmt(value, digits = 0) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return Number(value).toLocaleString('en-AU', {
       maximumFractionDigits: digits,
       minimumFractionDigits: digits
     });
   }
   function fmtAudThousands(value) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
       maximumFractionDigits: 1,
       minimumFractionDigits: 1
     })}bn`;
   }
+  function fmtChange(current, previous) {
+    if (!isNumber(current) || !isNumber(previous)) return notApplicable();
+    const change = Number(current) - Number(previous);
+    if (change === 0) return '0';
+    return `${change > 0 ? '+' : ''}${fmt(change)}`;
+  }
+  function tankerCell(value) {
+    return isNumber(value) ? `${fmt(value)} tankers` : notApplicable();
+  }
+  function daysCell(value) {
+    return isNumber(value) ? `${fmt(value)} days` : notApplicable();
+  }
   const tankerFields = fields(tankersEnv);
-  const groups = [{
+  const totalTankers = latest(tankersEnv);
+  const forwardOrders = latest(forwardOrdersEnv);
+  const importValue = latest(importsEnv);
+  const liveVesselNotes = liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.';
+  const rows = [{
     key: 'crude',
-    label: 'Crude oil',
-    shortLabel: 'Crude',
-    count: tankerFields.crude_oil_tankers,
-    previous: tankerFields.previous_crude_oil_tankers,
-    days: tankerFields.crude_oil_equivalent_days,
-    route: 'Overseas crude supply -> Australian refining system',
-    note: 'Aggregate PM&C count. No vessel identities or ETAs are loaded.'
+    filter: 'crude',
+    supplyGroup: 'Crude oil',
+    current: tankerCell(tankerFields.crude_oil_tankers),
+    previous: tankerCell(tankerFields.previous_crude_oil_tankers),
+    change: fmtChange(tankerFields.crude_oil_tankers, tankerFields.previous_crude_oil_tankers),
+    equivalentDays: daysCell(tankerFields.crude_oil_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate crude-oil tanker count and equivalent days only. No vessel names, AIS positions, cargo assignments or port-call ETAs are loaded.'
   }, {
     key: 'clean',
-    label: 'Clean refined products',
-    shortLabel: 'Clean products',
-    count: tankerFields.clean_refined_product_tankers,
-    previous: tankerFields.previous_clean_refined_product_tankers,
-    days: tankerFields.clean_refined_product_equivalent_days,
-    route: 'Regional product supply -> Australian terminals',
-    note: 'Aggregate PM&C count covering refined-product tankers.'
+    filter: 'clean',
+    supplyGroup: 'Clean refined products',
+    current: tankerCell(tankerFields.clean_refined_product_tankers),
+    previous: tankerCell(tankerFields.previous_clean_refined_product_tankers),
+    change: fmtChange(tankerFields.clean_refined_product_tankers, tankerFields.previous_clean_refined_product_tankers),
+    equivalentDays: daysCell(tankerFields.clean_refined_product_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate clean refined-product tanker count and equivalent days only. This is inbound supply visibility, not a live shipping layer.'
+  }, {
+    key: 'total',
+    filter: 'all',
+    supplyGroup: 'Total reported tankers',
+    current: tankerCell(totalTankers),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'Latest PM&C aggregate total reported tanker count. It does not identify individual vessels, ports, terminals or cargoes.'
+  }, {
+    key: 'orders',
+    filter: 'all',
+    supplyGroup: 'Forward import orders',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: forwardOrdersEnv,
+    partial: true,
+    meaning: `Latest PM&C forward import order visibility is ${fmt(forwardOrders, 1)} billion L ordered. This is aggregate public order visibility only.`
+  }, {
+    key: 'imports',
+    filter: 'all',
+    supplyGroup: 'ABS petroleum imports',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: importsEnv,
+    partial: false,
+    meaning: `Latest ABS petroleum import value is ${fmtAudThousands(importValue)} (${fmt(importValue)} AUD thousands). This is trade-value context, not tanker or vessel tracking.`
+  }, {
+    key: 'live',
+    filter: 'all',
+    supplyGroup: 'Live vessel identities / ETAs',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: liveVesselEnv,
+    partial: false,
+    meaning: `${liveVesselNotes} No AIS positions, vessel names, cargo assignments or port-call ETAs are plotted.`
   }];
-  const visibleGroups = filter === 'all' ? groups : groups.filter(group => group.key === filter);
-  const totalTankers = latest(tankersEnv);
+  const cards = [{
+    key: 'crude-card',
+    filter: 'crude',
+    title: 'Crude oil tankers',
+    value: isNumber(tankerFields.crude_oil_tankers) ? fmt(tankerFields.crude_oil_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.crude_oil_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_crude_oil_tankers)} tankers; equivalent days: ${fmt(tankerFields.crude_oil_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'clean-card',
+    filter: 'clean',
+    title: 'Clean refined-product tankers',
+    value: isNumber(tankerFields.clean_refined_product_tankers) ? fmt(tankerFields.clean_refined_product_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.clean_refined_product_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_clean_refined_product_tankers)} tankers; equivalent days: ${fmt(tankerFields.clean_refined_product_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'orders-card',
+    filter: 'all',
+    title: 'Forward import orders',
+    value: isNumber(forwardOrders) ? fmt(forwardOrders, 1) : 'Unavailable',
+    unit: isNumber(forwardOrders) ? 'billion L ordered' : '',
+    subtext: 'Aggregate public order visibility only. No cargo-level or vessel-level allocation is loaded.',
+    env: forwardOrdersEnv,
+    partial: true
+  }, {
+    key: 'live-card',
+    filter: 'all',
+    title: 'Live vessel layer',
+    value: 'Unavailable',
+    unit: '',
+    subtext: 'No source-safe live vessel names, AIS positions or port-call ETAs loaded.',
+    env: liveVesselEnv,
+    partial: false,
+    unavailable: true
+  }];
+  const visibleRows = filter === 'all' ? rows : rows.filter(row => row.filter === filter);
+  const visibleCards = filter === 'all' ? cards : cards.filter(card => card.filter === filter);
   const filterButtons = [['all', `All (${fmt(totalTankers)})`], ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`], ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`]];
+  const sourceLines = [tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv].map(env => window.FR.sourceLine(env)).filter(Boolean);
   return React.createElement("div", {
     className: "shipping-visibility"
   }, React.createElement("div", {
@@ -160,22 +270,20 @@ function ShippingVisibility({
     "aria-label": "Inbound fuel summary"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Inbound fuel visibility"), React.createElement("h3", null, "Australia supply inbound, shown only at aggregate level."), React.createElement("p", null, "PM&C publishes tanker counts and equivalent days. This layout makes that flow easier to read without inventing vessel identities, live positions or cargo assignments.")), React.createElement("div", {
+  }, "Inbound fuel evidence board"), React.createElement("h3", null, "Aggregate public data only, not a live map."), React.createElement("p", null, "PM&C publishes aggregate tanker counts, equivalent days and forward import orders. ABS publishes petroleum import value. This board shows those loaded values directly and keeps live vessel identities, AIS positions and port-call ETAs unavailable.")), React.createElement("div", {
     className: "shipping-stats"
   }, React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "reported tankers")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "PM&C aggregate reported tankers")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(forwardOrdersEnv), 1)), React.createElement("small", null, "billion L ordered")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(forwardOrders, 1)), React.createElement("small", null, "billion L ordered in PM&C forward import orders")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "ABS imports, AUD thousands")), React.createElement("div", {
-    className: "shipping-stat"
-  }, React.createElement("span", null, fmtAudThousands(latest(importsEnv))), React.createElement("small", null, "same value rounded to A$bn")), React.createElement("div", {
+  }, React.createElement("span", null, fmtAudThousands(importValue)), React.createElement("small", null, "ABS petroleum import value, rounded from AUD thousands")), React.createElement("div", {
     className: "shipping-stat shipping-stat--unavailable"
-  }, React.createElement("span", null, "0"), React.createElement("small", null, "live vessel feeds")))), React.createElement("div", {
+  }, React.createElement("span", null, "Unavailable"), React.createElement("small", null, "No live vessel feed loaded")))), React.createElement("div", {
     className: "shipping-tabs",
     role: "tablist",
-    "aria-label": "Inbound fuel visibility filters"
+    "aria-label": "Inbound fuel evidence filters"
   }, filterButtons.map(([key, label]) => React.createElement("button", {
     key: key,
     type: "button",
@@ -185,121 +293,45 @@ function ShippingVisibility({
   }, label))), React.createElement("div", {
     className: "shipping-visibility__body"
   }, React.createElement("div", {
-    className: "shipping-list",
-    "aria-label": "Aggregate tanker groups"
-  }, visibleGroups.map(group => React.createElement("article", {
-    key: group.key,
-    className: "shipping-row"
+    className: "shipping-evidence-main"
   }, React.createElement("div", {
-    className: "shipping-row__head"
-  }, React.createElement("div", null, React.createElement("span", {
+    className: "data-table-wrap shipping-evidence-table",
+    "aria-label": "Aggregate inbound supply comparison"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Supply group"), React.createElement("th", null, "Current tankers"), React.createElement("th", null, "Previous tankers"), React.createElement("th", null, "Change"), React.createElement("th", null, "Equivalent days"), React.createElement("th", null, "Source status"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, visibleRows.map(row => React.createElement("tr", {
+    key: row.key
+  }, React.createElement("td", null, row.supplyGroup), React.createElement("td", null, row.current), React.createElement("td", null, row.previous), React.createElement("td", null, row.change), React.createElement("td", null, row.equivalentDays), React.createElement("td", {
+    className: "shipping-status-cell"
+  }, React.createElement(EnvTrustBadges, {
+    env: row.env,
+    partial: row.partial
+  })), React.createElement("td", {
+    className: "shipping-meaning-cell"
+  }, row.meaning)))))), React.createElement("div", {
+    className: "shipping-evidence-note"
+  }, React.createElement("span", {
     className: "eyebrow"
-  }, group.shortLabel), React.createElement("h4", null, group.label)), React.createElement(EnvTrustBadges, {
-    env: tankersEnv,
-    partial: true
-  })), React.createElement("dl", {
-    className: "shipping-row__facts"
-  }, React.createElement("div", null, React.createElement("dt", null, "Current"), React.createElement("dd", null, fmt(group.count), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Previous"), React.createElement("dd", null, fmt(group.previous), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Equivalent"), React.createElement("dd", null, fmt(group.days), " days"))), React.createElement("p", {
-    className: "shipping-route"
-  }, group.route), React.createElement("p", {
-    className: "caption"
-  }, group.note))), React.createElement("article", {
-    className: "shipping-row shipping-row--unavailable"
+  }, "Evidence board, not live map"), React.createElement("p", null, "This section does not plot ships. PM&C publishes aggregate tanker counts and equivalent days, not vessel names, AIS positions, cargo assignments or port-call ETAs. The dashboard therefore shows inbound supply as an evidence board rather than a live map."), React.createElement("ul", null, React.createElement("li", null, "PM&C aggregate tanker counts only."), React.createElement("li", null, "No live vessel feed loaded."), React.createElement("li", null, "No AIS positions, vessel names or port-call ETAs."), React.createElement("li", null, "No invented ports, terminals, shipping lanes or vessel locations.")))), React.createElement("div", {
+    className: "shipping-evidence-cards",
+    "aria-label": "Inbound supply evidence cards"
+  }, visibleCards.map(card => React.createElement("article", {
+    key: card.key,
+    className: `shipping-evidence-card${card.unavailable ? ' shipping-evidence-card--unavailable' : ''}`
   }, React.createElement("div", {
-    className: "shipping-row__head"
-  }, React.createElement("div", null, React.createElement("span", {
+    className: "shipping-evidence-card__head"
+  }, React.createElement("span", {
     className: "eyebrow"
-  }, "Vessel layer"), React.createElement("h4", null, "Live vessel identities and ETAs")), React.createElement(EnvTrustBadges, {
-    env: liveVesselEnv
-  })), React.createElement("p", null, liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.'))), React.createElement("div", {
-    className: "shipping-map",
-    "aria-label": "Illustrative aggregate fuel supply lane map"
-  }, React.createElement("div", {
-    className: "shipping-map__canvas"
-  }, React.createElement("svg", {
-    viewBox: "0 0 720 420",
-    role: "img",
-    "aria-labelledby": "shipping-map-title shipping-map-desc"
-  }, React.createElement("title", {
-    id: "shipping-map-title"
-  }, "Aggregate inbound fuel lane context"), React.createElement("desc", {
-    id: "shipping-map-desc"
-  }, "Illustrative Indo-Pacific fuel supply lanes into Australia. No live vessel positions are plotted."), React.createElement("rect", {
-    x: "0",
-    y: "0",
-    width: "720",
-    height: "420",
-    rx: "8"
-  }), React.createElement("path", {
-    className: "shipping-grid",
-    d: "M60 80H660M60 160H660M60 240H660M60 320H660M120 40V380M240 40V380M360 40V380M480 40V380M600 40V380"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--crude",
-    d: "M96 116 C220 80 340 112 466 210 C508 244 540 270 592 286"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--clean",
-    d: "M136 238 C246 202 358 216 484 272 C524 290 552 306 612 318"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--context",
-    d: "M198 312 C320 282 424 306 578 342"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "96",
-    cy: "116",
-    r: "6"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "136",
-    cy: "238",
-    r: "6"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "198",
-    cy: "312",
-    r: "6"
-  }), React.createElement("path", {
-    className: "shipping-australia",
-    d: "M536 242 L602 230 L650 260 L666 314 L622 358 L556 344 L510 302 Z"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "592",
-    cy: "286",
-    r: "5"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "612",
-    cy: "318",
-    r: "5"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "578",
-    cy: "342",
-    r: "5"
-  }), React.createElement("text", {
-    x: "80",
-    y: "96"
-  }, "Crude supply"), React.createElement("text", {
-    x: "118",
-    y: "220"
-  }, "Refined-product hubs"), React.createElement("text", {
-    x: "188",
-    y: "296"
-  }, "Regional context"), React.createElement("text", {
-    x: "528",
-    y: "222"
-  }, "Australia"))), React.createElement("div", {
-    className: "shipping-map__legend"
-  }, React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--crude"
-  }), "Crude aggregate"), React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--clean"
-  }), "Clean-product aggregate"), React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--context"
-  }), "Context only")), React.createElement("p", {
-    className: "caption mono"
-  }, "Illustrative route context only. No AIS positions, vessel names, port-call ETAs or live tracks are loaded."))), React.createElement("p", {
+  }, card.title), React.createElement(EnvTrustBadges, {
+    env: card.env,
+    partial: card.partial
+  })), React.createElement("div", {
+    className: "shipping-evidence-card__value"
+  }, React.createElement("span", null, card.value), card.unit && React.createElement("small", null, card.unit)), React.createElement("p", null, card.subtext))))), React.createElement("div", {
     className: "shipping-source mono"
-  }, window.FR.sourceLine(tankersEnv)));
+  }, sourceLines.map((line, index) => React.createElement("p", {
+    key: `${line}-${index}`
+  }, line))));
 }
 Object.assign(window, {
   ShippingVisibility
@@ -1160,6 +1192,195 @@ function MoreThanPumpPrices() {
     className: "why-body"
   }, React.createElement("p", null, "A useful national fuel dashboard should not only show the price at the bowser. It should connect price pressure to supply resilience: stock cover, import reliance, inbound supply, outages, reserves, terminal visibility and known data gaps."), React.createElement("p", null, "Fuel Resilience AU also links this fuel-security view into broader national resilience dashboards covering fertiliser, oil production, resource value, strategic resources, defence posture, power, infrastructure, manufacturing and the Australian economy."))));
 }
+function FreshnessNotice({
+  latestRetrieved,
+  updatedDisplay
+}) {
+  const hasRefresh = Boolean(latestRetrieved);
+  return React.createElement("section", {
+    className: "freshness-notice",
+    "aria-labelledby": "freshness-notice-h"
+  }, React.createElement("div", {
+    className: "freshness-notice__inner"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Refresh and freshness"), React.createElement("h2", {
+    id: "freshness-notice-h"
+  }, hasRefresh ? `Last verified source retrieval: ${updatedDisplay}` : 'Programmatic refresh not recorded yet'), React.createElement("p", null, hasRefresh ? 'Some feeds may still be manual, partial or stale; check the source cards below before treating any value as current.' : 'Programmatic refresh is not recorded yet. This page may include manual or stale public-source data. Check the source cards below before treating any value as current.')), React.createElement("div", {
+    className: "trust-badges",
+    "aria-label": "Freshness caveat labels"
+  }, React.createElement(TrustBadge, {
+    kind: "manual"
+  }), React.createElement(TrustBadge, {
+    kind: "partial"
+  }), React.createElement(TrustBadge, {
+    kind: "stale"
+  }), React.createElement(TrustBadge, {
+    kind: "unavailable"
+  }))));
+}
+function PublishingNeedsChecklist() {
+  const rows = [{
+    item: 'Live station fuel availability',
+    why: 'Travellers and operators need to know where fuel is actually available.',
+    label: 'Missing / unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Station-level outage feed',
+    why: 'Shows dry sites by region, product and time.',
+    label: 'Missing / unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Live tanker ETAs',
+    why: 'Shows timing of inbound supply.',
+    label: 'Missing / unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Terminal capacity and inventory',
+    why: 'Shows local storage resilience and supply pressure.',
+    label: 'Missing / unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Product-level national pump prices',
+    why: 'Shows price pressure beyond one public ULP 91 context row.',
+    label: 'Partial',
+    kind: 'partial'
+  }, {
+    item: 'Regional fuel risk zones',
+    why: 'Helps tourism, freight and remote communities plan.',
+    label: 'Not safe to publish yet',
+    kind: 'unavailable'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "publish-needed-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Missing public feeds"), React.createElement("h2", {
+    id: "publish-needed-h"
+  }, "What government and industry still need to publish"), React.createElement("p", {
+    className: "section__lede"
+  }, "This prototype shows what can be built from public-source data. A true national fuel dashboard would need several feeds that are not currently available as source-safe public data."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Needed feed"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Current status"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
+    key: row.item
+  }, React.createElement("td", null, row.item), React.createElement("td", null, row.why), React.createElement("td", null, React.createElement(TrustBadge, {
+    kind: row.kind
+  }, row.label))))))));
+}
+function TravellersAndTourismSection() {
+  const rows = [{
+    question: 'Can I see live station availability?',
+    answer: 'Not yet. No national live dry-site feed is loaded.',
+    label: 'Unavailable',
+    kind: 'unavailable'
+  }, {
+    question: 'Can I see state-level stock-outs?',
+    answer: 'Partially. PM&C state/territory stock-out rows are loaded where available.',
+    label: 'Partial',
+    kind: 'partial'
+  }, {
+    question: 'Can I see Queensland-specific unavailable reports?',
+    answer: 'Partially. QLD Open Data unavailable-fuel rows are loaded monthly, but this is not live station availability.',
+    label: 'Partial',
+    kind: 'partial'
+  }, {
+    question: 'Can I see inbound supply risk?',
+    answer: 'Partially. Aggregate tanker counts and forward import orders are loaded, but no vessel ETAs or cargo-level live feed.',
+    label: 'Partial',
+    kind: 'partial'
+  }, {
+    question: 'Can I use this as a trip-planning fuel finder?',
+    answer: 'No. This dashboard is a public-source fuel-security prototype, not a live service-station finder.',
+    label: 'Unavailable',
+    kind: 'unavailable'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "travellers-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Public use"), React.createElement("h2", {
+    id: "travellers-h"
+  }, "For travellers and tourism operators"), React.createElement("p", {
+    className: "section__lede"
+  }, "These are planning answers, not live operating instructions. The page is useful for seeing source-backed visibility and gaps, but it is not a service-station finder."))), React.createElement("div", {
+    className: "sources-grid sources-grid--compact"
+  }, rows.map(row => React.createElement("article", {
+    className: "source-card",
+    key: row.question
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, row.question), React.createElement(TrustBadge, {
+    kind: row.kind
+  }, row.label)), React.createElement("p", {
+    className: "body-sm"
+  }, row.answer)))));
+}
+function QueenslandVisibility({
+  stockoutsEnv,
+  qldReportsEnv
+}) {
+  const stockoutFields = fields(stockoutsEnv);
+  const qldFields = fields(qldReportsEnv);
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "qld-visibility-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Queensland visibility"), React.createElement("h2", {
+    id: "qld-visibility-h"
+  }, "Partial Queensland fuel visibility, not live station coverage"), React.createElement("p", {
+    className: "section__lede"
+  }, "Queensland is visible through partial public-source coverage: PM&C state/territory stock-out rows and monthly QLD Open Data unavailable-fuel reports. This does not replace a live station-level availability feed for tourists, freight or regional operators."))), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Partial coverage",
+    title: "QLD petrol stock-outs",
+    value: fmtNumber(stockoutFields.qld_petrol),
+    unit: "sites",
+    env: stockoutsEnv,
+    partial: true
+  }, "PM&C Queensland petrol row. Seven-day change: ", fmtChange(stockoutFields.qld_petrol_change_7d), "."), React.createElement(SecurityCard, {
+    eyebrow: "Partial coverage",
+    title: "QLD diesel stock-outs",
+    value: fmtNumber(stockoutFields.qld_diesel),
+    unit: "sites",
+    env: stockoutsEnv,
+    partial: true
+  }, "PM&C Queensland diesel row. Seven-day change: ", fmtChange(stockoutFields.qld_diesel_change_7d), "."), React.createElement(SecurityCard, {
+    eyebrow: "Partial coverage",
+    title: "QLD unavailable fuel reports",
+    value: fmtNumber(latest(qldReportsEnv)),
+    unit: "reports",
+    env: qldReportsEnv,
+    partial: true
+  }, "Monthly QLD Open Data rows where Price = 9999. Latest resource: ", qldFields.latest_resource_name || 'not specified', "."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "QLD live station availability",
+    env: {
+      status: 'unavailable',
+      source_name: 'No source-safe live Queensland station feed loaded'
+    },
+    unavailable: true
+  }, "No live station-level availability feed is loaded. No Queensland town, route or station coverage is inferred.")), React.createElement("div", {
+    style: {
+      height: 20
+    }
+  }), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Queensland public signal"), React.createElement("th", null, "Loaded value"), React.createElement("th", null, "Source boundary"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "PM&C petrol stock-outs"), React.createElement("td", null, fmtNumber(stockoutFields.qld_petrol), " sites; 7-day change ", fmtChange(stockoutFields.qld_petrol_change_7d)), React.createElement("td", null, "State-level row only; no station names, towns or live availability.")), React.createElement("tr", null, React.createElement("td", null, "PM&C diesel stock-outs"), React.createElement("td", null, fmtNumber(stockoutFields.qld_diesel), " sites; 7-day change ", fmtChange(stockoutFields.qld_diesel_change_7d)), React.createElement("td", null, "State-level row only; no station names, towns or live availability.")), React.createElement("tr", null, React.createElement("td", null, "QLD unavailable fuel reports"), React.createElement("td", null, fmtNumber(latest(qldReportsEnv)), " monthly reports; latest unavailable report date ", qldFields.latest_unavailable_report_date || '-'), React.createElement("td", null, "Monthly change-report coverage where Price = 9999; not a current statewide dry-site count."))))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -1218,7 +1439,13 @@ function App() {
     className: "mono"
   }, "Status unavailable"))), React.createElement(DataCoverage, {
     data: data
-  }), React.createElement(PublicRequestAlignment, null), React.createElement(WhatThisPageAnswers, null), React.createElement(MoreThanPumpPrices, null), React.createElement("section", {
+  }), React.createElement(FreshnessNotice, {
+    latestRetrieved: latestRetrieved,
+    updatedDisplay: updatedDisplay
+  }), React.createElement(PublicRequestAlignment, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
+    stockoutsEnv: data.pmc_retail_stockouts,
+    qldReportsEnv: data.qld_fuel_security_unavailable_reports
+  }), React.createElement(MoreThanPumpPrices, null), React.createElement("section", {
     className: "section section--why"
   }, React.createElement("div", {
     className: "why-grid"
@@ -1344,16 +1571,16 @@ function App() {
     className: "eyebrow"
   }, "4. Inbound fuel visibility"), React.createElement("h2", {
     id: "import-risk"
-  }, "Aggregate shipping context, no fake vessel layer"), React.createElement("p", {
+  }, "Inbound fuel evidence board, not a live map"), React.createElement("p", {
     className: "section__lede"
-  }, "This section borrows the readable shape of a ship-tracking dashboard, but only uses source-safe aggregate public data. It does not plot live AIS, vessel ETAs or shipment-level Kpler records."))), React.createElement(ShippingVisibility, {
+  }, "This section uses source-safe aggregate public data only. It does not plot ships, AIS positions, vessel names, port-call ETAs or shipment-level private logistics records."))), React.createElement(ShippingVisibility, {
     tankersEnv: data.pmc_tankers_on_water,
     forwardOrdersEnv: data.pmc_forward_import_orders,
     importsEnv: data.abs_petroleum_imports,
     liveVesselEnv: data.fuel_security_live_vessel_tracking
   }), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "Import visibility boundary"), React.createElement("dl", null, React.createElement("dt", null, "Loaded"), React.createElement("dd", null, "PM&C aggregate tankers and four-week import orders, APS monthly product imports, and ABS petroleum import value."), React.createElement("dt", null, "Not loaded"), React.createElement("dd", null, "Vessel names, AIS positions, ETA-level port calls and cargo inference. The route graphic is context only.")))), React.createElement("section", {
+  }, React.createElement("h3", null, "Import visibility boundary"), React.createElement("dl", null, React.createElement("dt", null, "Loaded"), React.createElement("dd", null, "PM&C aggregate tankers and four-week import orders, APS monthly product imports, and ABS petroleum import value."), React.createElement("dt", null, "Not loaded"), React.createElement("dd", null, "Vessel names, AIS positions, ETA-level port calls, cargo inference, ports, terminals, shipping lanes or vessel locations.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "outages"
   }, React.createElement("div", {
