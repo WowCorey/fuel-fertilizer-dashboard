@@ -336,6 +336,33 @@ function FreshnessNotice({ latestRetrieved, updatedDisplay }) {
   );
 }
 
+function HowToReadPage() {
+  return (
+    <section className="section section--why" aria-labelledby="how-read-h">
+      <div className="why-grid">
+        <div>
+          <span className="eyebrow">How to read this page</span>
+          <h2 id="how-read-h" style={{ marginTop: 8 }}>Public-source prototype, not a live fuel finder</h2>
+        </div>
+        <div className="why-body">
+          <p>
+            This independent page shows what Australia can currently see from public
+            fuel-security data, and what remains hidden because government or industry
+            feeds are not published. Treat it as a public-source prototype, not an
+            official government dashboard or live service-station finder.
+          </p>
+          <div className="trust-badges" aria-label="How to read trust labels">
+            <TrustBadge kind="observed"/>
+            <TrustBadge kind="partial"/>
+            <TrustBadge kind="unavailable"/>
+            <TrustBadge kind="stale"/>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function PublishingNeedsChecklist() {
   const rows = [
     {
@@ -593,11 +620,11 @@ function App() {
             <span className="eyebrow">National fuel security dashboard</span>
             <h1 style={{ marginTop: 12 }}>What a transparent Australian fuel dashboard should show.</h1>
             <p className="intro__lede">
-              This public-source prototype shows Australia's fuel security position using only
+              This independent public-source prototype shows Australia's fuel security position using only
               source-linked data: official public status, days of cover, MSO reserves, product stocks,
               imports, inbound tanker visibility, retail stock-outs, price pressure and known missing
               feeds. It does not invent live values where government or industry data is not publicly
-              available.
+              available, and it is not an official government dashboard or live service-station finder.
             </p>
           </div>
           <aside className="intro__meta" aria-label="National fuel security status">
@@ -612,6 +639,8 @@ function App() {
         <DataCoverage data={data}/>
 
         <FreshnessNotice latestRetrieved={latestRetrieved} updatedDisplay={updatedDisplay}/>
+
+        <HowToReadPage/>
 
         <PublicRequestAlignment/>
 

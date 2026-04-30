@@ -1219,6 +1219,34 @@ function FreshnessNotice({
     kind: "unavailable"
   }))));
 }
+function HowToReadPage() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "how-read-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "How to read this page"), React.createElement("h2", {
+    id: "how-read-h",
+    style: {
+      marginTop: 8
+    }
+  }, "Public-source prototype, not a live fuel finder")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "This independent page shows what Australia can currently see from public fuel-security data, and what remains hidden because government or industry feeds are not published. Treat it as a public-source prototype, not an official government dashboard or live service-station finder."), React.createElement("div", {
+    className: "trust-badges",
+    "aria-label": "How to read trust labels"
+  }, React.createElement(TrustBadge, {
+    kind: "observed"
+  }), React.createElement(TrustBadge, {
+    kind: "partial"
+  }), React.createElement(TrustBadge, {
+    kind: "unavailable"
+  }), React.createElement(TrustBadge, {
+    kind: "stale"
+  })))));
+}
 function PublishingNeedsChecklist() {
   const rows = [{
     item: 'Live station fuel availability',
@@ -1426,7 +1454,7 @@ function App() {
     }
   }, "What a transparent Australian fuel dashboard should show."), React.createElement("p", {
     className: "intro__lede"
-  }, "This public-source prototype shows Australia's fuel security position using only source-linked data: official public status, days of cover, MSO reserves, product stocks, imports, inbound tanker visibility, retail stock-outs, price pressure and known missing feeds. It does not invent live values where government or industry data is not publicly available.")), React.createElement("aside", {
+  }, "This independent public-source prototype shows Australia's fuel security position using only source-linked data: official public status, days of cover, MSO reserves, product stocks, imports, inbound tanker visibility, retail stock-outs, price pressure and known missing feeds. It does not invent live values where government or industry data is not publicly available, and it is not an official government dashboard or live service-station finder.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "National fuel security status"
   }, React.createElement("strong", null, "Official public level"), React.createElement("span", {
@@ -1442,7 +1470,7 @@ function App() {
   }), React.createElement(FreshnessNotice, {
     latestRetrieved: latestRetrieved,
     updatedDisplay: updatedDisplay
-  }), React.createElement(PublicRequestAlignment, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
+  }), React.createElement(HowToReadPage, null), React.createElement(PublicRequestAlignment, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
     stockoutsEnv: data.pmc_retail_stockouts,
     qldReportsEnv: data.qld_fuel_security_unavailable_reports
   }), React.createElement(MoreThanPumpPrices, null), React.createElement("section", {

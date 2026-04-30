@@ -528,6 +528,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
 @media (max-width: 1000px) {
   .intro { grid-template-columns: 1fr; }
   .intro__meta { text-align: left; }
+  .why-grid { grid-template-columns: 1fr; }
   .coverage-strip__inner { flex-direction: column; align-items: flex-start; }
   .coverage-badges { justify-content: flex-start; }
   .freshness-notice__inner { grid-template-columns: 1fr; }
