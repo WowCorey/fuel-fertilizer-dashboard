@@ -1417,6 +1417,7 @@ sources:
     canonical_url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
     fetch_url: https://www.industry.gov.au/sites/default/files/2024-12/resources-and-energy-major-projects-2024-data.xlsx
     check_url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
+    check_required: false
     fetch_user_agent: browser-compatible
     remp_sheet: Oil & gas
     format: XLSX
@@ -1425,7 +1426,7 @@ sources:
     rights: CC BY 4.0 except logos, third-party content, trademarks and otherwise-noted material
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Department of Industry, Science and Resources, Commonwealth of Australia, Resources and Energy Major Projects 2024.
-    reuse_notes: Programmatic extract from the REMP 2024 data workbook, Oil & gas sheet. Use as major-project/development mapping only. Company names are publisher-supplied project company/proponent text, not necessarily legal operators. Annual Estimated New Capacity is not current production, and basin names are not published in the workbook. The blocking refresh preflight checks the official publication page; the generated data fetch still downloads the source workbook directly.
+    reuse_notes: Programmatic extract from the REMP 2024 data workbook, Oil & gas sheet. Use as major-project/development mapping only. Company names are publisher-supplied project company/proponent text, not necessarily legal operators. Annual Estimated New Capacity is not current production, and basin names are not published in the workbook. The refresh preflight checks the official publication page as a non-blocking source-health signal because Industry.gov.au can time out from GitHub-hosted runners; the generated data fetch still downloads the source workbook directly.
     fetch: programmatic
     used_by: [state_contribution]
 
