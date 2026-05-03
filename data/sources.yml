@@ -1910,17 +1910,17 @@ sources:
     used_by: [au_economics]
 
   - id: state_government_debt_summary
-    human_name: State and territory government net debt (Treasury budget papers)
+    human_name: State and territory government net debt (Treasury budget papers, scaffold)
     publisher: State and territory Treasury departments
     url: https://www.budget.gov.au/
     canonical_url: https://www.budget.gov.au/
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-27
-    rights: CC BY 4.0 where stated by publisher
+    last_verified: 2026-05-02
+    rights: CC BY 4.0 where stated by publisher; each state/territory Treasury copyright applies
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: State and territory budget papers (Budget Paper 2 fiscal aggregates).
-    reuse_notes: Each state and territory publishes general government net debt in its annual budget papers (typically Budget Paper 2 or Budget Statement 1). No single Commonwealth dataset consolidates these on a comparable basis. Hand-key per jurisdiction once a year from named budget paper page references.
+    citation: State and territory budget papers (NSW Budget Paper No. 1; VIC Statement of Finances; QLD Budget Paper No. 2; WA Budget Paper No. 3; SA Budget Statement; TAS Budget Paper No. 1; ACT Budget Outlook; NT Budget Paper 2).
+    reuse_notes: Pass 2 scaffold loaded with all 8 jurisdiction rows present, each carrying the named Treasury Budget homepage URL. Per-jurisdiction values remain null and rows are marked Partial coverage; the state/territory net debt figures live inside Budget Paper PDFs that this build environment cannot fetch directly. Values must be hand-keyed from each Budget Paper PDF opened in a browser; preserve the comparability_note for each row. Do NOT publish a national aggregate - rows are not safe to sum (definitions and jurisdictional scope differ; ACT and NT in particular have non-comparable scope to mainland states). Commonwealth AOFM debt is a separate envelope and must stay separate from state/territory rows.
     fetch: manual
     used_by: [au_economics]
 

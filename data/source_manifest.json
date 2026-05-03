@@ -2438,7 +2438,7 @@
     },
     "state_government_debt_summary": {
       "id": "state_government_debt_summary",
-      "human_name": "State and territory government net debt (Treasury budget papers)",
+      "human_name": "State and territory government net debt (Treasury budget papers, scaffold)",
       "publisher": "State and territory Treasury departments",
       "fetch": "manual",
       "update_cadence": "annual",
@@ -2446,8 +2446,8 @@
         "au_economics"
       ],
       "canonical_url": "https://www.budget.gov.au/",
-      "rights": "CC BY 4.0 where stated by publisher",
-      "citation": "State and territory budget papers (Budget Paper 2 fiscal aggregates).",
+      "rights": "CC BY 4.0 where stated by publisher; each state/territory Treasury copyright applies",
+      "citation": "State and territory budget papers (NSW Budget Paper No. 1; VIC Statement of Finances; QLD Budget Paper No. 2; WA Budget Paper No. 3; SA Budget Statement; TAS Budget Paper No. 1; ACT Budget Outlook; NT Budget Paper 2).",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
