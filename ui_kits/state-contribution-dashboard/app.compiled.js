@@ -397,6 +397,10 @@ function Header({
     label: 'Infrastructure',
     href: '../infrastructure-dashboard/index.html'
   }, {
+    id: 'employment_automation',
+    label: 'Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
+  }, {
     id: 'sources',
     label: 'Sources & methodology',
     href: '#sources'

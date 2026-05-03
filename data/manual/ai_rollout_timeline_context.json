@@ -1,0 +1,63 @@
+{
+  "series_id": "ai_rollout_timeline_context",
+  "source_id": "ai_rollout_timeline_context",
+  "source_name": "AI rollout timeline - public milestone context",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+  "unit": "context milestones",
+  "retrieved_at": "2026-05-02T17:16:40+00:00",
+  "last_data_point": "2026-04-30",
+  "values": [
+    {
+      "t": "2026",
+      "v": 5
+    }
+  ],
+  "notes": "Public AI-rollout milestones used as time-context markers only on the Employment & Automation page. The timeline is ordered context, NOT a causal explanation of labour-market movements. The dashboard explicitly states timing is not causation.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0; upstream announcement rights remain with each publisher",
+  "citation": "Compiled public AI-rollout milestones for context.",
+  "extra": {
+    "schema": "ai_rollout_timeline.v1",
+    "fields": {
+      "boundary": "Each row is a published-by-the-named-organisation event. Timing is NOT presented as causation of any labour-market movement.",
+      "events": [
+        {
+          "date": "2022-06-21",
+          "title": "GitHub Copilot general availability",
+          "publisher": "GitHub / Microsoft",
+          "url": "https://github.blog/news-insights/product-news/github-copilot-is-generally-available-to-all-developers/",
+          "trust_label": "Manual"
+        },
+        {
+          "date": "2022-11-30",
+          "title": "ChatGPT public launch (research preview)",
+          "publisher": "OpenAI",
+          "url": "https://openai.com/index/chatgpt/",
+          "trust_label": "Manual"
+        },
+        {
+          "date": "2023-11-01",
+          "title": "Microsoft Copilot for Microsoft 365 general availability",
+          "publisher": "Microsoft",
+          "url": "https://www.microsoft.com/en-us/microsoft-365/blog/2023/11/01/microsoft-copilot-for-microsoft-365-now-generally-available-for-enterprises/",
+          "trust_label": "Manual"
+        },
+        {
+          "date": "2024-09-05",
+          "title": "Australian Voluntary AI Safety Standard published",
+          "publisher": "Department of Industry, Science and Resources",
+          "url": "https://www.industry.gov.au/publications/voluntary-ai-safety-standard",
+          "trust_label": "Manual"
+        },
+        {
+          "date": "2024-09-04",
+          "title": "Australian Government's Proposals Paper for introducing mandatory guardrails for AI in high-risk settings",
+          "publisher": "Department of Industry, Science and Resources",
+          "url": "https://consult.industry.gov.au/ai-mandatory-guardrails",
+          "trust_label": "Manual"
+        }
+      ]
+    }
+  }
+}

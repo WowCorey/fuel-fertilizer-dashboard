@@ -34,6 +34,7 @@ const dashboards = [
   'manufacturing-dashboard',
   'power-grid-dashboard',
   'infrastructure-dashboard',
+  'employment-automation-dashboard',
 ];
 
 function normalizeNewlines(text) {
