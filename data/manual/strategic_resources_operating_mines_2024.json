@@ -1,0 +1,47 @@
+{
+  "series_id": "strategic_resources_operating_mines_2024",
+  "source_id": "strategic_resources_operating_mines_2024",
+  "source_name": "Australian Operating Mines Map 2024 feature layer",
+  "source_url": "https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer",
+  "unit": "feature rows",
+  "retrieved_at": "2026-04-28T13:40:38+00:00",
+  "last_data_point": "2024-12-31",
+  "values": [
+    {
+      "t": "2024-12",
+      "v": 517
+    }
+  ],
+  "notes": "Manual summary from the public ArcGIS FeatureServer for Australian Operating Mines 2024. Counts are source feature rows by state/status/commodity group and are not production volumes.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 (Commonwealth of Australia / Geoscience Australia) where stated in item metadata",
+  "citation": "Commonwealth of Australia (Geoscience Australia), Australian Operating Mines Map 2024, hosted through the Digital Atlas of Australia.",
+  "extra": {
+    "schema": "strategic_resources_operating_mines_2024.v1",
+    "fields": {
+      "as_at": "2024-12",
+      "feature_service": "https://services-ap1.arcgis.com/ypkPEy1AmwPKGNNv/arcgis/rest/services/Australian_Operating_Mines_2024_2/FeatureServer/3",
+      "total_features": 517,
+      "status_normalisation": "Operating Mine and Operating mine are treated as operating; Developing Mine and Developing mine are treated as developing.",
+      "resource_rows": [
+        {"resource_id": "iron_ore", "commodity_groups": ["Iron ore"], "states": [{"state": "WA", "operating": 45, "developing": 2, "care_and_maintenance": 2}, {"state": "SA", "operating": 6, "developing": 1, "care_and_maintenance": 1}, {"state": "NT", "operating": 2, "developing": 0, "care_and_maintenance": 2}, {"state": "TAS", "operating": 2, "developing": 0, "care_and_maintenance": 2}, {"state": "QLD", "operating": 0, "developing": 0, "care_and_maintenance": 1}]},
+        {"resource_id": "coal", "commodity_groups": ["Coal"], "states": [{"state": "QLD", "operating": 54, "developing": 0, "care_and_maintenance": 3}, {"state": "NSW", "operating": 40, "developing": 0, "care_and_maintenance": 11}, {"state": "TAS", "operating": 3, "developing": 0, "care_and_maintenance": 0}, {"state": "VIC", "operating": 3, "developing": 0, "care_and_maintenance": 0}, {"state": "WA", "operating": 2, "developing": 0, "care_and_maintenance": 0}]},
+        {"resource_id": "uranium", "commodity_groups": ["Uranium"], "states": [{"state": "SA", "operating": 2, "developing": 0, "care_and_maintenance": 1}, {"state": "WA", "operating": 0, "developing": 1, "care_and_maintenance": 0}]},
+        {"resource_id": "bauxite_alumina", "commodity_groups": ["Bauxite"], "states": [{"state": "QLD", "operating": 4, "developing": 1, "care_and_maintenance": 0}, {"state": "WA", "operating": 3, "developing": 0, "care_and_maintenance": 0}, {"state": "NT", "operating": 2, "developing": 0, "care_and_maintenance": 0}, {"state": "TAS", "operating": 0, "developing": 1, "care_and_maintenance": 0}]},
+        {"resource_id": "copper", "commodity_groups": ["Base metals - Cu (Zn, Pb, Mo, Ag, Au)", "Base metals - Cu, Au, U, Ag"], "states": [{"state": "NSW", "operating": 10, "developing": 0, "care_and_maintenance": 2}, {"state": "WA", "operating": 5, "developing": 1, "care_and_maintenance": 4}, {"state": "QLD", "operating": 4, "developing": 1, "care_and_maintenance": 9}, {"state": "SA", "operating": 4, "developing": 1, "care_and_maintenance": 3}, {"state": "NT", "operating": 0, "developing": 2, "care_and_maintenance": 1}, {"state": "TAS", "operating": 0, "developing": 0, "care_and_maintenance": 2}]},
+        {"resource_id": "nickel", "commodity_groups": ["Battery/Alloy metals - Ni (Co, Cu, PGE)"], "states": [{"state": "WA", "operating": 2, "developing": 2, "care_and_maintenance": 19}, {"state": "NSW", "operating": 0, "developing": 2, "care_and_maintenance": 0}, {"state": "QLD", "operating": 0, "developing": 1, "care_and_maintenance": 0}, {"state": "TAS", "operating": 0, "developing": 0, "care_and_maintenance": 1}]},
+        {"resource_id": "lithium", "commodity_groups": ["Battery/Alloy metals - Li, Ta"], "states": [{"state": "WA", "operating": 7, "developing": 1, "care_and_maintenance": 1}, {"state": "NT", "operating": 0, "developing": 0, "care_and_maintenance": 1}]},
+        {"resource_id": "rare_earths", "commodity_groups": ["Rare earth elements"], "states": [{"state": "WA", "operating": 1, "developing": 1, "care_and_maintenance": 1}, {"state": "NSW", "operating": 0, "developing": 1, "care_and_maintenance": 0}, {"state": "NT", "operating": 0, "developing": 1, "care_and_maintenance": 0}]},
+        {"resource_id": "gold", "commodity_groups": ["Precious metals - Au, Ag"], "states": [{"state": "WA", "operating": 70, "developing": 8, "care_and_maintenance": 34}, {"state": "VIC", "operating": 5, "developing": 1, "care_and_maintenance": 2}, {"state": "QLD", "operating": 5, "developing": 0, "care_and_maintenance": 2}, {"state": "NSW", "operating": 2, "developing": 0, "care_and_maintenance": 4}, {"state": "NT", "operating": 1, "developing": 2, "care_and_maintenance": 0}, {"state": "SA", "operating": 1, "developing": 0, "care_and_maintenance": 2}, {"state": "TAS", "operating": 1, "developing": 0, "care_and_maintenance": 0}]},
+        {"resource_id": "zinc", "commodity_groups": ["Base metals - Zn, Pb (Cu, Ag)"], "states": [{"state": "QLD", "operating": 7, "developing": 0, "care_and_maintenance": 4}, {"state": "NSW", "operating": 3, "developing": 2, "care_and_maintenance": 0}, {"state": "NT", "operating": 1, "developing": 0, "care_and_maintenance": 0}, {"state": "TAS", "operating": 1, "developing": 0, "care_and_maintenance": 0}, {"state": "WA", "operating": 0, "developing": 2, "care_and_maintenance": 2}, {"state": "SA", "operating": 0, "developing": 0, "care_and_maintenance": 1}]}
+      ],
+      "not_captured": [
+        "Production tonnes by mine or by state",
+        "Export value by state",
+        "Company ownership or market share",
+        "Alumina refinery footprint"
+      ]
+    }
+  }
+}

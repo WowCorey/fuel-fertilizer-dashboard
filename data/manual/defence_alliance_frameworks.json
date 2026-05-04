@@ -1,0 +1,94 @@
+{
+  "series_id": "defence_alliance_frameworks",
+  "source_id": "defence_alliance_frameworks",
+  "source_name": "Selected Australian defence alliance and strategic frameworks",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+  "unit": "framework profiles",
+  "retrieved_at": "2026-04-28T14:30:00+00:00",
+  "last_data_point": "2026-04-29",
+  "values": [
+    {
+      "t": "selected alliance and framework profiles",
+      "v": 6
+    }
+  ],
+  "notes": "Manual compilation from official public treaty, Defence, DFAT, ONI and Australian Submarine Agency pages. Formal alliances, intelligence partnerships and diplomatic forums are kept separate.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; upstream source rights remain with each publisher",
+  "citation": "DFAT Australian Treaties Database; DFAT Quad and AUSMIN pages; Office of National Intelligence Five Eyes partners page; Australian Submarine Agency AUKUS pages.",
+  "extra": {
+    "schema": "defence_alliance_frameworks.v1",
+    "fields": {
+      "frameworks": [
+        {
+          "framework_id": "anzus",
+          "framework_name": "ANZUS",
+          "framework_type": "Formal security treaty",
+          "member_countries": ["Australia", "New Zealand", "United States"],
+          "formal_status": "In force for Australia according to the Australian Treaties Database",
+          "purpose_summary": "Security treaty between Australia, New Zealand and the United States, with Australia-US commitment reaffirmed after the US suspension of obligations to New Zealand in 1986.",
+          "source_url": "https://www.info.dfat.gov.au/Info/Treaties/treaties.nsf/AllDocIDs/4D4287DDC882C3D6CA256B8300007B4B",
+          "trust_label": "Observed",
+          "notes": "Treaty status and dates are treaty-record facts. This dashboard does not model operational decisions under the treaty."
+        },
+        {
+          "framework_id": "aukus",
+          "framework_name": "AUKUS",
+          "framework_type": "Trilateral security and technology partnership",
+          "member_countries": ["Australia", "United Kingdom", "United States"],
+          "formal_status": "Active partnership and submarine pathway",
+          "purpose_summary": "Supports Australia's pathway to conventionally armed nuclear-powered submarines and deeper industrial and advanced capability cooperation.",
+          "source_url": "https://www.asa.gov.au/aukus/optimal-pathway",
+          "trust_label": "Observed",
+          "notes": "AUKUS is not represented here as a mutual defence treaty. Nuclear-propulsion material is handled under separate legal and safeguards arrangements."
+        },
+        {
+          "framework_id": "five_eyes",
+          "framework_name": "Five Eyes",
+          "framework_type": "Intelligence partnership",
+          "member_countries": ["Australia", "Canada", "New Zealand", "United Kingdom", "United States"],
+          "formal_status": "Long-standing intelligence collaboration",
+          "purpose_summary": "ONI describes Five Eyes as Australia's longest-standing intelligence collaboration, supporting intelligence coverage across missions including counter-terrorism, counter-proliferation, cyber and regional challenges.",
+          "source_url": "https://www.oni.gov.au/national-intelligence-community/about-the-NIC/partners",
+          "trust_label": "Partial coverage",
+          "notes": "The public ONI page supports the high-level description, but detailed intelligence-sharing mechanics are not public and are not modelled."
+        },
+        {
+          "framework_id": "quad",
+          "framework_name": "Quad",
+          "framework_type": "Diplomatic partnership / strategic forum",
+          "member_countries": ["Australia", "India", "Japan", "United States"],
+          "formal_status": "Diplomatic partnership, not a formal alliance",
+          "purpose_summary": "DFAT describes the Quad as a diplomatic partnership focused on a peaceful, stable and prosperous Indo-Pacific, including maritime and transnational security, economic security, critical technologies, cyber security and emergency response.",
+          "source_url": "https://www.dfat.gov.au/international-relations/regional-architecture/quad",
+          "trust_label": "Observed",
+          "notes": "The dashboard labels Quad as a diplomatic partnership, not a defence treaty."
+        },
+        {
+          "framework_id": "ausmin",
+          "framework_name": "AUSMIN",
+          "framework_type": "Australia-US ministerial consultation",
+          "member_countries": ["Australia", "United States"],
+          "formal_status": "Regular ministerial consultation process",
+          "purpose_summary": "DFAT's 2025 AUSMIN fact sheet records Australia-US commitments across Indo-Pacific security, AUKUS, force posture cooperation, technology and regional resilience.",
+          "source_url": "https://www.dfat.gov.au/international-relations/joint-fact-sheet-australia-us-ministerial-consultations-ausmin-2025",
+          "trust_label": "Observed",
+          "notes": "AUSMIN is a consultation mechanism supporting the alliance; it is not itself a separate mutual defence treaty."
+        },
+        {
+          "framework_id": "png_pukpuk_treaty",
+          "framework_name": "Papua New Guinea-Australia Mutual Defence Treaty",
+          "framework_type": "Bilateral mutual defence treaty",
+          "member_countries": ["Australia", "Papua New Guinea"],
+          "formal_status": "Treaty text published by DFAT; entry into force depends on treaty notifications",
+          "purpose_summary": "DFAT publishes the treaty text as a bilateral mutual defence treaty between Australia and Papua New Guinea, also known as the Pukpuk Treaty.",
+          "source_url": "https://www.dfat.gov.au/countries/papua-new-guinea/papua-new-guinea-australia-mutual-defence-treaty",
+          "trust_label": "Partial coverage",
+          "notes": "The page text is public, but the dashboard does not model implementation status beyond the published source notes."
+        }
+      ],
+      "boundary": "Treaties, intelligence partnerships, trilateral technology partnerships, diplomatic forums and ministerial consultations are different framework types and are not collapsed into one alliance score."
+    }
+  }
+}

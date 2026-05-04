@@ -27,6 +27,23 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCES_FILE = ROOT / "data" / "sources.yml"
 MANUAL_DIR = ROOT / "data" / "manual"
 
+EXAMPLES = """examples:
+  List editable manual sources:
+    python scripts/enter_manual.py --list
+
+  Company tax/profit scalar fields:
+    python scripts/enter_manual.py --source company_ampol --field net_profit=122.5 --field net_profit_unit=A$m --field net_profit_period_end=2024-12-31 --last-data-point 2024-12-31 --notes "Ampol 2024 Annual Report, consolidated statement of income."
+
+  PM&C national status snapshot:
+    python scripts/enter_manual.py --source pmc_tankers_on_water --point 2026-04-17=61 --field crude_oil_tankers=10 --field clean_refined_product_tankers=51 --last-data-point 2026-04-17 --unit tankers --notes "PM&C public fuel supply page, ships on water table."
+
+  DCCEEW FSSP quarterly payment:
+    python scripts/enter_manual.py --source fuel_security_payment --point 2025-09-30=0 --unit A$m --notes "DCCEEW FSSP amounts paid table, GST-exclusive dollars converted to A$m."
+
+  Resource-value royalty receipt:
+    python scripts/enter_manual.py --source resource_qld_petroleum_royalty_receipts --point 2023-24=1705 --field includes_lng=true --unit A$m --last-data-point 2024-06-30 --notes "Queensland Budget 2025-26 BP2 Revenue, Table 3.4 petroleum royalties."
+"""
+
 
 def load_sources() -> dict[str, dict[str, Any]]:
     with SOURCES_FILE.open("r", encoding="utf-8") as f:
@@ -91,9 +108,12 @@ def parse_field(raw: str) -> tuple[str, Any]:
 
 def period_to_date(period: str) -> dt.date:
     if len(period) == 7:
-        year, month = [int(part) for part in period.split("-")]
-        if not 1 <= month <= 12:
-            raise ValueError(f"invalid month in period {period!r}")
+        year, month_or_fy = [int(part) for part in period.split("-")]
+        if month_or_fy > 12:
+            if month_or_fy != (year + 1) % 100:
+                raise ValueError(f"invalid fiscal year period {period!r}")
+            return dt.date(year + 1, 6, 30)
+        month = month_or_fy
         if month == 12:
             next_month = dt.date(year + 1, 1, 1)
         else:
@@ -205,8 +225,13 @@ def prompt_if_missing(value: str | None, label: str) -> str:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Enter verified manual source values")
+    ap = argparse.ArgumentParser(
+        description="Enter verified manual source values",
+        epilog=EXAMPLES,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     ap.add_argument("--list", action="store_true", help="list editable manual sources")
+    ap.add_argument("--examples", action="store_true", help="print source-specific examples and exit")
     ap.add_argument("--source", help="source id from data/sources.yml")
     ap.add_argument(
         "--point",
@@ -234,6 +259,10 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help="replace existing points or fields with the same key")
     ap.add_argument("--dry-run", action="store_true", help="print envelope without writing it")
     args = ap.parse_args()
+
+    if args.examples:
+        print(EXAMPLES)
+        return 0
 
     sources = load_sources()
     manual_sources = {sid: source for sid, source in sources.items() if source.get("fetch") == "manual"}

@@ -1,0 +1,16 @@
+{
+  "series_id": "au_data_centre_capacity_register",
+  "source_id": "au_data_centre_capacity_register",
+  "source_name": "Australian data centre capacity register",
+  "source_url": "",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-28T13:01:36+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Intentionally unavailable. No canonical public Australian government register of data centre capacity, MW load or AI-cluster capacity was identified for this pass. Do not populate this row from vendor, consultancy, private market, gated or media sources.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Unavailable - no canonical public source identified",
+  "citation": "No canonical Australian government register of data centre capacity exists; industry datasets such as DCD or 451 Research are gated or non-canonical for this dashboard."
+}
