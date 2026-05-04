@@ -1,0 +1,37 @@
+{
+  "series_id": "defence_workforce_annual_report_2024_25",
+  "source_id": "defence_workforce_annual_report_2024_25",
+  "source_name": "Defence Annual Report 2024-25 workforce figures",
+  "source_url": "https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf",
+  "unit": "people",
+  "retrieved_at": "2026-04-28T14:30:00+00:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25 permanent ADF achievement",
+      "v": 59147
+    }
+  ],
+  "notes": "Manual extract from the public Defence Annual Report 2024-25. Workforce figures are not readiness or deployability measures.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; Defence copyright terms apply",
+  "citation": "Department of Defence, Defence Annual Report 2024-25, workforce chapter and annual performance statements.",
+  "extra": {
+    "schema": "defence_workforce_annual_report_2024_25.v1",
+    "fields": {
+      "reporting_period": "2024-25",
+      "workforce_requirement_result": [
+        {"workforce": "Permanent ADF", "budgeted_requirement": 58850, "achievement": 59147, "result_percent": 100.51},
+        {"workforce": "APS", "budgeted_requirement": 19236, "achievement": 19301, "result_percent": 100.34}
+      ],
+      "reserve_paid_service": {
+        "service_days_total": 1308907,
+        "members_rendering_paid_service": 23280,
+        "period": "2024-25",
+        "boundary": "Reserve paid-service days are not a standing readiness measure."
+      },
+      "boundary": "Workforce rows describe staffing outcomes and paid reserve activity. They do not indicate combat readiness, operational availability or deployable strength."
+    }
+  }
+}

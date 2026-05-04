@@ -1,0 +1,14 @@
+{
+  "series_id": "strategic_resources_sulphur_gap",
+  "source_id": "strategic_resources_sulphur_gap",
+  "source_name": "Strategic resources sulphur source gate",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-28T13:40:38+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No official national sulphur production, export, reserve/resource or state-footprint metric has been loaded for this dashboard. Leave sulphur unavailable until a source-safe public row is found.",
+  "status": "unavailable",
+  "manual_entry": true
+}

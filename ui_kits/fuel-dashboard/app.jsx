@@ -15,12 +15,14 @@ function App() {
 
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const retailStates = data.aus_retail_fuel_multistate?.extra?.fields?.states
-    ?.map(state => state.state)
-    ?.join(', ');
-  const retailPlain = retailStates
-    ? `${retailStates} ULP 91 average weighted by station count.`
-    : 'WA, QLD and NSW public feeds where available.';
+  const retailPlainFor = (env, fallbackLabel) => {
+    const fields = env?.extra?.fields || {};
+    const states = fields.states?.map(state => state.state)?.join(', ');
+    const label = fields.label || fallbackLabel;
+    return states
+      ? `${states} ${label} average weighted by station count.`
+      : `${fallbackLabel} from public state feeds where available.`;
+  };
 
   // Build insight feed from release-note style notes on verified envelopes that have them.
   const insights = [];
@@ -112,8 +114,8 @@ function App() {
             />
             <MetricCard
               eyebrow="Pump"
-              label="Retail pump price - multi-state average"
-              plain={retailPlain}
+              label="Retail pump price - ULP 91"
+              plain={retailPlainFor(data.aus_retail_fuel_multistate, 'ULP 91')}
               fromEnvelope={data.aus_retail_fuel_multistate}
               unit=" c/L"
             />
@@ -134,6 +136,30 @@ function App() {
                 return `${v > 0 ? '+' : ''}${v}`;
               }}
               unit="%"
+            />
+          </div>
+          <div style={{ height: 24 }}/>
+          <div className="metric-grid metric-grid--3">
+            <MetricCard
+              eyebrow="Pump"
+              label="Retail diesel"
+              plain={retailPlainFor(data.aus_retail_fuel_multistate_diesel, 'diesel')}
+              fromEnvelope={data.aus_retail_fuel_multistate_diesel}
+              unit=" c/L"
+            />
+            <MetricCard
+              eyebrow="Pump"
+              label="Retail premium 95"
+              plain={retailPlainFor(data.aus_retail_fuel_multistate_premium95, 'premium 95')}
+              fromEnvelope={data.aus_retail_fuel_multistate_premium95}
+              unit=" c/L"
+            />
+            <MetricCard
+              eyebrow="Pump"
+              label="Retail E10"
+              plain={retailPlainFor(data.aus_retail_fuel_multistate_e10, 'E10')}
+              fromEnvelope={data.aus_retail_fuel_multistate_e10}
+              unit=" c/L"
             />
           </div>
         </section>
@@ -235,8 +261,8 @@ function App() {
             <dl>
               <dt>Days of Net Import Cover</dt>
               <dd>Total petroleum stocks (on land and in transit) divided by the prior 12-month average of net imports, expressed in days. Follows the IEA methodology used by DCCEEW.</dd>
-              <dt>Retail pump price - multi-state average</dt>
-              <dd>Daily ULP 91 average across the public state feeds that returned usable observations, weighted by station count.</dd>
+              <dt>Retail pump prices</dt>
+              <dd>Average across the public state feeds that returned usable observations for each product, weighted by station count. NSW contributes only when the FuelCheck secret is configured; WA does not expose E10 through the active public RSS product-code list.</dd>
               <dt>Terminal gate price</dt>
               <dd>Monthly mean of AIP daily national average unleaded petrol terminal gate prices from the historical TGP workbook.</dd>
               <dt>Monthly Imports (year-on-year)</dt>

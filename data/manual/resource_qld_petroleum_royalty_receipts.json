@@ -1,0 +1,32 @@
+{
+  "series_id": "resource_qld_petroleum_royalty_receipts",
+  "source_id": "resource_qld_petroleum_royalty_receipts",
+  "source_name": "Queensland petroleum royalty receipts",
+  "source_url": "https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-22T12:20:01+00:00",
+  "last_data_point": "2024-06-30",
+  "values": [
+    {
+      "t": "2023-24",
+      "v": 1705.0
+    }
+  ],
+  "notes": "Queensland Budget Strategy and Outlook 2025-26 BP2 Revenue, Table 3.4 Royalty revenue. Petroleum row; note 2 states petroleum includes gas converted into LNG. Actual 2023-24 used as display value; estimates/projections kept as fields.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Queensland Government copyright and budget website terms",
+  "citation": "Queensland Government, Budget Strategy and Outlook 2025-26, BP2 Revenue, Table 3.4 Royalty revenue.",
+  "extra": {
+    "schema": "manual_extra_fields.v1",
+    "fields": {
+      "latest_actual_period": "2023-24",
+      "includes_gas_converted_to_lng": true,
+      "estimated_actual_2024_25": 1689,
+      "budget_2025_26": 1196,
+      "projection_2026_27": 1135,
+      "projection_2027_28": 1148,
+      "projection_2028_29": 1083
+    }
+  }
+}

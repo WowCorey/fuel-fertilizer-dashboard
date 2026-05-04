@@ -1,0 +1,273 @@
+{
+  "series_id": "abs_manufacturing_employment",
+  "source_id": "abs_manufacturing_employment",
+  "source_name": "ABS Manufacturing employment, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+  "unit": "thousand persons",
+  "retrieved_at": "2026-04-30T09:45:33+00:00",
+  "last_data_point": "2026-02-28",
+  "values": [
+    {
+      "t": "2011-05",
+      "v": 957.8
+    },
+    {
+      "t": "2011-08",
+      "v": 931.0
+    },
+    {
+      "t": "2011-11",
+      "v": 937.4
+    },
+    {
+      "t": "2012-02",
+      "v": 947.1
+    },
+    {
+      "t": "2012-05",
+      "v": 943.6
+    },
+    {
+      "t": "2012-08",
+      "v": 953.3
+    },
+    {
+      "t": "2012-11",
+      "v": 955.5
+    },
+    {
+      "t": "2013-02",
+      "v": 918.2
+    },
+    {
+      "t": "2013-05",
+      "v": 918.2
+    },
+    {
+      "t": "2013-08",
+      "v": 916.7
+    },
+    {
+      "t": "2013-11",
+      "v": 936.8
+    },
+    {
+      "t": "2014-02",
+      "v": 924.2
+    },
+    {
+      "t": "2014-05",
+      "v": 919.7
+    },
+    {
+      "t": "2014-08",
+      "v": 914.7
+    },
+    {
+      "t": "2014-11",
+      "v": 910.9
+    },
+    {
+      "t": "2015-02",
+      "v": 917.3
+    },
+    {
+      "t": "2015-05",
+      "v": 915.6
+    },
+    {
+      "t": "2015-08",
+      "v": 890.0
+    },
+    {
+      "t": "2015-11",
+      "v": 859.3
+    },
+    {
+      "t": "2016-02",
+      "v": 897.3
+    },
+    {
+      "t": "2016-05",
+      "v": 893.2
+    },
+    {
+      "t": "2016-08",
+      "v": 884.2
+    },
+    {
+      "t": "2016-11",
+      "v": 963.8
+    },
+    {
+      "t": "2017-02",
+      "v": 908.7
+    },
+    {
+      "t": "2017-05",
+      "v": 888.3
+    },
+    {
+      "t": "2017-08",
+      "v": 876.2
+    },
+    {
+      "t": "2017-11",
+      "v": 878.9
+    },
+    {
+      "t": "2018-02",
+      "v": 917.8
+    },
+    {
+      "t": "2018-05",
+      "v": 949.0
+    },
+    {
+      "t": "2018-08",
+      "v": 966.0
+    },
+    {
+      "t": "2018-11",
+      "v": 900.7
+    },
+    {
+      "t": "2019-02",
+      "v": 856.6
+    },
+    {
+      "t": "2019-05",
+      "v": 903.2
+    },
+    {
+      "t": "2019-08",
+      "v": 872.4
+    },
+    {
+      "t": "2019-11",
+      "v": 915.0
+    },
+    {
+      "t": "2020-02",
+      "v": 912.1
+    },
+    {
+      "t": "2020-05",
+      "v": 860.8
+    },
+    {
+      "t": "2020-08",
+      "v": 863.0
+    },
+    {
+      "t": "2020-11",
+      "v": 835.3
+    },
+    {
+      "t": "2021-02",
+      "v": 886.6
+    },
+    {
+      "t": "2021-05",
+      "v": 911.1
+    },
+    {
+      "t": "2021-08",
+      "v": 967.1
+    },
+    {
+      "t": "2021-11",
+      "v": 855.4
+    },
+    {
+      "t": "2022-02",
+      "v": 851.2
+    },
+    {
+      "t": "2022-05",
+      "v": 835.6
+    },
+    {
+      "t": "2022-08",
+      "v": 856.7
+    },
+    {
+      "t": "2022-11",
+      "v": 867.4
+    },
+    {
+      "t": "2023-02",
+      "v": 866.5
+    },
+    {
+      "t": "2023-05",
+      "v": 904.6
+    },
+    {
+      "t": "2023-08",
+      "v": 933.3
+    },
+    {
+      "t": "2023-11",
+      "v": 921.6
+    },
+    {
+      "t": "2024-02",
+      "v": 909.8
+    },
+    {
+      "t": "2024-05",
+      "v": 902.0
+    },
+    {
+      "t": "2024-08",
+      "v": 892.9
+    },
+    {
+      "t": "2024-11",
+      "v": 880.1
+    },
+    {
+      "t": "2025-02",
+      "v": 884.4
+    },
+    {
+      "t": "2025-05",
+      "v": 866.8
+    },
+    {
+      "t": "2025-08",
+      "v": 860.4
+    },
+    {
+      "t": "2025-11",
+      "v": 869.5
+    },
+    {
+      "t": "2026-02",
+      "v": 869.0
+    }
+  ],
+  "notes": "Fetched from ABS Labour Force Australia Detailed latest-release XLSX Table 04. Series is Manufacturing employed total, seasonally adjusted, ANZSIC division C; values are thousands of persons and are trimmed to the last 60 quarterly observations.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), employed persons by industry.",
+  "extra": {
+    "schema": "abs_xlsx_series.v1",
+    "fields": {
+      "workbook_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed/mar-2026/6291004.xlsx",
+      "workbook_unit": "000",
+      "component_series": [
+        {
+          "description": "Manufacturing ;  Employed total ;",
+          "series_id": "A84090240X",
+          "sheet": "Data1",
+          "series_type": "Seasonally Adjusted",
+          "unit": "000",
+          "value": 869.0
+        }
+      ]
+    }
+  }
+}

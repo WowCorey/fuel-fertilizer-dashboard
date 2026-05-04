@@ -10,7 +10,7 @@
 function MetricCard({
   eyebrow, label, value, unit, delta, threshold, source,
   plain, highlight, jargonHint,
-  fromEnvelope, valueFn, unitFn,
+  fromEnvelope, valueFn, unitFn, partial = false,
 }) {
   // Envelope-aware path — resolves value/source from the JSON envelope.
   if (fromEnvelope !== undefined) {
@@ -22,7 +22,7 @@ function MetricCard({
           aria-label={`${label}: source unavailable`}>
           <div className="card-status-row">
             {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-            {window.StatusPill && <StatusPill env={env}/>}
+            {window.EnvTrustBadges ? <EnvTrustBadges env={env} partial={partial}/> : window.StatusPill && <StatusPill env={env}/>}
           </div>
           <h3 className="metric-card__label">{label}</h3>
           <p className="metric-card__plain">Source unavailable — awaiting data.</p>
@@ -51,7 +51,9 @@ function MetricCard({
       aria-label={`${label}: ${value}${unit || ''}`}>
       <div className="card-status-row">
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-        {fromEnvelope !== undefined && window.StatusPill && <StatusPill env={fromEnvelope}/>}
+        {fromEnvelope !== undefined && (
+          window.EnvTrustBadges ? <EnvTrustBadges env={fromEnvelope} partial={partial}/> : window.StatusPill && <StatusPill env={fromEnvelope}/>
+        )}
       </div>
       <h3 className="metric-card__label">
         {jargonHint ? (

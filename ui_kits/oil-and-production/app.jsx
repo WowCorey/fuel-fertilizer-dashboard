@@ -7,6 +7,10 @@ const SERIES = [
   'aps_production_diesel',
   'aps_production_jet',
   'aps_production_fuel_oil',
+  'aps_sales_diesel',
+  'aps_stocks_diesel',
+  'aps_imports_diesel',
+  'aps_exports_crude_feedstocks',
   'iea_90day',
   'fuel_security_payment',
   'offshore_ticket_volumes',
@@ -273,6 +277,26 @@ function App() {
           </>}
         </section>
 
+        {/* 2B — APS FLOWS */}
+        <section className="section" aria-labelledby="h-flows">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Section 2B</span>
+              <h2 id="h-flows">Demand, stocks, imports and exports</h2>
+              <p className="section__lede">
+                Additional Australian Petroleum Statistics series from the same public workbook.
+                These are monthly product-flow indicators, not live outage signals.
+              </p>
+            </div>
+          </div>
+          <div className="metric-grid metric-grid--4">
+            <MetricCard eyebrow="Demand" label="Diesel sales" plain="Reported diesel sales volume in the latest APS month." fromEnvelope={data.aps_sales_diesel} unit=" ML"/>
+            <MetricCard eyebrow="Stocks" label="Diesel stocks" plain="Reported diesel stock volume at month end." fromEnvelope={data.aps_stocks_diesel} unit=" ML"/>
+            <MetricCard eyebrow="Imports" label="Diesel imports" plain="Reported diesel import volume in the latest APS month." fromEnvelope={data.aps_imports_diesel} unit=" ML"/>
+            <MetricCard eyebrow="Exports" label="Crude/feedstock exports" plain="Reported exports of crude oil and other refinery feedstocks." fromEnvelope={data.aps_exports_crude_feedstocks} unit=" ML"/>
+          </div>
+        </section>
+
         {/* 3 — GOVERNMENT PURCHASES */}
         <section className="section" aria-labelledby="h-gov">
           <div className="section__head">
@@ -362,6 +386,8 @@ function App() {
               <dd>The IEA treaty benchmark is 90 days of net imports. This dashboard does not present an Australian compliance gap unless a current public compliance series is wired into an envelope.</dd>
               <dt>Policy disclosures</dt>
               <dd>Fuel Security Services Payment values are GST-exclusive DCCEEW quarterly amounts converted to A$m. Offshore ticket volumes use the latest DCCEEW public disclosure of stocks held overseas under government agreement.</dd>
+              <dt>APS product flows</dt>
+              <dd>Sales, stocks, imports and exports use the named columns in the Australian Petroleum Statistics XLSX data extract. These are publisher-reported monthly product-flow series and are not used to infer real-time shortages.</dd>
             </dl>
           </div>
         </section>
