@@ -1,0 +1,30 @@
+{
+  "series_id": "aemo_wem_summary",
+  "source_id": "aemo_wem_summary",
+  "source_name": "AEMO Western Australian Wholesale Electricity Market - capacity and price",
+  "source_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+  "unit": "AUD/MWh",
+  "retrieved_at": "2026-04-28T18:53:01+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2025-Q4",
+      "v": 69.55
+    }
+  ],
+  "notes": "AEMO Quarterly Energy Dynamics Q4 2025, WEM market dynamics. The headline is the Q4 2025 average WEM energy price. WEM is Western Australia's separate wholesale market and is not part of the NEM price/demand series.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "AEMO terms of use for tabular data",
+  "citation": "Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, WEM market dynamics.",
+  "extra": {
+    "schema": "fuel_resilience_typed_fields.v1",
+    "fields": {
+      "period": "Q4 2025",
+      "average_energy_price_aud_per_mwh": 69.55,
+      "essential_system_services_cost_million_aud": 17.7,
+      "battery_adjusted_renewable_contribution_pct": 50.3,
+      "peak_battery_discharge_mw": 1050
+    }
+  }
+}

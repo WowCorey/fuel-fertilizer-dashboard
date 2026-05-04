@@ -1,0 +1,273 @@
+{
+  "series_id": "abs_manufacturing_output_index",
+  "source_id": "abs_manufacturing_output_index",
+  "source_name": "ABS Manufacturing sales, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia",
+  "unit": "chain volume $m",
+  "retrieved_at": "2026-04-30T09:45:34+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2011-03",
+      "v": 135469
+    },
+    {
+      "t": "2011-06",
+      "v": 136460
+    },
+    {
+      "t": "2011-09",
+      "v": 137478
+    },
+    {
+      "t": "2011-12",
+      "v": 134637
+    },
+    {
+      "t": "2012-03",
+      "v": 135187
+    },
+    {
+      "t": "2012-06",
+      "v": 132264
+    },
+    {
+      "t": "2012-09",
+      "v": 133563
+    },
+    {
+      "t": "2012-12",
+      "v": 132965
+    },
+    {
+      "t": "2013-03",
+      "v": 131302
+    },
+    {
+      "t": "2013-06",
+      "v": 130667
+    },
+    {
+      "t": "2013-09",
+      "v": 130741
+    },
+    {
+      "t": "2013-12",
+      "v": 131507
+    },
+    {
+      "t": "2014-03",
+      "v": 130192
+    },
+    {
+      "t": "2014-06",
+      "v": 128988
+    },
+    {
+      "t": "2014-09",
+      "v": 127968
+    },
+    {
+      "t": "2014-12",
+      "v": 128186
+    },
+    {
+      "t": "2015-03",
+      "v": 122267
+    },
+    {
+      "t": "2015-06",
+      "v": 120435
+    },
+    {
+      "t": "2015-09",
+      "v": 120307
+    },
+    {
+      "t": "2015-12",
+      "v": 117460
+    },
+    {
+      "t": "2016-03",
+      "v": 116737
+    },
+    {
+      "t": "2016-06",
+      "v": 116795
+    },
+    {
+      "t": "2016-09",
+      "v": 114078
+    },
+    {
+      "t": "2016-12",
+      "v": 114243
+    },
+    {
+      "t": "2017-03",
+      "v": 112170
+    },
+    {
+      "t": "2017-06",
+      "v": 113884
+    },
+    {
+      "t": "2017-09",
+      "v": 116316
+    },
+    {
+      "t": "2017-12",
+      "v": 115550
+    },
+    {
+      "t": "2018-03",
+      "v": 117426
+    },
+    {
+      "t": "2018-06",
+      "v": 116657
+    },
+    {
+      "t": "2018-09",
+      "v": 115944
+    },
+    {
+      "t": "2018-12",
+      "v": 114266
+    },
+    {
+      "t": "2019-03",
+      "v": 112270
+    },
+    {
+      "t": "2019-06",
+      "v": 112401
+    },
+    {
+      "t": "2019-09",
+      "v": 112092
+    },
+    {
+      "t": "2019-12",
+      "v": 113433
+    },
+    {
+      "t": "2020-03",
+      "v": 115083
+    },
+    {
+      "t": "2020-06",
+      "v": 105940
+    },
+    {
+      "t": "2020-09",
+      "v": 110277
+    },
+    {
+      "t": "2020-12",
+      "v": 112703
+    },
+    {
+      "t": "2021-03",
+      "v": 113761
+    },
+    {
+      "t": "2021-06",
+      "v": 114416
+    },
+    {
+      "t": "2021-09",
+      "v": 113609
+    },
+    {
+      "t": "2021-12",
+      "v": 115022
+    },
+    {
+      "t": "2022-03",
+      "v": 113285
+    },
+    {
+      "t": "2022-06",
+      "v": 113479
+    },
+    {
+      "t": "2022-09",
+      "v": 112145
+    },
+    {
+      "t": "2022-12",
+      "v": 110922
+    },
+    {
+      "t": "2023-03",
+      "v": 114097
+    },
+    {
+      "t": "2023-06",
+      "v": 110931
+    },
+    {
+      "t": "2023-09",
+      "v": 111519
+    },
+    {
+      "t": "2023-12",
+      "v": 112385
+    },
+    {
+      "t": "2024-03",
+      "v": 110988
+    },
+    {
+      "t": "2024-06",
+      "v": 111570
+    },
+    {
+      "t": "2024-09",
+      "v": 111114
+    },
+    {
+      "t": "2024-12",
+      "v": 108005
+    },
+    {
+      "t": "2025-03",
+      "v": 109150
+    },
+    {
+      "t": "2025-06",
+      "v": 109864
+    },
+    {
+      "t": "2025-09",
+      "v": 110860
+    },
+    {
+      "t": "2025-12",
+      "v": 111786
+    }
+  ],
+  "notes": "Fetched from ABS Business Indicators Australia latest-release XLSX Table 4. Series is Manufacturing income from sales of goods and services, chain volume measures, seasonally adjusted; values are chain volume dollars in millions and are trimmed to the last 60 quarterly observations.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), income from sales of goods and services by industry.",
+  "extra": {
+    "schema": "abs_xlsx_series.v1",
+    "fields": {
+      "workbook_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia/dec-2025/5676004.xlsx",
+      "workbook_unit": "$ Millions",
+      "component_series": [
+        {
+          "description": "Sales ;  Total (State) ;  Manufacturing ;  Chain Volume Measures ;  TOTAL (SCP_SCOPE) ;",
+          "series_id": "A3538810J",
+          "sheet": "Data1",
+          "series_type": "Seasonally Adjusted",
+          "unit": "$ Millions",
+          "value": 111786
+        }
+      ]
+    }
+  }
+}

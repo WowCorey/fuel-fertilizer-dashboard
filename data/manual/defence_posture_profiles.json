@@ -1,0 +1,170 @@
+{
+  "series_id": "defence_posture_profiles",
+  "source_id": "defence_posture_profiles",
+  "source_name": "Defence alliances and strategic posture compiled profiles",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+  "unit": "dashboard profiles",
+  "retrieved_at": "2026-04-28T14:30:00+00:00",
+  "last_data_point": "2026-04-29",
+  "values": [
+    {
+      "t": "dashboard sections",
+      "v": 6
+    }
+  ],
+  "notes": "Manual compiled Defence, Alliances and Strategic Posture profile. Budget, workforce, capability, uncrewed-systems, alliance and industry rows are copied or summarised from named public source envelopes. Readiness-sensitive values stay unavailable.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher.",
+  "citation": "Fuel Resilience AU defence alliances methodology; Department of Defence; DFAT; Office of National Intelligence; Australian Submarine Agency.",
+  "extra": {
+    "schema": "defence_posture_profiles.v1",
+    "fields": {
+      "profile_date": "2026-04-29",
+      "method": "Budget, workforce, force structure, public asset/acquisition rows, alliances/frameworks, industry context and readiness boundaries are separate fields. Asset counts are not readiness or operational availability.",
+      "takeaways": [
+        {
+          "title": "The loaded current budget row is A$63.4b for 2026-27 Defence funding",
+          "text": "The 2026 National Defence Strategy budget factsheet reports A$63.4b Defence funding for 2026-27 and around A$425b in capability investment over the decade to 2035-36.",
+          "trust_label": "Observed",
+          "source_id": "defence_budget_2026_nds"
+        },
+        {
+          "title": "Public asset counts are not readiness",
+          "text": "The page loads selected public Navy, Air Force and Army capability rows, but it does not infer mission-capable rates, crewed availability, stockpile sufficiency or combat readiness.",
+          "trust_label": "Partial coverage",
+          "source_id": "defence_public_capability_assets"
+        },
+        {
+          "title": "Framework type matters",
+          "text": "ANZUS is a formal security treaty, AUKUS is a trilateral security and technology partnership, Five Eyes is an intelligence partnership, and the Quad is a diplomatic partnership. They are not collapsed into one generic alliance score.",
+          "trust_label": "Manual",
+          "source_id": "defence_alliance_frameworks"
+        },
+        {
+          "title": "Uncrewed coverage is by category, not by total inventory",
+          "text": "The page shows in-service (Triton, Integrator), development (Ghost Bat, Ghost Shark), counter-drone (LAND 156) and sovereign-program (SDIP autonomous systems, DIDS) rows separately. There is no clean public drone-only Defence budget, so that value stays unavailable.",
+          "trust_label": "Partial coverage",
+          "source_id": "defence_uncrewed_systems"
+        }
+      ],
+      "budget_metrics": [
+        {
+          "metric_id": "defence_funding_2026_27",
+          "section": "budget",
+          "metric_name": "Defence funding",
+          "metric_value": 63.4,
+          "metric_display": "A$63.4b",
+          "metric_unit": "A$bn",
+          "metric_period": "2026-27",
+          "category": "Funding",
+          "source_coverage_label": "Observed",
+          "trust_label": "Observed",
+          "source_id": "defence_budget_2026_nds",
+          "notes": "Funding includes Defence, ASD, ASA and ANNPSR as labelled in the factsheet."
+        },
+        {
+          "metric_id": "capability_investment_decade",
+          "section": "budget",
+          "metric_name": "Capability investment",
+          "metric_value": 425,
+          "metric_display": "around A$425b",
+          "metric_unit": "A$bn over decade",
+          "metric_period": "to 2035-36",
+          "category": "Capability investment",
+          "source_coverage_label": "Observed",
+          "trust_label": "Observed",
+          "source_id": "defence_budget_2026_nds",
+          "notes": "The source says around A$425b; dashboard keeps the source wording."
+        },
+        {
+          "metric_id": "planned_acquisition_2026_27",
+          "section": "budget",
+          "metric_name": "Acquisition planned expenditure",
+          "metric_value": 22.4,
+          "metric_display": "A$22.4b",
+          "metric_unit": "A$bn",
+          "metric_period": "2026-27",
+          "category": "Acquisition",
+          "source_coverage_label": "Observed",
+          "trust_label": "Observed",
+          "source_id": "defence_budget_2026_nds",
+          "notes": "Planned expenditure category, not a delivered capability count."
+        },
+        {
+          "metric_id": "planned_sustainment_2026_27",
+          "section": "budget",
+          "metric_name": "Sustainment planned expenditure",
+          "metric_value": 19.8,
+          "metric_display": "A$19.8b",
+          "metric_unit": "A$bn",
+          "metric_period": "2026-27",
+          "category": "Sustainment",
+          "source_coverage_label": "Observed",
+          "trust_label": "Observed",
+          "source_id": "defence_budget_2026_nds",
+          "notes": "Sustainment planned expenditure category, not an availability measure."
+        },
+        {
+          "metric_id": "defence_gdp_share",
+          "section": "budget",
+          "metric_name": "Defence spending as share of GDP",
+          "metric_value": null,
+          "metric_display": "Unavailable",
+          "metric_unit": "%",
+          "metric_period": "not loaded",
+          "category": "GDP share",
+          "source_coverage_label": "Unavailable",
+          "trust_label": "Unavailable",
+          "source_id": "defence_readiness_gap",
+          "notes": "Not computed here. Leave unavailable until a current official row or documented GDP denominator is loaded."
+        }
+      ],
+      "force_structure": [
+        {
+          "name": "Australian Defence Force",
+          "type": "Force structure",
+          "summary": "The ADF includes ADF Headquarters, Joint Capabilities Group, Joint Operations Command and the three services: Army, Air Force and Navy.",
+          "source_id": "defence_posture_profiles",
+          "source_url": "https://www.defence.gov.au/about/who-we-are/organisation-structure",
+          "trust_label": "Observed",
+          "notes": "Structure row only; no readiness or deployable-strength estimate."
+        },
+        {
+          "name": "Permanent ADF workforce achievement",
+          "type": "Workforce",
+          "summary": "59,147 permanent ADF workforce achievement against a 58,850 2024-25 budgeted requirement.",
+          "source_id": "defence_workforce_annual_report_2024_25",
+          "source_url": "https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf",
+          "trust_label": "Observed",
+          "notes": "Workforce achievement row only; not deployability or readiness."
+        },
+        {
+          "name": "Strategy of denial and integrated focused force",
+          "type": "Strategic posture",
+          "summary": "The 2026 NDS builds on the strategy of denial and an integrated, focused force, with self-reliance, industrial resilience and partner coordination as public themes.",
+          "source_id": "defence_budget_2026_nds",
+          "source_url": "https://www.defence.gov.au/about/strategic-planning/2026-national-defence-strategy-2026-integrated-investment-program",
+          "trust_label": "Manual",
+          "notes": "High-level public strategy summary; not a threat comparison or war-fighting prediction."
+        }
+      ],
+      "section_coverage": [
+        {"section": "Budget", "coverage": "Strong coverage", "notes": "Current 2026 NDS budget factsheet rows loaded for funding, capability investment and expenditure categories."},
+        {"section": "Force structure", "coverage": "Partial coverage", "notes": "Public organisation and workforce rows loaded; readiness and deployable-strength fields unavailable."},
+        {"section": "Capabilities/assets", "coverage": "Partial coverage", "notes": "Selected official public asset and acquisition rows loaded; not exhaustive and not readiness."},
+        {"section": "Uncrewed systems and counter-drone", "coverage": "Partial coverage", "notes": "Selected official Defence project rows loaded across in-service, development, counter-drone and sovereign-program categories; complete ADF drone inventory and clean drone-only budget remain unavailable."},
+        {"section": "Alliances/frameworks", "coverage": "Strong coverage", "notes": "ANZUS, AUKUS, Five Eyes, Quad, AUSMIN and PNG treaty profiles loaded with framework type separation."},
+        {"section": "Sovereign capability/industry", "coverage": "Partial coverage", "notes": "Official industrial priorities and program context loaded; sensitive supply-chain depth and stockpile adequacy unavailable."},
+        {"section": "Readiness/live posture", "coverage": "Unavailable", "notes": "No readiness, mission-capable, stockpile, classified basing or live operational posture metric is loaded."}
+      ],
+      "methodology_caveats": [
+        "Budget rows are money and planned expenditure; they are not capability availability.",
+        "Asset and acquisition rows are public counts or statuses; they are not mission-capable rates.",
+        "Formal treaties, intelligence partnerships, technology partnerships and diplomatic forums are separate framework types.",
+        "No classified, secret, live readiness or sensitive operational posture data is shown.",
+        "Unavailable fields stay unavailable until a named public source supports the exact metric."
+      ]
+    }
+  }
+}

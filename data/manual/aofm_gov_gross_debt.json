@@ -1,0 +1,52 @@
+{
+  "series_id": "aofm_gov_gross_debt",
+  "source_id": "aofm_gov_gross_debt",
+  "source_name": "AOFM Australian Government Securities outstanding",
+  "source_url": "https://www.aofm.gov.au/data-hub",
+  "unit": "AUD billions",
+  "retrieved_at": "2026-04-29T09:55:45+00:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2016-17",
+      "v": 497.5
+    },
+    {
+      "t": "2017-18",
+      "v": 529.4
+    },
+    {
+      "t": "2018-19",
+      "v": 539.0
+    },
+    {
+      "t": "2019-20",
+      "v": 625.5
+    },
+    {
+      "t": "2020-21",
+      "v": 789.7
+    },
+    {
+      "t": "2021-22",
+      "v": 867.7
+    },
+    {
+      "t": "2022-23",
+      "v": 863.3
+    },
+    {
+      "t": "2023-24",
+      "v": 878.9
+    },
+    {
+      "t": "2024-25",
+      "v": 895.6
+    }
+  ],
+  "notes": "Manual entry from AOFM stock_ags.csv, fetched from the official AOFM data hub. Values are financial-year Australian Government Securities face value in AUD billions. This is not the same as Commonwealth general government gross debt in Budget Papers; the monthly AOFM settlement workbook was not used because repeated read timeouts made it programmatically unstable in this pass.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 3.0 AU (Commonwealth of Australia)",
+  "citation": "Australian Office of Financial Management, Australian Government Securities Outstanding."
+}

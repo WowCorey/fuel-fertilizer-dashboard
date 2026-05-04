@@ -12,13 +12,15 @@ function DataCoverage({
     className: "coverage-strip__inner"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Verified means copied or fetched from a named source; derived means calculated from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
+  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Manual means copied from a named public source; derived means calculated or selected from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
     className: "coverage-badges"
   }, React.createElement("span", {
     className: "status-pill status-pill--verified"
   }, "Verified ", c.verified), React.createElement("span", {
     className: "status-pill status-pill--derived"
   }, "Derived ", c.derived), React.createElement("span", {
+    className: "status-pill status-pill--manual"
+  }, "Manual ", c.manual), React.createElement("span", {
     className: "status-pill status-pill--stale"
   }, "Stale ", c.stale), React.createElement("span", {
     className: "status-pill status-pill--awaiting"
@@ -37,6 +39,303 @@ Object.assign(window, {
   DataCoverage,
   StatusPill
 });
+function TrustBadge({
+  kind,
+  children
+}) {
+  const key = String(kind || 'observed').toLowerCase().replace(/\s+/g, '-');
+  const labels = {
+    observed: 'Observed',
+    derived: 'Derived',
+    scenario: 'Scenario',
+    estimated: 'Estimated',
+    manual: 'Manual',
+    stale: 'Stale',
+    unavailable: 'Unavailable',
+    partial: 'Partial coverage'
+  };
+  return React.createElement("span", {
+    className: `trust-badge trust-badge--${key}`
+  }, children || labels[key] || kind);
+}
+function EnvTrustBadges({
+  env,
+  partial = false
+}) {
+  if (!env || env.status !== 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(TrustBadge, {
+      kind: "unavailable"
+    }));
+  }
+  const f = window.FR.freshness(env);
+  const badges = [];
+  if (env._meta?.fetch === 'derived') {
+    badges.push(React.createElement(TrustBadge, {
+      key: "derived",
+      kind: "derived"
+    }));
+  } else {
+    badges.push(React.createElement(TrustBadge, {
+      key: "observed",
+      kind: "observed"
+    }));
+  }
+  if (env.manual_entry || env.extra?.fields?.parent_manual_entry) badges.push(React.createElement(TrustBadge, {
+    key: "manual",
+    kind: "manual"
+  }));
+  if (f.state === 'stale') badges.push(React.createElement(TrustBadge, {
+    key: "stale",
+    kind: "stale"
+  }));
+  if (partial) badges.push(React.createElement(TrustBadge, {
+    key: "partial",
+    kind: "partial"
+  }));
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, badges);
+}
+Object.assign(window, {
+  TrustBadge,
+  EnvTrustBadges
+});
+function ShippingVisibility({
+  tankersEnv,
+  forwardOrdersEnv,
+  importsEnv,
+  liveVesselEnv
+}) {
+  const [filter, setFilter] = React.useState('all');
+  const notApplicable = () => React.createElement("span", {
+    className: "unavail",
+    "aria-label": "not applicable"
+  }, "\u2014");
+  function latest(env) {
+    if (!env || env.status !== 'ok' || !env.values?.length) return null;
+    return env.values.at(-1).v;
+  }
+  function fields(env) {
+    return env?.extra?.fields || {};
+  }
+  function isNumber(value) {
+    return value !== null && value !== undefined && !Number.isNaN(Number(value));
+  }
+  function fmt(value, digits = 0) {
+    if (!isNumber(value)) return '-';
+    return Number(value).toLocaleString('en-AU', {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits
+    });
+  }
+  function fmtAudThousands(value) {
+    if (!isNumber(value)) return '-';
+    return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 1
+    })}bn`;
+  }
+  function fmtChange(current, previous) {
+    if (!isNumber(current) || !isNumber(previous)) return notApplicable();
+    const change = Number(current) - Number(previous);
+    if (change === 0) return '0';
+    return `${change > 0 ? '+' : ''}${fmt(change)}`;
+  }
+  function tankerCell(value) {
+    return isNumber(value) ? `${fmt(value)} tankers` : notApplicable();
+  }
+  function daysCell(value) {
+    return isNumber(value) ? `${fmt(value)} days` : notApplicable();
+  }
+  const tankerFields = fields(tankersEnv);
+  const totalTankers = latest(tankersEnv);
+  const forwardOrders = latest(forwardOrdersEnv);
+  const importValue = latest(importsEnv);
+  const liveVesselNotes = liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.';
+  const rows = [{
+    key: 'crude',
+    filter: 'crude',
+    supplyGroup: 'Crude oil',
+    current: tankerCell(tankerFields.crude_oil_tankers),
+    previous: tankerCell(tankerFields.previous_crude_oil_tankers),
+    change: fmtChange(tankerFields.crude_oil_tankers, tankerFields.previous_crude_oil_tankers),
+    equivalentDays: daysCell(tankerFields.crude_oil_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate crude-oil tanker count and equivalent days only. No vessel names, AIS positions, cargo assignments or port-call ETAs are loaded.'
+  }, {
+    key: 'clean',
+    filter: 'clean',
+    supplyGroup: 'Clean refined products',
+    current: tankerCell(tankerFields.clean_refined_product_tankers),
+    previous: tankerCell(tankerFields.previous_clean_refined_product_tankers),
+    change: fmtChange(tankerFields.clean_refined_product_tankers, tankerFields.previous_clean_refined_product_tankers),
+    equivalentDays: daysCell(tankerFields.clean_refined_product_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate clean refined-product tanker count and equivalent days only. This is inbound supply visibility, not a live shipping layer.'
+  }, {
+    key: 'total',
+    filter: 'all',
+    supplyGroup: 'Total reported tankers',
+    current: tankerCell(totalTankers),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'Latest PM&C aggregate total reported tanker count. It does not identify individual vessels, ports, terminals or cargoes.'
+  }, {
+    key: 'orders',
+    filter: 'all',
+    supplyGroup: 'Forward import orders',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: forwardOrdersEnv,
+    partial: true,
+    meaning: `Latest PM&C forward import order visibility is ${fmt(forwardOrders, 1)} billion L ordered. This is aggregate public order visibility only.`
+  }, {
+    key: 'imports',
+    filter: 'all',
+    supplyGroup: 'ABS petroleum imports',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: importsEnv,
+    partial: false,
+    meaning: `Latest ABS petroleum import value is ${fmtAudThousands(importValue)} (${fmt(importValue)} AUD thousands). This is trade-value context, not tanker or vessel tracking.`
+  }, {
+    key: 'live',
+    filter: 'all',
+    supplyGroup: 'Live vessel identities / ETAs',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: liveVesselEnv,
+    partial: false,
+    meaning: `${liveVesselNotes} No AIS positions, vessel names, cargo assignments or port-call ETAs are plotted.`
+  }];
+  const cards = [{
+    key: 'crude-card',
+    filter: 'crude',
+    title: 'Crude oil tankers',
+    value: isNumber(tankerFields.crude_oil_tankers) ? fmt(tankerFields.crude_oil_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.crude_oil_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_crude_oil_tankers)} tankers; equivalent days: ${fmt(tankerFields.crude_oil_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'clean-card',
+    filter: 'clean',
+    title: 'Clean refined-product tankers',
+    value: isNumber(tankerFields.clean_refined_product_tankers) ? fmt(tankerFields.clean_refined_product_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.clean_refined_product_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_clean_refined_product_tankers)} tankers; equivalent days: ${fmt(tankerFields.clean_refined_product_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'orders-card',
+    filter: 'all',
+    title: 'Forward import orders',
+    value: isNumber(forwardOrders) ? fmt(forwardOrders, 1) : 'Unavailable',
+    unit: isNumber(forwardOrders) ? 'billion L ordered' : '',
+    subtext: 'Aggregate public order visibility only. No cargo-level or vessel-level allocation is loaded.',
+    env: forwardOrdersEnv,
+    partial: true
+  }, {
+    key: 'live-card',
+    filter: 'all',
+    title: 'Live vessel layer',
+    value: 'Unavailable',
+    unit: '',
+    subtext: 'No source-safe live vessel names, AIS positions or port-call ETAs loaded.',
+    env: liveVesselEnv,
+    partial: false,
+    unavailable: true
+  }];
+  const visibleRows = filter === 'all' ? rows : rows.filter(row => row.filter === filter);
+  const visibleCards = filter === 'all' ? cards : cards.filter(card => card.filter === filter);
+  const filterButtons = [['all', `All (${fmt(totalTankers)})`], ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`], ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`]];
+  const sourceLines = [tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv].map(env => window.FR.sourceLine(env)).filter(Boolean);
+  return React.createElement("div", {
+    className: "shipping-visibility"
+  }, React.createElement("div", {
+    className: "shipping-visibility__summary",
+    "aria-label": "Inbound fuel summary"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Inbound fuel evidence board"), React.createElement("h3", null, "Aggregate public data only, not a live map."), React.createElement("p", null, "PM&C publishes aggregate tanker counts, equivalent days and forward import orders. ABS publishes petroleum import value. This board shows those loaded values directly and keeps live vessel identities, AIS positions and port-call ETAs unavailable.")), React.createElement("div", {
+    className: "shipping-stats"
+  }, React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "PM&C aggregate reported tankers")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(forwardOrders, 1)), React.createElement("small", null, "billion L ordered in PM&C forward import orders")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmtAudThousands(importValue)), React.createElement("small", null, "ABS petroleum import value, rounded from AUD thousands")), React.createElement("div", {
+    className: "shipping-stat shipping-stat--unavailable"
+  }, React.createElement("span", null, "Unavailable"), React.createElement("small", null, "No live vessel feed loaded")))), React.createElement("div", {
+    className: "shipping-tabs",
+    role: "tablist",
+    "aria-label": "Inbound fuel evidence filters"
+  }, filterButtons.map(([key, label]) => React.createElement("button", {
+    key: key,
+    type: "button",
+    className: filter === key ? 'is-active' : '',
+    "aria-pressed": filter === key,
+    onClick: () => setFilter(key)
+  }, label))), React.createElement("div", {
+    className: "shipping-visibility__body"
+  }, React.createElement("div", {
+    className: "shipping-evidence-main"
+  }, React.createElement("div", {
+    className: "data-table-wrap shipping-evidence-table",
+    "aria-label": "Aggregate inbound supply comparison"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Supply group"), React.createElement("th", null, "Current tankers"), React.createElement("th", null, "Previous tankers"), React.createElement("th", null, "Change"), React.createElement("th", null, "Equivalent days"), React.createElement("th", null, "Source status"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, visibleRows.map(row => React.createElement("tr", {
+    key: row.key
+  }, React.createElement("td", null, row.supplyGroup), React.createElement("td", null, row.current), React.createElement("td", null, row.previous), React.createElement("td", null, row.change), React.createElement("td", null, row.equivalentDays), React.createElement("td", {
+    className: "shipping-status-cell"
+  }, React.createElement(EnvTrustBadges, {
+    env: row.env,
+    partial: row.partial
+  })), React.createElement("td", {
+    className: "shipping-meaning-cell"
+  }, row.meaning)))))), React.createElement("div", {
+    className: "shipping-evidence-note"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence board, not live map"), React.createElement("p", null, "This section does not plot ships. PM&C publishes aggregate tanker counts and equivalent days, not vessel names, AIS positions, cargo assignments or port-call ETAs. The dashboard therefore shows inbound supply as an evidence board rather than a live map."), React.createElement("ul", null, React.createElement("li", null, "PM&C aggregate tanker counts only."), React.createElement("li", null, "No live vessel feed loaded."), React.createElement("li", null, "No AIS positions, vessel names or port-call ETAs."), React.createElement("li", null, "No invented ports, terminals, shipping lanes or vessel locations.")))), React.createElement("div", {
+    className: "shipping-evidence-cards",
+    "aria-label": "Inbound supply evidence cards"
+  }, visibleCards.map(card => React.createElement("article", {
+    key: card.key,
+    className: `shipping-evidence-card${card.unavailable ? ' shipping-evidence-card--unavailable' : ''}`
+  }, React.createElement("div", {
+    className: "shipping-evidence-card__head"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.title), React.createElement(EnvTrustBadges, {
+    env: card.env,
+    partial: card.partial
+  })), React.createElement("div", {
+    className: "shipping-evidence-card__value"
+  }, React.createElement("span", null, card.value), card.unit && React.createElement("small", null, card.unit)), React.createElement("p", null, card.subtext))))), React.createElement("div", {
+    className: "shipping-source mono"
+  }, sourceLines.map((line, index) => React.createElement("p", {
+    key: `${line}-${index}`
+  }, line))));
+}
+Object.assign(window, {
+  ShippingVisibility
+});
 function Header({
   active = 'fuel',
   updated = ''
@@ -46,16 +345,32 @@ function Header({
     label: 'National status',
     href: '../national-status-dashboard/index.html'
   }, {
+    id: 'fuel_security',
+    label: 'National fuel security',
+    href: '../fuel-security-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
+  }, {
+    id: 'state_contribution',
+    label: 'State ledger',
+    href: '../state-contribution-dashboard/index.html'
+  }, {
+    id: 'strategic_resources',
+    label: 'Strategic resources',
+    href: '../strategic-resources-dashboard/index.html'
+  }, {
+    id: 'defence_posture',
+    label: 'Defence posture',
+    href: '../defence-alliances-dashboard/index.html'
   }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
   }, {
     id: 'fertilizer',
-    label: 'Fertilizer',
+    label: 'Food & farms',
     href: '../fertilizer-dashboard/index.html'
   }, {
     id: 'oil',
@@ -65,6 +380,26 @@ function Header({
     id: 'who_pays_what',
     label: 'Who pays what',
     href: '../who-pays-what/index.html'
+  }, {
+    id: 'au_economics',
+    label: 'AU economics',
+    href: '../au-economics-dashboard/index.html'
+  }, {
+    id: 'manufacturing',
+    label: 'Manufacturing',
+    href: '../manufacturing-dashboard/index.html'
+  }, {
+    id: 'power_grid',
+    label: 'Power grid',
+    href: '../power-grid-dashboard/index.html'
+  }, {
+    id: 'infrastructure',
+    label: 'Infrastructure',
+    href: '../infrastructure-dashboard/index.html'
+  }, {
+    id: 'employment_automation',
+    label: 'Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'sources',
     label: 'Sources & methodology',
@@ -162,7 +497,8 @@ function MetricCard({
   jargonHint,
   fromEnvelope,
   valueFn,
-  unitFn
+  unitFn,
+  partial = false
 }) {
   if (fromEnvelope !== undefined) {
     const env = fromEnvelope;
@@ -175,7 +511,10 @@ function MetricCard({
         className: "card-status-row"
       }, eyebrow && React.createElement("span", {
         className: "eyebrow"
-      }, eyebrow), window.StatusPill && React.createElement(StatusPill, {
+      }, eyebrow), window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+        env: env,
+        partial: partial
+      }) : window.StatusPill && React.createElement(StatusPill, {
         env: env
       })), React.createElement("h3", {
         className: "metric-card__label"
@@ -208,9 +547,12 @@ function MetricCard({
     className: "card-status-row"
   }, eyebrow && React.createElement("span", {
     className: "eyebrow"
-  }, eyebrow), fromEnvelope !== undefined && window.StatusPill && React.createElement(StatusPill, {
+  }, eyebrow), fromEnvelope !== undefined && (window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+    env: fromEnvelope,
+    partial: partial
+  }) : window.StatusPill && React.createElement(StatusPill, {
     env: fromEnvelope
-  })), React.createElement("h3", {
+  }))), React.createElement("h3", {
     className: "metric-card__label"
   }, jargonHint ? React.createElement(React.Fragment, null, label.replace(jargonHint.term, ''), React.createElement("span", {
     className: "jargon",
@@ -555,12 +897,20 @@ function Footer({
   }, "Dashboards"), React.createElement("ul", null, React.createElement("li", null, React.createElement("a", {
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
+    href: "../fuel-security-dashboard/index.html"
+  }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
+    href: "../state-contribution-dashboard/index.html"
+  }, "State ledger")), React.createElement("li", null, React.createElement("a", {
+    href: "../strategic-resources-dashboard/index.html"
+  }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-alliances-dashboard/index.html"
+  }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
-  }, "Fertilizer")), React.createElement("li", null, React.createElement("a", {
+  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
     href: "../oil-and-production/index.html"
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
@@ -662,7 +1012,12 @@ function App() {
   const sourceCards = Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
     className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, env.source_name), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: ['pmc_tankers_on_water', 'pmc_retail_stockouts', 'pmc_forward_import_orders'].includes(id)
+  })), React.createElement("p", {
     className: "body-sm"
   }, env.status === 'ok' ? `Verified envelope. ${env.values.length} data point${env.values.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting verified values from the named public source.'), React.createElement("p", {
     className: "caption"
@@ -717,7 +1072,18 @@ function App() {
     }
   }, "What \"national status\" means here")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "This is not private operational intelligence. It is a public-source summary of the figures the Australian Government has chosen to publish: National Fuel Security Plan level, MSO stock coverage, expected arrivals and retail stock-outs."), React.createElement("p", null, "Tanker counts are aggregate counts from the PM&C page. They are not live AIS tracking and they do not identify individual vessels.")))), React.createElement("section", {
+  }, React.createElement("p", null, "This is not private operational intelligence. It is a public-source summary of the figures the Australian Government has chosen to publish: National Fuel Security Plan level, MSO stock coverage, expected arrivals and retail stock-outs."), React.createElement("p", null, "Tanker counts are aggregate counts from the PM&C page. They are not live AIS tracking and they do not identify individual vessels."), React.createElement("div", {
+    className: "trust-badges",
+    "aria-label": "Trust labels used on this page"
+  }, React.createElement(TrustBadge, {
+    kind: "observed"
+  }), React.createElement(TrustBadge, {
+    kind: "manual"
+  }), React.createElement(TrustBadge, {
+    kind: "partial"
+  }), React.createElement(TrustBadge, {
+    kind: "unavailable"
+  }))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "status-cards"
   }, React.createElement("div", {
@@ -758,21 +1124,24 @@ function App() {
     plain: "Reported overseas arrivals scheduled for the next four weeks.",
     fromEnvelope: data.pmc_forward_import_orders,
     valueFn: env => latestValue(env),
-    unit: " billion L"
+    unit: " billion L",
+    partial: true
   }), React.createElement(MetricCard, {
     eyebrow: "On water",
     label: "Ships on water",
     plain: "Crude and clean-product tankers reported on the public PM&C page.",
     fromEnvelope: data.pmc_tankers_on_water,
     valueFn: env => fmtInt(latestValue(env)),
-    unit: " tankers"
+    unit: " tankers",
+    partial: true
   }), React.createElement(MetricCard, {
     eyebrow: "Retail supply",
     label: "Diesel stock-outs",
     plain: "Australia-wide diesel stock-out count; petrol national total is not published.",
     fromEnvelope: data.pmc_retail_stockouts,
     valueFn: env => fmtInt(latestValue(env)),
-    unit: " sites"
+    unit: " sites",
+    partial: true
   }))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "tables-h"

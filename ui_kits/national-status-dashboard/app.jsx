@@ -88,7 +88,13 @@ function App() {
 
   const sourceCards = Object.entries(data).map(([id, env]) => (
     <article key={id} className="source-card">
-      <h4>{env.source_name}</h4>
+      <div className="card-status-row">
+        <h4>{env.source_name}</h4>
+        <EnvTrustBadges
+          env={env}
+          partial={['pmc_tankers_on_water', 'pmc_retail_stockouts', 'pmc_forward_import_orders'].includes(id)}
+        />
+      </div>
       <p className="body-sm">
         {env.status === 'ok'
           ? `Verified envelope. ${env.values.length} data point${env.values.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'unknown'}.`
@@ -142,6 +148,12 @@ function App() {
                 Tanker counts are aggregate counts from the PM&C page. They are not live AIS tracking
                 and they do not identify individual vessels.
               </p>
+              <div className="trust-badges" aria-label="Trust labels used on this page">
+                <TrustBadge kind="observed"/>
+                <TrustBadge kind="manual"/>
+                <TrustBadge kind="partial"/>
+                <TrustBadge kind="unavailable"/>
+              </div>
             </div>
           </div>
         </section>
@@ -190,6 +202,7 @@ function App() {
               fromEnvelope={data.pmc_forward_import_orders}
               valueFn={env => latestValue(env)}
               unit=" billion L"
+              partial
             />
             <MetricCard
               eyebrow="On water"
@@ -198,6 +211,7 @@ function App() {
               fromEnvelope={data.pmc_tankers_on_water}
               valueFn={env => fmtInt(latestValue(env))}
               unit=" tankers"
+              partial
             />
             <MetricCard
               eyebrow="Retail supply"
@@ -206,6 +220,7 @@ function App() {
               fromEnvelope={data.pmc_retail_stockouts}
               valueFn={env => fmtInt(latestValue(env))}
               unit=" sites"
+              partial
             />
           </div>
         </section>

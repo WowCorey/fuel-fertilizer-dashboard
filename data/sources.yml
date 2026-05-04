@@ -56,7 +56,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics.
     reuse_notes: Programmatically discovered from the data.gov.au CKAN package endpoint under stable dataset id d889484e-fb65-4190-a2e3-1739517cbf9b. The fetcher reads the latest APS data-extract XLSX, sheet "IEA days net import cover", column "IEA days of net import coverage".
     fetch: programmatic
-    used_by: [fuel, oil]
+    used_by: [fuel, oil, fuel_security]
 
   - id: aps_production_petrol
     human_name: Australian Petroleum Statistics - motor spirit production
@@ -151,7 +151,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Automotive gasoline total (ML)". This is reported sales volume, not household expenditure.
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_sales_diesel
     human_name: Australian Petroleum Statistics - diesel sales
@@ -170,7 +170,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
     reuse_notes: 'Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Diesel oil: total (ML)". This is reported sales volume, not a live shortage indicator.'
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_sales_jet
     human_name: Australian Petroleum Statistics - jet fuel sales
@@ -189,7 +189,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, sales of products.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Sales of products", column "Aviation turbine fuel total (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_stocks_petrol
     human_name: Australian Petroleum Statistics - automotive gasoline stocks
@@ -208,7 +208,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Stock volume by product", column "Automotive gasoline (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_stocks_diesel
     human_name: Australian Petroleum Statistics - diesel stocks
@@ -227,7 +227,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, stock volume by product.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Stock volume by product", column "Diesel oil (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_imports_petrol
     human_name: Australian Petroleum Statistics - automotive gasoline imports
@@ -246,7 +246,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Imports volume", column "Automotive gasoline (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_imports_diesel
     human_name: Australian Petroleum Statistics - diesel imports
@@ -265,7 +265,7 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Petroleum Statistics, imports volume.
     reuse_notes: Programmatically discovered from the latest APS data-extract XLSX via data.gov.au. The fetcher reads sheet "Imports volume", column "Diesel oil (ML)".
     fetch: programmatic
-    used_by: [oil]
+    used_by: [oil, fuel_security]
 
   - id: aps_exports_crude_feedstocks
     human_name: Australian Petroleum Statistics - crude and refinery feedstock exports
@@ -319,7 +319,7 @@ sources:
     citation: Australian Bureau of Statistics, International Trade in Goods.
     reuse_notes: Fetched from the live ABS Data API MERCH_IMP dataflow using SITC 33 (petroleum, petroleum products and related materials), total country of origin, total state destination, monthly frequency. The live ABS SDMX catalogue exposes this merchandise-imports series by SITC rather than HS; do not describe this envelope as HS 27 unless an HS-coded ABS API series is added later.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: abs_petroleum_imports_yoy
     human_name: ABS International Merchandise Trade — petroleum imports YoY
@@ -335,7 +335,7 @@ sources:
     reuse_notes: Derived from abs_petroleum_imports by comparing each month with the same month one year earlier. Do not hand-key or fetch directly.
     fetch: derived
     derived_from: abs_petroleum_imports
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: abs_fertiliser_imports
     human_name: ABS International Merchandise Trade — fertiliser imports (SITC 562)
@@ -437,6 +437,141 @@ sources:
     fetch: programmatic
     used_by: [fertilizer]
 
+  - id: abares_agricultural_exports
+    human_name: ABARES agricultural export value source gate
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture
+    canonical_url: https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: ABARES, Snapshot of Australian Agriculture.
+    reuse_notes: Source gate only. The page must not publish an agricultural export value until the exact ABARES figure, period, unit, scope and table/figure reference are hand-keyed into an envelope. Do not derive a dashboard total from narrative text.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abares_agricultural_commodities_wheat
+    human_name: ABARES agricultural commodities - wheat source gate
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: ABARES, Agricultural Commodities report and data tables.
+    reuse_notes: Source gate only. Populate only after verifying the exact wheat row, unit and period from ABARES Agricultural Commodities tables. Keep production, exports, domestic use and stocks as separate concepts.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abares_agricultural_commodities_beef
+    human_name: ABARES agricultural commodities - beef source gate
+    publisher: Australian Bureau of Agricultural and Resource Economics and Sciences
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: ABARES, Agricultural Commodities report and data tables.
+    reuse_notes: Source gate only. Populate only after verifying the exact beef row, unit and period from ABARES Agricultural Commodities tables. Keep production, export value, export volume and prices as separate concepts.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abs_food_imports
+    human_name: ABS International Trade in Goods - food imports source gate
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods.
+    reuse_notes: Source gate only. Do not publish a food-import value until the exact ABS commodity grouping, value basis, frequency and unit are verified. Do not mix food imports with fertiliser imports or broader merchandise imports.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: abs_agricultural_exports
+    human_name: ABS International Trade in Goods - agricultural exports source gate
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods.
+    reuse_notes: Source gate only. Do not publish an agricultural export value until the exact ABS commodity grouping, value basis, frequency and unit are verified. Keep ABS goods exports separate from ABARES agricultural production and forecast tables.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: bom_rainfall_deficiency
+    human_name: Bureau of Meteorology rainfall deficiency and drought services source gate
+    publisher: Bureau of Meteorology
+    url: https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services
+    canonical_url: https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services
+    format: MIXED
+    update_cadence: monthly
+    last_verified: 2026-05-01
+    rights: Bureau of Meteorology copyright and data-use terms apply; check product-specific terms
+    rights_url: https://www.bom.gov.au/copyright
+    citation: Bureau of Meteorology, Drought services and rainfall deficiency information.
+    reuse_notes: Source gate only. Do not publish rainfall deficiency, drought or agricultural stress values until the exact BOM product, geography, period, unit/class and reuse terms are verified. Do not infer values by visually reading a map.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: bom_water_storage
+    human_name: Bureau of Meteorology water storage source gate
+    publisher: Bureau of Meteorology
+    url: https://www.bom.gov.au/water/
+    canonical_url: https://www.bom.gov.au/water/
+    format: MIXED
+    update_cadence: weekly
+    last_verified: 2026-05-01
+    rights: Bureau of Meteorology copyright and data-use terms apply; check product-specific terms
+    rights_url: https://www.bom.gov.au/copyright
+    citation: Bureau of Meteorology, Water Information.
+    reuse_notes: Source gate only. Do not publish water storage or allocation values until the exact BOM water product, geography, unit, period and reuse terms are verified. Keep storage, streamflow and allocation as separate concepts.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: mdba_water_storage
+    human_name: MDBA water storage and basin water source gate
+    publisher: Murray-Darling Basin Authority
+    url: https://library.mdba.gov.au/
+    canonical_url: https://library.mdba.gov.au/
+    format: MIXED
+    update_cadence: weekly
+    last_verified: 2026-05-01
+    rights: MDBA Library datasets use resource-specific licences; check each resource before reuse
+    rights_url: https://library.mdba.gov.au/
+    citation: Murray-Darling Basin Authority, MDBA Library and water-storage publications.
+    reuse_notes: Source gate only. Do not publish Basin storage, allocation or irrigation availability values until the exact MDBA source, geography, unit, period and licence are verified. Do not treat Basin totals as national water security.
+    fetch: unavailable
+    used_by: [fertilizer]
+
+  - id: daff_agricultural_trade
+    human_name: DAFF/ABARES agricultural commodities and trade data source gate
+    publisher: Department of Agriculture, Fisheries and Forestry
+    url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data
+    canonical_url: https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data
+    format: MIXED
+    update_cadence: annual
+    last_verified: 2026-05-01
+    rights: CC BY 4.0 except logos, third-party content and otherwise-noted material
+    rights_url: https://www.agriculture.gov.au/about/copyright
+    citation: Department of Agriculture, Fisheries and Forestry, ABARES agricultural commodities and trade data.
+    reuse_notes: Source gate only. Use this for DAFF/ABARES agricultural trade context only after a specific row, period and unit are verified. Do not duplicate ABS trade rows or convert narrative summaries into values.
+    fetch: unavailable
+    used_by: [fertilizer]
+
   - id: iea_90day
     human_name: IEA 90-day oil stockholding obligation
     publisher: International Energy Agency
@@ -491,6 +626,7 @@ sources:
     url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
     canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
     fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
+    check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: ulp91
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
     qld_ckan_base: https://www.data.qld.gov.au
@@ -501,9 +637,9 @@ sources:
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
+    reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: aus_retail_fuel_multistate_diesel
     human_name: Retail pump price - diesel multi-state average
@@ -511,6 +647,7 @@ sources:
     url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
     canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
     fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
+    check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: diesel
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
     qld_ckan_base: https://www.data.qld.gov.au
@@ -521,9 +658,9 @@ sources:
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state diesel average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed.
+    reuse_notes: Programmatic multi-state diesel average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: aus_retail_fuel_multistate_premium95
     human_name: Retail pump price - premium 95 multi-state average
@@ -531,6 +668,7 @@ sources:
     url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
     canonical_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
     fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
+    check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: premium95
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
     qld_ckan_base: https://www.data.qld.gov.au
@@ -541,9 +679,9 @@ sources:
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state premium 95 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem.
+    reuse_notes: Programmatic multi-state premium 95 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem, when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: aus_retail_fuel_multistate_e10
     human_name: Retail pump price - E10 public-feed average
@@ -562,7 +700,7 @@ sources:
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting.
     reuse_notes: Programmatic E10 average from public feeds where available. Queensland publishes E10 in monthly Open Data resources. NSW contributes only when NSW_FUELCHECK_API_KEY is configured. WA FuelWatch's active public RSS product-code list does not expose E10, so WA is intentionally excluded.
     fetch: programmatic
-    used_by: [fuel]
+    used_by: [fuel, fuel_security]
 
   - id: ato_corporate_tax
     human_name: ATO Corporate Tax Transparency Report (latest year)
@@ -571,7 +709,7 @@ sources:
     canonical_url: https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/
     format: XLSX
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-30
     rights: CC BY 4.0 where stated by publisher
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Australian Taxation Office, Corporate Tax Transparency Report.
@@ -865,13 +1003,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; data compiled by DCCEEW.
-    reuse_notes: Hand-key from the public PM&C fuel supply page. Local pipeline requests to this page return an Incapsula challenge, so this source remains manual until a stable machine-readable endpoint is found.
+    reuse_notes: Hand-key from the public PM&C fuel supply page. Rechecked 2026-04-23; local pipeline requests return an Incapsula challenge page and the public page exposes no stable CSV, JSON or XLSX data file. Keep manual until PM&C/DCCEEW publishes a stable machine-readable endpoint.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_mso_days_cover
     human_name: PM&C public fuel supply - MSO days of cover
@@ -880,13 +1018,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
-    reuse_notes: Hand-key from the PM&C table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover.
+    reuse_notes: Hand-key from the PM&C table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_mso_fuel_reserves
     human_name: PM&C public fuel supply - MSO fuel reserves
@@ -895,13 +1033,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO reserves table.
-    reuse_notes: Hand-key from the PM&C table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page.
+    reuse_notes: Hand-key from the PM&C table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_forward_import_orders
     human_name: PM&C public fuel supply - four-week import orders
@@ -910,13 +1048,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; current and anticipated national supplies text.
-    reuse_notes: Hand-key only when PM&C publishes the reported four-week forward import-order volume. Do not infer from tanker counts or other sources.
+    reuse_notes: Hand-key only when PM&C publishes the reported four-week forward import-order volume. Do not infer from tanker counts or other sources. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_tankers_on_water
     human_name: PM&C public fuel supply - ships on water to Australia
@@ -925,13 +1063,13 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW estimate using Kpler commodity terminal.
-    reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and should not be presented as individual tanker movement data.
+    reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and should not be presented as individual tanker movement data. Rechecked 2026-04-23; no public vessel identities, ETAs or stable CSV/JSON/XLSX endpoint were exposed.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
 
   - id: pmc_retail_stockouts
     human_name: PM&C public fuel supply - retail stock-outs
@@ -940,13 +1078,164 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-22
+    last_verified: 2026-04-23
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; retail stock-outs table provided by state and territory governments.
-    reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one.
+    reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one. Rechecked 2026-04-23; no live station-level outage API or stable CSV/JSON/XLSX endpoint was exposed.
     fetch: manual
-    used_by: [national_status]
+    used_by: [national_status, fuel_security]
+
+  - id: wa_fuel_security_stockouts
+    human_name: WA Government weekly fuel update - statewide stockouts
+    publisher: Government of Western Australia
+    url: https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update
+    canonical_url: https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update
+    format: HTML_TABLE
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: Government of Western Australia copyright; WA.gov.au terms of use apply
+    rights_url: https://www.wa.gov.au/terms-of-use
+    citation: Government of Western Australia, WA Government Weekly Fuel Update.
+    reuse_notes: Hand-key the statewide stockout count and statewide station denominator from the official weekly update. This is WA-only dated partial coverage; it is not a national live outage feed, station-level availability feed, product-specific split, or terminal-stock measure.
+    fetch: manual
+    used_by: [fuel_security]
+
+  - id: qld_fuel_security_unavailable_reports
+    human_name: Queensland Fuel Price Reporting - unavailable fuel reports
+    publisher: Queensland Government Open Data
+    url: https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026
+    canonical_url: https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026
+    fetch_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
+    qld_ckan_base: https://www.data.qld.gov.au
+    qld_package_id: fuel-price-reporting-2026
+    qld_column_explanation_url: https://www.data.qld.gov.au/dataset/0dfad294-f852-45a5-b86f-986773745fe2/resource/2fc7161e-cf1f-4228-a1c7-141f0df99b4c/download/dataset-column-explanation-for-fuel-price-reporting.txt
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-23
+    rights: Creative Commons Attribution 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Queensland Government Open Data, Fuel Price Reporting 2026.
+    reuse_notes: Programmatic partial outage/availability signal. In the official column explanation, Price = 9999 denotes fuel stock temporarily unavailable, such as a tank empty and awaiting new stock. Use as monthly unavailable fuel-type report coverage only; do not describe as live station outage coverage, a complete current statewide stockout count, or national coverage.
+    fetch: programmatic
+    used_by: [fuel_security]
+
+  - id: fuel_security_petrol_days_remaining
+    human_name: Fuel security - petrol days remaining
+    publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: JSON
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
+    reuse_notes: Derived by selecting the petrol_days field from pmc_mso_days_cover. This is product-specific reshaping of the published table, not an independent stock or demand estimate.
+    fetch: derived
+    derived_from: pmc_mso_days_cover
+    derived_field: petrol_days
+    derived_label: Petrol
+    fetch_unit: days
+    used_by: [fuel_security]
+
+  - id: fuel_security_diesel_days_remaining
+    human_name: Fuel security - diesel days remaining
+    publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: JSON
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
+    reuse_notes: Derived by selecting the diesel_days field from pmc_mso_days_cover. This is product-specific reshaping of the published table, not an independent stock or demand estimate.
+    fetch: derived
+    derived_from: pmc_mso_days_cover
+    derived_field: diesel_days
+    derived_label: Diesel
+    fetch_unit: days
+    used_by: [fuel_security]
+
+  - id: fuel_security_jet_days_remaining
+    human_name: Fuel security - jet fuel days remaining
+    publisher: Fuel Resilience AU, derived from PM&C/DCCEEW public fuel supply
+    url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+    format: JSON
+    update_cadence: weekly
+    last_verified: 2026-04-23
+    rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
+    reuse_notes: Derived by selecting the jet_fuel_days field from pmc_mso_days_cover. This is product-specific reshaping of the published table, not an independent stock or demand estimate.
+    fetch: derived
+    derived_from: pmc_mso_days_cover
+    derived_field: jet_fuel_days
+    derived_label: Jet fuel
+    fetch_unit: days
+    used_by: [fuel_security]
+
+  - id: fuel_security_status_model
+    human_name: Fuel security status model
+    publisher: Fuel Resilience AU methodology
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU, Fuel security methodology.
+    reuse_notes: Fail-closed status model placeholder. Do not publish Stable/Tight/Disrupted/Critical until the methodology has enough observed coverage across days, stock, import, outage and disruption signals, and all blockers listed in data/manual/fuel_security_status_model.json are resolved.
+    fetch: unavailable
+    used_by: [fuel_security]
+
+  - id: fuel_security_live_station_outage_feed
+    human_name: Live national station outage feed
+    publisher: No public national feed currently loaded
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Not applicable; unavailable placeholder
+    rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    citation: Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.
+    reuse_notes: Do not imply live national station outage visibility. Use PM&C retail stock-outs for the dated partial public snapshot until a stable, licence-safe public feed exists. Rechecked 2026-04-23; no national live dry-station feed was verified.
+    fetch: unavailable
+    used_by: [fuel_security]
+
+  - id: fuel_security_live_vessel_tracking
+    human_name: Live shipment-level tanker tracking
+    publisher: No source-safe live vessel feed currently loaded
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Not applicable; unavailable placeholder
+    rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    citation: Fuel Resilience AU source review; PM&C aggregate ships-on-water counts remain the loaded partial public source.
+    reuse_notes: Do not scrape or infer live vessel movements. PM&C publishes aggregate tanker counts estimated by DCCEEW using Kpler; this repo does not publish individual vessel identities or ETAs. Rechecked 2026-04-23; no redistribution-safe live vessel feed was verified.
+    fetch: unavailable
+    used_by: [fuel_security]
+
+  - id: fuel_security_terminal_capacity
+    human_name: Terminal-level storage capacity
+    publisher: No defensible national terminal-capacity source currently loaded
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Not applicable; unavailable placeholder
+    rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
+    citation: Fuel Resilience AU source review; PM&C MSO reserve volumes and APS stock series remain the loaded public storage context.
+    reuse_notes: Do not fabricate terminal-by-terminal capacity. Publish only national/product stock context until a public, reusable terminal-capacity dataset is verified. Rechecked 2026-04-23; Geoscience Australia's National Liquid Fuel Terminals 2015 dataset is a location snapshot, not capacity or live inventory.
+    fetch: unavailable
+    used_by: [fuel_security]
 
   # =========================================================
   # RESOURCE VALUE - v1.5 (who captures oil and gas value)
@@ -965,7 +1254,7 @@ sources:
     citation: Australian Taxation Office, Company tax rates.
     reuse_notes: Policy-rate source only. The dashboard uses the full company tax rate as the headline and records the base-rate entity rate separately in structured extra fields. Do not treat this as tax actually paid by any oil or gas company.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_prrt_policy
     human_name: ATO Petroleum Resource Rent Tax policy
@@ -980,7 +1269,7 @@ sources:
     citation: Australian Taxation Office, Petroleum resource rent tax.
     reuse_notes: Policy-rate source only. PRRT is a profits-based tax on project taxable profit, not a royalty and not a gross export-value tax. Receipts and company/project-level liabilities require separate official data before display.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_resource_rent_tax_receipts_budget
     human_name: Australian Government Budget - resource rent tax receipts
@@ -996,7 +1285,7 @@ sources:
     citation: Australian Government, Budget Paper No. 1, Statement 4, Online Table 1, Australian Government cash receipts.
     reuse_notes: Budget Paper No. 1 labels this line as resource rent taxes. Use it as Commonwealth resource-rent receipt context only; do not describe it as project-level PRRT, company-level tax paid, or a leakage denominator.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_wa_petroleum_royalties
     human_name: WA petroleum royalties
@@ -1011,7 +1300,7 @@ sources:
     citation: Government of Western Australia, Petroleum royalties.
     reuse_notes: Explainer source for petroleum royalty mechanisms. The headline metric uses the Barrow Island Resource Rent Royalty rate; North West Shelf royalty rates and shares are stored as structured fields. This does not represent total royalty receipts.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_wa_petroleum_royalty_receipts
     human_name: WA petroleum royalty and North West Shelf grant receipts
@@ -1026,7 +1315,7 @@ sources:
     citation: Government of Western Australia, Overview of State Taxes and Royalties 2025-26, summary tables.
     reuse_notes: Receipt context only. The envelope sums WA petroleum state component royalties and North West Shelf grants, and explicitly excludes non-petroleum iron ore lease rentals shown near the same source table.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_qld_petroleum_royalty_receipts
     human_name: Queensland petroleum royalty receipts
@@ -1041,7 +1330,7 @@ sources:
     citation: Queensland Government, Budget Strategy and Outlook 2025-26, BP2 Revenue, Table 3.4 Royalty revenue.
     reuse_notes: Receipt context only. Table 3.4 reports petroleum royalties separately and notes that petroleum includes gas converted into LNG. Use actual-year rows for display; keep estimates and projections in typed extra fields.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_lng_export_value_req
     human_name: Resources and Energy Quarterly - LNG export earnings
@@ -1101,7 +1390,7 @@ sources:
     citation: "Geoscience Australia, Australia's Energy Commodity Resources 2025: Gas."
     reuse_notes: National gas origin and production context only. This source does not provide a complete state-by-state or project-by-project export-flow map for the dashboard.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_oil_origin_aecr
     human_name: Geoscience Australia AECR - oil production and exports
@@ -1116,7 +1405,7 @@ sources:
     citation: "Geoscience Australia, Australia's Energy Commodity Resources 2025: Oil."
     reuse_notes: National oil production, trade and basin context only. Production and export definitions differ between AECR calendar-year headline figures and Australian Energy Statistics financial-year flow figures; preserve both labels and do not combine them silently.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
 
   - id: resource_domestic_gas_prices_accc
     human_name: ACCC Gas Inquiry - domestic gas prices
@@ -1161,7 +1450,135 @@ sources:
     citation: Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics 2025, Tables I and Q.
     reuse_notes: Manual extract from AES Table I physical primary-fuel production and Table Q gas production by state/territory. Units differ by product; preserve units per field and do not combine oil, LPG and gas without a documented conversion method.
     fetch: manual
-    used_by: [resource_value]
+    used_by: [resource_value, state_contribution]
+
+  - id: state_resource_contribution_profiles
+    human_name: State petroleum ledger profiles
+    publisher: Fuel Resilience AU, compiled from official public sources
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU state petroleum ledger methodology; DCCEEW Australian Energy Statistics 2025; Geoscience Australia AECR 2025; NOPTA spatial data; WA and Queensland budget/royalty sources.
+    reuse_notes: Manual companion profile compiled only from loaded official source envelopes. Do not treat as a state-level federal tax allocation, complete infrastructure inventory, terminal-capacity dataset, project map or raw site count. NOPTA counts and refinery counts are separate object classes and must not be summed as a site total.
+    fetch: manual
+    used_by: [state_contribution]
+
+  - id: state_nsw_minerals_petroleum_royalty_context
+    human_name: NSW minerals and petroleum royalty context
+    publisher: NSW Resources
+    url: https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties
+    canonical_url: https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties
+    format: HTML_TABLE
+    update_cadence: annual
+    last_verified: 2026-04-23
+    rights: NSW Government copyright and website terms apply
+    rights_url: https://www.nsw.gov.au/copyright
+    citation: NSW Resources, Royalties page, checked 2026-04-23.
+    reuse_notes: Combined minerals-and-petroleum context only. Do not show as petroleum-only royalty receipts, and do not use as a state petroleum revenue denominator.
+    fetch: manual
+    used_by: [state_contribution]
+
+  - id: state_nt_mining_petroleum_royalty_context
+    human_name: Northern Territory mining and petroleum royalty context
+    publisher: Northern Territory Government
+    url: https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf
+    canonical_url: https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-23
+    rights: Northern Territory Government copyright and budget website terms apply
+    rights_url: https://nt.gov.au/page/copyright-disclaimer-and-privacy
+    citation: Northern Territory Government, Budget 2025-26 Budget Paper No. 2, taxation and royalty revenue sections.
+    reuse_notes: Combined mining-and-petroleum context only. Do not show as petroleum-only royalty receipts; preserve revised-budget and forecast caveats.
+    fetch: manual
+    used_by: [state_contribution]
+
+  - id: state_petroleum_ledger_source_gates
+    human_name: National petroleum ledger source gates
+    publisher: Fuel Resilience AU source review
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Project metadata/prose CC BY 4.0; upstream source rights remain with source publishers
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU petroleum ledger source-gate review, 2026-04-23.
+    reuse_notes: Gate/status metadata only. Do not convert blocked source gates into production, revenue, permit, terminal or outage values.
+    fetch: manual
+    used_by: [state_contribution, fuel_security]
+
+  - id: state_petroleum_nopta_counts
+    human_name: NOPTA petroleum title and well coverage counts
+    publisher: National Offshore Petroleum Titles Administrator
+    url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    canonical_url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    fetch_url: https://arcgis.nopta.gov.au/arcgis/rest/services/Public/TitlesCompany_NOPTA/FeatureServer/0/query
+    nopta_wells_query_url: https://arcgis.nopta.gov.au/arcgis/rest/services/Public/Petroleum_Wells/FeatureServer/0/query
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted
+    rights_url: https://www.nopta.gov.au/copyright.html
+    citation: NOPTA, Spatial data; Titles and Permits Current FeatureServer; Petroleum Wells FeatureServer.
+    reuse_notes: Programmatic counts from official NOPTA public ArcGIS REST endpoints. Count title/permit records, title types, status, and petroleum-wells layer records separately. Do not combine these into a generic site count, do not treat well-layer records as active or producing wells, and do not count Greenhouse Gas Assessment Permits as petroleum titles.
+    fetch: programmatic
+    used_by: [state_contribution]
+
+  - id: state_petroleum_production_licence_map
+    human_name: NOPTA active petroleum production licence map
+    publisher: National Offshore Petroleum Titles Administrator
+    url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    canonical_url: https://www.nopta.gov.au/maps-and-public-data/spatial-data.html
+    fetch_url: https://arcgis.nopta.gov.au/arcgis/rest/services/Public/TitlesCompany_NOPTA/FeatureServer/0/query
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Commonwealth copyright; NOPTA website material is CC BY 4.0 unless otherwise noted
+    rights_url: https://www.nopta.gov.au/copyright.html
+    citation: NOPTA, Spatial data; Titles and Permits Current FeatureServer.
+    reuse_notes: Programmatic active Production Licence rows from the official NOPTA public ArcGIS REST endpoint. Use only as offshore regulatory field/title/operator mapping. The layer does not publish production volumes, company tax, revenue, terminal capacity or complete onshore/state petroleum coverage.
+    fetch: programmatic
+    used_by: [state_contribution]
+
+  - id: state_oil_gas_major_projects_remp
+    human_name: Resources and Energy Major Projects - oil and gas project map
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
+    fetch_url: https://www.industry.gov.au/sites/default/files/2024-12/resources-and-energy-major-projects-2024-data.xlsx
+    check_url: https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024
+    check_required: false
+    fetch_user_agent: browser-compatible
+    remp_sheet: Oil & gas
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-23
+    rights: CC BY 4.0 except logos, third-party content, trademarks and otherwise-noted material
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Industry, Science and Resources, Commonwealth of Australia, Resources and Energy Major Projects 2024.
+    reuse_notes: Programmatic extract from the REMP 2024 data workbook, Oil & gas sheet. Use as major-project/development mapping only. Company names are publisher-supplied project company/proponent text, not necessarily legal operators. Annual Estimated New Capacity is not current production, and basin names are not published in the workbook. The refresh preflight checks the official publication page as a non-blocking source-health signal because Industry.gov.au can time out from GitHub-hosted runners; the generated data fetch still downloads the source workbook directly.
+    fetch: programmatic
+    used_by: [state_contribution]
+
+  - id: state_operating_refinery_counts
+    human_name: Operating refinery count by state
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty
+    canonical_url: https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-23
+    rights: Commonwealth copyright and DCCEEW website terms apply
+    rights_url: https://www.dcceew.gov.au/about/copyright
+    citation: Minister for Climate Change and Energy, Securing Australia's fuel sovereignty, 20 March 2026.
+    reuse_notes: Manual official count of the two operating Australian refineries named by the source as Viva in Geelong and Ampol in Brisbane. This is a facility count only; it is not refinery throughput, capacity, uptime or utilisation.
+    fetch: manual
+    used_by: [state_contribution, fuel_security]
 
   - id: resource_norway_petroleum_tax_model
     human_name: Norwegian petroleum tax system
@@ -1249,7 +1666,7 @@ sources:
     canonical_url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-30
     rights: Company copyright
     rights_url: https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports
     citation: ExxonMobil Australia annual report and financial statements.
@@ -1264,7 +1681,7 @@ sources:
     canonical_url: https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-30
     rights: Company copyright
     rights_url: https://australia.chevron.com/
     citation: Chevron Australia Holdings Pty Ltd Tax Transparency Report, year ended 31 December 2024.
@@ -1279,7 +1696,7 @@ sources:
     canonical_url: https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.vivaenergy.com.au/investors/financial-results-reports
     citation: Viva Energy Group annual report.
@@ -1294,7 +1711,7 @@ sources:
     canonical_url: https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations
     citation: Ampol annual report.
@@ -1309,7 +1726,7 @@ sources:
     canonical_url: https://www.bp.com/en_au/australia.html
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.bp.com/en_au/australia.html
     citation: BP Australia annual financial statements.
@@ -1324,7 +1741,7 @@ sources:
     canonical_url: https://www.shell.com.au/about-us.html
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-15
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.shell.com.au/about-us.html
     citation: Shell Australia financial statements.
@@ -1339,7 +1756,7 @@ sources:
     canonical_url: https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.woodside.com/investors/reports-investor-briefings
     citation: Woodside Energy annual report.
@@ -1354,10 +1771,1057 @@ sources:
     canonical_url: https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf
     format: PDF
     update_cadence: annual
-    last_verified: 2026-04-22
+    last_verified: 2026-04-28
     rights: Company copyright
     rights_url: https://www.santos.com/investors/results-reports-and-presentations/
     citation: Santos annual report.
     reuse_notes: Cite report year/page; do not republish beyond extracted factual values without checking company terms.
     fetch: manual
     used_by: [who_pays_what]
+
+  - id: ato_prrt_details
+    human_name: ATO Corporate Tax Transparency - PRRT details (latest year)
+    publisher: Australian Taxation Office
+    url: https://data.gov.au/data/dataset/corporate-transparency
+    canonical_url: https://data.gov.au/data/dataset/corporate-transparency
+    fetch_url: https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26/resource/491b366b-aa6f-4b1c-b39d-cebaeeb6f874/download/2023-24-corporate-report-of-entity-tax-information.xlsx
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 3.0 AU (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/3.0/au/
+    citation: Australian Taxation Office, Corporate Tax Transparency Report - PRRT details sheet.
+    reuse_notes: PRRT (Petroleum Resource Rent Tax) is a profits-based Commonwealth tax on petroleum project taxable profits. The ATO 2023-24 release lists 16 entities that paid PRRT with the entity name, ABN and PRRT payable in AUD on the PRRT details sheet of the same XLSX file as the income tax details. Per-corporate-group totals on the who-pays-what page are computed by summing the PRRT-paying subsidiaries documented in extra.fields.prrt_subsidiaries on each company envelope.
+    fetch: manual
+    used_by: [who_pays_what, resource_value]
+
+  - id: australia_institute_gas_export_tax_proposal
+    human_name: The Australia Institute - 25% gas export tax proposal (Denniss & Saunders, Mar 2026)
+    publisher: The Australia Institute
+    url: https://australiainstitute.org.au/research/
+    canonical_url: https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (The Australia Institute, where stated)
+    rights_url: https://australiainstitute.org.au/
+    citation: The Australia Institute, gas export tax / Petroleum Resource Rent Tax reform analysis.
+    reuse_notes: The Australia Institute periodically argues for a Commonwealth-level gas export tax (the most-cited proposal is a 25 per cent tax on the gross value of gas exports, modelled on Norway's offshore tax base) as an alternative to PRRT. The proposed rate, modelled revenue and policy mechanism vary by report year; only hand-key headline figures from a named, dated Australia Institute publication. Do not present this as an Australian government policy.
+    fetch: manual
+    used_by: [who_pays_what, resource_value]
+
+  - id: australia_institute_gas_giveaway_analysis
+    human_name: The Australia Institute - Taxing gas in Australia and Japan (Denniss, Campbell & Saunders, Apr 2026)
+    publisher: The Australia Institute
+    url: https://australiainstitute.org.au/research/
+    canonical_url: https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (The Australia Institute, where stated)
+    rights_url: https://australiainstitute.org.au/
+    citation: The Australia Institute, Australian LNG export royalty analysis.
+    reuse_notes: The Australia Institute publishes ad-hoc analyses comparing the price Australian LNG producers receive for exported gas with the price Japanese and other importers resell or trade Australian gas at, and the implied loss to Australian government revenue under different fiscal regimes. Only hand-key headline figures from a named, dated Australia Institute publication. Numbers vary across publications and over time; use only with the report-year and page reference cited.
+    fetch: manual
+    used_by: [who_pays_what, resource_value]
+
+  # =========================================================
+  # AU ECONOMICS - v1.0 (RBA, AOFM, ABS macro indicators)
+  # =========================================================
+
+  - id: rba_cash_rate
+    human_name: RBA Cash Rate Target (F1.1)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/cash-rate/
+    fetch_url: https://www.rba.gov.au/statistics/tables/csv/f1.1-data.csv
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-29
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table F1.1 (Cash Rate Target).
+    reuse_notes: RBA publishes the cash-rate target series as a CSV. Pick the column whose Title contains "Cash Rate Target". RBA table dates may appear as DD/MM/YYYY or DD-MMM-YYYY; aggregate daily observations to monthly mean.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: rba_household_debt_to_income
+    human_name: RBA Household Finances - Debt to disposable income (E2)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/tables/#household
+    fetch_url: https://www.rba.gov.au/statistics/tables/csv/e2-data.csv
+    format: CSV
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table E2 (Selected Household Finances Ratios).
+    reuse_notes: RBA Table E2 publishes selected household finance ratios quarterly. The Title row column to pick is "Household debt to income" (Description row clarifies "Ratio of household debt to annualised household disposable income"). RBA table dates may appear as DD/MM/YYYY or DD-MMM-YYYY; use quarter-end dates only.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: rba_standard_variable_mortgage_rate
+    human_name: RBA standard variable owner-occupier home loan rate (F5)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/tables/#interest-rates
+    fetch_url: https://www.rba.gov.au/statistics/tables/csv/f5-data.csv
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-29
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table F5 (Indicator Lending Rates).
+    reuse_notes: RBA Table F5 publishes indicator lending rates. Pick the Title row column "Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier" and treat it as a monthly percentage-per-annum indicator rate.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: rba_credit_card_debt_accruing_interest
+    human_name: RBA credit card balances accruing interest (C1.1)
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/tables/#credit-cards
+    fetch_url: https://www.rba.gov.au/statistics/tables/csv/c1.1-aggregate.csv
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-29
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Statistical Table C1.1 (Credit and Charge Card Statistics - Original).
+    reuse_notes: RBA Table C1.1 aggregate CSV publishes "Balances accruing interest" with series ID CCCCSBAI. Values are monthly AUD millions for larger Australian card issuers; preserve that boundary note.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: aofm_gov_gross_debt
+    human_name: AOFM Australian Government Securities outstanding
+    publisher: Australian Office of Financial Management
+    url: https://www.aofm.gov.au/data-hub
+    canonical_url: https://www.aofm.gov.au/data-hub
+    fetch_url: https://www.aofm.gov.au/sites/default/files/2025-05-29/stock_ags.csv
+    format: CSV
+    update_cadence: annual
+    last_verified: 2026-04-29
+    rights: CC BY 3.0 AU (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/3.0/au/
+    citation: Australian Office of Financial Management, Australian Government Securities Outstanding.
+    reuse_notes: AOFM publishes stock_ags.csv on its data hub with financial-year Australian Government Securities face value in AUD billions. Use this annual stock series for the public dashboard. Do not treat it as Commonwealth general government gross debt in Budget Papers. Kept manual in this pass because repeated AOFM read timeouts made programmatic fetching unstable.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: state_government_debt_summary
+    human_name: State and territory government net debt (Treasury budget papers)
+    publisher: State and territory Treasury departments
+    url: https://www.budget.gov.au/
+    canonical_url: https://www.budget.gov.au/
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: State and territory budget papers (Budget Paper 2 fiscal aggregates).
+    reuse_notes: Each state and territory publishes general government net debt in its annual budget papers (typically Budget Paper 2 or Budget Statement 1). No single Commonwealth dataset consolidates these on a comparable basis. Hand-key per jurisdiction once a year from named budget paper page references.
+    fetch: manual
+    used_by: [au_economics]
+
+  - id: abs_gdp_real_growth
+    human_name: ABS National Accounts - real GDP growth, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    canonical_url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    fetch_url: https://data.api.abs.gov.au/rest/data/ANA_AGG/M2.GPM.20.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: ANA_AGG
+    fetch_key: M2.GPM.20.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS ANA_AGG dataflow MEASURE M2 (Chain volume measures - Percentage changes), DATA_ITEM GPM (Gross domestic product), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns the seasonally adjusted percentage change in real GDP, quarter on quarter.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0), seasonally adjusted real GDP percentage change.
+    reuse_notes: Fetched from the live ABS Data API ANA_AGG dataflow. Returns seasonally adjusted quarter-on-quarter percentage change in real GDP (chain volume measure).
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: abs_unemployment_rate
+    human_name: ABS Labour Force - unemployment rate, monthly seasonally adjusted
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/LF/M13.3.1599.20.AUS.M?format=jsondata&startPeriod=2020-01
+    fetch_dataflow: LF
+    fetch_key: M13.3.1599.20.AUS.M
+    fetch_start_period: 2020-01
+    sdmx_note_suffix: ABS LF dataflow MEASURE M13 (Unemployment rate), SEX 3 (Persons), AGE 1599 (Total), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ M. Returns the headline national monthly unemployment rate, seasonally adjusted.
+    format: JSON
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), seasonally adjusted unemployment rate.
+    reuse_notes: Fetched from the live ABS Data API LF dataflow. Returns the seasonally adjusted national headline unemployment rate, monthly.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: abs_cpi_inflation
+    human_name: ABS Consumer Price Index - all groups annual change, monthly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia
+    canonical_url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/CPI/3.10001.10.50.M?format=jsondata&startPeriod=2020-01
+    fetch_dataflow: CPI
+    fetch_key: 3.10001.10.50.M
+    fetch_start_period: 2020-01
+    sdmx_note_suffix: ABS CPI dataflow MEASURE 3 (Percentage change from previous year), INDEX 10001 (All groups CPI), TSEST 10 (Original), REGION 50 (Australia weighted average of eight capital cities), FREQ M. Returns the headline all-groups annual percentage change, monthly.
+    format: JSON
+    update_cadence: monthly
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Consumer Price Index Australia (Cat. 6401.0), all-groups annual percentage change.
+    reuse_notes: Fetched from the live ABS Data API CPI dataflow. Returns the headline all-groups annual CPI percentage change for the Australia weighted average of eight capital cities, now published monthly.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  # =========================================================
+  # MANUFACTURING - v1.0 (what gets made in Australia)
+  # =========================================================
+
+  - id: abs_manufacturing_gdp_share
+    human_name: ABS Manufacturing share of GDP, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    canonical_url: https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Australian National Accounts - industry gross value added (Cat. 5206.0).
+    reuse_notes: ABS publishes industry gross value added (chain volume measure) by ANZSIC industry division in the quarterly National Accounts. Manufacturing is ANZSIC division C. Compute share as manufacturing GVA divided by total industry GVA only after the exact table/API mapping is verified. This source remains manual/unavailable in pass 1.
+    fetch: manual
+    used_by: [manufacturing]
+
+  - id: abs_manufacturing_employment
+    human_name: ABS Manufacturing employment, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), employed persons by industry.
+    reuse_notes: Programmatically fetched from the latest Labour Force Australia Detailed XLSX download, Table 04, using the seasonally adjusted Manufacturing employed total series (ANZSIC division C). Values are in thousands of persons.
+    fetch: programmatic
+    fetch_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed/latest-release
+    fetch_xlsx_label_contains:
+      - Table 04
+      - Industry division of main job
+    fetch_series_descriptions:
+      - "Manufacturing ;  Employed total ;"
+    fetch_series_type: Seasonally Adjusted
+    fetch_unit: thousand persons
+    fetch_round_digits: 1
+    fetch_trim_observations: 60
+    fetch_notes: "Fetched from ABS Labour Force Australia Detailed latest-release XLSX Table 04. Series is Manufacturing employed total, seasonally adjusted, ANZSIC division C; values are thousands of persons and are trimmed to the last 60 quarterly observations."
+    used_by: [manufacturing]
+
+  - id: abs_manufacturing_output_index
+    human_name: ABS Manufacturing sales, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia
+    canonical_url: https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), income from sales of goods and services by industry.
+    reuse_notes: Programmatically fetched from the latest Business Indicators Australia XLSX download, Table 4. Uses the seasonally adjusted Manufacturing income from sales of goods and services, chain volume measures series. This is a sales/output proxy, not a production index.
+    fetch: programmatic
+    fetch_url: https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia/latest-release
+    fetch_xlsx_label_contains:
+      - Table 4
+      - Income from sales of goods and services, chain volume measures
+    fetch_series_descriptions:
+      - "Sales ;  Total (State) ;  Manufacturing ;  Chain Volume Measures ;"
+    fetch_series_type: Seasonally Adjusted
+    fetch_unit: chain volume $m
+    fetch_round_digits: 0
+    fetch_trim_observations: 60
+    fetch_notes: "Fetched from ABS Business Indicators Australia latest-release XLSX Table 4. Series is Manufacturing income from sales of goods and services, chain volume measures, seasonally adjusted; values are chain volume dollars in millions and are trimmed to the last 60 quarterly observations."
+    used_by: [manufacturing]
+
+  - id: abs_manufactured_exports_total
+    human_name: ABS International Trade - manufactured exports (SITC 5-8), monthly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    canonical_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, International Trade in Goods, SITC 5-8 manufactured exports.
+    reuse_notes: Programmatically fetched from the latest International Trade in Goods XLSX download, Table 12a. Sum SITC sections 5, 6, 7 and 8. ABS workbook values are already in AUD millions; do not treat them as thousands.
+    fetch: programmatic
+    fetch_url: https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/latest-release
+    fetch_xlsx_label_contains:
+      - Table 12a
+      - Merchandise exports, standard international trade classification
+    fetch_series_descriptions:
+      - "5 Chemicals and related products"
+      - "6 Manufactured goods classified chiefly by material"
+      - "7 Machinery and transport equipment"
+      - "8 Miscellaneous manufactured articles"
+    fetch_series_type: Original
+    fetch_unit: AUD millions
+    fetch_round_digits: 0
+    fetch_trim_observations: 60
+    fetch_notes: "Fetched from ABS International Trade in Goods latest-release XLSX Table 12a. Value is the monthly sum of original FOB export values for SITC sections 5, 6, 7 and 8. ABS workbook values are AUD millions and are trimmed to the last 60 monthly observations."
+    used_by: [manufacturing]
+
+  - id: abs_manufacturing_capex
+    human_name: ABS Private new capital expenditure - manufacturing, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia
+    canonical_url: https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing industry.
+    reuse_notes: Programmatically fetched from the latest Private New Capital Expenditure XLSX download, Table 4. Uses actual total private new capital expenditure for Manufacturing, current prices, seasonally adjusted.
+    fetch: programmatic
+    fetch_url: https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia/latest-release
+    fetch_xlsx_label_contains:
+      - Table 4
+      - Actual Expenditure, by Type of Asset and Industry, Seasonally Adjusted
+    fetch_series_descriptions:
+      - "Actual Expenditure ;  Total (State) ;  Total (Type of Asset - Detailed Level) ;  Current Price ;  Manufacturing ;"
+    fetch_series_type: Seasonally Adjusted
+    fetch_unit: AUD millions
+    fetch_round_digits: 0
+    fetch_trim_observations: 60
+    fetch_notes: "Fetched from ABS Private New Capital Expenditure and Expected Expenditure latest-release XLSX Table 4. Series is actual total private new capital expenditure for Manufacturing, current prices, seasonally adjusted; values are AUD millions and are trimmed to the last 60 quarterly observations."
+    used_by: [manufacturing]
+
+  - id: abs_food_beverage_employment
+    human_name: ABS Food and beverage manufacturing employment, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia Detailed (Cat. 6291.0.55.001), food product manufacturing (ANZSIC 11) and beverage and tobacco product manufacturing (ANZSIC 12).
+    reuse_notes: Programmatically fetched from the latest Labour Force Australia Detailed XLSX download, Table 06, by summing original employed-persons series for Food Product Manufacturing (ANZSIC 11) and Beverage and Tobacco Product Manufacturing (ANZSIC 12). Values are in thousands of persons.
+    fetch: programmatic
+    fetch_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed/latest-release
+    fetch_xlsx_label_contains:
+      - Table 06
+      - Industry sub-division
+    fetch_series_descriptions:
+      - "Food Product Manufacturing ;  Employed total ;  Persons ;"
+      - "Beverage and Tobacco Product Manufacturing ;  Employed total ;  Persons ;"
+    fetch_series_type: Original
+    fetch_unit: thousand persons
+    fetch_round_digits: 1
+    fetch_trim_observations: 60
+    fetch_notes: "Fetched from ABS Labour Force Australia Detailed latest-release XLSX Table 06. Value is the sum of original employed-persons series for Food Product Manufacturing (ANZSIC 11) and Beverage and Tobacco Product Manufacturing (ANZSIC 12); values are thousands of persons and are trimmed to the last 60 quarterly observations."
+    used_by: [manufacturing]
+
+  # =========================================================
+  # INFRASTRUCTURE - v1.0 (population, housing, transport, digital)
+  # =========================================================
+
+  - id: abs_population_quarterly
+    human_name: ABS Estimated Resident Population - Australia, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    canonical_url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    fetch_url: https://data.api.abs.gov.au/rest/data/ERP_Q/1.3.TOT.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: ERP_Q
+    fetch_key: 1.3.TOT.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS ERP_Q dataflow MEASURE 1 (Estimated Resident Population), SEX 3 (Persons), AGE TOT (All ages), REGION AUS (Australia), FREQ Q. Quarterly headline national population estimate.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), Estimated Resident Population.
+    reuse_notes: Fetched from the live ABS Data API ERP_Q dataflow. Returns the headline quarterly national ERP, all ages, both sexes.
+    fetch: programmatic
+    used_by: [infrastructure]
+
+  - id: abs_population_growth_rate
+    human_name: ABS population growth rate - Australia, year-on-year %, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    canonical_url: https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population
+    fetch_url: https://data.api.abs.gov.au/rest/data/ERP_Q/3.3.TOT.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: ERP_Q
+    fetch_key: 3.3.TOT.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS ERP_Q dataflow MEASURE 3 (ERP Percentage Change Over Previous Year), SEX 3, AGE TOT, REGION AUS, FREQ Q. Year-on-year national population growth rate.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), ERP percentage change over previous year.
+    reuse_notes: Fetched from the live ABS Data API ERP_Q dataflow. Year-on-year national population growth rate, both sexes, all ages.
+    fetch: programmatic
+    used_by: [infrastructure]
+
+  - id: abs_residential_dwelling_stock
+    human_name: ABS residential dwelling stock - Australia, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings
+    canonical_url: https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings
+    fetch_url: https://data.api.abs.gov.au/rest/data/RES_DWELL_ST/4.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: RES_DWELL_ST
+    fetch_key: 4.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS RES_DWELL_ST dataflow MEASURE 4 (Number of residential dwellings), REGION AUS, FREQ Q. Total residential dwelling count, in thousands.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Total Value of Dwellings (Cat. 6432.0), number of residential dwellings.
+    reuse_notes: Fetched from the live ABS Data API RES_DWELL_ST dataflow. Returns the national count of residential dwellings, in thousands.
+    fetch: programmatic
+    used_by: [infrastructure]
+
+  - id: nhsac_housing_target_progress
+    human_name: NHSAC Quarterly Report - National Housing Accord progress
+    publisher: National Housing Supply and Affordability Council
+    url: https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026
+    canonical_url: https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026
+    format: HTML_TABLE
+    update_cadence: annual
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: National Housing Supply and Affordability Council, Quarterly Report - March 2026.
+    reuse_notes: Hand-key Australia's share of the 1.2 million Accord target built to date from the NHSAC Quarterly Report. The loaded row uses the March 2026 report's 18% national share built to date and 219,000 completions over the first five Accord quarters; do not substitute forecasts for actual completions.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: bitre_public_transport_patronage
+    human_name: BITRE Yearbook 2025 - public transport patronage by capital city
+    publisher: Bureau of Infrastructure and Transport Research Economics
+    url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers
+    canonical_url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, passenger tables.
+    reuse_notes: Hand-key the Australian capital cities total from BITRE Yearbook 2025 Table 2.5i. The loaded value is 2024-25 capital-city public transport patronage in million passenger trips, with city and mode breakdowns in extra fields; it is not all Australian passenger travel.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: bitre_airport_passenger_movements
+    human_name: BITRE Airport Traffic Data - capital city airport passenger movements
+    publisher: Bureau of Infrastructure and Transport Research Economics
+    url: https://www.bitre.gov.au/publications/ongoing/airport_traffic_data
+    canonical_url: https://www.bitre.gov.au/publications/ongoing/airport_traffic_data
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data 1985-86 to 2024-25.
+    reuse_notes: Hand-key the annual financial-year workbook total revenue passenger movements for the eight capital city airports. The loaded value is 2024-25 annual movements and excludes non-capital airports; do not describe it as a monthly national total.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: bitre_freight_volumes
+    human_name: BITRE Yearbook 2025 - domestic freight task by mode
+    publisher: Bureau of Infrastructure and Transport Research Economics
+    url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight
+    canonical_url: https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight
+    format: XLSX
+    update_cadence: annual
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, freight tables.
+    reuse_notes: Hand-key the domestic freight task from BITRE Yearbook 2025 Table 1.1c. The loaded value is 2024-25 total bulk and non-bulk domestic freight in billion tonne-kilometres; do not mix it with tonnes or international freight.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: infrastructure_australia_priority_list
+    human_name: Infrastructure Australia - 2026 Infrastructure Priority List
+    publisher: Infrastructure Australia
+    url: https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list
+    canonical_url: https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list
+    format: HTML_TABLE
+    update_cadence: annual
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Infrastructure Australia, 2026 Infrastructure Priority List.
+    reuse_notes: Infrastructure Australia publishes the 2026 Priority List overview publicly, but the proposal search is rendered dynamically. Keep this envelope unavailable until a clean extractable count and any capital-cost field are verified from the official site or publication; do not estimate from page navigation or blocked AJAX output.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: accc_nbn_broadband_speeds
+    human_name: ACCC Measuring Broadband Australia Report 32 - busy-hour download performance
+    publisher: Australian Competition and Consumer Commission
+    url: https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report
+    canonical_url: https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-30
+    rights: CC BY 3.0 AU (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/3.0/au/
+    citation: Australian Competition and Consumer Commission, Measuring Broadband Australia Report 32, April 2026.
+    reuse_notes: Hand-key the ACCC Report 32 state/territory range for average NBN fixed-line download performance during busy hours, expressed as percentage of plan speed. The loaded row is not a median Mbps speed and should not be described as one.
+    fetch: manual
+    used_by: [infrastructure]
+
+  - id: au_data_centre_capacity_register
+    human_name: Australian data centre capacity register
+    publisher: No canonical public Australian government register identified
+    url: ""
+    canonical_url: ""
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-30
+    rights: Unavailable - no canonical public source identified
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: No canonical Australian government register of data centre capacity exists; industry datasets such as DCD or 451 Research are gated.
+    reuse_notes: There is no public Australian government register of data centre capacity, MW load, or AI-cluster capacity comparable to the AEMO Generation Information register. Industry sources (Datacentre Dynamics, 451 Research, Synergy Research) are gated and do not consistently publish per-site MW figures with reuse rights. Keep this envelope intentionally unavailable until a verifiable named public source publishes a register; do not estimate.
+    fetch: unavailable
+    used_by: [infrastructure]
+
+  - id: doe_industry_growth_centres_summary
+    human_name: Australian Government Industry Growth Centres Initiative - summary
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/
+    canonical_url: https://www.industry.gov.au/
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-27
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Industry, Science and Resources, manufacturing industry profiles.
+    reuse_notes: The Department of Industry publishes named manufacturing capability profiles ad-hoc. Hand-key only verified factual headcounts and revenue values from named publications, never aggregated estimates.
+    fetch: manual
+    used_by: [manufacturing]
+
+  # =========================================================
+  # POWER GRID - v1.0 (AEMO NEM, AER, CER, DCCEEW)
+  # =========================================================
+
+  - id: aemo_nem_average_wholesale_price
+    human_name: AEMO NEM regional wholesale price (RRP), monthly mean
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data
+    fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
+    check_url: https://aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_202603_NSW1.csv
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-29
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
+    reuse_notes: AEMO publishes 5-minute interval price (RRP, AUD per MWh) and demand (MW) per NEM region (NSW1, VIC1, QLD1, SA1, TAS1) at the static URL pattern aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv. The fetcher pulls the last several full months across all five regions, averages RRP across all 5-minute TRADE intervals to a monthly mean per region, then computes a NEM-wide mean of region means. Per-region latest-month values are kept in extra.fields.
+    fetch: programmatic
+    used_by: [power_grid]
+
+  - id: aemo_nem_total_demand
+    human_name: AEMO NEM total operational demand, monthly mean MW
+    publisher: Australian Energy Market Operator
+    url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem
+    canonical_url: https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data
+    fetch_url: https://aemo.com.au/aemo/data/nem/priceanddemand/
+    check_url: https://aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_202603_NSW1.csv
+    format: CSV
+    update_cadence: monthly
+    last_verified: 2026-04-29
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
+    reuse_notes: Same source files as aemo_nem_average_wholesale_price. The fetcher averages TOTALDEMAND (MW) across all 5-minute TRADE intervals to a monthly mean per region, then sums region means to a NEM-wide monthly mean total operational demand. Per-region latest-month values are kept in extra.fields.
+    fetch: programmatic
+    used_by: [power_grid]
+
+  - id: aemo_nem_fuel_mix
+    human_name: AEMO NEM generation fuel mix (% by source)
+    publisher: Australian Energy Market Operator
+    url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    canonical_url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, Table 3 NEM supply mix contribution by fuel type.
+    reuse_notes: AEMO Quarterly Energy Dynamics Q4 2025 Table 3 publishes the NEM supply mix contribution by fuel type for Q4 2025. The dashboard headline records the renewable-plus-battery share and keeps black coal, brown coal, gas and other shares separated in typed extra fields. This remains manual because no stable dashboard-safe aggregate fuel-mix endpoint is wired.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_generation_information_register
+    human_name: AEMO Generation Information register - capacity by fuel type
+    publisher: Australian Energy Market Operator
+    url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    canonical_url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Generation Information.
+    reuse_notes: AEMO publishes a NEM Generation Information workbook listing existing and new-development generation rows. January 2026 Summary sheet totals are hand-keyed as listed nameplate capacity across existing, committed, anticipated and publicly announced rows. This is not available capacity, reliability, dispatchability or a construction guarantee.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_coal_retirement_timeline
+    human_name: AEMO scheduled and announced coal generator retirement timeline
+    publisher: Australian Energy Market Operator
+    url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    canonical_url: https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information
+    format: XLSX
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, NEM Generation Information - expected closure year column.
+    reuse_notes: Derived from the January 2026 NEM Generation Information workbook and the Generating Unit Expected Closure Year workbook. The headline is coal capacity with an explicit closure date only; coal units with an expected closure year but no explicit closure date remain separate in typed extra fields and notes.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: cer_renewable_energy_target_progress
+    human_name: CER Renewable Energy Target progress, annual
+    publisher: Clean Energy Regulator
+    url: https://cer.gov.au/document/renewable-energy-target-administrative-report-2024
+    canonical_url: https://cer.gov.au/document/renewable-energy-target-administrative-report-2024
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Clean Energy Regulator, Renewable Energy Target Administrative Report 2024.
+    reuse_notes: The Clean Energy Regulator's 2024 RET Administrative Report publishes 2024 NEM+SWIS renewable generation share, renewable generation, capacity added and RET emissions-reduction context. The dashboard headline records the NEM+SWIS renewable generation share; it is not an LRET compliance percentage.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: dcceew_electricity_emissions
+    human_name: DCCEEW national greenhouse accounts - electricity sector emissions
+    publisher: Department of Climate Change, Energy, the Environment and Water
+    url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025
+    canonical_url: https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: CC BY 4.0 (Commonwealth of Australia)
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Department of Climate Change, Energy, the Environment and Water, Quarterly Update of Australia's National Greenhouse Gas Inventory, September 2025.
+    reuse_notes: DCCEEW's September 2025 quarterly update Table 3 publishes actual annual emissions by sector for the year to September 2025. The dashboard headline records the Energy - Electricity annual value and keeps the previous-year and change fields separated. It is not a single-quarter emissions value.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_2024_isp_summary
+    human_name: AEMO Integrated System Plan - headline forecasts
+    publisher: Australian Energy Market Operator
+    url: https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp
+    canonical_url: https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, 2024 Integrated System Plan for the National Electricity Market.
+    reuse_notes: The AEMO 2024 ISP states that around 10,000 km of transmission will be needed by 2050 under Step Change and Progressive Change scenarios, with around 5,000 km in the next decade. The dashboard records this rounded planning headline only; it is not current built transmission.
+    fetch: manual
+    used_by: [power_grid]
+
+  - id: aemo_wem_summary
+    human_name: AEMO Western Australian Wholesale Electricity Market - capacity and price
+    publisher: Australian Energy Market Operator
+    url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    canonical_url: https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed
+    format: PDF
+    update_cadence: quarterly
+    last_verified: 2026-04-29
+    rights: AEMO terms of use for tabular data
+    rights_url: https://aemo.com.au/privacy-and-legal-notices/copyright-permissions
+    citation: Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, WEM market dynamics.
+    reuse_notes: Western Australia operates a separate Wholesale Electricity Market (WEM) and is not part of the NEM. AEMO Quarterly Energy Dynamics Q4 2025 publishes the average WEM energy price and other WEM market-dynamics fields; the dashboard records the quarterly price headline.
+    fetch: manual
+    used_by: [power_grid]
+
+  # =========================================================
+  # STRATEGIC RESOURCES - first-pass critical minerals surface
+  # =========================================================
+
+  - id: strategic_resources_profiles
+    human_name: Strategic resources compiled profiles
+    publisher: Fuel Resilience AU, compiled from named public sources
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU strategic resources methodology; Department of Industry, Science and Resources; Geoscience Australia.
+    reuse_notes: Manual compiled profile envelope. It references official source envelopes for production, export, reserve/resource, state-footprint and strategic-role fields. Do not add values here unless a named source envelope supports the exact metric, period and unit.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_req_dec2025
+    human_name: Resources and Energy Quarterly December 2025 - strategic resource exports
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    canonical_url: https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
+    format: XLSX
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Commonwealth copyright; DISR copyright terms apply
+    rights_url: https://www.industry.gov.au/about-us/copyright
+    citation: "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025, forecast data workbook and publication page."
+    reuse_notes: Manual extract from the official December 2025 REQ publication and forecast data workbook. Export value and export volume rows are kept separate, preserve nominal/current-dollar notes, and must not be added to production or reserve/resource rows.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_aimr_2025
+    human_name: Geoscience Australia AIMR 2025 preliminary tables
+    publisher: Geoscience Australia
+    url: https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables
+    canonical_url: https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables
+    format: HTML_TABLE
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia) where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Geoscience Australia, Australia's Identified Mineral Resources 2025 preliminary tables.
+    reuse_notes: Manual extract from Table 1 for selected operating-mine production, Ore Reserves, Measured and Indicated Mineral Resources, Inferred Mineral Resources, reserve life and resource life. Units differ by commodity and must remain attached to each row.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_operating_mines_2024
+    human_name: Australian Operating Mines Map 2024 feature layer
+    publisher: Geoscience Australia / Digital Atlas of Australia
+    url: https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer
+    canonical_url: https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer
+    format: JSON
+    update_cadence: annual
+    last_verified: 2026-04-28
+    rights: CC BY 4.0 (Commonwealth of Australia / Geoscience Australia) where stated in item metadata
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Commonwealth of Australia (Geoscience Australia), Australian Operating Mines Map 2024, hosted through the Digital Atlas of Australia.
+    reuse_notes: Manual summary from the public ArcGIS FeatureServer and data.gov.au metadata. Counts are feature rows by commodity group, state and status as at December 2024. They are not mine production volumes, reserve estimates or export-value allocations by state.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_critical_minerals_context
+    human_name: Australian critical minerals and strategic materials context
+    publisher: Department of Industry, Science and Resources
+    url: https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list
+    canonical_url: https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list
+    format: HTML_TABLE
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Commonwealth copyright; DISR copyright terms apply
+    rights_url: https://www.industry.gov.au/about-us/copyright
+    citation: Department of Industry, Science and Resources, Australia's Critical Minerals List and Strategic Materials List; Critical minerals sector page; Critical Minerals Strategic Reserve page.
+    reuse_notes: Manual qualitative source for strategic role labels. It supports why critical minerals and strategic materials matter for net zero, advanced manufacturing, defence technologies and broader strategic applications. It does not provide a production, export or reserve metric for every resource.
+    fetch: manual
+    used_by: [strategic_resources]
+
+  - id: strategic_resources_sulphur_gap
+    human_name: Strategic resources sulphur source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-28
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU strategic resources source audit, sulphur source gate.
+    reuse_notes: Deliberate unavailable placeholder. Add sulphur or sulfur only if an official/public source publishes a national production, export, reserve/resource or industrial-use metric with clear unit, date and reuse terms.
+    fetch: unavailable
+    used_by: [strategic_resources]
+
+  # =========================================================
+  # DEFENCE, ALLIANCES AND STRATEGIC POSTURE - public source surface
+  # =========================================================
+
+  - id: defence_posture_profiles
+    human_name: Defence alliances and strategic posture compiled profiles
+    publisher: Fuel Resilience AU, compiled from named public sources
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU defence, alliances and strategic posture methodology; Department of Defence; DFAT; Office of National Intelligence; Australian Submarine Agency.
+    reuse_notes: Manual compiled profile envelope. It references official source envelopes for budget, workforce, public capability, alliance/framework, sovereign industry and readiness-boundary fields. Do not add values here unless a named source envelope supports the exact metric, period and unit.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_budget_2026_nds
+    human_name: 2026 National Defence Strategy budget factsheet
+    publisher: Department of Defence
+    url: https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf
+    canonical_url: https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, 2026 National Defence Strategy Budget Factsheet, April 2026.
+    reuse_notes: Manual extract from the official budget factsheet. Funding profile, planned expenditure, additional investment and capability-investment rows must stay separate and must not be converted into readiness, availability or deployability claims.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_workforce_annual_report_2024_25
+    human_name: Defence Annual Report 2024-25 workforce figures
+    publisher: Department of Defence
+    url: https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf
+    canonical_url: https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf
+    format: PDF
+    update_cadence: annual
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, Defence Annual Report 2024-25, workforce chapter and annual performance statements.
+    reuse_notes: Manual extract of workforce requirement and achievement rows. Workforce counts and reserve paid-service days are not deployable strength, combat readiness or operational availability.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_public_capability_assets
+    human_name: Selected public ADF capability and asset counts
+    publisher: Department of Defence, Royal Australian Navy, Royal Australian Air Force and Defence Ministers
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; service-specific website copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, Royal Australian Navy, Royal Australian Air Force and Defence Ministers public capability pages, as listed in the defence alliances source audit.
+    reuse_notes: Manual selected public counts and acquisition statuses only. The envelope is not exhaustive and must not be used to infer mission-capable rates, crewing, serviceability, stockpile sufficiency, basing posture or live operational availability.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_alliance_frameworks
+    human_name: Selected Australian defence alliance and strategic frameworks
+    publisher: DFAT, Defence, Office of National Intelligence and Australian Submarine Agency
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; upstream source rights remain with each publisher
+    rights_url: https://www.dfat.gov.au/about-us/copyright
+    citation: DFAT Australian Treaties Database and country/framework pages; Office of National Intelligence Five Eyes partners page; Australian Submarine Agency AUKUS pages.
+    reuse_notes: Manual framework profiles. Formal security treaties, intelligence partnerships, technology partnerships, diplomatic forums and ministerial consultations must stay separate and must not be collapsed into one alliance score.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_sovereign_industry_context
+    human_name: Defence sovereign industry and resilience context
+    publisher: Department of Defence and Australian Submarine Agency
+    url: https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities
+    canonical_url: https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence, Sovereign Defence Industrial Priorities; Guided Weapons and Explosive Ordnance Enterprise; Australian Submarine Agency industry pages.
+    reuse_notes: Manual official program context only. Do not infer private supply-chain capacity, classified industrial depth, munitions stockpile size or operational readiness from these program rows.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_uncrewed_systems
+    human_name: Australian Defence uncrewed systems and counter-drone public posture
+    publisher: Department of Defence and Australian Submarine Agency
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md
+    format: MIXED
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Commonwealth copyright; Defence copyright terms apply
+    rights_url: https://www.defence.gov.au/copyright
+    citation: Department of Defence project pages (AIR 7000 Phase 1B Triton; AIR 6014 Phase 1 MQ-28A Ghost Bat; LAND 129 Phase 3 Integrator; LAND 156 counter-small UAS); Department of Defence / Australian Submarine Agency Ghost Shark public announcements; Sovereign Defence Industrial Priorities; Defence Industry Development Strategy 2024; 2024 Integrated Investment Program; 2026 National Defence Strategy budget factsheet.
+    reuse_notes: Manual selected public uncrewed-systems rows. The envelope is not a complete ADF drone inventory and must not be used to infer mission-capable rates, deployability, sortie rates or live availability. In-service / acquisition / development / sovereign program / counter-drone rows must stay separate. Drone-only budget rows must remain unavailable until a public Defence budget separates one from broader IIP or NDS envelopes.
+    fetch: manual
+    used_by: [defence_posture]
+
+  - id: defence_readiness_gap
+    human_name: Defence readiness and sensitive-data source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-29
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU defence, alliances and strategic posture methodology, readiness source gate.
+    reuse_notes: Deliberate unavailable placeholder. Do not add readiness, mission-capable rates, live operational availability, munitions stockpile depth, classified basing or live posture metrics unless a named public source supports the exact field and publication is assessed as safe.
+    fetch: unavailable
+    used_by: [defence_posture]
+
+  # =========================================================
+  # EMPLOYMENT & AUTOMATION - v0.5 (ABS labour-market data + AI rollout context)
+  # =========================================================
+
+  - id: abs_participation_rate
+    human_name: ABS Labour Force - participation rate, monthly seasonally adjusted
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/LF/M12.3.1599.20.AUS.M?format=jsondata&startPeriod=2018-01
+    fetch_dataflow: LF
+    fetch_key: M12.3.1599.20.AUS.M
+    fetch_start_period: 2018-01
+    sdmx_note_suffix: ABS LF dataflow MEASURE M12 (Participation rate), SEX 3 (Persons), AGE 1599 (Total), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ M. Returns the headline national monthly participation rate.
+    format: JSON
+    update_cadence: monthly
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), seasonally adjusted participation rate.
+    reuse_notes: Fetched from the live ABS Data API LF dataflow. Headline national participation rate, monthly.
+    fetch: programmatic
+    used_by: [employment_automation]
+
+  - id: abs_employment_population_ratio
+    human_name: ABS Labour Force - employment-to-population ratio, monthly seasonally adjusted
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/LF/M16.3.1599.20.AUS.M?format=jsondata&startPeriod=2018-01
+    fetch_dataflow: LF
+    fetch_key: M16.3.1599.20.AUS.M
+    fetch_start_period: 2018-01
+    sdmx_note_suffix: ABS LF dataflow MEASURE M16 (Employment to population ratio), SEX 3, AGE 1599, TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ M. Returns the headline national monthly employment-to-population ratio.
+    format: JSON
+    update_cadence: monthly
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), seasonally adjusted employment-to-population ratio.
+    reuse_notes: Fetched from the live ABS Data API LF dataflow. Headline national employment-to-population ratio, monthly.
+    fetch: programmatic
+    used_by: [employment_automation]
+
+  - id: abs_job_vacancies
+    human_name: ABS Job Vacancies Australia - all industries, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/job-vacancies-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/job-vacancies-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/JV/M1.7.TOT.20.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: JV
+    fetch_key: M1.7.TOT.20.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS JV dataflow MEASURE M1 (Job Vacancies), SECTOR 7 (Private and Public), INDUSTRY TOT (All Industries), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns thousands of job vacancies in Australia per quarter.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Job Vacancies Australia (Cat. 6354.0), seasonally adjusted job vacancies, all industries, private and public sectors.
+    reuse_notes: Fetched from the live ABS Data API JV dataflow. Quarterly count of job vacancies, in thousands.
+    fetch: programmatic
+    used_by: [employment_automation]
+
+  - id: abs_wage_price_index
+    human_name: ABS Wage Price Index - total hourly rates incl. bonuses, annual % change, quarterly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia
+    canonical_url: https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia
+    fetch_url: https://data.api.abs.gov.au/rest/data/WPI/3.THRPEB.7.TOT.20.AUS.Q?format=jsondata&startPeriod=2018-Q1
+    fetch_dataflow: WPI
+    fetch_key: 3.THRPEB.7.TOT.20.AUS.Q
+    fetch_start_period: 2018-Q1
+    sdmx_note_suffix: ABS WPI dataflow MEASURE 3 (Percentage change from corresponding quarter of previous year), INDEX THRPEB (Total hourly rates of pay excluding bonuses), SECTOR 7 (Private and Public), INDUSTRY TOT (All Industries), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns the headline national wage price index annual % change, quarterly.
+    format: JSON
+    update_cadence: quarterly
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Wage Price Index Australia (Cat. 6345.0), total hourly rates of pay excluding bonuses, all sectors, all industries, year-on-year percentage change.
+    reuse_notes: Fetched from the live ABS Data API WPI dataflow. Annual percentage change in the WPI, quarterly.
+    fetch: programmatic
+    used_by: [employment_automation]
+
+  - id: abs_underemployment_rate
+    human_name: ABS Labour Force - underemployment rate, monthly
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), underemployment rate (proportion of labour force).
+    reuse_notes: ABS LF dataflow MEASURE M23 (Underemployment rate, proportion of labour force) was probed at the standard headline shape (`M23.3.1599.20.AUS.M` and several variants) and returned 404. The dataflow does not expose the headline underemployment series at the standard sex/age/TSEST combination used for unemployment and participation. Manual stub until a verified key combination or a published Cat. 6202.0 workbook value is hand-keyed.
+    fetch: manual
+    used_by: [employment_automation]
+
+  - id: abs_hours_worked
+    human_name: ABS Labour Force - monthly hours worked in all jobs
+    publisher: Australian Bureau of Statistics
+    url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    canonical_url: https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia
+    format: XLSX
+    update_cadence: monthly
+    last_verified: 2026-04-30
+    rights: CC BY 4.0 where stated by publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Australian Bureau of Statistics, Labour Force Australia (Cat. 6202.0), monthly hours worked in all jobs.
+    reuse_notes: ABS LF dataflow MEASURE M18 (Employed Persons - Monthly hours worked in all jobs) and M43 (Number of hours actually worked in all jobs) were probed at the standard headline shape and returned 404. Manual stub until a verified key combination or a published workbook row is hand-keyed.
+    fetch: manual
+    used_by: [employment_automation]
+
+  - id: ai_rollout_timeline_context
+    human_name: AI rollout timeline - public milestone context
+    publisher: Compiled from public publisher announcements
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-04-30
+    rights: Project metadata/prose CC BY 4.0; upstream announcement rights remain with each publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Compiled public AI-rollout milestones for context; not a causal explanation of labour-market movements.
+    reuse_notes: Manual context envelope. Lists named public AI-product-launch events (e.g. ChatGPT public launch, Microsoft Copilot rollout, Australian AI Safety Standard publication) as contextual time markers only. Must NOT be presented as causes of labour-market movements; the dashboard explicitly states timing is not causation.
+    fetch: manual
+    used_by: [employment_automation]
+
+  - id: automation_exposure_context
+    human_name: Australian automation/AI labour-market exposure context
+    publisher: No source-safe Australian publication identified yet
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md
+    format: PDF
+    update_cadence: ad-hoc
+    last_verified: 2026-04-30
+    rights: Various - depends on publisher
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: No canonical Australian government dataset of automation/AI labour-market exposure has been identified.
+    reuse_notes: Intentionally unavailable. There is no current Australian official dataset of automation or AI exposure by occupation or industry that is source-safe to publish without estimation. International "occupational exposure" studies (e.g. OECD/Frey-Osborne) cannot be silently mapped to Australian rows because the methodology and concept boundaries differ. Will only be loaded if Productivity Commission, DEWR, DISR or another named Australian publisher releases a directly comparable Australian indicator.
+    fetch: unavailable
+    used_by: [employment_automation]

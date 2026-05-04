@@ -12,13 +12,15 @@ function DataCoverage({
     className: "coverage-strip__inner"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Verified means copied or fetched from a named source; derived means calculated from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
+  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Manual means copied from a named public source; derived means calculated or selected from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
     className: "coverage-badges"
   }, React.createElement("span", {
     className: "status-pill status-pill--verified"
   }, "Verified ", c.verified), React.createElement("span", {
     className: "status-pill status-pill--derived"
   }, "Derived ", c.derived), React.createElement("span", {
+    className: "status-pill status-pill--manual"
+  }, "Manual ", c.manual), React.createElement("span", {
     className: "status-pill status-pill--stale"
   }, "Stale ", c.stale), React.createElement("span", {
     className: "status-pill status-pill--awaiting"
@@ -37,6 +39,303 @@ Object.assign(window, {
   DataCoverage,
   StatusPill
 });
+function TrustBadge({
+  kind,
+  children
+}) {
+  const key = String(kind || 'observed').toLowerCase().replace(/\s+/g, '-');
+  const labels = {
+    observed: 'Observed',
+    derived: 'Derived',
+    scenario: 'Scenario',
+    estimated: 'Estimated',
+    manual: 'Manual',
+    stale: 'Stale',
+    unavailable: 'Unavailable',
+    partial: 'Partial coverage'
+  };
+  return React.createElement("span", {
+    className: `trust-badge trust-badge--${key}`
+  }, children || labels[key] || kind);
+}
+function EnvTrustBadges({
+  env,
+  partial = false
+}) {
+  if (!env || env.status !== 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(TrustBadge, {
+      kind: "unavailable"
+    }));
+  }
+  const f = window.FR.freshness(env);
+  const badges = [];
+  if (env._meta?.fetch === 'derived') {
+    badges.push(React.createElement(TrustBadge, {
+      key: "derived",
+      kind: "derived"
+    }));
+  } else {
+    badges.push(React.createElement(TrustBadge, {
+      key: "observed",
+      kind: "observed"
+    }));
+  }
+  if (env.manual_entry || env.extra?.fields?.parent_manual_entry) badges.push(React.createElement(TrustBadge, {
+    key: "manual",
+    kind: "manual"
+  }));
+  if (f.state === 'stale') badges.push(React.createElement(TrustBadge, {
+    key: "stale",
+    kind: "stale"
+  }));
+  if (partial) badges.push(React.createElement(TrustBadge, {
+    key: "partial",
+    kind: "partial"
+  }));
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, badges);
+}
+Object.assign(window, {
+  TrustBadge,
+  EnvTrustBadges
+});
+function ShippingVisibility({
+  tankersEnv,
+  forwardOrdersEnv,
+  importsEnv,
+  liveVesselEnv
+}) {
+  const [filter, setFilter] = React.useState('all');
+  const notApplicable = () => React.createElement("span", {
+    className: "unavail",
+    "aria-label": "not applicable"
+  }, "\u2014");
+  function latest(env) {
+    if (!env || env.status !== 'ok' || !env.values?.length) return null;
+    return env.values.at(-1).v;
+  }
+  function fields(env) {
+    return env?.extra?.fields || {};
+  }
+  function isNumber(value) {
+    return value !== null && value !== undefined && !Number.isNaN(Number(value));
+  }
+  function fmt(value, digits = 0) {
+    if (!isNumber(value)) return '-';
+    return Number(value).toLocaleString('en-AU', {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits
+    });
+  }
+  function fmtAudThousands(value) {
+    if (!isNumber(value)) return '-';
+    return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 1
+    })}bn`;
+  }
+  function fmtChange(current, previous) {
+    if (!isNumber(current) || !isNumber(previous)) return notApplicable();
+    const change = Number(current) - Number(previous);
+    if (change === 0) return '0';
+    return `${change > 0 ? '+' : ''}${fmt(change)}`;
+  }
+  function tankerCell(value) {
+    return isNumber(value) ? `${fmt(value)} tankers` : notApplicable();
+  }
+  function daysCell(value) {
+    return isNumber(value) ? `${fmt(value)} days` : notApplicable();
+  }
+  const tankerFields = fields(tankersEnv);
+  const totalTankers = latest(tankersEnv);
+  const forwardOrders = latest(forwardOrdersEnv);
+  const importValue = latest(importsEnv);
+  const liveVesselNotes = liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.';
+  const rows = [{
+    key: 'crude',
+    filter: 'crude',
+    supplyGroup: 'Crude oil',
+    current: tankerCell(tankerFields.crude_oil_tankers),
+    previous: tankerCell(tankerFields.previous_crude_oil_tankers),
+    change: fmtChange(tankerFields.crude_oil_tankers, tankerFields.previous_crude_oil_tankers),
+    equivalentDays: daysCell(tankerFields.crude_oil_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate crude-oil tanker count and equivalent days only. No vessel names, AIS positions, cargo assignments or port-call ETAs are loaded.'
+  }, {
+    key: 'clean',
+    filter: 'clean',
+    supplyGroup: 'Clean refined products',
+    current: tankerCell(tankerFields.clean_refined_product_tankers),
+    previous: tankerCell(tankerFields.previous_clean_refined_product_tankers),
+    change: fmtChange(tankerFields.clean_refined_product_tankers, tankerFields.previous_clean_refined_product_tankers),
+    equivalentDays: daysCell(tankerFields.clean_refined_product_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate clean refined-product tanker count and equivalent days only. This is inbound supply visibility, not a live shipping layer.'
+  }, {
+    key: 'total',
+    filter: 'all',
+    supplyGroup: 'Total reported tankers',
+    current: tankerCell(totalTankers),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'Latest PM&C aggregate total reported tanker count. It does not identify individual vessels, ports, terminals or cargoes.'
+  }, {
+    key: 'orders',
+    filter: 'all',
+    supplyGroup: 'Forward import orders',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: forwardOrdersEnv,
+    partial: true,
+    meaning: `Latest PM&C forward import order visibility is ${fmt(forwardOrders, 1)} billion L ordered. This is aggregate public order visibility only.`
+  }, {
+    key: 'imports',
+    filter: 'all',
+    supplyGroup: 'ABS petroleum imports',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: importsEnv,
+    partial: false,
+    meaning: `Latest ABS petroleum import value is ${fmtAudThousands(importValue)} (${fmt(importValue)} AUD thousands). This is trade-value context, not tanker or vessel tracking.`
+  }, {
+    key: 'live',
+    filter: 'all',
+    supplyGroup: 'Live vessel identities / ETAs',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: liveVesselEnv,
+    partial: false,
+    meaning: `${liveVesselNotes} No AIS positions, vessel names, cargo assignments or port-call ETAs are plotted.`
+  }];
+  const cards = [{
+    key: 'crude-card',
+    filter: 'crude',
+    title: 'Crude oil tankers',
+    value: isNumber(tankerFields.crude_oil_tankers) ? fmt(tankerFields.crude_oil_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.crude_oil_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_crude_oil_tankers)} tankers; equivalent days: ${fmt(tankerFields.crude_oil_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'clean-card',
+    filter: 'clean',
+    title: 'Clean refined-product tankers',
+    value: isNumber(tankerFields.clean_refined_product_tankers) ? fmt(tankerFields.clean_refined_product_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.clean_refined_product_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_clean_refined_product_tankers)} tankers; equivalent days: ${fmt(tankerFields.clean_refined_product_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'orders-card',
+    filter: 'all',
+    title: 'Forward import orders',
+    value: isNumber(forwardOrders) ? fmt(forwardOrders, 1) : 'Unavailable',
+    unit: isNumber(forwardOrders) ? 'billion L ordered' : '',
+    subtext: 'Aggregate public order visibility only. No cargo-level or vessel-level allocation is loaded.',
+    env: forwardOrdersEnv,
+    partial: true
+  }, {
+    key: 'live-card',
+    filter: 'all',
+    title: 'Live vessel layer',
+    value: 'Unavailable',
+    unit: '',
+    subtext: 'No source-safe live vessel names, AIS positions or port-call ETAs loaded.',
+    env: liveVesselEnv,
+    partial: false,
+    unavailable: true
+  }];
+  const visibleRows = filter === 'all' ? rows : rows.filter(row => row.filter === filter);
+  const visibleCards = filter === 'all' ? cards : cards.filter(card => card.filter === filter);
+  const filterButtons = [['all', `All (${fmt(totalTankers)})`], ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`], ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`]];
+  const sourceLines = [tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv].map(env => window.FR.sourceLine(env)).filter(Boolean);
+  return React.createElement("div", {
+    className: "shipping-visibility"
+  }, React.createElement("div", {
+    className: "shipping-visibility__summary",
+    "aria-label": "Inbound fuel summary"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Inbound fuel evidence board"), React.createElement("h3", null, "Aggregate public data only, not a live map."), React.createElement("p", null, "PM&C publishes aggregate tanker counts, equivalent days and forward import orders. ABS publishes petroleum import value. This board shows those loaded values directly and keeps live vessel identities, AIS positions and port-call ETAs unavailable.")), React.createElement("div", {
+    className: "shipping-stats"
+  }, React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "PM&C aggregate reported tankers")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(forwardOrders, 1)), React.createElement("small", null, "billion L ordered in PM&C forward import orders")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmtAudThousands(importValue)), React.createElement("small", null, "ABS petroleum import value, rounded from AUD thousands")), React.createElement("div", {
+    className: "shipping-stat shipping-stat--unavailable"
+  }, React.createElement("span", null, "Unavailable"), React.createElement("small", null, "No live vessel feed loaded")))), React.createElement("div", {
+    className: "shipping-tabs",
+    role: "tablist",
+    "aria-label": "Inbound fuel evidence filters"
+  }, filterButtons.map(([key, label]) => React.createElement("button", {
+    key: key,
+    type: "button",
+    className: filter === key ? 'is-active' : '',
+    "aria-pressed": filter === key,
+    onClick: () => setFilter(key)
+  }, label))), React.createElement("div", {
+    className: "shipping-visibility__body"
+  }, React.createElement("div", {
+    className: "shipping-evidence-main"
+  }, React.createElement("div", {
+    className: "data-table-wrap shipping-evidence-table",
+    "aria-label": "Aggregate inbound supply comparison"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Supply group"), React.createElement("th", null, "Current tankers"), React.createElement("th", null, "Previous tankers"), React.createElement("th", null, "Change"), React.createElement("th", null, "Equivalent days"), React.createElement("th", null, "Source status"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, visibleRows.map(row => React.createElement("tr", {
+    key: row.key
+  }, React.createElement("td", null, row.supplyGroup), React.createElement("td", null, row.current), React.createElement("td", null, row.previous), React.createElement("td", null, row.change), React.createElement("td", null, row.equivalentDays), React.createElement("td", {
+    className: "shipping-status-cell"
+  }, React.createElement(EnvTrustBadges, {
+    env: row.env,
+    partial: row.partial
+  })), React.createElement("td", {
+    className: "shipping-meaning-cell"
+  }, row.meaning)))))), React.createElement("div", {
+    className: "shipping-evidence-note"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence board, not live map"), React.createElement("p", null, "This section does not plot ships. PM&C publishes aggregate tanker counts and equivalent days, not vessel names, AIS positions, cargo assignments or port-call ETAs. The dashboard therefore shows inbound supply as an evidence board rather than a live map."), React.createElement("ul", null, React.createElement("li", null, "PM&C aggregate tanker counts only."), React.createElement("li", null, "No live vessel feed loaded."), React.createElement("li", null, "No AIS positions, vessel names or port-call ETAs."), React.createElement("li", null, "No invented ports, terminals, shipping lanes or vessel locations.")))), React.createElement("div", {
+    className: "shipping-evidence-cards",
+    "aria-label": "Inbound supply evidence cards"
+  }, visibleCards.map(card => React.createElement("article", {
+    key: card.key,
+    className: `shipping-evidence-card${card.unavailable ? ' shipping-evidence-card--unavailable' : ''}`
+  }, React.createElement("div", {
+    className: "shipping-evidence-card__head"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.title), React.createElement(EnvTrustBadges, {
+    env: card.env,
+    partial: card.partial
+  })), React.createElement("div", {
+    className: "shipping-evidence-card__value"
+  }, React.createElement("span", null, card.value), card.unit && React.createElement("small", null, card.unit)), React.createElement("p", null, card.subtext))))), React.createElement("div", {
+    className: "shipping-source mono"
+  }, sourceLines.map((line, index) => React.createElement("p", {
+    key: `${line}-${index}`
+  }, line))));
+}
+Object.assign(window, {
+  ShippingVisibility
+});
 function Header({
   active = 'fuel',
   updated = ''
@@ -46,16 +345,32 @@ function Header({
     label: 'National status',
     href: '../national-status-dashboard/index.html'
   }, {
+    id: 'fuel_security',
+    label: 'National fuel security',
+    href: '../fuel-security-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
+  }, {
+    id: 'state_contribution',
+    label: 'State ledger',
+    href: '../state-contribution-dashboard/index.html'
+  }, {
+    id: 'strategic_resources',
+    label: 'Strategic resources',
+    href: '../strategic-resources-dashboard/index.html'
+  }, {
+    id: 'defence_posture',
+    label: 'Defence posture',
+    href: '../defence-alliances-dashboard/index.html'
   }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
   }, {
     id: 'fertilizer',
-    label: 'Fertilizer',
+    label: 'Food & farms',
     href: '../fertilizer-dashboard/index.html'
   }, {
     id: 'oil',
@@ -65,6 +380,26 @@ function Header({
     id: 'who_pays_what',
     label: 'Who pays what',
     href: '../who-pays-what/index.html'
+  }, {
+    id: 'au_economics',
+    label: 'AU economics',
+    href: '../au-economics-dashboard/index.html'
+  }, {
+    id: 'manufacturing',
+    label: 'Manufacturing',
+    href: '../manufacturing-dashboard/index.html'
+  }, {
+    id: 'power_grid',
+    label: 'Power grid',
+    href: '../power-grid-dashboard/index.html'
+  }, {
+    id: 'infrastructure',
+    label: 'Infrastructure',
+    href: '../infrastructure-dashboard/index.html'
+  }, {
+    id: 'employment_automation',
+    label: 'Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'sources',
     label: 'Sources & methodology',
@@ -162,7 +497,8 @@ function MetricCard({
   jargonHint,
   fromEnvelope,
   valueFn,
-  unitFn
+  unitFn,
+  partial = false
 }) {
   if (fromEnvelope !== undefined) {
     const env = fromEnvelope;
@@ -175,7 +511,10 @@ function MetricCard({
         className: "card-status-row"
       }, eyebrow && React.createElement("span", {
         className: "eyebrow"
-      }, eyebrow), window.StatusPill && React.createElement(StatusPill, {
+      }, eyebrow), window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+        env: env,
+        partial: partial
+      }) : window.StatusPill && React.createElement(StatusPill, {
         env: env
       })), React.createElement("h3", {
         className: "metric-card__label"
@@ -208,9 +547,12 @@ function MetricCard({
     className: "card-status-row"
   }, eyebrow && React.createElement("span", {
     className: "eyebrow"
-  }, eyebrow), fromEnvelope !== undefined && window.StatusPill && React.createElement(StatusPill, {
+  }, eyebrow), fromEnvelope !== undefined && (window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+    env: fromEnvelope,
+    partial: partial
+  }) : window.StatusPill && React.createElement(StatusPill, {
     env: fromEnvelope
-  })), React.createElement("h3", {
+  }))), React.createElement("h3", {
     className: "metric-card__label"
   }, jargonHint ? React.createElement(React.Fragment, null, label.replace(jargonHint.term, ''), React.createElement("span", {
     className: "jargon",
@@ -555,12 +897,20 @@ function Footer({
   }, "Dashboards"), React.createElement("ul", null, React.createElement("li", null, React.createElement("a", {
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
+    href: "../fuel-security-dashboard/index.html"
+  }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
+    href: "../state-contribution-dashboard/index.html"
+  }, "State ledger")), React.createElement("li", null, React.createElement("a", {
+    href: "../strategic-resources-dashboard/index.html"
+  }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-alliances-dashboard/index.html"
+  }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
-  }, "Fertilizer")), React.createElement("li", null, React.createElement("a", {
+  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
     href: "../oil-and-production/index.html"
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
@@ -616,8 +966,8 @@ const COMPANIES = [{
   id: 'company_santos',
   short: 'Santos (ASX:STO)'
 }];
-const SERIES = ['ato_corporate_tax', 'accc_petroleum_monitoring', 'accc_petrol_mogas95_component', 'accc_petrol_tax_component', 'accc_petrol_other_costs_margins_component', 'accc_petrol_gird_component', 'accc_petrol_breakdown_series', ...COMPANIES.map(c => c.id)];
-const TAX_FIELDS = ['fiscal_year', 'total_income', 'taxable_income', 'income_tax_paid', 'net_profit'];
+const SERIES = ['ato_corporate_tax', 'ato_prrt_details', 'australia_institute_gas_export_tax_proposal', 'australia_institute_gas_giveaway_analysis', 'accc_petroleum_monitoring', 'accc_petrol_mogas95_component', 'accc_petrol_tax_component', 'accc_petrol_other_costs_margins_component', 'accc_petrol_gird_component', 'accc_petrol_breakdown_series', ...COMPANIES.map(c => c.id)];
+const TAX_FIELDS = ['fiscal_year', 'total_income', 'taxable_income', 'income_tax_paid', 'prrt_paid', 'net_profit'];
 const PUMP_COMPONENTS = [{
   id: 'accc_petrol_mogas95_component',
   eyebrow: 'Pump $',
@@ -672,17 +1022,27 @@ function Cell({
   env,
   fieldKey,
   unit,
-  atoEnv
+  atoEnv,
+  prrtEnv
 }) {
   const v = pick(env, fieldKey);
   if (v == null) {
+    if (fieldKey === 'prrt_paid' && pick(env, 'prrt_note')) {
+      return React.createElement("td", {
+        className: "unavail",
+        "aria-label": "Not a PRRT payer",
+        title: pick(env, 'prrt_note')
+      }, "n/a");
+    }
     return React.createElement("td", {
       className: "unavail",
       "aria-label": "Source unavailable"
     }, "\u2014");
   }
   const atoFields = new Set(['total_income', 'taxable_income', 'income_tax_paid', 'fiscal_year']);
-  const linkEnv = atoFields.has(fieldKey) ? atoEnv || env : env;
+  let linkEnv = env;
+  if (atoFields.has(fieldKey)) linkEnv = atoEnv || env;
+  if (fieldKey === 'prrt_paid') linkEnv = prrtEnv || env;
   const href = linkEnv && linkEnv.source_url;
   const displayUnit = fieldKey === 'net_profit' ? pick(env, 'net_profit_unit') || unit : unit;
   return React.createElement("td", null, href ? React.createElement("a", {
@@ -787,7 +1147,7 @@ function App() {
     }
   }, "How to read this page")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, React.createElement("b", null, "Total income"), " is the gross revenue a company declares to the ATO. It is not profit. A company can have billions in total income and still record a loss."), React.createElement("p", null, React.createElement("b", null, "Taxable income"), " is what's left after the ATO lets the company deduct costs, depreciation, past losses and some concessions. Corporate tax is charged on this, not on total income."), React.createElement("p", null, React.createElement("b", null, "Income tax paid"), " is what actually landed in Commonwealth coffers for that fiscal year. Zero is legal when taxable income is zero or there are carried-forward losses; it is still worth noting."), React.createElement("p", null, React.createElement("b", null, "Net profit"), " comes from the company's own annual report and follows accounting standards, not tax law. It will usually differ from the ATO's taxable income, sometimes by a lot."), React.createElement("p", null, React.createElement("b", null, "Effective tax rate"), " here = income tax paid \xF7 taxable income. Australia's statutory rate is 30%. Lower effective rates typically reflect R&D offsets, past losses, or the Petroleum Resource Rent Tax regime.")))), React.createElement("section", {
+  }, React.createElement("p", null, React.createElement("b", null, "Total income"), " is the gross revenue a company declares to the ATO. It is not profit. A company can have billions in total income and still record a loss."), React.createElement("p", null, React.createElement("b", null, "Taxable income"), " is what's left after the ATO lets the company deduct costs, depreciation, past losses and some concessions. Corporate tax is charged on this, not on total income."), React.createElement("p", null, React.createElement("b", null, "Income tax paid"), " is what actually landed in Commonwealth coffers for that fiscal year. Zero is legal when taxable income is zero or there are carried-forward losses; it is still worth noting."), React.createElement("p", null, React.createElement("b", null, "PRRT paid"), " is the Petroleum Resource Rent Tax \u2014 a separate Commonwealth tax charged on petroleum project profits, on top of company tax. It is project-level, so it appears against operating subsidiaries (e.g. Esso Australia Resources, several Woodside and Santos subsidiaries) rather than the parent group. Numbers shown here are summed across each corporate group's subsidiaries listed in the ATO PRRT details sheet. \"n/a\" means the company is downstream-only (refining, retail) and does not fall within the PRRT regime; \"\u2014\" means no data."), React.createElement("p", null, React.createElement("b", null, "Net profit"), " comes from the company's own annual report and follows accounting standards, not tax law. It will usually differ from the ATO's taxable income, sometimes by a lot."), React.createElement("p", null, React.createElement("b", null, "Effective tax rate"), " here = income tax paid \xF7 taxable income. Australia's statutory rate is 30%. Lower effective rates typically reflect R&D offsets, past losses, or the Petroleum Resource Rent Tax regime.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "h-tax"
   }, React.createElement("div", {
@@ -823,6 +1183,8 @@ function App() {
     scope: "col"
   }, "Income tax paid (ATO)"), React.createElement("th", {
     scope: "col"
+  }, "PRRT paid (ATO group total)"), React.createElement("th", {
+    scope: "col"
   }, "Net profit (report)"), React.createElement("th", {
     scope: "col"
   }, "Effective tax rate"), React.createElement("th", {
@@ -853,6 +1215,11 @@ function App() {
       unit: "A$m"
     }), React.createElement(Cell, {
       env: env,
+      prrtEnv: data.ato_prrt_details,
+      fieldKey: "prrt_paid",
+      unit: "A$m"
+    }), React.createElement(Cell, {
+      env: env,
       fieldKey: "net_profit",
       unit: "A$m"
     }), er == null ? React.createElement("td", {
@@ -865,9 +1232,136 @@ function App() {
     style: {
       marginTop: 12
     }
-  }, "\"\u2014\" means the figure has not yet been hand-keyed from the company's latest filed report. Cross-check with the ATO Corporate Tax Transparency dataset before publishing:", ' ', React.createElement("a", {
+  }, "\"\u2014\" means the figure has not yet been hand-keyed from the company's latest filed report. \"n/a\" in the PRRT column means the company is downstream-only and does not fall within the PRRT regime. Cross-check with the ATO Corporate Tax Transparency dataset before publishing:", ' ', React.createElement("a", {
     href: data.ato_corporate_tax.source_url
-  }, data.ato_corporate_tax.source_name), ".")), React.createElement("section", {
+  }, data.ato_corporate_tax.source_name), ".")), data.ato_prrt_details?.status === 'ok' && React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "h-prrt-total"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Section 1b \xB7 Industry PRRT"), React.createElement("h2", {
+    id: "h-prrt-total"
+  }, "All Petroleum Resource Rent Tax paid in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), React.createElement("p", {
+    className: "section__lede"
+  }, "Across the entire petroleum industry, every entity that paid PRRT and how much, directly from the ATO's PRRT details sheet."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Industry total",
+    label: "Total PRRT paid",
+    plain: `Sum of PRRT payable across all ${pick(data.ato_prrt_details, 'entity_count') || 0} entities listed in the ATO PRRT details sheet for ${pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'}.`,
+    value: pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions'),
+    unit: " A$m",
+    source: data.ato_prrt_details.source_name,
+    highlight: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "Coverage",
+    label: "Entities that paid PRRT",
+    plain: "Number of corporate entities appearing in the ATO PRRT details sheet.",
+    value: pick(data.ato_prrt_details, 'entity_count'),
+    unit: " entities",
+    source: data.ato_prrt_details.source_name
+  }), React.createElement(MetricCard, {
+    eyebrow: "Statutory rate",
+    label: "PRRT statutory rate",
+    plain: "The headline PRRT rate is 40% of project taxable profit, charged in addition to company tax.",
+    value: 40,
+    unit: "%",
+    source: "PRRT Assessment Act 1987"
+  })), React.createElement("div", {
+    className: "data-table-wrap",
+    role: "region",
+    "aria-label": "PRRT paid by entity, full ATO list"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", {
+    scope: "col"
+  }, "Entity (ATO name)"), React.createElement("th", {
+    scope: "col"
+  }, "ABN"), React.createElement("th", {
+    scope: "col",
+    style: {
+      textAlign: 'right'
+    }
+  }, "PRRT paid (AUD)"))), React.createElement("tbody", null, (pick(data.ato_prrt_details, 'entities') || []).map(row => React.createElement("tr", {
+    key: row.abn
+  }, React.createElement("td", null, row.entity), React.createElement("td", {
+    className: "mono"
+  }, row.abn), React.createElement("td", {
+    style: {
+      textAlign: 'right'
+    }
+  }, row.prrt_paid_aud.toLocaleString('en-AU')))))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "h-policy"
+  }, data.ato_prrt_details?.status === 'ok' && data.australia_institute_gas_giveaway_analysis?.status === 'ok' && data.australia_institute_gas_export_tax_proposal?.status === 'ok' && React.createElement("aside", {
+    role: "note",
+    "aria-label": "Headline takeaway",
+    style: {
+      margin: 'var(--s-4) 0 var(--s-6)',
+      padding: 'var(--s-5) var(--s-6)',
+      background: 'var(--paper-sunk)',
+      border: '1px solid var(--rule)',
+      borderLeft: '4px solid var(--accent)',
+      borderRadius: 'var(--r-2)'
+    }
+  }, React.createElement("div", {
+    className: "eyebrow"
+  }, "If you only read one number"), React.createElement("p", {
+    style: {
+      marginTop: 'var(--s-2)',
+      fontSize: 'var(--fs-18)',
+      lineHeight: 1.5,
+      maxWidth: '70ch'
+    }
+  }, "Australia's entire petroleum industry paid ", React.createElement("b", null, "A$", (pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions') / 1000).toFixed(2), " billion"), " in PRRT in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24', " \u2014 less than the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_giveaway_analysis, 'japan_gas_import_tax_total_aud_billions_per_year'), " billion"), " Japan raises taxing its gas imports each year \u2014 and well under half of the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_export_tax_proposal, 'modelled_revenue_aud_billions'), " billion"), " a 25% gas export tax would have raised since 2022, modelled by The Australia Institute."), React.createElement("p", {
+    className: "caption mono",
+    style: {
+      marginTop: 'var(--s-3)'
+    }
+  }, "Sources: ", React.createElement("a", {
+    href: data.ato_prrt_details.source_url
+  }, "ATO PRRT details ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), " \xB7", ' ', React.createElement("a", {
+    href: data.australia_institute_gas_giveaway_analysis.source_url
+  }, "Australia Institute, \"Taxing gas in Australia and Japan\""), " \xB7", ' ', React.createElement("a", {
+    href: data.australia_institute_gas_export_tax_proposal.source_url
+  }, "Australia Institute, \"We have already missed out on $63.8 billion\""))), React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Section 1c \xB7 Policy comparisons"), React.createElement("h2", {
+    id: "h-policy"
+  }, "\"What if Australia taxed gas differently?\""), React.createElement("p", {
+    className: "section__lede"
+  }, "Researchers and policy think-tanks publish alternative fiscal regimes \u2014 from Norway's 78% petroleum tax to The Australia Institute's proposal for a 25% gas export tax. These cards link to each named publication; the dashboard does not publish the proposed-revenue figures until they are hand-keyed from the source."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Modelled revenue forgone",
+    label: "25% gas export tax (since 2022)",
+    plain: "The Australia Institute (Denniss & Saunders, 20 Mar 2026) calculates that a 25 per cent Commonwealth tax on the gross value of Australian gas exports, if enacted in 2022, would have already raised A$63.8 billion by March 2026.",
+    fromEnvelope: data.australia_institute_gas_export_tax_proposal,
+    unit: " AUD billions",
+    highlight: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "Australia vs Japan, per year",
+    label: "PRRT (AU) vs gas-import tax (Japan)",
+    plain: "The Australia Institute (Denniss, Campbell & Saunders, 21 Apr 2026) reports Australia's PRRT raises about A$1.4 billion per year, while Japan's gas-import tax raises A$1.8 billion per year overall \u2014 including A$710 million per year specifically from Australian gas imports. Japan collects more in gas tax from our exports than our entire national PRRT take.",
+    fromEnvelope: data.australia_institute_gas_giveaway_analysis,
+    unit: " AUD billions/year"
+  }), React.createElement(MetricCard, {
+    eyebrow: "International comparison",
+    label: "Norway - statutory petroleum tax rate",
+    plain: "Norway charges 22% company tax plus a 56% special petroleum tax on offshore profits, for a 78% statutory rate. Comparison only; not directly portable to Australia without also reflecting state ownership and field-level fiscal design. See the Resource value dashboard for full Norway state-revenue context.",
+    value: 78,
+    unit: "%",
+    source: "Norwegian Petroleum Tax Act"
+  })), React.createElement("p", {
+    className: "caption",
+    style: {
+      marginTop: 12
+    }
+  }, "Each Australia Institute card links to the named, dated report. Headline figures are modelled by The Australia Institute, not by this site. We do not recompute or estimate; we cite. The Norway 78 per cent figure is the statutory rate from the Norwegian Petroleum Tax Act and is shown as comparison context only.")), React.createElement("section", {
     className: "section",
     "aria-labelledby": "h-consumer"
   }, React.createElement("div", {

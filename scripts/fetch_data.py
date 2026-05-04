@@ -542,6 +542,81 @@ def fetch_abs_petroleum_imports_yoy(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def load_parent_envelope(parent_id: str) -> dict[str, Any]:
+    """Load a generated or manual parent envelope by source id."""
+    for base in (GENERATED_DIR, MANUAL_DIR):
+        path = base / f"{parent_id}.json"
+        if path.exists():
+            with path.open("r", encoding="utf-8") as f:
+                parent = json.load(f)
+            if not isinstance(parent, dict):
+                raise RuntimeError(f"Parent envelope {path.relative_to(ROOT)} is not a JSON object")
+            return parent
+    raise RuntimeError(f"Missing parent envelope for {parent_id}")
+
+
+def fetch_extra_field_derived(source: dict[str, Any]) -> dict[str, Any]:
+    """Derive a single-point series by selecting a typed extra.fields value.
+
+    This is used for fuel-security dashboard slots where the source publishes
+    several product-specific values inside one public table. The parent remains
+    the auditable source envelope; this generated envelope gives each product a
+    first-class source id for cards, coverage and freshness display.
+    """
+    parent_id = source.get("derived_from")
+    field = source.get("derived_field")
+    if not parent_id or not field:
+        raise RuntimeError(f"{source.get('id', '<unknown>')}: derived_from and derived_field are required")
+
+    parent = load_parent_envelope(parent_id)
+    if parent.get("status") != "ok":
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} status is not ok")
+    fields = parent.get("extra", {}).get("fields", {})
+    if not isinstance(fields, dict):
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} has no typed extra.fields")
+    value = fields.get(field)
+    if not isinstance(value, (int, float)):
+        raise RuntimeError(f"Cannot derive {source['id']}; parent field {field!r} is missing or not numeric")
+
+    point_date = fields.get("as_at") or parent.get("last_data_point")
+    if not isinstance(point_date, str) or not point_date:
+        raise RuntimeError(f"Cannot derive {source['id']}; parent {parent_id} has no date")
+
+    label = source.get("derived_label") or field
+    return {
+        "unit": source.get("fetch_unit") or parent.get("unit") or "",
+        "values": [{"t": point_date, "v": round(float(value), 1)}],
+        "last_data_point": parent.get("last_data_point"),
+        "notes": (
+            f"Derived by selecting {field} from {parent_id}. "
+            f"This is a product-specific reshaping of the PM&C/DCCEEW public table, not an independent estimate."
+        ),
+        "extra": {
+            "schema": "fuel_security_product_metric.v1",
+            "fields": {
+                "product": label,
+                "parent_source_id": parent_id,
+                "parent_field": field,
+                "parent_last_data_point": parent.get("last_data_point"),
+                "parent_manual_entry": bool(parent.get("manual_entry")),
+                "method": "typed_extra_field_selection",
+            },
+        },
+        "source_url_resolved": parent.get("source_url"),
+    }
+
+
+def parse_rba_date(value: str) -> dt.date:
+    """Parse date strings used in RBA statistical table CSVs."""
+    cleaned = value.strip()
+    for fmt in ("%d/%m/%Y", "%d-%b-%Y", "%Y-%m-%d"):
+        try:
+            return dt.datetime.strptime(cleaned, fmt).date()
+        except ValueError:
+            continue
+    raise ValueError(f"Unsupported RBA date format: {value!r}")
+
+
 def fetch_rba_f11(url: str) -> dict[str, Any]:
     """Fetch RBA Table F11.1 CSV and return monthly mean AUD/USD values."""
     r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
@@ -578,7 +653,7 @@ def fetch_rba_f11(url: str) -> dict[str, Any]:
         if len(row) <= usd_col or not row or not row[0].strip():
             continue
         try:
-            obs_date = dt.datetime.strptime(row[0].strip(), "%d-%b-%Y").date()
+            obs_date = parse_rba_date(row[0])
             value = float(row[usd_col])
         except (ValueError, TypeError):
             continue
@@ -602,20 +677,463 @@ def fetch_rba_f11(url: str) -> dict[str, Any]:
     }
 
 
+def fetch_rba_csv_column(
+    url: str,
+    title_substring: str,
+    *,
+    aggregate: str = "monthly_mean",
+    unit: str,
+    notes: str,
+    ndigits: int = 4,
+) -> dict[str, Any]:
+    """Generic RBA Statistical Table CSV fetcher.
+
+    RBA tables share a layout: a metadata block (rows starting with "Title",
+    "Description", "Frequency", ..., "Series ID"), then date+value rows where
+    column 0 is the observation date. RBA CSVs have used both DD/MM/YYYY and
+    DD-MMM-YYYY date strings, so the parser accepts both. We pick the column
+    whose Title row contains ``title_substring`` (case-insensitive substring
+    match) and aggregate either to monthly mean or quarter-end.
+    """
+    if aggregate not in {"monthly_mean", "quarter_end"}:
+        raise RuntimeError(f"fetch_rba_csv_column: unsupported aggregate {aggregate!r}")
+
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    reader = list(csv.reader(io.StringIO(r.content.decode("utf-8-sig"))))
+    if len(reader) < 12:
+        raise RuntimeError(f"RBA CSV {url} was too short")
+
+    target = title_substring.strip().lower()
+    title_row_idx = None
+    col_idx = None
+    for idx, row in enumerate(reader):
+        if not row or row[0] != "Title":
+            continue
+        title_row_idx = idx
+        for ci, cell in enumerate(row[1:], start=1):
+            if cell and target in cell.strip().lower():
+                col_idx = ci
+                break
+        if col_idx is not None:
+            break
+    if title_row_idx is None or col_idx is None:
+        raise RuntimeError(f"RBA CSV {url} did not contain a Title column matching {title_substring!r}")
+
+    data_start = None
+    for idx, row in enumerate(reader[title_row_idx + 1 :], start=title_row_idx + 1):
+        if row and row[0] == "Series ID":
+            data_start = idx + 1
+            break
+    if data_start is None:
+        raise RuntimeError(f"RBA CSV {url} did not contain a Series ID row")
+
+    by_period: dict[str, list[float]] = {}
+    period_end_dates: dict[str, dt.date] = {}
+    latest_date: dt.date | None = None
+    for row in reader[data_start:]:
+        if not row or len(row) <= col_idx or not row[0].strip():
+            continue
+        try:
+            obs_date = parse_rba_date(row[0])
+            value = float(row[col_idx])
+        except (ValueError, TypeError):
+            continue
+        latest_date = max(latest_date, obs_date) if latest_date else obs_date
+        if aggregate == "monthly_mean":
+            key = obs_date.strftime("%Y-%m")
+        else:
+            quarter = (obs_date.month - 1) // 3 + 1
+            key = f"{obs_date.year}-Q{quarter}"
+        by_period.setdefault(key, []).append(value)
+        prior = period_end_dates.get(key)
+        if prior is None or obs_date > prior:
+            period_end_dates[key] = obs_date
+
+    if not by_period or latest_date is None:
+        raise RuntimeError(f"RBA CSV {url} contained no numeric observations for column {title_substring!r}")
+
+    if aggregate == "monthly_mean":
+        values = [
+            {"t": period, "v": round(sum(obs) / len(obs), ndigits)}
+            for period, obs in sorted(by_period.items())
+        ][-60:]
+    else:
+        values = [
+            {"t": period, "v": round(obs[-1], ndigits)}
+            for period, obs in sorted(by_period.items())
+        ][-40:]
+
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": latest_date.isoformat(),
+        "notes": notes,
+        "source_url_resolved": url,
+    }
+
+
+def fetch_aofm_ags_face_value(source: dict[str, Any]) -> dict[str, Any]:
+    """Fetch annual AOFM AGS face value from the compact stock_ags CSV."""
+    url = source.get("fetch_url") or source.get("canonical_url") or source["url"]
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    reader = csv.DictReader(io.StringIO(r.content.decode("utf-8-sig")))
+    if reader.fieldnames != ["FY", "Face Value ($b)"]:
+        raise RuntimeError(f"AOFM stock_ags CSV had unexpected header: {reader.fieldnames!r}")
+
+    def fy_end_date(fy: str) -> dt.date:
+        match = re.fullmatch(r"(\d{4})-(\d{2})", fy.strip())
+        if not match:
+            raise RuntimeError(f"AOFM stock_ags FY value was malformed: {fy!r}")
+        start_year = int(match.group(1))
+        end_suffix = int(match.group(2))
+        century = (start_year // 100) * 100
+        end_year = century + end_suffix
+        if end_year <= start_year:
+            end_year += 100
+        return dt.date(end_year, 6, 30)
+
+    values: list[dict[str, Any]] = []
+    latest_date: dt.date | None = None
+    for row in reader:
+        fy = (row.get("FY") or "").strip()
+        raw_value = (row.get("Face Value ($b)") or "").strip()
+        if not fy or not raw_value:
+            continue
+        try:
+            value = round(float(raw_value), 1)
+        except ValueError as exc:
+            raise RuntimeError(f"AOFM stock_ags value was not numeric for {fy!r}") from exc
+        obs_date = fy_end_date(fy)
+        values.append({"t": fy, "v": value})
+        latest_date = max(latest_date, obs_date) if latest_date else obs_date
+
+    if not values or latest_date is None:
+        raise RuntimeError("AOFM stock_ags CSV contained no annual face-value observations")
+
+    return {
+        "unit": "AUD billions",
+        "values": values,
+        "last_data_point": latest_date.isoformat(),
+        "notes": (
+            "Fetched from the AOFM stock_ags CSV on the AOFM data hub. Values are annual "
+            "Australian Government Securities face value in AUD billions by financial year. "
+            "This is not the same as Commonwealth general government gross debt in Budget Papers."
+        ),
+        "source_url_resolved": url,
+    }
+
+
+def fetch_aemo_nem_price_demand(metric: str) -> dict[str, Any]:
+    """Fetch AEMO NEM monthly price/demand CSVs across all 5 regions.
+
+    Pulls the static CSVs at
+    aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv
+    for the last 12 complete months across NSW1, VIC1, QLD1, SA1, TAS1, then
+    reduces 5-minute TRADE intervals to monthly means per region. The NEM-wide
+    series is the simple mean of region means for ``metric == "price"`` and the
+    sum of region means for ``metric == "demand"``. Per-region latest-month
+    values land in ``extra.fields``.
+    """
+    if metric not in {"price", "demand"}:
+        raise RuntimeError(f"fetch_aemo_nem_price_demand: unsupported metric {metric!r}")
+
+    regions = ["NSW1", "VIC1", "QLD1", "SA1", "TAS1"]
+    today = dt.date.today()
+    months: list[dt.date] = []
+    cursor = dt.date(today.year, today.month, 1)
+    for _ in range(13):
+        cursor = cursor.replace(day=1) - dt.timedelta(days=1)
+        cursor = cursor.replace(day=1)
+        months.append(cursor)
+    months.reverse()
+
+    base = "https://aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_{ym}_{region}.csv"
+    region_monthly: dict[str, dict[str, float]] = {r: {} for r in regions}
+
+    for month in months:
+        ym = month.strftime("%Y%m")
+        for region in regions:
+            url = base.format(ym=ym, region=region)
+            r = requests.get(url, headers={"User-Agent": UA}, timeout=60)
+            if r.status_code == 404:
+                continue
+            r.raise_for_status()
+            reader = csv.DictReader(io.StringIO(r.content.decode("utf-8-sig")))
+            sum_v = 0.0
+            n_v = 0
+            for row in reader:
+                if row.get("PERIODTYPE") != "TRADE":
+                    continue
+                try:
+                    if metric == "price":
+                        v = float(row["RRP"])
+                    else:
+                        v = float(row["TOTALDEMAND"])
+                except (KeyError, ValueError, TypeError):
+                    continue
+                sum_v += v
+                n_v += 1
+            if n_v == 0:
+                continue
+            region_monthly[region][month.strftime("%Y-%m")] = sum_v / n_v
+
+    all_months: set[str] = set()
+    for region in regions:
+        all_months.update(region_monthly[region].keys())
+    if not all_months:
+        raise RuntimeError("AEMO NEM price/demand fetch returned no monthly observations")
+
+    sorted_months = sorted(all_months)
+    values: list[dict[str, Any]] = []
+    for ym in sorted_months:
+        per_region = [region_monthly[r][ym] for r in regions if ym in region_monthly[r]]
+        if not per_region:
+            continue
+        if metric == "price":
+            agg = sum(per_region) / len(per_region)
+            values.append({"t": ym, "v": round(agg, 2)})
+        else:
+            agg = sum(per_region)
+            values.append({"t": ym, "v": round(agg, 0)})
+
+    if not values:
+        raise RuntimeError("AEMO NEM price/demand aggregation produced no values")
+
+    latest_month = values[-1]["t"]
+    region_latest: dict[str, Any] = {}
+    for region in regions:
+        v = region_monthly[region].get(latest_month)
+        if v is None:
+            region_latest[region] = None
+        else:
+            region_latest[region] = round(v, 2 if metric == "price" else 0)
+
+    last_year, last_month = latest_month.split("-")
+    last_day = calendar.monthrange(int(last_year), int(last_month))[1]
+    last_data_point = f"{last_year}-{last_month}-{last_day:02d}"
+
+    if metric == "price":
+        unit = "AUD per MWh"
+        notes = (
+            "Monthly mean of 5-minute TRADE-interval Regional Reference Price across NSW1, VIC1, QLD1, SA1 and TAS1. "
+            "Aggregate is the simple mean of the five regional monthly means. extra.fields holds the latest-month value per region."
+        )
+    else:
+        unit = "MW"
+        notes = (
+            "Monthly mean of 5-minute TRADE-interval TOTALDEMAND across NSW1, VIC1, QLD1, SA1 and TAS1, then summed across regions. "
+            "extra.fields holds the latest-month region-mean value per region."
+        )
+
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": notes,
+        "extra": {
+            "schema": "fuel_resilience_typed_fields.v1",
+            "fields": {
+                "latest_month": latest_month,
+                **{f"region_{r.lower()}_latest": region_latest[r] for r in regions},
+            },
+        },
+        "source_url_resolved": base.format(ym=latest_month.replace("-", ""), region="NSW1"),
+    }
+
+
 def month_end_iso(month: dt.date) -> str:
     last_day = calendar.monthrange(month.year, month.month)[1]
     return dt.date(month.year, month.month, last_day).isoformat()
 
 
-def load_xlsx_from_url(url: str):
+def load_xlsx_from_url(url: str, extra_headers: dict[str, str] | None = None):
     try:
         import openpyxl
     except ImportError as exc:
         raise RuntimeError("openpyxl is required for XLSX fetchers. Install with: pip install openpyxl") from exc
 
-    r = requests.get(url, headers={"User-Agent": UA}, timeout=90)
+    headers = {"User-Agent": UA}
+    if extra_headers:
+        headers.update(extra_headers)
+    r = requests.get(url, headers=headers, timeout=90)
     r.raise_for_status()
     return openpyxl.load_workbook(io.BytesIO(r.content), read_only=True, data_only=True)
+
+
+def normalized_abs_text(value: Any) -> str:
+    text = "" if value is None else str(value)
+    text = text.replace("\xa0", " ").replace("\u2019", "'")
+    text = re.sub(r"\s+", " ", text).strip()
+    return text.lstrip(">").strip().lower()
+
+
+def discover_abs_release_xlsx_url(release_url: str, label_contains: str | list[str]) -> str:
+    """Find a named XLSX download link on an ABS latest-release page."""
+    needles = [label_contains] if isinstance(label_contains, str) else list(label_contains)
+    wanted = [normalized_abs_text(needle) for needle in needles if normalized_abs_text(needle)]
+    if not release_url:
+        raise RuntimeError("ABS release URL is required")
+    if release_url.lower().endswith(".xlsx"):
+        return release_url
+    if not wanted:
+        raise RuntimeError("ABS XLSX discovery requires fetch_xlsx_label_contains")
+
+    r = requests.get(release_url, headers={"User-Agent": UA}, timeout=60)
+    r.raise_for_status()
+
+    candidates: list[tuple[str, str]] = []
+    for match in re.finditer(r"<a[^>]+href=[\"']([^\"']+\.xlsx)[\"'][^>]*>(.*?)</a>", r.text, flags=re.I | re.S):
+        tag = match.group(0)
+        href = urllib.parse.urljoin(r.url, match.group(1))
+        aria = re.search(r"aria-label=[\"']([^\"']+)[\"']", tag, flags=re.I)
+        label = aria.group(1) if aria else re.sub(r"<.*?>", " ", match.group(2), flags=re.S)
+        label_norm = normalized_abs_text(label)
+        candidates.append((label_norm, href))
+        if all(needle in label_norm for needle in wanted):
+            return href
+
+    available = "; ".join(label for label, _ in candidates[:8])
+    raise RuntimeError(f"ABS release page did not contain a matching XLSX link. Wanted {wanted}; saw {available}")
+
+
+def _round_numeric(value: float, ndigits: int) -> int | float:
+    rounded = round(float(value), ndigits)
+    return int(rounded) if ndigits == 0 else rounded
+
+
+def extract_abs_xlsx_series(
+    wb: Any,
+    targets: list[str],
+    *,
+    series_type: str | None,
+    ndigits: int,
+    limit: int,
+) -> tuple[list[dict[str, Any]], str, list[dict[str, Any]], str]:
+    """Extract one or more ABS spreadsheet series and sum them by period."""
+    if not targets:
+        raise RuntimeError("ABS XLSX extraction requires at least one target series description")
+
+    wanted_type = normalized_abs_text(series_type) if series_type else None
+    found: list[dict[str, Any]] = []
+
+    for target in targets:
+        target_norm = normalized_abs_text(target)
+        match_info: dict[str, Any] | None = None
+        for sheet_name in wb.sheetnames:
+            if not str(sheet_name).lower().startswith("data"):
+                continue
+            ws = wb[sheet_name]
+            rows = list(ws.iter_rows(values_only=True))
+            if len(rows) < 11:
+                continue
+            max_cols = max(len(row) for row in rows[:10])
+            for col_idx in range(1, max_cols):
+                desc = rows[0][col_idx] if col_idx < len(rows[0]) else None
+                if not desc:
+                    continue
+                desc_norm = normalized_abs_text(desc)
+                if target_norm not in desc_norm:
+                    continue
+                col_type = normalized_abs_text(rows[2][col_idx] if col_idx < len(rows[2]) else None)
+                if wanted_type and col_type != wanted_type:
+                    continue
+                observations: dict[str, float] = {}
+                for row in rows[10:]:
+                    raw_date = row[0] if row else None
+                    raw_value = row[col_idx] if col_idx < len(row) else None
+                    if isinstance(raw_date, dt.datetime):
+                        obs_date = raw_date.date()
+                    elif isinstance(raw_date, dt.date):
+                        obs_date = raw_date
+                    else:
+                        continue
+                    if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+                        continue
+                    observations[obs_date.strftime("%Y-%m")] = float(raw_value)
+                if observations:
+                    match_info = {
+                        "target": target,
+                        "description": str(desc),
+                        "sheet": sheet_name,
+                        "series_id": rows[9][col_idx] if col_idx < len(rows[9]) else None,
+                        "unit": rows[1][col_idx] if col_idx < len(rows[1]) else None,
+                        "series_type": rows[2][col_idx] if col_idx < len(rows[2]) else None,
+                        "observations": observations,
+                    }
+                    break
+            if match_info:
+                break
+        if not match_info:
+            raise RuntimeError(f"ABS workbook did not contain target series {target!r}")
+        found.append(match_info)
+
+    common_periods = set(found[0]["observations"])
+    for series in found[1:]:
+        common_periods &= set(series["observations"])
+    values: list[dict[str, Any]] = []
+    for period in sorted(common_periods):
+        total = sum(series["observations"][period] for series in found)
+        values.append({"t": period, "v": _round_numeric(total, ndigits)})
+
+    values = values[-limit:]
+    if not values:
+        raise RuntimeError("ABS workbook target series contained no common numeric observations")
+
+    latest_period = values[-1]["t"]
+    latest_date = dt.date.fromisoformat(f"{latest_period}-01")
+    latest_components = [
+        {
+            "description": series["description"],
+            "series_id": series["series_id"],
+            "sheet": series["sheet"],
+            "series_type": series["series_type"],
+            "unit": series["unit"],
+            "value": _round_numeric(series["observations"][latest_period], ndigits),
+        }
+        for series in found
+    ]
+    unit = str(found[0]["unit"] or "").strip()
+    return values, month_end_iso(latest_date), latest_components, unit
+
+
+def fetch_abs_release_xlsx_series(source: dict[str, Any]) -> dict[str, Any]:
+    release_url = source.get("fetch_url") or source.get("canonical_url") or source.get("url")
+    workbook_url = discover_abs_release_xlsx_url(release_url, source.get("fetch_xlsx_label_contains", []))
+    wb = load_xlsx_from_url(workbook_url)
+
+    targets = source.get("fetch_series_descriptions") or []
+    if isinstance(targets, str):
+        targets = [targets]
+    values, last_data_point, components, workbook_unit = extract_abs_xlsx_series(
+        wb,
+        list(targets),
+        series_type=source.get("fetch_series_type"),
+        ndigits=int(source.get("fetch_round_digits", 1)),
+        limit=int(source.get("fetch_trim_observations", 60)),
+    )
+    unit = source.get("fetch_unit") or workbook_unit
+    component_names = "; ".join(str(component["series_id"]) for component in components)
+    notes = source.get("fetch_notes") or (
+        f"Fetched from ABS latest-release XLSX workbook. Series IDs: {component_names}. "
+        f"Workbook unit: {workbook_unit}. Values are trimmed to the last {len(values)} observations."
+    )
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": notes,
+        "source_url_resolved": workbook_url,
+        "extra": {
+            "schema": "abs_xlsx_series.v1",
+            "fields": {
+                "workbook_url": workbook_url,
+                "workbook_unit": workbook_unit,
+                "component_series": components,
+            },
+        },
+    }
 
 
 def discover_aps_workbook_url(package_url: str) -> str:
@@ -842,7 +1360,44 @@ def fetch_wa_fuelwatch(url: str, label: str = "ULP 91") -> dict[str, Any] | None
     return retail_result("WA", prices, source_date, f"FuelWatch {label} RSS feed")
 
 
-def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | None:
+QLD_MONTH_NAMES = {
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12,
+}
+
+
+def qld_resource_period(resource: dict[str, Any]) -> tuple[int, int] | None:
+    text = f"{resource.get('name', '')} {resource.get('url', '')}".lower()
+    year = None
+    month = None
+    if found := re.search(r"20\d{2}[-_](\d{2})", text):
+        year_match = re.search(r"(20\d{2})[-_]\d{2}", text)
+        if year_match:
+            year = int(year_match.group(1))
+            month = int(found.group(1))
+    if year is None:
+        if year_match := re.search(r"20\d{2}", text):
+            year = int(year_match.group(0))
+        for name, value in QLD_MONTH_NAMES.items():
+            if name in text:
+                month = value
+                break
+    if year and month:
+        return year, month
+    return None
+
+
+def qld_datastore_resources(package_id: str, ckan_base: str) -> list[dict[str, Any]] | None:
     url = f"{ckan_base.rstrip('/')}/api/3/action/package_show?id={urllib.parse.quote(package_id)}"
     try:
         r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
@@ -854,31 +1409,23 @@ def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | Non
         warn_skip("QLD Fuel Prices", f"package lookup {type(exc).__name__}: {exc}")
         return None
 
-    month_names = {
-        "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
-        "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
-    }
+    return [
+        resource
+        for resource in package.get("resources", [])
+        if str(resource.get("format", "")).upper() == "CSV" and resource.get("datastore_active")
+    ]
+
+
+def latest_qld_resource(package_id: str, ckan_base: str) -> dict[str, Any] | None:
+    resources = qld_datastore_resources(package_id, ckan_base)
+    if resources is None:
+        return None
+
     candidates: list[tuple[tuple[int, int], dict[str, Any]]] = []
-    for resource in package.get("resources", []):
-        if str(resource.get("format", "")).upper() != "CSV" or not resource.get("datastore_active"):
-            continue
-        text = f"{resource.get('name', '')} {resource.get('url', '')}".lower()
-        year = None
-        month = None
-        if found := re.search(r"20\d{2}[-_](\d{2})", text):
-            year_match = re.search(r"(20\d{2})[-_]\d{2}", text)
-            if year_match:
-                year = int(year_match.group(1))
-                month = int(found.group(1))
-        if year is None:
-            if year_match := re.search(r"20\d{2}", text):
-                year = int(year_match.group(0))
-            for name, value in month_names.items():
-                if name in text:
-                    month = value
-                    break
-        if year and month:
-            candidates.append(((year, month), resource))
+    for resource in resources:
+        period = qld_resource_period(resource)
+        if period:
+            candidates.append((period, resource))
 
     if not candidates:
         warn_skip("QLD Fuel Prices", "no datastore-backed monthly CSV resource found")
@@ -937,6 +1484,131 @@ def fetch_qld_open_data(
     latest_date = max(date_text[:10] for date_text, _ in latest_by_site.values())
     detail = f"Queensland Open Data {label} latest public monthly file: {resource.get('name', rid)}"
     return retail_result("QLD", [price for _, price in latest_by_site.values()], latest_date, detail)
+
+
+def qld_datastore_sql(ckan_base: str, sql: str) -> list[dict[str, Any]]:
+    url = f"{ckan_base.rstrip('/')}/api/3/action/datastore_search_sql?{urllib.parse.urlencode({'sql': sql})}"
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=60)
+    r.raise_for_status()
+    doc = r.json()
+    if not doc.get("success", True):
+        raise RuntimeError(f"Queensland datastore query failed: {doc}")
+    records = doc.get("result", {}).get("records", [])
+    if not isinstance(records, list):
+        raise RuntimeError("Queensland datastore query returned malformed records")
+    return records
+
+
+def fetch_qld_unavailable_reports(source: dict[str, Any]) -> dict[str, Any]:
+    """Count QLD monthly fuel-price rows where Price = 9999.
+
+    The Queensland Open Data column explanation defines 9999 as fuel stock
+    temporarily unavailable. This is a partial monthly reporting signal, not a
+    live station outage feed.
+    """
+    ckan_base = source.get("qld_ckan_base", "https://www.data.qld.gov.au")
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date()
+    package_id = source.get("qld_package_id", f"fuel-price-reporting-{today.year}")
+    resources = qld_datastore_resources(package_id, ckan_base)
+    if not resources:
+        raise RuntimeError(f"{source['id']}: no datastore-backed QLD monthly resources found")
+
+    monthly: list[tuple[tuple[int, int], dict[str, Any], dict[str, Any]]] = []
+    for resource in resources:
+        period = qld_resource_period(resource)
+        rid = resource.get("id")
+        if not period or not rid:
+            continue
+        sql = (
+            'SELECT COUNT(*) AS reports, COUNT(DISTINCT "SiteId") AS sites, '
+            'MAX("TransactionDateutc") AS latest, MIN("TransactionDateutc") AS earliest '
+            f'FROM "{rid}" WHERE "Price" = 9999'
+        )
+        records = qld_datastore_sql(ckan_base, sql)
+        record = records[0] if records else {}
+        monthly.append((period, resource, record))
+
+    if not monthly:
+        raise RuntimeError(f"{source['id']}: no dated QLD monthly resources could be queried")
+
+    monthly = sorted(monthly, key=lambda item: item[0])[-60:]
+    values = []
+    for (year, month), _, record in monthly:
+        try:
+            reports = int(record.get("reports") or 0)
+        except (TypeError, ValueError):
+            raise RuntimeError(f"{source['id']}: malformed report count in QLD datastore response")
+        values.append({"t": f"{year:04d}-{month:02d}", "v": reports})
+
+    latest_period, latest_resource, latest_record = monthly[-1]
+    latest_rid = latest_resource.get("id")
+    latest_date = str(latest_record.get("latest") or "")[:10]
+    if not latest_date:
+        latest_date = month_end_iso(dt.date(latest_period[0], latest_period[1], 1))
+
+    breakdown_records = []
+    if latest_rid:
+        sql = (
+            'SELECT "Fuel_Type", COUNT(*) AS reports, COUNT(DISTINCT "SiteId") AS sites '
+            f'FROM "{latest_rid}" WHERE "Price" = 9999 '
+            'GROUP BY "Fuel_Type" ORDER BY reports DESC'
+        )
+        breakdown_records = qld_datastore_sql(ckan_base, sql)
+
+    breakdown = []
+    for record in breakdown_records:
+        try:
+            reports = int(record.get("reports") or 0)
+            sites = int(record.get("sites") or 0)
+        except (TypeError, ValueError):
+            continue
+        breakdown.append(
+            {
+                "fuel_type": str(record.get("Fuel_Type") or "Unknown"),
+                "reports": reports,
+                "sites": sites,
+            }
+        )
+
+    try:
+        latest_sites = int(latest_record.get("sites") or 0)
+        latest_reports = int(latest_record.get("reports") or 0)
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(f"{source['id']}: malformed latest QLD stockout counts") from exc
+
+    return {
+        "unit": "unavailable fuel-type reports",
+        "values": values,
+        "last_data_point": latest_date,
+        "notes": (
+            "Counts rows in the latest monthly Queensland Open Data Fuel Price Reporting "
+            "resource where Price = 9999. The official column explanation says 9999 "
+            "denotes fuel stock temporarily unavailable, such as a tank empty and "
+            "awaiting new stock. This is monthly change-report coverage, not a live "
+            "statewide station outage count."
+        ),
+        "source_url_resolved": latest_resource.get("url") or source.get("url"),
+        "extra": {
+            "schema": "qld_fuel_security_unavailable_reports.v1",
+            "fields": {
+                "coverage": "Queensland monthly Open Data fuel-price reporting resources",
+                "metric": "Rows where Price = 9999",
+                "latest_resource_name": latest_resource.get("name"),
+                "latest_resource_id": latest_rid,
+                "latest_resource_url": latest_resource.get("url"),
+                "earliest_unavailable_report_date": str(latest_record.get("earliest") or "")[:10] or None,
+                "latest_unavailable_report_date": latest_date,
+                "unavailable_fuel_type_reports": latest_reports,
+                "distinct_sites_with_unavailable_fuel": latest_sites,
+                "fuel_type_breakdown": breakdown,
+                "not_covered": [
+                    "live station-level outage status",
+                    "national coverage",
+                    "stations with no fuel of any product unless all products are reported unavailable",
+                ],
+            },
+        },
+    }
 
 
 def fetch_nsw_fuelcheck(url: str, fuel_types: set[str] | None = None, label: str = "ULP 91") -> dict[str, Any] | None:
@@ -1053,6 +1725,515 @@ def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+STATE_NAME_TO_CODE = {
+    "Western Australia": "WA",
+    "Queensland": "QLD",
+    "Victoria": "VIC",
+    "South Australia": "SA",
+    "Northern Territory": "NT",
+    "New South Wales": "NSW",
+    "Tasmania": "TAS",
+    "ACT": "ACT",
+}
+
+STATE_CODE_TO_NAME = {
+    "WA": "Western Australia",
+    "QLD": "Queensland",
+    "VIC": "Victoria",
+    "SA": "South Australia",
+    "NT": "Northern Territory",
+    "NSW": "New South Wales",
+    "TAS": "Tasmania",
+    "ACT": "Australian Capital Territory",
+}
+
+
+def arcgis_group_count(query_url: str, group_fields: list[str], where: str = "1=1") -> list[dict[str, Any]]:
+    params = {
+        "f": "json",
+        "where": where,
+        "returnGeometry": "false",
+        "groupByFieldsForStatistics": ",".join(group_fields),
+        "outStatistics": json.dumps(
+            [
+                {
+                    "statisticType": "count",
+                    "onStatisticField": "OBJECTID",
+                    "outStatisticFieldName": "record_count",
+                }
+            ]
+        ),
+    }
+    r = requests.get(query_url, params=params, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    doc = r.json()
+    if "error" in doc:
+        raise RuntimeError(f"ArcGIS query failed for {query_url}: {doc['error']}")
+    features = doc.get("features")
+    if not isinstance(features, list):
+        raise RuntimeError(f"ArcGIS query for {query_url} did not return features")
+    return [feature.get("attributes", {}) for feature in features if isinstance(feature, dict)]
+
+
+def arcgis_features(query_url: str, where: str, out_fields: list[str]) -> list[dict[str, Any]]:
+    features: list[dict[str, Any]] = []
+    offset = 0
+    page_size = 2000
+    while True:
+        params = {
+            "f": "json",
+            "where": where,
+            "returnGeometry": "false",
+            "outFields": ",".join(out_fields),
+            "resultRecordCount": page_size,
+            "resultOffset": offset,
+            "orderByFields": out_fields[0],
+        }
+        r = requests.get(query_url, params=params, headers={"User-Agent": UA}, timeout=45)
+        r.raise_for_status()
+        doc = r.json()
+        if "error" in doc:
+            raise RuntimeError(f"ArcGIS query failed for {query_url}: {doc['error']}")
+        page = doc.get("features")
+        if not isinstance(page, list):
+            raise RuntimeError(f"ArcGIS query for {query_url} did not return features")
+        features.extend(feature.get("attributes", {}) for feature in page if isinstance(feature, dict))
+        if not doc.get("exceededTransferLimit") or len(page) < page_size:
+            break
+        offset += len(page)
+    return features
+
+
+def arcgis_date(value: Any) -> str | None:
+    if isinstance(value, (int, float)):
+        return (dt.datetime(1970, 1, 1, tzinfo=dt.timezone.utc) + dt.timedelta(milliseconds=value)).date().isoformat()
+    return None
+
+
+def clean_text(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text or text.lower() in {"n/a", "na", "none", "null"}:
+        return None
+    return text
+
+
+def clean_number(value: Any) -> float | None:
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).replace(",", "").strip()
+    if not text or text.lower() in {"n/a", "na", "other"}:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def product_class(resource: str | None) -> str:
+    text = (resource or "").lower()
+    classes = []
+    if "lng" in text:
+        classes.append("LNG")
+    if "gas" in text:
+        classes.append("gas")
+    if "oil" in text:
+        classes.append("crude/oil")
+    if "condensate" in text:
+        classes.append("condensate")
+    return " / ".join(dict.fromkeys(classes)) or (resource or "Unavailable")
+
+
+def fetch_nopta_petroleum_counts(source: dict[str, Any]) -> dict[str, Any]:
+    title_url = source.get("fetch_url")
+    wells_url = source.get("nopta_wells_query_url")
+    if not title_url or not wells_url:
+        raise RuntimeError(f"{source['id']}: fetch_url and nopta_wells_query_url are required")
+
+    title_rows = arcgis_group_count(
+        title_url,
+        ["OffShoreAr", "TitleType", "Status"],
+        "TitleType <> 'Greenhouse Gas Assessment Permit'",
+    )
+    well_rows = arcgis_group_count(wells_url, ["OffshoreArea", "Type", "IsOffshore"])
+
+    states = {
+        code: {
+            "state_code": code,
+            "state_name": STATE_CODE_TO_NAME[code],
+            "title_records": {
+                "total_current_non_ghg": 0,
+                "active": 0,
+                "pending_application": 0,
+                "by_title_type": {},
+            },
+            "well_records": {
+                "total_layer_records": 0,
+                "known_petroleum_type_records": 0,
+                "offshore_records": 0,
+                "onshore_or_unspecified_records": 0,
+            },
+        }
+        for code in ["WA", "QLD", "VIC", "SA", "NT", "NSW", "TAS", "ACT"]
+    }
+    external_or_unallocated = {
+        "title_records": {},
+        "well_records": {},
+    }
+
+    for row in title_rows:
+        area = row.get("OffShoreAr")
+        count = int(row.get("record_count") or 0)
+        title_type = row.get("TitleType") or "Unspecified"
+        status = row.get("Status") or "Unspecified"
+        code = STATE_NAME_TO_CODE.get(area)
+        if code:
+            target = states[code]["title_records"]
+            target["total_current_non_ghg"] += count
+            target["by_title_type"][title_type] = target["by_title_type"].get(title_type, 0) + count
+            if status == "Active":
+                target["active"] += count
+            elif status == "Pending Application":
+                target["pending_application"] += count
+        else:
+            key = area or "Unallocated"
+            external_or_unallocated["title_records"][key] = (
+                external_or_unallocated["title_records"].get(key, 0) + count
+            )
+
+    for row in well_rows:
+        area = row.get("OffshoreArea")
+        count = int(row.get("record_count") or 0)
+        well_type = row.get("Type")
+        is_offshore = row.get("IsOffshore")
+        code = STATE_NAME_TO_CODE.get(area)
+        if code:
+            target = states[code]["well_records"]
+            target["total_layer_records"] += count
+            if well_type == "Petroleum":
+                target["known_petroleum_type_records"] += count
+            if is_offshore == "Yes":
+                target["offshore_records"] += count
+            else:
+                target["onshore_or_unspecified_records"] += count
+        else:
+            key = area or "Unallocated"
+            external_or_unallocated["well_records"][key] = (
+                external_or_unallocated["well_records"].get(key, 0) + count
+            )
+
+    state_rows = []
+    for code, row in states.items():
+        row["title_records"]["by_title_type"] = [
+            {"title_type": title_type, "count": count}
+            for title_type, count in sorted(row["title_records"]["by_title_type"].items())
+        ]
+        row["labels"] = {
+            "title_records": "Observed current NOPTA non-GHG offshore title/permit records. Active and pending rows are kept separate.",
+            "well_records": "Observed NOPTA Petroleum Wells layer records by OffshoreArea. This is not an active or producing well count.",
+        }
+        state_rows.append(row)
+
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date().isoformat()
+    return {
+        "unit": "structured counts",
+        "values": [],
+        "last_data_point": today,
+        "notes": (
+            "Fetched from NOPTA ArcGIS REST FeatureServer public endpoints. Counts keep "
+            "titles/permits, title types, status and petroleum-wells layer records separate. "
+            "Greenhouse Gas Assessment Permits are excluded from petroleum title counts. "
+            "Well records are not presented as active or producing wells."
+        ),
+        "extra": {
+            "schema": "state_petroleum_nopta_counts.v1",
+            "fields": {
+                "as_at": today,
+                "state_rows": state_rows,
+                "external_or_unallocated": external_or_unallocated,
+                "title_source_url": title_url,
+                "wells_source_url": wells_url,
+                "object_definitions": {
+                    "title_records": "Current NOPTA Titles and Permits FeatureServer records, excluding Greenhouse Gas Assessment Permits.",
+                    "active_title_records": "Rows where Status is Active.",
+                    "pending_application_records": "Rows where Status is Pending Application.",
+                    "well_records": "Rows in the NOPTA Petroleum Wells FeatureServer grouped by OffshoreArea.",
+                    "known_petroleum_type_records": "Well-layer rows where Type equals Petroleum.",
+                },
+            },
+        },
+    }
+
+
+def fetch_nopta_production_licence_map(source: dict[str, Any]) -> dict[str, Any]:
+    title_url = source.get("fetch_url")
+    if not title_url:
+        raise RuntimeError(f"{source['id']}: fetch_url is required")
+
+    rows = arcgis_features(
+        title_url,
+        "TitleType = 'Production Licence' AND Status = 'Active'",
+        [
+            "Title",
+            "RelTitle",
+            "TitleType",
+            "ExpiryDate",
+            "GrantDate",
+            "Status",
+            "FieldName",
+            "BasinName",
+            "SubBasin",
+            "OffShoreAr",
+            "TitleOprat",
+            "TitleHold",
+            "NoOfBlocks",
+            "AreaKM2",
+            "NEATS_Links",
+        ],
+    )
+
+    state_rows = {
+        code: {
+            "state_code": code,
+            "state_name": STATE_CODE_TO_NAME[code],
+            "production_licence_records": 0,
+            "mapped_field_records": 0,
+            "mapped_operator_records": 0,
+            "basins": set(),
+            "operators": set(),
+        }
+        for code in ["WA", "QLD", "VIC", "SA", "NT", "NSW", "TAS", "ACT"]
+    }
+    mapped_rows: list[dict[str, Any]] = []
+    external_or_unallocated: list[dict[str, Any]] = []
+
+    for row in rows:
+        offshore_area = clean_text(row.get("OffShoreAr"))
+        state_code = STATE_NAME_TO_CODE.get(offshore_area)
+        title_holders_raw = clean_text(row.get("TitleHold"))
+        item = {
+            "state_code": state_code,
+            "state_name": STATE_CODE_TO_NAME.get(state_code) if state_code else offshore_area,
+            "offshore_area": offshore_area,
+            "basin_name": clean_text(row.get("BasinName")),
+            "sub_basin": clean_text(row.get("SubBasin")),
+            "title": clean_text(row.get("Title")),
+            "related_title": clean_text(row.get("RelTitle")),
+            "field_name": clean_text(row.get("FieldName")),
+            "title_operator": clean_text(row.get("TitleOprat")),
+            "title_holders_raw": title_holders_raw,
+            "title_holders": [part.strip() for part in title_holders_raw.split(",") if part.strip()] if title_holders_raw else [],
+            "title_type": clean_text(row.get("TitleType")),
+            "status": clean_text(row.get("Status")),
+            "grant_date": arcgis_date(row.get("GrantDate")),
+            "expiry_date": arcgis_date(row.get("ExpiryDate")),
+            "blocks": int(row["NoOfBlocks"]) if clean_number(row.get("NoOfBlocks")) is not None else None,
+            "area_km2": round(clean_number(row.get("AreaKM2")), 2) if clean_number(row.get("AreaKM2")) is not None else None,
+            "neats_url": clean_text(row.get("NEATS_Links")),
+            "product_class": "petroleum",
+            "production_metric_name": "Active offshore petroleum production licence record",
+            "production_metric_value": None,
+            "production_unit": None,
+            "production_period": "current NOPTA title record",
+            "trust_label": "Observed",
+            "mapping_status": "Mapped active production licence; source does not publish production volume in this layer.",
+            "notes": "NOPTA title/operator/field metadata. This is not a production-volume, revenue or project-output measure.",
+        }
+        if state_code:
+            target = state_rows[state_code]
+            target["production_licence_records"] += 1
+            if item["field_name"]:
+                target["mapped_field_records"] += 1
+            if item["title_operator"]:
+                target["mapped_operator_records"] += 1
+                target["operators"].add(item["title_operator"])
+            if item["basin_name"]:
+                target["basins"].add(item["basin_name"])
+            mapped_rows.append(item)
+        else:
+            external_or_unallocated.append(item)
+
+    summary_rows = []
+    for row in state_rows.values():
+        summary = dict(row)
+        summary["basins"] = sorted(summary["basins"])
+        summary["operators"] = sorted(summary["operators"])
+        summary_rows.append(summary)
+
+    today = dt.datetime.now(dt.timezone(dt.timedelta(hours=10))).date().isoformat()
+    return {
+        "unit": "active offshore petroleum production licence records",
+        "values": [{"t": today, "v": len(mapped_rows)}],
+        "last_data_point": today,
+        "notes": (
+            "Fetched from the NOPTA Titles and Permits Current FeatureServer for active "
+            "petroleum production licence records. Rows map offshore area/state, basin, "
+            "field name, title, title operator and title holders where published. This "
+            "is partial offshore regulatory mapping and does not contain production volumes."
+        ),
+        "extra": {
+            "schema": "state_petroleum_production_licence_map.v1",
+            "fields": {
+                "as_at": today,
+                "source_scope": "Active NOPTA Production Licence rows only.",
+                "state_rows": summary_rows,
+                "production_licence_rows": mapped_rows,
+                "external_or_unallocated": external_or_unallocated,
+                "title_source_url": title_url,
+                "mapping_definitions": {
+                    "state": "Derived from NOPTA OffShoreAr where it matches an Australian state or territory.",
+                    "basin": "NOPTA BasinName field.",
+                    "field_name": "NOPTA FieldName field. It can contain one or multiple fields and is not split or inferred.",
+                    "operator": "NOPTA TitleOprat field.",
+                    "title_holders": "NOPTA TitleHold field, preserved as raw text and a best-effort split list.",
+                    "production_metric_value": "Unavailable. The source layer publishes regulatory title metadata, not production volume.",
+                },
+            },
+        },
+    }
+
+
+def find_workbook_header(rows: list[tuple[Any, ...]], required: list[str]) -> tuple[int, list[str]]:
+    normalized_required = {item.lower() for item in required}
+    for idx, row in enumerate(rows):
+        header = [str(cell).strip() if cell is not None else "" for cell in row]
+        normalized = {cell.lower() for cell in header if cell}
+        if normalized_required.issubset(normalized):
+            return idx, header
+    raise RuntimeError(f"Workbook sheet did not contain required columns: {', '.join(required)}")
+
+
+def fetch_remp_oil_gas_projects(source: dict[str, Any]) -> dict[str, Any]:
+    url = source.get("fetch_url")
+    if not url:
+        raise RuntimeError(f"{source['id']}: fetch_url is required")
+    user_agent = source.get("fetch_user_agent")
+    if user_agent == "browser-compatible":
+        user_agent = "Mozilla/5.0"
+    wb = load_xlsx_from_url(
+        url,
+        {
+            "User-Agent": user_agent or "Mozilla/5.0",
+            "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,*/*",
+        },
+    )
+    sheet_name = source.get("remp_sheet", "Oil & gas")
+    if sheet_name not in wb.sheetnames:
+        raise RuntimeError(f"REMP workbook did not contain sheet {sheet_name!r}")
+    rows = list(wb[sheet_name].iter_rows(values_only=True))
+    header_idx, header = find_workbook_header(rows, ["Project", "Company", "State", "Resource"])
+    header_map = {name: idx for idx, name in enumerate(header) if name}
+
+    project_rows: list[dict[str, Any]] = []
+    state_rows = {
+        code: {
+            "state_code": code,
+            "state_name": STATE_CODE_TO_NAME[code],
+            "project_rows": 0,
+            "committed_rows": 0,
+            "publicly_announced_rows": 0,
+            "mapped_company_rows": 0,
+            "product_classes": set(),
+        }
+        for code in ["WA", "QLD", "VIC", "SA", "NT", "NSW", "TAS", "ACT"]
+    }
+
+    def cell(row: tuple[Any, ...], name: str) -> Any:
+        idx = header_map.get(name)
+        return row[idx] if idx is not None and idx < len(row) else None
+
+    for raw in rows[header_idx + 1:]:
+        project_name = clean_text(cell(raw, "Project"))
+        if not project_name:
+            continue
+        state_code = clean_text(cell(raw, "State"))
+        if state_code not in state_rows:
+            continue
+        resource = clean_text(cell(raw, "Resource"))
+        status = clean_text(cell(raw, "Status"))
+        capacity_value = clean_number(cell(raw, "Annual Estimated New Capacity"))
+        capacity_unit = clean_text(cell(raw, "Capacity Unit"))
+        cost_value = clean_number(cell(raw, "Cost Estimate A$m"))
+        row = {
+            "state_code": state_code,
+            "state_name": STATE_CODE_TO_NAME[state_code],
+            "basin_name": None,
+            "project_name": project_name,
+            "field_name": None,
+            "operator_name": None,
+            "company_name": clean_text(cell(raw, "Company")),
+            "product_class": product_class(resource),
+            "resource": resource,
+            "project_type": clean_text(cell(raw, "Type")),
+            "status": status,
+            "latitude": clean_number(cell(raw, "Latitude")),
+            "longitude": clean_number(cell(raw, "Longitude")),
+            "production_metric_name": "Annual estimated new capacity (not current production)",
+            "production_metric_value": capacity_value,
+            "production_unit": capacity_unit,
+            "production_period": "Resources and Energy Major Projects 2024",
+            "cost_estimate_aud_m": cost_value,
+            "estimated_start_commercial_operation": clean_text(cell(raw, "Estimated Start Commercial Operation")),
+            "trust_label": "Partial coverage",
+            "mapping_status": "Major project/development row; not a current production-volume row.",
+            "notes": "REMP maps project, company, state, resource and estimated new capacity where published. It does not publish basin, operator role or current production volume.",
+        }
+        project_rows.append(row)
+        summary = state_rows[state_code]
+        summary["project_rows"] += 1
+        if status == "Committed":
+            summary["committed_rows"] += 1
+        elif status == "Publicly_announced":
+            summary["publicly_announced_rows"] += 1
+        if row["company_name"]:
+            summary["mapped_company_rows"] += 1
+        summary["product_classes"].add(row["product_class"])
+
+    if not project_rows:
+        raise RuntimeError("REMP Oil & gas sheet contained no project rows")
+
+    summary_rows = []
+    for row in state_rows.values():
+        summary = dict(row)
+        summary["product_classes"] = sorted(summary["product_classes"])
+        summary_rows.append(summary)
+
+    return {
+        "unit": "oil and gas major project rows",
+        "values": [{"t": "2024-12-20", "v": len(project_rows)}],
+        "last_data_point": "2024-12-20",
+        "notes": (
+            "Parsed the Department of Industry, Science and Resources Resources and Energy "
+            "Major Projects 2024 data workbook, Oil & gas sheet. Rows map project, company, "
+            "state, resource, status and annual estimated new capacity where published. "
+            "This is a major-project/development list, not current production by company."
+        ),
+        "source_url_resolved": url,
+        "extra": {
+            "schema": "state_oil_gas_major_projects_remp.v1",
+            "fields": {
+                "report": "Resources and Energy Major Projects 2024",
+                "publication_date": "2024-12-20",
+                "source_period_note": "Publication page states the 2024 report updates project developments from November 2023 to October 2024; the workbook table-of-contents text still refers to project data as at 31 October 2023.",
+                "sheet": sheet_name,
+                "state_rows": summary_rows,
+                "project_rows": project_rows,
+                "mapping_definitions": {
+                    "project": "REMP Project column.",
+                    "company": "REMP Company column. The row does not distinguish operator, owner, proponent or joint-venture role.",
+                    "state": "REMP State column.",
+                    "product_class": "Derived only from the REMP Resource text for display grouping.",
+                    "production_metric_value": "Annual Estimated New Capacity where numeric. It is not current production.",
+                    "basin_name": "Unavailable; the REMP Oil & gas sheet does not publish a basin column.",
+                },
+            },
+        },
+    }
+
+
 Fetcher = Callable[[dict[str, Any]], dict[str, Any]]
 FETCHERS: dict[str, Fetcher] = {
     "eia_brent": lambda source: fetch_eia_series("RBRTE", source.get("fetch_url")),
@@ -1079,10 +2260,124 @@ FETCHERS: dict[str, Fetcher] = {
         source.get("sdmx_note_suffix"),
         source.get("fetch_url"),
     ),
+    "abs_unemployment_rate": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_cpi_inflation": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_gdp_real_growth": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_population_quarterly": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_population_growth_rate": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_residential_dwelling_stock": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_manufacturing_employment": fetch_abs_release_xlsx_series,
+    "abs_manufacturing_output_index": fetch_abs_release_xlsx_series,
+    "abs_manufactured_exports_total": fetch_abs_release_xlsx_series,
+    "abs_manufacturing_capex": fetch_abs_release_xlsx_series,
+    "abs_food_beverage_employment": fetch_abs_release_xlsx_series,
+    "abs_participation_rate": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_employment_population_ratio": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_job_vacancies": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_wage_price_index": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
+    "rba_cash_rate": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Cash Rate Target",
+        aggregate="monthly_mean",
+        unit="per cent",
+        notes="Monthly mean of daily RBA cash-rate target observations from Statistical Table F1.1. Trimmed to last 60 months.",
+        ndigits=2,
+    ),
+    "rba_household_debt_to_income": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Household debt to income",
+        aggregate="quarter_end",
+        unit="per cent",
+        notes="Quarter-end value of household debt as a per cent of annualised household disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
+        ndigits=1,
+    ),
+    "rba_standard_variable_mortgage_rate": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier",
+        aggregate="monthly_mean",
+        unit="per cent per annum",
+        notes="Monthly RBA indicator lending rate for banks' standard variable owner-occupier housing loans, from Statistical Table F5. Trimmed to last 60 months.",
+        ndigits=2,
+    ),
+    "rba_credit_card_debt_accruing_interest": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Balances accruing interest",
+        aggregate="monthly_mean",
+        unit="AUD millions",
+        notes="Monthly value of credit and charge card balances accruing interest from RBA Statistical Table C1.1 aggregate credit card statistics. Trimmed to last 60 months.",
+        ndigits=1,
+    ),
+    "aofm_gov_gross_debt": fetch_aofm_ags_face_value,
+    "aemo_nem_average_wholesale_price": lambda source: fetch_aemo_nem_price_demand("price"),
+    "aemo_nem_total_demand": lambda source: fetch_aemo_nem_price_demand("demand"),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
     "aip_tgp": fetch_aip_tgp,
+    "qld_fuel_security_unavailable_reports": fetch_qld_unavailable_reports,
+    "state_petroleum_nopta_counts": fetch_nopta_petroleum_counts,
+    "state_petroleum_production_licence_map": fetch_nopta_production_licence_map,
+    "state_oil_gas_major_projects_remp": fetch_remp_oil_gas_projects,
 }
 
 
@@ -1123,12 +2418,40 @@ def write_generated(source: dict[str, Any], block: dict[str, Any]) -> pathlib.Pa
     return path
 
 
-def check_url(url: str) -> tuple[bool, str]:
+def check_url(
+    url: str,
+    *,
+    headers: dict[str, str] | None = None,
+    timeout_seconds: int = 20,
+) -> tuple[bool, str]:
+    request_headers = headers or {"User-Agent": UA}
     try:
-        r = requests.head(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True)
-        if r.status_code >= 400:
-            r = requests.get(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True, stream=True)
+        try:
+            r = requests.head(
+                url,
+                headers=request_headers,
+                timeout=timeout_seconds,
+                allow_redirects=True,
+            )
+        except requests.RequestException:
+            r = requests.get(
+                url,
+                headers=request_headers,
+                timeout=timeout_seconds,
+                allow_redirects=True,
+                stream=True,
+            )
             r.close()
+        else:
+            if r.status_code >= 400:
+                r = requests.get(
+                    url,
+                    headers=request_headers,
+                    timeout=timeout_seconds,
+                    allow_redirects=True,
+                    stream=True,
+                )
+                r.close()
         if r.status_code >= 400:
             return False, f"HTTP {r.status_code}"
         return True, f"HTTP {r.status_code}"
@@ -1139,7 +2462,18 @@ def check_url(url: str) -> tuple[bool, str]:
 def source_check_url(source: dict[str, Any], *, all_links: bool) -> str:
     if all_links:
         return source.get("canonical_url") or source["url"]
-    return source.get("fetch_url") or source.get("canonical_url") or source["url"]
+    return source.get("check_url") or source.get("fetch_url") or source.get("canonical_url") or source["url"]
+
+
+def source_check_options(source: dict[str, Any]) -> tuple[dict[str, str], int]:
+    user_agent = source.get("check_user_agent") or source.get("fetch_user_agent")
+    headers = {"User-Agent": "Mozilla/5.0" if user_agent == "browser-compatible" else UA}
+    timeout_seconds = int(source.get("check_timeout_seconds") or 20)
+    return headers, timeout_seconds
+
+
+def source_check_required(source: dict[str, Any]) -> bool:
+    return source.get("check_required", True) is not False
 
 
 def main() -> int:
@@ -1174,6 +2508,8 @@ def main() -> int:
             fetcher = fetch_aps_xlsx_series
         if fetcher is None and source.get("retail_product"):
             fetcher = fetch_retail_multistate
+        if fetcher is None and source.get("derived_from") and source.get("derived_field"):
+            fetcher = fetch_extra_field_derived
         if not fetcher:
             errors.append(f"{sid}: marked {source.get('fetch')} but no fetcher registered")
             return
@@ -1198,11 +2534,15 @@ def main() -> int:
                 skipped.append((sid, "not programmatic; skipped blocking fetch check"))
                 continue
             url = source_check_url(source, all_links=args.check_all_links)
-            ok, msg = check_url(url)
-            tag = "OK " if ok else "ERR"
+            headers, timeout_seconds = source_check_options(source)
+            ok, msg = check_url(url, headers=headers, timeout_seconds=timeout_seconds)
+            required = source_check_required(source)
+            tag = "OK " if ok else ("ERR" if required else "WARN")
             print(f"[{tag}] {sid:<32} {msg}  {url}")
-            if not ok:
+            if not ok and required:
                 errors.append(f"{sid}: {msg}")
+            elif not ok:
+                skipped.append((sid, f"non-blocking fetch check failed: {msg}"))
             continue
 
         if fetch_mode in {"programmatic", "derived"}:

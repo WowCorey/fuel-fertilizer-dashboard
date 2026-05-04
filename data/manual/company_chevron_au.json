@@ -24,7 +24,12 @@
       "net_profit": 5193.579,
       "net_profit_unit": "US$m",
       "net_profit_period_end": "2024-12-31",
-      "net_profit_basis": "profit after tax derived from stated audited Annual Report extract: profit before income tax expense US$7,056.593m less total income tax expense US$1,863.014m"
+      "net_profit_basis": "profit after tax derived from stated audited Annual Report extract: profit before income tax expense US$7,056.593m less total income tax expense US$1,863.014m",
+      "prrt_paid": 0.0,
+      "prrt_subsidiaries": [],
+      "prrt_note": "No Chevron entity appears in the 2023-24 ATO PRRT details sheet. Chevron operates the Gorgon and Wheatstone LNG projects but reported zero PRRT payable in 2023-24.",
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }
