@@ -28,6 +28,29 @@ class FakeResponse:
 
 
 class FetchTransformTests(unittest.TestCase):
+    def test_non_required_fetch_check_failure_does_not_block(self):
+        source = {
+            "id": "slow_optional_source",
+            "fetch": "programmatic",
+            "fetch_url": "https://example.test/slow.xlsx",
+            "check_required": False,
+        }
+        with mock.patch.object(fetch_data, "load_sources", return_value=[source]), \
+             mock.patch.object(fetch_data, "check_url", return_value=(False, "ReadTimeout: timed out")), \
+             mock.patch.object(sys, "argv", ["fetch_data.py", "--check"]):
+            self.assertEqual(fetch_data.main(), 0)
+
+    def test_required_fetch_check_failure_blocks(self):
+        source = {
+            "id": "required_source",
+            "fetch": "programmatic",
+            "fetch_url": "https://example.test/required.csv",
+        }
+        with mock.patch.object(fetch_data, "load_sources", return_value=[source]), \
+             mock.patch.object(fetch_data, "check_url", return_value=(False, "ReadTimeout: timed out")), \
+             mock.patch.object(sys, "argv", ["fetch_data.py", "--check"]):
+            self.assertEqual(fetch_data.main(), 1)
+
     def test_abs_sdmx_parses_single_series(self):
         doc = {
             "dataSets": [
@@ -230,6 +253,56 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(out["unit"], "USD per AUD")
         self.assertEqual(out["values"], [{"t": "2026-01", "v": 0.66}, {"t": "2026-02", "v": 0.7}])
         self.assertEqual(out["last_data_point"], "2026-02-03")
+
+    def test_rba_csv_column_accepts_slash_dates(self):
+        csv_text = "\n".join(
+            [
+                "Some intro",
+                "More intro",
+                "More intro",
+                "More intro",
+                "More intro",
+                "More intro",
+                "More intro",
+                "More intro",
+                "More intro",
+                "Title,Cash Rate Target,Other",
+                "Description,Cash rate target,Other",
+                "Series ID,FIRMMCRT,Other",
+                "01/01/2026,4.00,x",
+                "31/01/2026,3.50,x",
+            ]
+        )
+        with mock.patch.object(fetch_data.requests, "get", return_value=FakeResponse(content=csv_text.encode("utf-8-sig"))):
+            out = fetch_data.fetch_rba_csv_column(
+                "https://example.test/f1.1.csv",
+                title_substring="Cash Rate Target",
+                aggregate="monthly_mean",
+                unit="per cent",
+                notes="test",
+                ndigits=2,
+            )
+
+        self.assertEqual(out["unit"], "per cent")
+        self.assertEqual(out["values"], [{"t": "2026-01", "v": 3.75}])
+        self.assertEqual(out["last_data_point"], "2026-01-31")
+
+    def test_aofm_ags_face_value_csv(self):
+        csv_text = "\n".join(
+            [
+                "FY,Face Value ($b)",
+                "2023-24,878.9",
+                "2024-25,895.6",
+            ]
+        )
+        source = {"id": "aofm_gov_gross_debt", "fetch_url": "https://example.test/stock_ags.csv"}
+        with mock.patch.object(fetch_data.requests, "get", return_value=FakeResponse(content=csv_text.encode("utf-8-sig"))):
+            out = fetch_data.fetch_aofm_ags_face_value(source)
+
+        self.assertEqual(out["unit"], "AUD billions")
+        self.assertEqual(out["values"], [{"t": "2023-24", "v": 878.9}, {"t": "2024-25", "v": 895.6}])
+        self.assertEqual(out["last_data_point"], "2025-06-30")
+        self.assertIn("not the same as Commonwealth general government gross debt", out["notes"])
 
     def test_aps_xlsx_series_reads_named_sheet_and_column(self):
         import openpyxl

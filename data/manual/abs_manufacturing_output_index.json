@@ -1,8 +1,8 @@
 {
   "series_id": "abs_manufacturing_output_index",
   "source_id": "abs_manufacturing_output_index",
-  "source_name": "ABS Manufacturing production index, quarterly",
-  "source_url": "https://www.abs.gov.au/statistics/industry/industry-overview/business-indicators-australia",
+  "source_name": "ABS Manufacturing sales, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia",
   "unit": "",
   "retrieved_at": null,
   "stub_created_at": "2026-04-27T09:21:37+00:00",
@@ -12,5 +12,5 @@
   "status": "unavailable",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 where stated by publisher",
-  "citation": "Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), manufacturing sales of goods produced."
+  "citation": "Australian Bureau of Statistics, Business Indicators Australia (Cat. 5676.0), income from sales of goods and services by industry."
 }

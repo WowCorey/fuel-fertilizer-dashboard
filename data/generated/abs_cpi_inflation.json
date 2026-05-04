@@ -4,8 +4,8 @@
   "source_name": "ABS Consumer Price Index - all groups annual change, monthly",
   "source_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
   "unit": "PCT",
-  "retrieved_at": "2026-04-27T19:08:34+00:00",
-  "last_data_point": "2026-02-28",
+  "retrieved_at": "2026-04-30T09:45:32+00:00",
+  "last_data_point": "2026-03-31",
   "values": [
     {
       "t": "2025-04",
@@ -50,6 +50,10 @@
     {
       "t": "2026-02",
       "v": 3.7
+    },
+    {
+      "t": "2026-03",
+      "v": 4.6
     }
   ],
   "notes": "Fetched from ABS Data API dataflow CPI, key 3.10001.10.50.M. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS CPI dataflow MEASURE 3 (Percentage change from previous year), INDEX 10001 (All groups CPI), TSEST 10 (Original), REGION 50 (Australia weighted average of eight capital cities), FREQ M. Returns the headline all-groups annual percentage change, monthly.",

@@ -109,6 +109,10 @@ function ShippingVisibility({
   liveVesselEnv
 }) {
   const [filter, setFilter] = React.useState('all');
+  const notApplicable = () => React.createElement("span", {
+    className: "unavail",
+    "aria-label": "not applicable"
+  }, "\u2014");
   function latest(env) {
     if (!env || env.status !== 'ok' || !env.values?.length) return null;
     return env.values.at(-1).v;
@@ -116,43 +120,149 @@ function ShippingVisibility({
   function fields(env) {
     return env?.extra?.fields || {};
   }
+  function isNumber(value) {
+    return value !== null && value !== undefined && !Number.isNaN(Number(value));
+  }
   function fmt(value, digits = 0) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return Number(value).toLocaleString('en-AU', {
       maximumFractionDigits: digits,
       minimumFractionDigits: digits
     });
   }
   function fmtAudThousands(value) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
       maximumFractionDigits: 1,
       minimumFractionDigits: 1
     })}bn`;
   }
+  function fmtChange(current, previous) {
+    if (!isNumber(current) || !isNumber(previous)) return notApplicable();
+    const change = Number(current) - Number(previous);
+    if (change === 0) return '0';
+    return `${change > 0 ? '+' : ''}${fmt(change)}`;
+  }
+  function tankerCell(value) {
+    return isNumber(value) ? `${fmt(value)} tankers` : notApplicable();
+  }
+  function daysCell(value) {
+    return isNumber(value) ? `${fmt(value)} days` : notApplicable();
+  }
   const tankerFields = fields(tankersEnv);
-  const groups = [{
+  const totalTankers = latest(tankersEnv);
+  const forwardOrders = latest(forwardOrdersEnv);
+  const importValue = latest(importsEnv);
+  const liveVesselNotes = liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.';
+  const rows = [{
     key: 'crude',
-    label: 'Crude oil',
-    shortLabel: 'Crude',
-    count: tankerFields.crude_oil_tankers,
-    previous: tankerFields.previous_crude_oil_tankers,
-    days: tankerFields.crude_oil_equivalent_days,
-    route: 'Overseas crude supply -> Australian refining system',
-    note: 'Aggregate PM&C count. No vessel identities or ETAs are loaded.'
+    filter: 'crude',
+    supplyGroup: 'Crude oil',
+    current: tankerCell(tankerFields.crude_oil_tankers),
+    previous: tankerCell(tankerFields.previous_crude_oil_tankers),
+    change: fmtChange(tankerFields.crude_oil_tankers, tankerFields.previous_crude_oil_tankers),
+    equivalentDays: daysCell(tankerFields.crude_oil_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate crude-oil tanker count and equivalent days only. No vessel names, AIS positions, cargo assignments or port-call ETAs are loaded.'
   }, {
     key: 'clean',
-    label: 'Clean refined products',
-    shortLabel: 'Clean products',
-    count: tankerFields.clean_refined_product_tankers,
-    previous: tankerFields.previous_clean_refined_product_tankers,
-    days: tankerFields.clean_refined_product_equivalent_days,
-    route: 'Regional product supply -> Australian terminals',
-    note: 'Aggregate PM&C count covering refined-product tankers.'
+    filter: 'clean',
+    supplyGroup: 'Clean refined products',
+    current: tankerCell(tankerFields.clean_refined_product_tankers),
+    previous: tankerCell(tankerFields.previous_clean_refined_product_tankers),
+    change: fmtChange(tankerFields.clean_refined_product_tankers, tankerFields.previous_clean_refined_product_tankers),
+    equivalentDays: daysCell(tankerFields.clean_refined_product_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate clean refined-product tanker count and equivalent days only. This is inbound supply visibility, not a live shipping layer.'
+  }, {
+    key: 'total',
+    filter: 'all',
+    supplyGroup: 'Total reported tankers',
+    current: tankerCell(totalTankers),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'Latest PM&C aggregate total reported tanker count. It does not identify individual vessels, ports, terminals or cargoes.'
+  }, {
+    key: 'orders',
+    filter: 'all',
+    supplyGroup: 'Forward import orders',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: forwardOrdersEnv,
+    partial: true,
+    meaning: `Latest PM&C forward import order visibility is ${fmt(forwardOrders, 1)} billion L ordered. This is aggregate public order visibility only.`
+  }, {
+    key: 'imports',
+    filter: 'all',
+    supplyGroup: 'ABS petroleum imports',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: importsEnv,
+    partial: false,
+    meaning: `Latest ABS petroleum import value is ${fmtAudThousands(importValue)} (${fmt(importValue)} AUD thousands). This is trade-value context, not tanker or vessel tracking.`
+  }, {
+    key: 'live',
+    filter: 'all',
+    supplyGroup: 'Live vessel identities / ETAs',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: liveVesselEnv,
+    partial: false,
+    meaning: `${liveVesselNotes} No AIS positions, vessel names, cargo assignments or port-call ETAs are plotted.`
   }];
-  const visibleGroups = filter === 'all' ? groups : groups.filter(group => group.key === filter);
-  const totalTankers = latest(tankersEnv);
+  const cards = [{
+    key: 'crude-card',
+    filter: 'crude',
+    title: 'Crude oil tankers',
+    value: isNumber(tankerFields.crude_oil_tankers) ? fmt(tankerFields.crude_oil_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.crude_oil_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_crude_oil_tankers)} tankers; equivalent days: ${fmt(tankerFields.crude_oil_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'clean-card',
+    filter: 'clean',
+    title: 'Clean refined-product tankers',
+    value: isNumber(tankerFields.clean_refined_product_tankers) ? fmt(tankerFields.clean_refined_product_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.clean_refined_product_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_clean_refined_product_tankers)} tankers; equivalent days: ${fmt(tankerFields.clean_refined_product_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'orders-card',
+    filter: 'all',
+    title: 'Forward import orders',
+    value: isNumber(forwardOrders) ? fmt(forwardOrders, 1) : 'Unavailable',
+    unit: isNumber(forwardOrders) ? 'billion L ordered' : '',
+    subtext: 'Aggregate public order visibility only. No cargo-level or vessel-level allocation is loaded.',
+    env: forwardOrdersEnv,
+    partial: true
+  }, {
+    key: 'live-card',
+    filter: 'all',
+    title: 'Live vessel layer',
+    value: 'Unavailable',
+    unit: '',
+    subtext: 'No source-safe live vessel names, AIS positions or port-call ETAs loaded.',
+    env: liveVesselEnv,
+    partial: false,
+    unavailable: true
+  }];
+  const visibleRows = filter === 'all' ? rows : rows.filter(row => row.filter === filter);
+  const visibleCards = filter === 'all' ? cards : cards.filter(card => card.filter === filter);
   const filterButtons = [['all', `All (${fmt(totalTankers)})`], ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`], ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`]];
+  const sourceLines = [tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv].map(env => window.FR.sourceLine(env)).filter(Boolean);
   return React.createElement("div", {
     className: "shipping-visibility"
   }, React.createElement("div", {
@@ -160,22 +270,20 @@ function ShippingVisibility({
     "aria-label": "Inbound fuel summary"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Inbound fuel visibility"), React.createElement("h3", null, "Australia supply inbound, shown only at aggregate level."), React.createElement("p", null, "PM&C publishes tanker counts and equivalent days. This layout makes that flow easier to read without inventing vessel identities, live positions or cargo assignments.")), React.createElement("div", {
+  }, "Inbound fuel evidence board"), React.createElement("h3", null, "Aggregate public data only, not a live map."), React.createElement("p", null, "PM&C publishes aggregate tanker counts, equivalent days and forward import orders. ABS publishes petroleum import value. This board shows those loaded values directly and keeps live vessel identities, AIS positions and port-call ETAs unavailable.")), React.createElement("div", {
     className: "shipping-stats"
   }, React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "reported tankers")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "PM&C aggregate reported tankers")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(forwardOrdersEnv), 1)), React.createElement("small", null, "billion L ordered")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(forwardOrders, 1)), React.createElement("small", null, "billion L ordered in PM&C forward import orders")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "ABS imports, AUD thousands")), React.createElement("div", {
-    className: "shipping-stat"
-  }, React.createElement("span", null, fmtAudThousands(latest(importsEnv))), React.createElement("small", null, "same value rounded to A$bn")), React.createElement("div", {
+  }, React.createElement("span", null, fmtAudThousands(importValue)), React.createElement("small", null, "ABS petroleum import value, rounded from AUD thousands")), React.createElement("div", {
     className: "shipping-stat shipping-stat--unavailable"
-  }, React.createElement("span", null, "0"), React.createElement("small", null, "live vessel feeds")))), React.createElement("div", {
+  }, React.createElement("span", null, "Unavailable"), React.createElement("small", null, "No live vessel feed loaded")))), React.createElement("div", {
     className: "shipping-tabs",
     role: "tablist",
-    "aria-label": "Inbound fuel visibility filters"
+    "aria-label": "Inbound fuel evidence filters"
   }, filterButtons.map(([key, label]) => React.createElement("button", {
     key: key,
     type: "button",
@@ -185,121 +293,45 @@ function ShippingVisibility({
   }, label))), React.createElement("div", {
     className: "shipping-visibility__body"
   }, React.createElement("div", {
-    className: "shipping-list",
-    "aria-label": "Aggregate tanker groups"
-  }, visibleGroups.map(group => React.createElement("article", {
-    key: group.key,
-    className: "shipping-row"
+    className: "shipping-evidence-main"
   }, React.createElement("div", {
-    className: "shipping-row__head"
-  }, React.createElement("div", null, React.createElement("span", {
+    className: "data-table-wrap shipping-evidence-table",
+    "aria-label": "Aggregate inbound supply comparison"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Supply group"), React.createElement("th", null, "Current tankers"), React.createElement("th", null, "Previous tankers"), React.createElement("th", null, "Change"), React.createElement("th", null, "Equivalent days"), React.createElement("th", null, "Source status"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, visibleRows.map(row => React.createElement("tr", {
+    key: row.key
+  }, React.createElement("td", null, row.supplyGroup), React.createElement("td", null, row.current), React.createElement("td", null, row.previous), React.createElement("td", null, row.change), React.createElement("td", null, row.equivalentDays), React.createElement("td", {
+    className: "shipping-status-cell"
+  }, React.createElement(EnvTrustBadges, {
+    env: row.env,
+    partial: row.partial
+  })), React.createElement("td", {
+    className: "shipping-meaning-cell"
+  }, row.meaning)))))), React.createElement("div", {
+    className: "shipping-evidence-note"
+  }, React.createElement("span", {
     className: "eyebrow"
-  }, group.shortLabel), React.createElement("h4", null, group.label)), React.createElement(EnvTrustBadges, {
-    env: tankersEnv,
-    partial: true
-  })), React.createElement("dl", {
-    className: "shipping-row__facts"
-  }, React.createElement("div", null, React.createElement("dt", null, "Current"), React.createElement("dd", null, fmt(group.count), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Previous"), React.createElement("dd", null, fmt(group.previous), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Equivalent"), React.createElement("dd", null, fmt(group.days), " days"))), React.createElement("p", {
-    className: "shipping-route"
-  }, group.route), React.createElement("p", {
-    className: "caption"
-  }, group.note))), React.createElement("article", {
-    className: "shipping-row shipping-row--unavailable"
+  }, "Evidence board, not live map"), React.createElement("p", null, "This section does not plot ships. PM&C publishes aggregate tanker counts and equivalent days, not vessel names, AIS positions, cargo assignments or port-call ETAs. The dashboard therefore shows inbound supply as an evidence board rather than a live map."), React.createElement("ul", null, React.createElement("li", null, "PM&C aggregate tanker counts only."), React.createElement("li", null, "No live vessel feed loaded."), React.createElement("li", null, "No AIS positions, vessel names or port-call ETAs."), React.createElement("li", null, "No invented ports, terminals, shipping lanes or vessel locations.")))), React.createElement("div", {
+    className: "shipping-evidence-cards",
+    "aria-label": "Inbound supply evidence cards"
+  }, visibleCards.map(card => React.createElement("article", {
+    key: card.key,
+    className: `shipping-evidence-card${card.unavailable ? ' shipping-evidence-card--unavailable' : ''}`
   }, React.createElement("div", {
-    className: "shipping-row__head"
-  }, React.createElement("div", null, React.createElement("span", {
+    className: "shipping-evidence-card__head"
+  }, React.createElement("span", {
     className: "eyebrow"
-  }, "Vessel layer"), React.createElement("h4", null, "Live vessel identities and ETAs")), React.createElement(EnvTrustBadges, {
-    env: liveVesselEnv
-  })), React.createElement("p", null, liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.'))), React.createElement("div", {
-    className: "shipping-map",
-    "aria-label": "Illustrative aggregate fuel supply lane map"
-  }, React.createElement("div", {
-    className: "shipping-map__canvas"
-  }, React.createElement("svg", {
-    viewBox: "0 0 720 420",
-    role: "img",
-    "aria-labelledby": "shipping-map-title shipping-map-desc"
-  }, React.createElement("title", {
-    id: "shipping-map-title"
-  }, "Aggregate inbound fuel lane context"), React.createElement("desc", {
-    id: "shipping-map-desc"
-  }, "Illustrative Indo-Pacific fuel supply lanes into Australia. No live vessel positions are plotted."), React.createElement("rect", {
-    x: "0",
-    y: "0",
-    width: "720",
-    height: "420",
-    rx: "8"
-  }), React.createElement("path", {
-    className: "shipping-grid",
-    d: "M60 80H660M60 160H660M60 240H660M60 320H660M120 40V380M240 40V380M360 40V380M480 40V380M600 40V380"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--crude",
-    d: "M96 116 C220 80 340 112 466 210 C508 244 540 270 592 286"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--clean",
-    d: "M136 238 C246 202 358 216 484 272 C524 290 552 306 612 318"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--context",
-    d: "M198 312 C320 282 424 306 578 342"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "96",
-    cy: "116",
-    r: "6"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "136",
-    cy: "238",
-    r: "6"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "198",
-    cy: "312",
-    r: "6"
-  }), React.createElement("path", {
-    className: "shipping-australia",
-    d: "M536 242 L602 230 L650 260 L666 314 L622 358 L556 344 L510 302 Z"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "592",
-    cy: "286",
-    r: "5"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "612",
-    cy: "318",
-    r: "5"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "578",
-    cy: "342",
-    r: "5"
-  }), React.createElement("text", {
-    x: "80",
-    y: "96"
-  }, "Crude supply"), React.createElement("text", {
-    x: "118",
-    y: "220"
-  }, "Refined-product hubs"), React.createElement("text", {
-    x: "188",
-    y: "296"
-  }, "Regional context"), React.createElement("text", {
-    x: "528",
-    y: "222"
-  }, "Australia"))), React.createElement("div", {
-    className: "shipping-map__legend"
-  }, React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--crude"
-  }), "Crude aggregate"), React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--clean"
-  }), "Clean-product aggregate"), React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--context"
-  }), "Context only")), React.createElement("p", {
-    className: "caption mono"
-  }, "Illustrative route context only. No AIS positions, vessel names, port-call ETAs or live tracks are loaded."))), React.createElement("p", {
+  }, card.title), React.createElement(EnvTrustBadges, {
+    env: card.env,
+    partial: card.partial
+  })), React.createElement("div", {
+    className: "shipping-evidence-card__value"
+  }, React.createElement("span", null, card.value), card.unit && React.createElement("small", null, card.unit)), React.createElement("p", null, card.subtext))))), React.createElement("div", {
     className: "shipping-source mono"
-  }, window.FR.sourceLine(tankersEnv)));
+  }, sourceLines.map((line, index) => React.createElement("p", {
+    key: `${line}-${index}`
+  }, line))));
 }
 Object.assign(window, {
   ShippingVisibility
@@ -314,7 +346,7 @@ function Header({
     href: '../national-status-dashboard/index.html'
   }, {
     id: 'fuel_security',
-    label: 'Fuel security',
+    label: 'National fuel security',
     href: '../fuel-security-dashboard/index.html'
   }, {
     id: 'resource_value',
@@ -338,7 +370,7 @@ function Header({
     href: '../fuel-dashboard/index.html'
   }, {
     id: 'fertilizer',
-    label: 'Fertilizer',
+    label: 'Food & farms',
     href: '../fertilizer-dashboard/index.html'
   }, {
     id: 'oil',
@@ -364,6 +396,10 @@ function Header({
     id: 'infrastructure',
     label: 'Infrastructure',
     href: '../infrastructure-dashboard/index.html'
+  }, {
+    id: 'employment_automation',
+    label: 'Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'sources',
     label: 'Sources & methodology',
@@ -862,7 +898,7 @@ function Footer({
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-security-dashboard/index.html"
-  }, "Fuel security")), React.createElement("li", null, React.createElement("a", {
+  }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"
@@ -874,7 +910,7 @@ function Footer({
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
-  }, "Fertilizer")), React.createElement("li", null, React.createElement("a", {
+  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
     href: "../oil-and-production/index.html"
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
@@ -1001,10 +1037,10 @@ function App() {
     unit: " thousand persons"
   }), React.createElement(MetricCard, {
     eyebrow: "Output",
-    label: "Manufacturing sales (production index)",
-    plain: "ABS Business Indicators manufacturing sales of goods produced, seasonally adjusted, quarterly.",
+    label: "Manufacturing sales (chain volume)",
+    plain: "ABS Business Indicators income from sales of goods and services for manufacturing, chain volume measures, seasonally adjusted, quarterly.",
     fromEnvelope: data.abs_manufacturing_output_index,
-    unit: " AUD millions"
+    unit: " chain volume $m"
   }), React.createElement(MetricCard, {
     eyebrow: "Exports",
     label: "Manufactured exports",
@@ -1042,7 +1078,7 @@ function App() {
     className: "source-card"
   }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "All ABS manufacturing series remain on manual until each SDMX dataflow key is verified by a human. The Department of Industry industry profile slot is also manual; values appear only after a named publication is verified.")))), React.createElement("section", {
+  }, "Five ABS manufacturing series now load from verified ABS latest-release XLSX tables. Manufacturing GDP share remains unavailable until the exact National Accounts table/API mapping is verified. The Department of Industry profile slot also stays unavailable until a named factual publication is loaded.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1083,14 +1119,14 @@ function App() {
     yAxisLabel: "Employed persons (thousand)"
   }), React.createElement(ChartCard, {
     eyebrow: "Output",
-    title: "Manufacturing sales, quarterly",
-    unit: "AUD millions",
+    title: "Manufacturing sales, chain volume, quarterly",
+    unit: "chain volume $m",
     fromEnvelope: data.abs_manufacturing_output_index,
     ranges: ['3Y', '5Y'],
     defaultRange: "5Y",
     accent: "#B45309",
-    takeaway: "Seasonally adjusted manufacturing sales of goods produced, ABS Business Indicators.",
-    yAxisLabel: "Manufacturing sales (AUD millions)"
+    takeaway: "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, ABS Business Indicators.",
+    yAxisLabel: "Manufacturing sales (chain volume $m)"
   })), React.createElement("div", {
     style: {
       height: 24
@@ -1153,7 +1189,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). Manual entry until the ABS SDMX dataflow key for industry GVA is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001), quarterly. Manual entry until the ABS SDMX dataflow key for industry employment is verified."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing sales of goods produced, from ABS Business Indicators Australia (Cat. 5676.0), quarterly. Manual entry until the ABS SDMX dataflow key for manufacturing sales is verified."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods. Manual entry until the per-section ABS SDMX query is verified for manufactured exports."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual private new capital expenditure for ANZSIC division C (manufacturing), from ABS Private New Capital Expenditure (Cat. 5625.0), quarterly. Manual entry until the ABS SDMX dataflow key for industry capex is verified."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed. Manual entry until the ABS SDMX dataflow key for ANZSIC subdivisions is verified."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. Aggregated estimates are never published.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). This remains unavailable until the exact source table or API mapping for the share calculation is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001) Table 04, seasonally adjusted, quarterly."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, from ABS Business Indicators Australia (Cat. 5676.0) Table 4, quarterly. This is a source-backed sales/output proxy, not a separate production-index series."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined original FOB export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods Table 12a. The ABS workbook unit is AUD millions."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual total private new capital expenditure for ANZSIC division C (manufacturing), current prices, from ABS Private New Capital Expenditure (Cat. 5625.0) Table 4, seasonally adjusted, quarterly."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Sum of original employed-persons series for ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed Table 06, quarterly."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. This remains unavailable until a named publication supports a clean factual row; aggregated estimates are never published.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

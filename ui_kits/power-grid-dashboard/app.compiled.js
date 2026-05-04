@@ -109,6 +109,10 @@ function ShippingVisibility({
   liveVesselEnv
 }) {
   const [filter, setFilter] = React.useState('all');
+  const notApplicable = () => React.createElement("span", {
+    className: "unavail",
+    "aria-label": "not applicable"
+  }, "\u2014");
   function latest(env) {
     if (!env || env.status !== 'ok' || !env.values?.length) return null;
     return env.values.at(-1).v;
@@ -116,43 +120,149 @@ function ShippingVisibility({
   function fields(env) {
     return env?.extra?.fields || {};
   }
+  function isNumber(value) {
+    return value !== null && value !== undefined && !Number.isNaN(Number(value));
+  }
   function fmt(value, digits = 0) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return Number(value).toLocaleString('en-AU', {
       maximumFractionDigits: digits,
       minimumFractionDigits: digits
     });
   }
   function fmtAudThousands(value) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
       maximumFractionDigits: 1,
       minimumFractionDigits: 1
     })}bn`;
   }
+  function fmtChange(current, previous) {
+    if (!isNumber(current) || !isNumber(previous)) return notApplicable();
+    const change = Number(current) - Number(previous);
+    if (change === 0) return '0';
+    return `${change > 0 ? '+' : ''}${fmt(change)}`;
+  }
+  function tankerCell(value) {
+    return isNumber(value) ? `${fmt(value)} tankers` : notApplicable();
+  }
+  function daysCell(value) {
+    return isNumber(value) ? `${fmt(value)} days` : notApplicable();
+  }
   const tankerFields = fields(tankersEnv);
-  const groups = [{
+  const totalTankers = latest(tankersEnv);
+  const forwardOrders = latest(forwardOrdersEnv);
+  const importValue = latest(importsEnv);
+  const liveVesselNotes = liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.';
+  const rows = [{
     key: 'crude',
-    label: 'Crude oil',
-    shortLabel: 'Crude',
-    count: tankerFields.crude_oil_tankers,
-    previous: tankerFields.previous_crude_oil_tankers,
-    days: tankerFields.crude_oil_equivalent_days,
-    route: 'Overseas crude supply -> Australian refining system',
-    note: 'Aggregate PM&C count. No vessel identities or ETAs are loaded.'
+    filter: 'crude',
+    supplyGroup: 'Crude oil',
+    current: tankerCell(tankerFields.crude_oil_tankers),
+    previous: tankerCell(tankerFields.previous_crude_oil_tankers),
+    change: fmtChange(tankerFields.crude_oil_tankers, tankerFields.previous_crude_oil_tankers),
+    equivalentDays: daysCell(tankerFields.crude_oil_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate crude-oil tanker count and equivalent days only. No vessel names, AIS positions, cargo assignments or port-call ETAs are loaded.'
   }, {
     key: 'clean',
-    label: 'Clean refined products',
-    shortLabel: 'Clean products',
-    count: tankerFields.clean_refined_product_tankers,
-    previous: tankerFields.previous_clean_refined_product_tankers,
-    days: tankerFields.clean_refined_product_equivalent_days,
-    route: 'Regional product supply -> Australian terminals',
-    note: 'Aggregate PM&C count covering refined-product tankers.'
+    filter: 'clean',
+    supplyGroup: 'Clean refined products',
+    current: tankerCell(tankerFields.clean_refined_product_tankers),
+    previous: tankerCell(tankerFields.previous_clean_refined_product_tankers),
+    change: fmtChange(tankerFields.clean_refined_product_tankers, tankerFields.previous_clean_refined_product_tankers),
+    equivalentDays: daysCell(tankerFields.clean_refined_product_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate clean refined-product tanker count and equivalent days only. This is inbound supply visibility, not a live shipping layer.'
+  }, {
+    key: 'total',
+    filter: 'all',
+    supplyGroup: 'Total reported tankers',
+    current: tankerCell(totalTankers),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'Latest PM&C aggregate total reported tanker count. It does not identify individual vessels, ports, terminals or cargoes.'
+  }, {
+    key: 'orders',
+    filter: 'all',
+    supplyGroup: 'Forward import orders',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: forwardOrdersEnv,
+    partial: true,
+    meaning: `Latest PM&C forward import order visibility is ${fmt(forwardOrders, 1)} billion L ordered. This is aggregate public order visibility only.`
+  }, {
+    key: 'imports',
+    filter: 'all',
+    supplyGroup: 'ABS petroleum imports',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: importsEnv,
+    partial: false,
+    meaning: `Latest ABS petroleum import value is ${fmtAudThousands(importValue)} (${fmt(importValue)} AUD thousands). This is trade-value context, not tanker or vessel tracking.`
+  }, {
+    key: 'live',
+    filter: 'all',
+    supplyGroup: 'Live vessel identities / ETAs',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: liveVesselEnv,
+    partial: false,
+    meaning: `${liveVesselNotes} No AIS positions, vessel names, cargo assignments or port-call ETAs are plotted.`
   }];
-  const visibleGroups = filter === 'all' ? groups : groups.filter(group => group.key === filter);
-  const totalTankers = latest(tankersEnv);
+  const cards = [{
+    key: 'crude-card',
+    filter: 'crude',
+    title: 'Crude oil tankers',
+    value: isNumber(tankerFields.crude_oil_tankers) ? fmt(tankerFields.crude_oil_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.crude_oil_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_crude_oil_tankers)} tankers; equivalent days: ${fmt(tankerFields.crude_oil_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'clean-card',
+    filter: 'clean',
+    title: 'Clean refined-product tankers',
+    value: isNumber(tankerFields.clean_refined_product_tankers) ? fmt(tankerFields.clean_refined_product_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.clean_refined_product_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_clean_refined_product_tankers)} tankers; equivalent days: ${fmt(tankerFields.clean_refined_product_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'orders-card',
+    filter: 'all',
+    title: 'Forward import orders',
+    value: isNumber(forwardOrders) ? fmt(forwardOrders, 1) : 'Unavailable',
+    unit: isNumber(forwardOrders) ? 'billion L ordered' : '',
+    subtext: 'Aggregate public order visibility only. No cargo-level or vessel-level allocation is loaded.',
+    env: forwardOrdersEnv,
+    partial: true
+  }, {
+    key: 'live-card',
+    filter: 'all',
+    title: 'Live vessel layer',
+    value: 'Unavailable',
+    unit: '',
+    subtext: 'No source-safe live vessel names, AIS positions or port-call ETAs loaded.',
+    env: liveVesselEnv,
+    partial: false,
+    unavailable: true
+  }];
+  const visibleRows = filter === 'all' ? rows : rows.filter(row => row.filter === filter);
+  const visibleCards = filter === 'all' ? cards : cards.filter(card => card.filter === filter);
   const filterButtons = [['all', `All (${fmt(totalTankers)})`], ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`], ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`]];
+  const sourceLines = [tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv].map(env => window.FR.sourceLine(env)).filter(Boolean);
   return React.createElement("div", {
     className: "shipping-visibility"
   }, React.createElement("div", {
@@ -160,22 +270,20 @@ function ShippingVisibility({
     "aria-label": "Inbound fuel summary"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Inbound fuel visibility"), React.createElement("h3", null, "Australia supply inbound, shown only at aggregate level."), React.createElement("p", null, "PM&C publishes tanker counts and equivalent days. This layout makes that flow easier to read without inventing vessel identities, live positions or cargo assignments.")), React.createElement("div", {
+  }, "Inbound fuel evidence board"), React.createElement("h3", null, "Aggregate public data only, not a live map."), React.createElement("p", null, "PM&C publishes aggregate tanker counts, equivalent days and forward import orders. ABS publishes petroleum import value. This board shows those loaded values directly and keeps live vessel identities, AIS positions and port-call ETAs unavailable.")), React.createElement("div", {
     className: "shipping-stats"
   }, React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "reported tankers")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "PM&C aggregate reported tankers")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(forwardOrdersEnv), 1)), React.createElement("small", null, "billion L ordered")), React.createElement("div", {
+  }, React.createElement("span", null, fmt(forwardOrders, 1)), React.createElement("small", null, "billion L ordered in PM&C forward import orders")), React.createElement("div", {
     className: "shipping-stat"
-  }, React.createElement("span", null, fmt(latest(importsEnv))), React.createElement("small", null, "ABS imports, AUD thousands")), React.createElement("div", {
-    className: "shipping-stat"
-  }, React.createElement("span", null, fmtAudThousands(latest(importsEnv))), React.createElement("small", null, "same value rounded to A$bn")), React.createElement("div", {
+  }, React.createElement("span", null, fmtAudThousands(importValue)), React.createElement("small", null, "ABS petroleum import value, rounded from AUD thousands")), React.createElement("div", {
     className: "shipping-stat shipping-stat--unavailable"
-  }, React.createElement("span", null, "0"), React.createElement("small", null, "live vessel feeds")))), React.createElement("div", {
+  }, React.createElement("span", null, "Unavailable"), React.createElement("small", null, "No live vessel feed loaded")))), React.createElement("div", {
     className: "shipping-tabs",
     role: "tablist",
-    "aria-label": "Inbound fuel visibility filters"
+    "aria-label": "Inbound fuel evidence filters"
   }, filterButtons.map(([key, label]) => React.createElement("button", {
     key: key,
     type: "button",
@@ -185,121 +293,45 @@ function ShippingVisibility({
   }, label))), React.createElement("div", {
     className: "shipping-visibility__body"
   }, React.createElement("div", {
-    className: "shipping-list",
-    "aria-label": "Aggregate tanker groups"
-  }, visibleGroups.map(group => React.createElement("article", {
-    key: group.key,
-    className: "shipping-row"
+    className: "shipping-evidence-main"
   }, React.createElement("div", {
-    className: "shipping-row__head"
-  }, React.createElement("div", null, React.createElement("span", {
+    className: "data-table-wrap shipping-evidence-table",
+    "aria-label": "Aggregate inbound supply comparison"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Supply group"), React.createElement("th", null, "Current tankers"), React.createElement("th", null, "Previous tankers"), React.createElement("th", null, "Change"), React.createElement("th", null, "Equivalent days"), React.createElement("th", null, "Source status"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, visibleRows.map(row => React.createElement("tr", {
+    key: row.key
+  }, React.createElement("td", null, row.supplyGroup), React.createElement("td", null, row.current), React.createElement("td", null, row.previous), React.createElement("td", null, row.change), React.createElement("td", null, row.equivalentDays), React.createElement("td", {
+    className: "shipping-status-cell"
+  }, React.createElement(EnvTrustBadges, {
+    env: row.env,
+    partial: row.partial
+  })), React.createElement("td", {
+    className: "shipping-meaning-cell"
+  }, row.meaning)))))), React.createElement("div", {
+    className: "shipping-evidence-note"
+  }, React.createElement("span", {
     className: "eyebrow"
-  }, group.shortLabel), React.createElement("h4", null, group.label)), React.createElement(EnvTrustBadges, {
-    env: tankersEnv,
-    partial: true
-  })), React.createElement("dl", {
-    className: "shipping-row__facts"
-  }, React.createElement("div", null, React.createElement("dt", null, "Current"), React.createElement("dd", null, fmt(group.count), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Previous"), React.createElement("dd", null, fmt(group.previous), " tankers")), React.createElement("div", null, React.createElement("dt", null, "Equivalent"), React.createElement("dd", null, fmt(group.days), " days"))), React.createElement("p", {
-    className: "shipping-route"
-  }, group.route), React.createElement("p", {
-    className: "caption"
-  }, group.note))), React.createElement("article", {
-    className: "shipping-row shipping-row--unavailable"
+  }, "Evidence board, not live map"), React.createElement("p", null, "This section does not plot ships. PM&C publishes aggregate tanker counts and equivalent days, not vessel names, AIS positions, cargo assignments or port-call ETAs. The dashboard therefore shows inbound supply as an evidence board rather than a live map."), React.createElement("ul", null, React.createElement("li", null, "PM&C aggregate tanker counts only."), React.createElement("li", null, "No live vessel feed loaded."), React.createElement("li", null, "No AIS positions, vessel names or port-call ETAs."), React.createElement("li", null, "No invented ports, terminals, shipping lanes or vessel locations.")))), React.createElement("div", {
+    className: "shipping-evidence-cards",
+    "aria-label": "Inbound supply evidence cards"
+  }, visibleCards.map(card => React.createElement("article", {
+    key: card.key,
+    className: `shipping-evidence-card${card.unavailable ? ' shipping-evidence-card--unavailable' : ''}`
   }, React.createElement("div", {
-    className: "shipping-row__head"
-  }, React.createElement("div", null, React.createElement("span", {
+    className: "shipping-evidence-card__head"
+  }, React.createElement("span", {
     className: "eyebrow"
-  }, "Vessel layer"), React.createElement("h4", null, "Live vessel identities and ETAs")), React.createElement(EnvTrustBadges, {
-    env: liveVesselEnv
-  })), React.createElement("p", null, liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.'))), React.createElement("div", {
-    className: "shipping-map",
-    "aria-label": "Illustrative aggregate fuel supply lane map"
-  }, React.createElement("div", {
-    className: "shipping-map__canvas"
-  }, React.createElement("svg", {
-    viewBox: "0 0 720 420",
-    role: "img",
-    "aria-labelledby": "shipping-map-title shipping-map-desc"
-  }, React.createElement("title", {
-    id: "shipping-map-title"
-  }, "Aggregate inbound fuel lane context"), React.createElement("desc", {
-    id: "shipping-map-desc"
-  }, "Illustrative Indo-Pacific fuel supply lanes into Australia. No live vessel positions are plotted."), React.createElement("rect", {
-    x: "0",
-    y: "0",
-    width: "720",
-    height: "420",
-    rx: "8"
-  }), React.createElement("path", {
-    className: "shipping-grid",
-    d: "M60 80H660M60 160H660M60 240H660M60 320H660M120 40V380M240 40V380M360 40V380M480 40V380M600 40V380"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--crude",
-    d: "M96 116 C220 80 340 112 466 210 C508 244 540 270 592 286"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--clean",
-    d: "M136 238 C246 202 358 216 484 272 C524 290 552 306 612 318"
-  }), React.createElement("path", {
-    className: "shipping-lane shipping-lane--context",
-    d: "M198 312 C320 282 424 306 578 342"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "96",
-    cy: "116",
-    r: "6"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "136",
-    cy: "238",
-    r: "6"
-  }), React.createElement("circle", {
-    className: "shipping-origin",
-    cx: "198",
-    cy: "312",
-    r: "6"
-  }), React.createElement("path", {
-    className: "shipping-australia",
-    d: "M536 242 L602 230 L650 260 L666 314 L622 358 L556 344 L510 302 Z"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "592",
-    cy: "286",
-    r: "5"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "612",
-    cy: "318",
-    r: "5"
-  }), React.createElement("circle", {
-    className: "shipping-port",
-    cx: "578",
-    cy: "342",
-    r: "5"
-  }), React.createElement("text", {
-    x: "80",
-    y: "96"
-  }, "Crude supply"), React.createElement("text", {
-    x: "118",
-    y: "220"
-  }, "Refined-product hubs"), React.createElement("text", {
-    x: "188",
-    y: "296"
-  }, "Regional context"), React.createElement("text", {
-    x: "528",
-    y: "222"
-  }, "Australia"))), React.createElement("div", {
-    className: "shipping-map__legend"
-  }, React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--crude"
-  }), "Crude aggregate"), React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--clean"
-  }), "Clean-product aggregate"), React.createElement("span", null, React.createElement("i", {
-    className: "lane-key lane-key--context"
-  }), "Context only")), React.createElement("p", {
-    className: "caption mono"
-  }, "Illustrative route context only. No AIS positions, vessel names, port-call ETAs or live tracks are loaded."))), React.createElement("p", {
+  }, card.title), React.createElement(EnvTrustBadges, {
+    env: card.env,
+    partial: card.partial
+  })), React.createElement("div", {
+    className: "shipping-evidence-card__value"
+  }, React.createElement("span", null, card.value), card.unit && React.createElement("small", null, card.unit)), React.createElement("p", null, card.subtext))))), React.createElement("div", {
     className: "shipping-source mono"
-  }, window.FR.sourceLine(tankersEnv)));
+  }, sourceLines.map((line, index) => React.createElement("p", {
+    key: `${line}-${index}`
+  }, line))));
 }
 Object.assign(window, {
   ShippingVisibility
@@ -314,7 +346,7 @@ function Header({
     href: '../national-status-dashboard/index.html'
   }, {
     id: 'fuel_security',
-    label: 'Fuel security',
+    label: 'National fuel security',
     href: '../fuel-security-dashboard/index.html'
   }, {
     id: 'resource_value',
@@ -338,7 +370,7 @@ function Header({
     href: '../fuel-dashboard/index.html'
   }, {
     id: 'fertilizer',
-    label: 'Fertilizer',
+    label: 'Food & farms',
     href: '../fertilizer-dashboard/index.html'
   }, {
     id: 'oil',
@@ -364,6 +396,10 @@ function Header({
     id: 'infrastructure',
     label: 'Infrastructure',
     href: '../infrastructure-dashboard/index.html'
+  }, {
+    id: 'employment_automation',
+    label: 'Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'sources',
     label: 'Sources & methodology',
@@ -862,7 +898,7 @@ function Footer({
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-security-dashboard/index.html"
-  }, "Fuel security")), React.createElement("li", null, React.createElement("a", {
+  }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"
@@ -874,7 +910,7 @@ function Footer({
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
-  }, "Fertilizer")), React.createElement("li", null, React.createElement("a", {
+  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
     href: "../oil-and-production/index.html"
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
@@ -939,6 +975,10 @@ function App() {
   const QLD = region('qld1');
   const SA = region('sa1');
   const TAS = region('tas1');
+  const cardNumber = (env, dp = 0) => env.values.at(-1).v.toLocaleString('en-AU', {
+    minimumFractionDigits: dp,
+    maximumFractionDigits: dp
+  });
   const fmt = (n, dp) => n === null ? '—' : n.toLocaleString('en-AU', {
     minimumFractionDigits: dp,
     maximumFractionDigits: dp
@@ -1021,15 +1061,17 @@ function App() {
     unit: " MW"
   }), React.createElement(MetricCard, {
     eyebrow: "Fuel mix",
-    label: "Latest published NEM fuel mix",
-    plain: "Share of generation by black coal, brown coal, gas, hydro, wind, solar and battery, from the latest AEMO Quarterly Energy Dynamics report.",
+    label: "NEM renewable share of supply mix",
+    plain: "Q4 2025 share of NEM supply from distributed PV, wind, grid solar, hydro, biomass and battery, from AEMO Quarterly Energy Dynamics Table 3.",
     fromEnvelope: data.aemo_nem_fuel_mix,
-    unit: ""
+    valueFn: env => cardNumber(env, 1),
+    unit: "%"
   }), React.createElement(MetricCard, {
     eyebrow: "Renewables",
-    label: "CER Renewable Energy Target progress",
-    plain: "Annual achieved-vs-target percentage from the Clean Energy Regulator's RET administrative report.",
+    label: "NEM+SWIS renewable generation share",
+    plain: "2024 renewable generation share across the NEM and Western Australia's SWIS from the Clean Energy Regulator's RET administrative report.",
     fromEnvelope: data.cer_renewable_energy_target_progress,
+    valueFn: env => cardNumber(env, 0),
     unit: "%"
   })), React.createElement("div", {
     style: {
@@ -1039,28 +1081,32 @@ function App() {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Capacity",
-    label: "NEM Generation Information register - total",
-    plain: "Total capacity (MW) across every existing, committed and proposed generator listed in the AEMO Generation Information workbook.",
+    label: "AEMO Generation Information listed capacity",
+    plain: "Listed NEM existing and development capacity in the January 2026 workbook. Includes anticipated and publicly announced projects; it is not available capacity.",
     fromEnvelope: data.aemo_generation_information_register,
+    valueFn: env => cardNumber(env, 0),
     unit: " MW"
   }), React.createElement(MetricCard, {
     eyebrow: "Coal retirement",
-    label: "Scheduled coal retirements",
-    plain: "Capacity (MW) of coal plants with announced closure dates in the AEMO Generation Information register.",
+    label: "Coal capacity with explicit closure dates",
+    plain: "Coal capacity in the January 2026 AEMO workbooks with an explicit closure date. Expected-year-only coal rows are kept separate in the notes.",
     fromEnvelope: data.aemo_coal_retirement_timeline,
+    valueFn: env => cardNumber(env, 0),
     unit: " MW"
   }), React.createElement(MetricCard, {
     eyebrow: "Emissions",
-    label: "Electricity sector emissions",
-    plain: "Quarterly electricity-sector emissions in megatonnes of CO2-equivalent, DCCEEW national greenhouse accounts.",
+    label: "Electricity-sector annual emissions",
+    plain: "Actual Energy - Electricity emissions for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory quarterly update.",
     fromEnvelope: data.dcceew_electricity_emissions,
+    valueFn: env => cardNumber(env, 1),
     unit: " Mt CO2-e"
   }), React.createElement(MetricCard, {
     eyebrow: "WA",
-    label: "WEM headline (Western Australia)",
-    plain: "Latest published WA Wholesale Electricity Market capacity or wholesale-price headline. WA is not part of the NEM.",
+    label: "WEM quarterly average energy price",
+    plain: "Q4 2025 average energy price in Western Australia's separate Wholesale Electricity Market, from AEMO Quarterly Energy Dynamics.",
     fromEnvelope: data.aemo_wem_summary,
-    unit: ""
+    valueFn: env => cardNumber(env, 2),
+    unit: " AUD/MWh"
   })), React.createElement("div", {
     style: {
       height: 16
@@ -1069,18 +1115,19 @@ function App() {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Forecast",
-    label: "AEMO Integrated System Plan headline",
-    plain: "Headline figure from the latest biennial Integrated System Plan, e.g. 2050 generation capacity by source under the optimal development path.",
+    label: "AEMO 2024 ISP transmission headline",
+    plain: "Rounded transmission need by 2050 under the 2024 ISP Step Change and Progressive Change scenarios. This is not current built transmission.",
     fromEnvelope: data.aemo_2024_isp_summary,
-    unit: ""
+    valueFn: env => cardNumber(env, 0),
+    unit: " km"
   })), React.createElement("div", {
     className: "pending-list",
-    "aria-label": "Pending power-grid source coverage"
+    "aria-label": "Manual power-grid source coverage"
   }, React.createElement("article", {
     className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
+  }, React.createElement("h4", null, "Manual source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "Fuel mix, generation register totals, coal retirement schedule, RET progress, emissions, ISP forecast and WEM summary stay on manual until each AEMO, AER, CER or DCCEEW publication is verified by a human. Programmatic access is wired for the AEMO NEM regional price and demand series only.")))), haveRegional && React.createElement("section", {
+  }, "Fuel mix, generation register totals, coal closure dates, RET context, emissions, ISP forecast and WEM summary are hand-keyed from named official publications. They remain manual because the page only has stable programmatic access for AEMO NEM regional price and demand.")))), haveRegional && React.createElement("section", {
     className: "section",
     "aria-labelledby": "per-state-h"
   }, React.createElement("div", {
@@ -1221,7 +1268,7 @@ function App() {
     className: "methodology"
   }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "NEM average wholesale price"), React.createElement("dd", null, "For each of the five NEM regions (NSW1, VIC1, QLD1, SA1, TAS1), the AEMO Price and Demand monthly archive is fetched from ", React.createElement("span", {
     className: "mono"
-  }, "aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv"), ". All 5-minute TRADE intervals in each month are averaged to a regional monthly mean, then the five regional means are averaged to a NEM-wide series. Per-region latest-month values are kept in extra.fields."), React.createElement("dt", null, "NEM total operational demand"), React.createElement("dd", null, "Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand."), React.createElement("dt", null, "NEM fuel mix"), React.createElement("dd", null, "Hand-keyed from the latest AEMO Quarterly Energy Dynamics summary tables, which publish the percentage share of generation by black coal, brown coal, gas, hydro, wind, solar and battery for the previous quarter."), React.createElement("dt", null, "NEM Generation Information register"), React.createElement("dd", null, "Hand-keyed from the latest monthly AEMO Generation Information workbook, which lists every existing, committed and proposed NEM generator with name, fuel type, region, MW capacity and expected closure year."), React.createElement("dt", null, "Scheduled coal retirements"), React.createElement("dd", null, "Subset of the NEM Generation Information register where fuel type is coal and an expected closure year is listed."), React.createElement("dt", null, "RET progress"), React.createElement("dd", null, "Annual achieved-vs-target percentage from the Clean Energy Regulator's Renewable Energy Target administrative report."), React.createElement("dt", null, "Electricity sector emissions"), React.createElement("dd", null, "Quarterly electricity-sector emissions in megatonnes of CO2-equivalent from the DCCEEW National Greenhouse Gas Inventory Quarterly Update, hand-keyed from the named PDF."), React.createElement("dt", null, "AEMO ISP headline"), React.createElement("dd", null, "Hand-keyed from the latest biennial AEMO Integrated System Plan; only headline scenario figures (e.g. 2050 generation capacity by source under the optimal development path) are recorded."), React.createElement("dt", null, "WEM summary"), React.createElement("dd", null, "Hand-keyed from named AEMO Wholesale Electricity Market monthly reports for Western Australia. The WEM is a separate market and is not part of the NEM.")))), React.createElement(Footer, {
+  }, "aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv"), ". All 5-minute TRADE intervals in each month are averaged to a regional monthly mean, then the five regional means are averaged to a NEM-wide series. Per-region latest-month values are kept in extra.fields."), React.createElement("dt", null, "NEM total operational demand"), React.createElement("dd", null, "Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand."), React.createElement("dt", null, "NEM fuel mix"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 Table 3, which publishes NEM supply mix contributions by black coal, brown coal, gas, liquid fuel, distributed PV, wind, grid solar, hydro, biomass and battery. The headline card shows the renewable-plus-battery share; fossil-fuel shares remain separate in the envelope fields."), React.createElement("dt", null, "NEM Generation Information register"), React.createElement("dd", null, "Hand-keyed from the January 2026 AEMO Generation Information workbook Summary table. The headline is listed nameplate capacity across existing and new-development rows, including anticipated and publicly announced projects. It is not available capacity, reliability or a construction guarantee."), React.createElement("dt", null, "Scheduled coal retirements"), React.createElement("dd", null, "Subset of January 2026 AEMO coal rows with an explicit closure date. Coal units with an expected closure year but no explicit date are retained in the envelope notes rather than mixed into the headline."), React.createElement("dt", null, "RET progress"), React.createElement("dd", null, "Hand-keyed from the Clean Energy Regulator's 2024 Renewable Energy Target Administrative Report. The headline is the reported 2024 renewable generation share across the NEM and Western Australia's SWIS, not an LRET compliance percentage."), React.createElement("dt", null, "Electricity sector emissions"), React.createElement("dd", null, "Annual Energy - Electricity emissions in megatonnes of CO2-equivalent for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory Quarterly Update. It is not a single-quarter value."), React.createElement("dt", null, "AEMO ISP headline"), React.createElement("dd", null, "Hand-keyed from the 2024 AEMO Integrated System Plan. The card shows the rounded transmission need by 2050 under Step Change and Progressive Change scenarios."), React.createElement("dt", null, "WEM summary"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 WEM market dynamics. The card shows Western Australia's quarterly average WEM energy price; the WEM is separate from the NEM.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

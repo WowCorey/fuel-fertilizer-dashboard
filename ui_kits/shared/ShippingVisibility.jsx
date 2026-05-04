@@ -1,6 +1,7 @@
-// ShippingVisibility.jsx - public-source shipping context without fake vessel tracking.
+// ShippingVisibility.jsx - evidence board for aggregate public inbound fuel data.
 function ShippingVisibility({ tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv }) {
   const [filter, setFilter] = React.useState('all');
+  const notApplicable = () => <span className="unavail" aria-label="not applicable">&mdash;</span>;
 
   function latest(env) {
     if (!env || env.status !== 'ok' || !env.values?.length) return null;
@@ -11,8 +12,12 @@ function ShippingVisibility({ tankersEnv, forwardOrdersEnv, importsEnv, liveVess
     return env?.extra?.fields || {};
   }
 
+  function isNumber(value) {
+    return value !== null && value !== undefined && !Number.isNaN(Number(value));
+  }
+
   function fmt(value, digits = 0) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return Number(value).toLocaleString('en-AU', {
       maximumFractionDigits: digits,
       minimumFractionDigits: digits,
@@ -20,80 +25,198 @@ function ShippingVisibility({ tankersEnv, forwardOrdersEnv, importsEnv, liveVess
   }
 
   function fmtAudThousands(value) {
-    if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+    if (!isNumber(value)) return '-';
     return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
       maximumFractionDigits: 1,
       minimumFractionDigits: 1,
     })}bn`;
   }
 
+  function fmtChange(current, previous) {
+    if (!isNumber(current) || !isNumber(previous)) return notApplicable();
+    const change = Number(current) - Number(previous);
+    if (change === 0) return '0';
+    return `${change > 0 ? '+' : ''}${fmt(change)}`;
+  }
+
+  function tankerCell(value) {
+    return isNumber(value) ? `${fmt(value)} tankers` : notApplicable();
+  }
+
+  function daysCell(value) {
+    return isNumber(value) ? `${fmt(value)} days` : notApplicable();
+  }
+
   const tankerFields = fields(tankersEnv);
-  const groups = [
+  const totalTankers = latest(tankersEnv);
+  const forwardOrders = latest(forwardOrdersEnv);
+  const importValue = latest(importsEnv);
+  const liveVesselNotes = liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.';
+
+  const rows = [
     {
       key: 'crude',
-      label: 'Crude oil',
-      shortLabel: 'Crude',
-      count: tankerFields.crude_oil_tankers,
-      previous: tankerFields.previous_crude_oil_tankers,
-      days: tankerFields.crude_oil_equivalent_days,
-      route: 'Overseas crude supply -> Australian refining system',
-      note: 'Aggregate PM&C count. No vessel identities or ETAs are loaded.',
+      filter: 'crude',
+      supplyGroup: 'Crude oil',
+      current: tankerCell(tankerFields.crude_oil_tankers),
+      previous: tankerCell(tankerFields.previous_crude_oil_tankers),
+      change: fmtChange(tankerFields.crude_oil_tankers, tankerFields.previous_crude_oil_tankers),
+      equivalentDays: daysCell(tankerFields.crude_oil_equivalent_days),
+      env: tankersEnv,
+      partial: true,
+      meaning: 'PM&C aggregate crude-oil tanker count and equivalent days only. No vessel names, AIS positions, cargo assignments or port-call ETAs are loaded.',
     },
     {
       key: 'clean',
-      label: 'Clean refined products',
-      shortLabel: 'Clean products',
-      count: tankerFields.clean_refined_product_tankers,
-      previous: tankerFields.previous_clean_refined_product_tankers,
-      days: tankerFields.clean_refined_product_equivalent_days,
-      route: 'Regional product supply -> Australian terminals',
-      note: 'Aggregate PM&C count covering refined-product tankers.',
+      filter: 'clean',
+      supplyGroup: 'Clean refined products',
+      current: tankerCell(tankerFields.clean_refined_product_tankers),
+      previous: tankerCell(tankerFields.previous_clean_refined_product_tankers),
+      change: fmtChange(tankerFields.clean_refined_product_tankers, tankerFields.previous_clean_refined_product_tankers),
+      equivalentDays: daysCell(tankerFields.clean_refined_product_equivalent_days),
+      env: tankersEnv,
+      partial: true,
+      meaning: 'PM&C aggregate clean refined-product tanker count and equivalent days only. This is inbound supply visibility, not a live shipping layer.',
+    },
+    {
+      key: 'total',
+      filter: 'all',
+      supplyGroup: 'Total reported tankers',
+      current: tankerCell(totalTankers),
+      previous: notApplicable(),
+      change: notApplicable(),
+      equivalentDays: notApplicable(),
+      env: tankersEnv,
+      partial: true,
+      meaning: 'Latest PM&C aggregate total reported tanker count. It does not identify individual vessels, ports, terminals or cargoes.',
+    },
+    {
+      key: 'orders',
+      filter: 'all',
+      supplyGroup: 'Forward import orders',
+      current: notApplicable(),
+      previous: notApplicable(),
+      change: notApplicable(),
+      equivalentDays: notApplicable(),
+      env: forwardOrdersEnv,
+      partial: true,
+      meaning: `Latest PM&C forward import order visibility is ${fmt(forwardOrders, 1)} billion L ordered. This is aggregate public order visibility only.`,
+    },
+    {
+      key: 'imports',
+      filter: 'all',
+      supplyGroup: 'ABS petroleum imports',
+      current: notApplicable(),
+      previous: notApplicable(),
+      change: notApplicable(),
+      equivalentDays: notApplicable(),
+      env: importsEnv,
+      partial: false,
+      meaning: `Latest ABS petroleum import value is ${fmtAudThousands(importValue)} (${fmt(importValue)} AUD thousands). This is trade-value context, not tanker or vessel tracking.`,
+    },
+    {
+      key: 'live',
+      filter: 'all',
+      supplyGroup: 'Live vessel identities / ETAs',
+      current: notApplicable(),
+      previous: notApplicable(),
+      change: notApplicable(),
+      equivalentDays: notApplicable(),
+      env: liveVesselEnv,
+      partial: false,
+      meaning: `${liveVesselNotes} No AIS positions, vessel names, cargo assignments or port-call ETAs are plotted.`,
     },
   ];
-  const visibleGroups = filter === 'all' ? groups : groups.filter(group => group.key === filter);
-  const totalTankers = latest(tankersEnv);
+
+  const cards = [
+    {
+      key: 'crude-card',
+      filter: 'crude',
+      title: 'Crude oil tankers',
+      value: isNumber(tankerFields.crude_oil_tankers) ? fmt(tankerFields.crude_oil_tankers) : 'Unavailable',
+      unit: isNumber(tankerFields.crude_oil_tankers) ? 'tankers' : '',
+      subtext: `Previous: ${fmt(tankerFields.previous_crude_oil_tankers)} tankers; equivalent days: ${fmt(tankerFields.crude_oil_equivalent_days)}.`,
+      env: tankersEnv,
+      partial: true,
+    },
+    {
+      key: 'clean-card',
+      filter: 'clean',
+      title: 'Clean refined-product tankers',
+      value: isNumber(tankerFields.clean_refined_product_tankers) ? fmt(tankerFields.clean_refined_product_tankers) : 'Unavailable',
+      unit: isNumber(tankerFields.clean_refined_product_tankers) ? 'tankers' : '',
+      subtext: `Previous: ${fmt(tankerFields.previous_clean_refined_product_tankers)} tankers; equivalent days: ${fmt(tankerFields.clean_refined_product_equivalent_days)}.`,
+      env: tankersEnv,
+      partial: true,
+    },
+    {
+      key: 'orders-card',
+      filter: 'all',
+      title: 'Forward import orders',
+      value: isNumber(forwardOrders) ? fmt(forwardOrders, 1) : 'Unavailable',
+      unit: isNumber(forwardOrders) ? 'billion L ordered' : '',
+      subtext: 'Aggregate public order visibility only. No cargo-level or vessel-level allocation is loaded.',
+      env: forwardOrdersEnv,
+      partial: true,
+    },
+    {
+      key: 'live-card',
+      filter: 'all',
+      title: 'Live vessel layer',
+      value: 'Unavailable',
+      unit: '',
+      subtext: 'No source-safe live vessel names, AIS positions or port-call ETAs loaded.',
+      env: liveVesselEnv,
+      partial: false,
+      unavailable: true,
+    },
+  ];
+
+  const visibleRows = filter === 'all' ? rows : rows.filter(row => row.filter === filter);
+  const visibleCards = filter === 'all' ? cards : cards.filter(card => card.filter === filter);
   const filterButtons = [
     ['all', `All (${fmt(totalTankers)})`],
     ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`],
     ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`],
   ];
 
+  const sourceLines = [tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv]
+    .map(env => window.FR.sourceLine(env))
+    .filter(Boolean);
+
   return (
     <div className="shipping-visibility">
       <div className="shipping-visibility__summary" aria-label="Inbound fuel summary">
         <div>
-          <span className="eyebrow">Inbound fuel visibility</span>
-          <h3>Australia supply inbound, shown only at aggregate level.</h3>
+          <span className="eyebrow">Inbound fuel evidence board</span>
+          <h3>Aggregate public data only, not a live map.</h3>
           <p>
-            PM&C publishes tanker counts and equivalent days. This layout makes that flow easier
-            to read without inventing vessel identities, live positions or cargo assignments.
+            PM&C publishes aggregate tanker counts, equivalent days and forward import orders.
+            ABS publishes petroleum import value. This board shows those loaded values directly
+            and keeps live vessel identities, AIS positions and port-call ETAs unavailable.
           </p>
         </div>
         <div className="shipping-stats">
           <div className="shipping-stat">
             <span>{fmt(totalTankers)}</span>
-            <small>reported tankers</small>
+            <small>PM&C aggregate reported tankers</small>
           </div>
           <div className="shipping-stat">
-            <span>{fmt(latest(forwardOrdersEnv), 1)}</span>
-            <small>billion L ordered</small>
+            <span>{fmt(forwardOrders, 1)}</span>
+            <small>billion L ordered in PM&C forward import orders</small>
           </div>
           <div className="shipping-stat">
-            <span>{fmt(latest(importsEnv))}</span>
-            <small>ABS imports, AUD thousands</small>
-          </div>
-          <div className="shipping-stat">
-            <span>{fmtAudThousands(latest(importsEnv))}</span>
-            <small>same value rounded to A$bn</small>
+            <span>{fmtAudThousands(importValue)}</span>
+            <small>ABS petroleum import value, rounded from AUD thousands</small>
           </div>
           <div className="shipping-stat shipping-stat--unavailable">
-            <span>0</span>
-            <small>live vessel feeds</small>
+            <span>Unavailable</span>
+            <small>No live vessel feed loaded</small>
           </div>
         </div>
       </div>
 
-      <div className="shipping-tabs" role="tablist" aria-label="Inbound fuel visibility filters">
+      <div className="shipping-tabs" role="tablist" aria-label="Inbound fuel evidence filters">
         {filterButtons.map(([key, label]) => (
           <button
             key={key}
@@ -108,81 +231,73 @@ function ShippingVisibility({ tankersEnv, forwardOrdersEnv, importsEnv, liveVess
       </div>
 
       <div className="shipping-visibility__body">
-        <div className="shipping-list" aria-label="Aggregate tanker groups">
-          {visibleGroups.map(group => (
-            <article key={group.key} className="shipping-row">
-              <div className="shipping-row__head">
-                <div>
-                  <span className="eyebrow">{group.shortLabel}</span>
-                  <h4>{group.label}</h4>
-                </div>
-                <EnvTrustBadges env={tankersEnv} partial/>
-              </div>
-              <dl className="shipping-row__facts">
-                <div>
-                  <dt>Current</dt>
-                  <dd>{fmt(group.count)} tankers</dd>
-                </div>
-                <div>
-                  <dt>Previous</dt>
-                  <dd>{fmt(group.previous)} tankers</dd>
-                </div>
-                <div>
-                  <dt>Equivalent</dt>
-                  <dd>{fmt(group.days)} days</dd>
-                </div>
-              </dl>
-              <p className="shipping-route">{group.route}</p>
-              <p className="caption">{group.note}</p>
-            </article>
-          ))}
-          <article className="shipping-row shipping-row--unavailable">
-            <div className="shipping-row__head">
-              <div>
-                <span className="eyebrow">Vessel layer</span>
-                <h4>Live vessel identities and ETAs</h4>
-              </div>
-              <EnvTrustBadges env={liveVesselEnv}/>
-            </div>
-            <p>{liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.'}</p>
-          </article>
+        <div className="shipping-evidence-main">
+          <div className="data-table-wrap shipping-evidence-table" aria-label="Aggregate inbound supply comparison">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Supply group</th>
+                  <th>Current tankers</th>
+                  <th>Previous tankers</th>
+                  <th>Change</th>
+                  <th>Equivalent days</th>
+                  <th>Source status</th>
+                  <th>What it means</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleRows.map(row => (
+                  <tr key={row.key}>
+                    <td>{row.supplyGroup}</td>
+                    <td>{row.current}</td>
+                    <td>{row.previous}</td>
+                    <td>{row.change}</td>
+                    <td>{row.equivalentDays}</td>
+                    <td className="shipping-status-cell"><EnvTrustBadges env={row.env} partial={row.partial}/></td>
+                    <td className="shipping-meaning-cell">{row.meaning}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="shipping-evidence-note">
+            <span className="eyebrow">Evidence board, not live map</span>
+            <p>
+              This section does not plot ships. PM&C publishes aggregate tanker counts and
+              equivalent days, not vessel names, AIS positions, cargo assignments or
+              port-call ETAs. The dashboard therefore shows inbound supply as an evidence
+              board rather than a live map.
+            </p>
+            <ul>
+              <li>PM&C aggregate tanker counts only.</li>
+              <li>No live vessel feed loaded.</li>
+              <li>No AIS positions, vessel names or port-call ETAs.</li>
+              <li>No invented ports, terminals, shipping lanes or vessel locations.</li>
+            </ul>
+          </div>
         </div>
 
-        <div className="shipping-map" aria-label="Illustrative aggregate fuel supply lane map">
-          <div className="shipping-map__canvas">
-            <svg viewBox="0 0 720 420" role="img" aria-labelledby="shipping-map-title shipping-map-desc">
-              <title id="shipping-map-title">Aggregate inbound fuel lane context</title>
-              <desc id="shipping-map-desc">Illustrative Indo-Pacific fuel supply lanes into Australia. No live vessel positions are plotted.</desc>
-              <rect x="0" y="0" width="720" height="420" rx="8"/>
-              <path className="shipping-grid" d="M60 80H660M60 160H660M60 240H660M60 320H660M120 40V380M240 40V380M360 40V380M480 40V380M600 40V380"/>
-              <path className="shipping-lane shipping-lane--crude" d="M96 116 C220 80 340 112 466 210 C508 244 540 270 592 286"/>
-              <path className="shipping-lane shipping-lane--clean" d="M136 238 C246 202 358 216 484 272 C524 290 552 306 612 318"/>
-              <path className="shipping-lane shipping-lane--context" d="M198 312 C320 282 424 306 578 342"/>
-              <circle className="shipping-origin" cx="96" cy="116" r="6"/>
-              <circle className="shipping-origin" cx="136" cy="238" r="6"/>
-              <circle className="shipping-origin" cx="198" cy="312" r="6"/>
-              <path className="shipping-australia" d="M536 242 L602 230 L650 260 L666 314 L622 358 L556 344 L510 302 Z"/>
-              <circle className="shipping-port" cx="592" cy="286" r="5"/>
-              <circle className="shipping-port" cx="612" cy="318" r="5"/>
-              <circle className="shipping-port" cx="578" cy="342" r="5"/>
-              <text x="80" y="96">Crude supply</text>
-              <text x="118" y="220">Refined-product hubs</text>
-              <text x="188" y="296">Regional context</text>
-              <text x="528" y="222">Australia</text>
-            </svg>
-          </div>
-          <div className="shipping-map__legend">
-            <span><i className="lane-key lane-key--crude"/>Crude aggregate</span>
-            <span><i className="lane-key lane-key--clean"/>Clean-product aggregate</span>
-            <span><i className="lane-key lane-key--context"/>Context only</span>
-          </div>
-          <p className="caption mono">
-            Illustrative route context only. No AIS positions, vessel names, port-call ETAs or live tracks are loaded.
-          </p>
+        <div className="shipping-evidence-cards" aria-label="Inbound supply evidence cards">
+          {visibleCards.map(card => (
+            <article key={card.key} className={`shipping-evidence-card${card.unavailable ? ' shipping-evidence-card--unavailable' : ''}`}>
+              <div className="shipping-evidence-card__head">
+                <span className="eyebrow">{card.title}</span>
+                <EnvTrustBadges env={card.env} partial={card.partial}/>
+              </div>
+              <div className="shipping-evidence-card__value">
+                <span>{card.value}</span>
+                {card.unit && <small>{card.unit}</small>}
+              </div>
+              <p>{card.subtext}</p>
+            </article>
+          ))}
         </div>
       </div>
 
-      <p className="shipping-source mono">{window.FR.sourceLine(tankersEnv)}</p>
+      <div className="shipping-source mono">
+        {sourceLines.map((line, index) => <p key={`${line}-${index}`}>{line}</p>)}
+      </div>
     </div>
   );
 }

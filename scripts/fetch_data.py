@@ -606,6 +606,17 @@ def fetch_extra_field_derived(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def parse_rba_date(value: str) -> dt.date:
+    """Parse date strings used in RBA statistical table CSVs."""
+    cleaned = value.strip()
+    for fmt in ("%d/%m/%Y", "%d-%b-%Y", "%Y-%m-%d"):
+        try:
+            return dt.datetime.strptime(cleaned, fmt).date()
+        except ValueError:
+            continue
+    raise ValueError(f"Unsupported RBA date format: {value!r}")
+
+
 def fetch_rba_f11(url: str) -> dict[str, Any]:
     """Fetch RBA Table F11.1 CSV and return monthly mean AUD/USD values."""
     r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
@@ -642,7 +653,7 @@ def fetch_rba_f11(url: str) -> dict[str, Any]:
         if len(row) <= usd_col or not row or not row[0].strip():
             continue
         try:
-            obs_date = dt.datetime.strptime(row[0].strip(), "%d-%b-%Y").date()
+            obs_date = parse_rba_date(row[0])
             value = float(row[usd_col])
         except (ValueError, TypeError):
             continue
@@ -679,7 +690,8 @@ def fetch_rba_csv_column(
 
     RBA tables share a layout: a metadata block (rows starting with "Title",
     "Description", "Frequency", ..., "Series ID"), then date+value rows where
-    column 0 is the observation date in DD-MMM-YYYY format. We pick the column
+    column 0 is the observation date. RBA CSVs have used both DD/MM/YYYY and
+    DD-MMM-YYYY date strings, so the parser accepts both. We pick the column
     whose Title row contains ``title_substring`` (case-insensitive substring
     match) and aggregate either to monthly mean or quarter-end.
     """
@@ -723,7 +735,7 @@ def fetch_rba_csv_column(
         if not row or len(row) <= col_idx or not row[0].strip():
             continue
         try:
-            obs_date = dt.datetime.strptime(row[0].strip(), "%d-%b-%Y").date()
+            obs_date = parse_rba_date(row[0])
             value = float(row[col_idx])
         except (ValueError, TypeError):
             continue
@@ -757,6 +769,58 @@ def fetch_rba_csv_column(
         "values": values,
         "last_data_point": latest_date.isoformat(),
         "notes": notes,
+        "source_url_resolved": url,
+    }
+
+
+def fetch_aofm_ags_face_value(source: dict[str, Any]) -> dict[str, Any]:
+    """Fetch annual AOFM AGS face value from the compact stock_ags CSV."""
+    url = source.get("fetch_url") or source.get("canonical_url") or source["url"]
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+    reader = csv.DictReader(io.StringIO(r.content.decode("utf-8-sig")))
+    if reader.fieldnames != ["FY", "Face Value ($b)"]:
+        raise RuntimeError(f"AOFM stock_ags CSV had unexpected header: {reader.fieldnames!r}")
+
+    def fy_end_date(fy: str) -> dt.date:
+        match = re.fullmatch(r"(\d{4})-(\d{2})", fy.strip())
+        if not match:
+            raise RuntimeError(f"AOFM stock_ags FY value was malformed: {fy!r}")
+        start_year = int(match.group(1))
+        end_suffix = int(match.group(2))
+        century = (start_year // 100) * 100
+        end_year = century + end_suffix
+        if end_year <= start_year:
+            end_year += 100
+        return dt.date(end_year, 6, 30)
+
+    values: list[dict[str, Any]] = []
+    latest_date: dt.date | None = None
+    for row in reader:
+        fy = (row.get("FY") or "").strip()
+        raw_value = (row.get("Face Value ($b)") or "").strip()
+        if not fy or not raw_value:
+            continue
+        try:
+            value = round(float(raw_value), 1)
+        except ValueError as exc:
+            raise RuntimeError(f"AOFM stock_ags value was not numeric for {fy!r}") from exc
+        obs_date = fy_end_date(fy)
+        values.append({"t": fy, "v": value})
+        latest_date = max(latest_date, obs_date) if latest_date else obs_date
+
+    if not values or latest_date is None:
+        raise RuntimeError("AOFM stock_ags CSV contained no annual face-value observations")
+
+    return {
+        "unit": "AUD billions",
+        "values": values,
+        "last_data_point": latest_date.isoformat(),
+        "notes": (
+            "Fetched from the AOFM stock_ags CSV on the AOFM data hub. Values are annual "
+            "Australian Government Securities face value in AUD billions by financial year. "
+            "This is not the same as Commonwealth general government gross debt in Budget Papers."
+        ),
         "source_url_resolved": url,
     }
 
@@ -896,6 +960,180 @@ def load_xlsx_from_url(url: str, extra_headers: dict[str, str] | None = None):
     r = requests.get(url, headers=headers, timeout=90)
     r.raise_for_status()
     return openpyxl.load_workbook(io.BytesIO(r.content), read_only=True, data_only=True)
+
+
+def normalized_abs_text(value: Any) -> str:
+    text = "" if value is None else str(value)
+    text = text.replace("\xa0", " ").replace("\u2019", "'")
+    text = re.sub(r"\s+", " ", text).strip()
+    return text.lstrip(">").strip().lower()
+
+
+def discover_abs_release_xlsx_url(release_url: str, label_contains: str | list[str]) -> str:
+    """Find a named XLSX download link on an ABS latest-release page."""
+    needles = [label_contains] if isinstance(label_contains, str) else list(label_contains)
+    wanted = [normalized_abs_text(needle) for needle in needles if normalized_abs_text(needle)]
+    if not release_url:
+        raise RuntimeError("ABS release URL is required")
+    if release_url.lower().endswith(".xlsx"):
+        return release_url
+    if not wanted:
+        raise RuntimeError("ABS XLSX discovery requires fetch_xlsx_label_contains")
+
+    r = requests.get(release_url, headers={"User-Agent": UA}, timeout=60)
+    r.raise_for_status()
+
+    candidates: list[tuple[str, str]] = []
+    for match in re.finditer(r"<a[^>]+href=[\"']([^\"']+\.xlsx)[\"'][^>]*>(.*?)</a>", r.text, flags=re.I | re.S):
+        tag = match.group(0)
+        href = urllib.parse.urljoin(r.url, match.group(1))
+        aria = re.search(r"aria-label=[\"']([^\"']+)[\"']", tag, flags=re.I)
+        label = aria.group(1) if aria else re.sub(r"<.*?>", " ", match.group(2), flags=re.S)
+        label_norm = normalized_abs_text(label)
+        candidates.append((label_norm, href))
+        if all(needle in label_norm for needle in wanted):
+            return href
+
+    available = "; ".join(label for label, _ in candidates[:8])
+    raise RuntimeError(f"ABS release page did not contain a matching XLSX link. Wanted {wanted}; saw {available}")
+
+
+def _round_numeric(value: float, ndigits: int) -> int | float:
+    rounded = round(float(value), ndigits)
+    return int(rounded) if ndigits == 0 else rounded
+
+
+def extract_abs_xlsx_series(
+    wb: Any,
+    targets: list[str],
+    *,
+    series_type: str | None,
+    ndigits: int,
+    limit: int,
+) -> tuple[list[dict[str, Any]], str, list[dict[str, Any]], str]:
+    """Extract one or more ABS spreadsheet series and sum them by period."""
+    if not targets:
+        raise RuntimeError("ABS XLSX extraction requires at least one target series description")
+
+    wanted_type = normalized_abs_text(series_type) if series_type else None
+    found: list[dict[str, Any]] = []
+
+    for target in targets:
+        target_norm = normalized_abs_text(target)
+        match_info: dict[str, Any] | None = None
+        for sheet_name in wb.sheetnames:
+            if not str(sheet_name).lower().startswith("data"):
+                continue
+            ws = wb[sheet_name]
+            rows = list(ws.iter_rows(values_only=True))
+            if len(rows) < 11:
+                continue
+            max_cols = max(len(row) for row in rows[:10])
+            for col_idx in range(1, max_cols):
+                desc = rows[0][col_idx] if col_idx < len(rows[0]) else None
+                if not desc:
+                    continue
+                desc_norm = normalized_abs_text(desc)
+                if target_norm not in desc_norm:
+                    continue
+                col_type = normalized_abs_text(rows[2][col_idx] if col_idx < len(rows[2]) else None)
+                if wanted_type and col_type != wanted_type:
+                    continue
+                observations: dict[str, float] = {}
+                for row in rows[10:]:
+                    raw_date = row[0] if row else None
+                    raw_value = row[col_idx] if col_idx < len(row) else None
+                    if isinstance(raw_date, dt.datetime):
+                        obs_date = raw_date.date()
+                    elif isinstance(raw_date, dt.date):
+                        obs_date = raw_date
+                    else:
+                        continue
+                    if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+                        continue
+                    observations[obs_date.strftime("%Y-%m")] = float(raw_value)
+                if observations:
+                    match_info = {
+                        "target": target,
+                        "description": str(desc),
+                        "sheet": sheet_name,
+                        "series_id": rows[9][col_idx] if col_idx < len(rows[9]) else None,
+                        "unit": rows[1][col_idx] if col_idx < len(rows[1]) else None,
+                        "series_type": rows[2][col_idx] if col_idx < len(rows[2]) else None,
+                        "observations": observations,
+                    }
+                    break
+            if match_info:
+                break
+        if not match_info:
+            raise RuntimeError(f"ABS workbook did not contain target series {target!r}")
+        found.append(match_info)
+
+    common_periods = set(found[0]["observations"])
+    for series in found[1:]:
+        common_periods &= set(series["observations"])
+    values: list[dict[str, Any]] = []
+    for period in sorted(common_periods):
+        total = sum(series["observations"][period] for series in found)
+        values.append({"t": period, "v": _round_numeric(total, ndigits)})
+
+    values = values[-limit:]
+    if not values:
+        raise RuntimeError("ABS workbook target series contained no common numeric observations")
+
+    latest_period = values[-1]["t"]
+    latest_date = dt.date.fromisoformat(f"{latest_period}-01")
+    latest_components = [
+        {
+            "description": series["description"],
+            "series_id": series["series_id"],
+            "sheet": series["sheet"],
+            "series_type": series["series_type"],
+            "unit": series["unit"],
+            "value": _round_numeric(series["observations"][latest_period], ndigits),
+        }
+        for series in found
+    ]
+    unit = str(found[0]["unit"] or "").strip()
+    return values, month_end_iso(latest_date), latest_components, unit
+
+
+def fetch_abs_release_xlsx_series(source: dict[str, Any]) -> dict[str, Any]:
+    release_url = source.get("fetch_url") or source.get("canonical_url") or source.get("url")
+    workbook_url = discover_abs_release_xlsx_url(release_url, source.get("fetch_xlsx_label_contains", []))
+    wb = load_xlsx_from_url(workbook_url)
+
+    targets = source.get("fetch_series_descriptions") or []
+    if isinstance(targets, str):
+        targets = [targets]
+    values, last_data_point, components, workbook_unit = extract_abs_xlsx_series(
+        wb,
+        list(targets),
+        series_type=source.get("fetch_series_type"),
+        ndigits=int(source.get("fetch_round_digits", 1)),
+        limit=int(source.get("fetch_trim_observations", 60)),
+    )
+    unit = source.get("fetch_unit") or workbook_unit
+    component_names = "; ".join(str(component["series_id"]) for component in components)
+    notes = source.get("fetch_notes") or (
+        f"Fetched from ABS latest-release XLSX workbook. Series IDs: {component_names}. "
+        f"Workbook unit: {workbook_unit}. Values are trimmed to the last {len(values)} observations."
+    )
+    return {
+        "unit": unit,
+        "values": values,
+        "last_data_point": last_data_point,
+        "notes": notes,
+        "source_url_resolved": workbook_url,
+        "extra": {
+            "schema": "abs_xlsx_series.v1",
+            "fields": {
+                "workbook_url": workbook_url,
+                "workbook_unit": workbook_unit,
+                "component_series": components,
+            },
+        },
+    }
 
 
 def discover_aps_workbook_url(package_url: str) -> str:
@@ -2064,6 +2302,39 @@ FETCHERS: dict[str, Fetcher] = {
         source.get("sdmx_note_suffix"),
         source.get("fetch_url"),
     ),
+    "abs_manufacturing_employment": fetch_abs_release_xlsx_series,
+    "abs_manufacturing_output_index": fetch_abs_release_xlsx_series,
+    "abs_manufactured_exports_total": fetch_abs_release_xlsx_series,
+    "abs_manufacturing_capex": fetch_abs_release_xlsx_series,
+    "abs_food_beverage_employment": fetch_abs_release_xlsx_series,
+    "abs_participation_rate": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_employment_population_ratio": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_job_vacancies": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_wage_price_index": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "rba_cash_rate": lambda source: fetch_rba_csv_column(
@@ -2082,6 +2353,23 @@ FETCHERS: dict[str, Fetcher] = {
         notes="Quarter-end value of household debt as a per cent of annualised household disposable income, from RBA Statistical Table E2. Trimmed to last 40 quarters.",
         ndigits=1,
     ),
+    "rba_standard_variable_mortgage_rate": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier",
+        aggregate="monthly_mean",
+        unit="per cent per annum",
+        notes="Monthly RBA indicator lending rate for banks' standard variable owner-occupier housing loans, from Statistical Table F5. Trimmed to last 60 months.",
+        ndigits=2,
+    ),
+    "rba_credit_card_debt_accruing_interest": lambda source: fetch_rba_csv_column(
+        source["fetch_url"],
+        title_substring="Balances accruing interest",
+        aggregate="monthly_mean",
+        unit="AUD millions",
+        notes="Monthly value of credit and charge card balances accruing interest from RBA Statistical Table C1.1 aggregate credit card statistics. Trimmed to last 60 months.",
+        ndigits=1,
+    ),
+    "aofm_gov_gross_debt": fetch_aofm_ags_face_value,
     "aemo_nem_average_wholesale_price": lambda source: fetch_aemo_nem_price_demand("price"),
     "aemo_nem_total_demand": lambda source: fetch_aemo_nem_price_demand("demand"),
     "aus_retail_fuel_multistate": fetch_retail_multistate,
@@ -2130,12 +2418,40 @@ def write_generated(source: dict[str, Any], block: dict[str, Any]) -> pathlib.Pa
     return path
 
 
-def check_url(url: str) -> tuple[bool, str]:
+def check_url(
+    url: str,
+    *,
+    headers: dict[str, str] | None = None,
+    timeout_seconds: int = 20,
+) -> tuple[bool, str]:
+    request_headers = headers or {"User-Agent": UA}
     try:
-        r = requests.head(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True)
-        if r.status_code >= 400:
-            r = requests.get(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True, stream=True)
+        try:
+            r = requests.head(
+                url,
+                headers=request_headers,
+                timeout=timeout_seconds,
+                allow_redirects=True,
+            )
+        except requests.RequestException:
+            r = requests.get(
+                url,
+                headers=request_headers,
+                timeout=timeout_seconds,
+                allow_redirects=True,
+                stream=True,
+            )
             r.close()
+        else:
+            if r.status_code >= 400:
+                r = requests.get(
+                    url,
+                    headers=request_headers,
+                    timeout=timeout_seconds,
+                    allow_redirects=True,
+                    stream=True,
+                )
+                r.close()
         if r.status_code >= 400:
             return False, f"HTTP {r.status_code}"
         return True, f"HTTP {r.status_code}"
@@ -2146,7 +2462,18 @@ def check_url(url: str) -> tuple[bool, str]:
 def source_check_url(source: dict[str, Any], *, all_links: bool) -> str:
     if all_links:
         return source.get("canonical_url") or source["url"]
-    return source.get("fetch_url") or source.get("canonical_url") or source["url"]
+    return source.get("check_url") or source.get("fetch_url") or source.get("canonical_url") or source["url"]
+
+
+def source_check_options(source: dict[str, Any]) -> tuple[dict[str, str], int]:
+    user_agent = source.get("check_user_agent") or source.get("fetch_user_agent")
+    headers = {"User-Agent": "Mozilla/5.0" if user_agent == "browser-compatible" else UA}
+    timeout_seconds = int(source.get("check_timeout_seconds") or 20)
+    return headers, timeout_seconds
+
+
+def source_check_required(source: dict[str, Any]) -> bool:
+    return source.get("check_required", True) is not False
 
 
 def main() -> int:
@@ -2207,11 +2534,15 @@ def main() -> int:
                 skipped.append((sid, "not programmatic; skipped blocking fetch check"))
                 continue
             url = source_check_url(source, all_links=args.check_all_links)
-            ok, msg = check_url(url)
-            tag = "OK " if ok else "ERR"
+            headers, timeout_seconds = source_check_options(source)
+            ok, msg = check_url(url, headers=headers, timeout_seconds=timeout_seconds)
+            required = source_check_required(source)
+            tag = "OK " if ok else ("ERR" if required else "WARN")
             print(f"[{tag}] {sid:<32} {msg}  {url}")
-            if not ok:
+            if not ok and required:
                 errors.append(f"{sid}: {msg}")
+            elif not ok:
+                skipped.append((sid, f"non-blocking fetch check failed: {msg}"))
             continue
 
         if fetch_mode in {"programmatic", "derived"}:

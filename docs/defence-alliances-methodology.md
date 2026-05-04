@@ -129,3 +129,48 @@ Unavailable rows stay unavailable rather than being estimated.
 - No defence-spending share-of-GDP row is computed.
 - No base or estate capacity table is loaded.
 
+
+## Uncrewed systems (Pass 2)
+
+The Defence posture page includes a dedicated uncrewed systems and counter-drone
+section that sits between "Capabilities and assets" and "Sovereign capability
+and industry". It is loaded from `data/manual/defence_uncrewed_systems.json`.
+
+The section keeps the following row types conceptually separate and never
+collapses them into one line or one number:
+
+- **In-service / introduced** — uncrewed systems that the public Defence
+  project page lists as introduced or in service. First-pass examples include
+  the MQ-4C Triton (Project AIR 7000 Phase 1B) and the Insitu Integrator
+  Tactical UAS (Project LAND 129 Phase 3).
+- **Acquisition / development** — programmes that public Defence pages
+  describe as in development, prototype or under acquisition rather than
+  fielded. First-pass examples include the MQ-28A Ghost Bat (Project AIR 6014
+  Phase 1) and the LAND 156 counter-small UAS work.
+- **Sovereign / domestic program** — Australian-developed or co-funded
+  uncrewed work, such as the Ghost Shark Extra-Large Autonomous Undersea
+  Vehicle and the Sovereign Defence Industrial Priorities autonomous-systems
+  category.
+- **Counter-drone** — capabilities that defend against adversary uncrewed
+  systems. Counter-drone is presented as its own line; it is not the same
+  thing as drones Australia operates.
+- **Funding boundaries** — the 2024 Integrated Investment Program and the
+  2026 National Defence Strategy reference uncrewed and autonomous-systems
+  lines inside broader capability investment envelopes. Neither publishes a
+  clean drone-only budget. The page keeps a "Drone-only budget" row marked
+  Unavailable rather than presenting an IIP or NDS envelope as drone funding.
+
+### What the uncrewed section does NOT do
+
+- It does not publish a complete ADF drone inventory.
+- It does not publish mission-capable rates, sortie rates, deployability or
+  live availability for any uncrewed platform.
+- It does not present development prototypes (Ghost Bat, Ghost Shark) as
+  fielded operational capability.
+- It does not bundle counter-drone, sovereign-program and acquisition rows
+  into a single inventory or single budget.
+- It does not include classified or sensitive uncrewed systems.
+
+If a row's quantity or status is not separately published on the cited
+Defence project page, the dashboard records that fact rather than asserting
+a fleet count.

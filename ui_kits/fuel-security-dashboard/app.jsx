@@ -180,6 +180,391 @@ function SourceInvestigationSummary() {
   );
 }
 
+const ANSWER_CARDS = [
+  {
+    title: 'National public fuel status',
+    label: 'Observed',
+    kind: 'observed',
+    body: 'The official public PM&C/DCCEEW level remains visible and is not reinterpreted into a private risk score.',
+  },
+  {
+    title: 'Petrol, diesel and jet fuel days remaining',
+    label: 'Derived',
+    kind: 'derived',
+    body: 'Product-day cards are reshaped from the public MSO table rather than invented from hidden demand assumptions.',
+  },
+  {
+    title: 'MSO reserves and APS stock context',
+    label: 'Observed',
+    kind: 'observed',
+    body: 'The page separates MSO reserve volumes from APS monthly stocks, sales and import context.',
+  },
+  {
+    title: 'Product imports and import dependency',
+    label: 'Observed',
+    kind: 'observed',
+    body: 'APS product imports and ABS petroleum import value are shown as public context, with source boundaries intact.',
+  },
+  {
+    title: 'Inbound tanker visibility',
+    label: 'Partial coverage',
+    kind: 'partial',
+    body: 'Only aggregate public tanker and forward-order counts are shown. Live vessel names, AIS positions and ETAs remain unavailable.',
+  },
+  {
+    title: 'Retail stock-out / outage visibility',
+    label: 'Partial coverage',
+    kind: 'partial',
+    body: 'PM&C, WA and QLD public rows provide partial outage visibility. They are not a live national dry-station feed.',
+  },
+  {
+    title: 'Retail price pressure where available',
+    label: 'Partial coverage',
+    kind: 'partial',
+    body: 'Public-feed retail price rows are treated as price-pressure context, not complete national pump-price coverage.',
+  },
+  {
+    title: 'Missing feeds',
+    label: 'Unavailable',
+    kind: 'unavailable',
+    body: 'Live station outages, live vessel ETAs and terminal-level storage capacity stay labelled unavailable until a named public source is loaded.',
+  },
+];
+
+function WhatThisPageAnswers() {
+  return (
+    <section className="section" aria-labelledby="answers-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">What this page answers</span>
+          <h2 id="answers-h">The national fuel dashboard structure</h2>
+          <p className="section__lede">
+            A public dashboard should show both the numbers that are visible and the feeds that are missing.
+            Visibility language matters: partial public rows are not full national live coverage.
+          </p>
+        </div>
+      </div>
+      <div className="sources-grid">
+        {ANSWER_CARDS.map(card => (
+          <article key={card.title} className="source-card">
+            <div className="card-status-row">
+              <h4>{card.title}</h4>
+              <TrustBadge kind={card.kind}>{card.label}</TrustBadge>
+            </div>
+            <p className="body-sm">{card.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PublicRequestAlignment() {
+  return (
+    <section className="section section--why" aria-labelledby="public-request-h">
+      <div className="why-grid">
+        <div>
+          <span className="eyebrow">Public dashboard request</span>
+          <h2 id="public-request-h" style={{ marginTop: 8 }}>Certainty means more than a price board</h2>
+        </div>
+        <div className="why-body">
+          <p>
+            Public calls for a national fuel dashboard are about certainty: whether fuel is available,
+            how many days of cover remain, what supply is inbound, where outages are visible, and
+            which gaps government or industry still need to publish. This page shows that structure
+            with public-source evidence only.
+          </p>
+          <p>
+            If a value cannot be verified from a named public source, this dashboard labels it partial,
+            unavailable or stale rather than filling the gap with estimates.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MoreThanPumpPrices() {
+  return (
+    <section className="section section--why" aria-labelledby="more-than-prices-h">
+      <div className="why-grid">
+        <div>
+          <span className="eyebrow">More than pump prices</span>
+          <h2 id="more-than-prices-h" style={{ marginTop: 8 }}>Supply resilience belongs beside price pressure</h2>
+        </div>
+        <div className="why-body">
+          <p>
+            A useful national fuel dashboard should not only show the price at the bowser. It should
+            connect price pressure to supply resilience: stock cover, import reliance, inbound supply,
+            outages, reserves, terminal visibility and known data gaps.
+          </p>
+          <p>
+            Fuel Resilience AU also links this fuel-security view into broader national resilience
+            dashboards covering fertiliser, oil production, resource value, strategic resources,
+            defence posture, power, infrastructure, manufacturing and the Australian economy.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FreshnessNotice({ latestRetrieved, updatedDisplay }) {
+  const hasRefresh = Boolean(latestRetrieved);
+  return (
+    <section className="freshness-notice" aria-labelledby="freshness-notice-h">
+      <div className="freshness-notice__inner">
+        <div>
+          <span className="eyebrow">Refresh and freshness</span>
+          <h2 id="freshness-notice-h">
+            {hasRefresh ? `Last verified source retrieval: ${updatedDisplay}` : 'Programmatic refresh not recorded yet'}
+          </h2>
+          <p>
+            {hasRefresh
+              ? 'Some feeds may still be manual, partial or stale; check the source cards below before treating any value as current.'
+              : 'Programmatic refresh is not recorded yet. This page may include manual or stale public-source data. Check the source cards below before treating any value as current.'}
+          </p>
+        </div>
+        <div className="trust-badges" aria-label="Freshness caveat labels">
+          <TrustBadge kind="manual"/>
+          <TrustBadge kind="partial"/>
+          <TrustBadge kind="stale"/>
+          <TrustBadge kind="unavailable"/>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowToReadPage() {
+  return (
+    <section className="section section--why" aria-labelledby="how-read-h">
+      <div className="why-grid">
+        <div>
+          <span className="eyebrow">How to read this page</span>
+          <h2 id="how-read-h" style={{ marginTop: 8 }}>Public-source prototype, not a live fuel finder</h2>
+        </div>
+        <div className="why-body">
+          <p>
+            This independent page shows what Australia can currently see from public
+            fuel-security data, and what remains hidden because government or industry
+            feeds are not published. Treat it as a public-source prototype, not an
+            official government dashboard or live service-station finder.
+          </p>
+          <div className="trust-badges" aria-label="How to read trust labels">
+            <TrustBadge kind="observed"/>
+            <TrustBadge kind="partial"/>
+            <TrustBadge kind="unavailable"/>
+            <TrustBadge kind="stale"/>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PublishingNeedsChecklist() {
+  const rows = [
+    {
+      item: 'Live station fuel availability',
+      why: 'Travellers and operators need to know where fuel is actually available.',
+      label: 'Missing / unavailable',
+      kind: 'unavailable',
+    },
+    {
+      item: 'Station-level outage feed',
+      why: 'Shows dry sites by region, product and time.',
+      label: 'Missing / unavailable',
+      kind: 'unavailable',
+    },
+    {
+      item: 'Live tanker ETAs',
+      why: 'Shows timing of inbound supply.',
+      label: 'Missing / unavailable',
+      kind: 'unavailable',
+    },
+    {
+      item: 'Terminal capacity and inventory',
+      why: 'Shows local storage resilience and supply pressure.',
+      label: 'Missing / unavailable',
+      kind: 'unavailable',
+    },
+    {
+      item: 'Product-level national pump prices',
+      why: 'Shows price pressure beyond one public ULP 91 context row.',
+      label: 'Partial',
+      kind: 'partial',
+    },
+    {
+      item: 'Regional fuel risk zones',
+      why: 'Helps tourism, freight and remote communities plan.',
+      label: 'Not safe to publish yet',
+      kind: 'unavailable',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="publish-needed-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Missing public feeds</span>
+          <h2 id="publish-needed-h">What government and industry still need to publish</h2>
+          <p className="section__lede">
+            This prototype shows what can be built from public-source data. A true national
+            fuel dashboard would need several feeds that are not currently available as
+            source-safe public data.
+          </p>
+        </div>
+      </div>
+      <div className="data-table-wrap">
+        <table className="data-table data-table--plain">
+          <thead>
+            <tr>
+              <th>Needed feed</th>
+              <th>Why it matters</th>
+              <th>Current status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(row => (
+              <tr key={row.item}>
+                <td>{row.item}</td>
+                <td>{row.why}</td>
+                <td><TrustBadge kind={row.kind}>{row.label}</TrustBadge></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function TravellersAndTourismSection() {
+  const rows = [
+    {
+      question: 'Can I see live station availability?',
+      answer: 'Not yet. No national live dry-site feed is loaded.',
+      label: 'Unavailable',
+      kind: 'unavailable',
+    },
+    {
+      question: 'Can I see state-level stock-outs?',
+      answer: 'Partially. PM&C state/territory stock-out rows are loaded where available.',
+      label: 'Partial',
+      kind: 'partial',
+    },
+    {
+      question: 'Can I see Queensland-specific unavailable reports?',
+      answer: 'Partially. QLD Open Data unavailable-fuel rows are loaded monthly, but this is not live station availability.',
+      label: 'Partial',
+      kind: 'partial',
+    },
+    {
+      question: 'Can I see inbound supply risk?',
+      answer: 'Partially. Aggregate tanker counts and forward import orders are loaded, but no vessel ETAs or cargo-level live feed.',
+      label: 'Partial',
+      kind: 'partial',
+    },
+    {
+      question: 'Can I use this as a trip-planning fuel finder?',
+      answer: 'No. This dashboard is a public-source fuel-security prototype, not a live service-station finder.',
+      label: 'Unavailable',
+      kind: 'unavailable',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="travellers-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Public use</span>
+          <h2 id="travellers-h">For travellers and tourism operators</h2>
+          <p className="section__lede">
+            These are planning answers, not live operating instructions. The page is useful
+            for seeing source-backed visibility and gaps, but it is not a service-station finder.
+          </p>
+        </div>
+      </div>
+      <div className="sources-grid sources-grid--compact">
+        {rows.map(row => (
+          <article className="source-card" key={row.question}>
+            <div className="card-status-row">
+              <h4>{row.question}</h4>
+              <TrustBadge kind={row.kind}>{row.label}</TrustBadge>
+            </div>
+            <p className="body-sm">{row.answer}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function QueenslandVisibility({ stockoutsEnv, qldReportsEnv }) {
+  const stockoutFields = fields(stockoutsEnv);
+  const qldFields = fields(qldReportsEnv);
+
+  return (
+    <section className="section" aria-labelledby="qld-visibility-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Queensland visibility</span>
+          <h2 id="qld-visibility-h">Partial Queensland fuel visibility, not live station coverage</h2>
+          <p className="section__lede">
+            Queensland is visible through partial public-source coverage: PM&C state/territory
+            stock-out rows and monthly QLD Open Data unavailable-fuel reports. This does not
+            replace a live station-level availability feed for tourists, freight or regional operators.
+          </p>
+        </div>
+      </div>
+      <div className="metric-grid metric-grid--4">
+        <SecurityCard eyebrow="Partial coverage" title="QLD petrol stock-outs" value={fmtNumber(stockoutFields.qld_petrol)} unit="sites" env={stockoutsEnv} partial>
+          PM&C Queensland petrol row. Seven-day change: {fmtChange(stockoutFields.qld_petrol_change_7d)}.
+        </SecurityCard>
+        <SecurityCard eyebrow="Partial coverage" title="QLD diesel stock-outs" value={fmtNumber(stockoutFields.qld_diesel)} unit="sites" env={stockoutsEnv} partial>
+          PM&C Queensland diesel row. Seven-day change: {fmtChange(stockoutFields.qld_diesel_change_7d)}.
+        </SecurityCard>
+        <SecurityCard eyebrow="Partial coverage" title="QLD unavailable fuel reports" value={fmtNumber(latest(qldReportsEnv))} unit="reports" env={qldReportsEnv} partial>
+          Monthly QLD Open Data rows where Price = 9999. Latest resource: {qldFields.latest_resource_name || 'not specified'}.
+        </SecurityCard>
+        <SecurityCard eyebrow="Unavailable" title="QLD live station availability" env={{ status: 'unavailable', source_name: 'No source-safe live Queensland station feed loaded' }} unavailable>
+          No live station-level availability feed is loaded. No Queensland town, route or station coverage is inferred.
+        </SecurityCard>
+      </div>
+      <div style={{ height: 20 }}/>
+      <div className="data-table-wrap">
+        <table className="data-table data-table--plain">
+          <thead>
+            <tr>
+              <th>Queensland public signal</th>
+              <th>Loaded value</th>
+              <th>Source boundary</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PM&C petrol stock-outs</td>
+              <td>{fmtNumber(stockoutFields.qld_petrol)} sites; 7-day change {fmtChange(stockoutFields.qld_petrol_change_7d)}</td>
+              <td>State-level row only; no station names, towns or live availability.</td>
+            </tr>
+            <tr>
+              <td>PM&C diesel stock-outs</td>
+              <td>{fmtNumber(stockoutFields.qld_diesel)} sites; 7-day change {fmtChange(stockoutFields.qld_diesel_change_7d)}</td>
+              <td>State-level row only; no station names, towns or live availability.</td>
+            </tr>
+            <tr>
+              <td>QLD unavailable fuel reports</td>
+              <td>{fmtNumber(latest(qldReportsEnv))} monthly reports; latest unavailable report date {qldFields.latest_unavailable_report_date || '-'}</td>
+              <td>Monthly change-report coverage where Price = 9999; not a current statewide dry-site count.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
@@ -232,15 +617,17 @@ function App() {
       <main id="main">
         <section className="intro" id="fuel-security">
           <div>
-            <span className="eyebrow">Australia fuel security dashboard</span>
-            <h1 style={{ marginTop: 12 }}>What Australia can see from public fuel-security data.</h1>
+            <span className="eyebrow">National fuel security dashboard</span>
+            <h1 style={{ marginTop: 12 }}>What a transparent Australian fuel dashboard should show.</h1>
             <p className="intro__lede">
-              This page separates observed public signals from derived, partial and unavailable
-              operational layers. It shows PM&C/DCCEEW status, product days, stock context,
-              import/shipping context and the blind spots that are not yet public-source safe.
+              This independent public-source prototype shows Australia's fuel security position using only
+              source-linked data: official public status, days of cover, MSO reserves, product stocks,
+              imports, inbound tanker visibility, retail stock-outs, price pressure and known missing
+              feeds. It does not invent live values where government or industry data is not publicly
+              available, and it is not an official government dashboard or live service-station finder.
             </p>
           </div>
-          <aside className="intro__meta" aria-label="Fuel security status">
+          <aside className="intro__meta" aria-label="National fuel security status">
             <strong>Official public level</strong>
             <span className="mono">{officialLevel}</span>
             <div style={{ height: 12 }}/>
@@ -250,6 +637,25 @@ function App() {
         </section>
 
         <DataCoverage data={data}/>
+
+        <FreshnessNotice latestRetrieved={latestRetrieved} updatedDisplay={updatedDisplay}/>
+
+        <HowToReadPage/>
+
+        <PublicRequestAlignment/>
+
+        <WhatThisPageAnswers/>
+
+        <PublishingNeedsChecklist/>
+
+        <TravellersAndTourismSection/>
+
+        <QueenslandVisibility
+          stockoutsEnv={data.pmc_retail_stockouts}
+          qldReportsEnv={data.qld_fuel_security_unavailable_reports}
+        />
+
+        <MoreThanPumpPrices/>
 
         <section className="section section--why">
           <div className="why-grid">
@@ -295,6 +701,9 @@ function App() {
             </SecurityCard>
             <SecurityCard eyebrow="Unavailable" title="Dashboard status model" env={data.fuel_security_status_model} unavailable>
               {data.fuel_security_status_model.notes}
+            </SecurityCard>
+            <SecurityCard eyebrow="Partial coverage" title="Public-feed ULP 91 price pressure" value={fmtNumber(latest(data.aus_retail_fuel_multistate), 1)} unit="c/L" env={data.aus_retail_fuel_multistate} partial>
+              Multi-state public-feed ULP 91 average. This is price-pressure context, not complete national all-product pump-price coverage.
             </SecurityCard>
           </div>
         </section>
@@ -370,11 +779,11 @@ function App() {
           <div className="section__head">
             <div>
               <span className="eyebrow">4. Inbound fuel visibility</span>
-              <h2 id="import-risk">Aggregate shipping context, no fake vessel layer</h2>
+              <h2 id="import-risk">Inbound fuel evidence board, not a live map</h2>
               <p className="section__lede">
-                This section borrows the readable shape of a ship-tracking dashboard, but only
-                uses source-safe aggregate public data. It does not plot live AIS, vessel ETAs
-                or shipment-level Kpler records.
+                This section uses source-safe aggregate public data only. It does not plot
+                ships, AIS positions, vessel names, port-call ETAs or shipment-level private
+                logistics records.
               </p>
             </div>
           </div>
@@ -390,7 +799,7 @@ function App() {
               <dt>Loaded</dt>
               <dd>PM&C aggregate tankers and four-week import orders, APS monthly product imports, and ABS petroleum import value.</dd>
               <dt>Not loaded</dt>
-              <dd>Vessel names, AIS positions, ETA-level port calls and cargo inference. The route graphic is context only.</dd>
+              <dd>Vessel names, AIS positions, ETA-level port calls, cargo inference, ports, terminals, shipping lanes or vessel locations.</dd>
             </dl>
           </div>
         </section>

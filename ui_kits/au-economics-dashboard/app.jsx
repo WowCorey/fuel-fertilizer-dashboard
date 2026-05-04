@@ -110,7 +110,7 @@ function App() {
             <MetricCard
               eyebrow="Mortgages"
               label="Standard variable home loan rate"
-              plain="The indicator standard variable owner-occupier rate published by the RBA in Tables F5/F6."
+              plain="The indicator standard variable owner-occupier rate published by the RBA in Statistical Table F5."
               fromEnvelope={data.rba_standard_variable_mortgage_rate}
               unit="%"
             />
@@ -136,7 +136,7 @@ function App() {
             <MetricCard
               eyebrow="Federal debt"
               label="Australian Government Securities outstanding"
-              plain="Face-value total of Treasury Bonds, Indexed Bonds and Treasury Notes on issue, from AOFM."
+              plain="Annual face value of Australian Government Securities outstanding, from AOFM stock_ags.csv. This is not Budget Paper gross debt."
               fromEnvelope={data.aofm_gov_gross_debt}
               unit=" AUD billions"
             />
@@ -179,10 +179,12 @@ function App() {
             <article className="source-card">
               <h4>Pending source coverage</h4>
               <p className="body-sm">
-                Mortgage rate, credit card balances, AOFM federal debt, state net debt, GDP,
-                unemployment and CPI sources stay on manual until each publisher endpoint or
-                workbook column is verified by a human. Programmatic access is wired for the
-                RBA cash rate and household debt-to-income series only.
+                State and territory net debt remains unavailable until a comparable annual
+                hand-key pass can cite each jurisdiction's budget paper clearly. RBA cash rate,
+                household debt, mortgage-rate and credit-card series now load from verified RBA
+                CSVs. ABS GDP, unemployment and CPI load from verified ABS Data API keys. AOFM
+                federal securities outstanding is hand-keyed from the official annual stock CSV
+                because the richer monthly workbook was not fetch-stable in this pass.
               </p>
             </article>
           </div>
@@ -309,21 +311,21 @@ function App() {
               <dt>RBA cash rate target</dt>
               <dd>Monthly mean of daily observations from RBA Statistical Table F1.1, fetched as CSV. The value is the headline policy interest rate the RBA Board sets at each Monetary Policy meeting.</dd>
               <dt>Standard variable home loan rate</dt>
-              <dd>Indicator standard variable owner-occupier rate from RBA Statistical Tables F5 and F6. Manual entry until the column header in the latest CSV release is verified.</dd>
+              <dd>Indicator standard variable owner-occupier rate from RBA Statistical Table F5. The fetcher selects the verified Table F5 CSV column whose title is "Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier".</dd>
               <dt>Household debt to disposable income</dt>
               <dd>Total household debt expressed as a per cent of household disposable income, from RBA Statistical Table E2 (Selected Household Finances Ratios). Quarter-end values.</dd>
               <dt>Credit card balances accruing interest</dt>
-              <dd>Total credit and charge card balances on which interest is being charged, from RBA Statistical Table C1.1. Manual entry until a stable CSV endpoint is confirmed.</dd>
+              <dd>Total credit and charge card balances on which interest is being charged, from the RBA Statistical Table C1.1 aggregate CSV column "Balances accruing interest". Values are AUD millions for larger Australian card issuers, preserving the RBA source boundary.</dd>
               <dt>Australian Government Securities outstanding</dt>
-              <dd>Face value of Treasury Bonds, Treasury Indexed Bonds and Treasury Notes on issue, from the Australian Office of Financial Management. Manual entry until a stable CSV endpoint is confirmed.</dd>
+              <dd>Annual Australian Government Securities face value in AUD billions, hand-keyed from AOFM stock_ags.csv. This card is not Commonwealth general government gross debt from Budget Papers.</dd>
               <dt>State and territory net debt</dt>
               <dd>General government net debt for each state and territory, hand-keyed once a year from the named Budget Paper or Budget Statement (typically Budget Paper 2). No single Commonwealth dataset consolidates these on a comparable basis.</dd>
               <dt>Real GDP growth</dt>
-              <dd>Seasonally adjusted percentage change in real Gross Domestic Product, from the ABS quarterly National Accounts release (Cat. 5206.0). Manual until the ABS SDMX dataflow key for this series is verified.</dd>
+              <dd>Seasonally adjusted percentage change in real Gross Domestic Product, from the ABS Data API ANA_AGG dataflow and the quarterly National Accounts release (Cat. 5206.0).</dd>
               <dt>Unemployment rate</dt>
-              <dd>Headline monthly seasonally adjusted unemployment rate, from ABS Labour Force Australia (Cat. 6202.0). Manual until the ABS SDMX dataflow key for this series is verified.</dd>
+              <dd>Headline monthly seasonally adjusted unemployment rate, from the ABS Data API LF dataflow and Labour Force Australia (Cat. 6202.0).</dd>
               <dt>CPI inflation</dt>
-              <dd>All-groups Consumer Price Index annual percentage change, from ABS Consumer Price Index Australia (Cat. 6401.0). Manual until the ABS SDMX dataflow key for this series is verified.</dd>
+              <dd>All-groups Consumer Price Index annual percentage change, from the ABS Data API CPI dataflow and Consumer Price Index Australia (Cat. 6401.0).</dd>
             </dl>
           </div>
         </section>
