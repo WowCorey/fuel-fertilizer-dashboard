@@ -1,8 +1,8 @@
 {
   "schema": "fuel_resilience_refresh_status.v1",
-  "status": "pending",
-  "refreshed_at": null,
-  "git_sha": null,
+  "status": "success",
+  "refreshed_at": "2026-04-30T09:50:25+00:00",
+  "git_sha": "e1b9c7cdd9e467b73ee858e31bb58f3434b9fb4b",
   "workflow": null,
   "run_id": null,
   "run_attempt": null

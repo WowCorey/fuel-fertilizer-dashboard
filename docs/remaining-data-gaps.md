@@ -1,6 +1,6 @@
 # Remaining Data Gaps
 
-Last reviewed: 2026-04-29
+Last reviewed: 2026-05-01
 
 This register records the known dashboard gaps that should not be filled with
 estimates. A gap can move to "ready to populate" only when a named public source
@@ -39,14 +39,27 @@ JSON envelope.
 | AIP national average retail petrol/diesel | deferred after re-check | Existing live fuel page has AIP terminal gate price plus public-feed retail averages by product. AIP retail reports remain PDF/report oriented; no stable public historical CSV/XLSX/JSON feed with verified reuse terms has been confirmed. | Keep manual. Populate only from a reviewed AIP report or add a fetcher if AIP publishes a deterministic reusable data file. |
 | IEA obligation/current compliance distinction | deferred | The dashboard has APS net-import cover and an IEA 90-day benchmark constant. It does not yet publish a current official compliance-gap series. | Keep showing APS cover vs 90-day benchmark unless DCCEEW publishes a current compliance series. |
 
-## Fertiliser
+## Food, farms & water security
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
+| Agricultural production rows | unavailable source gates | ABARES/ABS/DAFF candidate sources are registered, but no exact crop or livestock production row has been hand-keyed with period, unit and concept boundary. | Populate wheat, beef and other commodity rows only after the exact publisher table supports production, exports, stocks or prices as separate fields. |
+| Food imports | unavailable source gate | ABS International Trade in Goods is registered as the candidate source, but the food-import category boundary has not been verified for a dashboard-safe monthly or annual value. | Wire or hand-key only after the ABS commodity grouping, value basis, period and unit are confirmed. |
+| Agricultural exports | unavailable source gates | ABARES/DAFF and ABS trade sources are registered, but no aggregate export value is loaded because narrative summaries must not be converted into dashboard values. | Add a value only from a named table/figure with period, unit and scope. Keep ABS goods exports separate from ABARES production and forecast rows. |
+| Water/rainfall/drought pressure | unavailable source gates | BOM and MDBA candidate sources are registered, but no source-safe national agricultural pressure metric, rainfall-deficiency row, water-storage row or irrigation allocation row is wired. | Populate only after the exact product, geography, period, unit/class and reuse terms are verified. Do not infer values visually from maps. |
 | Urea, potash, phosphate, compound subseries | investigated, still deferred | The live ABS API returned no usable monthly series for the checked HS 3102/3103/3104/3105 and SITC 5621/5622/5623/5629 paths. A scan of the ABS latest-release International Trade in Goods workbooks found aggregate SITC 562 and country-origin data, but no dashboard-safe monthly nutrient-level value table. | Keep these cards unavailable. Re-check ABS Data Explorer or a custom ABS TableBuilder/export path before publishing any nutrient values. |
 | Supplier concentration | populated | ABS MERCH_IMP exposes SITC 562 monthly import value by country of origin. The dashboard now computes the top-3 non-total source-country share against total SITC 562 imports and stores the latest country breakdown in typed `extra.fields`. | Keep the aggregation method in `data/sources.yml` and the fertiliser methodology copy aligned if the formula changes. |
 | ABARES fertiliser price index | deferred | ABARES appears to publish this through quarterly workbook/report outputs rather than a stable JSON/CSV API. | Add XLSX ingestion or hand-key values from the named ABARES release table. |
 | Fertiliser stock cover | unavailable | No named public source has been verified for an Australian fertiliser stock-cover indicator. | Leave unavailable unless ABARES, DCCEEW, or another named public source publishes stock and usage inputs or a direct cover figure. |
+
+## Employment & Automation
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Underemployment rate | manual stub | ABS LF dataflow MEASURE M23 (Underemployment rate, proportion of labour force) was probed at the standard headline shape (`M23.3.1599.20.AUS.M` and several variants). All returned 404 from the live ABS Data API. The dataflow does not expose the headline underemployment series at the standard sex/age/TSEST combination used for unemployment and participation. | Investigate alternative LF subdomain dataflows or hand-key the headline figure from the named Cat. 6202.0 workbook before promoting to programmatic. |
+| Monthly hours worked in all jobs | manual stub | ABS LF dataflow MEASURE M18 and M43 were probed at the standard headline shape and returned 404. | Investigate alternative LF subdomain dataflows or hand-key the headline value from the named Cat. 6202.0 workbook before promoting to programmatic. |
+| Australian automation/AI labour-market exposure | intentionally unavailable | No source-safe Australian official dataset of automation or AI exposure by occupation or industry has been identified. International "occupational exposure" methodologies (e.g. OECD/Frey-Osborne) cannot be silently mapped to Australian rows because their concept boundaries differ. | Load only when a named Australian publisher (Productivity Commission, DEWR, DISR or ABS) releases a directly comparable Australian indicator. |
+| Causal AI rollout attribution | not in scope | The page tracks Australian labour-market change during the AI rollout era using ABS series, paired with a context-only AI rollout timeline. It does NOT assert AI caused any labour-market movement. | Continue to refuse causal labels. The AI timeline is a list of dated, named events from the listed organisations and is not a causal explanation. |
 
 ## Manufacturing
 
@@ -56,6 +69,15 @@ JSON envelope.
 | Department of Industry profile row | unavailable | No named Department of Industry, Science and Resources publication has been loaded that supports a clean dashboard row with exact period, unit and factual scope. | Keep `doe_industry_growth_centres_summary` unavailable. Add only a named factual row, not a narrative or promotional summary. |
 | Manufacturing sales wording | populated with caveat | ABS Business Indicators Table 4 supports manufacturing income from sales of goods and services, chain volume measures. This is a sales/output proxy, not a separate production-index series. | Keep the card and methodology labelled as sales/income from sales of goods and services. Do not relabel it as a production index unless a source-safe production index is added. |
 | Manufactured exports unit | resolved | ABS International Trade Table 12a values for SITC sections 5-8 are published in AUD millions. | Keep generated `abs_manufactured_exports_total` in AUD millions; do not convert as if the source values were AUD thousands. |
+
+## Infrastructure
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Infrastructure Australia priority-list count and capital cost | unavailable | The 2026 Infrastructure Priority List overview is public, but the proposal-count view is rendered through a dynamic search endpoint. Direct endpoint checks in this pass returned a request-blocked page, and the static overview did not expose a clean count or aggregate capital-cost row. | Keep `infrastructure_australia_priority_list` unavailable until an official export, static table or publication row is verified. Do not count navigation items or scrape blocked output. |
+| Australian data centre capacity | intentionally unavailable | No canonical public Australian government register of data centre capacity, MW load or AI-cluster capacity was identified. Vendor, consultancy and private market datasets are not source-safe public register inputs for this dashboard. | Keep `au_data_centre_capacity_register` unavailable unless a named public source publishes comparable capacity fields with date, unit and reuse terms. |
+| ACCC NBN speed concept | populated with caveat | ACCC Report 32 supports a state/territory range for average NBN fixed-line busy-hour download performance as a percentage of plan speed. It does not provide the page with a single source-safe median Mbps figure. | Keep the card labelled as percentage-of-plan busy-hour performance. Add Mbps only if the ACCC source publishes a clean comparable Mbps row. |
+| BITRE passenger and freight coverage | populated with caveat | BITRE public transport is capital-city patronage, airport movements are the eight capital city airports, and freight is domestic freight task in tonne-kilometres. These are scoped indicators, not full national mobility, all-airport or tonnes measures. | Keep partial-coverage trust labels visible and do not merge these concepts into broader totals. |
 
 ## Oil & Production
 

@@ -28,6 +28,29 @@ class FakeResponse:
 
 
 class FetchTransformTests(unittest.TestCase):
+    def test_non_required_fetch_check_failure_does_not_block(self):
+        source = {
+            "id": "slow_optional_source",
+            "fetch": "programmatic",
+            "fetch_url": "https://example.test/slow.xlsx",
+            "check_required": False,
+        }
+        with mock.patch.object(fetch_data, "load_sources", return_value=[source]), \
+             mock.patch.object(fetch_data, "check_url", return_value=(False, "ReadTimeout: timed out")), \
+             mock.patch.object(sys, "argv", ["fetch_data.py", "--check"]):
+            self.assertEqual(fetch_data.main(), 0)
+
+    def test_required_fetch_check_failure_blocks(self):
+        source = {
+            "id": "required_source",
+            "fetch": "programmatic",
+            "fetch_url": "https://example.test/required.csv",
+        }
+        with mock.patch.object(fetch_data, "load_sources", return_value=[source]), \
+             mock.patch.object(fetch_data, "check_url", return_value=(False, "ReadTimeout: timed out")), \
+             mock.patch.object(sys, "argv", ["fetch_data.py", "--check"]):
+            self.assertEqual(fetch_data.main(), 1)
+
     def test_abs_sdmx_parses_single_series(self):
         doc = {
             "dataSets": [

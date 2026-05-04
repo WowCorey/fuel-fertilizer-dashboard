@@ -2307,6 +2307,34 @@ FETCHERS: dict[str, Fetcher] = {
     "abs_manufactured_exports_total": fetch_abs_release_xlsx_series,
     "abs_manufacturing_capex": fetch_abs_release_xlsx_series,
     "abs_food_beverage_employment": fetch_abs_release_xlsx_series,
+    "abs_participation_rate": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_employment_population_ratio": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_job_vacancies": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_wage_price_index": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "rba_cash_rate": lambda source: fetch_rba_csv_column(
@@ -2390,12 +2418,40 @@ def write_generated(source: dict[str, Any], block: dict[str, Any]) -> pathlib.Pa
     return path
 
 
-def check_url(url: str) -> tuple[bool, str]:
+def check_url(
+    url: str,
+    *,
+    headers: dict[str, str] | None = None,
+    timeout_seconds: int = 20,
+) -> tuple[bool, str]:
+    request_headers = headers or {"User-Agent": UA}
     try:
-        r = requests.head(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True)
-        if r.status_code >= 400:
-            r = requests.get(url, headers={"User-Agent": UA}, timeout=20, allow_redirects=True, stream=True)
+        try:
+            r = requests.head(
+                url,
+                headers=request_headers,
+                timeout=timeout_seconds,
+                allow_redirects=True,
+            )
+        except requests.RequestException:
+            r = requests.get(
+                url,
+                headers=request_headers,
+                timeout=timeout_seconds,
+                allow_redirects=True,
+                stream=True,
+            )
             r.close()
+        else:
+            if r.status_code >= 400:
+                r = requests.get(
+                    url,
+                    headers=request_headers,
+                    timeout=timeout_seconds,
+                    allow_redirects=True,
+                    stream=True,
+                )
+                r.close()
         if r.status_code >= 400:
             return False, f"HTTP {r.status_code}"
         return True, f"HTTP {r.status_code}"
@@ -2406,7 +2462,18 @@ def check_url(url: str) -> tuple[bool, str]:
 def source_check_url(source: dict[str, Any], *, all_links: bool) -> str:
     if all_links:
         return source.get("canonical_url") or source["url"]
-    return source.get("fetch_url") or source.get("canonical_url") or source["url"]
+    return source.get("check_url") or source.get("fetch_url") or source.get("canonical_url") or source["url"]
+
+
+def source_check_options(source: dict[str, Any]) -> tuple[dict[str, str], int]:
+    user_agent = source.get("check_user_agent") or source.get("fetch_user_agent")
+    headers = {"User-Agent": "Mozilla/5.0" if user_agent == "browser-compatible" else UA}
+    timeout_seconds = int(source.get("check_timeout_seconds") or 20)
+    return headers, timeout_seconds
+
+
+def source_check_required(source: dict[str, Any]) -> bool:
+    return source.get("check_required", True) is not False
 
 
 def main() -> int:
@@ -2467,11 +2534,15 @@ def main() -> int:
                 skipped.append((sid, "not programmatic; skipped blocking fetch check"))
                 continue
             url = source_check_url(source, all_links=args.check_all_links)
-            ok, msg = check_url(url)
-            tag = "OK " if ok else "ERR"
+            headers, timeout_seconds = source_check_options(source)
+            ok, msg = check_url(url, headers=headers, timeout_seconds=timeout_seconds)
+            required = source_check_required(source)
+            tag = "OK " if ok else ("ERR" if required else "WARN")
             print(f"[{tag}] {sid:<32} {msg}  {url}")
-            if not ok:
+            if not ok and required:
                 errors.append(f"{sid}: {msg}")
+            elif not ok:
+                skipped.append((sid, f"non-blocking fetch check failed: {msg}"))
             continue
 
         if fetch_mode in {"programmatic", "derived"}:

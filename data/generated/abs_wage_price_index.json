@@ -1,0 +1,144 @@
+{
+  "series_id": "abs_wage_price_index",
+  "source_id": "abs_wage_price_index",
+  "source_name": "ABS Wage Price Index - total hourly rates incl. bonuses, annual % change, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia",
+  "unit": "PCT",
+  "retrieved_at": "2026-05-02T17:16:17+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2018-Q1",
+      "v": 2
+    },
+    {
+      "t": "2018-Q2",
+      "v": 2.1
+    },
+    {
+      "t": "2018-Q3",
+      "v": 2.3
+    },
+    {
+      "t": "2018-Q4",
+      "v": 2.3
+    },
+    {
+      "t": "2019-Q1",
+      "v": 2.3
+    },
+    {
+      "t": "2019-Q2",
+      "v": 2.3
+    },
+    {
+      "t": "2019-Q3",
+      "v": 2.2
+    },
+    {
+      "t": "2019-Q4",
+      "v": 2.2
+    },
+    {
+      "t": "2020-Q1",
+      "v": 2.2
+    },
+    {
+      "t": "2020-Q2",
+      "v": 1.8
+    },
+    {
+      "t": "2020-Q3",
+      "v": 1.4
+    },
+    {
+      "t": "2020-Q4",
+      "v": 1.3
+    },
+    {
+      "t": "2021-Q1",
+      "v": 1.5
+    },
+    {
+      "t": "2021-Q2",
+      "v": 1.8
+    },
+    {
+      "t": "2021-Q3",
+      "v": 2.2
+    },
+    {
+      "t": "2021-Q4",
+      "v": 2.4
+    },
+    {
+      "t": "2022-Q1",
+      "v": 2.4
+    },
+    {
+      "t": "2022-Q2",
+      "v": 2.6
+    },
+    {
+      "t": "2022-Q3",
+      "v": 3.1
+    },
+    {
+      "t": "2022-Q4",
+      "v": 3.3
+    },
+    {
+      "t": "2023-Q1",
+      "v": 3.7
+    },
+    {
+      "t": "2023-Q2",
+      "v": 3.7
+    },
+    {
+      "t": "2023-Q3",
+      "v": 4
+    },
+    {
+      "t": "2023-Q4",
+      "v": 4.3
+    },
+    {
+      "t": "2024-Q1",
+      "v": 4
+    },
+    {
+      "t": "2024-Q2",
+      "v": 4.1
+    },
+    {
+      "t": "2024-Q3",
+      "v": 3.6
+    },
+    {
+      "t": "2024-Q4",
+      "v": 3.2
+    },
+    {
+      "t": "2025-Q1",
+      "v": 3.4
+    },
+    {
+      "t": "2025-Q2",
+      "v": 3.4
+    },
+    {
+      "t": "2025-Q3",
+      "v": 3.3
+    },
+    {
+      "t": "2025-Q4",
+      "v": 3.4
+    }
+  ],
+  "notes": "Fetched from ABS Data API dataflow WPI, key 3.THRPEB.7.TOT.20.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS WPI dataflow MEASURE 3 (Percentage change from corresponding quarter of previous year), INDEX THRPEB (Total hourly rates of pay excluding bonuses), SECTOR 7 (Private and Public), INDUSTRY TOT (All Industries), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns the headline national wage price index annual % change, quarterly.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Wage Price Index Australia (Cat. 6345.0), total hourly rates of pay excluding bonuses, all sectors, all industries, year-on-year percentage change."
+}

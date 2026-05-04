@@ -1,16 +1,35 @@
 {
   "series_id": "bitre_freight_volumes",
   "source_id": "bitre_freight_volumes",
-  "source_name": "BITRE - Australian freight volumes by mode",
-  "source_url": "https://www.bitre.gov.au/statistics/freight",
-  "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-28T13:01:36+00:00",
-  "last_data_point": null,
-  "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
+  "source_name": "BITRE Yearbook 2025 - domestic freight task by mode",
+  "source_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight",
+  "unit": "billion tonne-kilometres",
+  "retrieved_at": "2026-04-29T14:17:30+00:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 786.5
+    }
+  ],
+  "notes": "Manual entry from BITRE Australian Infrastructure and Transport Statistics Yearbook 2025, Table 1.1c. The value is Australia's domestic freight task, total bulk and non-bulk, in billion tonne-kilometres. It is not a tonnes measure and does not include international freight movements.",
+  "status": "ok",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 (Commonwealth of Australia)",
-  "citation": "Bureau of Infrastructure and Transport Research Economics, Australian aggregate freight forecasts and statistics."
+  "citation": "Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, freight tables.",
+  "extra": {
+    "schema": "infrastructure_bitre_freight_volumes.v1",
+    "fields": {
+      "source_table": "BITRE Yearbook 2025 Table 1.1c",
+      "financial_year": "2024-25",
+      "coverage": "Australian domestic freight task, total bulk and non-bulk",
+      "total_billion_tonne_kilometres": 786.5,
+      "by_mode_billion_tonne_kilometres": {
+        "road": 252.9,
+        "rail": 446.8,
+        "coastal_shipping": 86.6,
+        "air_freight": 0.2
+      }
+    }
+  }
 }
