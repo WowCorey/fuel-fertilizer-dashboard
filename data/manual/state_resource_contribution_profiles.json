@@ -1,0 +1,262 @@
+{
+  "series_id": "state_resource_contribution_profiles",
+  "source_id": "state_resource_contribution_profiles",
+  "source_name": "State petroleum ledger profiles",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md",
+  "unit": "state profiles",
+  "retrieved_at": "2026-04-23T19:05:00+10:00",
+  "last_data_point": "2026-04-23",
+  "values": [
+    {
+      "t": "2026-04-23",
+      "v": 8
+    }
+  ],
+  "notes": "Manual state/territory profile scaffold compiled only from loaded official-source envelopes and methodology notes. It is qualitative context plus links to verified production, royalty, petroleum object-count, production-mapping and source-gate envelopes; it does not allocate Commonwealth tax by state.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with DCCEEW, Department of Industry, Geoscience Australia, NOPTA, WA Government, Queensland Government and Commonwealth Budget sources.",
+  "citation": "Fuel Resilience AU state petroleum ledger methodology; DCCEEW Australian Energy Statistics 2025; Department of Industry Resources and Energy Major Projects 2024; Geoscience Australia AECR 2025; NOPTA spatial data; WA and Queensland budget/royalty sources.",
+  "extra": {
+    "schema": "state_resource_contribution_profiles.v1",
+    "fields": {
+      "profile_date": "2026-04-23",
+      "method": "State roles are descriptive and anchored to loaded official production, royalty, petroleum object-count, production-mapping, source-gate and policy envelopes. Federal tax allocation remains unavailable unless a source publishes state-attributable Commonwealth receipts.",
+      "states": [
+        {
+          "state_code": "WA",
+          "state_name": "Western Australia",
+          "primary_role": "North-west oil, condensate, conventional gas and LNG export hub.",
+          "production_role": "Largest loaded state/territory oil and gas production role in the AES state rows.",
+          "crude_relevance": "High",
+          "gas_relevance": "High",
+          "lng_relevance": "High",
+          "refining_role": "No loaded refinery count is published on this page.",
+          "import_role": "Major export and import/storage infrastructure context; terminal capacity is not loaded.",
+          "infrastructure_summary": [
+            "North West Shelf conventional gas and liquid hydrocarbon context",
+            "Northern Carnarvon, Browse and Bonaparte basin context in AECR",
+            "WA petroleum state component royalty and North West Shelf grant receipt line loaded"
+          ],
+          "royalty_source_id": "resource_wa_petroleum_royalty_receipts",
+          "royalty_context_source_id": null,
+          "royalties_label": "State-collected / state-recognised petroleum revenue context",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "Loaded Commonwealth resource-rent and PRRT policy envelopes are national/project concepts, not WA-attributed receipt rows.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; onshore/state title systems are not complete.",
+          "production_mapping_status": "Partial - AES state rows, AECR basin context, NOPTA active offshore production-licence rows and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
+          "source_coverage_label": "Strong partial coverage",
+          "notes": "Strongest loaded state coverage because production and WA petroleum/NWS receipt context are both present."
+        },
+        {
+          "state_code": "QLD",
+          "state_name": "Queensland",
+          "primary_role": "Coal seam gas and LNG-linked petroleum royalty state.",
+          "production_role": "Large coal seam gas production role in the AES state rows.",
+          "crude_relevance": "Low",
+          "gas_relevance": "High",
+          "lng_relevance": "High",
+          "refining_role": "Lytton refinery role is noted as infrastructure context only; no refinery throughput is attributed here.",
+          "import_role": "Port and LNG export infrastructure context; terminal capacity is not loaded.",
+          "infrastructure_summary": [
+            "Bowen and Surat coal seam gas context",
+            "Queensland petroleum royalty receipt row loaded",
+            "Queensland petroleum royalty source notes include gas converted into LNG"
+          ],
+          "royalty_source_id": "resource_qld_petroleum_royalty_receipts",
+          "royalty_context_source_id": null,
+          "royalties_label": "State-collected petroleum royalty receipts",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "Loaded Commonwealth tax sources do not split PRRT, company tax or excise receipts by Queensland production.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; Queensland onshore/state title systems are not complete.",
+          "production_mapping_status": "Partial - AES coal seam gas rows, AECR Bowen/Surat context and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
+          "source_coverage_label": "Strong partial coverage",
+          "notes": "Strong loaded coverage for gas production and petroleum royalty receipts; federal revenue attribution remains unavailable."
+        },
+        {
+          "state_code": "VIC",
+          "state_name": "Victoria",
+          "primary_role": "Gippsland/Bass Strait oil and gas production plus refining infrastructure.",
+          "production_role": "Conventional gas, crude/condensate and naturally occurring LPG are present in AES state rows.",
+          "crude_relevance": "Medium",
+          "gas_relevance": "Medium",
+          "lng_relevance": "Low",
+          "refining_role": "Geelong refinery role is infrastructure context only; no refinery throughput is attributed here.",
+          "import_role": "Import/storage role likely material but no terminal-capacity envelope is loaded.",
+          "infrastructure_summary": [
+            "Gippsland basin appears in AECR oil basin context",
+            "AES state production rows are loaded",
+            "No petroleum-specific Victorian royalty receipt envelope is loaded"
+          ],
+          "royalty_source_id": null,
+          "royalty_context_source_id": null,
+          "royalties_label": "Unavailable",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "No loaded source attributes Commonwealth receipts to Victorian production or refining.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; Victorian onshore/state title systems are not complete.",
+          "production_mapping_status": "Partial - AES state rows, AECR Gippsland context, NOPTA active offshore production-licence rows and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
+          "source_coverage_label": "Partial coverage",
+          "notes": "Production context is loaded; revenue context remains unavailable."
+        },
+        {
+          "state_code": "SA",
+          "state_name": "South Australia",
+          "primary_role": "Cooper/Eromanga oil and gas production state.",
+          "production_role": "Conventional gas, crude/condensate and LPG are present in AES state rows.",
+          "crude_relevance": "Medium",
+          "gas_relevance": "Medium",
+          "lng_relevance": "Low",
+          "refining_role": "No loaded refinery role.",
+          "import_role": "Import/storage context not quantified on this page.",
+          "infrastructure_summary": [
+            "Cooper/Eromanga basin appears in AECR oil basin context",
+            "AES state production rows are loaded",
+            "No petroleum-specific South Australian royalty receipt envelope is loaded"
+          ],
+          "royalty_source_id": null,
+          "royalty_context_source_id": null,
+          "royalties_label": "Unavailable",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "No loaded source attributes Commonwealth receipts to South Australian production.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; South Australian onshore/state title systems are not complete.",
+          "production_mapping_status": "Partial - AES state rows, AECR Cooper/Eromanga context and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
+          "source_coverage_label": "Partial coverage",
+          "notes": "Production context is loaded; petroleum-specific royalty receipts are not yet loaded."
+        },
+        {
+          "state_code": "NT",
+          "state_name": "Northern Territory",
+          "primary_role": "Northern offshore/onshore gas and LNG-linked infrastructure state.",
+          "production_role": "Conventional gas, crude/condensate and naturally occurring LPG are present in AES state rows.",
+          "crude_relevance": "Low to medium",
+          "gas_relevance": "High",
+          "lng_relevance": "High",
+          "refining_role": "No loaded refinery role.",
+          "import_role": "LNG export and pipeline context; terminal capacity is not loaded.",
+          "infrastructure_summary": [
+            "Bonaparte basin appears in AECR North West Shelf gas context",
+            "AES state production rows are loaded",
+            "No petroleum-specific NT royalty receipt envelope is loaded"
+          ],
+          "royalty_source_id": null,
+          "royalty_context_source_id": "state_nt_mining_petroleum_royalty_context",
+          "royalties_label": "Combined mining and petroleum context loaded; petroleum-only amount unavailable",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "No loaded source attributes Commonwealth receipts to Northern Territory production or LNG infrastructure.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; Northern Territory onshore/state title systems are not complete.",
+          "production_mapping_status": "Partial - AES state rows, AECR Bonaparte context, NOPTA active offshore production-licence rows and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
+          "source_coverage_label": "Partial coverage",
+          "notes": "Production context is loaded; revenue context remains unavailable."
+        },
+        {
+          "state_code": "NSW",
+          "state_name": "New South Wales",
+          "primary_role": "Small loaded gas production role; major consumer and import/distribution market.",
+          "production_role": "AES state rows show coal seam gas production but no loaded crude/condensate value.",
+          "crude_relevance": "Low",
+          "gas_relevance": "Low",
+          "lng_relevance": "Low",
+          "refining_role": "No loaded refinery role.",
+          "import_role": "Consumer/import-distribution role is not quantified on this page.",
+          "infrastructure_summary": [
+            "AES state production row is loaded",
+            "No petroleum-specific NSW royalty receipt envelope is loaded",
+            "No state-attributable Commonwealth tax source is loaded"
+          ],
+          "royalty_source_id": null,
+          "royalty_context_source_id": "state_nsw_minerals_petroleum_royalty_context",
+          "royalties_label": "Combined minerals and petroleum context loaded; petroleum-only amount unavailable",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "No loaded source attributes Commonwealth receipts to NSW production or consumption.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded; NSW onshore/state title systems are not complete.",
+          "production_mapping_status": "Limited - AES state gas row and REMP major-project rows are loaded; current project/company production volumes remain unavailable.",
+          "source_coverage_label": "Limited coverage",
+          "notes": "Only a small loaded production signal is present; revenue and infrastructure fields remain limited."
+        },
+        {
+          "state_code": "TAS",
+          "state_name": "Tasmania",
+          "primary_role": "No loaded petroleum production profile.",
+          "production_role": "No Tasmania oil/gas production row is loaded in the current AES petroleum envelope.",
+          "crude_relevance": "Unavailable",
+          "gas_relevance": "Unavailable",
+          "lng_relevance": "Low",
+          "refining_role": "No loaded refinery role.",
+          "import_role": "Consumer/import-distribution role is not quantified on this page.",
+          "infrastructure_summary": [
+            "No loaded state petroleum production row",
+            "No petroleum-specific royalty receipt envelope is loaded",
+            "No state-attributable Commonwealth tax source is loaded"
+          ],
+          "royalty_source_id": null,
+          "royalty_context_source_id": null,
+          "royalties_label": "Unavailable",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "No loaded source attributes Commonwealth receipts to Tasmanian petroleum activity.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA current offshore title/permit records are loaded where present; Tasmanian onshore/state title systems are not complete.",
+          "production_mapping_status": "Partial - NOPTA active offshore production-licence rows are loaded; no AES petroleum production row or REMP major-project row is loaded for Tasmania.",
+          "source_coverage_label": "Limited coverage",
+          "notes": "Left limited rather than implying production or revenue that is not in the loaded sources."
+        },
+        {
+          "state_code": "ACT",
+          "state_name": "Australian Capital Territory",
+          "primary_role": "No loaded petroleum production profile.",
+          "production_role": "No ACT oil/gas production row is loaded in the current AES petroleum envelope.",
+          "crude_relevance": "Unavailable",
+          "gas_relevance": "Unavailable",
+          "lng_relevance": "Low",
+          "refining_role": "No loaded refinery role.",
+          "import_role": "Consumer/distribution role is not quantified on this page.",
+          "infrastructure_summary": [
+            "No loaded state petroleum production row",
+            "No petroleum-specific royalty receipt envelope is loaded",
+            "No state-attributable Commonwealth tax source is loaded"
+          ],
+          "royalty_source_id": null,
+          "royalty_context_source_id": null,
+          "royalties_label": "Unavailable",
+          "federal_tax_attribution_status": "Unavailable by state",
+          "federal_tax_note": "No loaded source attributes Commonwealth receipts to ACT petroleum activity.",
+          "project_count_status": "Unavailable - no current official project-count export is loaded.",
+          "permit_count_status": "Partial - NOPTA Petroleum Wells layer records are loaded where present; no ACT petroleum title count is loaded.",
+          "production_mapping_status": "Unavailable - no loaded AES petroleum production row for ACT.",
+          "source_coverage_label": "Limited coverage",
+          "notes": "Left limited rather than implying production or revenue that is not in the loaded sources."
+        }
+      ],
+      "federal_revenue_boundary": {
+        "shown_as_national_only": [
+          "resource_resource_rent_tax_receipts_budget",
+          "resource_prrt_policy",
+          "resource_company_tax_rate"
+        ],
+        "not_attributed_by_state": [
+          "PRRT receipts",
+          "company income tax",
+          "fuel excise",
+          "GST on petroleum products"
+        ],
+        "reason": "Loaded Commonwealth sources do not provide defensible state-level allocation. Allocating by production, company address, project location or consumption would be a model, not an observed public receipt."
+      },
+      "not_captured": [
+        "field-level production volumes",
+        "company-level state tax paid",
+        "terminal capacity",
+        "pipeline capacity",
+        "state-by-state fuel excise or GST attribution",
+        "LNG plant/train counts by state",
+        "gas processing plant counts by state",
+        "import/storage terminal counts by state",
+        "raw site counts without an official definition"
+      ]
+    }
+  }
+}

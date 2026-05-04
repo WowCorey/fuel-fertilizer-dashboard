@@ -1,0 +1,144 @@
+{
+  "series_id": "abs_gdp_real_growth",
+  "source_id": "abs_gdp_real_growth",
+  "source_name": "ABS National Accounts - real GDP growth, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+  "unit": "PCT (unit multiplier 0)",
+  "retrieved_at": "2026-04-30T09:45:29+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2018-Q1",
+      "v": 1
+    },
+    {
+      "t": "2018-Q2",
+      "v": 0.7
+    },
+    {
+      "t": "2018-Q3",
+      "v": 0.4
+    },
+    {
+      "t": "2018-Q4",
+      "v": 0.3
+    },
+    {
+      "t": "2019-Q1",
+      "v": 0.7
+    },
+    {
+      "t": "2019-Q2",
+      "v": 0.3
+    },
+    {
+      "t": "2019-Q3",
+      "v": 0.6
+    },
+    {
+      "t": "2019-Q4",
+      "v": 0.6
+    },
+    {
+      "t": "2020-Q1",
+      "v": -0.2
+    },
+    {
+      "t": "2020-Q2",
+      "v": -6.8
+    },
+    {
+      "t": "2020-Q3",
+      "v": 3.5
+    },
+    {
+      "t": "2020-Q4",
+      "v": 3.4
+    },
+    {
+      "t": "2021-Q1",
+      "v": 2.2
+    },
+    {
+      "t": "2021-Q2",
+      "v": 0.8
+    },
+    {
+      "t": "2021-Q3",
+      "v": -1.7
+    },
+    {
+      "t": "2021-Q4",
+      "v": 3.6
+    },
+    {
+      "t": "2022-Q1",
+      "v": 1
+    },
+    {
+      "t": "2022-Q2",
+      "v": 0.9
+    },
+    {
+      "t": "2022-Q3",
+      "v": 0.5
+    },
+    {
+      "t": "2022-Q4",
+      "v": 0.8
+    },
+    {
+      "t": "2023-Q1",
+      "v": 0.6
+    },
+    {
+      "t": "2023-Q2",
+      "v": 0.4
+    },
+    {
+      "t": "2023-Q3",
+      "v": 0.4
+    },
+    {
+      "t": "2023-Q4",
+      "v": -0.1
+    },
+    {
+      "t": "2024-Q1",
+      "v": 0.4
+    },
+    {
+      "t": "2024-Q2",
+      "v": 0.2
+    },
+    {
+      "t": "2024-Q3",
+      "v": 0.3
+    },
+    {
+      "t": "2024-Q4",
+      "v": 0.3
+    },
+    {
+      "t": "2025-Q1",
+      "v": 0.4
+    },
+    {
+      "t": "2025-Q2",
+      "v": 0.8
+    },
+    {
+      "t": "2025-Q3",
+      "v": 0.5
+    },
+    {
+      "t": "2025-Q4",
+      "v": 0.8
+    }
+  ],
+  "notes": "Fetched from ABS Data API dataflow ANA_AGG, key M2.GPM.20.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS ANA_AGG dataflow MEASURE M2 (Chain volume measures - Percentage changes), DATA_ITEM GPM (Gross domestic product), TSEST 20 (Seasonally Adjusted), REGION AUS, FREQ Q. Returns the seasonally adjusted percentage change in real GDP, quarter on quarter.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Australian National Accounts - National Income Expenditure and Product (Cat. 5206.0), seasonally adjusted real GDP percentage change."
+}

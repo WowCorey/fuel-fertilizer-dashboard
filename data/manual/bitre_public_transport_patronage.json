@@ -1,0 +1,45 @@
+{
+  "series_id": "bitre_public_transport_patronage",
+  "source_id": "bitre_public_transport_patronage",
+  "source_name": "BITRE Yearbook 2025 - public transport patronage by capital city",
+  "source_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers",
+  "unit": "million passenger trips",
+  "retrieved_at": "2026-04-29T14:17:30+00:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 1600.6
+    }
+  ],
+  "notes": "Manual entry from BITRE Australian Infrastructure and Transport Statistics Yearbook 2025, Table 2.5i. The value is total public transport patronage across Australian capital cities in 2024-25. It does not cover non-capital-city public transport use.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 (Commonwealth of Australia)",
+  "citation": "Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, passenger tables.",
+  "extra": {
+    "schema": "infrastructure_bitre_public_transport_patronage.v1",
+    "fields": {
+      "source_table": "BITRE Yearbook 2025 Table 2.5i",
+      "financial_year": "2024-25",
+      "coverage": "Australian capital cities",
+      "total_capital_cities_million_trips": 1600.6,
+      "by_mode_million_trips": {
+        "heavy_rail": 681.9,
+        "light_rail": 220.3,
+        "bus": 670.1,
+        "ferry": 28.3
+      },
+      "by_city_million_trips": {
+        "Sydney": 708.6,
+        "Melbourne": 480.2,
+        "Brisbane": 161.6,
+        "Adelaide": 69.6,
+        "Perth": 148.7,
+        "Hobart": 6.7,
+        "Darwin": 4.6,
+        "Canberra": 20.6
+      }
+    }
+  }
+}

@@ -2,12 +2,12 @@
   "series_id": "company_ampol",
   "source_id": "company_ampol",
   "source_name": "Ampol annual report (ASX:ALD)",
-  "source_url": "https://www.ampol.com.au/about-ampol/investor-centre/reports-and-presentations",
+  "source_url": "https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf",
   "unit": "",
-  "retrieved_at": "2026-04-21T14:44:07+00:00",
-  "last_data_point": "2024-06-30",
+  "retrieved_at": "2026-04-22T12:20:02+00:00",
+  "last_data_point": "2024-12-31",
   "values": [],
-  "notes": "ATO 2023-24 Corporate Report of Entity Tax Information workbook, Income tax details sheet. ATO dollar amounts converted to A$m for dashboard display; blank ATO fields are omitted rather than treated as zero.",
+  "notes": "ATO 2023-24 Corporate Report of Entity Tax Information workbook for tax fields. Net profit copied from Ampol Limited Annual Report 2024, Directors Report and consolidated statement of income; ATO tax year and annual-report period do not match exactly.",
   "status": "ok",
   "manual_entry": true,
   "source_rights": "Company copyright",
@@ -20,7 +20,16 @@
       "abn": 40004201307,
       "total_income": 34642.408,
       "taxable_income": 582.071,
-      "income_tax_paid": 149.573
+      "income_tax_paid": 149.573,
+      "net_profit": 122.5,
+      "net_profit_unit": "A$m",
+      "net_profit_period_end": "2024-12-31",
+      "net_profit_basis": "statutory profit after tax attributable to equity holders of the parent entity",
+      "prrt_paid": null,
+      "prrt_subsidiaries": [],
+      "prrt_note": "Ampol is a downstream refiner and retailer; not within the PRRT regime.",
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }

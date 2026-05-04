@@ -1,0 +1,207 @@
+{
+  "series_id": "defence_uncrewed_systems",
+  "source_id": "defence_uncrewed_systems",
+  "source_name": "Australian Defence uncrewed systems and counter-drone public posture",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+  "unit": "uncrewed system rows",
+  "retrieved_at": "2026-04-29T00:00:00+00:00",
+  "last_data_point": "2026-04-29",
+  "values": [
+    {
+      "t": "uncrewed system rows",
+      "v": 7
+    }
+  ],
+  "notes": "Manual public-source uncrewed systems and counter-drone profile for the Australian Defence posture page. Rows are kept conceptually separate by capability_type so introduced, acquisition, development, sovereign program, and counter-drone categories are not collapsed. Quantities cite the named Defence project URL rather than asserting a specific operational fleet number; readiness, mission-capable rates, deployability and a clean drone-only budget remain unavailable.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; Defence copyright terms apply",
+  "citation": "Department of Defence project pages (AIR 7000 Phase 1B Triton; AIR 6014 Phase 1 MQ-28A Ghost Bat; LAND 129 Phase 3 Integrator; LAND 156 counter-small UAS); Australian Submarine Agency / Department of Defence Ghost Shark public announcements; Sovereign Defence Industrial Priorities (SDIP) - Autonomous Systems; 2024 Integrated Investment Program (IIP) and 2026 National Defence Strategy budget factsheet.",
+  "extra": {
+    "schema": "defence_uncrewed_systems.v1",
+    "fields": {
+      "section_intro": "Selected publicly stated rows for Australia's uncrewed-systems posture. The page keeps in-service / acquisition / development / sovereign program / counter-drone rows separate. Quantities are described as the public source describes them; this section does not publish a complete ADF drone inventory.",
+      "boundary": "No complete ADF uncrewed inventory is published here. No readiness, mission-capable rates, deployability or operational-availability values are loaded. The 2024 Integrated Investment Program references uncrewed and autonomous-system lines, but does not publish a clean drone-only budget; that figure is left unavailable.",
+      "systems_rows": [
+        {
+          "system_id": "mq4c_triton_air7000_p1b",
+          "system_name": "MQ-4C Triton High-Altitude Long-Endurance UAS",
+          "domain": "Air (maritime patrol)",
+          "public_status": "Introduced / In service",
+          "capability_type": "in_service",
+          "quantity_or_status": "Acquisition delivered against Project AIR 7000 Phase 1B; first aircraft transferred to RAAF and progressively introduced into service.",
+          "operator_or_program": "Royal Australian Air Force (Project AIR 7000 Phase 1B)",
+          "source_url": "https://www.defence.gov.au/project/triton-uas",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Manual",
+          "notes": "Long-range maritime ISR UAS; quantity per the named public Defence project page rather than a separately published operational fleet count."
+        },
+        {
+          "system_id": "mq28a_ghost_bat_air6014_p1",
+          "system_name": "MQ-28A Ghost Bat (Airpower Teaming System)",
+          "domain": "Air (uncrewed combat / loyal wingman)",
+          "public_status": "Development / prototype",
+          "capability_type": "development",
+          "quantity_or_status": "Sovereign-developed under Project AIR 6014 Phase 1 with Boeing Defence Australia; prototype aircraft built and flying. Not in operational service.",
+          "operator_or_program": "Royal Australian Air Force test and evaluation (Project AIR 6014 Phase 1)",
+          "source_url": "https://www.defence.gov.au/project/airpower-teaming-system",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Manual",
+          "notes": "Australian-designed and -built uncrewed aircraft. Treat as a development program; not a fielded combat capability."
+        },
+        {
+          "system_id": "land129_p3_integrator_uas",
+          "system_name": "Insitu Integrator Tactical UAS",
+          "domain": "Air (Army tactical ISR)",
+          "public_status": "Introduced / In service",
+          "capability_type": "in_service",
+          "quantity_or_status": "In service with the Australian Army under Project LAND 129 Phase 3 since the program was acquired; numbers not separately published in the named project page.",
+          "operator_or_program": "Australian Army (Project LAND 129 Phase 3, sustainment)",
+          "source_url": "https://www.defence.gov.au/project/integrator-tactical-uas",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Manual",
+          "notes": "Tactical fixed-wing UAS for Army artillery / surveillance and target acquisition use; small, runway-independent, catapult-launched."
+        },
+        {
+          "system_id": "land156_counter_small_uas",
+          "system_name": "LAND 156 Counter-small UAS (c-sUAS) capability",
+          "domain": "Land (counter-drone)",
+          "public_status": "Acquisition / development",
+          "capability_type": "counter_drone",
+          "quantity_or_status": "Project LAND 156 establishes a layered Army counter-small-UAS capability. Acquisition is in progress; published material does not list a final fleet count or radar/effector mix.",
+          "operator_or_program": "Australian Army (Project LAND 156)",
+          "source_url": "https://www.defence.gov.au/project/counter-small-unmanned-aircraft-systems",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Manual",
+          "notes": "Counter-drone capability is treated as a separate row from uncrewed systems Australia operates; it defends against adversary drones rather than being one."
+        },
+        {
+          "system_id": "ghost_shark_xl_auv",
+          "system_name": "Ghost Shark Extra-Large Autonomous Undersea Vehicle",
+          "domain": "Maritime (uncrewed undersea)",
+          "public_status": "Sovereign development / prototype",
+          "capability_type": "sovereign_program",
+          "quantity_or_status": "Co-funded sovereign development with Anduril Australia. Prototype build publicly announced; not in operational service.",
+          "operator_or_program": "Royal Australian Navy / Department of Defence (Anduril Australia)",
+          "source_url": "https://www.defence.gov.au/news-events/news/2025-01-30/ghost-shark-extra-large-autonomous-undersea-vehicle",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Manual",
+          "notes": "Sovereign-developed XL-AUV. Operational availability and crewless-deployment capacity are not published."
+        },
+        {
+          "system_id": "sdip_autonomous_systems_priority",
+          "system_name": "Sovereign Defence Industrial Priorities - autonomous systems",
+          "domain": "Industry / sovereign program",
+          "public_status": "Industrial priority category",
+          "capability_type": "sovereign_program",
+          "quantity_or_status": "Autonomous systems is one of the published Sovereign Defence Industrial Priorities; this is a stated industrial-capability category, not a fielded capability count.",
+          "operator_or_program": "Department of Defence - Sovereign Defence Industrial Priorities (SDIP)",
+          "source_url": "https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Manual",
+          "notes": "Industrial priority context only. Not equivalent to readiness or fleet counts."
+        },
+        {
+          "system_id": "ran_maritime_autonomous_context",
+          "system_name": "RAN maritime autonomous systems (broader context)",
+          "domain": "Maritime (uncrewed surface and undersea)",
+          "public_status": "Partial coverage",
+          "capability_type": "development",
+          "quantity_or_status": "The Royal Australian Navy publicly references maritime autonomous systems in its Warfare Innovation and uncrewed-vessel work. Beyond Ghost Shark and small uncrewed surface vessel trials, no consolidated public RAN uncrewed inventory or fleet plan is loaded.",
+          "operator_or_program": "Royal Australian Navy",
+          "source_url": "https://www.navy.gov.au/",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Partial coverage",
+          "notes": "Captured here only as published context. Loaded as partial because no single public source lists every RAN uncrewed maritime program with a consistent definition."
+        }
+      ],
+      "program_rows": [
+        {
+          "program_id": "iip_2024_uncrewed_lines",
+          "program_name": "2024 Integrated Investment Program - uncrewed and autonomous lines",
+          "program_type": "Capability investment plan",
+          "headline": "The 2024 IIP describes investment lines that include uncrewed aerial, surface, undersea and counter-drone capabilities, but it does not publish a single clean drone-only budget figure.",
+          "source_url": "https://www.defence.gov.au/about/strategic-planning/2024-integrated-investment-program",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Partial coverage",
+          "notes": "Treat as plan context only. The IIP groups uncrewed systems with broader capability lines; there is no source-safe drone-only line item to extract."
+        },
+        {
+          "program_id": "nds_2026_capability_envelope",
+          "program_name": "2026 National Defence Strategy capability envelope",
+          "program_type": "Strategy refresh",
+          "headline": "The 2026 NDS reaffirms the broader capability investment envelope (around A$425b in capability investment over the decade to 2035-36 per the official factsheet) but it does not separate a drone-only or uncrewed-only budget within that envelope.",
+          "source_url": "https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf",
+          "source_id": "defence_budget_2026_nds",
+          "trust_label": "Partial coverage",
+          "notes": "Funding envelope context only. Do not present this number as drone funding."
+        },
+        {
+          "program_id": "did_strategy_2024_autonomous",
+          "program_name": "Defence Industry Development Strategy 2024 - autonomous systems",
+          "program_type": "Industry development strategy",
+          "headline": "The 2024 Defence Industry Development Strategy lists autonomous systems among priority sovereign capabilities. It frames industrial intent rather than a procurement budget or fleet count.",
+          "source_url": "https://www.defence.gov.au/about/strategic-planning/defence-industry-development-strategy",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Manual",
+          "notes": "Strategy context only. Not a budget or readiness statement."
+        }
+      ],
+      "funding_rows": [
+        {
+          "funding_id": "drone_only_budget_unavailable",
+          "program_name": "Australian drone-only / uncrewed-only Defence budget",
+          "funding_status": "Unavailable",
+          "funding_value": null,
+          "funding_unit": null,
+          "funding_period": null,
+          "boundary_note": "No public Defence budget or factsheet publishes a clean drone-only or uncrewed-only line. The 2024 IIP and 2026 NDS reference uncrewed and autonomous capabilities inside broader investment envelopes, but those envelopes also include crewed platforms, sustainment, infrastructure and workforce. Presenting a bundled IIP or NDS line as a drone budget would misrepresent the source.",
+          "source_url": "https://www.defence.gov.au/about/strategic-planning/2024-integrated-investment-program",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Unavailable"
+        },
+        {
+          "funding_id": "ghost_shark_co_funding_context",
+          "program_name": "Ghost Shark co-development funding context",
+          "funding_status": "Partial coverage",
+          "funding_value": null,
+          "funding_unit": null,
+          "funding_period": null,
+          "boundary_note": "Defence and Anduril Australia have publicly described the Ghost Shark XL-AUV as a co-funded sovereign development. The exact Commonwealth contribution is not published as a single, clean figure on the project page; treat as program context only.",
+          "source_url": "https://www.defence.gov.au/news-events/news/2025-01-30/ghost-shark-extra-large-autonomous-undersea-vehicle",
+          "source_id": "defence_uncrewed_systems",
+          "trust_label": "Partial coverage"
+        }
+      ],
+      "takeaway_rows": [
+        {
+          "title": "Australia operates, acquires and is developing uncrewed systems across all domains",
+          "text": "Public Defence project pages cover air (Triton, Ghost Bat), land (Integrator, counter-small UAS), and maritime (Ghost Shark) uncrewed work. The page keeps in-service, acquisition, development, sovereign program and counter-drone rows separate.",
+          "trust_label": "Manual",
+          "source_id": "defence_uncrewed_systems"
+        },
+        {
+          "title": "There is no clean public drone-only Defence budget",
+          "text": "The 2024 Integrated Investment Program and the 2026 National Defence Strategy reference uncrewed and autonomous-system lines inside broader capability investment envelopes. Neither publishes a separate drone-only figure, so this page leaves that unavailable rather than guessing.",
+          "trust_label": "Unavailable",
+          "source_id": "defence_uncrewed_systems"
+        },
+        {
+          "title": "Counter-drone is its own line",
+          "text": "LAND 156 c-sUAS is shown as a separate counter-drone capability row. It defends against adversary uncrewed systems and is not the same kind of line as the drones Australia operates or develops.",
+          "trust_label": "Manual",
+          "source_id": "defence_uncrewed_systems"
+        }
+      ],
+      "methodology_caveats": [
+        "Quantities cite the named Defence project page rather than asserting a separately published operational fleet count.",
+        "Development programs (Ghost Bat, Ghost Shark) are not presented as fielded operational capability.",
+        "Counter-drone (LAND 156) is shown as a defensive line, not as an Australian uncrewed-platform count.",
+        "Sovereign programs (SDIP autonomous systems, DIDS) are industrial categories, not readiness or fleet counts.",
+        "No drone-only Defence budget is published here because no public Defence source separates one cleanly from the broader IIP / NDS envelopes.",
+        "No mission-capable, deployability, sortie-rate, basing, or live-availability data is loaded.",
+        "No classified or sensitive uncrewed systems are listed."
+      ]
+    }
+  }
+}

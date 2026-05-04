@@ -1,0 +1,44 @@
+{
+  "series_id": "strategic_resources_aimr_2025",
+  "source_id": "strategic_resources_aimr_2025",
+  "source_name": "Geoscience Australia AIMR 2025 preliminary tables",
+  "source_url": "https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables",
+  "unit": "selected resource rows",
+  "retrieved_at": "2026-04-28T13:40:38+00:00",
+  "last_data_point": "2024-12-31",
+  "values": [
+    {
+      "t": "2024 selected commodities",
+      "v": 10
+    }
+  ],
+  "notes": "Manual extract from Geoscience Australia AIMR 2025 preliminary Table 1 for selected commodities. Units differ by commodity and are preserved per row.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 (Commonwealth of Australia) where stated by publisher",
+  "citation": "Geoscience Australia, Australia's Identified Mineral Resources 2025 preliminary tables.",
+  "extra": {
+    "schema": "strategic_resources_aimr_2025.v1",
+    "fields": {
+      "as_at": "2024-12-31",
+      "table": "Table 1. Australia's Ore Reserves and Mineral Resources of selected commodities at operating mines in 2024.",
+      "rows": [
+        {"resource_id": "bauxite_alumina", "commodity": "Bauxite", "unit": "Mt", "operating_mines": 9, "ore_reserves": 1783, "measured_indicated_resources": 1740, "inferred_resources": 1986, "mine_production": 100.5, "reserve_life_years": 18, "resource_life_1_years": 17, "resource_life_2_years": 37},
+        {"resource_id": "coal", "commodity": "Black Coal", "unit": "Mt", "operating_mines": 96, "ore_reserves": 10959, "measured_indicated_resources": 33617, "inferred_resources": 20451, "mine_production": 424, "production_note": "Saleable coal", "reserve_life_years": 26, "resource_life_1_years": 79, "resource_life_2_years": 128},
+        {"resource_id": "copper", "commodity": "Copper", "unit": "Mt Cu", "operating_mines": 24, "ore_reserves": 19.11, "measured_indicated_resources": 79.07, "inferred_resources": 31.23, "mine_production": 0.75, "reserve_life_years": 25, "resource_life_1_years": 105, "resource_life_2_years": 147},
+        {"resource_id": "gold", "commodity": "Gold", "unit": "t Au", "operating_mines": 141, "ore_reserves": 3369, "measured_indicated_resources": 7256, "inferred_resources": 2666, "mine_production": 284, "reserve_life_years": 12, "resource_life_1_years": 26, "resource_life_2_years": 35},
+        {"resource_id": "iron_ore", "commodity": "Iron Ore", "unit": "Mt", "operating_mines": 55, "ore_reserves": 12330, "measured_indicated_resources": 31383, "inferred_resources": 53373, "mine_production": 954, "reserve_life_years": 13, "resource_life_1_years": 33, "resource_life_2_years": 89},
+        {"resource_id": "lithium", "commodity": "Lithium", "unit": "kt Li", "operating_mines": 8, "ore_reserves": 4601, "measured_indicated_resources": 6779, "inferred_resources": 1186, "mine_production": 108, "reserve_life_years": 43, "resource_life_1_years": 63, "resource_life_2_years": 74},
+        {"resource_id": "nickel", "commodity": "Nickel", "unit": "Mt Ni", "operating_mines": 13, "ore_reserves": 2.6, "measured_indicated_resources": 7.5, "inferred_resources": 2.1, "mine_production": 0.10, "reserve_life_years": 26, "resource_life_1_years": 76, "resource_life_2_years": 98},
+        {"resource_id": "rare_earths", "commodity": "Rare Earths", "unit": "Mt oxide", "operating_mines": 2, "ore_reserves": 2.05, "measured_indicated_resources": 2.42, "inferred_resources": 2.72, "mine_production": 0.031, "reserve_life_years": 66, "resource_life_1_years": 78, "resource_life_2_years": 165},
+        {"resource_id": "uranium", "commodity": "Uranium", "unit": "kt U", "operating_mines": 3, "ore_reserves": 307, "measured_indicated_resources": 1051, "inferred_resources": 346, "mine_production": 4.656, "reserve_life_years": 66, "resource_life_1_years": 226, "resource_life_2_years": 300},
+        {"resource_id": "zinc", "commodity": "Zinc", "unit": "Mt Zn", "operating_mines": 14, "ore_reserves": 15.56, "measured_indicated_resources": 49.05, "inferred_resources": 20.50, "mine_production": 1.10, "reserve_life_years": 14, "resource_life_1_years": 45, "resource_life_2_years": 63}
+      ],
+      "global_context": [
+        "AIMR 2025 release says Australia was a top-five global supplier in 2024 of bauxite, black coal, gold, iron ore, lithium, rare earths, uranium and zinc.",
+        "AIMR 2025 release says Australia maintained number one EDR rankings for gold, iron ore, uranium and zinc among the resources used on this page."
+      ],
+      "caveat": "Reserve/resource life ratios are AIMR snapshot ratios and should be treated with caution. The dashboard does not use them as a prediction."
+    }
+  }
+}

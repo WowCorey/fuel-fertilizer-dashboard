@@ -12,13 +12,15 @@ function DataCoverage({
     className: "coverage-strip__inner"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.")), React.createElement("div", {
+  }, "Data coverage"), React.createElement("p", null, verifiedTotal, " of ", c.total, " loaded envelopes are verified or derived. ", c.awaiting, " await source data.", ' ', "Manual means copied from a named public source; derived means calculated or selected from verified envelopes; stale means the latest source period is outside its cadence window.")), React.createElement("div", {
     className: "coverage-badges"
   }, React.createElement("span", {
     className: "status-pill status-pill--verified"
   }, "Verified ", c.verified), React.createElement("span", {
     className: "status-pill status-pill--derived"
   }, "Derived ", c.derived), React.createElement("span", {
+    className: "status-pill status-pill--manual"
+  }, "Manual ", c.manual), React.createElement("span", {
     className: "status-pill status-pill--stale"
   }, "Stale ", c.stale), React.createElement("span", {
     className: "status-pill status-pill--awaiting"
@@ -37,6 +39,303 @@ Object.assign(window, {
   DataCoverage,
   StatusPill
 });
+function TrustBadge({
+  kind,
+  children
+}) {
+  const key = String(kind || 'observed').toLowerCase().replace(/\s+/g, '-');
+  const labels = {
+    observed: 'Observed',
+    derived: 'Derived',
+    scenario: 'Scenario',
+    estimated: 'Estimated',
+    manual: 'Manual',
+    stale: 'Stale',
+    unavailable: 'Unavailable',
+    partial: 'Partial coverage'
+  };
+  return React.createElement("span", {
+    className: `trust-badge trust-badge--${key}`
+  }, children || labels[key] || kind);
+}
+function EnvTrustBadges({
+  env,
+  partial = false
+}) {
+  if (!env || env.status !== 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(TrustBadge, {
+      kind: "unavailable"
+    }));
+  }
+  const f = window.FR.freshness(env);
+  const badges = [];
+  if (env._meta?.fetch === 'derived') {
+    badges.push(React.createElement(TrustBadge, {
+      key: "derived",
+      kind: "derived"
+    }));
+  } else {
+    badges.push(React.createElement(TrustBadge, {
+      key: "observed",
+      kind: "observed"
+    }));
+  }
+  if (env.manual_entry || env.extra?.fields?.parent_manual_entry) badges.push(React.createElement(TrustBadge, {
+    key: "manual",
+    kind: "manual"
+  }));
+  if (f.state === 'stale') badges.push(React.createElement(TrustBadge, {
+    key: "stale",
+    kind: "stale"
+  }));
+  if (partial) badges.push(React.createElement(TrustBadge, {
+    key: "partial",
+    kind: "partial"
+  }));
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, badges);
+}
+Object.assign(window, {
+  TrustBadge,
+  EnvTrustBadges
+});
+function ShippingVisibility({
+  tankersEnv,
+  forwardOrdersEnv,
+  importsEnv,
+  liveVesselEnv
+}) {
+  const [filter, setFilter] = React.useState('all');
+  const notApplicable = () => React.createElement("span", {
+    className: "unavail",
+    "aria-label": "not applicable"
+  }, "\u2014");
+  function latest(env) {
+    if (!env || env.status !== 'ok' || !env.values?.length) return null;
+    return env.values.at(-1).v;
+  }
+  function fields(env) {
+    return env?.extra?.fields || {};
+  }
+  function isNumber(value) {
+    return value !== null && value !== undefined && !Number.isNaN(Number(value));
+  }
+  function fmt(value, digits = 0) {
+    if (!isNumber(value)) return '-';
+    return Number(value).toLocaleString('en-AU', {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits
+    });
+  }
+  function fmtAudThousands(value) {
+    if (!isNumber(value)) return '-';
+    return `A$${(Number(value) / 1000000).toLocaleString('en-AU', {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 1
+    })}bn`;
+  }
+  function fmtChange(current, previous) {
+    if (!isNumber(current) || !isNumber(previous)) return notApplicable();
+    const change = Number(current) - Number(previous);
+    if (change === 0) return '0';
+    return `${change > 0 ? '+' : ''}${fmt(change)}`;
+  }
+  function tankerCell(value) {
+    return isNumber(value) ? `${fmt(value)} tankers` : notApplicable();
+  }
+  function daysCell(value) {
+    return isNumber(value) ? `${fmt(value)} days` : notApplicable();
+  }
+  const tankerFields = fields(tankersEnv);
+  const totalTankers = latest(tankersEnv);
+  const forwardOrders = latest(forwardOrdersEnv);
+  const importValue = latest(importsEnv);
+  const liveVesselNotes = liveVesselEnv?.notes || 'No source-safe live vessel feed is loaded.';
+  const rows = [{
+    key: 'crude',
+    filter: 'crude',
+    supplyGroup: 'Crude oil',
+    current: tankerCell(tankerFields.crude_oil_tankers),
+    previous: tankerCell(tankerFields.previous_crude_oil_tankers),
+    change: fmtChange(tankerFields.crude_oil_tankers, tankerFields.previous_crude_oil_tankers),
+    equivalentDays: daysCell(tankerFields.crude_oil_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate crude-oil tanker count and equivalent days only. No vessel names, AIS positions, cargo assignments or port-call ETAs are loaded.'
+  }, {
+    key: 'clean',
+    filter: 'clean',
+    supplyGroup: 'Clean refined products',
+    current: tankerCell(tankerFields.clean_refined_product_tankers),
+    previous: tankerCell(tankerFields.previous_clean_refined_product_tankers),
+    change: fmtChange(tankerFields.clean_refined_product_tankers, tankerFields.previous_clean_refined_product_tankers),
+    equivalentDays: daysCell(tankerFields.clean_refined_product_equivalent_days),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'PM&C aggregate clean refined-product tanker count and equivalent days only. This is inbound supply visibility, not a live shipping layer.'
+  }, {
+    key: 'total',
+    filter: 'all',
+    supplyGroup: 'Total reported tankers',
+    current: tankerCell(totalTankers),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: tankersEnv,
+    partial: true,
+    meaning: 'Latest PM&C aggregate total reported tanker count. It does not identify individual vessels, ports, terminals or cargoes.'
+  }, {
+    key: 'orders',
+    filter: 'all',
+    supplyGroup: 'Forward import orders',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: forwardOrdersEnv,
+    partial: true,
+    meaning: `Latest PM&C forward import order visibility is ${fmt(forwardOrders, 1)} billion L ordered. This is aggregate public order visibility only.`
+  }, {
+    key: 'imports',
+    filter: 'all',
+    supplyGroup: 'ABS petroleum imports',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: importsEnv,
+    partial: false,
+    meaning: `Latest ABS petroleum import value is ${fmtAudThousands(importValue)} (${fmt(importValue)} AUD thousands). This is trade-value context, not tanker or vessel tracking.`
+  }, {
+    key: 'live',
+    filter: 'all',
+    supplyGroup: 'Live vessel identities / ETAs',
+    current: notApplicable(),
+    previous: notApplicable(),
+    change: notApplicable(),
+    equivalentDays: notApplicable(),
+    env: liveVesselEnv,
+    partial: false,
+    meaning: `${liveVesselNotes} No AIS positions, vessel names, cargo assignments or port-call ETAs are plotted.`
+  }];
+  const cards = [{
+    key: 'crude-card',
+    filter: 'crude',
+    title: 'Crude oil tankers',
+    value: isNumber(tankerFields.crude_oil_tankers) ? fmt(tankerFields.crude_oil_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.crude_oil_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_crude_oil_tankers)} tankers; equivalent days: ${fmt(tankerFields.crude_oil_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'clean-card',
+    filter: 'clean',
+    title: 'Clean refined-product tankers',
+    value: isNumber(tankerFields.clean_refined_product_tankers) ? fmt(tankerFields.clean_refined_product_tankers) : 'Unavailable',
+    unit: isNumber(tankerFields.clean_refined_product_tankers) ? 'tankers' : '',
+    subtext: `Previous: ${fmt(tankerFields.previous_clean_refined_product_tankers)} tankers; equivalent days: ${fmt(tankerFields.clean_refined_product_equivalent_days)}.`,
+    env: tankersEnv,
+    partial: true
+  }, {
+    key: 'orders-card',
+    filter: 'all',
+    title: 'Forward import orders',
+    value: isNumber(forwardOrders) ? fmt(forwardOrders, 1) : 'Unavailable',
+    unit: isNumber(forwardOrders) ? 'billion L ordered' : '',
+    subtext: 'Aggregate public order visibility only. No cargo-level or vessel-level allocation is loaded.',
+    env: forwardOrdersEnv,
+    partial: true
+  }, {
+    key: 'live-card',
+    filter: 'all',
+    title: 'Live vessel layer',
+    value: 'Unavailable',
+    unit: '',
+    subtext: 'No source-safe live vessel names, AIS positions or port-call ETAs loaded.',
+    env: liveVesselEnv,
+    partial: false,
+    unavailable: true
+  }];
+  const visibleRows = filter === 'all' ? rows : rows.filter(row => row.filter === filter);
+  const visibleCards = filter === 'all' ? cards : cards.filter(card => card.filter === filter);
+  const filterButtons = [['all', `All (${fmt(totalTankers)})`], ['crude', `Crude (${fmt(tankerFields.crude_oil_tankers)})`], ['clean', `Clean (${fmt(tankerFields.clean_refined_product_tankers)})`]];
+  const sourceLines = [tankersEnv, forwardOrdersEnv, importsEnv, liveVesselEnv].map(env => window.FR.sourceLine(env)).filter(Boolean);
+  return React.createElement("div", {
+    className: "shipping-visibility"
+  }, React.createElement("div", {
+    className: "shipping-visibility__summary",
+    "aria-label": "Inbound fuel summary"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Inbound fuel evidence board"), React.createElement("h3", null, "Aggregate public data only, not a live map."), React.createElement("p", null, "PM&C publishes aggregate tanker counts, equivalent days and forward import orders. ABS publishes petroleum import value. This board shows those loaded values directly and keeps live vessel identities, AIS positions and port-call ETAs unavailable.")), React.createElement("div", {
+    className: "shipping-stats"
+  }, React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(totalTankers)), React.createElement("small", null, "PM&C aggregate reported tankers")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmt(forwardOrders, 1)), React.createElement("small", null, "billion L ordered in PM&C forward import orders")), React.createElement("div", {
+    className: "shipping-stat"
+  }, React.createElement("span", null, fmtAudThousands(importValue)), React.createElement("small", null, "ABS petroleum import value, rounded from AUD thousands")), React.createElement("div", {
+    className: "shipping-stat shipping-stat--unavailable"
+  }, React.createElement("span", null, "Unavailable"), React.createElement("small", null, "No live vessel feed loaded")))), React.createElement("div", {
+    className: "shipping-tabs",
+    role: "tablist",
+    "aria-label": "Inbound fuel evidence filters"
+  }, filterButtons.map(([key, label]) => React.createElement("button", {
+    key: key,
+    type: "button",
+    className: filter === key ? 'is-active' : '',
+    "aria-pressed": filter === key,
+    onClick: () => setFilter(key)
+  }, label))), React.createElement("div", {
+    className: "shipping-visibility__body"
+  }, React.createElement("div", {
+    className: "shipping-evidence-main"
+  }, React.createElement("div", {
+    className: "data-table-wrap shipping-evidence-table",
+    "aria-label": "Aggregate inbound supply comparison"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Supply group"), React.createElement("th", null, "Current tankers"), React.createElement("th", null, "Previous tankers"), React.createElement("th", null, "Change"), React.createElement("th", null, "Equivalent days"), React.createElement("th", null, "Source status"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, visibleRows.map(row => React.createElement("tr", {
+    key: row.key
+  }, React.createElement("td", null, row.supplyGroup), React.createElement("td", null, row.current), React.createElement("td", null, row.previous), React.createElement("td", null, row.change), React.createElement("td", null, row.equivalentDays), React.createElement("td", {
+    className: "shipping-status-cell"
+  }, React.createElement(EnvTrustBadges, {
+    env: row.env,
+    partial: row.partial
+  })), React.createElement("td", {
+    className: "shipping-meaning-cell"
+  }, row.meaning)))))), React.createElement("div", {
+    className: "shipping-evidence-note"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence board, not live map"), React.createElement("p", null, "This section does not plot ships. PM&C publishes aggregate tanker counts and equivalent days, not vessel names, AIS positions, cargo assignments or port-call ETAs. The dashboard therefore shows inbound supply as an evidence board rather than a live map."), React.createElement("ul", null, React.createElement("li", null, "PM&C aggregate tanker counts only."), React.createElement("li", null, "No live vessel feed loaded."), React.createElement("li", null, "No AIS positions, vessel names or port-call ETAs."), React.createElement("li", null, "No invented ports, terminals, shipping lanes or vessel locations.")))), React.createElement("div", {
+    className: "shipping-evidence-cards",
+    "aria-label": "Inbound supply evidence cards"
+  }, visibleCards.map(card => React.createElement("article", {
+    key: card.key,
+    className: `shipping-evidence-card${card.unavailable ? ' shipping-evidence-card--unavailable' : ''}`
+  }, React.createElement("div", {
+    className: "shipping-evidence-card__head"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.title), React.createElement(EnvTrustBadges, {
+    env: card.env,
+    partial: card.partial
+  })), React.createElement("div", {
+    className: "shipping-evidence-card__value"
+  }, React.createElement("span", null, card.value), card.unit && React.createElement("small", null, card.unit)), React.createElement("p", null, card.subtext))))), React.createElement("div", {
+    className: "shipping-source mono"
+  }, sourceLines.map((line, index) => React.createElement("p", {
+    key: `${line}-${index}`
+  }, line))));
+}
+Object.assign(window, {
+  ShippingVisibility
+});
 function Header({
   active = 'fuel',
   updated = ''
@@ -46,16 +345,32 @@ function Header({
     label: 'National status',
     href: '../national-status-dashboard/index.html'
   }, {
+    id: 'fuel_security',
+    label: 'National fuel security',
+    href: '../fuel-security-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
+  }, {
+    id: 'state_contribution',
+    label: 'State ledger',
+    href: '../state-contribution-dashboard/index.html'
+  }, {
+    id: 'strategic_resources',
+    label: 'Strategic resources',
+    href: '../strategic-resources-dashboard/index.html'
+  }, {
+    id: 'defence_posture',
+    label: 'Defence posture',
+    href: '../defence-alliances-dashboard/index.html'
   }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
   }, {
     id: 'fertilizer',
-    label: 'Fertilizer',
+    label: 'Food & farms',
     href: '../fertilizer-dashboard/index.html'
   }, {
     id: 'oil',
@@ -65,6 +380,26 @@ function Header({
     id: 'who_pays_what',
     label: 'Who pays what',
     href: '../who-pays-what/index.html'
+  }, {
+    id: 'au_economics',
+    label: 'AU economics',
+    href: '../au-economics-dashboard/index.html'
+  }, {
+    id: 'manufacturing',
+    label: 'Manufacturing',
+    href: '../manufacturing-dashboard/index.html'
+  }, {
+    id: 'power_grid',
+    label: 'Power grid',
+    href: '../power-grid-dashboard/index.html'
+  }, {
+    id: 'infrastructure',
+    label: 'Infrastructure',
+    href: '../infrastructure-dashboard/index.html'
+  }, {
+    id: 'employment_automation',
+    label: 'Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'sources',
     label: 'Sources & methodology',
@@ -162,7 +497,8 @@ function MetricCard({
   jargonHint,
   fromEnvelope,
   valueFn,
-  unitFn
+  unitFn,
+  partial = false
 }) {
   if (fromEnvelope !== undefined) {
     const env = fromEnvelope;
@@ -175,7 +511,10 @@ function MetricCard({
         className: "card-status-row"
       }, eyebrow && React.createElement("span", {
         className: "eyebrow"
-      }, eyebrow), window.StatusPill && React.createElement(StatusPill, {
+      }, eyebrow), window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+        env: env,
+        partial: partial
+      }) : window.StatusPill && React.createElement(StatusPill, {
         env: env
       })), React.createElement("h3", {
         className: "metric-card__label"
@@ -208,9 +547,12 @@ function MetricCard({
     className: "card-status-row"
   }, eyebrow && React.createElement("span", {
     className: "eyebrow"
-  }, eyebrow), fromEnvelope !== undefined && window.StatusPill && React.createElement(StatusPill, {
+  }, eyebrow), fromEnvelope !== undefined && (window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
+    env: fromEnvelope,
+    partial: partial
+  }) : window.StatusPill && React.createElement(StatusPill, {
     env: fromEnvelope
-  })), React.createElement("h3", {
+  }))), React.createElement("h3", {
     className: "metric-card__label"
   }, jargonHint ? React.createElement(React.Fragment, null, label.replace(jargonHint.term, ''), React.createElement("span", {
     className: "jargon",
@@ -555,12 +897,20 @@ function Footer({
   }, "Dashboards"), React.createElement("ul", null, React.createElement("li", null, React.createElement("a", {
     href: "../national-status-dashboard/index.html"
   }, "National status")), React.createElement("li", null, React.createElement("a", {
+    href: "../fuel-security-dashboard/index.html"
+  }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
+    href: "../state-contribution-dashboard/index.html"
+  }, "State ledger")), React.createElement("li", null, React.createElement("a", {
+    href: "../strategic-resources-dashboard/index.html"
+  }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-alliances-dashboard/index.html"
+  }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
-  }, "Fertilizer")), React.createElement("li", null, React.createElement("a", {
+  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
     href: "../oil-and-production/index.html"
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
@@ -591,7 +941,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['resource_company_tax_rate', 'resource_prrt_policy', 'resource_resource_rent_tax_receipts_budget', 'resource_wa_petroleum_royalties', 'resource_wa_petroleum_royalty_receipts', 'resource_lng_export_value_req', 'resource_oil_export_value_req', 'resource_lng_export_destinations_req', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_domestic_gas_prices_accc', 'resource_lng_netback_accc', 'resource_state_production_aes', 'resource_norway_petroleum_tax_model', 'resource_norway_state_revenue_model', 'resource_value_leakage_model'];
+const SERIES = ['resource_company_tax_rate', 'resource_prrt_policy', 'resource_resource_rent_tax_receipts_budget', 'resource_wa_petroleum_royalties', 'resource_wa_petroleum_royalty_receipts', 'resource_qld_petroleum_royalty_receipts', 'resource_lng_export_value_req', 'resource_oil_export_value_req', 'resource_lng_export_destinations_req', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_domestic_gas_prices_accc', 'resource_lng_netback_accc', 'resource_state_production_aes', 'resource_norway_petroleum_tax_model', 'resource_norway_state_revenue_model', 'resource_value_leakage_model'];
 function latestValue(env) {
   if (!env || env.status !== 'ok' || !env.values?.length) return null;
   return env.values.at(-1).v;
@@ -628,16 +978,20 @@ function price(value) {
     maximumFractionDigits: 2
   }) + '/GJ';
 }
+function valuePeriod(env) {
+  return env?.values?.at(-1)?.t || env?.last_data_point || '-';
+}
 function ScenarioCard({
   lngEnv,
   oilEnv,
   rentTaxEnv,
-  royaltyReceiptEnv
+  royaltyReceiptEnvs
 }) {
   const lng = latestValue(lngEnv);
   const oil = latestValue(oilEnv);
   const rentTax = latestValue(rentTaxEnv);
-  const royaltyReceipt = latestValue(royaltyReceiptEnv);
+  const royaltyReceipts = (royaltyReceiptEnvs || []).map(env => latestValue(env));
+  const royaltyReceipt = royaltyReceipts.every(v => v != null) ? royaltyReceipts.reduce((sum, v) => sum + v, 0) : null;
   const canCompute = lng != null && oil != null && rentTax != null && royaltyReceipt != null;
   const exportBase = lng != null && oil != null ? lng + oil : null;
   const scenario = exportBase != null ? exportBase * 0.25 : null;
@@ -706,16 +1060,6 @@ function SourceSummary({
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-'));
 }
-function PhaseTable() {
-  const rows = [['Phase 1', 'Tax, royalty and PRRT explainer', 'Policy rates plus Budget resource-rent tax receipts and WA petroleum/NWS receipt context are loaded.'], ['Phase 2', 'Production and export-flow maps/tables', 'Gas and oil national/basin context, AES state production and LNG destination values are loaded.'], ['Phase 3', 'Domestic vs export price comparison', 'ACCC domestic contract prices and LNG netback benchmark are shown with a non-equivalence caveat.'], ['Phase 4', '25% export-tax scenario calculator', 'Expanded to show loaded export base, gross scenario, loaded receipt context and missing-channel caveat.'], ['Phase 5', 'Norway comparison and value retained/leaked', 'Norway comparison sources are shown; value leaked remains unavailable until the method and denominator are defensible.']];
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Phase"), React.createElement("th", null, "Scope"), React.createElement("th", null, "Current status"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row[0]
-  }, React.createElement("td", null, React.createElement("b", null, row[0])), React.createElement("td", null, row[1]), React.createElement("td", null, row[2]))))));
-}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -736,7 +1080,7 @@ function App() {
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const royaltyFields = fields(data.resource_wa_petroleum_royalties);
   const rentTaxFields = fields(data.resource_resource_rent_tax_receipts_budget);
-  const royaltyReceiptFields = fields(data.resource_wa_petroleum_royalty_receipts);
+  const qldRoyaltyReceiptFields = fields(data.resource_qld_petroleum_royalty_receipts);
   const gasFields = fields(data.resource_gas_origin_aecr);
   const oilFields = fields(data.resource_oil_origin_aecr);
   const stateFields = fields(data.resource_state_production_aes);
@@ -760,6 +1104,13 @@ function App() {
   const domesticProducer = latestValue(data.resource_domestic_gas_prices_accc);
   const netbackAverage = latestValue(data.resource_lng_netback_accc);
   const netbackGap = domesticProducer != null && netbackAverage != null ? netbackAverage - domesticProducer : null;
+  const lngExportValue = latestValue(data.resource_lng_export_value_req);
+  const oilExportValue = latestValue(data.resource_oil_export_value_req);
+  const exportValueBase = lngExportValue != null && oilExportValue != null ? lngExportValue + oilExportValue : null;
+  const grossScenario25 = exportValueBase != null ? exportValueBase * 0.25 : null;
+  const loadedRoyaltyReceiptContext = latestValue(data.resource_wa_petroleum_royalty_receipts) != null && latestValue(data.resource_qld_petroleum_royalty_receipts) != null ? latestValue(data.resource_wa_petroleum_royalty_receipts) + latestValue(data.resource_qld_petroleum_royalty_receipts) : null;
+  const loadedReceiptContext = latestValue(data.resource_resource_rent_tax_receipts_budget) != null && loadedRoyaltyReceiptContext != null ? latestValue(data.resource_resource_rent_tax_receipts_budget) + loadedRoyaltyReceiptContext : null;
+  const scenarioLessLoadedReceipts = grossScenario25 != null && loadedReceiptContext != null ? grossScenario25 - loadedReceiptContext : null;
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
@@ -778,7 +1129,7 @@ function App() {
     }
   }, "Who captures Australian oil and gas value?"), React.createElement("p", {
     className: "intro__lede"
-  }, "This page separates the resource-value question from the company-tax dashboard. It shows official policy rates, receipt context, export-value context and comparison sources without turning them into a leakage claim before the denominator and method are defensible.")), React.createElement("aside", {
+  }, "This page separates the resource-value question from the company-tax dashboard. It shows official policy rates, receipt context, production and export flows, domestic gas-price context, a gross export-tax scenario and the Norway comparison without turning them into a leakage claim before the denominator and method are defensible.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -808,7 +1159,7 @@ function App() {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Headline figures"), React.createElement("h2", {
+  }, "1. Tax, royalty and PRRT"), React.createElement("h2", {
     id: "headline-h"
   }, "Policy rates, receipts and export-value context"), React.createElement("p", {
     className: "section__lede"
@@ -847,6 +1198,13 @@ function App() {
     valueFn: env => audBillions(latestValue(env)),
     unitFn: () => ''
   }), React.createElement(MetricCard, {
+    eyebrow: "Receipts",
+    label: "Queensland petroleum royalties",
+    plain: "Queensland Budget petroleum royalty row; includes gas converted into LNG.",
+    fromEnvelope: data.resource_qld_petroleum_royalty_receipts,
+    valueFn: env => audBillions(latestValue(env)),
+    unitFn: () => ''
+  }), React.createElement(MetricCard, {
     eyebrow: "Exports",
     label: "LNG export earnings",
     plain: "REQ December 2025 value for 2024-25.",
@@ -874,11 +1232,6 @@ function App() {
     fromEnvelope: data.resource_lng_netback_accc,
     valueFn: env => price(latestValue(env)),
     unitFn: () => ''
-  }), React.createElement(ScenarioCard, {
-    lngEnv: data.resource_lng_export_value_req,
-    oilEnv: data.resource_oil_export_value_req,
-    rentTaxEnv: data.resource_resource_rent_tax_receipts_budget,
-    royaltyReceiptEnv: data.resource_wa_petroleum_royalty_receipts
   }), React.createElement(MetricCard, {
     eyebrow: "Norway comparison",
     label: "Marginal petroleum tax rate",
@@ -896,7 +1249,7 @@ function App() {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Capture channels"), React.createElement("h2", {
+  }, "1. Tax, royalty and PRRT"), React.createElement("h2", {
     id: "capture-h"
   }, "What exists now"), React.createElement("p", {
     className: "section__lede"
@@ -904,14 +1257,14 @@ function App() {
     className: "data-table-wrap"
   }, React.createElement("table", {
     className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Channel"), React.createElement("th", null, "Basis"), React.createElement("th", null, "Current envelope"), React.createElement("th", null, "Missing before full value analysis"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Company income tax"), React.createElement("td", null, "Taxable income at the company level."), React.createElement("td", null, latestValue(data.resource_company_tax_rate), "% full company tax rate."), React.createElement("td", null, "Already separate from company-level ATO values on Who pays what.")), React.createElement("tr", null, React.createElement("td", null, "PRRT"), React.createElement("td", null, "Taxable profit of petroleum projects."), React.createElement("td", null, latestValue(data.resource_prrt_policy), "% policy rate; Budget resource-rent tax receipts ", audBillions(latestValue(data.resource_resource_rent_tax_receipts_budget)), " for ", rentTaxFields.latest_actual_period, " actual."), React.createElement("td", null, "Exact project-level PRRT receipts, company/project scope, deductions and uplift treatment.")), React.createElement("tr", null, React.createElement("td", null, "Petroleum royalties"), React.createElement("td", null, "Field-specific royalty systems such as wellhead value or net cash flow."), React.createElement("td", null, "Barrow Island ", latestValue(data.resource_wa_petroleum_royalties), "% RRR; NWS ", royaltyFields.north_west_shelf_primary_production_licence_rate_percent, "% / ", royaltyFields.north_west_shelf_secondary_production_licence_rate_percent, "% royalty rates; WA petroleum/NWS receipt context ", audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts)), "."), React.createElement("td", null, "Other state/federal petroleum royalty receipts and field-level coverage.")), React.createElement("tr", null, React.createElement("td", null, "Direct state ownership"), React.createElement("td", null, "Norway comparison channel through SDFI and Equinor shareholding."), React.createElement("td", null, "Norway source lists taxes, SDFI, dividends, fees and environmental taxes."), React.createElement("td", null, "Australian equivalent does not exist at the same scale; comparison needs careful framing.")))))), React.createElement("section", {
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Channel"), React.createElement("th", null, "Basis"), React.createElement("th", null, "Current envelope"), React.createElement("th", null, "Missing before full value analysis"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Company income tax"), React.createElement("td", null, "Taxable income at the company level."), React.createElement("td", null, latestValue(data.resource_company_tax_rate), "% full company tax rate."), React.createElement("td", null, "Already separate from company-level ATO values on Who pays what.")), React.createElement("tr", null, React.createElement("td", null, "PRRT"), React.createElement("td", null, "Taxable profit of petroleum projects."), React.createElement("td", null, latestValue(data.resource_prrt_policy), "% policy rate; Budget resource-rent tax receipts ", audBillions(latestValue(data.resource_resource_rent_tax_receipts_budget)), " for ", rentTaxFields.latest_actual_period, " actual."), React.createElement("td", null, "Exact project-level PRRT receipts, company/project scope, deductions and uplift treatment.")), React.createElement("tr", null, React.createElement("td", null, "Petroleum royalties"), React.createElement("td", null, "Field-specific royalty systems such as wellhead value or net cash flow."), React.createElement("td", null, "Barrow Island ", latestValue(data.resource_wa_petroleum_royalties), "% RRR; NWS ", royaltyFields.north_west_shelf_primary_production_licence_rate_percent, "% / ", royaltyFields.north_west_shelf_secondary_production_licence_rate_percent, "% royalty rates; WA petroleum/NWS receipt context ", audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts)), "; Queensland petroleum royalty actual ", audBillions(latestValue(data.resource_qld_petroleum_royalty_receipts)), " for ", qldRoyaltyReceiptFields.latest_actual_period, "."), React.createElement("td", null, "Other state/federal petroleum royalty receipts and field-level/project coverage.")), React.createElement("tr", null, React.createElement("td", null, "Direct state ownership"), React.createElement("td", null, "Norway comparison channel through SDFI and Equinor shareholding."), React.createElement("td", null, "Norway source lists taxes, SDFI, dividends, fees and environmental taxes."), React.createElement("td", null, "Australian equivalent does not exist at the same scale; comparison needs careful framing.")))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "flows-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Production and buyers"), React.createElement("h2", {
+  }, "2. Production and export flows"), React.createElement("h2", {
     id: "flows-h"
   }, "Where oil and gas come from, and where exports go"), React.createElement("p", {
     className: "section__lede"
@@ -933,15 +1286,7 @@ function App() {
     className: "caption"
   }, "AECR says nearly ", oneDecimal(oilFields.north_west_shelf_production_share_percent), "% of oil production came from offshore North West Shelf fields in 2023."), React.createElement("p", {
     className: "caption mono"
-  }, window.FR.sourceLine(data.resource_oil_origin_aecr))), React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Norway capture-channel comparison"), React.createElement("p", {
-    className: "body-sm"
-  }, "Norway's 2025 estimated petroleum net government cash flow is ", oneDecimal(norwayRevenue.net_government_cashflow_nok_billion), " NOK billion."), React.createElement("p", {
-    className: "caption"
-  }, "It combines taxes, SDFI, Equinor dividends, fees and environmental taxes. Australia cannot be compared honestly until those channels are mapped separately."), React.createElement("p", {
-    className: "caption mono"
-  }, window.FR.sourceLine(data.resource_norway_state_revenue_model)))), React.createElement("div", {
+  }, window.FR.sourceLine(data.resource_oil_origin_aecr)))), React.createElement("div", {
     style: {
       height: 24
     }
@@ -1018,7 +1363,7 @@ function App() {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Domestic vs export price"), React.createElement("h2", {
+  }, "3. Domestic vs export price"), React.createElement("h2", {
     id: "gas-price-h"
   }, "ACCC gas contract prices and LNG netback"), React.createElement("p", {
     className: "section__lede"
@@ -1036,14 +1381,86 @@ function App() {
     className: "caption mono"
   }, window.FR.sourceLine(data.resource_lng_netback_accc))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "roadmap-h"
+    "aria-labelledby": "export-tax-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Build phases"), React.createElement("h2", {
-    id: "roadmap-h"
-  }, "What still needs to be done"))), React.createElement(PhaseTable, null)), React.createElement("section", {
+  }, "4. Export-tax scenario"), React.createElement("h2", {
+    id: "export-tax-h"
+  }, "25% gross export-value calculator"), React.createElement("p", {
+    className: "section__lede"
+  }, "This is a transparent arithmetic scenario, not current law and not a PRRT model."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Loaded base",
+    label: "LNG plus oil export earnings",
+    plain: `${valuePeriod(data.resource_lng_export_value_req)} LNG plus ${valuePeriod(data.resource_oil_export_value_req)} oil export-value envelopes.`,
+    fromEnvelope: data.resource_lng_export_value_req,
+    valueFn: () => audBillions(exportValueBase),
+    unitFn: () => ''
+  }), React.createElement(MetricCard, {
+    eyebrow: "Scenario",
+    label: "25% of loaded export value",
+    plain: "Gross calculation before deductions, timing, incidence, project boundaries or trade effects.",
+    fromEnvelope: data.resource_oil_export_value_req,
+    valueFn: () => audBillions(grossScenario25),
+    unitFn: () => ''
+  }), React.createElement(ScenarioCard, {
+    lngEnv: data.resource_lng_export_value_req,
+    oilEnv: data.resource_oil_export_value_req,
+    rentTaxEnv: data.resource_resource_rent_tax_receipts_budget,
+    royaltyReceiptEnvs: [data.resource_wa_petroleum_royalty_receipts, data.resource_qld_petroleum_royalty_receipts]
+  })), React.createElement("div", {
+    className: "data-table-wrap",
+    style: {
+      marginTop: 24
+    }
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Line"), React.createElement("th", null, "Loaded value"), React.createElement("th", null, "Period/source caveat"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "LNG export earnings"), React.createElement("td", null, audBillions(lngExportValue)), React.createElement("td", null, valuePeriod(data.resource_lng_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Oil export earnings"), React.createElement("td", null, audBillions(oilExportValue)), React.createElement("td", null, valuePeriod(data.resource_oil_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Loaded export base"), React.createElement("td", null, audBillions(exportValueBase)), React.createElement("td", null, "Only LNG and oil export-value envelopes currently loaded.")), React.createElement("tr", null, React.createElement("td", null, "25% gross scenario"), React.createElement("td", null, audBillions(grossScenario25)), React.createElement("td", null, "Gross export-value scenario, not profits-based tax law.")), React.createElement("tr", null, React.createElement("td", null, "Loaded receipt context"), React.createElement("td", null, audBillions(loadedReceiptContext)), React.createElement("td", null, "Mixed-period Budget resource-rent taxes plus WA petroleum/NWS and Queensland petroleum royalty receipts; not full Australian public capture.")), React.createElement("tr", null, React.createElement("td", null, "Scenario less loaded receipt context"), React.createElement("td", null, audBillions(scenarioLessLoadedReceipts)), React.createElement("td", null, "Displayed as a gap in loaded rows only. It is not value leaked.")))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "norway-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "5. Norway comparison"), React.createElement("h2", {
+    id: "norway-h"
+  }, "Value retained versus value leaked stays method-gated"), React.createElement("p", {
+    className: "section__lede"
+  }, "Norway is shown as a capture-channel comparison. Australia does not yet have a complete matched receipt model, so this page does not publish a retained/leaked percentage."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Norway",
+    label: "Net government cash flow",
+    plain: "Estimated 2025 net government cash flow from petroleum activities.",
+    fromEnvelope: data.resource_norway_state_revenue_model,
+    valueFn: () => `${oneDecimal(norwayRevenue.net_government_cashflow_nok_billion)} NOKb`,
+    unitFn: () => ''
+  }), React.createElement(MetricCard, {
+    eyebrow: "Australia",
+    label: "Loaded receipt context",
+    plain: "Only the loaded Budget resource-rent, WA petroleum/NWS and Queensland petroleum royalty rows.",
+    fromEnvelope: data.resource_resource_rent_tax_receipts_budget,
+    valueFn: () => audBillions(loadedReceiptContext),
+    unitFn: () => ''
+  }), React.createElement(MetricCard, {
+    eyebrow: "Not published",
+    label: "Value retained vs leaked",
+    fromEnvelope: data.resource_value_leakage_model
+  })), React.createElement("div", {
+    className: "data-table-wrap",
+    style: {
+      marginTop: 24
+    }
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Country/context"), React.createElement("th", null, "Loaded capture channels"), React.createElement("th", null, "What can be said now"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Norway"), React.createElement("td", null, "Taxes ", oneDecimal(norwayRevenue.taxes_nok_billion), " NOKb; SDFI ", oneDecimal(norwayRevenue.sdfi_net_cashflow_nok_billion), " NOKb; Equinor dividend ", oneDecimal(norwayRevenue.equinor_dividend_nok_billion), " NOKb; fees/taxes ", oneDecimal(norwayRevenue.environmental_taxes_and_area_fees_nok_billion), " NOKb."), React.createElement("td", null, "Official comparison source shows multiple public capture channels, not just a tax rate.")), React.createElement("tr", null, React.createElement("td", null, "Australia"), React.createElement("td", null, "Budget resource-rent tax actuals plus WA petroleum/NWS and Queensland petroleum royalty receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here."), React.createElement("td", null, "Enough for a structured explainer and scenario, not enough for a retained-value or leaked-value claim.")), React.createElement("tr", null, React.createElement("td", null, "Method gate"), React.createElement("td", null, "Needs matched periods, full receipt channels, company profit scope, export denominator and domestic-price method."), React.createElement("td", null, "Until those inputs exist, the dashboard will keep the leakage envelope unavailable."))))), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_norway_state_revenue_model)), React.createElement("p", {
+    className: "caption mono"
+  }, window.FR.sourceLine(data.resource_value_leakage_model))), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
   }, React.createElement("div", {

@@ -4,6 +4,7 @@ const SERIES = [
   'resource_resource_rent_tax_receipts_budget',
   'resource_wa_petroleum_royalties',
   'resource_wa_petroleum_royalty_receipts',
+  'resource_qld_petroleum_royalty_receipts',
   'resource_lng_export_value_req',
   'resource_oil_export_value_req',
   'resource_lng_export_destinations_req',
@@ -51,11 +52,18 @@ function price(value) {
   return '$' + Number(value).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '/GJ';
 }
 
-function ScenarioCard({ lngEnv, oilEnv, rentTaxEnv, royaltyReceiptEnv }) {
+function valuePeriod(env) {
+  return env?.values?.at(-1)?.t || env?.last_data_point || '-';
+}
+
+function ScenarioCard({ lngEnv, oilEnv, rentTaxEnv, royaltyReceiptEnvs }) {
   const lng = latestValue(lngEnv);
   const oil = latestValue(oilEnv);
   const rentTax = latestValue(rentTaxEnv);
-  const royaltyReceipt = latestValue(royaltyReceiptEnv);
+  const royaltyReceipts = (royaltyReceiptEnvs || []).map(env => latestValue(env));
+  const royaltyReceipt = royaltyReceipts.every(v => v != null)
+    ? royaltyReceipts.reduce((sum, v) => sum + v, 0)
+    : null;
   const canCompute = lng != null && oil != null && rentTax != null && royaltyReceipt != null;
   const exportBase = lng != null && oil != null ? lng + oil : null;
   const scenario = exportBase != null ? exportBase * 0.25 : null;
@@ -119,28 +127,6 @@ function SourceSummary({ id, env }) {
   );
 }
 
-function PhaseTable() {
-  const rows = [
-    ['Phase 1', 'Tax, royalty and PRRT explainer', 'Policy rates plus Budget resource-rent tax receipts and WA petroleum/NWS receipt context are loaded.'],
-    ['Phase 2', 'Production and export-flow maps/tables', 'Gas and oil national/basin context, AES state production and LNG destination values are loaded.'],
-    ['Phase 3', 'Domestic vs export price comparison', 'ACCC domestic contract prices and LNG netback benchmark are shown with a non-equivalence caveat.'],
-    ['Phase 4', '25% export-tax scenario calculator', 'Expanded to show loaded export base, gross scenario, loaded receipt context and missing-channel caveat.'],
-    ['Phase 5', 'Norway comparison and value retained/leaked', 'Norway comparison sources are shown; value leaked remains unavailable until the method and denominator are defensible.'],
-  ];
-  return (
-    <div className="data-table-wrap">
-      <table className="data-table">
-        <thead>
-          <tr><th>Phase</th><th>Scope</th><th>Current status</th></tr>
-        </thead>
-        <tbody>
-          {rows.map(row => <tr key={row[0]}><td><b>{row[0]}</b></td><td>{row[1]}</td><td>{row[2]}</td></tr>)}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
@@ -158,7 +144,7 @@ function App() {
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const royaltyFields = fields(data.resource_wa_petroleum_royalties);
   const rentTaxFields = fields(data.resource_resource_rent_tax_receipts_budget);
-  const royaltyReceiptFields = fields(data.resource_wa_petroleum_royalty_receipts);
+  const qldRoyaltyReceiptFields = fields(data.resource_qld_petroleum_royalty_receipts);
   const gasFields = fields(data.resource_gas_origin_aecr);
   const oilFields = fields(data.resource_oil_origin_aecr);
   const stateFields = fields(data.resource_state_production_aes);
@@ -186,6 +172,17 @@ function App() {
   const domesticProducer = latestValue(data.resource_domestic_gas_prices_accc);
   const netbackAverage = latestValue(data.resource_lng_netback_accc);
   const netbackGap = domesticProducer != null && netbackAverage != null ? netbackAverage - domesticProducer : null;
+  const lngExportValue = latestValue(data.resource_lng_export_value_req);
+  const oilExportValue = latestValue(data.resource_oil_export_value_req);
+  const exportValueBase = lngExportValue != null && oilExportValue != null ? lngExportValue + oilExportValue : null;
+  const grossScenario25 = exportValueBase != null ? exportValueBase * 0.25 : null;
+  const loadedRoyaltyReceiptContext = latestValue(data.resource_wa_petroleum_royalty_receipts) != null && latestValue(data.resource_qld_petroleum_royalty_receipts) != null
+    ? latestValue(data.resource_wa_petroleum_royalty_receipts) + latestValue(data.resource_qld_petroleum_royalty_receipts)
+    : null;
+  const loadedReceiptContext = latestValue(data.resource_resource_rent_tax_receipts_budget) != null && loadedRoyaltyReceiptContext != null
+    ? latestValue(data.resource_resource_rent_tax_receipts_budget) + loadedRoyaltyReceiptContext
+    : null;
+  const scenarioLessLoadedReceipts = grossScenario25 != null && loadedReceiptContext != null ? grossScenario25 - loadedReceiptContext : null;
 
   return (
     <div className="page">
@@ -198,8 +195,9 @@ function App() {
             <h1 style={{ marginTop: 12 }}>Who captures Australian oil and gas value?</h1>
             <p className="intro__lede">
               This page separates the resource-value question from the company-tax dashboard. It shows
-              official policy rates, receipt context, export-value context and comparison sources without
-              turning them into a leakage claim before the denominator and method are defensible.
+              official policy rates, receipt context, production and export flows, domestic gas-price
+              context, a gross export-tax scenario and the Norway comparison without turning them into
+              a leakage claim before the denominator and method are defensible.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
@@ -239,7 +237,7 @@ function App() {
         <section className="section" aria-labelledby="headline-h">
           <div className="section__head">
             <div>
-              <span className="eyebrow">Headline figures</span>
+              <span className="eyebrow">1. Tax, royalty and PRRT</span>
               <h2 id="headline-h">Policy rates, receipts and export-value context</h2>
               <p className="section__lede">
                 Values are copied from official sources or calculated transparently from loaded envelopes.
@@ -285,6 +283,14 @@ function App() {
               unitFn={() => ''}
             />
             <MetricCard
+              eyebrow="Receipts"
+              label="Queensland petroleum royalties"
+              plain="Queensland Budget petroleum royalty row; includes gas converted into LNG."
+              fromEnvelope={data.resource_qld_petroleum_royalty_receipts}
+              valueFn={env => audBillions(latestValue(env))}
+              unitFn={() => ''}
+            />
+            <MetricCard
               eyebrow="Exports"
               label="LNG export earnings"
               plain="REQ December 2025 value for 2024-25."
@@ -316,12 +322,6 @@ function App() {
               valueFn={env => price(latestValue(env))}
               unitFn={() => ''}
             />
-            <ScenarioCard
-              lngEnv={data.resource_lng_export_value_req}
-              oilEnv={data.resource_oil_export_value_req}
-              rentTaxEnv={data.resource_resource_rent_tax_receipts_budget}
-              royaltyReceiptEnv={data.resource_wa_petroleum_royalty_receipts}
-            />
             <MetricCard
               eyebrow="Norway comparison"
               label="Marginal petroleum tax rate"
@@ -340,7 +340,7 @@ function App() {
         <section className="section" aria-labelledby="capture-h">
           <div className="section__head">
             <div>
-              <span className="eyebrow">Capture channels</span>
+              <span className="eyebrow">1. Tax, royalty and PRRT</span>
               <h2 id="capture-h">What exists now</h2>
               <p className="section__lede">
                 This table describes the channel. It does not claim how much cash each channel captured.
@@ -368,8 +368,8 @@ function App() {
                 <tr>
                   <td>Petroleum royalties</td>
                   <td>Field-specific royalty systems such as wellhead value or net cash flow.</td>
-                  <td>Barrow Island {latestValue(data.resource_wa_petroleum_royalties)}% RRR; NWS {royaltyFields.north_west_shelf_primary_production_licence_rate_percent}% / {royaltyFields.north_west_shelf_secondary_production_licence_rate_percent}% royalty rates; WA petroleum/NWS receipt context {audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts))}.</td>
-                  <td>Other state/federal petroleum royalty receipts and field-level coverage.</td>
+                  <td>Barrow Island {latestValue(data.resource_wa_petroleum_royalties)}% RRR; NWS {royaltyFields.north_west_shelf_primary_production_licence_rate_percent}% / {royaltyFields.north_west_shelf_secondary_production_licence_rate_percent}% royalty rates; WA petroleum/NWS receipt context {audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts))}; Queensland petroleum royalty actual {audBillions(latestValue(data.resource_qld_petroleum_royalty_receipts))} for {qldRoyaltyReceiptFields.latest_actual_period}.</td>
+                  <td>Other state/federal petroleum royalty receipts and field-level/project coverage.</td>
                 </tr>
                 <tr>
                   <td>Direct state ownership</td>
@@ -385,7 +385,7 @@ function App() {
         <section className="section" aria-labelledby="flows-h">
           <div className="section__head">
             <div>
-              <span className="eyebrow">Production and buyers</span>
+              <span className="eyebrow">2. Production and export flows</span>
               <h2 id="flows-h">Where oil and gas come from, and where exports go</h2>
               <p className="section__lede">
                 National and basin context is loaded from AECR; buyer detail is currently limited to the latest verified full LNG destination split.
@@ -415,17 +415,6 @@ function App() {
                 AECR says nearly {oneDecimal(oilFields.north_west_shelf_production_share_percent)}% of oil production came from offshore North West Shelf fields in 2023.
               </p>
               <p className="caption mono">{window.FR.sourceLine(data.resource_oil_origin_aecr)}</p>
-            </article>
-
-            <article className="source-card">
-              <h4>Norway capture-channel comparison</h4>
-              <p className="body-sm">
-                Norway's 2025 estimated petroleum net government cash flow is {oneDecimal(norwayRevenue.net_government_cashflow_nok_billion)} NOK billion.
-              </p>
-              <p className="caption">
-                It combines taxes, SDFI, Equinor dividends, fees and environmental taxes. Australia cannot be compared honestly until those channels are mapped separately.
-              </p>
-              <p className="caption mono">{window.FR.sourceLine(data.resource_norway_state_revenue_model)}</p>
             </article>
           </div>
 
@@ -555,7 +544,7 @@ function App() {
         <section className="section" aria-labelledby="gas-price-h">
           <div className="section__head">
             <div>
-              <span className="eyebrow">Domestic vs export price</span>
+              <span className="eyebrow">3. Domestic vs export price</span>
               <h2 id="gas-price-h">ACCC gas contract prices and LNG netback</h2>
               <p className="section__lede">
                 This comparison is contextual only. Domestic long-term contract prices and LNG netback are related market signals, not identical products.
@@ -599,14 +588,120 @@ function App() {
           <p className="caption mono">{window.FR.sourceLine(data.resource_lng_netback_accc)}</p>
         </section>
 
-        <section className="section" aria-labelledby="roadmap-h">
+        <section className="section" aria-labelledby="export-tax-h">
           <div className="section__head">
             <div>
-              <span className="eyebrow">Build phases</span>
-              <h2 id="roadmap-h">What still needs to be done</h2>
+              <span className="eyebrow">4. Export-tax scenario</span>
+              <h2 id="export-tax-h">25% gross export-value calculator</h2>
+              <p className="section__lede">
+                This is a transparent arithmetic scenario, not current law and not a PRRT model.
+              </p>
             </div>
           </div>
-          <PhaseTable/>
+          <div className="metric-grid metric-grid--3">
+            <MetricCard
+              eyebrow="Loaded base"
+              label="LNG plus oil export earnings"
+              plain={`${valuePeriod(data.resource_lng_export_value_req)} LNG plus ${valuePeriod(data.resource_oil_export_value_req)} oil export-value envelopes.`}
+              fromEnvelope={data.resource_lng_export_value_req}
+              valueFn={() => audBillions(exportValueBase)}
+              unitFn={() => ''}
+            />
+            <MetricCard
+              eyebrow="Scenario"
+              label="25% of loaded export value"
+              plain="Gross calculation before deductions, timing, incidence, project boundaries or trade effects."
+              fromEnvelope={data.resource_oil_export_value_req}
+              valueFn={() => audBillions(grossScenario25)}
+              unitFn={() => ''}
+            />
+            <ScenarioCard
+              lngEnv={data.resource_lng_export_value_req}
+              oilEnv={data.resource_oil_export_value_req}
+              rentTaxEnv={data.resource_resource_rent_tax_receipts_budget}
+              royaltyReceiptEnvs={[
+                data.resource_wa_petroleum_royalty_receipts,
+                data.resource_qld_petroleum_royalty_receipts,
+              ]}
+            />
+          </div>
+          <div className="data-table-wrap" style={{ marginTop: 24 }}>
+            <table className="data-table">
+              <thead>
+                <tr><th>Line</th><th>Loaded value</th><th>Period/source caveat</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>LNG export earnings</td><td>{audBillions(lngExportValue)}</td><td>{valuePeriod(data.resource_lng_export_value_req)} REQ envelope.</td></tr>
+                <tr><td>Oil export earnings</td><td>{audBillions(oilExportValue)}</td><td>{valuePeriod(data.resource_oil_export_value_req)} REQ envelope.</td></tr>
+                <tr><td>Loaded export base</td><td>{audBillions(exportValueBase)}</td><td>Only LNG and oil export-value envelopes currently loaded.</td></tr>
+                <tr><td>25% gross scenario</td><td>{audBillions(grossScenario25)}</td><td>Gross export-value scenario, not profits-based tax law.</td></tr>
+                <tr><td>Loaded receipt context</td><td>{audBillions(loadedReceiptContext)}</td><td>Mixed-period Budget resource-rent taxes plus WA petroleum/NWS and Queensland petroleum royalty receipts; not full Australian public capture.</td></tr>
+                <tr><td>Scenario less loaded receipt context</td><td>{audBillions(scenarioLessLoadedReceipts)}</td><td>Displayed as a gap in loaded rows only. It is not value leaked.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="norway-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">5. Norway comparison</span>
+              <h2 id="norway-h">Value retained versus value leaked stays method-gated</h2>
+              <p className="section__lede">
+                Norway is shown as a capture-channel comparison. Australia does not yet have a complete matched
+                receipt model, so this page does not publish a retained/leaked percentage.
+              </p>
+            </div>
+          </div>
+          <div className="metric-grid metric-grid--3">
+            <MetricCard
+              eyebrow="Norway"
+              label="Net government cash flow"
+              plain="Estimated 2025 net government cash flow from petroleum activities."
+              fromEnvelope={data.resource_norway_state_revenue_model}
+              valueFn={() => `${oneDecimal(norwayRevenue.net_government_cashflow_nok_billion)} NOKb`}
+              unitFn={() => ''}
+            />
+            <MetricCard
+              eyebrow="Australia"
+              label="Loaded receipt context"
+              plain="Only the loaded Budget resource-rent, WA petroleum/NWS and Queensland petroleum royalty rows."
+              fromEnvelope={data.resource_resource_rent_tax_receipts_budget}
+              valueFn={() => audBillions(loadedReceiptContext)}
+              unitFn={() => ''}
+            />
+            <MetricCard
+              eyebrow="Not published"
+              label="Value retained vs leaked"
+              fromEnvelope={data.resource_value_leakage_model}
+            />
+          </div>
+          <div className="data-table-wrap" style={{ marginTop: 24 }}>
+            <table className="data-table">
+              <thead>
+                <tr><th>Country/context</th><th>Loaded capture channels</th><th>What can be said now</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Norway</td>
+                  <td>Taxes {oneDecimal(norwayRevenue.taxes_nok_billion)} NOKb; SDFI {oneDecimal(norwayRevenue.sdfi_net_cashflow_nok_billion)} NOKb; Equinor dividend {oneDecimal(norwayRevenue.equinor_dividend_nok_billion)} NOKb; fees/taxes {oneDecimal(norwayRevenue.environmental_taxes_and_area_fees_nok_billion)} NOKb.</td>
+                  <td>Official comparison source shows multiple public capture channels, not just a tax rate.</td>
+                </tr>
+                <tr>
+                  <td>Australia</td>
+                  <td>Budget resource-rent tax actuals plus WA petroleum/NWS and Queensland petroleum royalty receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here.</td>
+                  <td>Enough for a structured explainer and scenario, not enough for a retained-value or leaked-value claim.</td>
+                </tr>
+                <tr>
+                  <td>Method gate</td>
+                  <td>Needs matched periods, full receipt channels, company profit scope, export denominator and domestic-price method.</td>
+                  <td>Until those inputs exist, the dashboard will keep the leakage envelope unavailable.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="caption mono">{window.FR.sourceLine(data.resource_norway_state_revenue_model)}</p>
+          <p className="caption mono">{window.FR.sourceLine(data.resource_value_leakage_model)}</p>
         </section>
 
         <section className="section section--sources" id="sources">

@@ -20,7 +20,17 @@
       "abn": 48091561198,
       "total_income": 22037.894,
       "taxable_income": 2616.078,
-      "income_tax_paid": 769.615
+      "income_tax_paid": 769.615,
+      "prrt_paid": 351.898218,
+      "prrt_subsidiaries": [
+        {
+          "entity": "ESSO AUSTRALIA RESOURCES PTY LTD- BASS STRAIT",
+          "abn": "62091829819",
+          "paid_aud": 351898218
+        }
+      ],
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }

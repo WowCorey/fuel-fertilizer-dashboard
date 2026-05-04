@@ -1,0 +1,32 @@
+{
+  "series_id": "fuel_security_live_vessel_tracking",
+  "source_id": "fuel_security_live_vessel_tracking",
+  "source_name": "Live shipment-level tanker tracking",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+  "unit": "vessels",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-23T00:00:00+10:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No source-safe live vessel-level tanker feed is currently loaded. PM&C publishes aggregate ships-on-water counts estimated by DCCEEW using Kpler; this repo does not publish individual vessel identities or ETAs.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Not applicable; unavailable placeholder",
+  "citation": "Fuel Resilience AU source review; PM&C aggregate ships-on-water counts remain the loaded partial public source.",
+  "extra": {
+    "schema": "fuel_security_source_investigation.v1",
+    "fields": {
+      "decision": "unavailable",
+      "reviewed_at": "2026-04-23",
+      "loaded_partial_source": "pmc_tankers_on_water",
+      "loaded_partial_coverage": "Aggregate crude and clean-product tanker counts and equivalent days from the PM&C public page.",
+      "missing_coverage": [
+        "vessel identities",
+        "AIS positions",
+        "port-call ETAs",
+        "cargo/product inference",
+        "redistribution-safe live vessel API"
+      ]
+    }
+  }
+}

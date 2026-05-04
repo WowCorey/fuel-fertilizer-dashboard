@@ -1,0 +1,16 @@
+{
+  "series_id": "abares_agricultural_exports",
+  "source_id": "abares_agricultural_exports",
+  "source_name": "ABARES agricultural export value source gate",
+  "source_url": "https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-30T14:11:53+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 except logos, third-party content and otherwise-noted material",
+  "citation": "ABARES, Snapshot of Australian Agriculture."
+}

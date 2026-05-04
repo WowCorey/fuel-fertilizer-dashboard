@@ -1,0 +1,51 @@
+name: Manual data update
+description: Request or record a hand-verified manual envelope update.
+title: "Manual update: "
+labels: ["manual-data"]
+body:
+  - type: input
+    id: source_id
+    attributes:
+      label: Source ID
+      description: The `data/sources.yml` ID, for example `pmc_mso_days_cover`.
+    validations:
+      required: true
+  - type: input
+    id: publisher_url
+    attributes:
+      label: Publisher URL
+      description: Exact page, PDF or workbook used for the update.
+    validations:
+      required: true
+  - type: input
+    id: last_data_point
+    attributes:
+      label: Last data point
+      description: Reporting date or period end in YYYY-MM-DD.
+    validations:
+      required: true
+  - type: textarea
+    id: values
+    attributes:
+      label: Values copied
+      description: List the field names, values, units and source table/figure labels.
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Review notes
+      description: Note any caveats, source-date mismatches, missing fields or stale publisher pages.
+    validations:
+      required: false
+  - type: checkboxes
+    id: guardrails
+    attributes:
+      label: Guardrails
+      options:
+        - label: Values were copied from the named source, not estimated.
+          required: true
+        - label: Units and reporting period were preserved.
+          required: true
+        - label: Missing or unsupported fields remain blank/unavailable.
+          required: true
