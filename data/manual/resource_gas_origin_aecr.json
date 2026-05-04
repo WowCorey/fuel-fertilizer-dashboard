@@ -1,0 +1,58 @@
+{
+  "series_id": "resource_gas_origin_aecr",
+  "source_id": "resource_gas_origin_aecr",
+  "source_name": "Geoscience Australia AECR - gas production and exports",
+  "source_url": "https://www.ga.gov.au/aecr2025/gas",
+  "unit": "PJ",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2023-12-31",
+  "values": [
+    {
+      "t": "2023",
+      "v": 6264
+    }
+  ],
+  "notes": "National gas context from Geoscience Australia's AECR 2025 gas page. This is not a state-by-state flow table.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; Geoscience Australia copyright terms apply",
+  "citation": "Geoscience Australia, Australia's Energy Commodity Resources 2025: Gas.",
+  "extra": {
+    "schema": "resource_gas_origin.v1",
+    "fields": {
+      "year": 2023,
+      "raw_gas_production_pj": 6264,
+      "lng_exports_pj": 4388,
+      "lng_exports_mt": 80.7,
+      "lng_export_value_aud_billion": 74.3,
+      "export_share_percent": 69,
+      "conventional_gas_production_pj": 4671,
+      "north_west_shelf_conventional_production_pj": 4193,
+      "north_west_shelf_conventional_production_share_percent": 90,
+      "coal_seam_gas_production_pj": 1593,
+      "conventional_resource_north_west_shelf_share_percent": 93,
+      "north_west_shelf_basins": ["Northern Carnarvon", "Browse", "Bonaparte"],
+      "basin_rows": [
+        {
+          "group": "North West Shelf conventional gas",
+          "basins": "Northern Carnarvon, Browse and Bonaparte",
+          "production_pj": 4193,
+          "share_note": "About 90% of conventional gas production in 2023"
+        },
+        {
+          "group": "Queensland coal seam gas",
+          "basins": "Bowen and Surat",
+          "production_pj": 1593,
+          "share_note": "Nearly all coal seam gas production in 2023"
+        }
+      ],
+      "flow_rows": [
+        { "flow": "Raw gas production", "value_pj": 6264 },
+        { "flow": "LNG exports", "value_pj": 4388 },
+        { "flow": "LNG exports", "value_mt": 80.7 },
+        { "flow": "LNG export earnings", "value_aud_billion": 74.3 }
+      ],
+      "not_captured": "No state-by-state, project-level or buyer-level gas flow map is published from this envelope."
+    }
+  }
+}

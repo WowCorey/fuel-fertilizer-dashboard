@@ -9,11 +9,14 @@ function DataCoverage({ data }) {
           <span className="eyebrow">Data coverage</span>
           <p>
             {verifiedTotal} of {c.total} loaded envelopes are verified or derived. {c.awaiting} await source data.
+            {' '}Manual means copied from a named public source; derived means calculated or selected from verified envelopes;
+            stale means the latest source period is outside its cadence window.
           </p>
         </div>
         <div className="coverage-badges">
           <span className="status-pill status-pill--verified">Verified {c.verified}</span>
           <span className="status-pill status-pill--derived">Derived {c.derived}</span>
+          <span className="status-pill status-pill--manual">Manual {c.manual}</span>
           <span className="status-pill status-pill--stale">Stale {c.stale}</span>
           <span className="status-pill status-pill--awaiting">Awaiting {c.awaiting}</span>
         </div>

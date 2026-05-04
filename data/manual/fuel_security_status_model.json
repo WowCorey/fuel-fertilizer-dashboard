@@ -1,0 +1,43 @@
+{
+  "series_id": "fuel_security_status_model",
+  "source_id": "fuel_security_status_model",
+  "source_name": "Fuel security status model",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+  "unit": "status",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-23T00:00:00+10:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Status model intentionally unavailable. The dashboard shows the observed PM&C National Fuel Security Plan level, but does not translate it into Stable/Tight/Disrupted/Critical until outage, import, stock and product-day coverage rules are defensible.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0",
+  "citation": "Fuel Resilience AU, Fuel security methodology.",
+  "extra": {
+    "schema": "fuel_security_status_model_gate.v1",
+    "fields": {
+      "decision": "unavailable",
+      "reviewed_at": "2026-04-23",
+      "reason": "Input coverage is not yet sufficient for a defensible Stable/Tight/Disrupted/Critical dashboard model.",
+      "blockers": [
+        "No public national live station outage feed is loaded.",
+        "No source-safe live vessel or ETA-level shipment feed is loaded.",
+        "No terminal-by-terminal public storage capacity or live inventory feed is loaded.",
+        "PM&C/DCCEEW public fuel-supply snapshot remains manual because local pipeline requests return an Incapsula challenge and no stable CSV/JSON/XLSX endpoint is exposed.",
+        "No documented, tested thresholds exist for mapping public snapshot fields into Stable/Tight/Disrupted/Critical labels."
+      ],
+      "publishable_now": false,
+      "required_inputs": [
+        "Latest reviewed PM&C/DCCEEW national fuel-supply snapshot.",
+        "Product-level petrol, diesel and jet days/reserve context.",
+        "Outage coverage with visible geographic limits.",
+        "Import/shipping aggregate context with no vessel-level claims.",
+        "Storage/terminal inclusion or explicit exclusion rule.",
+        "Freshness/stale rule for every contributing source."
+      ],
+      "minimum_geographic_coverage": "No Stable/Tight/Disrupted/Critical label until the model either has national outage coverage or visibly treats WA/QLD partial layers as incomplete inputs.",
+      "minimum_freshness": "Every contributing source must carry a reviewed/retrieved date and source-specific stale threshold before the model can publish a label.",
+      "test_requirement": "Threshold rules must be implemented in code and covered by unit tests before a public national status label is displayed."
+    }
+  }
+}

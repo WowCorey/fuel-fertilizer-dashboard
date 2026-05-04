@@ -54,7 +54,10 @@ jobs:
       - name: Validate source registry and envelopes
         run: python scripts/validate_data.py
 
-      - name: Commit any changed JSON
+      - name: Write last successful refresh marker
+        run: python scripts/write_refresh_status.py
+
+      - name: Commit any changed data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

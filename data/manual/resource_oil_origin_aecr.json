@@ -1,0 +1,52 @@
+{
+  "series_id": "resource_oil_origin_aecr",
+  "source_id": "resource_oil_origin_aecr",
+  "source_name": "Geoscience Australia AECR - oil production and exports",
+  "source_url": "https://www.ga.gov.au/aecr2025/oil",
+  "unit": "PJ",
+  "retrieved_at": "2026-04-21T19:07:04Z",
+  "last_data_point": "2023-12-31",
+  "values": [
+    {
+      "t": "2023",
+      "v": 619
+    }
+  ],
+  "notes": "National oil production and export-flow context from Geoscience Australia's AECR 2025 oil page. Calendar-year AECR headline figures and financial-year Australian Energy Statistics flow figures are preserved separately.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; Geoscience Australia copyright terms apply",
+  "citation": "Geoscience Australia, Australia's Energy Commodity Resources 2025: Oil.",
+  "extra": {
+    "schema": "resource_oil_origin.v1",
+    "fields": {
+      "year": 2023,
+      "production_crude_condensate_lpg_pj": 619,
+      "exports_crude_refinery_feedstocks_lpg_pj": 703,
+      "export_value_aud_billion": 14.5,
+      "north_west_shelf_production_share_percent": 80,
+      "import_requirement_share_percent": 90,
+      "aes_period": "2022-23",
+      "aes_crude_condensate_lpg_production_pj": 771,
+      "aes_crude_condensate_lpg_exports_pj": 604,
+      "aes_exported_domestic_oil_resources_share_percent": 97,
+      "aes_refined_products_and_lpg_imports_pj": 1846,
+      "aes_refined_products_and_lpg_exports_pj": 120,
+      "aes_crude_condensate_export_earnings_aud_billion": 13.2,
+      "aes_refined_petroleum_and_lpg_export_earnings_aud_billion": 5,
+      "crude_basin_rows": [
+        { "basin": "Northern Carnarvon/Roebuck", "annual_production_pj": 115 },
+        { "basin": "Cooper/Eromanga", "annual_production_pj": 39 },
+        { "basin": "Gippsland", "annual_production_pj": 17 },
+        { "basin": "Bonaparte/Browse", "annual_production_pj": 8 }
+      ],
+      "condensate_basin_rows": [
+        { "basin": "Northern Carnarvon/Roebuck", "annual_production_pj": 210 },
+        { "basin": "Bonaparte/Browse", "annual_production_pj": 157 },
+        { "basin": "Gippsland", "annual_production_pj": 12 },
+        { "basin": "Cooper/Eromanga", "annual_production_pj": 9 }
+      ],
+      "method_caveat": "AECR notes the 2023 oil production total does not fully capture LPG production from North West Shelf basins."
+    }
+  }
+}

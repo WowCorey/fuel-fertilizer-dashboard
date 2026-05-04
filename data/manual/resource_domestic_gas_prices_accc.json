@@ -1,0 +1,59 @@
+{
+  "series_id": "resource_domestic_gas_prices_accc",
+  "source_id": "resource_domestic_gas_prices_accc",
+  "source_name": "ACCC Gas Inquiry - domestic gas prices",
+  "source_url": "https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report",
+  "unit": "A$/GJ",
+  "retrieved_at": "2026-04-21T19:07:04Z",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2026 supply contracts agreed Oct-Dec 2025",
+      "v": 13.55
+    }
+  ],
+  "notes": "Manual extract from ACCC Gas Inquiry March 2026 interim report Chart 2.1. Values are east coast gas commodity prices agreed under long-term gas supply agreements for 2026 supply, not household retail prices.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; ACCC copyright terms apply",
+  "citation": "Australian Competition and Consumer Commission, Gas Inquiry March 2026 interim report, Chart 2.1.",
+  "extra": {
+    "schema": "resource_domestic_gas_prices.v1",
+    "fields": {
+      "supply_year": 2026,
+      "agreement_period": "Oct-Dec 2025",
+      "unit": "A$/GJ",
+      "rows": [
+        {
+          "segment": "Producers to all",
+          "period": "Oct-Dec 2025",
+          "min_price": 12.65,
+          "max_price": 18.8,
+          "volume_weighted_average": 13.55
+        },
+        {
+          "segment": "Retailers to all",
+          "period": "Oct-Dec 2025",
+          "min_price": 12.91,
+          "max_price": 16.27,
+          "volume_weighted_average": 13.93
+        },
+        {
+          "segment": "Producers to all",
+          "period": "Jul-Sep 2025",
+          "min_price": 12.37,
+          "max_price": 13.97,
+          "volume_weighted_average": 13.02
+        },
+        {
+          "segment": "Retailers to all",
+          "period": "Jul-Sep 2025",
+          "min_price": 13.49,
+          "max_price": 13.73,
+          "volume_weighted_average": 13.54
+        }
+      ],
+      "comparison_caveat": "These are contract commodity prices for 2026 supply. They are not spot prices, delivered household prices or a like-for-like replacement for LNG netback."
+    }
+  }
+}

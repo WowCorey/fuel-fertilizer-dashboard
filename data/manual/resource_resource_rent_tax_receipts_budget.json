@@ -1,0 +1,48 @@
+{
+  "series_id": "resource_resource_rent_tax_receipts_budget",
+  "source_id": "resource_resource_rent_tax_receipts_budget",
+  "source_name": "Australian Government Budget - resource rent tax receipts",
+  "source_url": "https://budget.gov.au/content/bp1/",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-21T19:07:04Z",
+  "last_data_point": "2024-06-30",
+  "values": [
+    {
+      "t": "2021-22",
+      "v": 1638
+    },
+    {
+      "t": "2022-23",
+      "v": 2287
+    },
+    {
+      "t": "2023-24",
+      "v": 1144
+    }
+  ],
+  "notes": "Manual extract from Budget Paper No. 1 Statement 4 Online Table 1. The values array keeps actual years only. Estimates and forecasts are retained in typed extra fields. The source line is labelled resource rent taxes, so this is Commonwealth resource-rent receipt context rather than project-level PRRT receipts.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; Budget website terms apply",
+  "citation": "Australian Government, Budget Paper No. 1, Statement 4, Online Table 1, Australian Government cash receipts.",
+  "extra": {
+    "schema": "resource_receipts_budget.v1",
+    "fields": {
+      "source_line": "Resource rent taxes",
+      "unit": "A$m",
+      "latest_actual_period": "2023-24",
+      "latest_budget_estimate_period": "2025-26",
+      "rows": [
+        { "period": "2021-22", "value": 1638, "estimate": false },
+        { "period": "2022-23", "value": 2287, "estimate": false },
+        { "period": "2023-24", "value": 1144, "estimate": false },
+        { "period": "2024-25", "value": 1450, "estimate": true },
+        { "period": "2025-26", "value": 1950, "estimate": true },
+        { "period": "2026-27", "value": 1800, "estimate": true },
+        { "period": "2027-28", "value": 1650, "estimate": true },
+        { "period": "2028-29", "value": 1450, "estimate": true }
+      ],
+      "method_caveat": "Budget line is resource rent taxes. Do not treat it as project-level PRRT or as a full oil-and-gas public-receipts total."
+    }
+  }
+}

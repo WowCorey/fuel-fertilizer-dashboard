@@ -1,0 +1,20 @@
+{
+  "series_id": "accc_petrol_gird_component",
+  "source_id": "accc_petrol_gird_component",
+  "source_name": "ACCC petrol price breakdown - gross indicative retail difference",
+  "source_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+  "unit": "A$/L",
+  "retrieved_at": "2026-04-21T14:45:46+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2025-12-31",
+      "v": 0.179
+    }
+  ],
+  "notes": "ACCC Report on the Australian petroleum market, December quarter 2025, Key messages/Figure 1.2. Gross indicative retail difference reported as 17.9 cpl; converted to A$/L. This is a broad indicator of retail costs and margins, not pure profit.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Competition and Consumer Commission, Report on the Australian petroleum market - December quarter 2025, Key messages and Figure 1.2."
+}

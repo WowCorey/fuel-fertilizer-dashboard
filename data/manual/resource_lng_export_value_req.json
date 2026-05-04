@@ -1,0 +1,30 @@
+{
+  "series_id": "resource_lng_export_value_req",
+  "source_id": "resource_lng_export_value_req",
+  "source_name": "Resources and Energy Quarterly - LNG export earnings",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 65000
+    }
+  ],
+  "notes": "Manual extract from the December 2025 Resources and Energy Quarterly gas summary: LNG export earnings are described as declining from $65 billion in 2024-25 to $47 billion by 2026-27.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; DISR copyright terms apply",
+  "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025.",
+  "extra": {
+    "schema": "resource_export_value.v1",
+    "fields": {
+      "commodity": "LNG",
+      "value_period": "2024-25",
+      "value_aud_billion": 65,
+      "forecast_2026_27_aud_billion": 47,
+      "release": "Resources and Energy Quarterly: December 2025"
+    }
+  }
+}

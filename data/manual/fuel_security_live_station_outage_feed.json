@@ -1,0 +1,31 @@
+{
+  "series_id": "fuel_security_live_station_outage_feed",
+  "source_id": "fuel_security_live_station_outage_feed",
+  "source_name": "Live national station outage feed",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+  "unit": "sites",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-23T00:00:00+10:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No public national live station-outage feed is currently loaded. The dashboard uses the PM&C dated retail stock-out snapshot as partial public coverage and does not imply live national outage visibility.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Not applicable; unavailable placeholder",
+  "citation": "Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.",
+  "extra": {
+    "schema": "fuel_security_source_investigation.v1",
+    "fields": {
+      "decision": "unavailable",
+      "reviewed_at": "2026-04-23",
+      "loaded_partial_source": "pmc_retail_stockouts",
+      "loaded_partial_coverage": "State and territory petrol/diesel stock-out counts plus an Australia-wide diesel total as a dated PM&C public snapshot.",
+      "missing_coverage": [
+        "station-level live outage records",
+        "regional shortage polygons or alerts",
+        "Australia-wide petrol total in the PM&C table",
+        "reusable national API for dry-site status"
+      ]
+    }
+  }
+}
