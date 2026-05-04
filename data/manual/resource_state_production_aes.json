@@ -1,0 +1,93 @@
+{
+  "series_id": "resource_state_production_aes",
+  "source_id": "resource_state_production_aes",
+  "source_name": "Australian Energy Statistics - production by state",
+  "source_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
+  "unit": "PJ",
+  "retrieved_at": "2026-04-21T19:07:04Z",
+  "last_data_point": "2024-06-30",
+  "values": [
+    {
+      "t": "2023-24 gas production",
+      "v": 6121.951
+    }
+  ],
+  "notes": "Manual extract from Australian Energy Statistics 2025 Tables I and Q. The headline value sums Table Q conventional gas and coal seam gas production energy units for 2023-24. Product-level state rows retain their source units.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Department of Climate Change, Energy, the Environment and Water, Australian Energy Statistics 2025, Tables I and Q.",
+  "extra": {
+    "schema": "resource_state_production_aes.v1",
+    "fields": {
+      "period": "2023-24",
+      "gas_total_pj": 6121.951,
+      "state_rows": [
+        {
+          "state": "New South Wales",
+          "conventional_gas_pj": 0,
+          "coal_seam_gas_pj": 1.501,
+          "crude_oil_and_ngl_ml": null,
+          "naturally_occurring_lpg_ml": null,
+          "natural_gas_mcm": 40.08
+        },
+        {
+          "state": "Victoria",
+          "conventional_gas_pj": 286.847,
+          "coal_seam_gas_pj": 0,
+          "crude_oil_and_ngl_ml": 803.408,
+          "naturally_occurring_lpg_ml": 1148.835,
+          "natural_gas_mcm": 7362.82
+        },
+        {
+          "state": "Queensland",
+          "conventional_gas_pj": 32.723,
+          "coal_seam_gas_pj": 1550.427,
+          "crude_oil_and_ngl_ml": 313.185,
+          "naturally_occurring_lpg_ml": 79.992,
+          "natural_gas_mcm": 42273.685
+        },
+        {
+          "state": "Western Australia",
+          "conventional_gas_pj": 3534.73,
+          "coal_seam_gas_pj": 0,
+          "crude_oil_and_ngl_ml": 13696.875,
+          "naturally_occurring_lpg_ml": 886.262,
+          "natural_gas_mcm": 93019.212
+        },
+        {
+          "state": "South Australia",
+          "conventional_gas_pj": 82.391,
+          "coal_seam_gas_pj": 0,
+          "crude_oil_and_ngl_ml": 842.96,
+          "naturally_occurring_lpg_ml": 234.398,
+          "natural_gas_mcm": 2041.293
+        },
+        {
+          "state": "Northern Territory",
+          "conventional_gas_pj": 633.333,
+          "coal_seam_gas_pj": 0,
+          "crude_oil_and_ngl_ml": 291.489,
+          "naturally_occurring_lpg_ml": 3146.663,
+          "natural_gas_mcm": 16911.423
+        },
+        {
+          "state": "Australia",
+          "conventional_gas_pj": 4570.023,
+          "coal_seam_gas_pj": 1551.928,
+          "crude_oil_and_ngl_ml": 15947.918,
+          "naturally_occurring_lpg_ml": 5496.15,
+          "natural_gas_mcm": 161648.514
+        }
+      ],
+      "source_units": {
+        "conventional_gas_pj": "PJ, AES Table Q3",
+        "coal_seam_gas_pj": "PJ, AES Table Q3",
+        "crude_oil_and_ngl_ml": "ML, AES Table I",
+        "naturally_occurring_lpg_ml": "ML, AES Table I",
+        "natural_gas_mcm": "Mcm, AES Table I"
+      },
+      "not_captured": "This envelope is a state/territory production table, not a field-level or company-level production map."
+    }
+  }
+}

@@ -10,6 +10,8 @@ const checkOnly = process.argv.includes('--check');
 
 const sharedFiles = [
   'ui_kits/shared/DataCoverage.jsx',
+  'ui_kits/shared/TrustBadge.jsx',
+  'ui_kits/shared/ShippingVisibility.jsx',
   'ui_kits/shared/Header.jsx',
   'ui_kits/shared/MetricCard.jsx',
   'ui_kits/shared/ChartCard.jsx',
@@ -18,11 +20,26 @@ const sharedFiles = [
 ];
 
 const dashboards = [
+  'national-status-dashboard',
+  'fuel-security-dashboard',
+  'resource-value-dashboard',
+  'state-contribution-dashboard',
+  'strategic-resources-dashboard',
+  'defence-alliances-dashboard',
   'fuel-dashboard',
   'fertilizer-dashboard',
   'oil-and-production',
   'who-pays-what',
+  'au-economics-dashboard',
+  'manufacturing-dashboard',
+  'power-grid-dashboard',
+  'infrastructure-dashboard',
+  'employment-automation-dashboard',
 ];
+
+function normalizeNewlines(text) {
+  return text.replace(/\r\n/g, '\n');
+}
 
 function read(relPath) {
   return fs.readFileSync(path.join(root, relPath), 'utf8');
@@ -56,7 +73,7 @@ function compileDashboard(name) {
 
   if (checkOnly) {
     const existing = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : null;
-    if (existing !== output) {
+    if (existing === null || normalizeNewlines(existing) !== normalizeNewlines(output)) {
       throw new Error(`${path.relative(root, outputPath)} is missing or stale. Run npm run build:ui.`);
     }
     return;

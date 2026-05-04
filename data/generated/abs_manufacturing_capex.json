@@ -1,0 +1,273 @@
+{
+  "series_id": "abs_manufacturing_capex",
+  "source_id": "abs_manufacturing_capex",
+  "source_name": "ABS Private new capital expenditure - manufacturing, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
+  "unit": "AUD millions",
+  "retrieved_at": "2026-04-30T09:45:37+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2011-03",
+      "v": 3075
+    },
+    {
+      "t": "2011-06",
+      "v": 3244
+    },
+    {
+      "t": "2011-09",
+      "v": 3672
+    },
+    {
+      "t": "2011-12",
+      "v": 3344
+    },
+    {
+      "t": "2012-03",
+      "v": 3177
+    },
+    {
+      "t": "2012-06",
+      "v": 3060
+    },
+    {
+      "t": "2012-09",
+      "v": 2478
+    },
+    {
+      "t": "2012-12",
+      "v": 2419
+    },
+    {
+      "t": "2013-03",
+      "v": 2352
+    },
+    {
+      "t": "2013-06",
+      "v": 2223
+    },
+    {
+      "t": "2013-09",
+      "v": 2402
+    },
+    {
+      "t": "2013-12",
+      "v": 2320
+    },
+    {
+      "t": "2014-03",
+      "v": 2350
+    },
+    {
+      "t": "2014-06",
+      "v": 2195
+    },
+    {
+      "t": "2014-09",
+      "v": 2117
+    },
+    {
+      "t": "2014-12",
+      "v": 2303
+    },
+    {
+      "t": "2015-03",
+      "v": 2180
+    },
+    {
+      "t": "2015-06",
+      "v": 2027
+    },
+    {
+      "t": "2015-09",
+      "v": 2258
+    },
+    {
+      "t": "2015-12",
+      "v": 2160
+    },
+    {
+      "t": "2016-03",
+      "v": 1924
+    },
+    {
+      "t": "2016-06",
+      "v": 2219
+    },
+    {
+      "t": "2016-09",
+      "v": 2051
+    },
+    {
+      "t": "2016-12",
+      "v": 2194
+    },
+    {
+      "t": "2017-03",
+      "v": 2344
+    },
+    {
+      "t": "2017-06",
+      "v": 2278
+    },
+    {
+      "t": "2017-09",
+      "v": 2269
+    },
+    {
+      "t": "2017-12",
+      "v": 2424
+    },
+    {
+      "t": "2018-03",
+      "v": 2373
+    },
+    {
+      "t": "2018-06",
+      "v": 2372
+    },
+    {
+      "t": "2018-09",
+      "v": 2465
+    },
+    {
+      "t": "2018-12",
+      "v": 2422
+    },
+    {
+      "t": "2019-03",
+      "v": 2236
+    },
+    {
+      "t": "2019-06",
+      "v": 2441
+    },
+    {
+      "t": "2019-09",
+      "v": 2620
+    },
+    {
+      "t": "2019-12",
+      "v": 2359
+    },
+    {
+      "t": "2020-03",
+      "v": 2449
+    },
+    {
+      "t": "2020-06",
+      "v": 2345
+    },
+    {
+      "t": "2020-09",
+      "v": 2369
+    },
+    {
+      "t": "2020-12",
+      "v": 2458
+    },
+    {
+      "t": "2021-03",
+      "v": 2832
+    },
+    {
+      "t": "2021-06",
+      "v": 2616
+    },
+    {
+      "t": "2021-09",
+      "v": 2593
+    },
+    {
+      "t": "2021-12",
+      "v": 2808
+    },
+    {
+      "t": "2022-03",
+      "v": 2770
+    },
+    {
+      "t": "2022-06",
+      "v": 2939
+    },
+    {
+      "t": "2022-09",
+      "v": 3068
+    },
+    {
+      "t": "2022-12",
+      "v": 3205
+    },
+    {
+      "t": "2023-03",
+      "v": 3530
+    },
+    {
+      "t": "2023-06",
+      "v": 3749
+    },
+    {
+      "t": "2023-09",
+      "v": 3695
+    },
+    {
+      "t": "2023-12",
+      "v": 3999
+    },
+    {
+      "t": "2024-03",
+      "v": 3713
+    },
+    {
+      "t": "2024-06",
+      "v": 3519
+    },
+    {
+      "t": "2024-09",
+      "v": 3862
+    },
+    {
+      "t": "2024-12",
+      "v": 3603
+    },
+    {
+      "t": "2025-03",
+      "v": 3691
+    },
+    {
+      "t": "2025-06",
+      "v": 3879
+    },
+    {
+      "t": "2025-09",
+      "v": 4130
+    },
+    {
+      "t": "2025-12",
+      "v": 4200
+    }
+  ],
+  "notes": "Fetched from ABS Private New Capital Expenditure and Expected Expenditure latest-release XLSX Table 4. Series is actual total private new capital expenditure for Manufacturing, current prices, seasonally adjusted; values are AUD millions and are trimmed to the last 60 quarterly observations.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, Private New Capital Expenditure and Expected Expenditure (Cat. 5625.0), manufacturing industry.",
+  "extra": {
+    "schema": "abs_xlsx_series.v1",
+    "fields": {
+      "workbook_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia/dec-2025/04_current_prices_seasonally_adjusted_capex.xlsx",
+      "workbook_unit": "$ Millions",
+      "component_series": [
+        {
+          "description": "Actual Expenditure ;  Total (State) ;  Total (Type of Asset - Detailed Level) ;  Current Price ;  Manufacturing ;",
+          "series_id": "A3515140F",
+          "sheet": "Data1",
+          "series_type": "Seasonally Adjusted",
+          "unit": "$ Millions",
+          "value": 4200
+        }
+      ]
+    }
+  }
+}

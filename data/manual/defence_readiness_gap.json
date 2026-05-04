@@ -1,0 +1,31 @@
+{
+  "series_id": "defence_readiness_gap",
+  "source_id": "defence_readiness_gap",
+  "source_name": "Defence readiness and sensitive-data source gate",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+  "unit": "unavailable readiness metrics",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-28T14:30:00+00:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No public source-safe readiness, mission-capable rate, live operational availability, munitions stockpile, classified basing or live posture metric is loaded. Do not infer readiness from asset counts or budget rows.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0",
+  "citation": "Fuel Resilience AU defence alliances methodology, readiness source gate.",
+  "extra": {
+    "schema": "defence_readiness_gap.v1",
+    "fields": {
+      "blocked_metrics": [
+        "mission-capable rates",
+        "operational availability",
+        "live readiness",
+        "munitions stockpile depth",
+        "classified basing posture",
+        "live deployment availability",
+        "war-winning comparisons"
+      ],
+      "boundary": "This source gate intentionally carries no values. It exists to make the unavailable readiness boundary visible."
+    }
+  }
+}

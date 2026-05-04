@@ -1,0 +1,184 @@
+{
+  "series_id": "defence_public_capability_assets",
+  "source_id": "defence_public_capability_assets",
+  "source_name": "Selected public ADF capability and asset counts",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+  "unit": "public capability rows",
+  "retrieved_at": "2026-04-28T14:30:00+00:00",
+  "last_data_point": "2026-04-29",
+  "values": [
+    {
+      "t": "selected public capability rows",
+      "v": 13
+    }
+  ],
+  "notes": "Manual compilation from official Defence, Navy, Air Force and Defence Ministers public pages. Counts describe public force-structure or acquisition rows only; they are not readiness, mission-capable or operational availability figures.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; service-specific website copyright terms apply",
+  "citation": "Department of Defence, Royal Australian Navy, Royal Australian Air Force and Defence Ministers public capability pages.",
+  "extra": {
+    "schema": "defence_public_capability_assets.v1",
+    "fields": {
+      "capability_rows": [
+        {
+          "capability_id": "navy_collins_submarines",
+          "capability_name": "Collins class submarines",
+          "branch": "Navy",
+          "capability_type": "Submarine force",
+          "quantity_or_status": "6 in service",
+          "numeric_value": 6,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://seapower.navy.gov.au/fleet/vessels/submarines",
+          "trust_label": "Observed",
+          "notes": "Sea Power Centre states all six Collins class submarines remain in service. This is not a readiness count."
+        },
+        {
+          "capability_id": "navy_hobart_destroyers",
+          "capability_name": "Hobart class guided missile destroyers",
+          "branch": "Navy",
+          "capability_type": "Major surface combatant",
+          "quantity_or_status": "3 in service",
+          "numeric_value": 3,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://seapower.navy.gov.au/fleet/vessels/destroyers",
+          "trust_label": "Observed",
+          "notes": "Sea Power Centre lists Brisbane, Hobart and Sydney as current guided missile destroyers."
+        },
+        {
+          "capability_id": "navy_anzac_frigates",
+          "capability_name": "Anzac class frigates",
+          "branch": "Navy",
+          "capability_type": "Major surface combatant",
+          "quantity_or_status": "7 currently operated",
+          "numeric_value": 7,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://seapower.navy.gov.au/fleet/vessels/frigates",
+          "trust_label": "Observed",
+          "notes": "Sea Power Centre states the Royal Australian Navy currently operates seven Anzac-class frigates."
+        },
+        {
+          "capability_id": "airforce_f35a",
+          "capability_name": "F-35A Lightning II",
+          "branch": "Air Force",
+          "capability_type": "Air combat",
+          "quantity_or_status": "72 committed",
+          "numeric_value": 72,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://www.airforce.gov.au/aircraft/f-35a-lightning-ii",
+          "trust_label": "Observed",
+          "notes": "Air Force page says Australia has committed to 72 F-35A aircraft. This row does not state current availability."
+        },
+        {
+          "capability_id": "airforce_super_hornet",
+          "capability_name": "F/A-18F Super Hornet",
+          "branch": "Air Force",
+          "capability_type": "Air combat",
+          "quantity_or_status": "24 aircraft",
+          "numeric_value": 24,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://www.airforce.gov.au/aircraft/18f-super-hornet",
+          "trust_label": "Observed",
+          "notes": "Air Force page states Air Force has 24 F/A-18F Super Hornets."
+        },
+        {
+          "capability_id": "airforce_growler",
+          "capability_name": "EA-18G Growler",
+          "branch": "Air Force",
+          "capability_type": "Electronic attack",
+          "quantity_or_status": "12 aircraft",
+          "numeric_value": 12,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://www.airforce.gov.au/aircraft/ea-18g-growler",
+          "trust_label": "Observed",
+          "notes": "Air Force page states 12 Growlers are controlled by No. 6 Squadron."
+        },
+        {
+          "capability_id": "airforce_p8a",
+          "capability_name": "P-8A Poseidon",
+          "branch": "Air Force",
+          "capability_type": "Maritime patrol and ISR",
+          "quantity_or_status": "13 aircraft",
+          "numeric_value": 13,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://www.airforce.gov.au/aircraft/p-8a-poseidon",
+          "trust_label": "Observed",
+          "notes": "Air Force page states No. 92 Wing commands 13 P-8A aircraft."
+        },
+        {
+          "capability_id": "airforce_c17a",
+          "capability_name": "C-17A Globemaster III",
+          "branch": "Air Force",
+          "capability_type": "Heavy airlift",
+          "quantity_or_status": "8 aircraft",
+          "numeric_value": 8,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://www.airforce.gov.au/aircraft/c-17-globemaster",
+          "trust_label": "Observed",
+          "notes": "Air Force page states all eight C-17As are operated by No. 36 Squadron."
+        },
+        {
+          "capability_id": "airforce_c130j",
+          "capability_name": "C-130J-30 Hercules",
+          "branch": "Air Force",
+          "capability_type": "Tactical airlift",
+          "quantity_or_status": "12 aircraft",
+          "numeric_value": 12,
+          "period": "public page reviewed 2026-04-29",
+          "source_url": "https://www.airforce.gov.au/aircraft/c-130j-hercules",
+          "trust_label": "Observed",
+          "notes": "Air Force page states a fleet of 12 C-130J-30 Hercules is operated from RAAF Base Richmond."
+        },
+        {
+          "capability_id": "army_himars",
+          "capability_name": "HIMARS launchers",
+          "branch": "Army",
+          "capability_type": "Long-range fires acquisition",
+          "quantity_or_status": "42 being acquired",
+          "numeric_value": 42,
+          "period": "announced 2023-08-19",
+          "source_url": "https://www.minister.defence.gov.au/media-releases/2023-08-19/australia-accelerates-long-range-precision-strike-capability-acquisition",
+          "trust_label": "Observed",
+          "notes": "Ministerial release says the expanded acquisition brings the total number of HIMARS to 42. This is an acquisition row, not a current readiness row."
+        },
+        {
+          "capability_id": "army_redback_ifv",
+          "capability_name": "Redback infantry fighting vehicles",
+          "branch": "Army",
+          "capability_type": "Armoured vehicle acquisition",
+          "quantity_or_status": "129 locally built vehicles contracted",
+          "numeric_value": 129,
+          "period": "contract announced 2023-12-08",
+          "source_url": "https://www.minister.defence.gov.au/media-releases/2023-12-08/contracts-signed-infantry-fighting-vehicles",
+          "trust_label": "Observed",
+          "notes": "Ministerial release says contracts were signed to deliver and support 129 locally built Redback infantry fighting vehicles."
+        },
+        {
+          "capability_id": "army_abrams_m1a2",
+          "capability_name": "M1A2 SEPv3 Abrams tanks",
+          "branch": "Army",
+          "capability_type": "Armoured combat acquisition",
+          "quantity_or_status": "up to 75 tanks",
+          "numeric_value": 75,
+          "period": "announced 2022-01-10",
+          "source_url": "https://www.minister.defence.gov.au/media-releases/2022-01-10/enhancing-adfs-armoured-combat-capability",
+          "trust_label": "Partial coverage",
+          "notes": "Ministerial release uses 'up to 75'. This row preserves that wording and does not treat it as a verified current fleet count."
+        },
+        {
+          "capability_id": "readiness_operational_availability",
+          "capability_name": "Operational readiness and availability",
+          "branch": "Joint",
+          "capability_type": "Readiness",
+          "quantity_or_status": "Unavailable",
+          "numeric_value": null,
+          "period": "not public",
+          "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+          "trust_label": "Unavailable",
+          "notes": "No live readiness, mission-capable rate or operational availability metric is loaded. The dashboard does not infer one from asset counts."
+        }
+      ],
+      "boundary": "Capability rows are selected public counts or acquisition statuses. They are not exhaustive, and they do not show readiness, serviceability, crewing, munitions stockpiles, basing posture or operational availability."
+    }
+  }
+}

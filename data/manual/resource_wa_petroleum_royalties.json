@@ -1,0 +1,32 @@
+{
+  "series_id": "resource_wa_petroleum_royalties",
+  "source_id": "resource_wa_petroleum_royalties",
+  "source_name": "WA petroleum royalties",
+  "source_url": "https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties",
+  "unit": "%",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2026-04-22",
+  "values": [
+    {
+      "t": "barrow-island-rrr",
+      "v": 40
+    }
+  ],
+  "notes": "Explainer envelope. The headline is the Barrow Island Resource Rent Royalty rate. North West Shelf royalty rates and Barrow Island Commonwealth/State sharing are recorded in structured fields.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Government of Western Australia copyright and website terms",
+  "citation": "Government of Western Australia, Petroleum royalties.",
+  "extra": {
+    "schema": "resource_royalty_terms.v1",
+    "fields": {
+      "barrow_island_resource_rent_royalty_percent": 40,
+      "barrow_island_commonwealth_share_percent": 75,
+      "barrow_island_state_share_percent": 25,
+      "north_west_shelf_primary_production_licence_rate_percent": 10,
+      "north_west_shelf_secondary_production_licence_rate_percent": 12.5,
+      "north_west_shelf_basis": "wellhead value",
+      "not_captured": "This envelope does not show total royalty receipts or field-level payments."
+    }
+  }
+}

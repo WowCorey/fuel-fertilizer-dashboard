@@ -332,6 +332,7 @@ def validate_envelopes(sources: dict[str, dict[str, Any]], errors: list[dict[str
 def extract_dashboard_refs() -> dict[str, set[str]]:
     refs: dict[str, set[str]] = {}
     files = list((DASHBOARD_DIR / "fuel-dashboard").glob("data.js"))
+    files += list(DASHBOARD_DIR.glob("*/app.jsx"))
     files += list(DASHBOARD_DIR.glob("*-dashboard/index.html"))
     files += list((DASHBOARD_DIR / "oil-and-production").glob("index.html"))
     files += list((DASHBOARD_DIR / "who-pays-what").glob("index.html"))

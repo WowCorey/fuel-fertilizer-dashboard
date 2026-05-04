@@ -1,0 +1,140 @@
+{
+  "series_id": "abs_population_quarterly",
+  "source_id": "abs_population_quarterly",
+  "source_name": "ABS Estimated Resident Population - Australia, quarterly",
+  "source_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+  "unit": "PSNS",
+  "retrieved_at": "2026-04-30T09:45:40+00:00",
+  "last_data_point": "2025-09-30",
+  "values": [
+    {
+      "t": "2018-Q1",
+      "v": 24881751
+    },
+    {
+      "t": "2018-Q2",
+      "v": 24963258
+    },
+    {
+      "t": "2018-Q3",
+      "v": 25067399
+    },
+    {
+      "t": "2018-Q4",
+      "v": 25146140
+    },
+    {
+      "t": "2019-Q1",
+      "v": 25264932
+    },
+    {
+      "t": "2019-Q2",
+      "v": 25334826
+    },
+    {
+      "t": "2019-Q3",
+      "v": 25438073
+    },
+    {
+      "t": "2019-Q4",
+      "v": 25520468
+    },
+    {
+      "t": "2020-Q1",
+      "v": 25627924
+    },
+    {
+      "t": "2020-Q2",
+      "v": 25649248
+    },
+    {
+      "t": "2020-Q3",
+      "v": 25633341
+    },
+    {
+      "t": "2020-Q4",
+      "v": 25630698
+    },
+    {
+      "t": "2021-Q1",
+      "v": 25653005
+    },
+    {
+      "t": "2021-Q2",
+      "v": 25685412
+    },
+    {
+      "t": "2021-Q3",
+      "v": 25704774
+    },
+    {
+      "t": "2021-Q4",
+      "v": 25773795
+    },
+    {
+      "t": "2022-Q1",
+      "v": 25912977
+    },
+    {
+      "t": "2022-Q2",
+      "v": 26018721
+    },
+    {
+      "t": "2022-Q3",
+      "v": 26169314
+    },
+    {
+      "t": "2022-Q4",
+      "v": 26320285
+    },
+    {
+      "t": "2023-Q1",
+      "v": 26514302
+    },
+    {
+      "t": "2023-Q2",
+      "v": 26659922
+    },
+    {
+      "t": "2023-Q3",
+      "v": 26831131
+    },
+    {
+      "t": "2023-Q4",
+      "v": 26956660
+    },
+    {
+      "t": "2024-Q1",
+      "v": 27113517
+    },
+    {
+      "t": "2024-Q2",
+      "v": 27194286
+    },
+    {
+      "t": "2024-Q3",
+      "v": 27301149
+    },
+    {
+      "t": "2024-Q4",
+      "v": 27388133
+    },
+    {
+      "t": "2025-Q1",
+      "v": 27531443
+    },
+    {
+      "t": "2025-Q2",
+      "v": 27613654
+    },
+    {
+      "t": "2025-Q3",
+      "v": 27724744
+    }
+  ],
+  "notes": "Fetched from ABS Data API dataflow ERP_Q, key 1.3.TOT.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS ERP_Q dataflow MEASURE 1 (Estimated Resident Population), SEX 3 (Persons), AGE TOT (All ages), REGION AUS (Australia), FREQ Q. Quarterly headline national population estimate.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "CC BY 4.0 where stated by publisher",
+  "citation": "Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), Estimated Resident Population."
+}

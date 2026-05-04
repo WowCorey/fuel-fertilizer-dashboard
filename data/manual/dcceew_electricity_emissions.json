@@ -1,0 +1,31 @@
+{
+  "series_id": "dcceew_electricity_emissions",
+  "source_id": "dcceew_electricity_emissions",
+  "source_name": "DCCEEW national greenhouse accounts - electricity sector emissions",
+  "source_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025",
+  "unit": "Mt CO2-e",
+  "retrieved_at": "2026-04-28T18:53:01+00:00",
+  "last_data_point": "2025-09-30",
+  "values": [
+    {
+      "t": "2025-09",
+      "v": 147.6
+    }
+  ],
+  "notes": "DCCEEW Quarterly Update of Australia's National Greenhouse Gas Inventory: September 2025, Table 3. The headline is actual annual Energy - Electricity emissions for the year to September 2025. It is not a single-quarter emissions value.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 4.0 (Commonwealth of Australia)",
+  "citation": "Department of Climate Change, Energy, the Environment and Water, Quarterly Update of Australia's National Greenhouse Gas Inventory: September 2025.",
+  "extra": {
+    "schema": "fuel_resilience_typed_fields.v1",
+    "fields": {
+      "period": "year to September 2025",
+      "sector": "Energy - Electricity",
+      "annual_emissions_mt_co2e": 147.6,
+      "previous_year_emissions_mt_co2e": 152.4,
+      "annual_change_pct": -3.1,
+      "annual_change_mt_co2e": -4.8
+    }
+  }
+}

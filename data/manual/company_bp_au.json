@@ -20,7 +20,12 @@
       "abn": 91092495700,
       "total_income": 28638.153,
       "taxable_income": 932.156,
-      "income_tax_paid": 275.563
+      "income_tax_paid": 275.563,
+      "prrt_paid": null,
+      "prrt_subsidiaries": [],
+      "prrt_note": "BP Australia is downstream-focused; no BP entity appears in the 2023-24 ATO PRRT details sheet.",
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
     }
   }
 }

@@ -1,0 +1,43 @@
+{
+  "series_id": "accc_nbn_broadband_speeds",
+  "source_id": "accc_nbn_broadband_speeds",
+  "source_name": "ACCC Measuring Broadband Australia Report 32 - busy-hour download performance",
+  "source_url": "https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report",
+  "unit": "% of plan speed",
+  "retrieved_at": "2026-04-29T14:17:30+00:00",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2025-12",
+      "v": 94.8
+    }
+  ],
+  "notes": "Manual entry from ACCC Measuring Broadband Australia Report 32 and appendix tables, April 2026. The displayed value is the lower end of the state/territory range for average NBN fixed-line download performance during busy hours in December 2025; the full range is 94.8% to 99.4% of plan speed. This is not a median Mbps measure.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 3.0 AU (Commonwealth of Australia)",
+  "citation": "Australian Competition and Consumer Commission, Measuring Broadband Australia Report 32, April 2026.",
+  "extra": {
+    "schema": "infrastructure_accc_nbn_broadband_speeds.v1",
+    "fields": {
+      "report": "Measuring Broadband Australia Report 32, April 2026",
+      "measurement_period": "1 December 2025 to 31 December 2025",
+      "metric": "Average NBN fixed-line download performance during busy hours, by state and territory",
+      "busy_hours": "7-11 pm, Monday to Friday",
+      "download_busy_hour_percent_of_plan_speed_range": {
+        "min": 94.8,
+        "max": 99.4
+      },
+      "by_state_or_territory_percent_of_plan_speed": {
+        "NSW": 99.3,
+        "ACT": 98.0,
+        "VIC": 98.4,
+        "QLD": 99.4,
+        "WA": 97.7,
+        "TAS": 94.8,
+        "NT + SA": 96.7
+      },
+      "source_boundary": "Includes underperforming and impaired services; excludes very high speed services. ACCC reports this row as percentage of plan speed rather than a median Mbps speed."
+    }
+  }
+}

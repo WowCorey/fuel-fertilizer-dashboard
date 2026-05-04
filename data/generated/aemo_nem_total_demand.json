@@ -1,0 +1,79 @@
+{
+  "series_id": "aemo_nem_total_demand",
+  "source_id": "aemo_nem_total_demand",
+  "source_name": "AEMO NEM total operational demand, monthly mean MW",
+  "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+  "unit": "MW",
+  "retrieved_at": "2026-04-30T09:48:00+00:00",
+  "last_data_point": "2026-03-31",
+  "values": [
+    {
+      "t": "2025-03",
+      "v": 21293.0
+    },
+    {
+      "t": "2025-04",
+      "v": 19615.0
+    },
+    {
+      "t": "2025-05",
+      "v": 21098.0
+    },
+    {
+      "t": "2025-06",
+      "v": 23791.0
+    },
+    {
+      "t": "2025-07",
+      "v": 23767.0
+    },
+    {
+      "t": "2025-08",
+      "v": 22353.0
+    },
+    {
+      "t": "2025-09",
+      "v": 19533.0
+    },
+    {
+      "t": "2025-10",
+      "v": 19197.0
+    },
+    {
+      "t": "2025-11",
+      "v": 19536.0
+    },
+    {
+      "t": "2025-12",
+      "v": 19701.0
+    },
+    {
+      "t": "2026-01",
+      "v": 21058.0
+    },
+    {
+      "t": "2026-02",
+      "v": 21572.0
+    },
+    {
+      "t": "2026-03",
+      "v": 20662.0
+    }
+  ],
+  "notes": "Monthly mean of 5-minute TRADE-interval TOTALDEMAND across NSW1, VIC1, QLD1, SA1 and TAS1, then summed across regions. extra.fields holds the latest-month region-mean value per region.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "AEMO terms of use for tabular data",
+  "citation": "Australian Energy Market Operator, NEM Price and Demand monthly archives.",
+  "extra": {
+    "schema": "fuel_resilience_typed_fields.v1",
+    "fields": {
+      "latest_month": "2026-03",
+      "region_nsw1_latest": 7469.0,
+      "region_vic1_latest": 4679.0,
+      "region_qld1_latest": 6420.0,
+      "region_sa1_latest": 1165.0,
+      "region_tas1_latest": 928.0
+    }
+  }
+}

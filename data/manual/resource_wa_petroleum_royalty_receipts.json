@@ -1,0 +1,32 @@
+{
+  "series_id": "resource_wa_petroleum_royalty_receipts",
+  "source_id": "resource_wa_petroleum_royalty_receipts",
+  "source_name": "WA petroleum royalty and North West Shelf grant receipts",
+  "source_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-21T19:07:04Z",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25",
+      "v": 660.1
+    }
+  ],
+  "notes": "Manual extract from WA Overview of State Taxes and Royalties 2025-26. The value sums Petroleum - State component royalties and North West Shelf grants; iron ore lease rentals shown near the source table are excluded.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Government of Western Australia copyright and website terms",
+  "citation": "Government of Western Australia, Overview of State Taxes and Royalties 2025-26, summary tables.",
+  "extra": {
+    "schema": "resource_wa_petroleum_receipts.v1",
+    "fields": {
+      "period": "2024-25",
+      "unit": "A$m",
+      "petroleum_state_component_royalties_a_m": 17.9,
+      "north_west_shelf_grants_a_m": 642.2,
+      "petroleum_and_nws_total_a_m": 660.1,
+      "excluded_iron_ore_lease_rentals_a_m": 9.7,
+      "source_note": "Source summary table states total royalties exclude North West Shelf grants, which were $642.2 million in 2024-25. Petroleum - State component royalties were $17.9 million."
+    }
+  }
+}

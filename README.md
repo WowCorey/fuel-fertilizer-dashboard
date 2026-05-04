@@ -1,16 +1,34 @@
 # Fuel Resilience AU
 
+[![Deploy GitHub Pages](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml/badge.svg)](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml)
+
 A neutral, public-interest dashboard for everyday Australians — tracking the
 bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Four dashboard surfaces read from a shared JSON-envelope data
+**Status:** Fifteen dashboard surfaces read from a shared JSON-envelope data
 pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
-ABS fertiliser imports, APS net-import cover, APS refinery production series,
+ABS fertiliser imports, food/farm/water source gates, APS net-import cover, APS refinery production series,
 AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
-and the multi-state retail fuel average. Other sources remain manual or
-unavailable until a named public source can support the value.
+and the multi-state retail fuel average. The national status page adds a
+manually verified PM&C/DCCEEW public fuel-supply snapshot. The resource value
+page adds official tax, PRRT, WA/NWS and Queensland royalty receipts,
+export-value and Norway comparison envelopes, while leaving unsupported leakage and price-comparison claims
+unavailable. The state petroleum ledger separates state production,
+infrastructure roles, revenue context and source gates. The strategic resources
+page adds DISR REQ export rows, Geoscience Australia AIMR production/reserve rows
+and GA/Digital Atlas operating-mines footprint context, while leaving rare-earth
+individual export value and sulphur unavailable. The defence posture page adds
+public Defence budget, workforce, selected capability, alliance/framework and
+sovereign-industry context, while leaving readiness-sensitive and unsupported
+fields unavailable. The fuel-security page reuses the public PM&C/DCCEEW snapshot,
+APS product-flow envelopes and ABS import data to show what is observable,
+derived, partial or unavailable. The former fertiliser page is now framed as
+Food, farms & water security: it keeps verified fertiliser import coverage and
+adds explicit agricultural production, food trade and water-pressure source gates.
+Other sources remain manual or unavailable
+until a named public source can support the value.
 
 ## What this is
 
@@ -29,12 +47,44 @@ interpolate or estimate missing numbers.
 
 | Page | Version | What it covers | Current data state |
 |---|---|---|---|
-| [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and multi-state retail average fetched; AIP retail and IEA obligation remain manual |
-| [Fertilizer](ui_kits/fertilizer-dashboard/index.html) | v1.1 | Imports by HS-31 subcategory, price index, supplier concentration | ABS SITC 562 total imports fetched; nutrient subseries, ABARES and concentration slots remain manual/unavailable |
-| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet and APS production fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
-| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields and ACCC December quarter 2025 petrol components are hand-keyed; company profit remains unavailable |
+| [National status](ui_kits/national-status-dashboard/index.html) | v1.4 | National Fuel Security Plan level, MSO reserves, ships on water and retail stock-outs | PM&C/DCCEEW public fuel-supply snapshot hand-keyed; direct scripted access is blocked/deferred until a stable machine-readable endpoint exists |
+| [Fuel security](ui_kits/fuel-security-dashboard/index.html) | v1.6 | Product days remaining, PM&C/DCCEEW fuel-supply snapshot, APS stocks/sales/imports, import/shipping risk context, WA weekly stockout context, QLD monthly unavailable-fuel reports and unavailable operational feeds | Product days are derived from the named PM&C/DCCEEW snapshot; APS/ABS, public retail feeds, a WA-only weekly stockout snapshot and QLD Open Data unavailable-fuel reports are loaded where available; live national station outage, vessel tracking, terminal capacity and status-score feeds remain unavailable |
+| [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources, including WA/NWS and Queensland petroleum royalty receipt context; value-leakage estimate remains unavailable until a documented denominator and method exist |
+| [State petroleum ledger](ui_kits/state-contribution-dashboard/index.html) | v1.3 | State/territory petroleum and gas production roles, defined object counts, partial project/operator mapping, infrastructure context, state royalty receipts, combined royalty context and source gates | AES state production rows, NOPTA offshore title/well-layer counts, NOPTA active production-licence field/operator rows, REMP oil/gas major-project rows, QLD/VIC operating refinery counts, WA/NWS and Queensland petroleum receipts, NSW/NT combined royalty context and source-gate workstreams are loaded; Commonwealth tax attribution by state, current project/company production volumes, terminal capacity, LNG train counts and raw site totals remain unavailable |
+| [Strategic resources](ui_kits/strategic-resources-dashboard/index.html) | v1.0 | Iron ore, coal, uranium, bauxite/alumina, copper, nickel, lithium, rare earths, gold, zinc and sulphur source-gate context | DISR REQ export rows, GA AIMR 2025 production/reserve/resource rows and GA/Digital Atlas operating-mines footprint rows are loaded where source-safe; rare-earth individual export value and sulphur production/export/reserve rows remain unavailable |
+| [Defence posture](ui_kits/defence-alliances-dashboard/index.html) | v1.1 | Defence spending, selected public ADF capability rows, force-structure context, uncrewed systems and counter-drone, alliances/frameworks and sovereign defence-industry context | 2026 NDS budget rows, Defence Annual Report workforce rows, selected Navy/Air Force/Army public capability rows, selected uncrewed-systems rows (Triton, Ghost Bat, Integrator, LAND 156 counter-small UAS, Ghost Shark, SDIP autonomous systems, RAN maritime autonomous context), ANZUS/AUKUS/Five Eyes/Quad/AUSMIN/PNG framework profiles and SDIP/GWEO industry context are loaded; readiness, mission-capable rates, live availability, munitions stockpile depth, classified posture, GDP-share fields and a clean drone-only budget remain unavailable |
+| [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
+| [Food, farms & water security](ui_kits/fertilizer-dashboard/index.html) | v1.2 | Food-system visibility, fertiliser and farm inputs, agricultural production/export source gates, food import source gates, water and seasonal pressure | ABS SITC 562 total fertiliser imports and source-country top-3 concentration are loaded; agricultural production, food imports, agricultural exports, water storage/rainfall pressure, nutrient subseries, ABARES price and stock cover remain unavailable placeholders until source-safe values are wired |
+| [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
+| [Who pays what](ui_kits/who-pays-what/index.html) | v1.3 | Revenue, tax paid and effective tax rates for major energy companies, plus retail-price breakdown | ATO 2023-24 corporate tax fields, five company profit rows and ACCC December quarter 2025 petrol components are hand-keyed; remaining private Australian subsidiary profit stays unavailable until source filings are verified |
+| [AU economics](ui_kits/au-economics-dashboard/index.html) | v1.0 | RBA cash rate, household and government debt, mortgages, unemployment and inflation | RBA cash rate (F1.1), household debt-to-income (E2), standard variable mortgage rate (F5), credit-card balances accruing interest (C1.1), ABS real GDP growth, unemployment and CPI load from verified RBA/ABS endpoints; AOFM AGS face value is hand-keyed from official stock_ags.csv after workbook fetch timeouts; state-level net debt remains unavailable until a comparable budget-paper pass is completed |
+| [Manufacturing](ui_kits/manufacturing-dashboard/index.html) | v1.0 | Manufacturing share of GDP, employment, sales, exports, capex and food/beverage subsector | ABS Labour Force Detailed industry employment, Business Indicators manufacturing sales, International Trade SITC 5-8 manufactured exports, Private New Capex (Cat. 5625.0) and food/beverage employment now load from verified ABS latest-release XLSX tables; manufacturing GDP share and the Department of Industry profile stay unavailable until exact source-safe mappings are verified |
+| [Power grid](ui_kits/power-grid-dashboard/index.html) | v1.0 | NEM wholesale price and demand by state, fuel mix, generation register, coal retirement timeline, emissions and ISP forecasts | AEMO NEM regional wholesale price and total operational demand are fetched programmatically from the AEMO 5-minute Price and Demand archive across NSW1, VIC1, QLD1, SA1 and TAS1; Q4 2025 AEMO QED fuel mix and WEM price, January 2026 AEMO Generation Information totals and explicit coal closure-date capacity, CER 2024 NEM+SWIS renewable share, DCCEEW year-to-September 2025 electricity emissions and the 2024 ISP transmission headline are hand-keyed from named official publications |
+| [Infrastructure](ui_kits/infrastructure-dashboard/index.html) | v1.0 | Population vs dwellings, housing target progress, public transport, airports, freight, NBN busy-hour performance and the major-project pipeline | ABS quarterly population (ERP_Q), year-on-year growth rate and residential dwelling stock (RES_DWELL_ST) fetched programmatically from the ABS Data API; NHSAC Accord progress, BITRE public transport / airports / freight and ACCC Measuring Broadband Australia busy-hour performance are now hand-keyed from named official sources; Infrastructure Australia proposal count remains unavailable until a clean official extract is verified; Australian data centre capacity stays intentionally unavailable as no canonical public register exists |
+| [Employment & Automation](ui_kits/employment-automation-dashboard/index.html) | v0.5 | Australian labour-market change during the AI rollout era - unemployment, participation, employment-to-population, job vacancies, wages, plus context-only AI rollout milestones | ABS LF unemployment / participation / employment-to-population, ABS Job Vacancies (JV) and ABS Wage Price Index (WPI) annual % change fetched programmatically from the ABS Data API; underemployment rate and monthly hours worked stay on manual (LF dataflow standard headline keys returned 404 in initial probing); AI rollout timeline carries dated public milestone events from named publishers as context only; Australian automation/AI labour-market exposure remains intentionally unavailable as no source-safe Australian dataset has been identified. Page rule: timing is not causation. |
 
 Every page cross-links to the others in the header nav.
+
+Known missing data is tracked in
+[`docs/remaining-data-gaps.md`](docs/remaining-data-gaps.md). Those gaps stay
+unavailable until a named public source supports the exact value.
+Fuel-security source investigations are recorded in
+[`docs/fuel-security-source-investigation.md`](docs/fuel-security-source-investigation.md),
+including the current PM&C/DCCEEW access result, station-outage limits,
+shipping limits and terminal-capacity decision. Issue-ready source gates are in
+[`docs/fuel-security-backlog.md`](docs/fuel-security-backlog.md).
+State petroleum ledger attribution rules are documented in
+[`docs/state-contribution-methodology.md`](docs/state-contribution-methodology.md),
+with source-gate decisions in
+[`docs/petroleum-ledger-source-gates.md`](docs/petroleum-ledger-source-gates.md).
+Strategic resources methodology is documented in
+[`docs/strategic-resources-methodology.md`](docs/strategic-resources-methodology.md),
+with source decisions in
+[`docs/strategic-resources-source-audit.md`](docs/strategic-resources-source-audit.md).
+Defence, alliances and strategic posture methodology is documented in
+[`docs/defence-alliances-methodology.md`](docs/defence-alliances-methodology.md),
+with source decisions in
+[`docs/defence-alliances-source-audit.md`](docs/defence-alliances-source-audit.md).
 
 ## Run locally
 
@@ -45,6 +95,12 @@ envelopes does not work from `file://`, so you must use a server.
 ```sh
 python3 -m http.server 8000
 # then visit:
+#   http://localhost:8000/ui_kits/national-status-dashboard/index.html
+#   http://localhost:8000/ui_kits/fuel-security-dashboard/index.html
+#   http://localhost:8000/ui_kits/resource-value-dashboard/index.html
+#   http://localhost:8000/ui_kits/state-contribution-dashboard/index.html
+#   http://localhost:8000/ui_kits/strategic-resources-dashboard/index.html
+#   http://localhost:8000/ui_kits/defence-alliances-dashboard/index.html
 #   http://localhost:8000/ui_kits/fuel-dashboard/index.html
 #   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
 #   http://localhost:8000/ui_kits/oil-and-production/index.html
@@ -138,9 +194,11 @@ Run the validator before opening or merging a PR:
 pip install -r requirements.txt
 npm ci
 npm run check:ui
+npm run smoke:ui
 python3 scripts/validate_data.py
 python3 scripts/validate_data.py --json
 python3 scripts/build_source_manifest.py --check
+python3 scripts/review_due.py
 python3 -m unittest discover -s tests
 ```
 
@@ -154,6 +212,12 @@ minimal Python dependencies in `requirements.txt` and the pinned Node build
 dependencies in `package-lock.json`, checks that compiled dashboard JS is fresh,
 compile-checks scripts, runs the data validator, checks the browser source
 manifest, and runs unit tests for the fetch/data-entry transforms.
+
+`.github/workflows/manual-data-review.yml` runs weekly and on demand. It runs
+the validator, writes a `scripts/review_due.py` summary to the Actions job
+summary, and uploads JSON/text review artifacts. The workflow is advisory: a
+source can be due or intentionally unavailable without inventing a replacement
+number.
 
 ## Run the pipeline locally
 
@@ -184,6 +248,18 @@ python3 scripts/validate_data.py              # validate registry and envelopes
 Manual and canonical publisher pages should not block a valid programmatic data
 refresh; broken programmatic fetch URLs should fail loudly.
 
+To run the scheduled refresh manually, open the repository on GitHub, go to
+Actions, choose **Weekly data refresh**, then use **Run workflow** on `main`.
+That refresh only updates programmatic envelopes and stubs. Manual public
+snapshot sources, such as PM&C national status, FSSP disclosures, company
+profits and resource-value receipts, still need a human review before changing
+their JSON.
+
+To run the manual review report from GitHub, open Actions, choose
+**Manual data review**, then use **Run workflow** on `main`. Read the summary
+before editing manual JSON; stale and unavailable items are prompts for review,
+not permission to estimate.
+
 ### Add or update a source
 
 1. Add or edit an entry in `data/sources.yml` with the full source registry contract above.
@@ -196,6 +272,9 @@ refresh; broken programmatic fetch URLs should fail loudly.
    fields, use typed `extra.fields`, for example `--field
    fiscal_year=2023-24 --field total_income=1234 --last-data-point
    2024-06-30`.
+   Use `python3 scripts/enter_manual.py --examples` for source-specific command
+   templates and review `docs/manual-entry-templates.md` before updating public
+   snapshot sources.
 4. When manual values are verified, set `status` to `"ok"`, set `retrieved_at`
    to the data-entry timestamp, set `last_data_point`, and keep
    `manual_entry: true`.
@@ -206,6 +285,31 @@ refresh; broken programmatic fetch URLs should fail loudly.
    `<MetricCard>` or `<ChartCard>`.
 7. Run `python3 scripts/build_source_manifest.py` and
    `python3 scripts/validate_data.py` before committing.
+
+### Manual review due report
+
+Run this when checking whether hand-keyed sources need attention:
+
+```sh
+python3 scripts/review_due.py
+python3 scripts/review_due.py --used-by national_status
+python3 scripts/review_due.py --used-by resource_value --json
+```
+
+The report uses the same freshness windows as the validator and flags missing,
+unavailable or stale manual envelopes. It does not fail CI by default because
+some public sources legitimately lag; use `--fail-on-due` only for an
+intentional manual-data review workflow.
+
+## Fuel Stress Index gate
+
+The Fuel Stress Index has not been implemented. Its input, exclusion,
+freshness, confidence and coverage rules are locked in
+`docs/fuel-stress-index-spec.md`. Do not add scoring code or public labels until
+the score can show missing inputs, stale/manual status and component coverage
+beside the number. The fuel-security dashboard is not the Fuel Stress Index; its
+methodology and unavailable operational feeds are documented in
+`docs/fuel-security-methodology.md`.
 
 ## Repo layout
 
@@ -227,22 +331,32 @@ scripts/
   enter_manual.py              Safer manual data-entry helper
   fetch_data.py                Pipeline entry point
   init_manual_stubs.py         Creates missing data/manual/*.json stubs
+  review_due.py                Reports manual sources that need review
   validate_data.py             Validates registry, envelopes and dashboard refs
+  write_refresh_status.py      Writes data/last_successful_refresh.json after refresh
 
 tests/
   test_fetch_transforms.py     Fetch/derivation transform coverage
   test_enter_manual.py         Manual-entry helper coverage
+  ui-smoke.spec.js             Playwright smoke tests for every dashboard route
 
 .github/workflows/
   ci.yml                       PR/push validation
+  manual-data-review.yml       Weekly/manual advisory stale-source report
   refresh-data.yml             Weekly Monday 02:00 AEST data refresh
 
 ui_kits/
   shared/                      Header, Footer, MetricCard, ChartCard,
                                InsightFeed, data-loader, styles — used by
                                every dashboard
+  national-status-dashboard/   v1.4 — public fuel-status snapshot
+  fuel-security-dashboard/     v1.6 — fuel-security visibility and gaps
+  resource-value-dashboard/    v1.5 — tax, PRRT, royalties, export value
+    state-contribution-dashboard/ v1.3 - state petroleum ledger, source gates, defined object counts and partial production mapping
+  strategic-resources-dashboard/ v1.0 - critical minerals and strategic resource context
+  defence-alliances-dashboard/ v1.0 - public defence posture, alliances and capability context
   fuel-dashboard/              v1.0 — liquid fuel
-  fertilizer-dashboard/        v1.1 — fertiliser
+  fertilizer-dashboard/        v1.2 - food, farms and water security
   oil-and-production/          v1.2 — crude, refining, government spending
   who-pays-what/               v1.3 — tax vs consumer price vs profit
 ```
@@ -266,6 +380,8 @@ ui_kits/
   document, the card renders "Source unavailable" — never an estimate.
 - Do not describe a page as live or current unless the referenced envelopes have
   `status: "ok"` and valid freshness metadata.
+- On the fuel-security surfaces, "shipping" means aggregate public PM&C tanker
+  counts unless a future source-safe vessel feed is explicitly registered.
 
 ## Deployment (suggested, not configured)
 
