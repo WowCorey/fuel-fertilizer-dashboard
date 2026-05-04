@@ -118,7 +118,9 @@
     return isNaN(d) ? null : d;
   }
 
-  const STALE_GRACE_DAYS = { daily: 7, weekly: 21, monthly: 75, quarterly: 140, annual: 460 };
+  // Annual public releases can lag the reporting year by 12-18 months while
+  // still being the latest verified publication.
+  const STALE_GRACE_DAYS = { daily: 7, weekly: 21, monthly: 75, quarterly: 140, annual: 820 };
 
   function daysOld(env) {
     const d = parseDateish(env?.last_data_point);

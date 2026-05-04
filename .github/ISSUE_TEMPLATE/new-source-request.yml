@@ -1,0 +1,54 @@
+name: New source request
+description: Propose a new public data source for a dashboard envelope.
+title: "Source request: "
+labels: ["source-request"]
+body:
+  - type: input
+    id: dashboard
+    attributes:
+      label: Dashboard
+      description: Which dashboard would use this source?
+      placeholder: Fuel, Oil & production, Fertilizer, Who pays what, National status, Resource value
+    validations:
+      required: true
+  - type: input
+    id: source_url
+    attributes:
+      label: Source URL
+      description: Link to the publisher page or data file.
+    validations:
+      required: true
+  - type: textarea
+    id: values
+    attributes:
+      label: Values needed
+      description: List the exact metric, unit, reporting period and source table/field.
+    validations:
+      required: true
+  - type: textarea
+    id: rights
+    attributes:
+      label: Rights and citation
+      description: Publisher licence, terms URL and required citation if known.
+    validations:
+      required: false
+  - type: dropdown
+    id: fetch_mode
+    attributes:
+      label: Likely fetch mode
+      options:
+        - Programmatic
+        - Manual
+        - Unavailable until source improves
+        - Unknown
+    validations:
+      required: true
+  - type: checkboxes
+    id: guardrails
+    attributes:
+      label: Guardrails
+      options:
+        - label: I have not estimated or inferred missing values.
+          required: true
+        - label: The source is public or the issue explains why it is not usable yet.
+          required: true

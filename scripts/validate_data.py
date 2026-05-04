@@ -65,7 +65,10 @@ STALE_GRACE_DAYS = {
     "weekly": 21,
     "monthly": 75,
     "quarterly": 140,
-    "annual": 460,
+    # Annual public releases can lag the reporting year by 12-18 months.
+    # ATO corporate tax data is current while the latest report is still
+    # the 2023-24 income year, even though its last_data_point is 2024-06-30.
+    "annual": 820,
     "ad-hoc": None,
 }
 
@@ -329,6 +332,7 @@ def validate_envelopes(sources: dict[str, dict[str, Any]], errors: list[dict[str
 def extract_dashboard_refs() -> dict[str, set[str]]:
     refs: dict[str, set[str]] = {}
     files = list((DASHBOARD_DIR / "fuel-dashboard").glob("data.js"))
+    files += list(DASHBOARD_DIR.glob("*/app.jsx"))
     files += list(DASHBOARD_DIR.glob("*-dashboard/index.html"))
     files += list((DASHBOARD_DIR / "oil-and-production").glob("index.html"))
     files += list((DASHBOARD_DIR / "who-pays-what").glob("index.html"))

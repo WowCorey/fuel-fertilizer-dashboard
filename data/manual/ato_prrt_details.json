@@ -1,0 +1,108 @@
+{
+  "series_id": "ato_prrt_details",
+  "source_id": "ato_prrt_details",
+  "source_name": "ATO Corporate Tax Transparency - PRRT details (latest year)",
+  "source_url": "https://data.gov.au/data/dataset/corporate-transparency",
+  "unit": "",
+  "retrieved_at": "2026-04-28T08:23:09+00:00",
+  "stub_created_at": "2026-04-28T08:22:54+00:00",
+  "last_data_point": "2024-06-30",
+  "values": [],
+  "notes": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet, cut-off 18 August 2025. 16 entities paid a total of A$1,483.3m in PRRT in the 2023-24 income year. Each row carries the exact entity name, ABN and PRRT paid in AUD as published by the ATO.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "CC BY 3.0 AU (Commonwealth of Australia)",
+  "citation": "Australian Taxation Office, Corporate Tax Transparency Report - PRRT details sheet.",
+  "extra": {
+    "schema": "manual_extra_fields.v1",
+    "fields": {
+      "fiscal_year": "2023-24",
+      "cutoff_date": "2025-08-18",
+      "total_prrt_paid_aud": 1483251276,
+      "total_prrt_paid_aud_millions": 1483.251,
+      "entity_count": 16,
+      "entities": [
+        {
+          "entity": "COOPER ENERGY (CH) PTY. LTD.",
+          "abn": "70615355023",
+          "prrt_paid_aud": 3210449
+        },
+        {
+          "entity": "ESSO AUSTRALIA RESOURCES PTY LTD- BASS STRAIT",
+          "abn": "62091829819",
+          "prrt_paid_aud": 351898218
+        },
+        {
+          "entity": "KANSAI ELECTRIC POWER AUSTRALIA PTY LTD",
+          "abn": "32126720732",
+          "prrt_paid_aud": 7237704
+        },
+        {
+          "entity": "KUFPEC AUSTRALIA (JULIMAR) PTY LTD",
+          "abn": "38139500502",
+          "prrt_paid_aud": 21404964
+        },
+        {
+          "entity": "MEPAU OTWAY BASIN PTY LTD",
+          "abn": "17009363820",
+          "prrt_paid_aud": 3202743
+        },
+        {
+          "entity": "MIDOCEAN PLUTO PTY LTD",
+          "abn": "23126462744",
+          "prrt_paid_aud": 7418023
+        },
+        {
+          "entity": "MITSUI E&P AUSTRALIA PTY LTD",
+          "abn": "45108437529",
+          "prrt_paid_aud": 75846094
+        },
+        {
+          "entity": "SANTOS (BOL) PTY LTD",
+          "abn": "35000670575",
+          "prrt_paid_aud": 418029
+        },
+        {
+          "entity": "SANTOS WA NORTHWEST PTY LTD",
+          "abn": "58009140854",
+          "prrt_paid_aud": 69330991
+        },
+        {
+          "entity": "SANTOS WA PVG PTY LTD",
+          "abn": "51129604860",
+          "prrt_paid_aud": 144019454
+        },
+        {
+          "entity": "VERMILION OIL & GAS AUSTRALIA PTY LTD",
+          "abn": "29113023591",
+          "prrt_paid_aud": 3753096
+        },
+        {
+          "entity": "WOODSIDE BURRUP PTY. LTD.",
+          "abn": "20120237416",
+          "prrt_paid_aud": 150896061
+        },
+        {
+          "entity": "WOODSIDE ENERGY (AUSTRALIA) PTY LTD",
+          "abn": "39006923879",
+          "prrt_paid_aud": 113183482
+        },
+        {
+          "entity": "WOODSIDE ENERGY (BASS STRAIT) PTY LTD",
+          "abn": "29004228004",
+          "prrt_paid_aud": 390477620
+        },
+        {
+          "entity": "WOODSIDE ENERGY JULIMAR PTY LTD",
+          "abn": "56130391365",
+          "prrt_paid_aud": 38447922
+        },
+        {
+          "entity": "WOODSIDE ENERGY LTD.",
+          "abn": "63005482986",
+          "prrt_paid_aud": 102506426
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "series_id": "pmc_forward_import_orders",
+  "source_id": "pmc_forward_import_orders",
+  "source_name": "PM&C public fuel supply - four-week import orders",
+  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "unit": "billion litres",
+  "retrieved_at": "2026-04-21T15:37:26Z",
+  "last_data_point": "2026-04-17",
+  "values": [
+    {
+      "t": "2026-04-17",
+      "v": 4.1
+    }
+  ],
+  "notes": "Hand-keyed from PM&C's current and anticipated national supplies text. The figure is reported crude, diesel, jet and petrol scheduled to arrive from overseas in the next four weeks.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+  "citation": "Department of the Prime Minister and Cabinet, Public information on fuel supply; current and anticipated national supplies text.",
+  "extra": {
+    "schema": "pmc_forward_import_orders.v1",
+    "fields": {
+      "period": "next four weeks",
+      "products": "crude, diesel, jet fuel and petrol",
+      "excludes": "Domestic refinery supply and stock already on hand"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "series_id": "strategic_resources_req_dec2025",
+  "source_id": "strategic_resources_req_dec2025",
+  "source_name": "Resources and Energy Quarterly December 2025 - strategic resource exports",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-28T13:40:38+00:00",
+  "last_data_point": "2025-06-30",
+  "values": [
+    {
+      "t": "2024-25 resources and energy exports",
+      "v": 385298.956128312
+    }
+  ],
+  "notes": "Manual extract from the December 2025 Resources and Energy Quarterly publication page and forecast data workbook. Export value and export volume are recorded separately and are not production or reserve/resource figures.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; DISR copyright terms apply",
+  "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025, forecast data workbook.",
+  "extra": {
+    "schema": "strategic_resources_req_dec2025.v1",
+    "fields": {
+      "release": "Resources and Energy Quarterly: December 2025",
+      "publication_date": "2025-12-19",
+      "value_period": "2024-25",
+      "notes": "Nominal value rows are copied from the individual commodity sheets unless noted. REQ Selected exports also publishes real/current-dollar rows; this dashboard labels the nominal rows used here.",
+      "exports": [
+        {"resource_id": "iron_ore", "commodity": "Iron ore", "export_value_aud_m": 116376.394755, "export_volume": 899.92642373, "export_volume_unit": "Mt", "sheet": "Steel-making", "row_label": "Iron ore - nominal value"},
+        {"resource_id": "coal", "commodity": "Metallurgical coal", "export_value_aud_m": 39313.75848, "export_volume": 147.00078477, "export_volume_unit": "Mt", "sheet": "Steel-making", "row_label": "Metallurgical coal - nominal value"},
+        {"resource_id": "coal", "commodity": "Thermal coal", "export_value_aud_m": 31993, "export_volume": 205, "export_volume_unit": "Mt", "sheet": "Thermal coal", "row_label": "Thermal coal - nominal value"},
+        {"resource_id": "uranium", "commodity": "Uranium", "export_value_aud_m": 1173.5735153, "export_volume": 5033.994901, "export_volume_unit": "t", "sheet": "Uranium", "row_label": "Uranium - nominal value"},
+        {"resource_id": "gold", "commodity": "Gold", "export_value_aud_m": 46895.432455, "export_volume": 239.14812136, "export_volume_unit": "t", "sheet": "Gold", "row_label": "Gold - nominal value"},
+        {"resource_id": "bauxite_alumina", "commodity": "Bauxite", "export_value_aud_m": 3291.420334, "export_volume": 43178.0947, "export_volume_unit": "kt", "sheet": "Aluminium", "row_label": "Bauxite - nominal value"},
+        {"resource_id": "bauxite_alumina", "commodity": "Alumina", "export_value_aud_m": 12154.623945, "export_volume": 14717.560116, "export_volume_unit": "kt", "sheet": "Aluminium", "row_label": "Alumina - nominal value"},
+        {"resource_id": "bauxite_alumina", "commodity": "Primary aluminium", "export_value_aud_m": 5989, "export_volume": 1460, "export_volume_unit": "kt", "sheet": "Aluminium", "row_label": "Primary aluminium - nominal value"},
+        {"resource_id": "copper", "commodity": "Copper", "export_value_aud_m": 12565.333418, "export_volume": 765.369159503502, "export_volume_unit": "kt total metallic content", "sheet": "Copper", "row_label": "Copper - nominal value"},
+        {"resource_id": "nickel", "commodity": "Nickel", "export_value_aud_m": 2319.63712730428, "export_volume": 81.246052, "export_volume_unit": "kt", "sheet": "Nickel", "row_label": "Nickel - nominal value"},
+        {"resource_id": "lithium", "commodity": "Lithium total", "export_value_aud_m": 4823.52275257291, "export_volume": null, "export_volume_unit": "mixed spodumene and refined rows", "sheet": "Lithium", "row_label": "Total nominal value"},
+        {"resource_id": "zinc", "commodity": "Zinc", "export_value_aud_m": 4430.779155, "export_volume": 1264.07916705644, "export_volume_unit": "kt total metallic content", "sheet": "Zinc", "row_label": "Zinc - nominal value"}
+      ],
+      "not_attributed": [
+        "Rare earths are mentioned in the REQ other critical minerals narrative, but no individual rare-earth export value is loaded here.",
+        "Coal is kept as separate metallurgical and thermal export rows.",
+        "Bauxite, alumina and primary aluminium are kept as separate product rows."
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "series_id": "resource_lng_export_destinations_req",
+  "source_id": "resource_lng_export_destinations_req",
+  "source_name": "Resources and Energy Quarterly - LNG export destinations",
+  "source_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+  "unit": "A$m",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2023-06-30",
+  "values": [
+    {
+      "t": "2022-23",
+      "v": 92237
+    }
+  ],
+  "notes": "Manual extract from the Resources and Energy Quarterly LNG exports by destination table. Later years can be confidentialised, so this page shows the latest verified full-destination split only.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; DISR copyright terms apply",
+  "citation": "Department of Industry, Science and Resources, Resources and Energy Quarterly: December 2025, LNG exports by destination table.",
+  "extra": {
+    "schema": "resource_destination_values.v1",
+    "fields": {
+      "period": "2022-23",
+      "unit": "A$m",
+      "destinations": [
+        { "destination": "Japan", "value": 34508 },
+        { "destination": "China", "value": 19833 },
+        { "destination": "Korea", "value": 18310 },
+        { "destination": "Taiwan", "value": 12070 },
+        { "destination": "Singapore", "value": 3165 },
+        { "destination": "Malaysia", "value": 2121 },
+        { "destination": "Other", "value": 63 }
+      ],
+      "total": 92237
+    }
+  }
+}

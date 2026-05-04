@@ -1,0 +1,55 @@
+{
+  "series_id": "defence_budget_2026_nds",
+  "source_id": "defence_budget_2026_nds",
+  "source_name": "2026 National Defence Strategy budget factsheet",
+  "source_url": "https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf",
+  "unit": "A$bn",
+  "retrieved_at": "2026-04-28T14:30:00+00:00",
+  "last_data_point": "2026-04-17",
+  "values": [
+    {
+      "t": "2026-27 defence funding",
+      "v": 63.4
+    }
+  ],
+  "notes": "Manual extract from the public 2026 National Defence Strategy budget factsheet. Funding, planned expenditure and additional investment rows are kept separate and are not readiness or capability availability measures.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; Defence copyright terms apply",
+  "citation": "Department of Defence, 2026 National Defence Strategy Budget Factsheet, April 2026.",
+  "extra": {
+    "schema": "defence_budget_2026_nds.v1",
+    "fields": {
+      "release": "2026 National Defence Strategy budget factsheet",
+      "publication_date": "2026-04-17",
+      "funding_profile_aud_bn": [
+        {"period": "2026-27", "defence_funding": 63.4},
+        {"period": "2027-28", "defence_funding": 67.3},
+        {"period": "2028-29", "defence_funding": 73.3},
+        {"period": "2029-30", "defence_funding": 80.1},
+        {"period": "2030-31", "defence_funding": 86.9},
+        {"period": "2031-32", "defence_funding": 90.1},
+        {"period": "2032-33", "defence_funding": 96.6},
+        {"period": "2033-34", "defence_funding": 106.7},
+        {"period": "2034-35", "defence_funding": 110.9},
+        {"period": "2035-36", "defence_funding": 112.1}
+      ],
+      "planned_expenditure_2026_27_aud_bn": [
+        {"category": "Acquisition", "value": 22.4},
+        {"category": "Sustainment", "value": 19.8},
+        {"category": "Workforce", "value": 19.4},
+        {"category": "Operating and operations", "value": 2.9},
+        {"category": "Total planned expenditure", "value": 64.5}
+      ],
+      "additional_investment_aud_bn": [
+        {"label": "2026 NDS additional investment over four years", "value": 14.0},
+        {"label": "2026 NDS additional investment over decade", "value": 53.0},
+        {"label": "Combined 2024 and 2026 NDS additional investment over four years", "value": 30.0},
+        {"label": "Combined 2024 and 2026 NDS additional investment over decade to 2035-36", "value": 117.0},
+        {"label": "Total additional investment table value over decade", "value": 117.4}
+      ],
+      "capability_investment_decade_aud_bn": 425,
+      "boundary": "The factsheet reports funding, planned expenditure and investment profiles. It does not report live readiness, operational availability or deployable force availability."
+    }
+  }
+}

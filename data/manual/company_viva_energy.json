@@ -2,13 +2,34 @@
   "series_id": "company_viva_energy",
   "source_id": "company_viva_energy",
   "source_name": "Viva Energy Group annual report (ASX:VEA)",
-  "source_url": "https://www.vivaenergy.com.au/investors/financial-results-reports",
+  "source_url": "https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx",
   "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-18T12:27:44+00:00",
-  "last_data_point": null,
+  "retrieved_at": "2026-04-22T12:20:02+00:00",
+  "last_data_point": "2025-12-31",
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
-  "manual_entry": true
+  "notes": "ATO 2023-24 Corporate Report of Entity Tax Information workbook for tax fields. Net profit copied from Viva Energy Group Limited Annual Report 2025, consolidated results and statement of profit or loss; ATO tax year and annual-report period do not match exactly.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Company copyright",
+  "citation": "Viva Energy Group annual report.",
+  "extra": {
+    "schema": "manual_extra_fields.v1",
+    "fields": {
+      "fiscal_year": "2023-24",
+      "ato_entity_name": "VIVA ENERGY GROUP LIMITED",
+      "abn": 74626661032,
+      "total_income": 27188.044,
+      "taxable_income": 103.092,
+      "income_tax_paid": 17.866,
+      "net_profit": -421.1,
+      "net_profit_unit": "A$m",
+      "net_profit_period_end": "2025-12-31",
+      "net_profit_basis": "statutory net loss after tax on a historical cost basis",
+      "prrt_paid": null,
+      "prrt_subsidiaries": [],
+      "prrt_note": "Viva Energy is a downstream refiner and retailer; not within the PRRT regime which applies only to upstream petroleum project profits.",
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
+    }
+  }
 }

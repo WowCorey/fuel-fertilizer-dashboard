@@ -1,0 +1,33 @@
+{
+  "series_id": "resource_norway_state_revenue_model",
+  "source_id": "resource_norway_state_revenue_model",
+  "source_name": "Norwegian petroleum government revenues",
+  "source_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+  "unit": "NOK billion",
+  "retrieved_at": "2026-04-21T18:31:04Z",
+  "last_data_point": "2025-12-31",
+  "values": [
+    {
+      "t": "2025",
+      "v": 655.8
+    }
+  ],
+  "notes": "Comparison envelope. Norway's government-revenue page reports estimated net government cash flow from petroleum activities and the main capture channels. This is not an Australian leakage estimate.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Norskpetroleum.no copyright and reuse terms",
+  "citation": "Norskpetroleum.no, The government's revenues.",
+  "extra": {
+    "schema": "resource_norway_revenue_model.v1",
+    "fields": {
+      "year": 2025,
+      "net_government_cashflow_nok_billion": 655.8,
+      "taxes_nok_billion": 373.1,
+      "environmental_taxes_and_area_fees_nok_billion": 9.2,
+      "sdfi_net_cashflow_nok_billion": 238.9,
+      "equinor_dividend_nok_billion": 34.6,
+      "state_equinor_share_percent": 67,
+      "comparison_warning": "Do not use this as a denominator for Australian leakage without verified Australian receipts and export value methodology."
+    }
+  }
+}

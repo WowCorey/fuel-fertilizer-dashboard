@@ -1,17 +1,28 @@
-// Header.jsx — shared masthead across all four dashboards.
+// Header.jsx - shared masthead across dashboard pages.
 // Cross-links to sibling dashboards so every page has the same nav.
 function Header({ active = 'fuel', updated = '' }) {
   const nav = [
+    { id: 'national_status', label: 'National status',      href: '../national-status-dashboard/index.html' },
+    { id: 'fuel_security',   label: 'National fuel security', href: '../fuel-security-dashboard/index.html' },
+    { id: 'resource_value',  label: 'Resource value',       href: '../resource-value-dashboard/index.html' },
+    { id: 'state_contribution', label: 'State ledger', href: '../state-contribution-dashboard/index.html' },
+    { id: 'strategic_resources', label: 'Strategic resources', href: '../strategic-resources-dashboard/index.html' },
+    { id: 'defence_posture', label: 'Defence posture', href: '../defence-alliances-dashboard/index.html' },
     { id: 'fuel',          label: 'Fuel',                  href: '../fuel-dashboard/index.html' },
-    { id: 'fertilizer',    label: 'Fertilizer',            href: '../fertilizer-dashboard/index.html' },
+    { id: 'fertilizer',    label: 'Food & farms',          href: '../fertilizer-dashboard/index.html' },
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },
     { id: 'who_pays_what', label: 'Who pays what',         href: '../who-pays-what/index.html' },
+    { id: 'au_economics',  label: 'AU economics',          href: '../au-economics-dashboard/index.html' },
+    { id: 'manufacturing', label: 'Manufacturing',         href: '../manufacturing-dashboard/index.html' },
+    { id: 'power_grid',    label: 'Power grid',            href: '../power-grid-dashboard/index.html' },
+    { id: 'infrastructure',label: 'Infrastructure',        href: '../infrastructure-dashboard/index.html' },
+    { id: 'employment_automation', label: 'Employment & Automation', href: '../employment-automation-dashboard/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];
   return (
     <header className="site-header">
       <div className="site-header__inner">
-        <a href="../fuel-dashboard/index.html" className="brand" aria-label="Fuel Resilience AU — home">
+        <a href="../../index.html" className="brand" aria-label="Fuel Resilience AU home">
           <span className="brand__name">Fuel Resilience AU</span>
         </a>
         <nav className="site-nav" aria-label="Primary">
@@ -31,7 +42,7 @@ function Header({ active = 'fuel', updated = '' }) {
   );
 }
 
-// Shared icon set — Lucide-style, 1.5px stroke, currentColor.
+// Shared icon set - Lucide-style, 1.5px stroke, currentColor.
 function Icon({ name, size = 20 }) {
   const paths = {
     download: <path d="M12 5v14M5 12l7 7 7-7"/>,

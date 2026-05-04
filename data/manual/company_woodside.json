@@ -2,13 +2,59 @@
   "series_id": "company_woodside",
   "source_id": "company_woodside",
   "source_name": "Woodside Energy annual report (ASX:WDS)",
-  "source_url": "https://www.woodside.com/investors/reports-investor-briefings",
+  "source_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
   "unit": "",
-  "retrieved_at": null,
-  "stub_created_at": "2026-04-18T12:27:44+00:00",
-  "last_data_point": null,
+  "retrieved_at": "2026-04-22T12:20:02+00:00",
+  "last_data_point": "2025-12-31",
   "values": [],
-  "notes": "Awaiting hand-keyed values from the named public source. Populate this file with figures copied directly from the publisher's latest report, keep 'manual_entry' set to true, set 'retrieved_at' to the data-entry timestamp, and set 'status' to 'ok'.",
-  "status": "unavailable",
-  "manual_entry": true
+  "notes": "ATO 2023-24 Corporate Report of Entity Tax Information workbook for tax fields. Net profit copied from Woodside Energy Annual Report 2025 Appendix 4E. Amount is reported in US$m and is not converted to A$m.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Company copyright",
+  "citation": "Woodside Energy annual report.",
+  "extra": {
+    "schema": "manual_extra_fields.v1",
+    "fields": {
+      "fiscal_year": "2023-24",
+      "ato_entity_name": "WOODSIDE ENERGY GROUP LTD",
+      "abn": 55004898962,
+      "total_income": 19834.595,
+      "taxable_income": 7517.012,
+      "income_tax_paid": 1720.802,
+      "net_profit": 2718,
+      "net_profit_unit": "US$m",
+      "net_profit_period_end": "2025-12-31",
+      "net_profit_basis": "net profit for the period attributable to members",
+      "prrt_paid": 795.511511,
+      "prrt_subsidiaries": [
+        {
+          "entity": "WOODSIDE BURRUP PTY. LTD.",
+          "abn": "20120237416",
+          "paid_aud": 150896061
+        },
+        {
+          "entity": "WOODSIDE ENERGY (AUSTRALIA) PTY LTD",
+          "abn": "39006923879",
+          "paid_aud": 113183482
+        },
+        {
+          "entity": "WOODSIDE ENERGY (BASS STRAIT) PTY LTD",
+          "abn": "29004228004",
+          "paid_aud": 390477620
+        },
+        {
+          "entity": "WOODSIDE ENERGY JULIMAR PTY LTD",
+          "abn": "56130391365",
+          "paid_aud": 38447922
+        },
+        {
+          "entity": "WOODSIDE ENERGY LTD.",
+          "abn": "63005482986",
+          "paid_aud": 102506426
+        }
+      ],
+      "prrt_source_year": "2023-24",
+      "prrt_source": "ATO 2023-24 Corporate Report of Entity Tax Information, PRRT details sheet"
+    }
+  }
 }

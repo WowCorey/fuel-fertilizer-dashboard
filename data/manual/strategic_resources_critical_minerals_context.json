@@ -1,0 +1,40 @@
+{
+  "series_id": "strategic_resources_critical_minerals_context",
+  "source_id": "strategic_resources_critical_minerals_context",
+  "source_name": "Australian critical minerals and strategic materials context",
+  "source_url": "https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list",
+  "unit": "policy context",
+  "retrieved_at": "2026-04-28T13:40:38+00:00",
+  "last_data_point": "2026-04-28",
+  "values": [
+    {
+      "t": "2026-04-28",
+      "v": 2
+    }
+  ],
+  "notes": "Manual qualitative context from DISR critical minerals and strategic materials pages. This envelope supports strategic-role framing only; it does not provide production, export or reserve metrics.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Commonwealth copyright; DISR copyright terms apply",
+  "citation": "Department of Industry, Science and Resources, Australia's Critical Minerals List and Strategic Materials List; Critical minerals sector page; Critical Minerals Strategic Reserve page.",
+  "extra": {
+    "schema": "strategic_resources_critical_minerals_context.v1",
+    "fields": {
+      "critical_minerals_list_updated": "2024-02-20",
+      "strategic_materials": ["aluminium", "copper", "phosphorus", "tin", "zinc"],
+      "uses_supported_by_source": [
+        "transition to net zero emissions",
+        "advanced manufacturing",
+        "defence technologies and capabilities",
+        "broader strategic applications"
+      ],
+      "cmsr_initial_subset": [
+        "antimony",
+        "gallium",
+        "light rare earth elements, particularly neodymium and praseodymium",
+        "heavy rare earth elements, particularly dysprosium and terbium"
+      ],
+      "boundary": "Use this source for strategic-role labels only. Do not infer production, exports or reserves from policy wording."
+    }
+  }
+}

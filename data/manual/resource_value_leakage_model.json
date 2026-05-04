@@ -1,0 +1,14 @@
+{
+  "series_id": "resource_value_leakage_model",
+  "source_id": "resource_value_leakage_model",
+  "source_name": "Resource value leakage model placeholder",
+  "source_url": "https://github.com/WowCorey/fuel-fertilizer-dashboard",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-04-21T18:31:04Z",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No leakage estimate is published yet. A supported estimate needs verified export values, PRRT and royalty receipts, company profits, domestic price comparisons and a documented method.",
+  "status": "unavailable",
+  "manual_entry": true
+}

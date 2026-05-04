@@ -15,8 +15,14 @@ function Footer({ updated = '' }) {
         <div className="site-footer__col">
           <span className="eyebrow">Dashboards</span>
           <ul>
+            <li><a href="../national-status-dashboard/index.html">National status</a></li>
+            <li><a href="../fuel-security-dashboard/index.html">National fuel security</a></li>
+            <li><a href="../resource-value-dashboard/index.html">Resource value</a></li>
+            <li><a href="../state-contribution-dashboard/index.html">State ledger</a></li>
+            <li><a href="../strategic-resources-dashboard/index.html">Strategic resources</a></li>
+            <li><a href="../defence-alliances-dashboard/index.html">Defence posture</a></li>
             <li><a href="../fuel-dashboard/index.html">Fuel</a></li>
-            <li><a href="../fertilizer-dashboard/index.html">Fertilizer</a></li>
+            <li><a href="../fertilizer-dashboard/index.html">Food &amp; farms</a></li>
             <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>
             <li><a href="../who-pays-what/index.html">Who pays what</a></li>
           </ul>

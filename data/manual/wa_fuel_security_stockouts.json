@@ -1,0 +1,37 @@
+{
+  "series_id": "wa_fuel_security_stockouts",
+  "source_id": "wa_fuel_security_stockouts",
+  "source_name": "WA Government weekly fuel update - statewide stockouts",
+  "source_url": "https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update",
+  "unit": "sites",
+  "retrieved_at": "2026-04-23T07:03:37Z",
+  "last_data_point": "2026-04-17",
+  "values": [
+    {
+      "t": "2026-04-17",
+      "v": 10
+    }
+  ],
+  "notes": "Hand-keyed from the WA Government Weekly Fuel Update summary dated 17 April 2026. The summary reports 10 stockouts out of 771 WA petrol stations statewide. This is WA-only dated partial coverage, not a live national outage feed.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Government of Western Australia copyright; WA.gov.au terms of use apply",
+  "citation": "Government of Western Australia, WA Government Weekly Fuel Update.",
+  "extra": {
+    "schema": "wa_fuel_security_stockouts.v1",
+    "fields": {
+      "jurisdiction": "WA",
+      "source_update_date": "2026-04-17",
+      "stockouts": 10,
+      "stations_statewide": 771,
+      "coverage": "Western Australia statewide petrol stations",
+      "coverage_class": "partial_state_snapshot",
+      "not_covered": [
+        "station-level live availability",
+        "fuel-product split",
+        "national stock-out total"
+      ],
+      "source_wording": "Yesterday, WA petrol stations reported a total of 10 stockouts out of 771 stations statewide."
+    }
+  }
+}
