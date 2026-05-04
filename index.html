@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fuel Resilience AU</title>
-<meta name="description" content="Static dashboard hub for Australian fuel, fertiliser, oil production, strategic resources, defence posture, national status and resource-value source envelopes.">
+<meta name="description" content="Static dashboard hub for Australian fuel, food, farms, water, oil production, strategic resources, defence posture, national status and resource-value source envelopes.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="colors_and_type.css">
 <link rel="stylesheet" href="ui_kits/shared/styles.css">
@@ -178,13 +178,14 @@
         <a href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
         <a href="ui_kits/defence-alliances-dashboard/index.html">Defence posture</a>
         <a href="ui_kits/fuel-dashboard/index.html">Fuel</a>
-        <a href="ui_kits/fertilizer-dashboard/index.html">Fertilizer</a>
+        <a href="ui_kits/fertilizer-dashboard/index.html">Food &amp; farms</a>
         <a href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
         <a href="ui_kits/who-pays-what/index.html">Who pays what</a>
         <a href="ui_kits/au-economics-dashboard/index.html">AU economics</a>
         <a href="ui_kits/manufacturing-dashboard/index.html">Manufacturing</a>
         <a href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
         <a href="ui_kits/infrastructure-dashboard/index.html">Infrastructure</a>
+        <a href="ui_kits/employment-automation-dashboard/index.html">Employment &amp; Automation</a>
       </nav>
     </div>
   </header>
@@ -193,13 +194,13 @@
     <section class="home-hero" aria-labelledby="home-title">
       <div>
         <span class="eyebrow">Public source dashboard</span>
-        <h1 id="home-title">Australia's fuel and fertiliser data, without estimates.</h1>
+        <h1 id="home-title">Australia's fuel, food and resilience data, without estimates.</h1>
           <p class="home-hero__lede">
-            This static site collects source-linked dashboard pages for liquid fuel, fertiliser,
-            oil production, national fuel security, national fuel status, resource value, state petroleum ledger, strategic resources, defence posture and retail-price breakdowns.
+            This static site collects source-linked dashboard pages for liquid fuel, food and farm inputs,
+            water pressure, oil production, national fuel security, national fuel status, resource value, state petroleum ledger, strategic resources, defence posture and retail-price breakdowns.
             Values appear only when they flow through a verified JSON envelope; unavailable
             values remain visible as placeholders.
-            The National Fuel Security page is the direct fuel-dashboard prototype; the wider site expands the same public-source method across energy, resources, food inputs, infrastructure and national resilience.
+            The National Fuel Security page is the direct fuel-dashboard prototype; the Food, farms &amp; water security page extends the same public-source method into food-system resilience.
         </p>
         <div class="home-badge-row">
           <span class="refresh-badge" id="refresh-badge">Programmatic refresh: no successful refresh recorded</span>
@@ -269,10 +270,10 @@
           <div class="home-card__status">Status: ABS imports, APS cover, AIP TGP and ULP 91, diesel, premium 95 and E10 public-feed retail averages live; AIP national retail reports remain manual.</div>
         </article>
         <article class="home-card">
-          <h3>Fertilizer</h3>
-          <p>Fertiliser import value, supplier concentration, nutrient subseries and price-index slots.</p>
-          <a class="home-card__link" href="ui_kits/fertilizer-dashboard/index.html">Open fertiliser dashboard</a>
-          <div class="home-card__status">Status: ABS total fertiliser imports and source-country concentration live; nutrient, ABARES price and stock-cover slots remain manual or unavailable.</div>
+          <h3>Food, farms &amp; water security</h3>
+          <p>Public-source view of food-system signals: fertiliser imports, farm-input exposure, agricultural production and trade source gates, water pressure and missing public feeds.</p>
+          <a class="home-card__link" href="ui_kits/fertilizer-dashboard/index.html">Open food and farms dashboard</a>
+          <div class="home-card__status">Status: ABS total fertiliser imports and source-country concentration are loaded; food imports, agricultural production/export rows, nutrient subseries, ABARES price/stock-cover and water-pressure datasets remain unavailable until source-safe values are wired.</div>
         </article>
         <article class="home-card">
           <h3>Oil &amp; production</h3>
@@ -309,6 +310,12 @@
           <p>Population vs housing, public transport, airports, freight, NBN speeds and the major-project pipeline.</p>
           <a class="home-card__link" href="ui_kits/infrastructure-dashboard/index.html">Open infrastructure dashboard</a>
           <div class="home-card__status">Status: ABS quarterly population, year-on-year growth and residential dwelling stock wired programmatically; NHSAC housing target, BITRE public transport / airports / freight, ACCC NBN speeds and Infrastructure Australia priority list remain manual until each named publication is verified. Australian data centre capacity stays intentionally unavailable - no canonical public register exists.</div>
+        </article>
+        <article class="home-card">
+          <h3>Employment &amp; Automation</h3>
+          <p>Australian labour-market change since the AI rollout era - unemployment, participation, employment-to-population, job vacancies and wages, with an explicit "no AI causation" rule.</p>
+          <a class="home-card__link" href="ui_kits/employment-automation-dashboard/index.html">Open employment dashboard</a>
+          <div class="home-card__status">Status: ABS unemployment, participation, employment-to-population, job vacancies and Wage Price Index wired programmatically from the ABS Data API; underemployment rate and monthly hours worked stay on manual until verified key combinations or hand-keyed workbook values are loaded. AI rollout timeline is context-only with named publisher events; Australian automation/AI exposure stays intentionally unavailable - no source-safe Australian dataset has been identified, and the page does not assert AI causation.</div>
         </article>
       </div>
     </section>

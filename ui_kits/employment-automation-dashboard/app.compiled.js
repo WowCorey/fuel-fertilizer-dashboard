@@ -941,326 +941,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['defence_posture_profiles', 'defence_budget_2026_nds', 'defence_workforce_annual_report_2024_25', 'defence_public_capability_assets', 'defence_alliance_frameworks', 'defence_sovereign_industry_context', 'defence_uncrewed_systems', 'defence_readiness_gap'];
-function fields(env) {
-  return env?.extra?.fields || {};
-}
-function hasRows(env) {
-  return env && env.status === 'ok' && env.extra?.fields;
-}
-function trustKind(label) {
-  const text = String(label || '').toLowerCase();
-  if (text.includes('unavailable')) return 'unavailable';
-  if (text.includes('partial')) return 'partial';
-  if (text.includes('derived')) return 'derived';
-  if (text.includes('manual')) return 'manual';
-  if (text.includes('stale')) return 'stale';
-  return 'observed';
-}
-function sourceLineFor(data, sourceId) {
-  const env = data?.[sourceId];
-  return env ? window.FR.sourceLine(env) : `Source id not loaded: ${sourceId}.`;
-}
-function SourceAnchor({
-  href,
-  children
-}) {
-  if (!href) return React.createElement("span", null, children || 'No source URL loaded');
-  return React.createElement("a", {
-    href: href
-  }, children || href.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  }));
-}
-function MetricStatus({
-  label
-}) {
-  return React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: trustKind(label)
-  }, label || 'Observed'));
-}
-function ProfileCard({
-  item,
-  data
-}) {
-  return React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, item.title), React.createElement(MetricStatus, {
-    label: item.trust_label
-  })), React.createElement("p", {
-    className: "body-sm"
-  }, item.text), React.createElement("p", {
-    className: "caption mono"
-  }, sourceLineFor(data, item.source_id)));
-}
-function BudgetMetricCard({
-  metric,
-  data
-}) {
-  const unavailable = metric.source_coverage_label === 'Unavailable';
-  return React.createElement("article", {
-    className: `metric-card ${unavailable ? 'metric-card--unavailable' : ''}`
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("span", {
-    className: "eyebrow"
-  }, metric.category), React.createElement(MetricStatus, {
-    label: metric.trust_label
-  })), React.createElement("h3", {
-    className: "metric-card__label"
-  }, metric.metric_name), React.createElement("p", {
-    className: "metric-card__plain"
-  }, metric.notes), unavailable ? React.createElement("div", {
-    className: "metric-card__unavail"
-  }, React.createElement(Icon, {
-    name: "alert",
-    size: 18
-  }), React.createElement("span", null, metric.metric_display)) : React.createElement("div", {
-    className: "metric-card__row"
-  }, React.createElement("span", {
-    className: "metric-numeral"
-  }, metric.metric_display)), React.createElement("footer", {
-    className: "metric-card__foot"
-  }, React.createElement("span", {
-    className: "metric-card__source"
-  }, metric.metric_period, ". ", sourceLineFor(data, metric.source_id))));
-}
-function BudgetTable({
-  rows,
-  data
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Metric"), React.createElement("th", null, "Period"), React.createElement("th", null, "Value"), React.createElement("th", null, "Type"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.metric_id
-  }, React.createElement("td", null, React.createElement("b", null, row.metric_name), React.createElement("br", null), React.createElement("span", {
-    className: "caption mono"
-  }, row.metric_id)), React.createElement("td", null, row.metric_period), React.createElement("td", {
-    className: row.source_coverage_label === 'Unavailable' ? 'unavail' : ''
-  }, row.metric_display), React.createElement("td", null, row.category), React.createElement("td", null, React.createElement(MetricStatus, {
-    label: row.trust_label
-  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
-    className: "caption mono"
-  }, sourceLineFor(data, row.source_id))))))));
-}
-function ForceStructureTable({
-  rows,
-  data
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Row"), React.createElement("th", null, "Type"), React.createElement("th", null, "What the public source supports"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.name
-  }, React.createElement("td", null, React.createElement("b", null, row.name)), React.createElement("td", null, row.type), React.createElement("td", null, row.summary, React.createElement("br", null), React.createElement(SourceAnchor, {
-    href: row.source_url
-  })), React.createElement("td", null, React.createElement(MetricStatus, {
-    label: row.trust_label
-  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
-    className: "caption mono"
-  }, sourceLineFor(data, row.source_id))))))));
-}
-function CapabilitySection({
-  rows
-}) {
-  const groups = ['Navy', 'Air Force', 'Army', 'Joint'];
-  return React.createElement("div", {
-    className: "sources-grid"
-  }, groups.map(branch => {
-    const branchRows = rows.filter(row => row.branch === branch);
-    if (!branchRows.length) return null;
-    return React.createElement("article", {
-      className: "source-card",
-      key: branch
-    }, React.createElement("div", {
-      className: "card-status-row"
-    }, React.createElement("h4", null, branch), React.createElement(TrustBadge, {
-      kind: branch === 'Joint' ? 'unavailable' : 'partial'
-    }, branch === 'Joint' ? 'Unavailable' : 'Partial coverage')), React.createElement("div", {
-      className: "data-table-wrap"
-    }, React.createElement("table", {
-      className: "data-table"
-    }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Capability"), React.createElement("th", null, "Public row"), React.createElement("th", null, "Status"))), React.createElement("tbody", null, branchRows.map(row => React.createElement("tr", {
-      key: row.capability_id
-    }, React.createElement("td", null, React.createElement("b", null, row.capability_name), React.createElement("br", null), React.createElement("span", {
-      className: "caption"
-    }, row.capability_type)), React.createElement("td", {
-      className: row.trust_label === 'Unavailable' ? 'unavail' : ''
-    }, row.quantity_or_status, React.createElement("br", null), React.createElement("span", {
-      className: "caption"
-    }, row.notes), React.createElement("br", null), React.createElement(SourceAnchor, {
-      href: row.source_url
-    })), React.createElement("td", null, React.createElement(MetricStatus, {
-      label: row.trust_label
-    }))))))));
-  }));
-}
-function AllianceSection({
-  frameworks
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Framework"), React.createElement("th", null, "Type"), React.createElement("th", null, "Members"), React.createElement("th", null, "Public status"), React.createElement("th", null, "Purpose"), React.createElement("th", null, "Trust"))), React.createElement("tbody", null, frameworks.map(row => React.createElement("tr", {
-    key: row.framework_id
-  }, React.createElement("td", null, React.createElement("b", null, row.framework_name), React.createElement("br", null), React.createElement(SourceAnchor, {
-    href: row.source_url
-  })), React.createElement("td", null, row.framework_type), React.createElement("td", null, row.member_countries.join(', ')), React.createElement("td", null, row.formal_status), React.createElement("td", null, row.purpose_summary, React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.notes)), React.createElement("td", null, React.createElement(MetricStatus, {
-    label: row.trust_label
-  })))))));
-}
-function UncrewedSystemsTable({
-  rows,
-  data
-}) {
-  if (!rows.length) return null;
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "System"), React.createElement("th", null, "Domain"), React.createElement("th", null, "Public status"), React.createElement("th", null, "Operator / program"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.system_id
-  }, React.createElement("td", null, React.createElement("b", null, row.system_name), React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.capability_type)), React.createElement("td", null, row.domain), React.createElement("td", null, row.public_status, React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.quantity_or_status), React.createElement("br", null), React.createElement(SourceAnchor, {
-    href: row.source_url
-  })), React.createElement("td", null, row.operator_or_program), React.createElement("td", null, React.createElement(MetricStatus, {
-    label: row.trust_label
-  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
-    className: "caption mono"
-  }, sourceLineFor(data, row.source_id))))))));
-}
-function UncrewedProgramsTable({
-  rows,
-  data
-}) {
-  if (!rows.length) return null;
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Program"), React.createElement("th", null, "Type"), React.createElement("th", null, "Public headline"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.program_id
-  }, React.createElement("td", null, React.createElement("b", null, row.program_name), React.createElement("br", null), React.createElement(SourceAnchor, {
-    href: row.source_url
-  })), React.createElement("td", null, row.program_type), React.createElement("td", null, row.headline), React.createElement("td", null, React.createElement(MetricStatus, {
-    label: row.trust_label
-  })), React.createElement("td", null, row.notes, React.createElement("br", null), React.createElement("span", {
-    className: "caption mono"
-  }, sourceLineFor(data, row.source_id))))))));
-}
-function UncrewedFundingTable({
-  rows,
-  data
-}) {
-  if (!rows.length) return null;
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Funding row"), React.createElement("th", null, "Status"), React.createElement("th", null, "Value"), React.createElement("th", null, "Period"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.funding_id
-  }, React.createElement("td", null, React.createElement("b", null, row.program_name), React.createElement("br", null), React.createElement(SourceAnchor, {
-    href: row.source_url
-  })), React.createElement("td", null, React.createElement(MetricStatus, {
-    label: row.trust_label
-  })), React.createElement("td", {
-    className: row.funding_status === 'Unavailable' ? 'unavail' : ''
-  }, row.funding_value == null ? 'Not separately published' : `${row.funding_value} ${row.funding_unit || ''}`.trim()), React.createElement("td", null, row.funding_period || '—'), React.createElement("td", null, row.boundary_note, React.createElement("br", null), React.createElement("span", {
-    className: "caption mono"
-  }, sourceLineFor(data, row.source_id))))))));
-}
-function IndustrySection({
-  fields
-}) {
-  const programRows = fields.program_rows || [];
-  return React.createElement("div", null, React.createElement("div", {
-    className: "sources-grid"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, "Sovereign Defence Industrial Priorities"), React.createElement(TrustBadge, {
-    kind: "observed"
-  }, "Observed")), React.createElement("p", {
-    className: "body-sm"
-  }, "Defence lists ", fields.sdip_count, " Sovereign Defence Industrial Priorities. The page treats them as industrial capability categories, not readiness."), React.createElement("ul", {
-    className: "gap-list"
-  }, (fields.sdip_priorities || []).map(item => React.createElement("li", {
-    key: item
-  }, item)))), programRows.map(row => React.createElement("article", {
-    className: "source-card",
-    key: row.program_id
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, row.name), React.createElement(MetricStatus, {
-    label: row.trust_label
-  })), React.createElement("p", {
-    className: "body-sm"
-  }, row.headline), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Boundary:"), " ", row.boundary), React.createElement(SourceAnchor, {
-    href: row.source_url
-  })))), React.createElement("p", {
-    className: "caption"
-  }, fields.boundary));
-}
-function CoverageTable({
-  rows
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Section"), React.createElement("th", null, "Coverage"), React.createElement("th", null, "What that means"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.section
-  }, React.createElement("td", null, React.createElement("b", null, row.section)), React.createElement("td", null, React.createElement(MetricStatus, {
-    label: row.coverage
-  })), React.createElement("td", null, row.notes))))));
-}
-function SourceSummary({
-  id,
-  env,
-  partial = false
-}) {
-  const meta = env?._meta || {};
-  const ok = env?.status === 'ok';
-  return React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, env?.source_name || id), React.createElement(EnvTrustBadges, {
-    env: env,
-    partial: partial
-  })), React.createElement("p", {
-    className: "body-sm"
-  }, ok ? `Verified envelope. ${env.values?.length || 0} headline point${env.values?.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'source period listed in notes'}.` : 'Source gate intentionally unavailable until a public, source-safe field exists.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), meta.rights && React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.notes && React.createElement("p", {
-    className: "caption"
-  }, env.notes), env?.source_url && React.createElement(SourceAnchor, {
-    href: env.source_url
-  }));
-}
+const SERIES = ['abs_unemployment_rate', 'abs_underemployment_rate', 'abs_participation_rate', 'abs_employment_population_ratio', 'abs_hours_worked', 'abs_job_vacancies', 'abs_wage_price_index', 'ai_rollout_timeline_context', 'automation_exposure_context'];
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -1270,49 +951,36 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "defence_posture"
+      active: "employment_automation"
     }), React.createElement("main", {
       id: "main"
     }, React.createElement("div", {
       className: "loading-wrap"
     }, "Loading source envelopes...")));
   }
-  const profile = fields(data.defence_posture_profiles);
-  const budget = profile.budget_metrics || [];
-  const forceStructure = profile.force_structure || [];
-  const capabilityRows = fields(data.defence_public_capability_assets).capability_rows || [];
-  const frameworks = fields(data.defence_alliance_frameworks).frameworks || [];
-  const industry = fields(data.defence_sovereign_industry_context);
-  const uncrewed = fields(data.defence_uncrewed_systems);
-  const uncrewedSystems = uncrewed.systems_rows || [];
-  const uncrewedPrograms = uncrewed.program_rows || [];
-  const uncrewedFunding = uncrewed.funding_rows || [];
-  const uncrewedCaveats = uncrewed.methodology_caveats || [];
-  const takeaways = hasRows(data.defence_posture_profiles) ? profile.takeaways || [] : [];
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const strongCoverage = (profile.section_coverage || []).filter(row => row.coverage === 'Strong coverage').length;
-  const partialCoverage = (profile.section_coverage || []).filter(row => String(row.coverage).includes('Partial')).length;
-  const unavailableCoverage = (profile.section_coverage || []).filter(row => String(row.coverage).includes('Unavailable')).length;
+  const aiTimelineFields = data.ai_rollout_timeline_context?.extra?.fields || {};
+  const aiEvents = aiTimelineFields.events || [];
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "defence_posture",
+    active: "employment_automation",
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "defence-posture"
+    id: "employment-automation"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Defence, alliances and strategic posture"), React.createElement("h1", {
+  }, "Employment & Automation \xB7 v0.5"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's defence posture, in plain English."), React.createElement("p", {
+  }, "Australia's labour market during the AI rollout era."), React.createElement("p", {
     className: "intro__lede"
-  }, "This page puts public defence spending, selected ADF capability rows, force-structure context, alliances, strategic frameworks and sovereign industry in one place. It does not publish secret, live or readiness-sensitive data.")), React.createElement("aside", {
+  }, "This page tracks Australian labour-market change since around the public AI rollout era (ChatGPT public launch, late 2022) using official ABS labour-market series. It does ", React.createElement("b", null, "not"), " claim AI caused these movements. Timing is context, not causation.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1321,244 +989,241 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "Budget, public assets, alliances and readiness are separate fields."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "Labour-market data is observed. AI-causation claims are not made."))), React.createElement(DataCoverage, {
     data: data
   }), React.createElement("section", {
-    className: "section section--why"
+    className: "section section--why",
+    "aria-labelledby": "why"
   }, React.createElement("div", {
     className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
   }, "Read this first"), React.createElement("h2", {
+    id: "why",
     style: {
       marginTop: 8
     }
-  }, "What this page measures")), React.createElement("div", {
+  }, "What this page measures and what it does not")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Defence capability and alliances are shown together because Australia's posture depends on both public force structure and formal or practical international arrangements. The page keeps those concepts separate instead of turning them into one score."), React.createElement("p", null, "Budget rows describe money and planned expenditure. Capability rows describe selected public counts or acquisition statuses. Alliance rows describe framework type and purpose. No readiness, mission-capable or live operational availability metric is loaded."), React.createElement("p", null, "The page avoids secret, live and operationally sensitive data. It also avoids \"Australia can beat X\" framing and does not rank adversaries or predict conflict outcomes.")))), takeaways.length > 0 && React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "takeaway-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "If you only read one thing"), React.createElement("h2", {
-    id: "takeaway-h"
-  }, "Loaded source takeaways"))), React.createElement("div", {
-    className: "sources-grid"
-  }, takeaways.map(item => React.createElement(ProfileCard, {
-    key: item.title,
-    item: item,
-    data: data
-  })))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "budget-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Defence spending"), React.createElement("h2", {
-    id: "budget-h"
-  }, "Budget rows stay money rows"), React.createElement("p", {
-    className: "section__lede"
-  }, "The strongest current coverage is the public 2026 National Defence Strategy budget factsheet. Spending as share of GDP is left unavailable until a source-safe official row or denominator is loaded."))), React.createElement("div", {
-    className: "metric-grid"
-  }, budget.slice(0, 3).map(metric => React.createElement(BudgetMetricCard, {
-    key: metric.metric_id,
-    metric: metric,
-    data: data
-  }))), React.createElement("div", {
+  }, React.createElement("p", null, "This page shows two separate things side by side: (1) official Australian labour-market indicators from the ABS, and (2) a contextual timeline of public AI-product rollout milestones. The two are not joined by a causal claim."), React.createElement("p", null, "There is no current Australian government dataset of automation/AI labour-market exposure that is source-safe to publish without estimation. International \"occupational exposure\" studies cannot be silently mapped to Australian rows because their methodology and concept boundaries differ. Where a clean row does not exist, this page leaves it unavailable rather than guessing."), React.createElement("p", {
+    className: "body-sm",
     style: {
-      height: 24
+      color: 'var(--ink-3)',
+      marginTop: 12
     }
-  }), React.createElement(BudgetTable, {
-    rows: budget,
-    data: data
-  })), React.createElement("section", {
+  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " WPI"), " = Wage Price Index.", React.createElement("b", null, " SA"), " = Seasonally Adjusted.", React.createElement("b", null, " DISR"), " = Department of Industry, Science and Resources.", React.createElement("b", null, " DEWR"), " = Department of Employment and Workplace Relations.")))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "force-h"
+    "aria-labelledby": "metrics-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Force structure"), React.createElement("h2", {
-    id: "force-h"
-  }, "Public structure and workforce context"), React.createElement("p", {
+  }, "Headline labour-market numbers"), React.createElement("h2", {
+    id: "metrics-h"
+  }, "As of the latest ABS publication"), React.createElement("p", {
     className: "section__lede"
-  }, "These rows explain high-level public structure and workforce reporting. They are not deployable strength or readiness rows."))), React.createElement(ForceStructureTable, {
-    rows: forceStructure,
-    data: data
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "capability-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Capabilities and assets"), React.createElement("h2", {
-    id: "capability-h"
-  }, "Selected public capability rows"), React.createElement("p", {
-    className: "section__lede"
-  }, "The first pass loads selected official public rows across Navy, Air Force and Army. This is not a complete inventory, and it does not show readiness."))), React.createElement(CapabilitySection, {
-    rows: capabilityRows
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "uncrewed-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Uncrewed systems and counter-drone"), React.createElement("h2", {
-    id: "uncrewed-h"
-  }, "Drones, autonomous systems and counter-drone, kept separate"), React.createElement("p", {
-    className: "section__lede"
-  }, uncrewed.section_intro || 'Selected publicly stated uncrewed-systems rows. In-service, acquisition, development, sovereign program and counter-drone rows are kept separate. This page does not publish a complete ADF drone inventory or readiness data.'))), React.createElement(UncrewedSystemsTable, {
-    rows: uncrewedSystems,
-    data: data
-  }), uncrewedPrograms.length > 0 && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("h3", null, "Domestic / sovereign programs and strategy context"), React.createElement(UncrewedProgramsTable, {
-    rows: uncrewedPrograms,
-    data: data
-  })), uncrewedFunding.length > 0 && React.createElement(React.Fragment, null, React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("h3", null, "Funding boundaries"), React.createElement(UncrewedFundingTable, {
-    rows: uncrewedFunding,
-    data: data
-  })), uncrewedCaveats.length > 0 && React.createElement("p", {
-    className: "caption",
-    style: {
-      marginTop: 16
-    }
-  }, React.createElement("b", null, "Boundary:"), " ", uncrewed.boundary || '', ' ', uncrewedCaveats.join(' '))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "industry-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Sovereign capability and industry"), React.createElement("h2", {
-    id: "industry-h"
-  }, "Official industrial resilience context"), React.createElement("p", {
-    className: "section__lede"
-  }, "These rows show public program and industrial-priority context. They do not publish private supply-chain depth, stockpile adequacy or classified facilities."))), React.createElement(IndustrySection, {
-    fields: industry
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "alliances-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Alliances and strategic commitments"), React.createElement("h2", {
-    id: "alliances-h"
-  }, "Treaties, partnerships and forums are separate"), React.createElement("p", {
-    className: "section__lede"
-  }, "ANZUS, AUKUS, Five Eyes, Quad and AUSMIN are deliberately not collapsed into one alliance blob. Quad is shown as a diplomatic partnership, not a formal alliance."))), React.createElement(AllianceSection, {
-    frameworks: frameworks
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "coverage-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Coverage result"), React.createElement("h2", {
-    id: "coverage-h"
-  }, "Strong, partial and unavailable areas"), React.createElement("p", {
-    className: "section__lede"
-  }, "The page is useful where official public sources are strong, and explicit where public coverage is partial or blocked."))), React.createElement("div", {
-    className: "metric-grid metric-grid--3"
+  }, "Cards marked \"Source unavailable\" are waiting on a verified key combination from the named ABS dataflow. We do not estimate."))), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
-    eyebrow: "Coverage",
-    label: "Strong sections",
-    value: `${strongCoverage}`,
-    plain: "Budget and alliance/framework rows have the clearest first-pass coverage.",
-    source: "Computed from section_coverage labels in the compiled defence posture envelope."
+    eyebrow: "Unemployment",
+    label: "Unemployment rate",
+    plain: "Headline national monthly seasonally adjusted unemployment rate, ABS LF dataflow MEASURE M13.",
+    fromEnvelope: data.abs_unemployment_rate,
+    unit: "%",
+    highlight: true
   }), React.createElement(MetricCard, {
-    eyebrow: "Coverage",
-    label: "Partial sections",
-    value: `${partialCoverage}`,
-    plain: "Force structure, selected capabilities and industry context have useful but incomplete public coverage.",
-    source: "Computed from explicit section coverage labels."
+    eyebrow: "Underemployment",
+    label: "Underemployment rate",
+    plain: "Underemployment rate (proportion of labour force), ABS LF dataflow MEASURE M23. Manual stub: the standard headline key combination returned 404 in initial probing; awaiting verified key or hand-keyed workbook value.",
+    fromEnvelope: data.abs_underemployment_rate,
+    unit: "%"
   }), React.createElement(MetricCard, {
-    eyebrow: "Coverage",
-    label: "Unavailable sections",
-    value: `${unavailableCoverage}`,
-    plain: "Readiness and live posture fields are intentionally unavailable.",
-    source: "No readiness source envelope carries display values."
+    eyebrow: "Participation",
+    label: "Participation rate",
+    plain: "Headline national monthly seasonally adjusted participation rate, ABS LF dataflow MEASURE M12.",
+    fromEnvelope: data.abs_participation_rate,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Employment intensity",
+    label: "Employment-to-population ratio",
+    plain: "Share of the working-age population that is employed, seasonally adjusted, ABS LF dataflow MEASURE M16.",
+    fromEnvelope: data.abs_employment_population_ratio,
+    unit: "%"
+  })), React.createElement("div", {
+    style: {
+      height: 16
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Hours",
+    label: "Monthly hours worked in all jobs",
+    plain: "Total monthly hours worked in all jobs, ABS LF dataflow. Manual stub: the standard headline key combination returned 404 in initial probing; awaiting verified key or hand-keyed workbook value.",
+    fromEnvelope: data.abs_hours_worked,
+    unit: " hours"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Demand",
+    label: "Job vacancies",
+    plain: "Total job vacancies across all industries, private and public sectors, seasonally adjusted, ABS Job Vacancies Australia (Cat. 6354.0), quarterly.",
+    fromEnvelope: data.abs_job_vacancies,
+    unit: " thousand vacancies"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Wages",
+    label: "Wage Price Index, year-on-year",
+    plain: "Annual percentage change in the ABS Wage Price Index (total hourly rates excluding bonuses, all sectors, all industries, SA), Cat. 6345.0, quarterly.",
+    fromEnvelope: data.abs_wage_price_index,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Automation exposure",
+    label: "Australian automation/AI exposure",
+    plain: "No source-safe Australian official dataset of automation or AI exposure by occupation or industry has been identified. International methodologies cannot be silently mapped to Australian rows. Card stays unavailable.",
+    fromEnvelope: data.automation_exposure_context,
+    unit: ""
+  })), React.createElement("div", {
+    className: "pending-list",
+    "aria-label": "Source coverage"
+  }, React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("h4", null, "Source coverage"), React.createElement("p", {
+    className: "body-sm"
+  }, "Wired live from the ABS Data API: unemployment rate, participation rate, employment-to-population ratio (LF dataflow, monthly SA), job vacancies (JV dataflow, quarterly SA) and Wage Price Index annual % change (WPI dataflow, quarterly SA). Underemployment rate and monthly hours worked stay on manual because their standard headline key combinations returned 404 from the LF dataflow in initial probing; they will be promoted once a verified key or a hand-keyed workbook value is loaded. Australian automation/AI labour-market exposure stays unavailable: no source-safe official Australian dataset has been identified. The AI rollout timeline below is context, not causation.")))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "charts-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "How it's changed"), React.createElement("h2", {
+    id: "charts-h"
+  }, "Labour-market trends since 2018"), React.createElement("p", {
+    className: "section__lede"
+  }, "Charts populate from the live ABS series above. The ChatGPT public-launch month (November 2022) is shown only for time context, not as a cause."))), React.createElement("div", {
+    className: "charts-grid"
+  }, React.createElement(ChartCard, {
+    eyebrow: "Unemployment",
+    title: "Unemployment rate, monthly SA",
+    unit: "%",
+    fromEnvelope: data.abs_unemployment_rate,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#1F3A8A",
+    takeaway: "Headline national monthly seasonally adjusted unemployment rate, ABS LF dataflow MEASURE M13.",
+    yAxisLabel: "Unemployment rate (%)"
+  }), React.createElement(ChartCard, {
+    eyebrow: "Participation",
+    title: "Participation rate, monthly SA",
+    unit: "%",
+    fromEnvelope: data.abs_participation_rate,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#0F766E",
+    takeaway: "Headline national monthly seasonally adjusted participation rate, ABS LF dataflow MEASURE M12.",
+    yAxisLabel: "Participation rate (%)"
   })), React.createElement("div", {
     style: {
       height: 24
     }
-  }), React.createElement(CoverageTable, {
-    rows: profile.section_coverage || []
-  })), React.createElement("section", {
-    className: "section section--why",
-    "aria-labelledby": "method-h"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Methodology"), React.createElement("h2", {
-    id: "method-h",
+  }), React.createElement("div", {
+    className: "charts-grid"
+  }, React.createElement(ChartCard, {
+    eyebrow: "Employment intensity",
+    title: "Employment-to-population ratio, monthly SA",
+    unit: "%",
+    fromEnvelope: data.abs_employment_population_ratio,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#B45309",
+    takeaway: "Share of the working-age population that is employed, ABS LF dataflow MEASURE M16.",
+    yAxisLabel: "Employment-to-population ratio (%)"
+  }), React.createElement(ChartCard, {
+    eyebrow: "Wages",
+    title: "Wage Price Index, year-on-year",
+    unit: "%",
+    fromEnvelope: data.abs_wage_price_index,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#6B7280",
+    takeaway: "Annual percentage change in the ABS Wage Price Index, Cat. 6345.0.",
+    yAxisLabel: "WPI annual change (%)"
+  })), React.createElement("div", {
     style: {
-      marginTop: 8
+      height: 24
     }
-  }, "Why the page is fail-closed")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, "Budget, assets, force structure, alliances and sovereign industry are different evidence types. A dollar value is not a platform count, a platform count is not readiness, and a diplomatic forum is not a mutual defence treaty."), React.createElement("p", null, "Framework rows preserve formal status: treaty, intelligence partnership, security and technology partnership, diplomatic forum, or consultation process. That prevents vague alliance/treaty mixing."), React.createElement("p", null, "Readiness-sensitive and unavailable fields stay unavailable. The dashboard does not estimate mission-capable rates, stockpile depth, classified basing posture or live operational availability from public budget or asset rows."), React.createElement("ul", {
-    className: "gap-list"
-  }, (profile.methodology_caveats || []).map(item => React.createElement("li", {
-    key: item
-  }, item)))))), React.createElement("section", {
-    className: "section section--sources",
-    id: "sources",
-    "aria-labelledby": "sources-h"
+  }), React.createElement("div", {
+    className: "charts-grid charts-grid--full"
+  }, React.createElement(ChartCard, {
+    eyebrow: "Demand",
+    title: "Job vacancies, quarterly SA",
+    unit: "thousand vacancies",
+    fromEnvelope: data.abs_job_vacancies,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#1F3A8A",
+    takeaway: "Total job vacancies across all industries, private and public sectors, ABS Cat. 6354.0.",
+    yAxisLabel: "Vacancies (thousands)"
+  }))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "ai-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", {
-    id: "sources-h"
-  }, "Every source envelope used on this page"), React.createElement("p", {
+  }, "AI rollout timeline \xB7 context only"), React.createElement("h2", {
+    id: "ai-h"
+  }, "Public AI milestone events, not a causal explanation"), React.createElement("p", {
     className: "section__lede"
-  }, "Source cards show envelope status, rights and citation. Candidate or sensitive areas are documented as gaps instead of being converted into values."))), React.createElement("div", {
+  }, "These are dated events published by the named organisation. They are shown so readers can place labour-market movements in time relative to the public AI rollout. ", React.createElement("b", null, "None of these events is asserted to have caused any labour-market movement on this page.")))), aiEvents.length > 0 ? React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Date"), React.createElement("th", null, "Event"), React.createElement("th", null, "Publisher"), React.createElement("th", null, "Trust"), React.createElement("th", null, "Source"))), React.createElement("tbody", null, aiEvents.map(ev => React.createElement("tr", {
+    key: ev.date + ev.title
+  }, React.createElement("td", {
+    className: "mono"
+  }, ev.date), React.createElement("td", null, ev.title), React.createElement("td", null, ev.publisher), React.createElement("td", null, React.createElement("span", {
+    className: "caption"
+  }, ev.trust_label || 'Manual')), React.createElement("td", null, ev.url ? React.createElement("a", {
+    href: ev.url
+  }, ev.url.replace(/^https?:\/\//, '').slice(0, 50), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })) : '—')))))) : React.createElement("p", {
+    className: "caption"
+  }, "AI rollout timeline envelope not yet loaded."), React.createElement("p", {
+    className: "caption",
+    style: {
+      marginTop: 12
+    }
+  }, React.createElement("b", null, "Boundary:"), " ", aiTimelineFields.boundary || 'Timing is not causation. The dashboard does not assign cause to any of these events.')), React.createElement("section", {
+    className: "section section--sources",
+    id: "sources"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+    className: "section__lede"
+  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate, and we do not assert AI causation."))), React.createElement("div", {
     className: "sources-grid"
-  }, React.createElement(SourceSummary, {
-    id: "defence_posture_profiles",
-    env: data.defence_posture_profiles,
-    partial: true
-  }), React.createElement(SourceSummary, {
-    id: "defence_budget_2026_nds",
-    env: data.defence_budget_2026_nds
-  }), React.createElement(SourceSummary, {
-    id: "defence_workforce_annual_report_2024_25",
-    env: data.defence_workforce_annual_report_2024_25
-  }), React.createElement(SourceSummary, {
-    id: "defence_public_capability_assets",
-    env: data.defence_public_capability_assets,
-    partial: true
-  }), React.createElement(SourceSummary, {
-    id: "defence_alliance_frameworks",
-    env: data.defence_alliance_frameworks,
-    partial: true
-  }), React.createElement(SourceSummary, {
-    id: "defence_sovereign_industry_context",
-    env: data.defence_sovereign_industry_context,
-    partial: true
-  }), React.createElement(SourceSummary, {
-    id: "defence_uncrewed_systems",
-    env: data.defence_uncrewed_systems,
-    partial: true
-  }), React.createElement(SourceSummary, {
-    id: "defence_readiness_gap",
-    env: data.defence_readiness_gap
-  }))), React.createElement(Footer, {
+  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+    key: id,
+    className: "source-card"
+  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
+    className: "body-sm"
+  }, env.status === 'ok' ? `Verified. ${env.values?.length || 0} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source, or intentionally unavailable.'), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), env.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, '').slice(0, 60), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })), React.createElement("p", {
+    className: "caption mono"
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+    className: "methodology"
+  }, React.createElement("h3", null, "How we calculate the numbers, and what we do not do"), React.createElement("dl", null, React.createElement("dt", null, "Strongest coverage"), React.createElement("dd", null, "The ABS labour-market series (unemployment, participation, employment-to-population, job vacancies and wages) are fetched live from the ABS Data API. Each card cites its dataflow + key."), React.createElement("dt", null, "Weaker coverage"), React.createElement("dd", null, "Underemployment rate and monthly hours worked stay on manual because the standard headline key combination returned 404 from the LF dataflow in initial probing. They will be promoted to programmatic when a verified key or a hand-keyed workbook value is loaded."), React.createElement("dt", null, "Why we do not publish an automation exposure score"), React.createElement("dd", null, "There is no current Australian government dataset of automation or AI labour-market exposure by occupation or industry that is source-safe to publish. International \"occupational exposure\" methodologies are not directly mappable to Australian rows because their concept boundaries differ. The exposure card stays Unavailable until a named Australian publisher (Productivity Commission, DEWR, DISR, ABS) releases a directly comparable Australian indicator."), React.createElement("dt", null, "What the AI rollout timeline does NOT do"), React.createElement("dd", null, "The AI timeline is a list of dated, named events published by the listed organisations. It is shown so labour-market movements can be placed in time. ", React.createElement("b", null, "It is not a causal model."), " No label, takeaway, table cell or chart annotation on this page asserts that an AI rollout event caused any labour-market change."), React.createElement("dt", null, "What still requires human review"), React.createElement("dd", null, "Whenever an Australian publisher (PC, DEWR, DISR or ABS) releases an automation/AI exposure indicator with clear methodology, the unavailable card can be reviewed and populated. Until then, it stays unavailable.")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }

@@ -370,7 +370,7 @@ function Header({
     href: '../fuel-dashboard/index.html'
   }, {
     id: 'fertilizer',
-    label: 'Fertilizer',
+    label: 'Food & farms',
     href: '../fertilizer-dashboard/index.html'
   }, {
     id: 'oil',
@@ -396,6 +396,10 @@ function Header({
     id: 'infrastructure',
     label: 'Infrastructure',
     href: '../infrastructure-dashboard/index.html'
+  }, {
+    id: 'employment_automation',
+    label: 'Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'sources',
     label: 'Sources & methodology',
@@ -906,7 +910,7 @@ function Footer({
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
-  }, "Fertilizer")), React.createElement("li", null, React.createElement("a", {
+  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
     href: "../oil-and-production/index.html"
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
