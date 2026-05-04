@@ -16,6 +16,7 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'manufacturing', label: 'Manufacturing',         href: '../manufacturing-dashboard/index.html' },
     { id: 'power_grid',    label: 'Power grid',            href: '../power-grid-dashboard/index.html' },
     { id: 'infrastructure',label: 'Infrastructure',        href: '../infrastructure-dashboard/index.html' },
+    { id: 'employment_automation', label: 'Employment & Automation', href: '../employment-automation-dashboard/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];
   return (

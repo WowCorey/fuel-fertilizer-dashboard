@@ -52,6 +52,15 @@ JSON envelope.
 | ABARES fertiliser price index | deferred | ABARES appears to publish this through quarterly workbook/report outputs rather than a stable JSON/CSV API. | Add XLSX ingestion or hand-key values from the named ABARES release table. |
 | Fertiliser stock cover | unavailable | No named public source has been verified for an Australian fertiliser stock-cover indicator. | Leave unavailable unless ABARES, DCCEEW, or another named public source publishes stock and usage inputs or a direct cover figure. |
 
+## Employment & Automation
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Underemployment rate | manual stub | ABS LF dataflow MEASURE M23 (Underemployment rate, proportion of labour force) was probed at the standard headline shape (`M23.3.1599.20.AUS.M` and several variants). All returned 404 from the live ABS Data API. The dataflow does not expose the headline underemployment series at the standard sex/age/TSEST combination used for unemployment and participation. | Investigate alternative LF subdomain dataflows or hand-key the headline figure from the named Cat. 6202.0 workbook before promoting to programmatic. |
+| Monthly hours worked in all jobs | manual stub | ABS LF dataflow MEASURE M18 and M43 were probed at the standard headline shape and returned 404. | Investigate alternative LF subdomain dataflows or hand-key the headline value from the named Cat. 6202.0 workbook before promoting to programmatic. |
+| Australian automation/AI labour-market exposure | intentionally unavailable | No source-safe Australian official dataset of automation or AI exposure by occupation or industry has been identified. International "occupational exposure" methodologies (e.g. OECD/Frey-Osborne) cannot be silently mapped to Australian rows because their concept boundaries differ. | Load only when a named Australian publisher (Productivity Commission, DEWR, DISR or ABS) releases a directly comparable Australian indicator. |
+| Causal AI rollout attribution | not in scope | The page tracks Australian labour-market change during the AI rollout era using ABS series, paired with a context-only AI rollout timeline. It does NOT assert AI caused any labour-market movement. | Continue to refuse causal labels. The AI timeline is a list of dated, named events from the listed organisations and is not a causal explanation. |
+
 ## Manufacturing
 
 | Gap | Current status | Why not filled yet | Next action |

@@ -16,6 +16,7 @@ const routes = [
   { path: '/ui_kits/manufacturing-dashboard/index.html', heading: 'What Australia still makes, in plain English.' },
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
   { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
+  { path: '/ui_kits/employment-automation-dashboard/index.html', heading: "Australia's labour market during the AI rollout era." },
 ];
 
 for (const route of routes) {

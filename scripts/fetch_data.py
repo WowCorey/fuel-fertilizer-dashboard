@@ -2307,6 +2307,34 @@ FETCHERS: dict[str, Fetcher] = {
     "abs_manufactured_exports_total": fetch_abs_release_xlsx_series,
     "abs_manufacturing_capex": fetch_abs_release_xlsx_series,
     "abs_food_beverage_employment": fetch_abs_release_xlsx_series,
+    "abs_participation_rate": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_employment_population_ratio": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_job_vacancies": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
+    "abs_wage_price_index": lambda source: fetch_abs_sdmx(
+        source["fetch_dataflow"],
+        source["fetch_key"],
+        source.get("fetch_start_period"),
+        source.get("sdmx_note_suffix"),
+        source.get("fetch_url"),
+    ),
     "abs_fertiliser_source_concentration": fetch_abs_fertiliser_source_concentration,
     "rba_aud_usd": lambda source: fetch_rba_f11(source["fetch_url"]),
     "rba_cash_rate": lambda source: fetch_rba_csv_column(
@@ -2444,6 +2472,10 @@ def source_check_options(source: dict[str, Any]) -> tuple[dict[str, str], int]:
     return headers, timeout_seconds
 
 
+def source_check_required(source: dict[str, Any]) -> bool:
+    return source.get("check_required", True) is not False
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Fetch data for Fuel Resilience AU")
     ap.add_argument("--only", help="Only fetch this source id")
@@ -2504,10 +2536,13 @@ def main() -> int:
             url = source_check_url(source, all_links=args.check_all_links)
             headers, timeout_seconds = source_check_options(source)
             ok, msg = check_url(url, headers=headers, timeout_seconds=timeout_seconds)
-            tag = "OK " if ok else "ERR"
+            required = source_check_required(source)
+            tag = "OK " if ok else ("ERR" if required else "WARN")
             print(f"[{tag}] {sid:<32} {msg}  {url}")
-            if not ok:
+            if not ok and required:
                 errors.append(f"{sid}: {msg}")
+            elif not ok:
+                skipped.append((sid, f"non-blocking fetch check failed: {msg}"))
             continue
 
         if fetch_mode in {"programmatic", "derived"}:
