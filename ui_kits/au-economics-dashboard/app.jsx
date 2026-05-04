@@ -143,9 +143,23 @@ function App() {
             <MetricCard
               eyebrow="State debt"
               label="State & territory net debt"
-              plain="General government net debt by state and territory, hand-keyed from each Treasury's annual budget paper."
-              fromEnvelope={data.state_government_debt_summary}
-              unit=" AUD billions"
+              plain={(() => {
+                const f = data.state_government_debt_summary?.extra?.fields || {};
+                const loaded = f.jurisdictions_loaded;
+                const total = f.jurisdictions_total;
+                const sources = f.rows_with_named_source;
+                if (typeof loaded === 'number' && typeof total === 'number') {
+                  return `Coverage: ${loaded}/${total} jurisdiction values populated, ${sources}/${total} named Treasury source URLs identified. ${f.national_aggregate_status === 'Not published' ? 'No national aggregate published — rows are not safe to sum.' : ''}`;
+                }
+                return 'General government net debt by state and territory, hand-keyed from each Treasury budget paper.';
+              })()}
+              value={(() => {
+                const f = data.state_government_debt_summary?.extra?.fields || {};
+                if (typeof f.jurisdictions_total === 'number') return `${f.jurisdictions_loaded || 0}/${f.jurisdictions_total}`;
+                return null;
+              })()}
+              unit=" jurisdictions populated"
+              source={data.state_government_debt_summary?.source_name || 'State and territory budget papers'}
             />
             <MetricCard
               eyebrow="Activity"
@@ -175,16 +189,75 @@ function App() {
             />
           </div>
 
+          {(() => {
+            const stateRows = data.state_government_debt_summary?.extra?.fields?.rows || [];
+            const stateFields = data.state_government_debt_summary?.extra?.fields || {};
+            if (!stateRows.length) return null;
+            return (
+              <section style={{ marginTop: 24 }}>
+                <h3 style={{ marginBottom: 8 }}>State and territory government net debt — coverage table</h3>
+                <p className="caption" style={{ marginBottom: 12 }}>
+                  Eight jurisdictions, named Treasury budget-paper URLs identified. Values are hand-keyed
+                  from each jurisdiction's Budget Paper PDF; rows shown as Partial coverage have not yet
+                  been verified. <b>No national aggregate is published</b> — rows are not safe to sum
+                  (definitions, scope, and rounding differ between jurisdictions; ACT and NT have
+                  smaller jurisdictional scope than mainland states). Commonwealth AOFM debt is shown
+                  separately above.
+                </p>
+                <div className="data-table-wrap">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Jurisdiction</th>
+                        <th>Concept</th>
+                        <th>Budget year</th>
+                        <th style={{ textAlign: 'right' }}>Value</th>
+                        <th>Coverage</th>
+                        <th>Source / caveat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {stateRows.map(row => (
+                        <tr key={row.jurisdiction}>
+                          <td><b>{row.jurisdiction}</b></td>
+                          <td>{row.debt_concept}</td>
+                          <td className="mono">{row.budget_year}<br/><span className="caption">{row.period}</span></td>
+                          <td style={{ textAlign: 'right' }} className={row.value == null ? 'unavail' : ''}>
+                            {row.value == null
+                              ? '—'
+                              : `A$${row.value.toLocaleString('en-AU', { maximumFractionDigits: 1 })}b`}
+                          </td>
+                          <td><span className="caption">{row.coverage_label}</span></td>
+                          <td>
+                            <span className="caption">{row.comparability_note}</span><br/>
+                            {row.source_url && (
+                              <a href={row.source_url}>{row.source_url.replace(/^https?:\/\//,'').slice(0, 50)} <Icon name="external" size={12}/></a>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="caption" style={{ marginTop: 12 }}>
+                  <b>Aggregate boundary:</b> {stateFields.national_aggregate_note || ''}
+                </p>
+              </section>
+            );
+          })()}
+
           <div className="pending-list" aria-label="Pending economics source coverage">
             <article className="source-card">
-              <h4>Pending source coverage</h4>
+              <h4>Source coverage</h4>
               <p className="body-sm">
-                State and territory net debt remains unavailable until a comparable annual
-                hand-key pass can cite each jurisdiction's budget paper clearly. RBA cash rate,
-                household debt, mortgage-rate and credit-card series now load from verified RBA
-                CSVs. ABS GDP, unemployment and CPI load from verified ABS Data API keys. AOFM
-                federal securities outstanding is hand-keyed from the official annual stock CSV
-                because the richer monthly workbook was not fetch-stable in this pass.
+                State and territory net debt is now scaffolded with named Treasury budget-paper URLs
+                for all 8 jurisdictions; per-jurisdiction values remain pending hand-key from each
+                Budget Paper PDF. No national aggregate is published because the rows are not safe
+                to sum across jurisdictions. RBA cash rate, household debt, mortgage-rate and
+                credit-card series load from verified RBA CSVs. ABS GDP, unemployment and CPI load
+                from verified ABS Data API keys. AOFM federal securities outstanding is hand-keyed
+                from the official annual stock CSV. Commonwealth AOFM debt and state/territory debt
+                stay clearly separate.
               </p>
             </article>
           </div>
