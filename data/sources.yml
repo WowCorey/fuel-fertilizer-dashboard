@@ -1910,17 +1910,17 @@ sources:
     used_by: [au_economics]
 
   - id: state_government_debt_summary
-    human_name: State and territory government net debt (Treasury budget papers, scaffold)
+    human_name: State and territory government net debt (Treasury budget papers, Pass 2B)
     publisher: State and territory Treasury departments
     url: https://www.budget.gov.au/
     canonical_url: https://www.budget.gov.au/
     format: PDF
     update_cadence: annual
-    last_verified: 2026-05-02
+    last_verified: 2026-05-04
     rights: CC BY 4.0 where stated by publisher; each state/territory Treasury copyright applies
     rights_url: https://creativecommons.org/licenses/by/4.0/
-    citation: State and territory budget papers (NSW Budget Paper No. 1; VIC Statement of Finances; QLD Budget Paper No. 2; WA Budget Paper No. 3; SA Budget Statement; TAS Budget Paper No. 1; ACT Budget Outlook; NT Budget Paper 2).
-    reuse_notes: Pass 2 scaffold loaded with all 8 jurisdiction rows present, each carrying the named Treasury Budget homepage URL. Per-jurisdiction values remain null and rows are marked Partial coverage; the state/territory net debt figures live inside Budget Paper PDFs that this build environment cannot fetch directly. Values must be hand-keyed from each Budget Paper PDF opened in a browser; preserve the comparability_note for each row. Do NOT publish a national aggregate - rows are not safe to sum (definitions and jurisdictional scope differ; ACT and NT in particular have non-comparable scope to mainland states). Commonwealth AOFM debt is a separate envelope and must stay separate from state/territory rows.
+    citation: State and territory budget papers (NSW Budget Paper No. 1 Chapter 8 Table 8.1; VIC 2025-26 Strategy and Outlook; QLD Budget Paper No. 2 Balance Sheet; WA Budget Paper No. 3 Table 2; SA Budget Statement; TAS Budget Paper No. 1; ACT Budget Outlook; NT Budget Paper 2).
+    reuse_notes: Pass 2B value-entry update. 4 of 8 jurisdiction values verified from official Budget Paper PDFs downloaded directly during this build pass. NSW (A$120.3b), VIC (A$167.6b) and QLD (A$41.8b) are general government sector (GGS) net debt at 30 June 2026 from each jurisdiction's 2025-26 Budget Paper. WA (A$39.0b) is Total Public Sector net debt - WA's headline measure - because WA still owns major utilities and BP3 does not publish a clean GGS-only net debt single-year figure in its overview tables; this row is recorded as Partial coverage with the WA-specific concept name preserved. SA, TAS, ACT and NT remain Partial coverage with null values; their Treasury budget homepages returned HTTP 403/503 from this build environment and require browser access. Do NOT publish a national aggregate - the four verified rows already mix concept boundaries and the remaining four are unverified.
     fetch: manual
     used_by: [au_economics]
 
