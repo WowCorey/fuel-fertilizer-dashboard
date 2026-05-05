@@ -1,13 +1,13 @@
 {
   "series_id": "state_government_debt_summary",
   "source_id": "state_government_debt_summary",
-  "source_name": "State and territory government net debt (Treasury budget papers, Pass 2B)",
+  "source_name": "State and territory government net debt (Treasury budget papers, Pass 2C)",
   "source_url": "https://www.budget.gov.au/",
   "unit": "AUD billions",
-  "retrieved_at": "2026-05-04T01:01:03+00:00",
-  "last_data_point": "2026-05-04",
+  "retrieved_at": "2026-05-05T21:32:23+00:00",
+  "last_data_point": "2026-05-05",
   "values": [],
-  "notes": "Pass 2B value-entry update. 4 of 8 jurisdiction values loaded from official Treasury Budget Paper PDFs verified during this pass: NSW Budget Paper No. 1 Chapter 8 Table 8.1 (A$120.3b GGS), VIC Strategy and Outlook (A$167.6b GGS), QLD Budget Paper No. 2 Balance Sheet (A$41.8b GGS), and WA Budget Paper No. 3 Table 2 (A$39.0b Total Public Sector, not GGS - explicitly Partial coverage with concept caveat). SA, TAS, ACT and NT remain Partial coverage with null values; their Treasury budget homepages returned HTTP 403/503 from this build environment. No national aggregate is published.",
+  "notes": "Pass 2C value-entry update. 8 of 8 jurisdiction values now have official Treasury/Budget Paper values loaded. NSW, VIC, QLD, SA, TAS and ACT use general government sector net debt rows from 2025-26 Budget Paper material. WA remains Total Public Sector net debt (not GGS) and NT uses Non Financial Public Sector net debt, so both remain Partial coverage with explicit concept caveats. No national aggregate is published because rows are not safe to sum across different public-sector boundaries and jurisdictional scopes.",
   "status": "ok",
   "manual_entry": true,
   "source_rights": "CC BY 4.0 where stated by publisher; each state/territory Treasury copyright applies",
@@ -71,63 +71,63 @@
         {
           "jurisdiction": "SA",
           "debt_concept": "General government sector net debt",
-          "row_label": "Pending verification from named Budget Statement",
-          "value": null,
+          "row_label": "General government net debt ($m), Table 4.2 Key budget aggregates (= 25,201)",
+          "value": 25.2,
           "unit": "AUD billions",
           "budget_year": "2025-26",
           "period": "30 June 2026 estimate",
-          "source_url": "https://statebudget.sa.gov.au/",
-          "coverage_label": "Partial coverage",
+          "source_url": "https://treasury.sa.gov.au/__data/assets/pdf_file/0003/1159383/2025-26-Budget-Statement.pdf",
+          "coverage_label": "Observed",
           "trust_label": "Manual",
-          "comparability_note": "SA state budget page returned HTTP 403 to scripted access from this sandbox; figure must be hand-keyed from the Budget Statement (PDF) opened in a browser. Value left null pending verification."
+          "comparability_note": "Verified from South Australia 2025-26 Budget Statement, Budget Overview chapter, Table 4.2 Key budget aggregates. General government net debt for the 2025-26 Budget column = $25,201m = A$25.2 billion. Conceptually comparable to other GGS net debt rows, subject to jurisdiction-specific accounting and scope notes."
         },
         {
           "jurisdiction": "TAS",
           "debt_concept": "General government sector net debt",
-          "row_label": "Pending verification from named Budget Paper No. 1",
-          "value": null,
+          "row_label": "Net Debt at 30 June, General Government Sector, Table 7.3 Fiscal indicators (= 7,081.1)",
+          "value": 7.1,
           "unit": "AUD billions",
           "budget_year": "2025-26",
           "period": "30 June 2026 estimate",
-          "source_url": "https://www.treasury.tas.gov.au/budget-and-financial-management/state-budget",
-          "coverage_label": "Partial coverage",
+          "source_url": "https://www.treasury.tas.gov.au/Documents/2025-26%20The%20Budget%2C%20Budget%20Paper%20No.%201.PDF",
+          "coverage_label": "Observed",
           "trust_label": "Manual",
-          "comparability_note": "TAS Treasury page returned HTTP 503 to scripted access from this sandbox; figure must be hand-keyed from Budget Paper No. 1 (PDF) opened in a browser. Value left null pending verification."
+          "comparability_note": "Verified from Tasmania 2025-26 Budget Paper No. 1, Chapter 7 Estimated Outcome, Table 7.3 Fiscal indicators. General Government Sector Net Debt at 30 June for 2026 Budget = $7,081.1m = A$7.1 billion. The table also publishes a separate GFS Net Debt row ($5,969.7m); this dashboard uses the Net Debt row and does not treat the two concepts as identical."
         },
         {
           "jurisdiction": "ACT",
-          "debt_concept": "General government sector net debt (ACT publishes a unified general government sector but boundary differs from larger jurisdictions)",
-          "row_label": "Pending verification from named Budget Outlook",
-          "value": null,
+          "debt_concept": "General government sector net debt excluding superannuation-related investments",
+          "row_label": "Net debt (excluding superannuation) ($m), General Government Sector Balance Sheet, Table 3.8.1 (= 11,001.8)",
+          "value": 11.0,
           "unit": "AUD billions",
           "budget_year": "2025-26",
           "period": "30 June 2026 estimate",
-          "source_url": "https://www.treasury.act.gov.au/budget",
-          "coverage_label": "Partial coverage",
+          "source_url": "https://www.treasury.act.gov.au/__data/assets/pdf_file/0011/2869580/2025-26-Budget-Outlook.pdf",
+          "coverage_label": "Observed",
           "trust_label": "Manual",
-          "comparability_note": "ACT Treasury page returned HTTP 403 to scripted access from this sandbox. ACT also has a smaller jurisdictional scope than mainland states, so its net-debt figure is not directly comparable to NSW/VIC/QLD/WA in absolute dollar terms. Hand-key from Budget Outlook (PDF) and preserve the scope-difference caveat. Value left null pending verification."
+          "comparability_note": "Verified from ACT 2025-26 Budget Outlook, Financial Statements chapter, Table 3.8.1 General Government Sector Balance Sheet. Net debt excluding superannuation for the 2025-26 Budget column = $11,001.8m = A$11.0 billion. ACT's scope and scale differ from mainland states, and this row preserves the ACT-specific excluding-superannuation boundary."
         },
         {
           "jurisdiction": "NT",
-          "debt_concept": "General government sector net debt",
-          "row_label": "Pending verification from named Budget Paper 2",
-          "value": null,
+          "debt_concept": "Non Financial Public Sector net debt (not General Government Sector)",
+          "row_label": "Non Financial Public Sector Net debt ($M), Table 1.1 Key Fiscal Indicators (= 12,191)",
+          "value": 12.2,
           "unit": "AUD billions",
           "budget_year": "2025-26",
           "period": "30 June 2026 estimate",
-          "source_url": "https://budget.nt.gov.au/",
+          "source_url": "https://budget.nt.gov.au/__data/assets/pdf_file/0006/1514832/2025-26-bp2-book.pdf",
           "coverage_label": "Partial coverage",
           "trust_label": "Manual",
-          "comparability_note": "NT Treasury page returned HTTP 403 to scripted access from this sandbox; figure must be hand-keyed from Budget Paper 2 (PDF) opened in a browser. NT has a much smaller revenue base than mainland states; absolute dollar net debt is not directly comparable. Value left null pending verification."
+          "comparability_note": "Verified from Northern Territory 2025-26 Budget Paper No. 2, Budget Strategy and Outlook, Chapter 1 Fiscal Strategy and Outlook, Table 1.1 Key Fiscal Indicators. The published row is Non Financial Public Sector Net debt, 2025-26 Budget = $12,191m = A$12.2 billion. This is not General Government Sector net debt and must not be treated as identical to NSW/VIC/QLD/SA/TAS/ACT GGS rows."
         }
       ],
-      "jurisdictions_loaded": 4,
+      "jurisdictions_loaded": 8,
       "jurisdictions_total": 8,
       "rows_with_named_source": 8,
       "national_aggregate_status": "Not published",
-      "national_aggregate_note": "No national aggregate is published. Even with NSW + VIC + QLD GGS rows verified, summing them with WA (Total Public Sector, not GGS) and with the still-null SA/TAS/ACT/NT rows would produce a misleading total. Concept boundaries and jurisdictional scope differ across the four verified rows already loaded; ACT and NT have much smaller jurisdictional scope than mainland states. Commonwealth AOFM debt is a separate measure on a separate card.",
-      "comparability_basis": "Preferred concept is general government sector net debt as published in each state/territory's latest Budget Paper / Statement (typically 30 June 2026 estimate from the 2025-26 budget cycle). NSW, VIC and QLD publish a clean GGS net debt headline (verified). WA publishes Total Public Sector as its headline measure because it still owns utilities; the WA row is recorded as Partial coverage with the WA-specific concept name preserved. SA, TAS, ACT and NT remain Partial coverage with null values because their Treasury budget homepages returned HTTP 403/503 to scripted access from this build environment; their figures must still be hand-keyed from a Budget Paper PDF opened in a browser.",
-      "audit_method": "Each Treasury budget homepage was probed for HTTP reachability from the build environment. Reachable (HTTP 200): NSW, VIC, QLD, WA budget homepages. Blocked from sandbox (HTTP 403/503): SA, TAS, ACT, NT budget homepages. In all eight cases, the actual net-debt figure lives in a Budget Paper PDF that requires browser access to verify, so values remain null in this scaffold."
+      "national_aggregate_note": "No national aggregate is published. Although 8 of 8 jurisdictions now have official net-debt values loaded, summing them would be misleading because NSW/VIC/QLD/SA/TAS/ACT use GGS or ACT-specific GGS excluding-superannuation rows, while WA uses Total Public Sector net debt and NT uses Non Financial Public Sector net debt. Jurisdictional scope and public-sector ownership structures differ. Commonwealth AOFM debt is a separate measure on a separate card.",
+      "comparability_basis": "Preferred concept is general government sector net debt as published in each state/territory's latest Budget Paper / Statement for the 2025-26 budget cycle, usually a 30 June 2026 estimate. NSW, VIC, QLD, SA, TAS and ACT have official GGS or ACT-specific GGS net-debt rows loaded. WA publishes Total Public Sector as its headline measure because it still owns utilities; NT publishes Non Financial Public Sector net debt in its key fiscal indicators. WA and NT are therefore recorded as Partial coverage with the jurisdiction-specific concept names preserved. No total is calculated.",
+      "audit_method": "Pass 2C verified SA, TAS, ACT and NT from official Treasury/Budget Paper PDFs or official PDF text opened during this pass. Search terms included general government sector net debt, general government net debt, GGS net debt, GFS net debt and net debt. Values were entered only where the exact official row label, period and unit were visible in source text."
     }
   }
 }

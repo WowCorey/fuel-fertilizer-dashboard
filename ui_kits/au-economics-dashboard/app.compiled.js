@@ -1120,7 +1120,7 @@ function App() {
       style: {
         marginBottom: 12
       }
-    }, "Eight jurisdictions, named Treasury budget-paper URLs identified. Values are hand-keyed from each jurisdiction's Budget Paper PDF; rows shown as Partial coverage have not yet been verified. ", React.createElement("b", null, "No national aggregate is published"), " \u2014 rows are not safe to sum (definitions, scope, and rounding differ between jurisdictions; ACT and NT have smaller jurisdictional scope than mainland states). Commonwealth AOFM debt is shown separately above."), React.createElement("div", {
+    }, "Eight jurisdiction values are hand-keyed from official Treasury Budget Paper PDFs. Rows shown as Partial coverage are verified but use a different public-sector boundary from the preferred GGS concept. ", React.createElement("b", null, "No national aggregate is published"), " \u2014 rows are not safe to sum (definitions, scope, and rounding differ between jurisdictions; ACT and NT have smaller jurisdictional scope than mainland states). Commonwealth AOFM debt is shown separately above."), React.createElement("div", {
       className: "data-table-wrap"
     }, React.createElement("table", {
       className: "data-table"
@@ -1163,7 +1163,7 @@ function App() {
     className: "source-card"
   }, React.createElement("h4", null, "Source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "State and territory net debt is now scaffolded with named Treasury budget-paper URLs for all 8 jurisdictions; per-jurisdiction values remain pending hand-key from each Budget Paper PDF. No national aggregate is published because the rows are not safe to sum across jurisdictions. RBA cash rate, household debt, mortgage-rate and credit-card series load from verified RBA CSVs. ABS GDP, unemployment and CPI load from verified ABS Data API keys. AOFM federal securities outstanding is hand-keyed from the official annual stock CSV. Commonwealth AOFM debt and state/territory debt stay clearly separate.")))), React.createElement("section", {
+  }, "State and territory net debt now has official Treasury budget-paper values for all 8 jurisdictions, with WA and NT kept as Partial coverage because their loaded concepts are not the preferred GGS measure. No national aggregate is published because the rows are not safe to sum across jurisdictions. RBA cash rate, household debt, mortgage-rate and credit-card series load from verified RBA CSVs. ABS GDP, unemployment and CPI load from verified ABS Data API keys. AOFM federal securities outstanding is hand-keyed from the official annual stock CSV. Commonwealth AOFM debt and state/territory debt stay clearly separate.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
