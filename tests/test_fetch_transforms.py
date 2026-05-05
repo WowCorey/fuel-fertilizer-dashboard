@@ -287,6 +287,28 @@ class FetchTransformTests(unittest.TestCase):
         self.assertEqual(out["values"], [{"t": "2026-01", "v": 3.75}])
         self.assertEqual(out["last_data_point"], "2026-01-31")
 
+    def test_rba_cash_rate_latest_preserves_latest_raw_observation(self):
+        html_text = """
+            <table>
+              <tr><th>Effective Date</th><th>Change %&nbsp;points</th><th>Cash rate target %</th><th>Related Documents</th></tr>
+              <tr><td>6 May 2026</td><td>+0.25</td><td>4.35</td><td>Statement</td></tr>
+              <tr><td>18 Mar 2026</td><td>+0.25</td><td>4.10</td><td>Statement</td></tr>
+            </table>
+        """
+        source = {"id": "rba_cash_rate_latest", "fetch_url": "https://example.test/cash-rate/"}
+        with mock.patch.object(fetch_data.requests, "get", return_value=FakeResponse(text=html_text)):
+            out = fetch_data.fetch_rba_cash_rate_latest(source)
+
+        self.assertEqual(out["unit"], "per cent")
+        self.assertEqual(out["values"], [{"t": "2026-05-06", "v": 4.35}])
+        self.assertEqual(out["last_data_point"], "2026-05-06")
+        fields = out["extra"]["fields"]
+        self.assertEqual(fields["latest_target_value"], 4.35)
+        self.assertEqual(fields["previous_target_value"], 4.1)
+        self.assertEqual(fields["previous_observation_date"], "2026-03-18")
+        self.assertEqual(fields["target_change_percentage_points"], 0.25)
+        self.assertEqual(fields["change_direction"], "up")
+
     def test_aofm_ags_face_value_csv(self):
         csv_text = "\n".join(
             [

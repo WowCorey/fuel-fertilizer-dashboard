@@ -1841,7 +1841,23 @@ sources:
     rights: RBA terms of use for tabular data
     rights_url: https://www.rba.gov.au/copyright/
     citation: Reserve Bank of Australia, Statistical Table F1.1 (Cash Rate Target).
-    reuse_notes: RBA publishes the cash-rate target series as a CSV. Pick the column whose Title contains "Cash Rate Target". RBA table dates may appear as DD/MM/YYYY or DD-MMM-YYYY; aggregate daily observations to monthly mean.
+    reuse_notes: RBA publishes the F1.1 cash-rate target series as a monthly-average CSV. Pick the column whose Title contains "Cash Rate Target". Use this envelope for the historical chart only; the current headline target is rba_cash_rate_latest from the RBA cash-rate decisions table.
+    fetch: programmatic
+    used_by: [au_economics]
+
+  - id: rba_cash_rate_latest
+    human_name: RBA Cash Rate Target - latest decision
+    publisher: Reserve Bank of Australia
+    url: https://www.rba.gov.au/statistics/tables/
+    canonical_url: https://www.rba.gov.au/statistics/cash-rate/
+    fetch_url: https://www.rba.gov.au/statistics/cash-rate/
+    format: HTML_TABLE
+    update_cadence: monthly
+    last_verified: 2026-05-06
+    rights: RBA terms of use for tabular data
+    rights_url: https://www.rba.gov.au/copyright/
+    citation: Reserve Bank of Australia, Cash Rate Target decisions table.
+    reuse_notes: Programmatic headline envelope from the official RBA cash-rate target page. Use the latest decision-table row for the headline card, and keep rba_cash_rate as the F1.1 monthly average history for charts. Previous target and change direction come from the RBA table row/order; no forecast or estimate is used.
     fetch: programmatic
     used_by: [au_economics]
 

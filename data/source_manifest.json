@@ -2526,6 +2526,22 @@
       "has_generated": true,
       "has_manual": false
     },
+    "rba_cash_rate_latest": {
+      "id": "rba_cash_rate_latest",
+      "human_name": "RBA Cash Rate Target - latest decision",
+      "publisher": "Reserve Bank of Australia",
+      "fetch": "programmatic",
+      "update_cadence": "monthly",
+      "used_by": [
+        "au_economics"
+      ],
+      "canonical_url": "https://www.rba.gov.au/statistics/cash-rate/",
+      "rights": "RBA terms of use for tabular data",
+      "citation": "Reserve Bank of Australia, Cash Rate Target decisions table.",
+      "preferred_dir": "generated",
+      "has_generated": true,
+      "has_manual": false
+    },
     "rba_credit_card_debt_accruing_interest": {
       "id": "rba_credit_card_debt_accruing_interest",
       "human_name": "RBA credit card balances accruing interest (C1.1)",

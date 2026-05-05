@@ -98,6 +98,14 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(page.getByText('This page does not infer drought or farm-level water availability from maps or commentary.')).toBeVisible();
 });
 
+test('AU economics page separates latest cash rate from monthly history', async ({ page }) => {
+  await page.goto('/ui_kits/au-economics-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: "Australia's economy, in plain English." })).toBeVisible();
+  await expect(page.getByText('Latest official cash-rate target decision published by the RBA. No forecast or estimate is used.')).toBeVisible();
+  await expect(page.getByText('The headline card above uses the latest official decision-table row instead.')).toBeVisible();
+  await expect(page.getByText('The chart preserves the F1.1 monthly-average cash-rate target history.')).toBeVisible();
+});
+
 test('state contribution page keeps tax attribution boundaries explicit', async ({ page }) => {
   await page.goto('/ui_kits/state-contribution-dashboard/index.html');
   await expect(page.getByRole('heading', { name: "What each state contributes to Australia's petroleum system." })).toBeVisible();
