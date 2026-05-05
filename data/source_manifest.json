@@ -2438,7 +2438,7 @@
     },
     "state_government_debt_summary": {
       "id": "state_government_debt_summary",
-      "human_name": "State and territory government net debt (Treasury budget papers, Pass 2B)",
+      "human_name": "State and territory government net debt (Treasury budget papers, Pass 2C)",
       "publisher": "State and territory Treasury departments",
       "fetch": "manual",
       "update_cadence": "annual",
