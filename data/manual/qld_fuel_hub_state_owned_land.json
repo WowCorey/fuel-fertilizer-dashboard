@@ -1,0 +1,31 @@
+{
+  "series_id": "qld_fuel_hub_state_owned_land",
+  "source_id": "qld_fuel_hub_state_owned_land",
+  "source_name": "Queensland fuel hub state-owned land audit",
+  "source_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+  "unit": "source gate",
+  "retrieved_at": "2026-05-05T21:55:26+00:00",
+  "stub_created_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Official page confirms a state-wide audit of suitable government-owned industrial and port land is underway. No parcel-level or hub-level land availability is published here.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Copyright The State of Queensland 1995-2026; Coordinator-General website terms apply",
+  "citation": "Office of the Coordinator-General, Accelerating Fuel Infrastructure Program.",
+  "extra": {
+    "schema": "qld_fuel_hub_land_audit.v1",
+    "fields": {
+      "audit_status": "Officially described as underway",
+      "parcel_visibility": "Unavailable",
+      "state_owned_land_visibility": "Source-gated; no parcels loaded",
+      "not_published": [
+        "parcel IDs",
+        "available hectares",
+        "land owner by parcel",
+        "shortlisted locations",
+        "approval status by site"
+      ]
+    }
+  }
+}

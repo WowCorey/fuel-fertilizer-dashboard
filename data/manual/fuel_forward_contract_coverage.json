@@ -1,0 +1,31 @@
+{
+  "series_id": "fuel_forward_contract_coverage",
+  "source_id": "fuel_forward_contract_coverage",
+  "source_name": "Fuel forward contract coverage source gate",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-05-06T00:00:00+10:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "Fuel contracts beyond the month are not publicly loaded. Do not infer contracts from shipments, prices, port calls or import values.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+  "citation": "Fuel Resilience AU source gate for Fuel forward contract coverage source gate.",
+  "extra": {
+    "schema": "source_gate.v1",
+    "fields": {
+      "decision": "unavailable",
+      "required_public_feed": "Fuel contracts beyond the month are not publicly loaded. Do not infer contracts from shipments, prices, port calls or import values.",
+      "do_not_infer_from": [
+        "prices",
+        "shipments",
+        "media commentary",
+        "maps",
+        "port calls",
+        "private proposals"
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "series_id": "qld_domestic_fuel_production_pathway",
+  "source_id": "qld_domestic_fuel_production_pathway",
+  "source_name": "Queensland domestic fuel production pathway",
+  "source_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+  "unit": "policy pathway",
+  "retrieved_at": "2026-05-05T21:55:26+00:00",
+  "stub_created_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Official source frames Queensland's pathway as drilling, refining and storing fuel locally. This is policy-pathway context, not a project delivery metric or capacity figure.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Copyright The State of Queensland 2026; Queensland Government website terms apply",
+  "citation": "Queensland Government, New fuel storage and refining projects to help restore fuel security, 5 May 2026.",
+  "extra": {
+    "schema": "qld_domestic_fuel_pathway.v1",
+    "fields": {
+      "pathway_elements": [
+        "drilling",
+        "refining",
+        "storage"
+      ],
+      "public_status": "Policy pathway announced",
+      "capacity_values_loaded": false,
+      "project_delivery_claim_loaded": false
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "series_id": "qld_drilling_approvals_pathway",
+  "source_id": "qld_drilling_approvals_pathway",
+  "source_name": "Queensland drilling approvals pathway source gate",
+  "source_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+  "unit": "approval pathway",
+  "retrieved_at": "2026-05-05T21:55:26+00:00",
+  "stub_created_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Official page describes the works regulation and coordinated planning pathway. Specific state/federal project approvals remain unavailable unless separately published.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Copyright The State of Queensland 1995-2026; Coordinator-General website terms apply",
+  "citation": "Office of the Coordinator-General, Taroom Trough Development Plan.",
+  "extra": {
+    "schema": "qld_drilling_approvals_pathway.v1",
+    "fields": {
+      "state_pathway": "Works regulation and Coordinator-General planning pathway",
+      "federal_pathway": "Federal EPBC fast-track request referenced in Premier material; no project approval status loaded",
+      "duplicated_approvals_issue": "Referenced as a policy issue, not quantified",
+      "specific_project_approval_status": "Unavailable"
+    }
+  }
+}
