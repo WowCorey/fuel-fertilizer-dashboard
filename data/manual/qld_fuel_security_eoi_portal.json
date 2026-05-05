@@ -1,0 +1,27 @@
+{
+  "series_id": "qld_fuel_security_eoi_portal",
+  "source_id": "qld_fuel_security_eoi_portal",
+  "source_name": "Queensland fuel security EOI portal",
+  "source_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+  "unit": "EOI stage",
+  "retrieved_at": "2026-05-05T21:55:26+00:00",
+  "stub_created_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Official page confirms Stage 1 Expression of Interest is open for liquid fuel refining and/or storage proposals. Submission counts and bid details are not public in this envelope.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "Copyright The State of Queensland 1995-2026; Coordinator-General website terms apply",
+  "citation": "Office of the Coordinator-General, Accelerating Fuel Infrastructure Program.",
+  "extra": {
+    "schema": "qld_fuel_security_eoi.v1",
+    "fields": {
+      "stage": "Stage 1 - Expression of interest",
+      "portal_status": "Public EOI form linked by official page",
+      "proposal_scope": "Liquid fuel refining and/or storage",
+      "submission_count": null,
+      "shortlist_status": "Unavailable",
+      "award_status": "Unavailable"
+    }
+  }
+}

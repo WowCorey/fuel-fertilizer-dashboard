@@ -1508,6 +1508,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "crop_planting_window_pressure": {
+      "id": "crop_planting_window_pressure",
+      "human_name": "Crop planting window pressure source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for crop planting window pressure.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "daff_agricultural_trade": {
       "id": "daff_agricultural_trade",
       "human_name": "DAFF/ABARES agricultural commodities and trade data source gate",
@@ -1668,6 +1684,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "diesel_forward_contract_coverage": {
+      "id": "diesel_forward_contract_coverage",
+      "human_name": "Diesel forward contract coverage source gate",
+      "publisher": "No public government-industry feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for diesel forward contract coverage.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "doe_industry_growth_centres_summary": {
       "id": "doe_industry_growth_centres_summary",
       "human_name": "Australian Government Industry Growth Centres Initiative - summary",
@@ -1680,6 +1712,22 @@
       "canonical_url": "https://www.industry.gov.au/",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Department of Industry, Science and Resources, manufacturing industry profiles.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "drought_pressure_agriculture_regions": {
+      "id": "drought_pressure_agriculture_regions",
+      "human_name": "Drought pressure by agricultural region source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for drought pressure by agricultural region.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1747,6 +1795,119 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "emergency_reserve_contracts": {
+      "id": "emergency_reserve_contracts",
+      "human_name": "Emergency reserve contracts source gate",
+      "publisher": "No public government-industry feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for emergency reserve contracts.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "farm_diesel_risk_source_gate": {
+      "id": "farm_diesel_risk_source_gate",
+      "human_name": "Farm diesel risk source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for farm diesel risk.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fertiliser_forward_contract_coverage": {
+      "id": "fertiliser_forward_contract_coverage",
+      "human_name": "Fertiliser forward contract coverage source gate",
+      "publisher": "No public government-industry feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security",
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for fertiliser forward contract coverage.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fertiliser_price_pressure_farm_gate": {
+      "id": "fertiliser_price_pressure_farm_gate",
+      "human_name": "Farm-gate fertiliser price pressure source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for farm-gate fertiliser price pressure.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fertiliser_stock_cover_regional": {
+      "id": "fertiliser_stock_cover_regional",
+      "human_name": "Regional fertiliser stock-cover source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for regional fertiliser stock cover.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "freight_disruption_farm_regions": {
+      "id": "freight_disruption_farm_regions",
+      "human_name": "Farm-region freight disruption source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for farm-region freight disruption.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "fuel_forward_contract_coverage": {
+      "id": "fuel_forward_contract_coverage",
+      "human_name": "Fuel forward contract coverage source gate",
+      "publisher": "No public government-industry feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for fuel forward contract coverage.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "fuel_security_diesel_days_remaining": {
       "id": "fuel_security_diesel_days_remaining",
@@ -1909,6 +2070,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "jet_forward_contract_coverage": {
+      "id": "jet_forward_contract_coverage",
+      "human_name": "Jet fuel forward contract coverage source gate",
+      "publisher": "No public government-industry feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for jet fuel forward contract coverage.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "mdba_water_storage": {
       "id": "mdba_water_storage",
       "human_name": "MDBA water storage and basin water source gate",
@@ -1941,6 +2118,70 @@
       "has_generated": false,
       "has_manual": true
     },
+    "nz_fuel_import_supply_visibility": {
+      "id": "nz_fuel_import_supply_visibility",
+      "human_name": "New Zealand fuel supply visibility source gate",
+      "publisher": "New Zealand Ministry of Business, Innovation and Employment",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-supply-disruption-response",
+      "rights": "New Zealand Government copyright and reuse terms apply",
+      "citation": "MBIE, Fuel supply disruption response.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "nz_fuel_resilience_model_comparison": {
+      "id": "nz_fuel_resilience_model_comparison",
+      "human_name": "New Zealand fuel resilience model comparison source gate",
+      "publisher": "New Zealand Ministry of Business, Innovation and Employment",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for New Zealand fuel resilience model comparison.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "nz_fuel_security_dashboard_source_gate": {
+      "id": "nz_fuel_security_dashboard_source_gate",
+      "human_name": "New Zealand fuel security dashboard equivalence source gate",
+      "publisher": "New Zealand Ministry of Business, Innovation and Employment",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for New Zealand fuel security dashboard equivalence.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "nz_fuel_security_stockholding": {
+      "id": "nz_fuel_security_stockholding",
+      "human_name": "New Zealand minimum fuel stockholding obligation",
+      "publisher": "New Zealand Ministry of Business, Innovation and Employment",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand/minimum-stockholding-obligation",
+      "rights": "New Zealand Government copyright and reuse terms apply",
+      "citation": "MBIE, Minimum stockholding obligation.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "offshore_ticket_volumes": {
       "id": "offshore_ticket_volumes",
       "human_name": "DCCEEW offshore ticket volume disclosures",
@@ -1953,6 +2194,22 @@
       "canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "petrol_forward_contract_coverage": {
+      "id": "petrol_forward_contract_coverage",
+      "human_name": "Petrol forward contract coverage source gate",
+      "publisher": "No public government-industry feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for petrol forward contract coverage.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -2059,6 +2316,119 @@
       "has_generated": false,
       "has_manual": true
     },
+    "qld_domestic_fuel_production_pathway": {
+      "id": "qld_domestic_fuel_production_pathway",
+      "human_name": "Queensland domestic fuel production pathway",
+      "publisher": "Queensland Government",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security",
+        "oil"
+      ],
+      "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "rights": "© The State of Queensland 2026; Queensland Government website terms apply",
+      "citation": "Queensland Government, New fuel storage and refining projects to help restore fuel security, 5 May 2026.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_drilling_approvals_pathway": {
+      "id": "qld_drilling_approvals_pathway",
+      "human_name": "Queensland drilling approvals pathway source gate",
+      "publisher": "Office of the Coordinator-General, Queensland Government",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+      "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",
+      "citation": "Office of the Coordinator-General, Taroom Trough Development Plan.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_fuel_hub_six_ports_official_list": {
+      "id": "qld_fuel_hub_six_ports_official_list",
+      "human_name": "Queensland fuel hub six-port official list",
+      "publisher": "Queensland Government",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "rights": "© The State of Queensland 2026; Queensland Government website terms apply",
+      "citation": "Queensland Government, New fuel storage and refining projects to help restore fuel security, 5 May 2026.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_fuel_hub_state_owned_land": {
+      "id": "qld_fuel_hub_state_owned_land",
+      "human_name": "Queensland fuel hub state-owned land audit",
+      "publisher": "Office of the Coordinator-General, Queensland Government",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",
+      "citation": "Office of the Coordinator-General, Accelerating Fuel Infrastructure Program.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_fuel_security_bid_status": {
+      "id": "qld_fuel_security_bid_status",
+      "human_name": "Queensland fuel security bid and award status",
+      "publisher": "Office of the Coordinator-General, Queensland Government",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for Queensland fuel security bid and award status.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_fuel_security_eoi_portal": {
+      "id": "qld_fuel_security_eoi_portal",
+      "human_name": "Queensland fuel security EOI portal",
+      "publisher": "Office of the Coordinator-General, Queensland Government",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",
+      "citation": "Office of the Coordinator-General, Accelerating Fuel Infrastructure Program.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_fuel_security_private_proposals": {
+      "id": "qld_fuel_security_private_proposals",
+      "human_name": "Queensland fuel security private proposals",
+      "publisher": "Office of the Coordinator-General, Queensland Government",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for Queensland fuel security private proposals.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "qld_fuel_security_unavailable_reports": {
       "id": "qld_fuel_security_unavailable_reports",
       "human_name": "Queensland Fuel Price Reporting - unavailable fuel reports",
@@ -2074,6 +2444,55 @@
       "preferred_dir": "generated",
       "has_generated": true,
       "has_manual": false
+    },
+    "qld_refinery_option_status": {
+      "id": "qld_refinery_option_status",
+      "human_name": "Queensland refinery option status source gate",
+      "publisher": "Queensland Government",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for Queensland refinery option status.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_refining_capacity_source_gate": {
+      "id": "qld_refining_capacity_source_gate",
+      "human_name": "Queensland refining capacity source gate",
+      "publisher": "Queensland Government",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for Queensland refining capacity.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "qld_taroom_trough_source_gate": {
+      "id": "qld_taroom_trough_source_gate",
+      "human_name": "Taroom Trough source gate",
+      "publisher": "Office of the Coordinator-General, Queensland Government",
+      "fetch": "manual",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security",
+        "oil"
+      ],
+      "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+      "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",
+      "citation": "Office of the Coordinator-General, Taroom Trough Development Plan.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
     },
     "rba_aud_usd": {
       "id": "rba_aud_usd",
@@ -2436,6 +2855,86 @@
       "has_generated": false,
       "has_manual": true
     },
+    "small_business_confidence_source_gate": {
+      "id": "small_business_confidence_source_gate",
+      "human_name": "Small business confidence planning source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for small business confidence planning.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "small_business_energy_price_pressure": {
+      "id": "small_business_energy_price_pressure",
+      "human_name": "Small business energy price pressure source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for small business energy price pressure.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "small_business_freight_disruption": {
+      "id": "small_business_freight_disruption",
+      "human_name": "Small business freight disruption source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for small business freight disruption.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "small_business_supply_chain_delay": {
+      "id": "small_business_supply_chain_delay",
+      "human_name": "Small business supply-chain delay source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for small business supply-chain delay.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "small_business_tourism_route_pressure": {
+      "id": "small_business_tourism_route_pressure",
+      "human_name": "Small business tourism route pressure source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for small business tourism route pressure.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "state_government_debt_summary": {
       "id": "state_government_debt_summary",
       "human_name": "State and territory government net debt (Treasury budget papers, Pass 2C)",
@@ -2706,6 +3205,22 @@
       "canonical_url": "https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update",
       "rights": "Government of Western Australia copyright; WA.gov.au terms of use apply",
       "citation": "Government of Western Australia, WA Government Weekly Fuel Update.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "water_allocation_food_regions": {
+      "id": "water_allocation_food_regions",
+      "human_name": "Water allocation by food-producing region source gate",
+      "publisher": "No source-safe public feed currently loaded",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "fertilizer"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
+      "citation": "Fuel Resilience AU source gate for water allocation by food-producing region.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

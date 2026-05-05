@@ -1,0 +1,26 @@
+{
+  "series_id": "nz_fuel_security_stockholding",
+  "source_id": "nz_fuel_security_stockholding",
+  "source_name": "New Zealand minimum fuel stockholding obligation",
+  "source_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand/minimum-stockholding-obligation",
+  "unit": "days cover",
+  "retrieved_at": "2026-05-05T21:55:26+00:00",
+  "stub_created_at": null,
+  "last_data_point": null,
+  "values": [],
+  "notes": "Official MBIE page publishes minimum stockholding obligations: petrol 28 days, jet fuel 24 days and diesel 21 days. This is a regulatory comparison, not an Australian dashboard value.",
+  "status": "ok",
+  "manual_entry": true,
+  "source_rights": "New Zealand Government copyright and reuse terms apply",
+  "citation": "MBIE, Minimum stockholding obligation.",
+  "extra": {
+    "schema": "nz_fuel_stockholding_obligation.v1",
+    "fields": {
+      "petrol_days_cover": 28,
+      "diesel_days_cover": 21,
+      "jet_fuel_days_cover": 24,
+      "comparison_scope": "NZ minimum stockholding obligation",
+      "not_equivalent_to_australia": true
+    }
+  }
+}

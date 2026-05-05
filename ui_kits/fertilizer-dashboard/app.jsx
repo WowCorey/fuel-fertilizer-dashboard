@@ -16,6 +16,14 @@ const SERIES = [
   'bom_water_storage',
   'mdba_water_storage',
   'daff_agricultural_trade',
+  'farm_diesel_risk_source_gate',
+  'fertiliser_stock_cover_regional',
+  'fertiliser_price_pressure_farm_gate',
+  'crop_planting_window_pressure',
+  'water_allocation_food_regions',
+  'drought_pressure_agriculture_regions',
+  'freight_disruption_farm_regions',
+  'fertiliser_forward_contract_coverage',
 ];
 
 const latestPoint = env => env?.values?.length ? env.values.at(-1) : null;
@@ -99,6 +107,114 @@ function ChecklistTable({ rows }) {
         </tbody>
       </table>
     </div>
+  );
+}
+
+function FarmerDecisionPressure({ data }) {
+  const rows = [
+    {
+      id: 'fertiliser_stock_cover_regional',
+      question: 'Can farmers see fertiliser cover?',
+      answer: 'Not yet. National or regional fertiliser cover by nutrient type is not loaded.',
+      current: 'Unavailable',
+      env: data.fertiliser_stock_cover_regional,
+      missing: 'Public fertiliser stocks, usage and cover by nutrient and production region.',
+      why: 'Fertiliser cover affects planting, top-dressing and cash-flow timing.',
+    },
+    {
+      id: 'fertiliser_price_pressure_farm_gate',
+      question: 'Can farmers see fertiliser price pressure?',
+      answer: 'Partially. Import value and source-country concentration are visible, but farm-gate price pressure is not loaded.',
+      current: 'Partial',
+      env: data.fertiliser_price_pressure_farm_gate,
+      partial: true,
+      missing: 'Farm-gate or wholesale fertiliser price rows tied to nutrient type and region.',
+      why: 'Import value is not a farm-gate price and should not be treated as one.',
+    },
+    {
+      id: 'farm_diesel_risk_source_gate',
+      question: 'Can farmers see farm diesel risk?',
+      answer: 'Not yet. The fuel page has national fuel-security context, not farm-region diesel availability.',
+      current: 'Unavailable',
+      env: data.farm_diesel_risk_source_gate,
+      missing: 'Farm diesel availability, price and disruption signal by production region.',
+      why: 'Diesel risk affects planting, harvest, irrigation pumping and freight.',
+    },
+    {
+      id: 'water_allocation_food_regions',
+      question: 'Can farmers see water allocation by production region?',
+      answer: 'Not yet. No source-safe water allocation table by food-producing region is loaded.',
+      current: 'Unavailable',
+      env: data.water_allocation_food_regions,
+      missing: 'Allocation and storage rows by irrigated production region.',
+      why: 'Water availability can decide whether a crop can be planted or finished.',
+    },
+    {
+      id: 'drought_pressure_agriculture_regions',
+      question: 'Can farmers see rainfall/drought pressure?',
+      answer: 'Not yet. BOM source gates are registered, but no agricultural-region drought metric is wired.',
+      current: 'Unavailable',
+      env: data.drought_pressure_agriculture_regions,
+      missing: 'Rainfall deficiency or drought stress by agricultural region, with period and class boundary.',
+      why: 'Regional rainfall pressure changes planting and stocking decisions.',
+    },
+    {
+      id: 'crop_planting_window_pressure',
+      question: 'Can farmers see crop-region exposure?',
+      answer: 'Not yet. No crop planting-window exposure indicator is loaded.',
+      current: 'Unavailable',
+      env: data.crop_planting_window_pressure,
+      missing: 'Crop calendar, region exposure and input availability method from a named source.',
+      why: 'Farm decisions are timing-sensitive, not just annual totals.',
+    },
+    {
+      id: 'freight_disruption_farm_regions',
+      question: 'Can farmers see freight disruption risk?',
+      answer: 'Not yet. No farm-region freight disruption feed is loaded.',
+      current: 'Unavailable',
+      env: data.freight_disruption_farm_regions,
+      missing: 'Freight disruption or route risk indicator for farm regions.',
+      why: 'Inputs and produce both depend on fuel, freight and cold-chain resilience.',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="farmer-pressure-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Farmer planning</span>
+          <h2 id="farmer-pressure-h">Farmer decision pressure</h2>
+          <p className="section__lede">
+            Farmers need source-safe signals for planting and operating decisions. This section shows
+            what the page can currently answer and which farm-planning feeds remain missing.
+          </p>
+        </div>
+      </div>
+      <div className="data-table-wrap">
+        <table className="data-table data-table--plain">
+          <thead>
+            <tr>
+              <th>Planning question</th>
+              <th>Current dashboard status</th>
+              <th>Available public source</th>
+              <th>Missing source feed</th>
+              <th>Why it matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(row => (
+              <tr key={row.id}>
+                <td>{row.question}<br/><span className="caption">{row.answer}</span></td>
+                <td>{window.EnvTrustBadges ? <EnvTrustBadges env={row.env} partial={row.partial}/> : row.current}</td>
+                <td className="mono">{row.env?.series_id || row.id}</td>
+                <td>{row.missing}</td>
+                <td>{row.why}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
 
@@ -257,6 +373,18 @@ function App() {
       why: 'Connects fuel-security pressure to planting, harvesting, freight and irrigation pumping.',
       status: 'Awaiting method',
       kind: 'partial',
+    },
+    {
+      item: 'Forward fertiliser contract coverage',
+      why: 'Shows whether fertiliser supply is committed beyond current import shipments.',
+      status: 'Unavailable',
+      kind: 'unavailable',
+    },
+    {
+      item: 'Crop planting-window pressure',
+      why: 'Makes input, diesel and water risk visible against planting decisions.',
+      status: 'Source-gated',
+      kind: 'unavailable',
     },
     {
       item: 'Water allocation and storage by food-producing region',
@@ -538,6 +666,8 @@ function App() {
             />
           </div>
         </section>
+
+        <FarmerDecisionPressure data={data}/>
 
         <section className="section" aria-labelledby="water-h">
           <div className="section__head">

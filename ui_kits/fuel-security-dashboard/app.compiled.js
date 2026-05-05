@@ -941,7 +941,7 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'fuel_security_petrol_days_remaining', 'fuel_security_diesel_days_remaining', 'fuel_security_jet_days_remaining', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts', 'wa_fuel_security_stockouts', 'qld_fuel_security_unavailable_reports', 'aps_monthly', 'aps_stocks_petrol', 'aps_stocks_diesel', 'aps_sales_petrol', 'aps_sales_diesel', 'aps_sales_jet', 'aps_imports_petrol', 'aps_imports_diesel', 'abs_petroleum_imports', 'aus_retail_fuel_multistate', 'fuel_security_status_model', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking', 'fuel_security_terminal_capacity'];
+const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'fuel_security_petrol_days_remaining', 'fuel_security_diesel_days_remaining', 'fuel_security_jet_days_remaining', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'pmc_retail_stockouts', 'wa_fuel_security_stockouts', 'qld_fuel_security_unavailable_reports', 'aps_monthly', 'aps_stocks_petrol', 'aps_stocks_diesel', 'aps_sales_petrol', 'aps_sales_diesel', 'aps_sales_jet', 'aps_imports_petrol', 'aps_imports_diesel', 'abs_petroleum_imports', 'aus_retail_fuel_multistate', 'fuel_security_status_model', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking', 'fuel_security_terminal_capacity', 'qld_fuel_hub_six_ports_official_list', 'qld_fuel_hub_state_owned_land', 'qld_fuel_security_eoi_portal', 'qld_fuel_security_private_proposals', 'qld_fuel_security_bid_status', 'qld_refining_capacity_source_gate', 'qld_refinery_option_status', 'qld_domestic_fuel_production_pathway', 'qld_taroom_trough_source_gate', 'qld_drilling_approvals_pathway', 'fuel_forward_contract_coverage', 'diesel_forward_contract_coverage', 'petrol_forward_contract_coverage', 'jet_forward_contract_coverage', 'emergency_reserve_contracts', 'small_business_freight_disruption', 'small_business_energy_price_pressure', 'small_business_tourism_route_pressure', 'small_business_supply_chain_delay', 'small_business_confidence_source_gate', 'nz_fuel_security_dashboard_source_gate', 'nz_fuel_security_stockholding', 'nz_fuel_import_supply_visibility', 'nz_fuel_resilience_model_comparison'];
 const PRODUCTS = [{
   name: 'Petrol',
   daysId: 'fuel_security_petrol_days_remaining',
@@ -997,6 +997,34 @@ function StatusBlockers({
   }, blockers.map(blocker => React.createElement("li", {
     key: blocker
   }, blocker)));
+}
+function GateStatus({
+  env,
+  partial = false
+}) {
+  return React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  });
+}
+function textOrUnavailable(value) {
+  return value === null || value === undefined || value === '' ? 'Unavailable' : value;
+}
+function GateTable({
+  columns,
+  rows
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
+    key: col
+  }, col)))), React.createElement("tbody", null, rows.map((row, idx) => React.createElement("tr", {
+    key: row.key || idx
+  }, row.cells.map((cell, cellIdx) => React.createElement("td", {
+    key: `${row.key || idx}-${cellIdx}`
+  }, cell)))))));
 }
 function SecurityCard({
   eyebrow,
@@ -1282,6 +1310,61 @@ function PublishingNeedsChecklist() {
     why: 'Helps tourism, freight and remote communities plan.',
     label: 'Not safe to publish yet',
     kind: 'unavailable'
+  }, {
+    item: 'Six-port hub official status',
+    why: 'Shows which Queensland ports are named publicly and what project status is actually verified.',
+    label: 'Partial',
+    kind: 'partial'
+  }, {
+    item: 'State-owned land availability',
+    why: 'Shows whether suitable industrial or port land is actually available for storage or refining.',
+    label: 'Source-gated',
+    kind: 'unavailable'
+  }, {
+    item: 'EOI and private-sector bid status',
+    why: 'Shows whether proposals exist, are shortlisted, assessed, awarded or contracted.',
+    label: 'Mostly unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Refining and storage project pipeline',
+    why: 'Separates announced opportunity pathways from approved projects, capacity and delivery dates.',
+    label: 'Source-gated',
+    kind: 'unavailable'
+  }, {
+    item: 'Drilling and approvals pathway',
+    why: 'Shows what is state-approved, what needs federal approval and what remains planning context.',
+    label: 'Partial',
+    kind: 'partial'
+  }, {
+    item: 'Forward fuel and fertiliser contracts',
+    why: 'Shows whether supply is committed beyond the current month rather than inferred from shipments.',
+    label: 'Unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Product-specific cargo horizon',
+    why: 'Shows petrol, diesel, jet fuel and fertiliser inbound visibility separately.',
+    label: 'Unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Port-destination visibility',
+    why: 'Shows where inbound supply is expected to land without guessing from vessel movement.',
+    label: 'Unavailable',
+    kind: 'unavailable'
+  }, {
+    item: 'Farmer decision inputs',
+    why: 'Shows fertiliser cover, farm diesel risk, water allocation and freight pressure in planting windows.',
+    label: 'Source-gated',
+    kind: 'unavailable'
+  }, {
+    item: 'Small-business planning indicators',
+    why: 'Connects fuel pressure to freight, energy, tourism-route and hiring/workforce signals.',
+    label: 'Source-gated',
+    kind: 'unavailable'
+  }, {
+    item: 'New Zealand comparison source mapping',
+    why: 'Shows what NZ publishes and what Australia or Queensland would need for comparable visibility.',
+    label: 'Partial',
+    kind: 'partial'
   }];
   return React.createElement("section", {
     className: "section",
@@ -1413,6 +1496,434 @@ function QueenslandVisibility({
     className: "data-table data-table--plain"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Queensland public signal"), React.createElement("th", null, "Loaded value"), React.createElement("th", null, "Source boundary"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "PM&C petrol stock-outs"), React.createElement("td", null, fmtNumber(stockoutFields.qld_petrol), " sites; 7-day change ", fmtChange(stockoutFields.qld_petrol_change_7d)), React.createElement("td", null, "State-level row only; no station names, towns or live availability.")), React.createElement("tr", null, React.createElement("td", null, "PM&C diesel stock-outs"), React.createElement("td", null, fmtNumber(stockoutFields.qld_diesel), " sites; 7-day change ", fmtChange(stockoutFields.qld_diesel_change_7d)), React.createElement("td", null, "State-level row only; no station names, towns or live availability.")), React.createElement("tr", null, React.createElement("td", null, "QLD unavailable fuel reports"), React.createElement("td", null, fmtNumber(latest(qldReportsEnv)), " monthly reports; latest unavailable report date ", qldFields.latest_unavailable_report_date || '-'), React.createElement("td", null, "Monthly change-report coverage where Price = 9999; not a current statewide dry-site count."))))));
 }
+function QueenslandFuelSovereigntySection({
+  data
+}) {
+  const portsEnv = data.qld_fuel_hub_six_ports_official_list;
+  const landEnv = data.qld_fuel_hub_state_owned_land;
+  const eoiEnv = data.qld_fuel_security_eoi_portal;
+  const proposalEnv = data.qld_fuel_security_private_proposals;
+  const pathwayEnv = data.qld_domestic_fuel_production_pathway;
+  const ports = fields(portsEnv).ports || [];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "qld-sovereignty-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Queensland fuel sovereignty"), React.createElement("h2", {
+    id: "qld-sovereignty-h"
+  }, "Queensland fuel sovereignty and storage pathway"), React.createElement("p", {
+    className: "section__lede"
+  }, "Queensland's public fuel-security discussion has moved beyond a dashboard alone. It now includes storage, refining, port infrastructure, state-owned land, drilling approvals, private-sector proposals and forward supply visibility. This section separates what is public, what is source-gated, and what government or industry would need to publish."))), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(SecurityCard, {
+    eyebrow: "Observed public context",
+    title: "Official six-port pathway",
+    value: ports.length ? ports.length : null,
+    unit: "named hubs",
+    env: portsEnv,
+    partial: true
+  }, "Named by the Queensland Government source. No port capacity, project approval or land parcel is inferred."), React.createElement(SecurityCard, {
+    eyebrow: "Observed public context",
+    title: "State land audit",
+    value: fields(landEnv).audit_status || null,
+    env: landEnv,
+    partial: true
+  }, "State-wide audit is public context; parcel-level availability remains source-gated."), React.createElement(SecurityCard, {
+    eyebrow: "Observed public context",
+    title: "EOI pathway",
+    value: fields(eoiEnv).stage || null,
+    env: eoiEnv,
+    partial: true
+  }, "Stage and scope are public. Submission count, proponents and contracts remain unavailable."), React.createElement(SecurityCard, {
+    eyebrow: "Unavailable",
+    title: "Private bids / awards",
+    env: proposalEnv,
+    unavailable: true
+  }, "Proposal counts, proponent names, shortlist and award status are not publicly loaded.")), React.createElement("div", {
+    style: {
+      height: 20
+    }
+  }), React.createElement(GateTable, {
+    columns: ['Variable', 'Current public evidence', 'Public confidence', 'What remains missing'],
+    rows: [{
+      key: 'ports',
+      cells: ['Ports and hubs', ports.length ? ports.join(', ') : 'Awaiting official source confirmation', React.createElement(GateStatus, {
+        env: portsEnv,
+        partial: true
+      }), 'Site boundaries, terminal capacity, refinery capacity, land tenure and approved projects.']
+    }, {
+      key: 'land',
+      cells: ['State-owned land', textOrUnavailable(fields(landEnv).audit_status), React.createElement(GateStatus, {
+        env: landEnv,
+        partial: true
+      }), 'Public register of suitable parcels, owner/authority, availability and development constraints.']
+    }, {
+      key: 'eoi',
+      cells: ['EOI / market engagement', `${fields(eoiEnv).stage || 'EOI source gate'}; scope: ${fields(eoiEnv).proposal_scope || 'liquid fuel refining/storage'}`, React.createElement(GateStatus, {
+        env: eoiEnv,
+        partial: true
+      }), 'Number of submissions, proposal categories, proponents, shortlist and contract status.']
+    }, {
+      key: 'pathway',
+      cells: ['Drill-refine-store pathway', (fields(pathwayEnv).pathway_elements || ['drilling', 'refining', 'storage']).join(', '), React.createElement(GateStatus, {
+        env: pathwayEnv,
+        partial: true
+      }), 'Capacity, timing, delivery status, counterparties and approvals for specific projects.']
+    }]
+  }));
+}
+function SixPortFuelHubPathway({
+  data
+}) {
+  const portsEnv = data.qld_fuel_hub_six_ports_official_list;
+  const ports = fields(portsEnv).ports || [];
+  const rows = ports.length ? ports.map(port => ({
+    key: port,
+    cells: [port, 'Queensland Government fuel storage/refining statement', 'Named as a Government-owned site/port pathway; no specific capacity or project loaded.', 'Source-gated; no parcel-level public row loaded.', 'EOI pathway public; bid count unavailable.', React.createElement(GateStatus, {
+      env: portsEnv,
+      partial: true
+    }), 'Named hub only. Do not infer terminals, storage tanks, refinery works or approved proponents.']
+  })) : [{
+    key: 'unverified',
+    cells: ['Six ports referenced publicly', 'Awaiting official source confirmation', 'Awaiting verified public source', 'Unavailable', 'Unavailable', React.createElement(GateStatus, {
+      env: portsEnv
+    }), 'No ports are guessed without an official list.']
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "six-port-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Port pathway"), React.createElement("h2", {
+    id: "six-port-h"
+  }, "Six-port fuel hub pathway"), React.createElement("p", {
+    className: "section__lede"
+  }, "The official Queensland source names the six hubs, but this dashboard does not infer storage tanks, refinery capacity, state-owned land parcels, port destination flows or proposal status."))), React.createElement(GateTable, {
+    columns: ['Port / hub', 'Evidence source', 'Storage/refining relevance', 'State-owned land visibility', 'EOI/bid status', 'Public confidence', 'Current status'],
+    rows: rows
+  }));
+}
+function StateLandAndIndustrialHubs({
+  data
+}) {
+  const landEnv = data.qld_fuel_hub_state_owned_land;
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "state-land-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Industrial land"), React.createElement("h2", {
+    id: "state-land-h"
+  }, "State-owned land and industrial fuel hubs"), React.createElement("p", {
+    className: "section__lede"
+  }, "A land audit is visible as public context. The dashboard does not list parcels, infer ownership from maps or treat a port name as a confirmed storage site."))), React.createElement(GateTable, {
+    columns: ['Location / hub', 'Land owner / public authority', 'Intended use', 'Development status', 'Approval status', 'Source confidence', 'Notes'],
+    rows: [{
+      key: 'audit',
+      cells: ['Queensland industrial and port land audit', 'OCG / EDQ source gate', 'Potential fuel refining and storage projects', textOrUnavailable(fields(landEnv).audit_status), 'Unavailable by site', React.createElement(GateStatus, {
+        env: landEnv,
+        partial: true
+      }), 'No land parcels, hectares, tenure, constraints or shortlisted sites are loaded.']
+    }]
+  }));
+}
+function PrivateSectorEOISection({
+  data
+}) {
+  const eoiEnv = data.qld_fuel_security_eoi_portal;
+  const proposalEnv = data.qld_fuel_security_private_proposals;
+  const bidEnv = data.qld_fuel_security_bid_status;
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "eoi-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Market engagement"), React.createElement("h2", {
+    id: "eoi-h"
+  }, "Private-sector proposals and EOI status"), React.createElement("p", {
+    className: "section__lede"
+  }, "The public EOI process is visible. Bid numbers, proponent identities, proposal categories, shortlist status and award/contract status remain government-held unless published."))), React.createElement(GateTable, {
+    columns: ['Field', 'Public availability', 'Coverage period', 'Volume / count visibility', 'Current status', 'Source confidence'],
+    rows: [{
+      key: 'portal',
+      cells: ['EOI portal link', 'Public official page and form link', 'Stage 1', 'No submission count', fields(eoiEnv).stage || 'EOI open', React.createElement(GateStatus, {
+        env: eoiEnv,
+        partial: true
+      })]
+    }, {
+      key: 'proposals',
+      cells: ['Proposal categories', 'Not publicly published as data', '-', 'Unavailable', 'Government-held feed required', React.createElement(GateStatus, {
+        env: proposalEnv
+      })]
+    }, {
+      key: 'bids',
+      cells: ['Shortlist / award status', 'Not publicly published as data', '-', 'Unavailable', 'Government-held feed required', React.createElement(GateStatus, {
+        env: bidEnv
+      })]
+    }]
+  }));
+}
+function RefiningAndProductionPathway({
+  data
+}) {
+  const pathwayEnv = data.qld_domestic_fuel_production_pathway;
+  const capacityEnv = data.qld_refining_capacity_source_gate;
+  const optionEnv = data.qld_refinery_option_status;
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "refining-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Domestic capability"), React.createElement("h2", {
+    id: "refining-h"
+  }, "Refining and domestic production pathway"), React.createElement("p", {
+    className: "section__lede"
+  }, "This section connects the public Queensland pathway to existing source boundaries. APS refinery production remains separate from refinery capacity or utilisation, and no new refinery project is implied."))), React.createElement(GateTable, {
+    columns: ['Signal', 'Public source status', 'Fuel relevance', 'What is not loaded', 'Confidence'],
+    rows: [{
+      key: 'pathway',
+      cells: ['Drill-refine-store pathway', (fields(pathwayEnv).pathway_elements || []).join(', ') || 'Policy pathway', 'Petrol, diesel and jet fuel resilience context', 'No delivery date, contract, capacity or approval value', React.createElement(GateStatus, {
+        env: pathwayEnv,
+        partial: true
+      })]
+    }, {
+      key: 'capacity',
+      cells: ['Queensland refining capacity', 'No source-safe capacity denominator loaded', 'Potential refining context only', 'Capacity, utilisation and product yield', React.createElement(GateStatus, {
+        env: capacityEnv
+      })]
+    }, {
+      key: 'options',
+      cells: ['Refinery option status', 'Source-gated', 'Potential project pipeline only', 'FID, build commitment, proponent and approvals', React.createElement(GateStatus, {
+        env: optionEnv
+      })]
+    }]
+  }));
+}
+function DrillingApprovalsPathway({
+  data
+}) {
+  const taroomEnv = data.qld_taroom_trough_source_gate;
+  const approvalsEnv = data.qld_drilling_approvals_pathway;
+  const f = fields(taroomEnv);
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "drilling-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Drilling and approvals"), React.createElement("h2", {
+    id: "drilling-h"
+  }, "Drilling and approvals pathway"), React.createElement("p", {
+    className: "section__lede"
+  }, "Public comments refer to a Queensland resource-development pathway linked to fuel sovereignty. This dashboard does not infer resource volume, commercial production or approval status without official source confirmation."))), React.createElement(GateTable, {
+    columns: ['Field', 'Public value', 'Status', 'Source confidence', 'Boundary'],
+    rows: [{
+      key: 'name',
+      cells: ['Basin/trough/project name', f.official_name || 'Taroom Trough', 'Official name verified', React.createElement(GateStatus, {
+        env: taroomEnv,
+        partial: true
+      }), 'This corrects the public-copy boundary without inferring volumes.']
+    }, {
+      key: 'resource',
+      cells: ['Resource type', f.resource_type || 'oil and gas resources', 'Planning context', React.createElement(GateStatus, {
+        env: taroomEnv,
+        partial: true
+      }), 'No reserve, production or commerciality claim is loaded.']
+    }, {
+      key: 'state',
+      cells: ['State approval pathway', fields(approvalsEnv).state_pathway || 'Works regulation / Coordinator-General pathway', 'Partial public pathway', React.createElement(GateStatus, {
+        env: approvalsEnv,
+        partial: true
+      }), 'Not a project-level approval for a named proponent.']
+    }, {
+      key: 'federal',
+      cells: ['Federal approval pathway', fields(approvalsEnv).federal_pathway || 'EPBC pathway source-gated', 'Source-gated', React.createElement(GateStatus, {
+        env: approvalsEnv,
+        partial: true
+      }), 'No federal approval completion is loaded.']
+    }]
+  }));
+}
+function ForwardContractsAndSupplyCoverage({
+  data
+}) {
+  const rows = [['Fuel import contracts', data.fuel_forward_contract_coverage, 'All products', 'Coverage period, volume and counterparties are not public.'], ['Diesel contract coverage', data.diesel_forward_contract_coverage, 'Diesel', 'No public diesel contract horizon is loaded.'], ['Petrol contract coverage', data.petrol_forward_contract_coverage, 'Petrol', 'No public petrol contract horizon is loaded.'], ['Jet fuel contract coverage', data.jet_forward_contract_coverage, 'Jet fuel', 'No public jet-fuel contract horizon is loaded.'], ['Fertiliser import contracts', data.fertiliser_forward_contract_coverage, 'Fertiliser', 'Fertiliser contracts are tracked on the food/farms page as source-gated.'], ['Emergency reserve contracts', data.emergency_reserve_contracts, 'Reserve arrangements', 'Counterparties and coverage period are unavailable unless published.'], ['Government-held supply agreements', data.fuel_forward_contract_coverage, 'Government-held', 'A public register or dashboard feed would be required.'], ['Industry-held supply agreements', data.fuel_forward_contract_coverage, 'Industry-held', 'A public, licence-safe industry feed would be required.']];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "contracts-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Forward coverage"), React.createElement("h2", {
+    id: "contracts-h"
+  }, "Forward contracts and supply coverage"), React.createElement("p", {
+    className: "section__lede"
+  }, "Forward import orders and tankers show aggregate public visibility. They are not contracts. This table keeps contract coverage unavailable until government or industry publishes it."))), React.createElement(GateTable, {
+    columns: ['Product', 'Public availability', 'Coverage period', 'Volume / counterparty visibility', 'Current status', 'What must be published'],
+    rows: rows.map(([label, env, product, missing]) => ({
+      key: label,
+      cells: [product, 'Unavailable', '-', 'Unavailable', React.createElement(GateStatus, {
+        env: env
+      }), missing]
+    }))
+  }));
+}
+function WhatIsOnItsWay({
+  data
+}) {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "horizon-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Supply horizon"), React.createElement("h2", {
+    id: "horizon-h"
+  }, "What is on its way"), React.createElement("p", {
+    className: "section__lede"
+  }, "The horizon view uses aggregate public data only. It does not become a live vessel map, port-destination tracker or cargo-level ETA feed."))), React.createElement(GateTable, {
+    columns: ['Supply horizon row', 'Visible / partial / unavailable', 'Source', 'What the public can know', 'What remains missing'],
+    rows: [{
+      key: 'tankers',
+      cells: ['Aggregate fuel tankers', 'Partial', 'PM&C aggregate tanker counts', `${fmtMetric(latest(data.pmc_tankers_on_water), 'reported tankers')} plus crude/clean fields where loaded`, 'Vessel names, cargoes, port destinations and ETAs']
+    }, {
+      key: 'orders',
+      cells: ['Forward import orders', 'Partial', 'PM&C forward import orders', `${fmtMetric(latest(data.pmc_forward_import_orders), 'billion L ordered', 1)} aggregate order visibility`, 'Contract terms, counterparties and product split beyond the public row']
+    }, {
+      key: 'imports',
+      cells: ['ABS petroleum imports', 'Observed', 'ABS petroleum import value', `${fmtMetric(latest(data.abs_petroleum_imports), 'AUD thousands')}`, 'Cargo-level timing, contract status and destination ports']
+    }, {
+      key: 'diesel',
+      cells: ['Diesel cargo visibility', 'Unavailable', 'No cargo-level public feed loaded', 'APS diesel imports are monthly historical context only', 'Inbound cargo identity, ETA and destination']
+    }, {
+      key: 'petrol',
+      cells: ['Petrol cargo visibility', 'Unavailable', 'No cargo-level public feed loaded', 'APS petrol imports are monthly historical context only', 'Inbound cargo identity, ETA and destination']
+    }, {
+      key: 'jet',
+      cells: ['Jet fuel cargo visibility', 'Unavailable', 'No cargo-level public feed loaded', 'No current cargo-level public feed', 'Inbound cargo identity, ETA and destination']
+    }, {
+      key: 'contracts',
+      cells: ['Contract-backed deliveries', 'Unavailable', 'No public contract coverage feed loaded', 'No source-safe contract row', 'Coverage period, volume, counterparty and delivery schedule']
+    }, {
+      key: 'ports',
+      cells: ['Port destination visibility', 'Unavailable', 'No live vessel or port-call feed loaded', 'No destination feed', 'Port-call ETAs and terminals']
+    }, {
+      key: 'etas',
+      cells: ['ETA visibility', 'Unavailable', 'No live vessel feed loaded', 'No AIS/vessel layer', 'AIS positions, vessel names and ETAs']
+    }]
+  }));
+}
+function SmallBusinessPlanningSignals({
+  data
+}) {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "small-business-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Small business planning"), React.createElement("h2", {
+    id: "small-business-h"
+  }, "Small business planning signals"), React.createElement("p", {
+    className: "section__lede"
+  }, "This is a planning-gap view for small businesses deciding whether to hire, bunker down or work more hours. It does not turn weak signals into operating advice."))), React.createElement(GateTable, {
+    columns: ['Planning signal', 'Current dashboard status', 'Available public source', 'Missing source feed', 'Confidence'],
+    rows: [{
+      key: 'fuel',
+      cells: ['Fuel price pressure', 'Partial', 'Public-feed retail fuel rows where available', 'Complete product-level regional pump prices', React.createElement(GateStatus, {
+        env: data.aus_retail_fuel_multistate,
+        partial: true
+      })]
+    }, {
+      key: 'outage',
+      cells: ['Regional outage visibility', 'Partial', 'PM&C stock-out rows and QLD/WA partial feeds', 'Live station-level outage and route coverage', React.createElement(GateStatus, {
+        env: data.fuel_security_live_station_outage_feed
+      })]
+    }, {
+      key: 'freight',
+      cells: ['Freight disruption indicators', 'Unavailable', 'No loaded public feed', 'Freight delay or route disruption indicator', React.createElement(GateStatus, {
+        env: data.small_business_freight_disruption
+      })]
+    }, {
+      key: 'energy',
+      cells: ['Energy price pressure', 'Source-gated', 'Power grid dashboard separate from this page', 'Small-business energy price pressure feed', React.createElement(GateStatus, {
+        env: data.small_business_energy_price_pressure
+      })]
+    }, {
+      key: 'tourism',
+      cells: ['Tourism route pressure', 'Unavailable', 'No route-level fuel feed', 'Tourism-route fuel availability and risk coverage', React.createElement(GateStatus, {
+        env: data.small_business_tourism_route_pressure
+      })]
+    }, {
+      key: 'supply',
+      cells: ['Supply-chain delay indicators', 'Unavailable', 'No loaded public feed', 'Fuel-linked supply-chain delay indicator', React.createElement(GateStatus, {
+        env: data.small_business_supply_chain_delay
+      })]
+    }, {
+      key: 'confidence',
+      cells: ['Hiring/workforce pressure', 'Unavailable', 'No loaded public feed', 'Official small-business planning/hiring indicator', React.createElement(GateStatus, {
+        env: data.small_business_confidence_source_gate
+      })]
+    }]
+  }));
+}
+function NewZealandComparison({
+  data
+}) {
+  const stockFields = fields(data.nz_fuel_security_stockholding);
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "nz-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "New Zealand comparison"), React.createElement("h2", {
+    id: "nz-h"
+  }, "New Zealand comparison"), React.createElement("p", {
+    className: "section__lede"
+  }, "The Premier referenced New Zealand as having a version of fuel-security visibility. This comparison tracks what New Zealand publishes, what Australia publishes, and what Queensland would still need for a comparable public dashboard. It does not claim New Zealand has the same dashboard."))), React.createElement(GateTable, {
+    columns: ['NZ source / model', 'What NZ publishes', 'Australia equivalent', 'Queensland equivalent', 'Gap', 'Relevance'],
+    rows: [{
+      key: 'stockholding',
+      cells: ['MBIE minimum stockholding obligation', `Petrol ${stockFields.petrol_days_cover || '-'} days, diesel ${stockFields.diesel_days_cover || '-'} days, jet fuel ${stockFields.jet_fuel_days_cover || '-'} days`, 'Australia has MSO/day-cover public rows but different legal design', 'No Queensland-specific equivalent loaded', 'Different law, scope and geography', React.createElement(GateStatus, {
+        env: data.nz_fuel_security_stockholding,
+        partial: true
+      })]
+    }, {
+      key: 'updates',
+      cells: ['MBIE fuel supply update page', fields(data.nz_fuel_import_supply_visibility).published_update_cadence || 'Regular update cadence source-gated', 'PM&C public fuel security page and this prototype', 'QLD partial stock-out/open-data rows only', 'No Queensland daily stock dashboard loaded', React.createElement(GateStatus, {
+        env: data.nz_fuel_import_supply_visibility,
+        partial: true
+      })]
+    }, {
+      key: 'dashboard',
+      cells: ['Dashboard equivalence', 'Not verified as equivalent', 'This site is independent, not official', 'No official Queensland dashboard loaded', 'Need official source mapping before comparing models', React.createElement(GateStatus, {
+        env: data.nz_fuel_security_dashboard_source_gate
+      })]
+    }, {
+      key: 'model',
+      cells: ['Fuel resilience model comparison', 'Source-gated', 'No model-equivalence table', 'No model-equivalence table', 'Need official model/source mapping', React.createElement(GateStatus, {
+        env: data.nz_fuel_resilience_model_comparison
+      })]
+    }]
+  }));
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -1477,6 +1988,26 @@ function App() {
   }), React.createElement(HowToReadPage, null), React.createElement(PublicRequestAlignment, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
     stockoutsEnv: data.pmc_retail_stockouts,
     qldReportsEnv: data.qld_fuel_security_unavailable_reports
+  }), React.createElement(QueenslandFuelSovereigntySection, {
+    data: data
+  }), React.createElement(SixPortFuelHubPathway, {
+    data: data
+  }), React.createElement(StateLandAndIndustrialHubs, {
+    data: data
+  }), React.createElement(PrivateSectorEOISection, {
+    data: data
+  }), React.createElement(RefiningAndProductionPathway, {
+    data: data
+  }), React.createElement(DrillingApprovalsPathway, {
+    data: data
+  }), React.createElement(ForwardContractsAndSupplyCoverage, {
+    data: data
+  }), React.createElement(WhatIsOnItsWay, {
+    data: data
+  }), React.createElement(SmallBusinessPlanningSignals, {
+    data: data
+  }), React.createElement(NewZealandComparison, {
+    data: data
   }), React.createElement(MoreThanPumpPrices, null), React.createElement("section", {
     className: "section section--why"
   }, React.createElement("div", {
