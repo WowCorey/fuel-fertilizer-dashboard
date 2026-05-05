@@ -22,6 +22,7 @@ import argparse
 import calendar
 import csv
 import datetime as dt
+import html
 import io
 import json
 import os
@@ -770,6 +771,101 @@ def fetch_rba_csv_column(
         "last_data_point": latest_date.isoformat(),
         "notes": notes,
         "source_url_resolved": url,
+    }
+
+
+def fetch_rba_cash_rate_latest(source: dict[str, Any]) -> dict[str, Any]:
+    """Fetch the latest RBA cash-rate decision from the official cash-rate page."""
+    url = source.get("fetch_url") or source.get("canonical_url") or source["url"]
+    if not url:
+        raise RuntimeError("rba_cash_rate_latest requires fetch_url")
+
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=45)
+    r.raise_for_status()
+
+    match = re.search(r"(?is)<table[^>]*>.*?</table>", r.text)
+    if not match:
+        raise RuntimeError("RBA cash-rate page contained no HTML table")
+
+    def clean_cell(cell_html: str) -> str:
+        text = re.sub(r"(?is)<[^>]+>", " ", cell_html)
+        text = html.unescape(re.sub(r"\s+", " ", text)).strip()
+        return text.replace("\xa0", " ")
+
+    rows: list[list[str]] = []
+    for tr_html in re.findall(r"(?is)<tr[^>]*>(.*?)</tr>", match.group(0)):
+        cells = [
+            clean_cell(cell)
+            for cell in re.findall(r"(?is)<t[dh][^>]*>(.*?)</t[dh]>", tr_html)
+        ]
+        if cells:
+            rows.append(cells)
+
+    if len(rows) < 2:
+        raise RuntimeError("RBA cash-rate page table contained no decision rows")
+
+    header = [cell.strip().lower() for cell in rows[0]]
+    required = ["effective date", "change % points", "cash rate target %"]
+    if header[:3] != required:
+        raise RuntimeError(f"RBA cash-rate table header changed: {rows[0]!r}")
+
+    decisions: list[dict[str, Any]] = []
+    for row in rows[1:]:
+        if len(row) < 3:
+            continue
+        try:
+            effective_date = dt.datetime.strptime(row[0], "%d %b %Y").date()
+            change = float(row[1].replace("+", ""))
+            target = float(row[2])
+        except (ValueError, TypeError):
+            continue
+        decisions.append({
+            "effective_date": effective_date,
+            "change": change,
+            "target": target,
+        })
+
+    decisions.sort(key=lambda item: item["effective_date"], reverse=True)
+    if not decisions:
+        raise RuntimeError("RBA cash-rate page contained no parseable decision rows")
+
+    latest = decisions[0]
+    previous = decisions[1] if len(decisions) > 1 else None
+    latest_date = latest["effective_date"]
+    latest_value = latest["target"]
+    change_pp = round(latest["change"], 2)
+    previous_value = previous["target"] if previous else round(latest_value - change_pp, 2)
+    previous_date = previous["effective_date"] if previous else None
+    if change_pp > 0:
+        change_direction = "up"
+    elif change_pp < 0:
+        change_direction = "down"
+    else:
+        change_direction = "unchanged"
+
+    return {
+        "unit": "per cent",
+        "values": [{"t": latest_date.isoformat(), "v": round(latest_value, 2)}],
+        "last_data_point": latest_date.isoformat(),
+        "notes": (
+            "Latest RBA cash-rate target from the official RBA cash-rate decisions table. "
+            "This envelope is for the headline current-rate card; the historical chart "
+            "uses rba_cash_rate monthly means."
+        ),
+        "source_url_resolved": url,
+        "extra": {
+            "fields": {
+                "latest_target_value": round(latest_value, 2),
+                "latest_observation_date": latest_date.isoformat(),
+                "previous_target_value": round(previous_value, 2) if previous_value is not None else None,
+                "previous_observation_date": previous_date.isoformat() if previous_date else None,
+                "target_change_percentage_points": change_pp,
+                "change_direction": change_direction,
+                "source_series": "RBA official cash-rate target decisions table",
+                "headline_boundary": "latest official decision table row; no forecast or estimate",
+                "chart_boundary": "monthly mean history remains in rba_cash_rate",
+            }
+        },
     }
 
 
@@ -2342,9 +2438,10 @@ FETCHERS: dict[str, Fetcher] = {
         title_substring="Cash Rate Target",
         aggregate="monthly_mean",
         unit="per cent",
-        notes="Monthly mean of daily RBA cash-rate target observations from Statistical Table F1.1. Trimmed to last 60 months.",
+        notes="RBA F1.1 monthly-average cash-rate target series. Trimmed to last 60 months; current headline target is fetched separately from the RBA cash-rate decisions table.",
         ndigits=2,
     ),
+    "rba_cash_rate_latest": fetch_rba_cash_rate_latest,
     "rba_household_debt_to_income": lambda source: fetch_rba_csv_column(
         source["fetch_url"],
         title_substring="Household debt to income",

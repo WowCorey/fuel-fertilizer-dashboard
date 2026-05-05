@@ -1,5 +1,6 @@
 const SERIES = [
   'rba_cash_rate',
+  'rba_cash_rate_latest',
   'rba_household_debt_to_income',
   'rba_standard_variable_mortgage_rate',
   'rba_credit_card_debt_accruing_interest',
@@ -9,6 +10,28 @@ const SERIES = [
   'abs_unemployment_rate',
   'abs_cpi_inflation',
 ];
+
+function cashRateDelta(env) {
+  const fields = env?.extra?.fields || {};
+  const change = fields.target_change_percentage_points;
+  const previous = fields.previous_target_value;
+  if (typeof change !== 'number' || typeof previous !== 'number') return null;
+  const direction = fields.change_direction === 'down' ? 'down' : fields.change_direction === 'up' ? 'up' : 'flat';
+  const verb = direction === 'up' ? 'up' : direction === 'down' ? 'down' : 'unchanged';
+  const pp = Math.abs(change).toLocaleString('en-AU', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const prevText = previous.toLocaleString('en-AU', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const dateText = fields.previous_observation_date ? ` from ${fields.previous_observation_date}` : '';
+  return {
+    dir: direction,
+    text: `${verb} ${pp} pp vs previous RBA decision target (${prevText}%)${dateText}`,
+  };
+}
 
 function App() {
   const [data, setData] = React.useState(null);
@@ -102,9 +125,10 @@ function App() {
             <MetricCard
               eyebrow="Interest rate"
               label="RBA cash rate target"
-              plain="The headline policy interest rate set by the Reserve Bank, from RBA Statistical Table F1.1."
-              fromEnvelope={data.rba_cash_rate}
+              plain="Latest official cash-rate target decision published by the RBA. No forecast or estimate is used."
+              fromEnvelope={data.rba_cash_rate_latest}
               unit="%"
+              delta={cashRateDelta(data.rba_cash_rate_latest)}
               highlight
             />
             <MetricCard
@@ -253,8 +277,9 @@ function App() {
                 State and territory net debt now has official Treasury budget-paper values for
                 all 8 jurisdictions, with WA and NT kept as Partial coverage because their loaded
                 concepts are not the preferred GGS measure. No national aggregate is published because
-                the rows are not safe to sum across jurisdictions. RBA cash rate, household debt, mortgage-rate and
-                credit-card series load from verified RBA CSVs. ABS GDP, unemployment and CPI load
+                the rows are not safe to sum across jurisdictions. The RBA cash-rate headline uses
+                the latest official RBA decision-table row while the chart keeps the F1.1 monthly-average history.
+                Household debt, mortgage-rate and credit-card series load from verified RBA CSVs. ABS GDP, unemployment and CPI load
                 from verified ABS Data API keys. AOFM federal securities outstanding is hand-keyed
                 from the official annual stock CSV. Commonwealth AOFM debt and state/territory debt
                 stay clearly separate.
@@ -282,7 +307,7 @@ function App() {
               ranges={['1Y','3Y','5Y']}
               defaultRange="5Y"
               accent="#1F3A8A"
-              takeaway="Monthly mean of the daily RBA cash rate target, from Statistical Table F1.1."
+              takeaway="Monthly-average RBA cash-rate target history from Statistical Table F1.1. The headline card above uses the latest official decision-table row instead."
               yAxisLabel="Cash rate target (%)"
             />
           </div>
@@ -382,7 +407,7 @@ function App() {
             <h3>How we calculate the numbers</h3>
             <dl>
               <dt>RBA cash rate target</dt>
-              <dd>Monthly mean of daily observations from RBA Statistical Table F1.1, fetched as CSV. The value is the headline policy interest rate the RBA Board sets at each Monetary Policy meeting.</dd>
+              <dd>The headline card uses the latest official cash-rate target row from the RBA cash-rate decisions table. The chart preserves the F1.1 monthly-average cash-rate target history. No forecast, interpolation or estimate is used.</dd>
               <dt>Standard variable home loan rate</dt>
               <dd>Indicator standard variable owner-occupier rate from RBA Statistical Table F5. The fetcher selects the verified Table F5 CSV column whose title is "Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier".</dd>
               <dt>Household debt to disposable income</dt>

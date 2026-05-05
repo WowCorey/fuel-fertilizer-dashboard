@@ -1,0 +1,33 @@
+{
+  "series_id": "rba_cash_rate_latest",
+  "source_id": "rba_cash_rate_latest",
+  "source_name": "RBA Cash Rate Target - latest decision",
+  "source_url": "https://www.rba.gov.au/statistics/cash-rate/",
+  "unit": "per cent",
+  "retrieved_at": "2026-05-05T22:25:47+00:00",
+  "last_data_point": "2026-05-06",
+  "values": [
+    {
+      "t": "2026-05-06",
+      "v": 4.35
+    }
+  ],
+  "notes": "Latest RBA cash-rate target from the official RBA cash-rate decisions table. This envelope is for the headline current-rate card; the historical chart uses rba_cash_rate monthly means.",
+  "status": "ok",
+  "manual_entry": false,
+  "source_rights": "RBA terms of use for tabular data",
+  "citation": "Reserve Bank of Australia, Cash Rate Target decisions table.",
+  "extra": {
+    "fields": {
+      "latest_target_value": 4.35,
+      "latest_observation_date": "2026-05-06",
+      "previous_target_value": 4.1,
+      "previous_observation_date": "2026-03-18",
+      "target_change_percentage_points": 0.25,
+      "change_direction": "up",
+      "source_series": "RBA official cash-rate target decisions table",
+      "headline_boundary": "latest official decision table row; no forecast or estimate",
+      "chart_boundary": "monthly mean history remains in rba_cash_rate"
+    }
+  }
+}

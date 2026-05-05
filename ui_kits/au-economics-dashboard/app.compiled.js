@@ -941,7 +941,28 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['rba_cash_rate', 'rba_household_debt_to_income', 'rba_standard_variable_mortgage_rate', 'rba_credit_card_debt_accruing_interest', 'aofm_gov_gross_debt', 'state_government_debt_summary', 'abs_gdp_real_growth', 'abs_unemployment_rate', 'abs_cpi_inflation'];
+const SERIES = ['rba_cash_rate', 'rba_cash_rate_latest', 'rba_household_debt_to_income', 'rba_standard_variable_mortgage_rate', 'rba_credit_card_debt_accruing_interest', 'aofm_gov_gross_debt', 'state_government_debt_summary', 'abs_gdp_real_growth', 'abs_unemployment_rate', 'abs_cpi_inflation'];
+function cashRateDelta(env) {
+  const fields = env?.extra?.fields || {};
+  const change = fields.target_change_percentage_points;
+  const previous = fields.previous_target_value;
+  if (typeof change !== 'number' || typeof previous !== 'number') return null;
+  const direction = fields.change_direction === 'down' ? 'down' : fields.change_direction === 'up' ? 'up' : 'flat';
+  const verb = direction === 'up' ? 'up' : direction === 'down' ? 'down' : 'unchanged';
+  const pp = Math.abs(change).toLocaleString('en-AU', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  const prevText = previous.toLocaleString('en-AU', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  const dateText = fields.previous_observation_date ? ` from ${fields.previous_observation_date}` : '';
+  return {
+    dir: direction,
+    text: `${verb} ${pp} pp vs previous RBA decision target (${prevText}%)${dateText}`
+  };
+}
 function App() {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
@@ -1025,9 +1046,10 @@ function App() {
   }, React.createElement(MetricCard, {
     eyebrow: "Interest rate",
     label: "RBA cash rate target",
-    plain: "The headline policy interest rate set by the Reserve Bank, from RBA Statistical Table F1.1.",
-    fromEnvelope: data.rba_cash_rate,
+    plain: "Latest official cash-rate target decision published by the RBA. No forecast or estimate is used.",
+    fromEnvelope: data.rba_cash_rate_latest,
     unit: "%",
+    delta: cashRateDelta(data.rba_cash_rate_latest),
     highlight: true
   }), React.createElement(MetricCard, {
     eyebrow: "Mortgages",
@@ -1163,7 +1185,7 @@ function App() {
     className: "source-card"
   }, React.createElement("h4", null, "Source coverage"), React.createElement("p", {
     className: "body-sm"
-  }, "State and territory net debt now has official Treasury budget-paper values for all 8 jurisdictions, with WA and NT kept as Partial coverage because their loaded concepts are not the preferred GGS measure. No national aggregate is published because the rows are not safe to sum across jurisdictions. RBA cash rate, household debt, mortgage-rate and credit-card series load from verified RBA CSVs. ABS GDP, unemployment and CPI load from verified ABS Data API keys. AOFM federal securities outstanding is hand-keyed from the official annual stock CSV. Commonwealth AOFM debt and state/territory debt stay clearly separate.")))), React.createElement("section", {
+  }, "State and territory net debt now has official Treasury budget-paper values for all 8 jurisdictions, with WA and NT kept as Partial coverage because their loaded concepts are not the preferred GGS measure. No national aggregate is published because the rows are not safe to sum across jurisdictions. The RBA cash-rate headline uses the latest official RBA decision-table row while the chart keeps the F1.1 monthly-average history. Household debt, mortgage-rate and credit-card series load from verified RBA CSVs. ABS GDP, unemployment and CPI load from verified ABS Data API keys. AOFM federal securities outstanding is hand-keyed from the official annual stock CSV. Commonwealth AOFM debt and state/territory debt stay clearly separate.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1184,7 +1206,7 @@ function App() {
     ranges: ['1Y', '3Y', '5Y'],
     defaultRange: "5Y",
     accent: "#1F3A8A",
-    takeaway: "Monthly mean of the daily RBA cash rate target, from Statistical Table F1.1.",
+    takeaway: "Monthly-average RBA cash-rate target history from Statistical Table F1.1. The headline card above uses the latest official decision-table row instead.",
     yAxisLabel: "Cash rate target (%)"
   })), React.createElement("div", {
     style: {
@@ -1274,7 +1296,7 @@ function App() {
     className: "caption mono"
   }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "RBA cash rate target"), React.createElement("dd", null, "Monthly mean of daily observations from RBA Statistical Table F1.1, fetched as CSV. The value is the headline policy interest rate the RBA Board sets at each Monetary Policy meeting."), React.createElement("dt", null, "Standard variable home loan rate"), React.createElement("dd", null, "Indicator standard variable owner-occupier rate from RBA Statistical Table F5. The fetcher selects the verified Table F5 CSV column whose title is \"Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier\"."), React.createElement("dt", null, "Household debt to disposable income"), React.createElement("dd", null, "Total household debt expressed as a per cent of household disposable income, from RBA Statistical Table E2 (Selected Household Finances Ratios). Quarter-end values."), React.createElement("dt", null, "Credit card balances accruing interest"), React.createElement("dd", null, "Total credit and charge card balances on which interest is being charged, from the RBA Statistical Table C1.1 aggregate CSV column \"Balances accruing interest\". Values are AUD millions for larger Australian card issuers, preserving the RBA source boundary."), React.createElement("dt", null, "Australian Government Securities outstanding"), React.createElement("dd", null, "Annual Australian Government Securities face value in AUD billions, hand-keyed from AOFM stock_ags.csv. This card is not Commonwealth general government gross debt from Budget Papers."), React.createElement("dt", null, "State and territory net debt"), React.createElement("dd", null, "General government net debt for each state and territory, hand-keyed once a year from the named Budget Paper or Budget Statement (typically Budget Paper 2). No single Commonwealth dataset consolidates these on a comparable basis."), React.createElement("dt", null, "Real GDP growth"), React.createElement("dd", null, "Seasonally adjusted percentage change in real Gross Domestic Product, from the ABS Data API ANA_AGG dataflow and the quarterly National Accounts release (Cat. 5206.0)."), React.createElement("dt", null, "Unemployment rate"), React.createElement("dd", null, "Headline monthly seasonally adjusted unemployment rate, from the ABS Data API LF dataflow and Labour Force Australia (Cat. 6202.0)."), React.createElement("dt", null, "CPI inflation"), React.createElement("dd", null, "All-groups Consumer Price Index annual percentage change, from the ABS Data API CPI dataflow and Consumer Price Index Australia (Cat. 6401.0).")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "RBA cash rate target"), React.createElement("dd", null, "The headline card uses the latest official cash-rate target row from the RBA cash-rate decisions table. The chart preserves the F1.1 monthly-average cash-rate target history. No forecast, interpolation or estimate is used."), React.createElement("dt", null, "Standard variable home loan rate"), React.createElement("dd", null, "Indicator standard variable owner-occupier rate from RBA Statistical Table F5. The fetcher selects the verified Table F5 CSV column whose title is \"Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier\"."), React.createElement("dt", null, "Household debt to disposable income"), React.createElement("dd", null, "Total household debt expressed as a per cent of household disposable income, from RBA Statistical Table E2 (Selected Household Finances Ratios). Quarter-end values."), React.createElement("dt", null, "Credit card balances accruing interest"), React.createElement("dd", null, "Total credit and charge card balances on which interest is being charged, from the RBA Statistical Table C1.1 aggregate CSV column \"Balances accruing interest\". Values are AUD millions for larger Australian card issuers, preserving the RBA source boundary."), React.createElement("dt", null, "Australian Government Securities outstanding"), React.createElement("dd", null, "Annual Australian Government Securities face value in AUD billions, hand-keyed from AOFM stock_ags.csv. This card is not Commonwealth general government gross debt from Budget Papers."), React.createElement("dt", null, "State and territory net debt"), React.createElement("dd", null, "General government net debt for each state and territory, hand-keyed once a year from the named Budget Paper or Budget Statement (typically Budget Paper 2). No single Commonwealth dataset consolidates these on a comparable basis."), React.createElement("dt", null, "Real GDP growth"), React.createElement("dd", null, "Seasonally adjusted percentage change in real Gross Domestic Product, from the ABS Data API ANA_AGG dataflow and the quarterly National Accounts release (Cat. 5206.0)."), React.createElement("dt", null, "Unemployment rate"), React.createElement("dd", null, "Headline monthly seasonally adjusted unemployment rate, from the ABS Data API LF dataflow and Labour Force Australia (Cat. 6202.0)."), React.createElement("dt", null, "CPI inflation"), React.createElement("dd", null, "All-groups Consumer Price Index annual percentage change, from the ABS Data API CPI dataflow and Consumer Price Index Australia (Cat. 6401.0).")))), React.createElement(Footer, {
     updated: latestRetrieved ? updatedDisplay : ''
   })));
 }
