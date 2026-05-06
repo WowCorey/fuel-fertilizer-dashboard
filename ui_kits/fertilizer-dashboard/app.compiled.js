@@ -412,7 +412,7 @@ function Header({
     href: '../infrastructure-dashboard/index.html'
   }, {
     id: 'employment_automation',
-    label: 'Employment & Automation',
+    label: 'Employment',
     href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'missing_data',
@@ -960,9 +960,9 @@ function Footer({
     className: "site-footer__base"
   }, React.createElement("span", {
     className: "caption"
-  }, "Code MIT \xB7 Project metadata/prose CC BY 4.0 \xB7 Upstream data rights remain with publishers"), React.createElement("span", {
+  }, "Code MIT - Project metadata/prose CC BY 4.0 - Upstream data rights remain with publishers"), React.createElement("span", {
     className: "caption mono"
-  }, "Site refresh: ", siteRefresh, " \xB7 Page data retrieved: ", pageRetrieved)));
+  }, "Site refresh: ", siteRefresh, " - Page data retrieved: ", pageRetrieved)));
 }
 Object.assign(window, {
   Footer
@@ -1121,6 +1121,44 @@ function FarmerDecisionPressure({
   }) : row.current), React.createElement("td", {
     className: "mono"
   }, row.env?.series_id || row.id), React.createElement("td", null, row.missing), React.createElement("td", null, row.why)))))));
+}
+function FoodPageQuickGuide() {
+  const items = [{
+    title: 'Real now',
+    copy: 'Fertiliser import value and source-country concentration are loaded from verified envelopes.',
+    href: '#inputs-h'
+  }, {
+    title: 'Farm planning gaps',
+    copy: 'Farm diesel, fertiliser cover, water allocation and drought pressure are source-gated rather than estimated.',
+    href: '#farmer-pressure-h'
+  }, {
+    title: 'Food trade gates',
+    copy: 'Production, food import and export sections show what still needs clean ABS, ABARES, DAFF or BOM wiring.',
+    href: '#grows-h'
+  }, {
+    title: 'Not a forecast',
+    copy: 'This page is not a live farm forecast, planting model, water-allocation service or commodity-trading tool.',
+    href: '#sources'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "food-quick-guide-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Best first clicks"), React.createElement("h2", {
+    id: "food-quick-guide-h"
+  }, "How to use this food and farm page"), React.createElement("p", {
+    className: "section__lede"
+  }, "Fertiliser is the verified starting point. Wider food, farm diesel and water questions stay visible as public-data gaps until source-safe feeds are loaded."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, items.map(item => React.createElement("article", {
+    className: "quick-link-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy), React.createElement("a", {
+    href: item.href
+  }, "Jump to section")))));
 }
 function App() {
   const [data, setData] = React.useState(null);
@@ -1345,7 +1383,7 @@ function App() {
     }
   }, "Source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Verified means the number is backed by a loaded JSON envelope. Manual means it was hand-keyed from a named public source. Derived means the page calculated or selected a value from verified envelopes. Stale means the latest source period is outside its cadence window."), React.createElement("p", null, "Unavailable means a source has not been safely wired or the public source does not publish the exact field needed. This page leaves those gaps visible instead of filling them with estimates.")))), React.createElement("section", {
+  }, React.createElement("p", null, "Verified means the number is backed by a loaded JSON envelope. Manual means it was hand-keyed from a named public source. Derived means the page calculated or selected a value from verified envelopes. Stale means the latest source period is outside its cadence window."), React.createElement("p", null, "Unavailable means a source has not been safely wired or the public source does not publish the exact field needed. This page leaves those gaps visible instead of filling them with estimates.")))), React.createElement(FoodPageQuickGuide, null), React.createElement("section", {
     className: "section",
     "aria-labelledby": "overview-h"
   }, React.createElement("div", {

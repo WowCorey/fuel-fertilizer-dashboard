@@ -412,7 +412,7 @@ function Header({
     href: '../infrastructure-dashboard/index.html'
   }, {
     id: 'employment_automation',
-    label: 'Employment & Automation',
+    label: 'Employment',
     href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'missing_data',
@@ -960,9 +960,9 @@ function Footer({
     className: "site-footer__base"
   }, React.createElement("span", {
     className: "caption"
-  }, "Code MIT \xB7 Project metadata/prose CC BY 4.0 \xB7 Upstream data rights remain with publishers"), React.createElement("span", {
+  }, "Code MIT - Project metadata/prose CC BY 4.0 - Upstream data rights remain with publishers"), React.createElement("span", {
     className: "caption mono"
-  }, "Site refresh: ", siteRefresh, " \xB7 Page data retrieved: ", pageRetrieved)));
+  }, "Site refresh: ", siteRefresh, " - Page data retrieved: ", pageRetrieved)));
 }
 Object.assign(window, {
   Footer
@@ -1953,6 +1953,48 @@ function NewZealandComparison({
     }]
   }));
 }
+function FuelPageQuickGuide() {
+  const items = [{
+    title: 'Public fuel dashboard basics',
+    copy: 'Start with what the page can verify: days cover, public status, reserves, stocks, imports and stock-out visibility.',
+    href: '#answers-h'
+  }, {
+    title: 'Queensland visibility',
+    copy: 'Use the Queensland section for partial PM&C and QLD Open Data visibility. It is not live station coverage.',
+    href: '#qld-visibility-h'
+  }, {
+    title: 'Fuel sovereignty pathway',
+    copy: 'Use this cluster for six-port, land, EOI, refining and drilling source gates without assuming delivery status.',
+    href: '#qld-sovereignty-h'
+  }, {
+    title: 'What is on its way',
+    copy: 'Use the horizon view for aggregate tankers and forward orders, not vessel names, ETAs or cargo-level tracking.',
+    href: '#horizon-h'
+  }, {
+    title: 'Missing feeds',
+    copy: 'Use the publication checklist to see what government or industry would need to publish for operational certainty.',
+    href: '#publish-needed-h'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "fuel-quick-guide-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Best first clicks"), React.createElement("h2", {
+    id: "fuel-quick-guide-h"
+  }, "Use this fuel page in order"), React.createElement("p", {
+    className: "section__lede"
+  }, "The page is intentionally broader than pump prices, but it should not be read as live fuel certainty. Start with verified public signals, then read the missing feeds."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--5"
+  }, items.map(item => React.createElement("article", {
+    className: "quick-link-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy), React.createElement("a", {
+    href: item.href
+  }, "Jump to section")))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -2020,7 +2062,7 @@ function App() {
     refreshStatus: refreshStatus,
     latestRetrieved: latestRetrieved,
     updatedDisplay: updatedDisplay
-  }), React.createElement(HowToReadPage, null), React.createElement(PublicRequestAlignment, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
+  }), React.createElement(HowToReadPage, null), React.createElement(PublicRequestAlignment, null), React.createElement(FuelPageQuickGuide, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
     stockoutsEnv: data.pmc_retail_stockouts,
     qldReportsEnv: data.qld_fuel_security_unavailable_reports
   }), React.createElement(QueenslandFuelSovereigntySection, {

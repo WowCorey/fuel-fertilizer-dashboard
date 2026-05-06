@@ -1059,6 +1059,59 @@ function NewZealandComparison({ data }) {
   );
 }
 
+function FuelPageQuickGuide() {
+  const items = [
+    {
+      title: 'Public fuel dashboard basics',
+      copy: 'Start with what the page can verify: days cover, public status, reserves, stocks, imports and stock-out visibility.',
+      href: '#answers-h',
+    },
+    {
+      title: 'Queensland visibility',
+      copy: 'Use the Queensland section for partial PM&C and QLD Open Data visibility. It is not live station coverage.',
+      href: '#qld-visibility-h',
+    },
+    {
+      title: 'Fuel sovereignty pathway',
+      copy: 'Use this cluster for six-port, land, EOI, refining and drilling source gates without assuming delivery status.',
+      href: '#qld-sovereignty-h',
+    },
+    {
+      title: 'What is on its way',
+      copy: 'Use the horizon view for aggregate tankers and forward orders, not vessel names, ETAs or cargo-level tracking.',
+      href: '#horizon-h',
+    },
+    {
+      title: 'Missing feeds',
+      copy: 'Use the publication checklist to see what government or industry would need to publish for operational certainty.',
+      href: '#publish-needed-h',
+    },
+  ];
+  return (
+    <section className="section" aria-labelledby="fuel-quick-guide-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Best first clicks</span>
+          <h2 id="fuel-quick-guide-h">Use this fuel page in order</h2>
+          <p className="section__lede">
+            The page is intentionally broader than pump prices, but it should not be read as live fuel certainty.
+            Start with verified public signals, then read the missing feeds.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--5">
+        {items.map(item => (
+          <article className="quick-link-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+            <a href={item.href}>Jump to section</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1141,6 +1194,8 @@ function App() {
         <HowToReadPage/>
 
         <PublicRequestAlignment/>
+
+        <FuelPageQuickGuide/>
 
         <WhatThisPageAnswers/>
 

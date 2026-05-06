@@ -46,8 +46,8 @@ function Footer({ updated = '', refreshStatus = null }) {
         </div>
       </div>
       <div className="site-footer__base">
-        <span className="caption">Code MIT · Project metadata/prose CC BY 4.0 · Upstream data rights remain with publishers</span>
-        <span className="caption mono">Site refresh: {siteRefresh} · Page data retrieved: {pageRetrieved}</span>
+        <span className="caption">Code MIT - Project metadata/prose CC BY 4.0 - Upstream data rights remain with publishers</span>
+        <span className="caption mono">Site refresh: {siteRefresh} - Page data retrieved: {pageRetrieved}</span>
       </div>
     </footer>
   );

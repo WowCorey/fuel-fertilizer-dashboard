@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fuel Resilience AU</title>
-<meta name="description" content="Static dashboard hub for Australian fuel, food, farms, water, oil production, strategic resources, defence posture, national status and resource-value source envelopes.">
+<meta name="description" content="Independent Australian resilience dashboard prototype showing verified public data, visible gaps and missing government or industry feeds across fuel, food, water, infrastructure and economic pressure.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="colors_and_type.css">
 <link rel="stylesheet" href="ui_kits/shared/styles.css">
@@ -21,7 +21,7 @@
     border-bottom: 1px solid var(--rule);
   }
   .home-hero h1 {
-    max-width: 16ch;
+    max-width: 18ch;
     margin-top: var(--s-3);
   }
   .home-hero__lede {
@@ -35,6 +35,37 @@
     justify-self: end;
     width: min(320px, 100%);
     opacity: 0.82;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-5);
+  }
+  .hero-button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0 var(--s-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-1);
+    background: var(--card);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .hero-button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .hero-button--primary {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .hero-button--primary:hover {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
   }
   .home-grid {
     display: grid;
@@ -69,6 +100,34 @@
     letter-spacing: 0.05em;
   }
   .summary-card dd { margin: 2px 0 0; color: var(--ink-2); line-height: 1.45; }
+  .first-clicks-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--s-4);
+  }
+  .first-click-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    padding: var(--s-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    min-height: 160px;
+  }
+  .first-click-card h3 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-20);
+    font-weight: 500;
+  }
+  .first-click-card p {
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .first-click-card a {
+    margin-top: auto;
+    font-weight: 600;
+  }
   .status-label {
     display: inline-flex;
     width: fit-content;
@@ -205,6 +264,7 @@
   @media (max-width: 1100px) {
     .home-grid { grid-template-columns: repeat(2, 1fr); }
     .summary-grid,
+    .first-clicks-grid,
     .legend-grid,
     .decision-grid { grid-template-columns: repeat(2, 1fr); }
   }
@@ -219,6 +279,7 @@
     }
     .home-grid,
     .summary-grid,
+    .first-clicks-grid,
     .legend-grid,
     .decision-grid,
     .home-note__inner {
@@ -257,7 +318,7 @@
         <a href="ui_kits/manufacturing-dashboard/index.html">Manufacturing</a>
         <a href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
         <a href="ui_kits/infrastructure-dashboard/index.html">Infrastructure</a>
-        <a href="ui_kits/employment-automation-dashboard/index.html">Employment &amp; Automation</a>
+        <a href="ui_kits/employment-automation-dashboard/index.html">Employment</a>
         <a href="ui_kits/missing-data-scoreboard/index.html">Missing data</a>
       </nav>
     </div>
@@ -266,16 +327,21 @@
   <main id="main">
     <section class="home-hero" aria-labelledby="home-title">
       <div>
-        <span class="eyebrow">Public source dashboard</span>
-        <h1 id="home-title">Australia's fuel, food and resilience data, without estimates.</h1>
+        <span class="eyebrow">Independent public-source prototype</span>
+        <h1 id="home-title">Australian resilience dashboard prototype</h1>
           <p class="home-hero__lede">
-            This static site collects source-linked dashboard pages for liquid fuel, food and farm inputs,
-            water pressure, oil production, national fuel security, national fuel status, resource value, state petroleum ledger, strategic resources, defence posture and retail-price breakdowns.
-            Values appear only when they flow through a verified JSON envelope; unavailable
-            values remain visible as placeholders.
-            The National Fuel Security page is the direct fuel-dashboard prototype; the Food, farms &amp; water security page extends the same public-source method into food-system resilience.
-            The missing data scoreboard shows which feeds remain partial, unavailable, source-gated or roadmap-only.
+            A public-source dashboard showing what can be verified, what is missing, and what
+            government or industry would need to publish for real fuel, food, water, infrastructure
+            and economic certainty. It is not an official government dashboard and it does not fill
+            missing feeds with estimates.
         </p>
+        <div class="hero-actions" aria-label="Best first dashboard links">
+          <a class="hero-button hero-button--primary" href="ui_kits/fuel-security-dashboard/index.html">Open National Fuel Security</a>
+          <a class="hero-button" href="ui_kits/missing-data-scoreboard/index.html">View Missing Data Scoreboard</a>
+          <a class="hero-button" href="ui_kits/missing-data-scoreboard/index.html#priority-h">View National Readiness Matrix</a>
+          <a class="hero-button" href="ui_kits/fertilizer-dashboard/index.html">View Food, Farms &amp; Water</a>
+          <a class="hero-button" href="ui_kits/au-economics-dashboard/index.html">View AU Economics</a>
+        </div>
         <div class="home-badge-row">
           <span class="refresh-badge" id="refresh-badge">Programmatic refresh: no successful refresh recorded</span>
           <a class="deploy-badge" href="https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml" aria-label="Open GitHub Pages deploy workflow status">
@@ -284,6 +350,51 @@
         </div>
       </div>
       <img class="home-hero__art" src="assets/au-outline.svg" alt="Outline map of Australia">
+    </section>
+
+    <section class="section" aria-labelledby="first-clicks-title">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow">Best first clicks</span>
+          <h2 id="first-clicks-title">Where to start</h2>
+          <p class="section__lede">
+            This prototype is designed to show what can already be built from public data, and what
+            cannot be shown until government or industry publishes safer, machine-readable feeds.
+          </p>
+        </div>
+      </div>
+      <div class="first-clicks-grid">
+        <article class="first-click-card">
+          <span class="status-label status-label--partial">Fuel request</span>
+          <h3>For the fuel dashboard request</h3>
+          <p>Start with the national fuel-security prototype and its Queensland visibility sections.</p>
+          <a href="ui_kits/fuel-security-dashboard/index.html">Open National Fuel Security</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--source-gated">Data gaps</span>
+          <h3>For what still needs publishing</h3>
+          <p>Use the scoreboard to see missing feeds, likely holders and next source actions.</p>
+          <a href="ui_kits/missing-data-scoreboard/index.html">Open Missing Data Scoreboard</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--manual">Priority view</span>
+          <h3>For the highest-priority gaps</h3>
+          <p>Use categorical triage bands to see which gaps matter most for decisions.</p>
+          <a href="ui_kits/missing-data-scoreboard/index.html#priority-h">Open National Readiness Matrix</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--partial">Food system</span>
+          <h3>For food, farms and water</h3>
+          <p>See real fertiliser signals beside source-gated farm diesel, water and drought feeds.</p>
+          <a href="ui_kits/fertilizer-dashboard/index.html">Open Food, Farms &amp; Water</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--verified">Economy</span>
+          <h3>For interest rates and pressure</h3>
+          <p>See the latest RBA cash-rate target and selected public macro indicators.</p>
+          <a href="ui_kits/au-economics-dashboard/index.html">Open AU Economics</a>
+        </article>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="summary-title">

@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const routes = [
-  { path: '/', heading: "Australia's fuel, food and resilience data, without estimates." },
+  { path: '/', heading: 'Australian resilience dashboard prototype' },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What a transparent Australian fuel dashboard should show.' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
@@ -47,11 +47,21 @@ for (const route of routes) {
 
 test('homepage presents the national summary and status legend', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: "Australia's fuel, food and resilience data, without estimates." })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Australian resilience dashboard prototype' })).toBeVisible();
+  await expect(page.getByText('A public-source dashboard showing what can be verified')).toBeVisible();
+  const heroLinks = page.getByLabel('Best first dashboard links');
+  await expect(heroLinks.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View Missing Data Scoreboard' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View National Readiness Matrix' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View Food, Farms & Water' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View AU Economics' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Where to start' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For the fuel dashboard request' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For what still needs publishing' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
   await expect(page.getByText('This site is an independent public-source prototype, not an official government dashboard.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel security' }).first()).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Food, farms and water' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Food, farms and water', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Economy and housing pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Power, manufacturing and infrastructure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Defence and strategic resources' })).toBeVisible();
@@ -72,6 +82,10 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await page.goto('/ui_kits/missing-data-scoreboard/index.html');
   await expect(page.getByRole('heading', { name: 'What Australia can see, and what is still missing.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Unavailable data is evidence of a public-data gap' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Start with the gap, then the action' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Scoreboard', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Priority matrix', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Action queue', exact: true })).toBeVisible();
   await expect(page.getByText('Source-backed and current enough for its cadence.')).toBeVisible();
   await expect(page.getByText('Waiting for a verified source, field, period, unit and reuse rights.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
@@ -91,7 +105,7 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByText('Defence / national security')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What would make this operational?' })).toBeVisible();
   await expect(page.getByText('machine-readable official/public feeds')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'No-estimate rule' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="no-estimate-h"]').getByRole('heading', { name: 'No-estimate rule' })).toBeVisible();
   await expect(page.getByText('This dashboard does not fill missing government or industry feeds with guesses.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Missing data scoreboard' })).toBeVisible();
   await expect(page.getByText('Fuel security').first()).toBeVisible();
@@ -119,6 +133,8 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByRole('heading', { name: /Site refresh:|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
   await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'The national fuel dashboard structure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Use this fuel page in order' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Fuel sovereignty pathway' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What government and industry still need to publish' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For travellers and tourism operators' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Partial Queensland fuel visibility, not live station coverage' })).toBeVisible();
@@ -137,7 +153,7 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'State-owned land and industrial fuel hubs' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Private-sector proposals and EOI status' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Forward contracts and supply coverage' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'What is on its way' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="horizon-h"]').getByRole('heading', { name: 'What is on its way' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Small business planning signals' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'New Zealand comparison' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Taroom Trough' })).toBeVisible();
@@ -155,6 +171,9 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(page.getByRole('heading', { name: /Site refreshed|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
   await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Source status comes first' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How to use this food and farm page' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Real now' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Farm planning gaps' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What Australia grows' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What Australia buys' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What Australia sells' })).toBeVisible();

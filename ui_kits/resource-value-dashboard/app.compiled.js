@@ -412,7 +412,7 @@ function Header({
     href: '../infrastructure-dashboard/index.html'
   }, {
     id: 'employment_automation',
-    label: 'Employment & Automation',
+    label: 'Employment',
     href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'missing_data',
@@ -960,9 +960,9 @@ function Footer({
     className: "site-footer__base"
   }, React.createElement("span", {
     className: "caption"
-  }, "Code MIT \xB7 Project metadata/prose CC BY 4.0 \xB7 Upstream data rights remain with publishers"), React.createElement("span", {
+  }, "Code MIT - Project metadata/prose CC BY 4.0 - Upstream data rights remain with publishers"), React.createElement("span", {
     className: "caption mono"
-  }, "Site refresh: ", siteRefresh, " \xB7 Page data retrieved: ", pageRetrieved)));
+  }, "Site refresh: ", siteRefresh, " - Page data retrieved: ", pageRetrieved)));
 }
 Object.assign(window, {
   Footer

@@ -384,6 +384,41 @@ function App() {
           </dl>
         </section>
 
+        <section className="section" aria-labelledby="scoreboard-read-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">How to read this scoreboard</span>
+              <h2 id="scoreboard-read-h">Start with the gap, then the action</h2>
+              <p className="section__lede">
+                The page is designed for quick triage: what is missing, why it matters,
+                who likely holds it and what has to happen before it can become a dashboard value.
+              </p>
+            </div>
+          </div>
+          <div className="quick-link-grid quick-link-grid--4">
+            <article className="quick-link-card">
+              <h3>Scoreboard</h3>
+              <p>Shows the public-data gaps and the dashboard pages affected.</p>
+              <a href="#scoreboard-h">Go to scoreboard</a>
+            </article>
+            <article className="quick-link-card">
+              <h3>Priority matrix</h3>
+              <p>Groups the most decision-useful gaps into categorical triage bands.</p>
+              <a href="#priority-h">Go to matrix</a>
+            </article>
+            <article className="quick-link-card">
+              <h3>Action queue</h3>
+              <p>Separates source checks, data requests, automation and methodology work.</p>
+              <a href="#queue-h">Go to action queue</a>
+            </article>
+            <article className="quick-link-card">
+              <h3>No-estimate rule</h3>
+              <p>Explains why unavailable, stale and source-gated gaps stay visible.</p>
+              <a href="#no-estimate-h">Go to rule</a>
+            </article>
+          </div>
+        </section>
+
         <section className="section section--why" aria-labelledby="legend-h">
           <div className="section__head">
             <div>
