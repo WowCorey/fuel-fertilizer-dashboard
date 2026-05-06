@@ -31,6 +31,7 @@ const dashboards = [
   'oil-and-production',
   'who-pays-what',
   'au-economics-dashboard',
+  'housing-economic-pressure-dashboard',
   'manufacturing-dashboard',
   'power-grid-dashboard',
   'infrastructure-dashboard',
