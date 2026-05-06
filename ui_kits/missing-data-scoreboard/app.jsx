@@ -26,7 +26,7 @@ const SCOREBOARD_ROWS = [
     holder: 'Queensland Government, port corporations, proponents and approval agencies',
     why: 'Public debate now includes delivery tracking, not only national fuel status.',
     action: 'Publish official AFIP delivery tables with hub, land, capacity, approval, proponent and contract status fields.',
-    page: 'National fuel security',
+    page: 'QLD fuel sovereignty',
   },
   {
     area: 'Food, farms and water',
@@ -155,7 +155,7 @@ const PRIORITY_MATRIX_ROWS = [
     decision: 'fuel sovereignty delivery tracking',
     blocker: 'public context exists, but proponents/capacity/land/status are not published',
     action: 're-check official AFIP/Coordinator-General pages for update tables',
-    page: 'National fuel security',
+    page: 'QLD fuel sovereignty',
   },
   {
     band: 'High',

@@ -367,6 +367,10 @@ function Header({
     label: 'Fuel strategy',
     href: '../australian-fuel-strategy-dashboard/index.html'
   }, {
+    id: 'qld_fuel_sovereignty',
+    label: 'QLD fuel',
+    href: '../qld-fuel-sovereignty-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
@@ -933,6 +937,8 @@ function Footer({
   }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../australian-fuel-strategy-dashboard/index.html"
   }, "Fuel strategy")), React.createElement("li", null, React.createElement("a", {
+    href: "../qld-fuel-sovereignty-dashboard/index.html"
+  }, "QLD fuel sovereignty")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"
@@ -2023,6 +2029,22 @@ function FuelStrategyCrossLink() {
     href: "../australian-fuel-strategy-dashboard/index.html"
   }, "Open Australian Fuel Strategy Tracker"))));
 }
+function QueenslandDeliveryCrossLink() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "qld-delivery-link-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Queensland delivery"), React.createElement("h2", {
+    id: "qld-delivery-link-h"
+  }, "For Queensland delivery tracking")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "For Queensland delivery tracking, see Queensland Fuel Sovereignty Delivery Tracker. It separates the six-port AFIP pathway, state-owned land audit, EOI status, storage/refining source gates and Taroom Trough approvals context from this operational fuel-security view."), React.createElement("p", null, "It does not infer land parcels, proponent names, bid counts, contracts, capacities or approval completion where a named official source is not loaded."), React.createElement("a", {
+    href: "../qld-fuel-sovereignty-dashboard/index.html"
+  }, "Open Queensland Fuel Sovereignty Delivery Tracker"))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -2095,7 +2117,7 @@ function App() {
     qldReportsEnv: data.qld_fuel_security_unavailable_reports
   }), React.createElement(QueenslandFuelSovereigntySection, {
     data: data
-  }), React.createElement(SixPortFuelHubPathway, {
+  }), React.createElement(QueenslandDeliveryCrossLink, null), React.createElement(SixPortFuelHubPathway, {
     data: data
   }), React.createElement(StateLandAndIndustrialHubs, {
     data: data

@@ -61,6 +61,12 @@ fields, dates, units and reuse boundaries.
 
 ### Queensland fuel sovereignty follow-up
 
+The dedicated [Queensland Fuel Sovereignty Delivery Tracker](../ui_kits/qld-fuel-sovereignty-dashboard/index.html)
+now surfaces the six-port AFIP list, state-owned land audit context, EOI/private-sector
+proposal gates, storage/refining pathway gates, Taroom Trough context and approval
+pathway gaps in one place. It does not infer capacities, land parcels, proponent
+names, bid counts, contracts, awards, approval completion or operational fuel holdings.
+
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
 | AFIP EOI updates and proponents | source-gated | The public pathway and EOI form are visible, but submissions, proponents, shortlists and contract awards are not published as reusable data. | Re-check official Queensland pages for updated EOI status before adding values. |

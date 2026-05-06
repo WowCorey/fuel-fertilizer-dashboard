@@ -20,6 +20,7 @@ function Footer({ updated = '', refreshStatus = null }) {
             <li><a href="../national-status-dashboard/index.html">National status</a></li>
             <li><a href="../fuel-security-dashboard/index.html">National fuel security</a></li>
             <li><a href="../australian-fuel-strategy-dashboard/index.html">Fuel strategy</a></li>
+            <li><a href="../qld-fuel-sovereignty-dashboard/index.html">QLD fuel sovereignty</a></li>
             <li><a href="../resource-value-dashboard/index.html">Resource value</a></li>
             <li><a href="../state-contribution-dashboard/index.html">State ledger</a></li>
             <li><a href="../strategic-resources-dashboard/index.html">Strategic resources</a></li>

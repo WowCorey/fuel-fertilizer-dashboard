@@ -367,6 +367,10 @@ function Header({
     label: 'Fuel strategy',
     href: '../australian-fuel-strategy-dashboard/index.html'
   }, {
+    id: 'qld_fuel_sovereignty',
+    label: 'QLD fuel',
+    href: '../qld-fuel-sovereignty-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
@@ -933,6 +937,8 @@ function Footer({
   }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../australian-fuel-strategy-dashboard/index.html"
   }, "Fuel strategy")), React.createElement("li", null, React.createElement("a", {
+    href: "../qld-fuel-sovereignty-dashboard/index.html"
+  }, "QLD fuel sovereignty")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"
@@ -995,7 +1001,7 @@ const SCOREBOARD_ROWS = [{
   holder: 'Queensland Government, port corporations, proponents and approval agencies',
   why: 'Public debate now includes delivery tracking, not only national fuel status.',
   action: 'Publish official AFIP delivery tables with hub, land, capacity, approval, proponent and contract status fields.',
-  page: 'National fuel security'
+  page: 'QLD fuel sovereignty'
 }, {
   area: 'Food, farms and water',
   status: 'partial',
@@ -1106,7 +1112,7 @@ const PRIORITY_MATRIX_ROWS = [{
   decision: 'fuel sovereignty delivery tracking',
   blocker: 'public context exists, but proponents/capacity/land/status are not published',
   action: 're-check official AFIP/Coordinator-General pages for update tables',
-  page: 'National fuel security'
+  page: 'QLD fuel sovereignty'
 }, {
   band: 'High',
   statusKind: 'unavailable',

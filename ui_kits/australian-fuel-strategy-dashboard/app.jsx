@@ -380,6 +380,32 @@ function SourceCard({ id, env, partial = false }) {
   );
 }
 
+function QueenslandDeliveryCrossLink() {
+  return (
+    <section className="section section--why" aria-labelledby="qld-delivery-link-h">
+      <div className="why-grid">
+        <div>
+          <span className="eyebrow">State delivery context</span>
+          <h2 id="qld-delivery-link-h">Queensland delivery pathway</h2>
+        </div>
+        <div className="why-body">
+          <p>
+            For state delivery and six-port AFIP context, see Queensland Fuel Sovereignty
+            Delivery Tracker. The national tracker covers fuel-security policy, MSO,
+            reserves, days-cover and emergency-response boundaries. The Queensland tracker
+            covers ports, land, EOI, storage/refining opportunities and approvals.
+          </p>
+          <p>
+            It keeps land parcels, capacities, proponents, bids, contracts and approval
+            completion source-gated unless named official sources publish exact fields.
+          </p>
+          <a href="../qld-fuel-sovereignty-dashboard/index.html">Open Queensland Fuel Sovereignty Delivery Tracker</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -587,6 +613,8 @@ function App() {
             rows={PUBLISH_ROWS}
           />
         </section>
+
+        <QueenslandDeliveryCrossLink/>
 
         <section className="section section--sources" id="sources">
           <div className="section__head">

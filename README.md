@@ -7,7 +7,7 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Seventeen dashboard surfaces plus a missing-data scoreboard read from
+**Status:** Eighteen dashboard surfaces plus a missing-data scoreboard read from
 a shared JSON-envelope data pipeline. Programmatic live sources now include ABS
 petroleum imports and YoY,
 ABS fertiliser imports, food/farm/water source gates, APS net-import cover, APS refinery production series,
@@ -49,8 +49,8 @@ any government department or industry body. The project does not fabricate,
 interpolate or estimate missing numbers.
 
 The homepage now opens with a plain-English national dashboard summary and
-best-first-click links for fuel security, fuel strategy, missing data, readiness
-triage, food and farms, housing pressure and AU economics. It also links to a missing-data scoreboard that
+best-first-click links for fuel security, fuel strategy, Queensland fuel delivery,
+missing data, readiness triage, food and farms, housing pressure and AU economics. It also links to a missing-data scoreboard that
 shows where a feed is verified, partial, stale, manual, derived, unavailable,
 source-gated or roadmap only. The scoreboard includes a national readiness
 priority matrix and action queue. Priority bands are categorical
@@ -65,6 +65,7 @@ permission to estimate.
 | [National status](ui_kits/national-status-dashboard/index.html) | v1.4 | National Fuel Security Plan level, MSO reserves, ships on water and retail stock-outs | PM&C/DCCEEW public fuel-supply snapshot hand-keyed; direct scripted access is blocked/deferred until a stable machine-readable endpoint exists |
 | [Fuel security](ui_kits/fuel-security-dashboard/index.html) | v1.7 | Product days remaining, PM&C/DCCEEW fuel-supply snapshot, APS stocks/sales/imports, import/shipping risk context, WA weekly stockout context, QLD monthly unavailable-fuel reports, Queensland fuel-sovereignty pathway gaps and unavailable operational feeds | Product days are derived from the named PM&C/DCCEEW snapshot; APS/ABS, public retail feeds, a WA-only weekly stockout snapshot and QLD Open Data unavailable-fuel reports are loaded where available. Queensland Government sources verify the six named ports, Stage 1 EOI pathway and Taroom Trough pathway as public context only. Land parcels, bid counts, forward contracts, project approvals, refinery/storage capacity, live national station outage, vessel tracking, terminal capacity and status-score feeds remain unavailable/source-gated. |
 | [Fuel strategy](ui_kits/australian-fuel-strategy-dashboard/index.html) | v0.1 | Australian fuel strategy, reserve/MSO indicators, product-level days-cover visibility, emergency-response boundaries and missing public policy feeds | Reuses existing PM&C/DCCEEW fuel-security envelopes for MSO days cover, MSO reserve volumes, product-level derived days and Fuel Security Services Payment context. Latest strategy, national liquid fuel security policy, emergency response settings, terminal/storage visibility and forward contract coverage remain source-gated; no fuel strategy facts, reserve values or emergency settings are invented. |
+| [QLD fuel sovereignty](ui_kits/qld-fuel-sovereignty-dashboard/index.html) | v0.1 | Queensland six-port AFIP delivery pathway, state-owned land audit, EOI/private-sector proposals, storage/refining pathway, Taroom Trough approvals and missing delivery feeds | Reuses existing Queensland Government / Coordinator-General envelopes. Six-port list, AFIP/EOI context, state-owned land audit context, domestic fuel pathway and Taroom Trough/approvals pathway are source-linked where available; capacity, land parcels, proponents, bid counts, contracts/awards, project delivery status and approval completion remain unavailable/source-gated. |
 | [Resource value](ui_kits/resource-value-dashboard/index.html) | v1.5 | Company tax, PRRT, petroleum royalties, LNG/oil export value, gas origin, export destinations, domestic-vs-netback context and Norway comparison | Official receipt, export, production, destination and gas-price comparison envelopes are hand-keyed from named public sources, including WA/NWS and Queensland petroleum royalty receipt context; value-leakage estimate remains unavailable until a documented denominator and method exist |
 | [State petroleum ledger](ui_kits/state-contribution-dashboard/index.html) | v1.3 | State/territory petroleum and gas production roles, defined object counts, partial project/operator mapping, infrastructure context, state royalty receipts, combined royalty context and source gates | AES state production rows, NOPTA offshore title/well-layer counts, NOPTA active production-licence field/operator rows, REMP oil/gas major-project rows, QLD/VIC operating refinery counts, WA/NWS and Queensland petroleum receipts, NSW/NT combined royalty context and source-gate workstreams are loaded; Commonwealth tax attribution by state, current project/company production volumes, terminal capacity, LNG train counts and raw site totals remain unavailable |
 | [Strategic resources](ui_kits/strategic-resources-dashboard/index.html) | v1.0 | Iron ore, coal, uranium, bauxite/alumina, copper, nickel, lithium, rare earths, gold, zinc and sulphur source-gate context | DISR REQ export rows, GA AIMR 2025 production/reserve/resource rows and GA/Digital Atlas operating-mines footprint rows are loaded where source-safe; rare-earth individual export value and sulphur production/export/reserve rows remain unavailable |
@@ -146,6 +147,7 @@ python3 -m http.server 8000
 #   http://localhost:8000/ui_kits/national-status-dashboard/index.html
 #   http://localhost:8000/ui_kits/fuel-security-dashboard/index.html
 #   http://localhost:8000/ui_kits/australian-fuel-strategy-dashboard/index.html
+#   http://localhost:8000/ui_kits/qld-fuel-sovereignty-dashboard/index.html
 #   http://localhost:8000/ui_kits/resource-value-dashboard/index.html
 #   http://localhost:8000/ui_kits/state-contribution-dashboard/index.html
 #   http://localhost:8000/ui_kits/strategic-resources-dashboard/index.html
@@ -421,6 +423,7 @@ ui_kits/
   national-status-dashboard/   v1.4 — public fuel-status snapshot
   fuel-security-dashboard/     v1.7 — fuel-security visibility and gaps
   australian-fuel-strategy-dashboard/ v0.1 - fuel strategy and MSO policy source gates
+  qld-fuel-sovereignty-dashboard/ v0.1 - Queensland AFIP delivery tracker and source gates
   resource-value-dashboard/    v1.5 — tax, PRRT, royalties, export value
     state-contribution-dashboard/ v1.3 - state petroleum ledger, source gates, defined object counts and partial production mapping
   strategic-resources-dashboard/ v1.0 - critical minerals and strategic resource context

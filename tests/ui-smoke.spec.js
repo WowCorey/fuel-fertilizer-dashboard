@@ -5,6 +5,7 @@ const routes = [
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What a transparent Australian fuel dashboard should show.' },
   { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: 'Australian fuel strategy tracker' },
+  { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: 'Queensland fuel sovereignty delivery tracker' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
@@ -54,6 +55,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   const heroLinks = page.getByLabel('Best first dashboard links');
   await expect(heroLinks.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Fuel Strategy' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View QLD Fuel Delivery' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Missing Data Scoreboard' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View National Readiness Matrix' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Food, Farms & Water' })).toBeVisible();
@@ -62,6 +64,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Where to start' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For the fuel dashboard request' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For fuel strategy and reserves' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For Queensland fuel delivery' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For what still needs publishing' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For housing pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
@@ -81,6 +84,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Public-data gaps are now tracked as a product' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Housing pressure' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel strategy' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'QLD fuel sovereignty' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
@@ -170,6 +174,8 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'For policy, reserves and MSO context' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Australian Fuel Strategy Tracker' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel sovereignty pathway' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For Queensland delivery tracking' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Queensland Fuel Sovereignty Delivery Tracker' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What government and industry still need to publish' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For travellers and tourism operators' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Partial Queensland fuel visibility, not live station coverage' })).toBeVisible();
@@ -239,11 +245,43 @@ test('fuel strategy tracker keeps policy and operational data source-gated', asy
   await expect(page.locator('section[aria-labelledby="boundary-h"]').getByRole('heading', { name: 'Emergency response and public/private boundary' })).toBeVisible();
   await expect(page.locator('section[aria-labelledby="implementation-h"]').getByRole('heading', { name: 'Strategy implementation tracker' })).toBeVisible();
   await expect(page.locator('section[aria-labelledby="publish-h"]').getByRole('heading', { name: 'What government still needs to publish' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Queensland delivery pathway' })).toBeVisible();
+  await expect(page.getByText('For state delivery and six-port AFIP context, see Queensland Fuel Sovereignty')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Queensland Fuel Sovereignty Delivery Tracker' })).toBeVisible();
   await expect(page.getByText('Latest national fuel strategy')).toBeVisible();
   await expect(page.getByText('Terminal inventory')).toBeVisible();
   await expect(page.getByText('Forward supply/contract coverage')).toBeVisible();
   await expect(page.getByText('No fuel reserves, contracts, cargoes or emergency powers are inferred.')).toBeVisible();
   await expect(page.getByText('No fuel strategy facts, reserve values, days-cover values, emergency policy settings')).toBeVisible();
+});
+
+test('Queensland fuel sovereignty tracker keeps delivery data source-gated', async ({ page }) => {
+  await page.goto('/ui_kits/qld-fuel-sovereignty-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: 'Queensland fuel sovereignty delivery tracker' })).toBeVisible();
+  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(page.getByText('It does not infer land parcels, storage capacity, refinery capacity, proponents, bids, contracts')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Delivery evidence before delivery claims' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Six-port delivery pathway' })).toBeVisible();
+  await expect(page.getByText('The six-port list is public context. It is not itself a project-status, capacity, land-parcel or approval dataset.')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Brisbane' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Townsville' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Mackay' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Gladstone' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Abbot Point' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Bundaberg' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'AFIP and private-sector proposal status' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Submission counts' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Proponent names' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'State-owned land and industrial fuel hubs' })).toBeVisible();
+  await expect(page.getByText('A public statement that an audit is underway is not the same as a reusable land-register dataset.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Storage and refining project pathway' })).toBeVisible();
+  await expect(page.getByText('This tracker does not derive storage or refinery capacity from broader production datasets.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Taroom Trough and approvals pathway' })).toBeVisible();
+  await expect(page.getByText('The tracker does not infer production volume, approval completion, timelines or fuel-security impact')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Delivery blockers matrix' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What Queensland still needs to publish' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How this connects to national fuel strategy' })).toBeVisible();
+  await expect(page.getByText('No land parcel, capacity, proponent, bid, contract, approval-completion or operational fuel-holding value is inferred.')).toBeVisible();
 });
 
 test('AU economics page separates latest cash rate from monthly history', async ({ page }) => {
