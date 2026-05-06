@@ -979,7 +979,262 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_manufacturing_gdp_share', 'abs_manufacturing_employment', 'abs_manufacturing_output_index', 'abs_manufactured_exports_total', 'abs_manufacturing_capex', 'abs_food_beverage_employment', 'doe_industry_growth_centres_summary'];
+const SERIES = ['pmc_fuel_security_level', 'pmc_mso_days_cover', 'pmc_mso_fuel_reserves', 'fuel_security_petrol_days_remaining', 'fuel_security_diesel_days_remaining', 'fuel_security_jet_days_remaining', 'fuel_security_payment', 'pmc_forward_import_orders', 'pmc_tankers_on_water', 'fuel_forward_contract_coverage', 'fuel_security_terminal_capacity', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking'];
+const QUICK_GUIDE = [['1', 'Official strategy and policy documents', 'Start with which fuel-security policy documents are verified, partial or still source-gated.'], ['2', 'Public reserve and MSO indicators', 'Read PM&C/DCCEEW reserve and days-cover rows with stale/manual labels intact.'], ['3', 'Product-level days-cover signals', 'Separate petrol, diesel and jet fuel visibility from any broader fuel-security claim.'], ['4', 'Emergency response and public/private boundary', 'Check what can be public as safe aggregates and what may need protection.'], ['5', 'What government still needs to publish', 'Use the gaps as source requests, not prompts for estimates.']];
+const POLICY_ROWS = [{
+  policy: 'Latest national fuel strategy',
+  publisher: 'Commonwealth source required',
+  date: 'Source-gated',
+  status: 'source-gated',
+  machineReadable: 'Not loaded',
+  covers: 'Would identify the current national policy document and its update cadence.',
+  notPublish: 'No latest-strategy claim is made until an official source is loaded.',
+  citation: null
+}, {
+  policy: 'National liquid fuel security policy',
+  publisher: 'Commonwealth source required',
+  date: 'Source-gated',
+  status: 'source-gated',
+  machineReadable: 'Not loaded',
+  covers: 'Would define the public policy boundary for liquid fuel security.',
+  notPublish: 'No policy settings, emergency powers or reserve commitments are inferred.',
+  citation: null
+}, {
+  policy: 'Fuel security services/payment scheme',
+  sourceId: 'fuel_security_payment',
+  publisher: 'DCCEEW',
+  status: 'manual',
+  machineReadable: 'Manual public page/table',
+  covers: 'Public FSSP payment disclosure rows where the named source provides them.',
+  notPublish: 'Does not reveal contracts, refinery operations or forward fuel coverage.'
+}, {
+  policy: 'Minimum Stockholding Obligation / MSO',
+  sourceId: 'pmc_mso_days_cover',
+  publisher: 'PM&C / DCCEEW',
+  status: 'manual',
+  machineReadable: 'Manual public table',
+  covers: 'Published product days of coverage under the MSO table.',
+  notPublish: 'Does not publish terminal-level stock, full national emergency stock depth or private contracts.'
+}, {
+  policy: 'Emergency fuel response settings',
+  publisher: 'Commonwealth source required',
+  date: 'Source-gated',
+  status: 'source-gated',
+  machineReadable: 'Not loaded',
+  covers: 'Would describe public emergency fuel response settings and their safe publication boundary.',
+  notPublish: 'No emergency release powers or operational trigger settings are inferred here.',
+  citation: null
+}, {
+  policy: 'Public/private data boundary',
+  publisher: 'Commonwealth / industry source required',
+  date: 'Source-gated',
+  status: 'source-gated',
+  machineReadable: 'Not loaded',
+  covers: 'Would separate safe public aggregates from protected operational detail.',
+  notPublish: 'No terminal, cargo, vessel, contract or security-sensitive holdings are invented.',
+  citation: null
+}];
+const INDICATOR_ROWS = [{
+  id: 'pmc_mso_days_cover',
+  name: 'MSO days of cover',
+  why: 'Shows public product days coverage under the MSO table.',
+  action: 'Verify whether PM&C/DCCEEW has advanced the table or published a stable machine-readable feed.'
+}, {
+  id: 'pmc_mso_fuel_reserves',
+  name: 'MSO fuel reserves',
+  why: 'Shows public reserve volume context for petrol, diesel and jet fuel.',
+  action: 'Keep reserve volumes as source-linked public aggregates; do not infer terminal inventories.'
+}, {
+  id: 'fuel_security_payment',
+  name: 'Fuel Security Services Payment',
+  why: 'Shows public payment-disclosure context for the scheme, not a contract or supply-coverage feed.',
+  action: 'Review the DCCEEW table on its quarterly cadence and leave stale warnings visible if it has not advanced.'
+}, {
+  id: 'fuel_security_petrol_days_remaining',
+  name: 'Petrol days cover',
+  why: 'Derived by selecting the petrol field from the PM&C MSO days table.',
+  action: 'Refresh only when the parent PM&C table is verified.'
+}, {
+  id: 'fuel_security_diesel_days_remaining',
+  name: 'Diesel days cover',
+  why: 'Derived by selecting the diesel field from the PM&C MSO days table.',
+  action: 'Refresh only when the parent PM&C table is verified.'
+}, {
+  id: 'fuel_security_jet_days_remaining',
+  name: 'Jet fuel days cover',
+  why: 'Derived by selecting the jet fuel field from the PM&C MSO days table.',
+  action: 'Refresh only when the parent PM&C table is verified.'
+}];
+const PRODUCT_ROWS = [['Petrol', 'fuel_security_petrol_days_remaining', 'Public MSO product field reshaped from PM&C/DCCEEW.'], ['Diesel', 'fuel_security_diesel_days_remaining', 'Public MSO product field reshaped from PM&C/DCCEEW.'], ['Jet fuel', 'fuel_security_jet_days_remaining', 'Public MSO product field reshaped from PM&C/DCCEEW.'], ['Aggregate petroleum / total fuel', null, 'No separate aggregate days-cover row is published here unless a named source provides the exact concept.']];
+const BOUNDARY_ROWS = [['Reserve commitments', 'Aggregated commitments can be public if official source defines them.', 'Possible', 'Partial / source-gated', 'Use official reserve/MSO rows only; do not infer holdings.'], ['Emergency release powers', 'Exact operational triggers may be sensitive.', 'Possible summary', 'Source-gated', 'Needs official public policy source before display.'], ['Industry-held stock obligations', 'Exact holdings may be commercially or security sensitive.', 'Possible aggregate', 'Partial', 'MSO public aggregates exist; firm-level detail is not loaded.'], ['Government-held reserves', 'Exact location and release detail may be sensitive.', 'Possible aggregate', 'Partial / source-gated', 'Use only public reserve disclosures or government summary rows.'], ['Terminal inventory', 'Exact terminal stocks can be sensitive.', 'Possible aggregate', 'Unavailable', 'No reusable public terminal-inventory feed is loaded.'], ['Contracted supply', 'Counterparties, prices and schedules may be commercial-in-confidence.', 'Possible aggregate', 'Unavailable', 'No public forward contract coverage is loaded.'], ['Vessel/cargo visibility', 'Vessel names and port-call detail may be operational.', 'Possible aggregate', 'Partial', 'Aggregate tanker counts are visible; no live AIS, cargo or ETA layer is loaded.'], ['Retail station availability', 'Station-level availability is public-useful but currently fragmented.', 'Possible', 'Unavailable / partial', 'PM&C/WA/QLD public rows exist; no national live station feed is loaded.'], ['Regional outage reporting', 'Useful for travellers, freight and emergency planning.', 'Possible', 'Partial', 'State/territory public rows are incomplete and not a live national coverage layer.']];
+const IMPLEMENTATION_ROWS = [['Policy document published', 'source-gated', 'No current national strategy document is asserted on this page.', 'Official source not loaded.', 'Verify official fuel strategy source before naming it current.'], ['Machine-readable data feeds available', 'partial', 'Programmatic and manual envelopes exist for selected fuel data.', 'MSO tables remain manual and some operational feeds are unavailable.', 'Prioritise stable CSV/JSON/XLSX endpoints for public indicators.'], ['Product-level days-cover updated', 'stale', 'Petrol, diesel and jet fuel days are derived from the loaded PM&C table.', 'Parent public table has not been advanced in the loaded envelope.', 'Recheck and update only from named PM&C/DCCEEW source material.'], ['MSO reserve data updated', 'stale', 'PM&C reserve volume row is loaded as a manual public aggregate.', 'Loaded period is outside weekly cadence.', 'Recheck official table; keep stale labels if source remains unchanged.'], ['Emergency fuel response explained', 'source-gated', 'No emergency response setting is asserted.', 'Official public source and sensitivity boundary not loaded.', 'Load official public policy source before describing settings.'], ['State/territory integration visible', 'partial', 'Retail stock-out and Queensland public rows exist on National Fuel Security.', 'Coverage is not a national live operational feed.', 'Keep state rows labelled partial until coverage is complete.'], ['Queensland fuel sovereignty linked', 'partial', 'Queensland pathway sections exist on National Fuel Security.', 'Delivery, bid, capacity, land and contract fields remain mostly source-gated.', 'Re-check official AFIP and Coordinator-General sources.'], ['Forward supply/contracts visible', 'unavailable', 'Forward import orders and aggregate tanker counts are separate from contracts.', 'Contract coverage is not public.', 'Keep as government/industry data-access request.'], ['Public dashboard exists', 'roadmap', 'This is an independent prototype, not government infrastructure.', 'Official ownership, maintenance and feed publishing are not loaded.', 'Publish official feed ownership, cadence and reuse boundaries.']];
+const PUBLISH_ROWS = [['Latest official fuel strategy in dashboard-readable form', 'Identifies what policy document is current and what period it covers.', 'Commonwealth', 'Source-gated', 'Load official source, publication date, status and reuse terms.'], ['Product-level petrol/diesel/jet days-cover', 'Supports product-specific fuel-security visibility.', 'PM&C / DCCEEW', 'Stale / partial', 'Advance the manual MSO table or publish a stable machine-readable feed.'], ['MSO reserves and obligations', 'Separates reserve obligations from live operational inventory.', 'PM&C / DCCEEW', 'Stale / partial', 'Publish current public aggregate reserve rows and definitions.'], ['Fuel security payment status', 'Shows public payment-scheme disclosures without implying supply contracts.', 'DCCEEW', 'Stale / manual', 'Update the table or confirm no new quarter is published.'], ['Safe aggregate terminal/storage visibility', 'Shows resilience without exposing sensitive site-level data.', 'Commonwealth / industry', 'Unavailable', 'Define safe aggregate indicators and cadence.'], ['Fuel emergency response settings', 'Explains public settings and sensitivity boundaries.', 'Commonwealth', 'Source-gated', 'Publish source-safe summary fields.'], ['Public/private data boundary', 'Stops dashboards from either hiding everything or publishing unsafe detail.', 'Commonwealth / industry', 'Source-gated', 'State what can be safely public as aggregate indicators.'], ['Regional fuel outage indicators', 'Helps travellers, freight, communities and emergency planning.', 'States / industry', 'Partial', 'Publish reusable regional outage rows with product and timestamp.'], ['Forward supply/contract coverage', 'Shows what is committed beyond the month.', 'Government / industry', 'Unavailable', 'Publish safe aggregate coverage without counterparties if needed.'], ['Update cadence for fuel security indicators', 'Lets stale/current labels be interpreted correctly.', 'Publishing agency', 'Partial', 'Publish cadence and last-updated metadata with each feed.']];
+function latestPoint(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1);
+}
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function fmtNumber(value, digits = 0) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+  return Number(value).toLocaleString('en-AU', {
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits
+  });
+}
+function fmtEnvelopeValue(env) {
+  const point = latestPoint(env);
+  if (!point) return 'Unavailable';
+  if (env.series_id === 'fuel_security_payment') {
+    return `A$${fmtNumber(point.v, 2)}m`;
+  }
+  return `${fmtNumber(point.v, Number(point.v) % 1 === 0 ? 0 : 1)}${env.unit ? ` ${env.unit}` : ''}`;
+}
+function statusKind(env, fallback = 'source-gated') {
+  if (!env || env.status !== 'ok') return fallback;
+  const f = window.FR.freshness(env);
+  if (f.state === 'stale') return 'stale';
+  if (env.manual_entry || env.extra?.fields?.parent_manual_entry) return 'manual';
+  if (env._meta?.fetch === 'derived') return 'derived';
+  return 'observed';
+}
+function statusText(env, fallback = 'Source-gated') {
+  if (!env || env.status !== 'ok') return fallback;
+  const f = window.FR.freshness(env);
+  return f.state === 'stale' ? 'Stale' : f.label;
+}
+function SourceLink({
+  env
+}) {
+  if (!env?.source_url) return React.createElement("span", {
+    className: "unavail"
+  }, "Source-gated");
+  return React.createElement("a", {
+    href: env.source_url
+  }, env.source_name || env.source_id, " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  }));
+}
+function FuelIndicatorBadges({
+  env,
+  parentEnv = null,
+  partial = false
+}) {
+  const parentStale = parentEnv && window.FR.freshness(parentEnv).state === 'stale';
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  }), parentStale && React.createElement(TrustBadge, {
+    kind: "stale"
+  }, "Parent table stale"));
+}
+function PolicyDocumentsTable({
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Document / policy"), React.createElement("th", null, "Publisher"), React.createElement("th", null, "Publication date"), React.createElement("th", null, "Current status"), React.createElement("th", null, "Machine-readable data?"), React.createElement("th", null, "What it covers"), React.createElement("th", null, "What it does not publish"), React.createElement("th", null, "Link / citation"))), React.createElement("tbody", null, POLICY_ROWS.map(row => {
+    const env = row.sourceId ? data[row.sourceId] : null;
+    return React.createElement("tr", {
+      key: row.policy
+    }, React.createElement("td", null, row.policy), React.createElement("td", null, row.publisher), React.createElement("td", null, env?.last_data_point || row.date || 'Unknown'), React.createElement("td", null, React.createElement(TrustBadge, {
+      kind: statusKind(env, row.status)
+    }, statusText(env, row.status === 'source-gated' ? 'Source-gated' : undefined))), React.createElement("td", null, row.machineReadable), React.createElement("td", null, row.covers), React.createElement("td", null, row.notPublish), React.createElement("td", null, env ? React.createElement(SourceLink, {
+      env: env
+    }) : React.createElement("span", {
+      className: "unavail"
+    }, "Official source required")));
+  }))));
+}
+function IndicatorTable({
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Indicator"), React.createElement("th", null, "Latest value"), React.createElement("th", null, "Data period"), React.createElement("th", null, "Status"), React.createElement("th", null, "Source"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Next source action"))), React.createElement("tbody", null, INDICATOR_ROWS.map(row => {
+    const env = data[row.id];
+    return React.createElement("tr", {
+      key: row.id
+    }, React.createElement("td", null, row.name), React.createElement("td", null, fmtEnvelopeValue(env)), React.createElement("td", null, env?.last_data_point || 'Unavailable'), React.createElement("td", null, React.createElement(FuelIndicatorBadges, {
+      env: env,
+      parentEnv: row.id.startsWith('fuel_security_') && row.id !== 'fuel_security_payment' ? data.pmc_mso_days_cover : null,
+      partial: row.id === 'fuel_security_payment'
+    })), React.createElement("td", null, React.createElement(SourceLink, {
+      env: env
+    })), React.createElement("td", null, row.why), React.createElement("td", null, row.action));
+  }))));
+}
+function ProductDaysPanel({
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Product"), React.createElement("th", null, "Current public status"), React.createElement("th", null, "Latest value"), React.createElement("th", null, "Latest data point"), React.createElement("th", null, "Source cadence"), React.createElement("th", null, "What is missing"))), React.createElement("tbody", null, PRODUCT_ROWS.map(([product, id, note]) => {
+    const env = id ? data[id] : null;
+    return React.createElement("tr", {
+      key: product
+    }, React.createElement("td", null, product), React.createElement("td", null, env ? React.createElement(FuelIndicatorBadges, {
+      env: env,
+      parentEnv: data.pmc_mso_days_cover
+    }) : React.createElement(TrustBadge, {
+      kind: "source-gated"
+    })), React.createElement("td", null, env ? fmtEnvelopeValue(env) : 'Unavailable'), React.createElement("td", null, env?.last_data_point || 'Unavailable'), React.createElement("td", null, env?._meta?.update_cadence || 'Source-gated'), React.createElement("td", null, note));
+  }))));
+}
+function SimpleStatusTable({
+  columns,
+  rows
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
+    key: col
+  }, col)))), React.createElement("tbody", null, rows.map((row, idx) => React.createElement("tr", {
+    key: idx
+  }, row.map((cell, cellIdx) => React.createElement("td", {
+    key: `${idx}-${cellIdx}`
+  }, cellIdx === 1 && ['observed', 'verified', 'partial', 'stale', 'manual', 'derived', 'unavailable', 'source-gated', 'roadmap'].includes(String(cell).toLowerCase()) ? React.createElement(TrustBadge, {
+    kind: cell
+  }) : cell)))))));
+}
+function SourceCard({
+  id,
+  env,
+  partial = false
+}) {
+  const f = window.FR.freshness(env);
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, env?.source_name || id), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, env?.status === 'ok' ? `Loaded envelope. Latest data point ${env.last_data_point || 'unknown'}; status ${f.label.toLowerCase()}.` : env?.notes || 'No source-safe envelope is loaded.'), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), env?.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -991,7 +1246,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "manufacturing",
+      active: "fuel_strategy",
       refreshStatus: refreshStatus
     }), React.createElement("main", {
       id: "main"
@@ -1001,26 +1256,34 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const msoFields = fields(data.pmc_mso_days_cover);
+  const reservesFields = fields(data.pmc_mso_fuel_reserves);
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "manufacturing",
+    active: "fuel_strategy",
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "manufacturing"
+    id: "fuel-strategy"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Manufacturing \xB7 v1.0"), React.createElement("h1", {
+  }, "Fuel strategy - source tracker"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What Australia still makes, in plain English."), React.createElement("p", {
+  }, "Australian fuel strategy tracker"), React.createElement("p", {
     className: "intro__lede"
-  }, "Manufacturing is a smaller share of the Australian economy than it used to be, but it still feeds, fuels and equips the country. This page tracks the public numbers that show how much value, employment and exports come from Australian factories, and where new capital is being spent.")), React.createElement("aside", {
+  }, "Tracks official fuel-security policy, reserve commitments, days-cover indicators and missing public feeds, while keeping security-sensitive or unpublished operational data clearly source-gated."), React.createElement("p", {
+    className: "body-sm",
+    style: {
+      marginTop: 16,
+      color: 'var(--ink-2)'
+    }
+  }, "This page is an independent public-source prototype. It does not infer fuel reserves, contracts, cargoes, emergency powers or security-sensitive holdings. If a fuel-security setting is not published in a named official source, it remains marked as unavailable or source-gated.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1029,180 +1292,142 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "No fuel reserves, contracts, cargoes or emergency powers are inferred."))), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
     className: "section section--why",
-    "aria-labelledby": "why"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
-    id: "why",
-    style: {
-      marginTop: 8
-    }
-  }, "Why this matters to you")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, "A country that can make things has more options when overseas supply gets disrupted. Manufacturing also pays measurable wages and produces measurable exports. The ABS publishes the headline numbers \u2014 value added, employment, sales, exports and private capex \u2014 by industry division (ANZSIC C is manufacturing) and subdivision (food, beverages, machinery, transport equipment, chemicals)."), React.createElement("p", null, "This page collects the named sources for each of those measures. Values appear only when the named publisher has been verified. Anything we can't verify shows up as \"Source unavailable\" \u2014 never an estimate."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ANZSIC"), " = Australian and New Zealand Standard Industrial Classification.", React.createElement("b", null, " SITC"), " = Standard International Trade Classification.", React.createElement("b", null, " GVA"), " = Gross Value Added (industry contribution to GDP).")))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "metrics-h"
+    "aria-labelledby": "guide-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Headline numbers"), React.createElement("h2", {
-    id: "metrics-h"
-  }, "As of the latest publisher update"), React.createElement("p", {
+  }, "Use this page in order"), React.createElement("h2", {
+    id: "guide-h"
+  }, "Policy evidence before operational claims"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Share of GDP",
-    label: "Manufacturing share of GDP",
-    plain: "ANZSIC division C (manufacturing) gross value added as a share of total industry GVA, ABS quarterly National Accounts.",
-    fromEnvelope: data.abs_manufacturing_gdp_share,
-    unit: "%",
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Jobs",
-    label: "Manufacturing employment",
-    plain: "Employed persons in ANZSIC division C (manufacturing), ABS Labour Force Detailed release, quarterly.",
-    fromEnvelope: data.abs_manufacturing_employment,
-    unit: " thousand persons"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Output",
-    label: "Manufacturing sales (chain volume)",
-    plain: "ABS Business Indicators income from sales of goods and services for manufacturing, chain volume measures, seasonally adjusted, quarterly.",
-    fromEnvelope: data.abs_manufacturing_output_index,
-    unit: " chain volume $m"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Exports",
-    label: "Manufactured exports",
-    plain: "Combined SITC sections 5-8 (chemicals, manufactured materials, machinery, miscellaneous manufactures) export value.",
-    fromEnvelope: data.abs_manufactured_exports_total,
-    unit: " AUD millions"
-  })), React.createElement("div", {
-    style: {
-      height: 16
-    }
-  }), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Investment",
-    label: "Manufacturing private new capex",
-    plain: "ABS Cat. 5625.0 actual private new capital expenditure for ANZSIC division C, quarterly.",
-    fromEnvelope: data.abs_manufacturing_capex,
-    unit: " AUD millions"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Food sector",
-    label: "Food and beverage manufacturing employment",
-    plain: "Employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco).",
-    fromEnvelope: data.abs_food_beverage_employment,
-    unit: " thousand persons"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Industry profile",
-    label: "Industry profile (DoIS)",
-    plain: "Department of Industry, Science and Resources published manufacturing industry profiles. Hand-keyed when verified factual headcounts or revenue values are available.",
-    fromEnvelope: data.doe_industry_growth_centres_summary,
-    unit: ""
-  })), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending manufacturing source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
-    className: "body-sm"
-  }, "Five ABS manufacturing series now load from verified ABS latest-release XLSX tables. Manufacturing GDP share remains unavailable until the exact National Accounts table/API mapping is verified. The Department of Industry profile slot also stays unavailable until a named factual publication is loaded.")))), React.createElement("section", {
+  }, "The strongest rows are existing PM&C/DCCEEW public indicators. Strategy status, emergency response settings, terminal inventories and contracts stay source-gated until official/public fields are loaded."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--5"
+  }, QUICK_GUIDE.map(([step, title, copy]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, step), React.createElement("h3", null, title), React.createElement("p", null, copy))))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "charts-h"
+    "aria-labelledby": "policy-docs-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "How it's changed"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Manufacturing's share, employment, output and exports over time"), React.createElement("p", {
+  }, "Policy documents"), React.createElement("h2", {
+    id: "policy-docs-h"
+  }, "Official strategy and policy documents"), React.createElement("p", {
     className: "section__lede"
-  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Share of GDP",
-    title: "Manufacturing share of total industry GVA, quarterly",
-    unit: "%",
-    fromEnvelope: data.abs_manufacturing_gdp_share,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#1F3A8A",
-    takeaway: "ANZSIC division C (manufacturing) gross value added as a percentage of total industry GVA, ABS National Accounts.",
-    yAxisLabel: "Manufacturing share of total GVA (%)"
+  }, "This table separates existing public scheme/MSO evidence from documents that still require official source verification. No latest-strategy claim is made without a named official source."))), React.createElement(PolicyDocumentsTable, {
+    data: data
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "reserve-indicators-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Reserve context"), React.createElement("h2", {
+    id: "reserve-indicators-h"
+  }, "Public reserve and MSO indicators"), React.createElement("p", {
+    className: "section__lede"
+  }, "These are the loaded public reserve and days-cover indicators. Stale labels remain visible where the latest source period is outside the cadence window."))), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "MSO table",
+    label: "Lowest product days cover",
+    plain: `PM&C MSO table as at ${msoFields.as_at || data.pmc_mso_days_cover?.last_data_point || 'unknown'}.`,
+    fromEnvelope: data.pmc_mso_days_cover,
+    unit: "days",
+    partial: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "MSO reserve volume",
+    label: "Petrol, diesel and jet reserves",
+    plain: reservesFields.includes || 'Public aggregate reserve volume from the PM&C/DCCEEW table.',
+    fromEnvelope: data.pmc_mso_fuel_reserves,
+    unit: "ML",
+    partial: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "Product days",
+    label: "Diesel days cover",
+    plain: "Derived from the diesel field in the public PM&C MSO days table.",
+    fromEnvelope: data.fuel_security_diesel_days_remaining,
+    unit: "days"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Policy scheme",
+    label: "FSSP latest payment disclosure",
+    plain: "Public DCCEEW payment-disclosure context only; not a contract or supply-coverage feed.",
+    fromEnvelope: data.fuel_security_payment,
+    valueFn: env => fmtNumber(latestPoint(env)?.v, 2),
+    unit: "A$m",
+    partial: true
   })), React.createElement("div", {
     style: {
-      height: 24
+      height: 'var(--s-5)'
     }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Jobs",
-    title: "Manufacturing employment, quarterly",
-    unit: "thousand persons",
-    fromEnvelope: data.abs_manufacturing_employment,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#0F766E",
-    takeaway: "Employed persons in ANZSIC division C, ABS Labour Force Detailed.",
-    yAxisLabel: "Employed persons (thousand)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Output",
-    title: "Manufacturing sales, chain volume, quarterly",
-    unit: "chain volume $m",
-    fromEnvelope: data.abs_manufacturing_output_index,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#B45309",
-    takeaway: "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, ABS Business Indicators.",
-    yAxisLabel: "Manufacturing sales (chain volume $m)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Exports",
-    title: "Manufactured exports, monthly",
-    unit: "AUD millions",
-    fromEnvelope: data.abs_manufactured_exports_total,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Total export value across SITC sections 5-8 (chemicals, manufactured materials, machinery, miscellaneous manufactures).",
-    yAxisLabel: "Export value (AUD millions per month)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Investment",
-    title: "Manufacturing private new capex, quarterly",
-    unit: "AUD millions",
-    fromEnvelope: data.abs_manufacturing_capex,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#6B7280",
-    takeaway: "Actual private new capital expenditure for ANZSIC division C (manufacturing), ABS Cat. 5625.0.",
-    yAxisLabel: "Manufacturing capex (AUD millions)"
-  }))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: [],
-    title: "What changed",
-    lede: "Populated from ABS / DoIS release notes as verified data arrives.",
-    emptyMessage: "Awaiting verified release notes for the loaded manufacturing source envelopes."
+  }), React.createElement(IndicatorTable, {
+    data: data
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "product-days-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Product visibility"), React.createElement("h2", {
+    id: "product-days-h"
+  }, "Product-level days-cover visibility"), React.createElement("p", {
+    className: "section__lede"
+  }, "Product-level days-cover is one of the most important public fuel-security signals. If petrol, diesel or jet fuel coverage is stale or not machine-readable, the dashboard must show the gap rather than estimate the missing value."))), React.createElement(ProductDaysPanel, {
+    data: data
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Security boundary"), React.createElement("h2", {
+    id: "boundary-h"
+  }, "Emergency response and public/private boundary"), React.createElement("p", {
+    className: "section__lede"
+  }, "A useful public dashboard should ask for safe aggregate indicators. It should not infer protected operational detail such as terminal inventories, cargo assignments, contract counterparties or emergency-release triggers."))), React.createElement(SimpleStatusTable, {
+    columns: ['Area', 'Should public see exact detail?', 'Safe public aggregate possible?', 'Current publication status', 'Sensitivity note'],
+    rows: BOUNDARY_ROWS
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "implementation-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Implementation"), React.createElement("h2", {
+    id: "implementation-h"
+  }, "Strategy implementation tracker"), React.createElement("p", {
+    className: "section__lede"
+  }, "This is categorical tracking only. It does not score readiness, infer policy compliance or invent implementation status."))), React.createElement(SimpleStatusTable, {
+    columns: ['Milestone', 'Status', 'Evidence', 'Current blocker', 'Next action'],
+    rows: IMPLEMENTATION_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "publish-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Missing public feeds"), React.createElement("h2", {
+    id: "publish-h"
+  }, "What government still needs to publish"), React.createElement("p", {
+    className: "section__lede"
+  }, "These rows are public-data requests. They are not back-filled with estimates or operational guesses."))), React.createElement(SimpleStatusTable, {
+    columns: ['Missing feed', 'Why it matters', 'Likely holder / publisher', 'Dashboard status', 'Next source action'],
+    rows: PUBLISH_ROWS
   })), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
@@ -1210,31 +1435,20 @@ function App() {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+  }, "Sources and methodology"), React.createElement("h2", null, "Every envelope used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
+  }, "This page reuses existing fuel-security envelopes. It adds no new fuel policy values, reserve figures, emergency settings, contract rows or terminal/storage data."))), React.createElement("div", {
     className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+  }, Object.entries(data).map(([id, env]) => React.createElement(SourceCard, {
     key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+    id: id,
+    env: env,
+    partial: ['fuel_security_payment', 'fuel_forward_contract_coverage', 'fuel_security_terminal_capacity', 'fuel_security_live_station_outage_feed', 'fuel_security_live_vessel_tracking'].includes(id)
+  }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). This remains unavailable until the exact source table or API mapping for the share calculation is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001) Table 04, seasonally adjusted, quarterly."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, from ABS Business Indicators Australia (Cat. 5676.0) Table 4, quarterly. This is a source-backed sales/output proxy, not a separate production-index series."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined original FOB export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods Table 12a. The ABS workbook unit is AUD millions."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual total private new capital expenditure for ANZSIC division C (manufacturing), current prices, from ABS Private New Capital Expenditure (Cat. 5625.0) Table 4, seasonally adjusted, quarterly."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Sum of original employed-persons series for ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed Table 06, quarterly."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. This remains unavailable until a named publication supports a clean factual row; aggregated estimates are never published.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "No-estimate rule"), React.createElement("p", null, "No fuel strategy facts, reserve values, days-cover values, emergency policy settings, contracts, cargoes, terminal inventories or live feeds are inferred. Source-gated means the page is waiting for a verified official/public source, exact field, period, unit and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
-  })));
+  }));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App, null));

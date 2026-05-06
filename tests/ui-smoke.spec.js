@@ -4,6 +4,7 @@ const routes = [
   { path: '/', heading: 'Australian resilience dashboard prototype' },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What a transparent Australian fuel dashboard should show.' },
+  { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: 'Australian fuel strategy tracker' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
@@ -52,6 +53,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByText('A public-source dashboard showing what can be verified')).toBeVisible();
   const heroLinks = page.getByLabel('Best first dashboard links');
   await expect(heroLinks.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View Fuel Strategy' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Missing Data Scoreboard' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View National Readiness Matrix' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Food, Farms & Water' })).toBeVisible();
@@ -59,6 +61,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(heroLinks.getByRole('link', { name: 'View AU Economics' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Where to start' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For the fuel dashboard request' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For fuel strategy and reserves' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For what still needs publishing' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For housing pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
@@ -77,6 +80,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'MPs and policy staff' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Public-data gaps are now tracked as a product' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Housing pressure' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Fuel strategy' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
@@ -121,6 +125,7 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByText('AI and workforce').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Next national dashboard areas' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Australian fuel strategy tracker' })).toBeVisible();
+  await expect(page.getByText('dedicated Fuel Strategy page now surfaces existing PM&C/DCCEEW indicators')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Housing and economic pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Defence procurement watch' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Brisbane 2032 readiness' })).toBeVisible();
@@ -162,6 +167,8 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'The national fuel dashboard structure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Use this fuel page in order' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For policy, reserves and MSO context' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Australian Fuel Strategy Tracker' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel sovereignty pathway' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What government and industry still need to publish' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For travellers and tourism operators' })).toBeVisible();
@@ -217,6 +224,26 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(page.getByText('Food-import exposure needs a verified ABS trade concept')).toBeVisible();
   await expect(page.getByText('No public Australian fertiliser cover row is loaded.')).toBeVisible();
   await expect(page.getByText('This page does not infer drought or farm-level water availability from maps or commentary.')).toBeVisible();
+});
+
+test('fuel strategy tracker keeps policy and operational data source-gated', async ({ page }) => {
+  await page.goto('/ui_kits/australian-fuel-strategy-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: 'Australian fuel strategy tracker' })).toBeVisible();
+  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(page.getByText('It does not infer fuel reserves, contracts, cargoes, emergency powers or security-sensitive holdings')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Policy evidence before operational claims' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="policy-docs-h"]').getByRole('heading', { name: 'Official strategy and policy documents' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="reserve-indicators-h"]').getByRole('heading', { name: 'Public reserve and MSO indicators' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="product-days-h"]').getByRole('heading', { name: 'Product-level days-cover visibility' })).toBeVisible();
+  await expect(page.getByText('Product-level days-cover is one of the most important public fuel-security signals.')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="boundary-h"]').getByRole('heading', { name: 'Emergency response and public/private boundary' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="implementation-h"]').getByRole('heading', { name: 'Strategy implementation tracker' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="publish-h"]').getByRole('heading', { name: 'What government still needs to publish' })).toBeVisible();
+  await expect(page.getByText('Latest national fuel strategy')).toBeVisible();
+  await expect(page.getByText('Terminal inventory')).toBeVisible();
+  await expect(page.getByText('Forward supply/contract coverage')).toBeVisible();
+  await expect(page.getByText('No fuel reserves, contracts, cargoes or emergency powers are inferred.')).toBeVisible();
+  await expect(page.getByText('No fuel strategy facts, reserve values, days-cover values, emergency policy settings')).toBeVisible();
 });
 
 test('AU economics page separates latest cash rate from monthly history', async ({ page }) => {

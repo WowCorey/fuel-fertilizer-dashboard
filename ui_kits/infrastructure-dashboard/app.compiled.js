@@ -363,6 +363,10 @@ function Header({
     label: 'National fuel security',
     href: '../fuel-security-dashboard/index.html'
   }, {
+    id: 'fuel_strategy',
+    label: 'Fuel strategy',
+    href: '../australian-fuel-strategy-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
@@ -927,6 +931,8 @@ function Footer({
   }, "National status")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-security-dashboard/index.html"
   }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
+    href: "../australian-fuel-strategy-dashboard/index.html"
+  }, "Fuel strategy")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"

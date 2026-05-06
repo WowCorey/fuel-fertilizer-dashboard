@@ -22,6 +22,7 @@ const sharedFiles = [
 const dashboards = [
   'national-status-dashboard',
   'fuel-security-dashboard',
+  'australian-fuel-strategy-dashboard',
   'resource-value-dashboard',
   'state-contribution-dashboard',
   'strategic-resources-dashboard',
