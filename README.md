@@ -48,15 +48,15 @@ The dashboards have no publisher brand, no sponsors, and no affiliation with
 any government department or industry body. The project does not fabricate,
 interpolate or estimate missing numbers.
 
-The homepage now opens with a national dashboard summary: fuel security; food,
-farms and water; economy and housing pressure; power, manufacturing and
-infrastructure; defence and strategic resources; and AI, workforce and future
-pressure. It also links to a missing-data scoreboard that shows where a feed is
-verified, partial, stale, manual, derived, unavailable, source-gated or roadmap
-only. The scoreboard now includes a national readiness priority matrix and
-action queue. Priority bands are categorical editorial/product triage only, not
-numeric risk scores or official ratings. Unavailable and source-gated rows are
-treated as public-data gaps, not as permission to estimate.
+The homepage now opens with a plain-English national dashboard summary and
+best-first-click links for fuel security, missing data, readiness triage, food
+and farms, and AU economics. It also links to a missing-data scoreboard that
+shows where a feed is verified, partial, stale, manual, derived, unavailable,
+source-gated or roadmap only. The scoreboard includes a national readiness
+priority matrix and action queue. Priority bands are categorical
+editorial/product triage only, not numeric risk scores or official ratings.
+Unavailable and source-gated rows are treated as public-data gaps, not as
+permission to estimate.
 
 ## Dashboards
 

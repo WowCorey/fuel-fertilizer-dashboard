@@ -218,6 +218,54 @@ function FarmerDecisionPressure({ data }) {
   );
 }
 
+function FoodPageQuickGuide() {
+  const items = [
+    {
+      title: 'Real now',
+      copy: 'Fertiliser import value and source-country concentration are loaded from verified envelopes.',
+      href: '#inputs-h',
+    },
+    {
+      title: 'Farm planning gaps',
+      copy: 'Farm diesel, fertiliser cover, water allocation and drought pressure are source-gated rather than estimated.',
+      href: '#farmer-pressure-h',
+    },
+    {
+      title: 'Food trade gates',
+      copy: 'Production, food import and export sections show what still needs clean ABS, ABARES, DAFF or BOM wiring.',
+      href: '#grows-h',
+    },
+    {
+      title: 'Not a forecast',
+      copy: 'This page is not a live farm forecast, planting model, water-allocation service or commodity-trading tool.',
+      href: '#sources',
+    },
+  ];
+  return (
+    <section className="section" aria-labelledby="food-quick-guide-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Best first clicks</span>
+          <h2 id="food-quick-guide-h">How to use this food and farm page</h2>
+          <p className="section__lede">
+            Fertiliser is the verified starting point. Wider food, farm diesel and water questions
+            stay visible as public-data gaps until source-safe feeds are loaded.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {items.map(item => (
+          <article className="quick-link-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+            <a href={item.href}>Jump to section</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -488,6 +536,8 @@ function App() {
             </div>
           </div>
         </section>
+
+        <FoodPageQuickGuide/>
 
         <section className="section" aria-labelledby="overview-h">
           <div className="section__head">

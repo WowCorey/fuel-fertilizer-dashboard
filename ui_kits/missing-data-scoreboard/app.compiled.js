@@ -412,7 +412,7 @@ function Header({
     href: '../infrastructure-dashboard/index.html'
   }, {
     id: 'employment_automation',
-    label: 'Employment & Automation',
+    label: 'Employment',
     href: '../employment-automation-dashboard/index.html'
   }, {
     id: 'missing_data',
@@ -960,9 +960,9 @@ function Footer({
     className: "site-footer__base"
   }, React.createElement("span", {
     className: "caption"
-  }, "Code MIT \xB7 Project metadata/prose CC BY 4.0 \xB7 Upstream data rights remain with publishers"), React.createElement("span", {
+  }, "Code MIT - Project metadata/prose CC BY 4.0 - Upstream data rights remain with publishers"), React.createElement("span", {
     className: "caption mono"
-  }, "Site refresh: ", siteRefresh, " \xB7 Page data retrieved: ", pageRetrieved)));
+  }, "Site refresh: ", siteRefresh, " - Page data retrieved: ", pageRetrieved)));
 }
 Object.assign(window, {
   Footer
@@ -1269,6 +1269,35 @@ function App() {
   }, "Data currency"), React.createElement("p", null, "Refreshed means the automated pipeline last ran successfully. This scoreboard does not publish new data values; it maps public-data gaps and the likely source owner.")), React.createElement("dl", {
     className: "data-currency__list"
   }, React.createElement("div", null, React.createElement("dt", null, "Site refreshed"), React.createElement("dd", null, window.FR.fmtRefreshStatus(refreshStatus))), React.createElement("div", null, React.createElement("dt", null, "Page data retrieved"), React.createElement("dd", null, "No source envelopes loaded on this scoreboard page")), React.createElement("div", null, React.createElement("dt", null, "Latest source data point"), React.createElement("dd", null, "Not applicable")))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "scoreboard-read-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "How to read this scoreboard"), React.createElement("h2", {
+    id: "scoreboard-read-h"
+  }, "Start with the gap, then the action"), React.createElement("p", {
+    className: "section__lede"
+  }, "The page is designed for quick triage: what is missing, why it matters, who likely holds it and what has to happen before it can become a dashboard value."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Scoreboard"), React.createElement("p", null, "Shows the public-data gaps and the dashboard pages affected."), React.createElement("a", {
+    href: "#scoreboard-h"
+  }, "Go to scoreboard")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Priority matrix"), React.createElement("p", null, "Groups the most decision-useful gaps into categorical triage bands."), React.createElement("a", {
+    href: "#priority-h"
+  }, "Go to matrix")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Action queue"), React.createElement("p", null, "Separates source checks, data requests, automation and methodology work."), React.createElement("a", {
+    href: "#queue-h"
+  }, "Go to action queue")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "No-estimate rule"), React.createElement("p", null, "Explains why unavailable, stale and source-gated gaps stay visible."), React.createElement("a", {
+    href: "#no-estimate-h"
+  }, "Go to rule")))), React.createElement("section", {
     className: "section section--why",
     "aria-labelledby": "legend-h"
   }, React.createElement("div", {
