@@ -2573,6 +2573,21 @@ def source_check_required(source: dict[str, Any]) -> bool:
     return source.get("check_required", True) is not False
 
 
+def source_fetch_required(source: dict[str, Any]) -> bool:
+    return source.get("fetch_required", True) is not False
+
+
+def fetch_failure_detail(source: dict[str, Any], exc: Exception, *, required: bool) -> str:
+    sid = source["id"]
+    name = source.get("human_name") or sid
+    url = source.get("fetch_url") or source.get("canonical_url") or source.get("url") or "(no fetch URL)"
+    requirement = "blocking" if required else "non-blocking"
+    return (
+        f"{sid}: {type(exc).__name__}: {exc} "
+        f"(source_name={name!r}; fetch_url={url}; fetch_required={required}; {requirement})"
+    )
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Fetch data for Fuel Resilience AU")
     ap.add_argument("--only", help="Only fetch this source id")
@@ -2610,6 +2625,7 @@ def main() -> int:
         if not fetcher:
             errors.append(f"{sid}: marked {source.get('fetch')} but no fetcher registered")
             return
+        fetch_required = source_fetch_required(source)
         try:
             block = fetcher(source)
             path = write_generated(source, block)
@@ -2617,8 +2633,16 @@ def main() -> int:
             wrote.append(str(path.relative_to(ROOT)))
             print(f"[OK ] {sid:<32} -> {path.relative_to(ROOT)}")
         except Exception as e:
-            errors.append(f"{sid}: {type(e).__name__}: {e}")
-            print(f"[ERR] {sid:<32} {e}", file=sys.stderr)
+            detail = fetch_failure_detail(source, e, required=fetch_required)
+            existing_path = GENERATED_DIR / f"{sid}.json"
+            if not fetch_required and existing_path.exists():
+                skipped.append((sid, "non-blocking fetch failed; kept existing generated envelope"))
+                print(f"[WARN] {detail}", file=sys.stderr)
+                return
+            if not fetch_required:
+                detail = f"{detail}; no existing generated envelope was available to keep"
+            errors.append(detail)
+            print(f"[ERR] {detail}", file=sys.stderr)
 
     for source in sources:
         sid = source["id"]
