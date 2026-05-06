@@ -13,11 +13,11 @@ const SCOREBOARD_ROWS = [
   {
     area: 'Fuel security',
     status: 'partial',
-    gap: 'Station availability, terminal inventory, vessel ETA/cargo/product and forward contracts',
+    gap: 'Latest fuel strategy source, station availability, terminal inventory, vessel ETA/cargo/product and forward contracts',
     holder: 'Commonwealth, state/territory agencies, industry and private operators',
     why: 'Fuel affects tourism, freight, farms, emergency services, defence posture and regional resilience.',
     action: 'Publish source-safe station, terminal, cargo and contract fields with product, date, geography and reuse terms.',
-    page: 'National fuel security',
+    page: 'Fuel strategy / National fuel security',
   },
   {
     area: 'Queensland fuel sovereignty',
@@ -78,9 +78,9 @@ const SCOREBOARD_ROWS = [
 const ROADMAP_SECTIONS = [
   {
     title: 'Australian fuel strategy tracker',
-    status: 'source-gated',
+    status: 'partial',
     fields: ['latest official fuel strategy release', 'national liquid fuel security policy', 'reserve commitments', 'MSO commitments', 'product-level days cover', 'emergency fuel response settings', 'public vs security-sensitive data boundary', 'next update due'],
-    note: 'Official source required before any latest-strategy claim is made.',
+    note: 'A dedicated Fuel Strategy page now surfaces existing PM&C/DCCEEW indicators and keeps latest-strategy, emergency-setting, terminal, contract and public/private-boundary rows source-gated.',
   },
   {
     title: 'Housing and economic pressure',
@@ -119,7 +119,7 @@ const PRIORITY_MATRIX_ROWS = [
     decision: 'national fuel risk visibility',
     blocker: 'latest machine-readable/public feed not loaded',
     action: 'verify latest official source and update or automate envelope',
-    page: 'National fuel security',
+    page: 'Fuel strategy / National fuel security',
   },
   {
     band: 'Immediate',

@@ -363,6 +363,10 @@ function Header({
     label: 'National fuel security',
     href: '../fuel-security-dashboard/index.html'
   }, {
+    id: 'fuel_strategy',
+    label: 'Fuel strategy',
+    href: '../australian-fuel-strategy-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
@@ -927,6 +931,8 @@ function Footer({
   }, "National status")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-security-dashboard/index.html"
   }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
+    href: "../australian-fuel-strategy-dashboard/index.html"
+  }, "Fuel strategy")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"
@@ -2001,6 +2007,22 @@ function FuelPageQuickGuide() {
     href: item.href
   }, "Jump to section")))));
 }
+function FuelStrategyCrossLink() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "fuel-strategy-link-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Policy context"), React.createElement("h2", {
+    id: "fuel-strategy-link-h"
+  }, "For policy, reserves and MSO context")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "The National Fuel Security page shows the public dashboard structure. The Australian Fuel Strategy Tracker separates official policy documents, MSO/reserve indicators, product-level days-cover visibility, emergency-response source gates and public/private data boundaries."), React.createElement("p", null, "It does not infer strategy facts, contracts, cargoes, terminal inventories or emergency settings where an official/public source is not loaded."), React.createElement("a", {
+    href: "../australian-fuel-strategy-dashboard/index.html"
+  }, "Open Australian Fuel Strategy Tracker"))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -2068,7 +2090,7 @@ function App() {
     refreshStatus: refreshStatus,
     latestRetrieved: latestRetrieved,
     updatedDisplay: updatedDisplay
-  }), React.createElement(HowToReadPage, null), React.createElement(PublicRequestAlignment, null), React.createElement(FuelPageQuickGuide, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
+  }), React.createElement(HowToReadPage, null), React.createElement(PublicRequestAlignment, null), React.createElement(FuelPageQuickGuide, null), React.createElement(FuelStrategyCrossLink, null), React.createElement(WhatThisPageAnswers, null), React.createElement(PublishingNeedsChecklist, null), React.createElement(TravellersAndTourismSection, null), React.createElement(QueenslandVisibility, {
     stockoutsEnv: data.pmc_retail_stockouts,
     qldReportsEnv: data.qld_fuel_security_unavailable_reports
   }), React.createElement(QueenslandFuelSovereigntySection, {

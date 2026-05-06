@@ -44,6 +44,13 @@ a named public source provides the exact field, period, unit and reuse rights.
 
 ### Fuel strategy / national fuel security policy
 
+The dedicated [Australian Fuel Strategy Tracker](../ui_kits/australian-fuel-strategy-dashboard/index.html)
+now surfaces existing PM&C/DCCEEW MSO, product days-cover and Fuel Security
+Services Payment envelopes beside source-gated policy rows. It does not assert
+the current national strategy, emergency response settings, reserve commitments,
+contracts or terminal/storage facts until official/public sources provide exact
+fields, dates, units and reuse boundaries.
+
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
 | Latest official Australian fuel strategy release | source-gated | The roadmap needs the current official strategy/policy source before it can become a dashboard envelope. | Verify the official Commonwealth source and only then add a source registry entry such as `aus_fuel_strategy_latest`. |

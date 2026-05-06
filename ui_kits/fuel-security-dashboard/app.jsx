@@ -1112,6 +1112,31 @@ function FuelPageQuickGuide() {
   );
 }
 
+function FuelStrategyCrossLink() {
+  return (
+    <section className="section section--why" aria-labelledby="fuel-strategy-link-h">
+      <div className="why-grid">
+        <div>
+          <span className="eyebrow">Policy context</span>
+          <h2 id="fuel-strategy-link-h">For policy, reserves and MSO context</h2>
+        </div>
+        <div className="why-body">
+          <p>
+            The National Fuel Security page shows the public dashboard structure. The Australian Fuel
+            Strategy Tracker separates official policy documents, MSO/reserve indicators, product-level
+            days-cover visibility, emergency-response source gates and public/private data boundaries.
+          </p>
+          <p>
+            It does not infer strategy facts, contracts, cargoes, terminal inventories or emergency
+            settings where an official/public source is not loaded.
+          </p>
+          <a href="../australian-fuel-strategy-dashboard/index.html">Open Australian Fuel Strategy Tracker</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1196,6 +1221,8 @@ function App() {
         <PublicRequestAlignment/>
 
         <FuelPageQuickGuide/>
+
+        <FuelStrategyCrossLink/>
 
         <WhatThisPageAnswers/>
 
