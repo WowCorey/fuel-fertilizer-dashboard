@@ -41,6 +41,72 @@
     grid-template-columns: repeat(4, 1fr);
     gap: var(--s-5);
   }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-5);
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+  .summary-card h3 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-24);
+    font-weight: 500;
+  }
+  .summary-card dl { display: grid; gap: var(--s-3); margin: 0; }
+  .summary-card dt {
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .summary-card dd { margin: 2px 0 0; color: var(--ink-2); line-height: 1.45; }
+  .status-label {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-1);
+    padding: 3px 7px;
+    color: var(--ink-3);
+    background: var(--paper-sunk);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .status-label--verified { color: var(--surplus); background: var(--surplus-tint); border-color: transparent; }
+  .status-label--partial,
+  .status-label--derived { color: var(--accent); background: var(--accent-tint); border-color: transparent; }
+  .status-label--stale { color: var(--caution); background: var(--caution-tint); border-color: transparent; }
+  .status-label--manual { color: var(--ink-2); background: var(--paper); }
+  .status-label--unavailable,
+  .status-label--source-gated,
+  .status-label--roadmap { color: var(--ink-3); background: var(--paper-sunk); }
+  .legend-grid,
+  .decision-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-4);
+  }
+  .legend-card,
+  .decision-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    padding: var(--s-4);
+  }
+  .legend-card p,
+  .decision-card p { color: var(--ink-2); margin-top: var(--s-2); }
   .home-card {
     background: var(--card);
     border: 1px solid var(--rule);
@@ -138,6 +204,9 @@
   }
   @media (max-width: 1100px) {
     .home-grid { grid-template-columns: repeat(2, 1fr); }
+    .summary-grid,
+    .legend-grid,
+    .decision-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 760px) {
     .home-hero {
@@ -149,6 +218,9 @@
       width: min(220px, 70%);
     }
     .home-grid,
+    .summary-grid,
+    .legend-grid,
+    .decision-grid,
     .home-note__inner {
       grid-template-columns: 1fr;
     }
@@ -186,6 +258,7 @@
         <a href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
         <a href="ui_kits/infrastructure-dashboard/index.html">Infrastructure</a>
         <a href="ui_kits/employment-automation-dashboard/index.html">Employment &amp; Automation</a>
+        <a href="ui_kits/missing-data-scoreboard/index.html">Missing data</a>
       </nav>
     </div>
   </header>
@@ -201,6 +274,7 @@
             Values appear only when they flow through a verified JSON envelope; unavailable
             values remain visible as placeholders.
             The National Fuel Security page is the direct fuel-dashboard prototype; the Food, farms &amp; water security page extends the same public-source method into food-system resilience.
+            The missing data scoreboard shows which feeds remain partial, unavailable, source-gated or roadmap-only.
         </p>
         <div class="home-badge-row">
           <span class="refresh-badge" id="refresh-badge">Programmatic refresh: no successful refresh recorded</span>
@@ -210,6 +284,135 @@
         </div>
       </div>
       <img class="home-hero__art" src="assets/au-outline.svg" alt="Outline map of Australia">
+    </section>
+
+    <section class="section" aria-labelledby="summary-title">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow">National dashboard summary</span>
+          <h2 id="summary-title">A 30-second view of national resilience signals</h2>
+          <p class="section__lede">
+            This site is an independent public-source prototype, not an official government dashboard.
+            It shows what can be verified from public sources and keeps missing feeds visible instead of filling gaps with estimates.
+          </p>
+        </div>
+      </div>
+      <div class="summary-grid">
+        <article class="summary-card">
+          <span class="status-label status-label--partial">Partial</span>
+          <h3>Fuel security</h3>
+          <dl>
+            <div><dt>Current signal</dt><dd>Days-cover, MSO/reserve context, inbound aggregate tanker visibility and Queensland visibility where public data exists.</dd></div>
+            <div><dt>Biggest missing feed</dt><dd>Live station-level availability, terminal inventory, product cargo, tanker ETAs and forward contracts.</dd></div>
+            <div><dt>Why it matters</dt><dd>Fuel affects tourism, freight, farms, emergency services, defence posture and regional resilience.</dd></div>
+          </dl>
+        </article>
+        <article class="summary-card">
+          <span class="status-label status-label--source-gated">Source-gated / partial</span>
+          <h3>Food, farms and water</h3>
+          <dl>
+            <div><dt>Current signal</dt><dd>Fertiliser imports and source concentration are loaded.</dd></div>
+            <div><dt>Biggest missing feed</dt><dd>Fertiliser stock cover, farm diesel risk, water allocation by food-producing region and drought pressure.</dd></div>
+            <div><dt>Why it matters</dt><dd>Fuel, fertiliser and water determine whether farms can produce and move food.</dd></div>
+          </dl>
+        </article>
+        <article class="summary-card">
+          <span class="status-label status-label--partial">Partial / roadmap</span>
+          <h3>Economy and housing pressure</h3>
+          <dl>
+            <div><dt>Current signal</dt><dd>AU Economics includes the latest official RBA cash-rate target and selected macro indicators.</dd></div>
+            <div><dt>Biggest missing feed</dt><dd>Housing ownership, investor, first-home buyer, negative gearing and rental-stress modelling.</dd></div>
+            <div><dt>Why it matters</dt><dd>Interest rates, household debt and housing pressure shape cost of living and social stability.</dd></div>
+          </dl>
+        </article>
+        <article class="summary-card">
+          <span class="status-label status-label--partial">Partial / source-gated</span>
+          <h3>Power, manufacturing and infrastructure</h3>
+          <dl>
+            <div><dt>Current signal</dt><dd>Power, manufacturing and infrastructure pages provide public-source visibility where wired.</dd></div>
+            <div><dt>Biggest missing feed</dt><dd>Outage resilience, manufacturing bottlenecks, project delivery status and logistics constraints.</dd></div>
+            <div><dt>Why it matters</dt><dd>National resilience depends on power reliability, industrial capacity and infrastructure delivery.</dd></div>
+          </dl>
+        </article>
+        <article class="summary-card">
+          <span class="status-label status-label--source-gated">Source-gated / partial</span>
+          <h3>Defence and strategic resources</h3>
+          <dl>
+            <div><dt>Current signal</dt><dd>Strategic resources, defence posture and resource-value pages are live with public-source caveats.</dd></div>
+            <div><dt>Biggest missing feed</dt><dd>Verified Defence procurement pathways, naval logistics implications and critical mineral project readiness.</dd></div>
+            <div><dt>Why it matters</dt><dd>Fuel, ships, resources and industrial capacity are national-security issues.</dd></div>
+          </dl>
+        </article>
+        <article class="summary-card">
+          <span class="status-label status-label--roadmap">Roadmap</span>
+          <h3>AI, workforce and future pressure</h3>
+          <dl>
+            <div><dt>Current signal</dt><dd>Employment &amp; Automation tracks labour-market changes during the AI rollout era without asserting AI causation.</dd></div>
+            <div><dt>Biggest missing feed</dt><dd>Sector automation exposure, displacement risk, retraining capacity and regional workforce exposure.</dd></div>
+            <div><dt>Why it matters</dt><dd>AI may reshape productivity, jobs, skills and government service demand.</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section--why" aria-labelledby="legend-title">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow">Unified confidence legend</span>
+          <h2 id="legend-title">Status labels are part of the evidence</h2>
+          <p class="section__lede">Unavailable and source-gated data is not a dashboard failure. It is evidence of a public-data gap.</p>
+        </div>
+      </div>
+      <div class="legend-grid">
+        <article class="legend-card"><span class="status-label status-label--verified">Verified</span><p>Source-backed and current enough for its cadence.</p></article>
+        <article class="legend-card"><span class="status-label status-label--partial">Partial</span><p>Source-backed, but incomplete by geography, product, timing or concept.</p></article>
+        <article class="legend-card"><span class="status-label status-label--stale">Stale</span><p>Source-backed, but outside expected cadence.</p></article>
+        <article class="legend-card"><span class="status-label status-label--manual">Manual</span><p>Hand-keyed from a named public source.</p></article>
+        <article class="legend-card"><span class="status-label status-label--derived">Derived</span><p>Calculated or selected from a named source envelope.</p></article>
+        <article class="legend-card"><span class="status-label status-label--unavailable">Unavailable</span><p>No public source-safe feed is loaded.</p></article>
+        <article class="legend-card"><span class="status-label status-label--source-gated">Source-gated</span><p>Waiting for verified source, field, period, unit and reuse rights.</p></article>
+        <article class="legend-card"><span class="status-label status-label--roadmap">Roadmap</span><p>Planned dashboard area, not yet populated.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="who-for-title">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow">Decision views</span>
+          <h2 id="who-for-title">Who is this for?</h2>
+        </div>
+      </div>
+      <div class="decision-grid">
+        <article class="decision-card"><h3>Travellers and tourism operators</h3><p>Can they plan fuel stops and understand disruption visibility?</p></article>
+        <article class="decision-card"><h3>Farmers</h3><p>Can they see fuel, fertiliser and water pressure before planting?</p></article>
+        <article class="decision-card"><h3>Small business</h3><p>Can they see cost, freight and outage pressure?</p></article>
+        <article class="decision-card"><h3>MPs and policy staff</h3><p>Can they see what government or industry has not published?</p></article>
+        <article class="decision-card"><h3>Journalists</h3><p>Can they separate verified data from political claims?</p></article>
+        <article class="decision-card"><h3>Citizens</h3><p>Can they see what affects cost of living and national resilience?</p></article>
+      </div>
+    </section>
+
+    <section class="home-note" aria-labelledby="scoreboard-title">
+      <div class="home-note__inner">
+        <div>
+          <span class="eyebrow">Missing data scoreboard</span>
+          <h2 id="scoreboard-title">Public-data gaps are now tracked as a product</h2>
+          <p>
+            The scoreboard lists verified, partial, stale, unavailable, source-gated and roadmap-only gaps,
+            who likely holds the missing data, why it matters, and the next source action.
+          </p>
+        </div>
+        <div>
+          <span class="eyebrow">Open scoreboard</span>
+          <h2>What still needs to be published</h2>
+          <p>
+            Fuel operations, Queensland delivery tracking, farm decision inputs, housing pressure,
+            Defence procurement watch, AI workforce exposure and Olympics readiness stay source-gated
+            until official/public sources support exact fields.
+          </p>
+          <p><a class="home-card__link" href="ui_kits/missing-data-scoreboard/index.html">Open missing data scoreboard</a></p>
+        </div>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="dashboards-title">
@@ -297,31 +500,37 @@
           <h3>AU economics</h3>
           <p>RBA cash rate, household and government debt, mortgages, unemployment and inflation.</p>
           <a class="home-card__link" href="ui_kits/au-economics-dashboard/index.html">Open economics dashboard</a>
-          <div class="home-card__status">Status: RBA cash rate and household debt-to-income wired programmatically from RBA statistical tables; mortgage rate, credit cards, AOFM federal debt, state debt, GDP, unemployment and CPI remain manual until each publisher endpoint or workbook column is verified.</div>
+          <div class="home-card__status">Status: latest RBA cash-rate target, monthly cash-rate history, household debt, mortgage rate, credit-card balances, GDP, unemployment and CPI load from verified RBA/ABS sources. AOFM AGS face value and state debt are hand-keyed from official sources; no state-debt aggregate is published.</div>
         </article>
         <article class="home-card">
           <h3>Manufacturing</h3>
           <p>What Australia makes — share of GDP, employment, sales, exports and capex by industry division.</p>
           <a class="home-card__link" href="ui_kits/manufacturing-dashboard/index.html">Open manufacturing dashboard</a>
-          <div class="home-card__status">Status: ABS National Accounts industry GVA, Labour Force Detailed, Business Indicators, International Trade and Private New Capex sources declared but stay on manual until each ABS SDMX dataflow key is verified.</div>
+          <div class="home-card__status">Status: ABS employment, manufacturing sales, manufactured exports, capex and food/beverage employment rows are loaded from verified ABS releases; manufacturing GDP share and the Department of Industry profile remain unavailable until exact source-safe mappings are verified.</div>
         </article>
         <article class="home-card">
           <h3>Power grid</h3>
           <p>NEM wholesale price and demand by state, fuel mix, capacity register, coal retirement timeline and emissions.</p>
           <a class="home-card__link" href="ui_kits/power-grid-dashboard/index.html">Open power grid dashboard</a>
-          <div class="home-card__status">Status: AEMO NEM regional price and total demand wired programmatically from the public 5-minute price/demand archive across NSW, VIC, QLD, SA and TAS; fuel mix, generation register, coal retirement schedule, RET progress, electricity emissions, ISP forecast and WEM summary remain manual until each AEMO/AER/CER/DCCEEW publication is verified.</div>
+          <div class="home-card__status">Status: AEMO NEM regional price and total demand are fetched programmatically across NSW, VIC, QLD, SA and TAS; fuel mix, generation register, coal retirement schedule, RET progress, electricity emissions, ISP forecast and WEM summary are hand-keyed from named official publications.</div>
         </article>
         <article class="home-card">
           <h3>Infrastructure</h3>
           <p>Population vs housing, public transport, airports, freight, NBN speeds and the major-project pipeline.</p>
           <a class="home-card__link" href="ui_kits/infrastructure-dashboard/index.html">Open infrastructure dashboard</a>
-          <div class="home-card__status">Status: ABS quarterly population, year-on-year growth and residential dwelling stock wired programmatically; NHSAC housing target, BITRE public transport / airports / freight, ACCC NBN speeds and Infrastructure Australia priority list remain manual until each named publication is verified. Australian data centre capacity stays intentionally unavailable - no canonical public register exists.</div>
+          <div class="home-card__status">Status: ABS quarterly population, year-on-year growth and residential dwelling stock are fetched programmatically; NHSAC housing target, BITRE public transport / airports / freight and ACCC NBN speeds are hand-keyed from named official sources. Infrastructure Australia count/cost and Australian data-centre capacity remain unavailable.</div>
         </article>
         <article class="home-card">
           <h3>Employment &amp; Automation</h3>
           <p>Australian labour-market change since the AI rollout era - unemployment, participation, employment-to-population, job vacancies and wages, with an explicit "no AI causation" rule.</p>
           <a class="home-card__link" href="ui_kits/employment-automation-dashboard/index.html">Open employment dashboard</a>
           <div class="home-card__status">Status: ABS unemployment, participation, employment-to-population, job vacancies and Wage Price Index wired programmatically from the ABS Data API; underemployment rate and monthly hours worked stay on manual until verified key combinations or hand-keyed workbook values are loaded. AI rollout timeline is context-only with named publisher events; Australian automation/AI exposure stays intentionally unavailable - no source-safe Australian dataset has been identified, and the page does not assert AI causation.</div>
+        </article>
+        <article class="home-card">
+          <h3>Missing data scoreboard</h3>
+          <p>Public-policy view of verified, partial, stale, unavailable, source-gated and roadmap-only dashboard gaps.</p>
+          <a class="home-card__link" href="ui_kits/missing-data-scoreboard/index.html">Open missing data scoreboard</a>
+          <div class="home-card__status">Status: no new values; maps missing feeds, likely data holders, next source actions and affected dashboard pages.</div>
         </article>
       </div>
     </section>

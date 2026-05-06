@@ -171,6 +171,8 @@ a.skip-link:focus, a.skip-link:focus-visible {
 .trust-badge--stale { color: var(--caution); background: var(--caution-tint); border-color: transparent; }
 .trust-badge--unavailable { color: var(--ink-3); background: var(--paper-sunk); }
 .trust-badge--partial { color: var(--accent); background: var(--accent-tint); border-color: transparent; }
+.trust-badge--source-gated { color: var(--caution); background: var(--paper); border-color: var(--rule); }
+.trust-badge--roadmap { color: var(--ink-3); background: var(--paper-sunk); border-color: var(--rule); }
 
 .coverage-strip {
   background: var(--paper-sunk); border-bottom: 1px solid var(--rule);

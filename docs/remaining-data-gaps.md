@@ -7,6 +7,28 @@ estimates. A gap can move to "ready to populate" only when a named public source
 contains the exact field, reporting period, unit, and reuse rights needed for a
 JSON envelope.
 
+The public missing-data scoreboard lives at
+`ui_kits/missing-data-scoreboard/index.html`. It does not add new values; it
+turns the gaps below into a visible public-policy view of what is verified,
+partial, stale, unavailable, source-gated or roadmap-only.
+
+## Status legend
+
+| Status | Meaning |
+|---|---|
+| Verified | Source-backed and current enough for its cadence. |
+| Partial | Source-backed, but incomplete by geography, product, timing or concept. |
+| Stale | Source-backed, but outside its expected cadence window. |
+| Manual | Hand-keyed from a named public source. |
+| Derived | Calculated or selected from a named source envelope. |
+| Unavailable | No public source-safe feed is loaded. |
+| Source-gated | Waiting for a verified source, field, period, unit and reuse rights. |
+| Roadmap | Planned dashboard area, not yet populated. |
+
+Unavailable and source-gated data is not a dashboard failure. It is evidence of
+a public-data gap that should remain visible until an official/public source can
+support an exact field, period, unit and reuse boundary.
+
 ## Next data priorities
 
 These are roadmap gaps only. They should stay unavailable or source-gated until

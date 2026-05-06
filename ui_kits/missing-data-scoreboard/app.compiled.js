@@ -967,262 +967,200 @@ function Footer({
 Object.assign(window, {
   Footer
 });
+const STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const SCOREBOARD_ROWS = [{
+  area: 'Fuel security',
+  status: 'partial',
+  gap: 'Station availability, terminal inventory, vessel ETA/cargo/product and forward contracts',
+  holder: 'Commonwealth, state/territory agencies, industry and private operators',
+  why: 'Fuel affects tourism, freight, farms, emergency services, defence posture and regional resilience.',
+  action: 'Publish source-safe station, terminal, cargo and contract fields with product, date, geography and reuse terms.',
+  page: 'National fuel security'
+}, {
+  area: 'Queensland fuel sovereignty',
+  status: 'source-gated',
+  gap: 'Land parcels, EOI/bid counts, proponents, contracts, storage/refining capacity and approvals completion',
+  holder: 'Queensland Government, port corporations, proponents and approval agencies',
+  why: 'Public debate now includes delivery tracking, not only national fuel status.',
+  action: 'Publish official AFIP delivery tables with hub, land, capacity, approval, proponent and contract status fields.',
+  page: 'National fuel security'
+}, {
+  area: 'Food, farms and water',
+  status: 'partial',
+  gap: 'Farm diesel, fertiliser cover, water allocations by food region, drought pressure and freight disruption',
+  holder: 'Commonwealth, states, water authorities, industry and logistics operators',
+  why: 'Fuel, fertiliser and water determine whether farms can produce and move food.',
+  action: 'Wire one exact public dataset at a time; do not infer drought, allocations or cover from maps or commentary.',
+  page: 'Food, farms & water security'
+}, {
+  area: 'Economy and housing',
+  status: 'source-gated',
+  gap: 'Housing affordability model, investor ownership, first-home buyers, negative gearing and rental stress',
+  holder: 'ABS, RBA, APRA, ATO, state agencies and housing authorities',
+  why: 'Rates, debt, rents and housing supply shape cost of living and social stability.',
+  action: 'Separate official cash-rate/debt signals from future housing model inputs before publishing any model.',
+  page: 'AU economics'
+}, {
+  area: 'Defence and procurement',
+  status: 'source-gated',
+  gap: 'Japan/warship procurement source verification, contract status, delivery timelines and logistics/fuel implications',
+  holder: 'Defence, procurement agencies and official program sources',
+  why: 'Ships, fuel logistics, industry content and delivery schedules are national-security issues.',
+  action: 'Load only official Defence or procurement source material before asserting supplier, contract or delivery status.',
+  page: 'Defence posture'
+}, {
+  area: 'Brisbane 2032 readiness',
+  status: 'roadmap',
+  gap: 'Infrastructure delivery, transport, accommodation, power, tourism pressure and emergency logistics',
+  holder: 'Delivery authority, Queensland agencies, councils, utilities and operators',
+  why: 'The Olympics will stress transport, accommodation, power, tourism and emergency systems.',
+  action: 'Scope official delivery and capacity sources before creating readiness indicators.',
+  page: 'Roadmap'
+}, {
+  area: 'AI and workforce',
+  status: 'roadmap',
+  gap: 'Sector exposure, displacement risk, retraining capacity and regional workforce exposure',
+  holder: 'ABS, Jobs and Skills Australia, Treasury, Productivity Commission and education agencies',
+  why: 'AI may reshape productivity, jobs, skills and government service demand, but timing is not causation.',
+  action: 'Do not publish AI displacement scores until an Australian source-safe methodology exists.',
+  page: 'Employment & Automation'
+}];
+const ROADMAP_SECTIONS = [{
+  title: 'Australian fuel strategy tracker',
+  status: 'source-gated',
+  fields: ['latest official fuel strategy release', 'national liquid fuel security policy', 'reserve commitments', 'MSO commitments', 'product-level days cover', 'emergency fuel response settings', 'public vs security-sensitive data boundary', 'next update due'],
+  note: 'Official source required before any latest-strategy claim is made.'
+}, {
+  title: 'Housing and economic pressure',
+  status: 'source-gated',
+  fields: ['RBA cash rate', 'mortgage pressure', 'household debt', 'first-home buyers', 'investor loans/ownership', 'rental stress', 'dwelling approvals / housing supply', 'negative gearing modelling'],
+  note: 'The RBA latest cash-rate target is loaded elsewhere; housing model inputs remain gated.'
+}, {
+  title: 'Defence procurement watch',
+  status: 'source-gated',
+  fields: ['procurement pathway', 'vessel/frigate/general-purpose ship program', 'supplier nation', 'contract status', 'delivery timeline', 'Australian industry content', 'logistics/fuel implication', 'defence posture impact'],
+  note: 'Pending official Defence or procurement source verification. No contract, delivery or supplier-pathway fact is asserted here.'
+}, {
+  title: 'Brisbane 2032 readiness',
+  status: 'roadmap',
+  fields: ['infrastructure delivery', 'transport capacity', 'accommodation pressure', 'power reliability', 'tourism pressure', 'supply-chain readiness', 'public safety and emergency logistics'],
+  note: 'Roadmap only until official delivery authority and public capacity sources are wired.'
+}, {
+  title: 'AI automation and workforce pressure',
+  status: 'roadmap',
+  fields: ['sector automation exposure', 'displacement risk', 'productivity upside/downside', 'retraining capacity', 'regional workforce exposure', 'labour market indicators'],
+  note: 'No AI causation or fake exposure score is published.'
+}];
+function StatusBadge({
+  status
+}) {
+  return React.createElement(TrustBadge, {
+    kind: status
+  }, status === 'source-gated' ? 'Source-gated' : status.charAt(0).toUpperCase() + status.slice(1));
+}
 function App() {
-  const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
   React.useEffect(() => {
-    window.FR.load(window.FUEL_SERIES).then(setData);
     window.FR.loadRefreshStatus().then(setRefreshStatus);
   }, []);
-  if (!data) {
-    return React.createElement("div", {
-      className: "page"
-    }, React.createElement(Header, {
-      active: "fuel",
-      refreshStatus: refreshStatus
-    }), React.createElement("main", {
-      id: "main"
-    }, React.createElement("div", {
-      className: "loading-wrap"
-    }, "Loading source envelopes...")));
-  }
-  const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
-  const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const retailPlainFor = (env, fallbackLabel) => {
-    const fields = env?.extra?.fields || {};
-    const states = fields.states?.map(state => state.state)?.join(', ');
-    const label = fields.label || fallbackLabel;
-    return states ? `${states} ${label} average weighted by station count.` : `${fallbackLabel} from public state feeds where available.`;
-  };
-  const insights = [];
-  for (const [id, env] of Object.entries(data)) {
-    if (env.status === 'ok' && env.last_data_point) {
-      insights.push({
-        date: env.last_data_point,
-        body: `${env.source_name} — latest observation ${env.last_data_point}, ${env.values.length} data points available.`,
-        tag: 'Data',
-        tagKind: 'imports',
-        link: env.source_url ? {
-          href: env.source_url,
-          text: 'Publisher page'
-        } : null
-      });
-    }
-  }
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fuel",
-    refreshStatus: refreshStatus,
-    updated: latestRetrieved ? updatedDisplay : ''
+    active: "missing_data",
+    refreshStatus: refreshStatus
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
-    className: "intro",
-    id: "fuel"
+    className: "intro"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Fuel"), React.createElement("h1", {
-    style: {
-      marginTop: 12
-    }
-  }, "Australia's liquid fuel, in plain English."), React.createElement("p", {
-    className: "intro__lede"
-  }, "Petrol, diesel and jet fuel power almost every truck, tractor and aircraft in the country. Most of it is imported. This page tracks how much we bring in, what it costs at the pump, and how long our stockpile would last if imports stopped.")), React.createElement("aside", {
-    className: "intro__meta",
-    "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
-    className: "mono"
-  }, updatedDisplay), React.createElement("div", {
+  }, "Missing data scoreboard"), React.createElement("h1", null, "What Australia can see, and what is still missing."), React.createElement("p", {
+    className: "lede"
+  }, "This page turns dashboard gaps into a public-policy product. It separates verified data, partial coverage, stale sources, unavailable feeds, source-gated work and roadmap-only areas without inventing values.")), React.createElement("aside", {
+    className: "intro-card"
+  }, React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype"), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
-    data: data,
-    refreshStatus: refreshStatus
-  }), React.createElement("section", {
+  }), React.createElement("strong", null, "No estimate-first scoring"), React.createElement("span", null, "Missing data stays visible until source-safe"))), React.createElement("section", {
+    className: "data-currency",
+    "aria-label": "Data currency summary"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Data currency"), React.createElement("p", null, "Refreshed means the automated pipeline last ran successfully. This scoreboard does not publish new data values; it maps public-data gaps and the likely source owner.")), React.createElement("dl", {
+    className: "data-currency__list"
+  }, React.createElement("div", null, React.createElement("dt", null, "Site refreshed"), React.createElement("dd", null, window.FR.fmtRefreshStatus(refreshStatus))), React.createElement("div", null, React.createElement("dt", null, "Page data retrieved"), React.createElement("dd", null, "No source envelopes loaded on this scoreboard page")), React.createElement("div", null, React.createElement("dt", null, "Latest source data point"), React.createElement("dd", null, "Not applicable")))), React.createElement("section", {
     className: "section section--why",
-    "aria-labelledby": "why"
+    "aria-labelledby": "legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Unified confidence legend"), React.createElement("h2", {
+    id: "legend-h"
+  }, "Unavailable data is evidence of a public-data gap"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels are used across the dashboard surfaces and the roadmap. They are categorical, not numeric scores."))), React.createElement("div", {
+    className: "source-grid"
+  }, STATUS_LEGEND.map(([kind, label, copy]) => React.createElement("article", {
+    className: "source-card",
+    key: kind
+  }, React.createElement(StatusBadge, {
+    status: kind
+  }), React.createElement("h3", null, label), React.createElement("p", null, copy))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "scoreboard-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Public-data scoreboard"), React.createElement("h2", {
+    id: "scoreboard-h"
+  }, "Missing data scoreboard"), React.createElement("p", {
+    className: "section__lede"
+  }, "Each row names the gap, the likely holder or publisher, why the gap matters, the next source action and the dashboard surface affected."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Area"), React.createElement("th", null, "Status"), React.createElement("th", null, "Missing feed or source gate"), React.createElement("th", null, "Likely holder / publisher"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Next source action"), React.createElement("th", null, "Dashboard"))), React.createElement("tbody", null, SCOREBOARD_ROWS.map(row => React.createElement("tr", {
+    key: row.area
+  }, React.createElement("td", null, row.area), React.createElement("td", null, React.createElement(StatusBadge, {
+    status: row.status
+  })), React.createElement("td", null, row.gap), React.createElement("td", null, row.holder), React.createElement("td", null, row.why), React.createElement("td", null, row.action), React.createElement("td", null, row.page))))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "roadmap-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Roadmap source gates"), React.createElement("h2", {
+    id: "roadmap-h"
+  }, "Next national dashboard areas"), React.createElement("p", {
+    className: "section__lede"
+  }, "These areas are useful, but they stay source-gated or roadmap-only until public sources support exact fields, dates, units and reuse rights."))), React.createElement("div", {
+    className: "source-grid"
+  }, ROADMAP_SECTIONS.map(section => React.createElement("article", {
+    className: "source-card",
+    key: section.title
+  }, React.createElement(StatusBadge, {
+    status: section.status
+  }), React.createElement("h3", null, section.title), React.createElement("ul", {
+    className: "gap-list"
+  }, section.fields.map(field => React.createElement("li", {
+    key: field
+  }, field))), React.createElement("p", null, section.note))))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "truth-h"
   }, React.createElement("div", {
     className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
-    id: "why",
-    style: {
-      marginTop: 8
-    }
-  }, "Why this matters to you")), React.createElement("div", {
+  }, "Truth boundary"), React.createElement("h2", {
+    id: "truth-h"
+  }, "What this scoreboard does not do")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Australia imports around 90% of its refined fuel. When overseas supply wobbles \u2014 a refinery outage, a shipping disruption, a price spike in Asia \u2014 it shows up at our pumps within days."), React.createElement("p", null, "This dashboard exists because most of the raw numbers are public, but scattered across government reports and trade databases. It loads verified source envelopes where available and leaves unavailable values visible, rather than filling gaps with estimates."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics. ", React.createElement("b", null, "APS"), " = Australian Petroleum Statistics.", React.createElement("b", null, " IEA"), " = International Energy Agency. ", React.createElement("b", null, "AIP"), " = Australian Institute of Petroleum.")))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "metrics-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Four headline numbers"), React.createElement("h2", {
-    id: "metrics-h"
-  }, "As of the latest publisher update"), React.createElement("p", {
-    className: "section__lede"
-  }, "Any card marked \"Source unavailable\" is waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Most watched",
-    label: "Days of Net Import Cover",
-    jargonHint: {
-      term: 'Days of Net Import Cover',
-      definition: 'How many days Australia could keep going on its fuel stockpile if imports stopped today.'
-    },
-    plain: "If imports stopped today, how long the national stockpile would last.",
-    fromEnvelope: data.aps_monthly,
-    unit: " days",
-    threshold: {
-      state: 'below',
-      text: 'IEA benchmark: 90 days'
-    },
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail pump price - ULP 91",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate, 'ULP 91'),
-    fromEnvelope: data.aus_retail_fuel_multistate,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Wholesale",
-    label: "Terminal gate price",
-    plain: "AIP national average unleaded petrol terminal gate price.",
-    fromEnvelope: data.aip_tgp,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Trade",
-    label: "Monthly Imports (year-on-year)",
-    plain: "How the latest month compared to the same month a year earlier.",
-    fromEnvelope: data.abs_petroleum_imports_yoy,
-    valueFn: env => {
-      const v = env.values.at(-1).v;
-      return `${v > 0 ? '+' : ''}${v}`;
-    },
-    unit: "%"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "metric-grid metric-grid--3"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail diesel",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_diesel, 'diesel'),
-    fromEnvelope: data.aus_retail_fuel_multistate_diesel,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail premium 95",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_premium95, 'premium 95'),
-    fromEnvelope: data.aus_retail_fuel_multistate_premium95,
-    unit: " c/L"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Pump",
-    label: "Retail E10",
-    plain: retailPlainFor(data.aus_retail_fuel_multistate_e10, 'E10'),
-    fromEnvelope: data.aus_retail_fuel_multistate_e10,
-    unit: " c/L"
-  }))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "charts-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "How it's changed"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Imports, prices and stockpile over time"), React.createElement("p", {
-    className: "section__lede"
-  }, "Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Volume",
-    title: "Monthly petroleum imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_petroleum_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly petroleum imports from ABS International Merchandise Trade. Chart populates when the latest month is verified.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Wholesale",
-    title: "Terminal gate price",
-    unit: "cents per litre",
-    fromEnvelope: data.aip_tgp,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#0F766E",
-    takeaway: "Monthly mean of AIP daily national average unleaded petrol terminal gate prices.",
-    yAxisLabel: "Cents per litre (c/L)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Resilience",
-    title: "Days of Net Import Cover vs. 90-day benchmark",
-    unit: " days",
-    fromEnvelope: data.aps_monthly,
-    baseline: 90,
-    baselineLabel: "IEA 90-day benchmark",
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Days of cover = petroleum stocks on land and in transit divided by average net imports. The 90-day benchmark is an IEA obligation for member countries.",
-    yAxisLabel: "Days of cover"
-  }))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: insights,
-    lede: "Notes synthesised from the envelope metadata on each source. Populated as verified data arrives.",
-    emptyMessage: "Awaiting verified publisher release notes for the loaded source envelopes."
-  })), React.createElement("section", {
-    className: "section section--sources",
-    id: "sources"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
-    className: "section__lede"
-  }, "All sources are public. When a figure cannot yet be verified, the card reads \"Source unavailable\" \u2014 we do not fill in estimates."))), React.createElement("div", {
-    className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
-    key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
-    className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Days of Net Import Cover"), React.createElement("dd", null, "Total petroleum stocks (on land and in transit) divided by the prior 12-month average of net imports, expressed in days. Follows the IEA methodology used by DCCEEW."), React.createElement("dt", null, "Retail pump prices"), React.createElement("dd", null, "Average across the public state feeds that returned usable observations for each product, weighted by station count. NSW contributes only when the FuelCheck secret is configured; WA does not expose E10 through the active public RSS product-code list."), React.createElement("dt", null, "Terminal gate price"), React.createElement("dd", null, "Monthly mean of AIP daily national average unleaded petrol terminal gate prices from the historical TGP workbook."), React.createElement("dt", null, "Monthly Imports (year-on-year)"), React.createElement("dd", null, "Percent change in petroleum import value vs. the same calendar month one year earlier, derived from ABS International Merchandise Trade.")))), React.createElement(Footer, {
-    refreshStatus: refreshStatus,
-    updated: latestRetrieved ? updatedDisplay : ''
-  })));
+  }, React.createElement("p", null, "It does not invent government strategy facts, Defence procurement facts, Olympics delivery status, housing model values, AI displacement scores, live fuel availability, vessel ETAs, port cargo data or private contract coverage."), React.createElement("p", null, "It makes the missing public feeds visible so policy staff, journalists, operators and citizens can see which national resilience questions still need official or industry data."))))), React.createElement(Footer, {
+    refreshStatus: refreshStatus
+  }));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App, null));
