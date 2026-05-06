@@ -4,7 +4,7 @@
   "source_name": "WTI crude spot price (EIA)",
   "source_url": "https://www.eia.gov/dnav/pet/hist/RWTCm.htm",
   "unit": "USD per barrel",
-  "retrieved_at": "2026-04-30T09:45:17+00:00",
+  "retrieved_at": "2026-05-06T03:54:26+00:00",
   "last_data_point": "2026-04-01",
   "values": [
     {
@@ -121,7 +121,7 @@
     },
     {
       "t": "2023-09",
-      "v": 89.42
+      "v": 89.43
     },
     {
       "t": "2023-10",
@@ -129,7 +129,7 @@
     },
     {
       "t": "2023-11",
-      "v": 77.69
+      "v": 77.68
     },
     {
       "t": "2023-12",
