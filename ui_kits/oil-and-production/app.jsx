@@ -39,12 +39,16 @@ function toAud(usdEnv, fxEnv) {
 
 function App() {
   const [data, setData] = React.useState(null);
-  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+  const [refreshStatus, setRefreshStatus] = React.useState(null);
+  React.useEffect(() => {
+    window.FR.load(SERIES).then(setData);
+    window.FR.loadRefreshStatus().then(setRefreshStatus);
+  }, []);
 
   if (!data) {
     return (
       <div className="page">
-        <Header active="oil"/>
+        <Header active="oil" refreshStatus={refreshStatus}/>
         <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
@@ -58,7 +62,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="oil" updated={latestRetrieved ? updatedDisplay : ''}/>
+      <Header active="oil" refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         {/* INTRO */}
@@ -81,7 +85,7 @@ function App() {
           </aside>
         </section>
 
-        <DataCoverage data={data}/>
+        <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         {/* WHAT THIS PAGE SHOWS */}
         <section className="section section--why">
@@ -392,7 +396,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
+        <Footer refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );

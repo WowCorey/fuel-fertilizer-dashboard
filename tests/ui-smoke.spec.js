@@ -33,6 +33,11 @@ for (const route of routes) {
     const response = await page.goto(route.path);
     expect(response?.ok(), route.path).toBeTruthy();
     await expect(page.getByRole('heading', { name: route.heading })).toBeVisible();
+    if (route.path !== '/') {
+      await expect(page.getByLabel('Refresh status')).toContainText(/Refreshed|Refresh status unavailable|No successful refresh recorded|Page data retrieved/);
+      await expect(page.getByText('Refreshed means the automated pipeline last ran successfully').first()).toBeVisible();
+      await expect(page.getByText('Page data retrieved', { exact: true }).first()).toBeVisible();
+    }
     await expect(page.locator('body')).not.toContainText("There isn't a GitHub Pages site here.");
     expect(pageErrors).toEqual([]);
     expect(consoleErrors.filter(text => !text.includes('favicon'))).toEqual([]);
@@ -43,7 +48,8 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await page.goto('/ui_kits/fuel-security-dashboard/index.html');
   await expect(page.getByRole('heading', { name: 'What a transparent Australian fuel dashboard should show.' })).toBeVisible();
   await expect(page.getByText('Public calls for a national fuel dashboard are about certainty')).toBeVisible();
-  await expect(page.getByRole('heading', { name: /Last verified source retrieval|Programmatic refresh not recorded yet/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Site refresh:|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
+  await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'The national fuel dashboard structure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What government and industry still need to publish' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For travellers and tourism operators' })).toBeVisible();
@@ -78,7 +84,8 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(page.getByRole('heading', { name: "Australia's food, farm inputs and water pressure, in plain English." })).toBeVisible();
   await expect(page.getByText('independent public-source prototype')).toBeVisible();
   await expect(page.getByText('not an official government dashboard')).toBeVisible();
-  await expect(page.getByRole('heading', { name: /Verified data retrieved|Programmatic refresh not recorded yet/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Site refreshed|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
+  await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Source status comes first' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What Australia grows' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What Australia buys' })).toBeVisible();
@@ -93,7 +100,6 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(page.getByText('Can farmers see rainfall/drought pressure?')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Food import value' })).toBeVisible();
   await expect(page.getByText('Food-import exposure needs a verified ABS trade concept')).toBeVisible();
-  await expect(page.getByText('No workflow timestamp is invented here.')).toBeVisible();
   await expect(page.getByText('No public Australian fertiliser cover row is loaded.')).toBeVisible();
   await expect(page.getByText('This page does not infer drought or farm-level water availability from maps or commentary.')).toBeVisible();
 });

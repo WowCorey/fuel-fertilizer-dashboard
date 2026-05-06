@@ -347,6 +347,29 @@
         </div>
       </div>
     </section>
+
+    <section class="home-note" aria-labelledby="next-data-title">
+      <div class="home-note__inner">
+        <div>
+          <span class="eyebrow">Next data priorities</span>
+          <h2 id="next-data-title">Roadmap gaps stay visible until source-safe</h2>
+          <p>
+            The next data work is fuel strategy and policy releases, Queensland fuel-sovereignty follow-up,
+            live station and terminal operations, food/farm/water planning feeds, housing pressure,
+            AI workforce exposure and Brisbane 2032 readiness.
+          </p>
+        </div>
+        <div>
+          <span class="eyebrow">Source gates</span>
+          <h2>No estimate-first roadmap</h2>
+          <p>
+            Warship procurement watch items, forward contracts, state-owned land, regional fuel risk,
+            farm diesel and water-allocation feeds remain source-gated until official/public sources
+            expose exact fields, dates, units and reuse rights.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="home-footer">
@@ -369,7 +392,7 @@
         return;
       }
       const when = new Date(status.refreshed_at);
-      badge.textContent = `Last successful refresh: ${when.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' })}`;
+      badge.textContent = `Site refresh: ${when.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' })}`;
     })
     .catch(() => {
       const badge = document.getElementById('refresh-badge');

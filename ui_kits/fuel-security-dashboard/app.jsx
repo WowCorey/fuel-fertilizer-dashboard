@@ -362,20 +362,22 @@ function MoreThanPumpPrices() {
   );
 }
 
-function FreshnessNotice({ latestRetrieved, updatedDisplay }) {
-  const hasRefresh = Boolean(latestRetrieved);
+function FreshnessNotice({ refreshStatus, latestRetrieved, updatedDisplay }) {
+  const hasSiteRefresh = refreshStatus?.status === 'success';
+  const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : 'Refresh status unavailable';
+  const hasPageRetrieved = Boolean(latestRetrieved);
   return (
     <section className="freshness-notice" aria-labelledby="freshness-notice-h">
       <div className="freshness-notice__inner">
         <div>
           <span className="eyebrow">Refresh and freshness</span>
           <h2 id="freshness-notice-h">
-            {hasRefresh ? `Last verified source retrieval: ${updatedDisplay}` : 'Programmatic refresh not recorded yet'}
+            {hasSiteRefresh ? `Site refresh: ${siteRefresh}` : siteRefresh}
           </h2>
           <p>
-            {hasRefresh
-              ? 'Some feeds may still be manual, partial or stale; check the source cards below before treating any value as current.'
-              : 'Programmatic refresh is not recorded yet. This page may include manual or stale public-source data. Check the source cards below before treating any value as current.'}
+            {hasPageRetrieved
+              ? `Latest verified page data retrieved: ${updatedDisplay}. Some feeds may still be manual, partial or stale; check the source cards below before treating any value as current.`
+              : 'No verified page data retrieval is recorded for these source envelopes yet. This page may include manual, partial, unavailable or stale public-source data.'}
           </p>
         </div>
         <div className="trust-badges" aria-label="Freshness caveat labels">
@@ -1059,12 +1061,16 @@ function NewZealandComparison({ data }) {
 
 function App() {
   const [data, setData] = React.useState(null);
-  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+  const [refreshStatus, setRefreshStatus] = React.useState(null);
+  React.useEffect(() => {
+    window.FR.load(SERIES).then(setData);
+    window.FR.loadRefreshStatus().then(setRefreshStatus);
+  }, []);
 
   if (!data) {
     return (
       <div className="page">
-        <Header active="fuel_security"/>
+        <Header active="fuel_security" refreshStatus={refreshStatus}/>
         <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
@@ -1104,7 +1110,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="fuel_security" updated={latestRetrieved ? updatedDisplay : ''}/>
+      <Header active="fuel_security" refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         <section className="intro" id="fuel-security">
@@ -1128,9 +1134,9 @@ function App() {
           </aside>
         </section>
 
-        <DataCoverage data={data}/>
+        <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
-        <FreshnessNotice latestRetrieved={latestRetrieved} updatedDisplay={updatedDisplay}/>
+        <FreshnessNotice refreshStatus={refreshStatus} latestRetrieved={latestRetrieved} updatedDisplay={updatedDisplay}/>
 
         <HowToReadPage/>
 
@@ -1449,7 +1455,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
+        <Footer refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );

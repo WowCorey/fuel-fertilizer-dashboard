@@ -410,12 +410,16 @@ function SourceSummary({ id, env, partial = false }) {
 
 function App() {
   const [data, setData] = React.useState(null);
-  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+  const [refreshStatus, setRefreshStatus] = React.useState(null);
+  React.useEffect(() => {
+    window.FR.load(SERIES).then(setData);
+    window.FR.loadRefreshStatus().then(setRefreshStatus);
+  }, []);
 
   if (!data) {
     return (
       <div className="page">
-        <Header active="defence_posture"/>
+        <Header active="defence_posture" refreshStatus={refreshStatus}/>
         <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
@@ -441,7 +445,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="defence_posture" updated={latestRetrieved ? updatedDisplay : ''}/>
+      <Header active="defence_posture" refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         <section className="intro" id="defence-posture">
@@ -463,7 +467,7 @@ function App() {
           </aside>
         </section>
 
-        <DataCoverage data={data}/>
+        <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         <section className="section section--why">
           <div className="why-grid">
@@ -704,7 +708,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
+        <Footer refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );

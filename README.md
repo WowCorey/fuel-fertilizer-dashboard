@@ -90,6 +90,36 @@ Defence, alliances and strategic posture methodology is documented in
 with source decisions in
 [`docs/defence-alliances-source-audit.md`](docs/defence-alliances-source-audit.md).
 
+## Next data priorities
+
+The next public-source work is to turn roadmap gaps into named, source-safe
+envelopes without inventing values. Current priorities are:
+
+- Australian fuel strategy and fuel-security policy: latest official fuel
+  strategy, product days-cover updates, MSO reserve commitments and public vs
+  security-sensitive data boundaries.
+- Queensland fuel sovereignty: AFIP EOI updates, six-port project status,
+  storage/refining capacity, state-owned land parcels, proponents, contracts,
+  Taroom Trough approvals and federal/state approval pathways.
+- Live fuel operations: station availability, regional outage feeds, terminal
+  inventory, port-destination visibility, tanker ETAs and contract-backed
+  delivery visibility.
+- Food, farms and water: fertiliser cover and contracts, farm diesel risk,
+  farm-gate fertiliser prices, water allocation by food-producing region,
+  drought/rainfall pressure, planting decision pressure and freight disruption.
+- Defence procurement watch items: source-gated Japan/Australia warship or
+  frigate procurement pathway, contract status, delivery timeline, Australian
+  industry content and logistics/fuel implications. Pending official Defence or
+  procurement source verification.
+- Housing and economy: interest rates, mortgage pressure, first-home buyers,
+  investor ownership, negative-gearing modelling, rental stress, supply and
+  household debt.
+- AI automation and workforce: sector exposure, displacement risk,
+  productivity effects, regional workforce exposure and retraining capacity.
+- Brisbane 2032 readiness: infrastructure delivery, transport capacity,
+  accommodation pressure, power reliability, tourism pressure, supply-chain
+  readiness, public safety and emergency logistics.
+
 ## Run locally
 
 The committed site can be served as static files because the dashboard JSX is
@@ -182,9 +212,17 @@ An unavailable stub must not look freshly retrieved:
 }
 ```
 
-The page-level `Updated` stamp is computed only from verified `status: "ok"`
-envelopes. If a page has no verified loaded data, it says so instead of showing
-a stub timestamp.
+Dashboard dates are deliberately split:
+
+- `Refreshed` is the last successful automated pipeline run recorded in
+  `data/last_successful_refresh.json`.
+- `Page data retrieved` is the newest `retrieved_at` timestamp among verified
+  envelopes loaded by that dashboard page.
+- `Latest source data point` is the newest reporting period in those envelopes.
+
+This means a dashboard can refresh today while still showing an older monthly,
+quarterly or annual government source period. If a page has no verified loaded
+data, it says so instead of showing a stub timestamp.
 
 When `status` is anything other than `"ok"`, the dashboard shows a
 **"Source unavailable — awaiting data"** placeholder instead of a value. We
@@ -247,7 +285,9 @@ python3 scripts/validate_data.py              # validate registry and envelopes
 4. Creates any missing manual stubs.
 5. Rebuilds `data/source_manifest.json`.
 6. Runs `scripts/validate_data.py` before committing.
-7. Commits changed data files to the repository only after validation passes.
+7. Writes `data/last_successful_refresh.json` only after successful refresh and
+   validation.
+8. Commits changed data files to the repository only after validation passes.
 
 Manual and canonical publisher pages should not block a valid programmatic data
 refresh; broken programmatic fetch URLs should fail loudly.
@@ -258,6 +298,10 @@ That refresh only updates programmatic envelopes and stubs. Manual public
 snapshot sources, such as PM&C national status, FSSP disclosures, company
 profits and resource-value receipts, still need a human review before changing
 their JSON.
+
+The site header uses the refresh marker for the top-level `Refreshed` date.
+Page-level coverage panels and footers continue to show the latest verified
+retrieval date among the source envelopes loaded by that page.
 
 To run the manual review report from GitHub, open Actions, choose
 **Manual data review**, then use **Run workflow** on `main`. Read the summary
