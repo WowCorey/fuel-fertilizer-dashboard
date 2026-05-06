@@ -10,6 +10,8 @@ function TrustBadge({ kind, children }) {
     stale: 'Stale',
     unavailable: 'Unavailable',
     partial: 'Partial coverage',
+    'source-gated': 'Source-gated',
+    roadmap: 'Roadmap',
   };
   return (
     <span className={`trust-badge trust-badge--${key}`}>

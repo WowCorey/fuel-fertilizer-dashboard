@@ -17,6 +17,7 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
     { id: 'power_grid',    label: 'Power grid',            href: '../power-grid-dashboard/index.html' },
     { id: 'infrastructure',label: 'Infrastructure',        href: '../infrastructure-dashboard/index.html' },
     { id: 'employment_automation', label: 'Employment & Automation', href: '../employment-automation-dashboard/index.html' },
+    { id: 'missing_data', label: 'Missing data', href: '../missing-data-scoreboard/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';

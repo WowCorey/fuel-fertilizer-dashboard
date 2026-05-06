@@ -35,6 +35,7 @@ const dashboards = [
   'power-grid-dashboard',
   'infrastructure-dashboard',
   'employment-automation-dashboard',
+  'missing-data-scoreboard',
 ];
 
 function normalizeNewlines(text) {

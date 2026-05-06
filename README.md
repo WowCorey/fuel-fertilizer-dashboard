@@ -7,8 +7,9 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Fifteen dashboard surfaces read from a shared JSON-envelope data
-pipeline. Programmatic live sources now include ABS petroleum imports and YoY,
+**Status:** Fifteen dashboard surfaces plus a missing-data scoreboard read from
+a shared JSON-envelope data pipeline. Programmatic live sources now include ABS
+petroleum imports and YoY,
 ABS fertiliser imports, food/farm/water source gates, APS net-import cover, APS refinery production series,
 AIP terminal gate prices, RBA AUD/USD, EIA/FRED crude and refined-fuel series,
 and the multi-state retail fuel average. The national status page adds a
@@ -47,6 +48,14 @@ The dashboards have no publisher brand, no sponsors, and no affiliation with
 any government department or industry body. The project does not fabricate,
 interpolate or estimate missing numbers.
 
+The homepage now opens with a national dashboard summary: fuel security; food,
+farms and water; economy and housing pressure; power, manufacturing and
+infrastructure; defence and strategic resources; and AI, workforce and future
+pressure. It also links to a missing-data scoreboard that shows where a feed is
+verified, partial, stale, manual, derived, unavailable, source-gated or roadmap
+only. Unavailable and source-gated rows are treated as public-data gaps, not as
+permission to estimate.
+
 ## Dashboards
 
 | Page | Version | What it covers | Current data state |
@@ -66,6 +75,7 @@ interpolate or estimate missing numbers.
 | [Power grid](ui_kits/power-grid-dashboard/index.html) | v1.0 | NEM wholesale price and demand by state, fuel mix, generation register, coal retirement timeline, emissions and ISP forecasts | AEMO NEM regional wholesale price and total operational demand are fetched programmatically from the AEMO 5-minute Price and Demand archive across NSW1, VIC1, QLD1, SA1 and TAS1; Q4 2025 AEMO QED fuel mix and WEM price, January 2026 AEMO Generation Information totals and explicit coal closure-date capacity, CER 2024 NEM+SWIS renewable share, DCCEEW year-to-September 2025 electricity emissions and the 2024 ISP transmission headline are hand-keyed from named official publications |
 | [Infrastructure](ui_kits/infrastructure-dashboard/index.html) | v1.0 | Population vs dwellings, housing target progress, public transport, airports, freight, NBN busy-hour performance and the major-project pipeline | ABS quarterly population (ERP_Q), year-on-year growth rate and residential dwelling stock (RES_DWELL_ST) fetched programmatically from the ABS Data API; NHSAC Accord progress, BITRE public transport / airports / freight and ACCC Measuring Broadband Australia busy-hour performance are now hand-keyed from named official sources; Infrastructure Australia proposal count remains unavailable until a clean official extract is verified; Australian data centre capacity stays intentionally unavailable as no canonical public register exists |
 | [Employment & Automation](ui_kits/employment-automation-dashboard/index.html) | v0.5 | Australian labour-market change during the AI rollout era - unemployment, participation, employment-to-population, job vacancies, wages, plus context-only AI rollout milestones | ABS LF unemployment / participation / employment-to-population, ABS Job Vacancies (JV) and ABS Wage Price Index (WPI) annual % change fetched programmatically from the ABS Data API; underemployment rate and monthly hours worked stay on manual (LF dataflow standard headline keys returned 404 in initial probing); AI rollout timeline carries dated public milestone events from named publishers as context only; Australian automation/AI labour-market exposure remains intentionally unavailable as no source-safe Australian dataset has been identified. Page rule: timing is not causation. |
+| [Missing data scoreboard](ui_kits/missing-data-scoreboard/index.html) | v0.1 | Public-policy view of verified, partial, stale, unavailable, source-gated and roadmap-only dashboard gaps | No new source values. The page maps missing feeds, likely data holders, why each gap matters, next source actions and affected dashboard surfaces; it keeps roadmap areas source-gated until exact public fields, dates, units and reuse rights are verified. |
 
 Every page cross-links to the others in the header nav.
 
@@ -139,6 +149,12 @@ python3 -m http.server 8000
 #   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
 #   http://localhost:8000/ui_kits/oil-and-production/index.html
 #   http://localhost:8000/ui_kits/who-pays-what/index.html
+#   http://localhost:8000/ui_kits/au-economics-dashboard/index.html
+#   http://localhost:8000/ui_kits/manufacturing-dashboard/index.html
+#   http://localhost:8000/ui_kits/power-grid-dashboard/index.html
+#   http://localhost:8000/ui_kits/infrastructure-dashboard/index.html
+#   http://localhost:8000/ui_kits/employment-automation-dashboard/index.html
+#   http://localhost:8000/ui_kits/missing-data-scoreboard/index.html
 ```
 
 ## Data pipeline

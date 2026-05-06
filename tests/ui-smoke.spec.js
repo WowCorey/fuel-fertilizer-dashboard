@@ -17,6 +17,7 @@ const routes = [
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
   { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
   { path: '/ui_kits/employment-automation-dashboard/index.html', heading: "Australia's labour market during the AI rollout era." },
+  { path: '/ui_kits/missing-data-scoreboard/index.html', heading: 'What Australia can see, and what is still missing.' },
 ];
 
 for (const route of routes) {
@@ -43,6 +44,52 @@ for (const route of routes) {
     expect(consoleErrors.filter(text => !text.includes('favicon'))).toEqual([]);
   });
 }
+
+test('homepage presents the national summary and status legend', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: "Australia's fuel, food and resilience data, without estimates." })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
+  await expect(page.getByText('This site is an independent public-source prototype, not an official government dashboard.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Fuel security' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Food, farms and water' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Economy and housing pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Power, manufacturing and infrastructure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Defence and strategic resources' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'AI, workforce and future pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels are part of the evidence' })).toBeVisible();
+  await expect(page.getByText('Unavailable and source-gated data is not a dashboard failure.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Who is this for?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Travellers and tourism operators' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Farmers' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'MPs and policy staff' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Public-data gaps are now tracked as a product' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
+});
+
+test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {
+  await page.goto('/ui_kits/missing-data-scoreboard/index.html');
+  await expect(page.getByRole('heading', { name: 'What Australia can see, and what is still missing.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Unavailable data is evidence of a public-data gap' })).toBeVisible();
+  await expect(page.getByText('Source-backed and current enough for its cadence.')).toBeVisible();
+  await expect(page.getByText('Waiting for a verified source, field, period, unit and reuse rights.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Missing data scoreboard' })).toBeVisible();
+  await expect(page.getByText('Fuel security').first()).toBeVisible();
+  await expect(page.getByText('Queensland fuel sovereignty').first()).toBeVisible();
+  await expect(page.getByText('Food, farms and water').first()).toBeVisible();
+  await expect(page.getByText('Economy and housing').first()).toBeVisible();
+  await expect(page.getByText('Defence and procurement').first()).toBeVisible();
+  await expect(page.getByText('Brisbane 2032 readiness').first()).toBeVisible();
+  await expect(page.getByText('AI and workforce').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Next national dashboard areas' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Australian fuel strategy tracker' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Housing and economic pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Defence procurement watch' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Brisbane 2032 readiness' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'AI automation and workforce pressure' })).toBeVisible();
+  await expect(page.getByText('Pending official Defence or procurement source verification.')).toBeVisible();
+  await expect(page.getByText('No AI causation or fake exposure score is published.')).toBeVisible();
+  await expect(page.getByText('It does not invent government strategy facts')).toBeVisible();
+});
 
 test('fuel security page keeps operational gaps fail-closed', async ({ page }) => {
   await page.goto('/ui_kits/fuel-security-dashboard/index.html');

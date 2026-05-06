@@ -63,7 +63,9 @@ function TrustBadge({
     manual: 'Manual',
     stale: 'Stale',
     unavailable: 'Unavailable',
-    partial: 'Partial coverage'
+    partial: 'Partial coverage',
+    'source-gated': 'Source-gated',
+    roadmap: 'Roadmap'
   };
   return React.createElement("span", {
     className: `trust-badge trust-badge--${key}`
@@ -412,6 +414,10 @@ function Header({
     id: 'employment_automation',
     label: 'Employment & Automation',
     href: '../employment-automation-dashboard/index.html'
+  }, {
+    id: 'missing_data',
+    label: 'Missing data',
+    href: '../missing-data-scoreboard/index.html'
   }, {
     id: 'sources',
     label: 'Sources & methodology',
@@ -932,7 +938,9 @@ function Footer({
     href: "../oil-and-production/index.html"
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
-  }, "Who pays what")))), React.createElement("div", {
+  }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
+    href: "../missing-data-scoreboard/index.html"
+  }, "Missing data scoreboard")))), React.createElement("div", {
     className: "site-footer__col"
   }, React.createElement("span", {
     className: "eyebrow"
