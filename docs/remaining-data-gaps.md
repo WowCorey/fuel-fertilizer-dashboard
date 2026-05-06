@@ -89,12 +89,14 @@ a named public source provides the exact field, period, unit and reuse rights.
 | Frigate/general-purpose vessel contract status and delivery timeline | source-gated | No source-safe contract row, delivery schedule or industry-content field has been loaded. | Add `defence_frigate_procurement_status` only from official procurement or Defence sources. |
 | Naval logistics/fuel implication | source-gated | Procurement discussion is not itself a fuel/logistics metric. | Add `defence_naval_logistics_fuel_implication` only if an official source links the procurement path to logistics or fuel posture. |
 
-### Housing / economy coming soon
+### Housing / economy
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Mortgage pressure and first-home buyer indicators | roadmap | Existing AU Economics sources do not yet include a full housing affordability view. | Scope official ABS/RBA/APRA/state sources before adding cards. |
-| Investor ownership, negative gearing, rental stress and housing supply | roadmap | Concepts differ across tax, tenancy, supply and affordability datasets. | Do not combine them until each source boundary is defined. |
+| Housing and Economic Pressure page | partial | The page now reuses existing source-backed RBA, ABS and NHSAC envelopes for latest cash rate, monthly cash-rate history, household debt, mortgage-rate context, CPI, unemployment, dwelling stock and housing-target progress. | Keep the page as observed indicators plus source gates until housing model inputs are verified. |
+| Mortgage repayment pressure and first-home buyer indicators | source-gated / roadmap | Official rate and debt signals are loaded, but repayment pressure needs loan-size, rate, term and income assumptions. No first-home buyer source row is loaded on the new page. | Scope official ABS/RBA/APRA/state sources before adding cards or modelling assumptions. |
+| Investor ownership, investor lending, negative gearing and rental stress | source-gated / roadmap | Concepts differ across tax, tenancy, ownership, lending, supply and affordability datasets. | Do not combine them until each source boundary and method is defined. |
+| Dwelling approvals / housing supply pipeline | partial | ABS residential dwelling stock and NHSAC Accord progress are loaded, but regional approvals/completions and pipeline status are not. | Add approvals, completions or pipeline rows only from named ABS/NHSAC/state sources with exact period, unit and geography. |
 | Household debt expansion | partial | RBA household debt-to-income is loaded, but not every housing stress signal. | Extend only with verified RBA/ABS/APRA rows. |
 
 ### AI automation / workforce displacement

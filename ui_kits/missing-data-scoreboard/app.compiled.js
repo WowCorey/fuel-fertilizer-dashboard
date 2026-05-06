@@ -399,6 +399,10 @@ function Header({
     label: 'AU economics',
     href: '../au-economics-dashboard/index.html'
   }, {
+    id: 'housing_pressure',
+    label: 'Housing pressure',
+    href: '../housing-economic-pressure-dashboard/index.html'
+  }, {
     id: 'manufacturing',
     label: 'Manufacturing',
     href: '../manufacturing-dashboard/index.html'
@@ -939,6 +943,8 @@ function Footer({
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
   }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
+    href: "../housing-economic-pressure-dashboard/index.html"
+  }, "Housing pressure")), React.createElement("li", null, React.createElement("a", {
     href: "../missing-data-scoreboard/index.html"
   }, "Missing data scoreboard")))), React.createElement("div", {
     className: "site-footer__col"
@@ -999,7 +1005,7 @@ const SCOREBOARD_ROWS = [{
   holder: 'ABS, RBA, APRA, ATO, state agencies and housing authorities',
   why: 'Rates, debt, rents and housing supply shape cost of living and social stability.',
   action: 'Separate official cash-rate/debt signals from future housing model inputs before publishing any model.',
-  page: 'AU economics'
+  page: 'Housing pressure'
 }, {
   area: 'Defence and procurement',
   status: 'source-gated',
@@ -1032,9 +1038,9 @@ const ROADMAP_SECTIONS = [{
   note: 'Official source required before any latest-strategy claim is made.'
 }, {
   title: 'Housing and economic pressure',
-  status: 'source-gated',
+  status: 'partial',
   fields: ['RBA cash rate', 'mortgage pressure', 'household debt', 'first-home buyers', 'investor loans/ownership', 'rental stress', 'dwelling approvals / housing supply', 'negative gearing modelling'],
-  note: 'The RBA latest cash-rate target is loaded elsewhere; housing model inputs remain gated.'
+  note: 'A dedicated Housing pressure page now reuses RBA, ABS and NHSAC envelopes while keeping repayment, rental, investor and negative-gearing model inputs gated.'
 }, {
   title: 'Defence procurement watch',
   status: 'source-gated',
@@ -1127,7 +1133,7 @@ const PRIORITY_MATRIX_ROWS = [{
   decision: 'cost-of-living and housing-pressure interpretation',
   blocker: 'housing stress concepts differ across debt, rents, tax, approvals and ownership datasets',
   action: 'separate each official indicator before creating any housing pressure view',
-  page: 'AU economics / Roadmap'
+  page: 'Housing pressure'
 }, {
   band: 'High',
   statusKind: 'source-gated',

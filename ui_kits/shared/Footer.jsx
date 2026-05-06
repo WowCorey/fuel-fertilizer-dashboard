@@ -27,6 +27,7 @@ function Footer({ updated = '', refreshStatus = null }) {
             <li><a href="../fertilizer-dashboard/index.html">Food &amp; farms</a></li>
             <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>
             <li><a href="../who-pays-what/index.html">Who pays what</a></li>
+            <li><a href="../housing-economic-pressure-dashboard/index.html">Housing pressure</a></li>
             <li><a href="../missing-data-scoreboard/index.html">Missing data scoreboard</a></li>
           </ul>
         </div>

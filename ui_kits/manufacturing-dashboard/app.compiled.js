@@ -399,6 +399,10 @@ function Header({
     label: 'AU economics',
     href: '../au-economics-dashboard/index.html'
   }, {
+    id: 'housing_pressure',
+    label: 'Housing pressure',
+    href: '../housing-economic-pressure-dashboard/index.html'
+  }, {
     id: 'manufacturing',
     label: 'Manufacturing',
     href: '../manufacturing-dashboard/index.html'
@@ -939,6 +943,8 @@ function Footer({
   }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
     href: "../who-pays-what/index.html"
   }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
+    href: "../housing-economic-pressure-dashboard/index.html"
+  }, "Housing pressure")), React.createElement("li", null, React.createElement("a", {
     href: "../missing-data-scoreboard/index.html"
   }, "Missing data scoreboard")))), React.createElement("div", {
     className: "site-footer__col"

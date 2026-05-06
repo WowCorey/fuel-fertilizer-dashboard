@@ -13,6 +13,7 @@ const routes = [
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
   { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
   { path: '/ui_kits/au-economics-dashboard/index.html', heading: "Australia's economy, in plain English." },
+  { path: '/ui_kits/housing-economic-pressure-dashboard/index.html', heading: 'Housing and economic pressure' },
   { path: '/ui_kits/manufacturing-dashboard/index.html', heading: 'What Australia still makes, in plain English.' },
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
   { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
@@ -54,10 +55,12 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(heroLinks.getByRole('link', { name: 'View Missing Data Scoreboard' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View National Readiness Matrix' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Food, Farms & Water' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View Housing Pressure' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View AU Economics' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Where to start' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For the fuel dashboard request' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For what still needs publishing' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For housing pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
   await expect(page.getByText('This site is an independent public-source prototype, not an official government dashboard.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel security' }).first()).toBeVisible();
@@ -73,6 +76,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Farmers' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'MPs and policy staff' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Public-data gaps are now tracked as a product' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Housing pressure' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
@@ -124,6 +128,30 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByText('Pending official Defence or procurement source verification.')).toBeVisible();
   await expect(page.getByText('No AI causation or fake exposure score is published.')).toBeVisible();
   await expect(page.getByText('It does not invent government strategy facts')).toBeVisible();
+});
+
+test('housing pressure page keeps models source-gated', async ({ page }) => {
+  await page.goto('/ui_kits/housing-economic-pressure-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: 'Housing and economic pressure' })).toBeVisible();
+  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(page.getByText('It does not estimate household repayments, rental stress, negative-gearing effects or housing affordability')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Read indicators before interpreting pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Interest-rate signal' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Household-debt pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Official indicators loaded now' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Latest RBA cash-rate target' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'RBA cash-rate target, monthly history' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What remains source-gated' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Mortgage repayment pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'First-home buyer indicators' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Investor ownership / investor lending' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Rental stress' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Negative gearing model' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Official indicators are not models' })).toBeVisible();
+  await expect(page.getByText('This dashboard separates official indicators from models.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Safe aggregate indicators, not private household detail' })).toBeVisible();
+  await expect(page.getByText('No-estimate rule')).toBeVisible();
+  await expect(page.getByText('No loan-size, term, offset or repayment calculation is added.')).toBeVisible();
 });
 
 test('fuel security page keeps operational gaps fail-closed', async ({ page }) => {

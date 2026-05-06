@@ -44,7 +44,7 @@ const SCOREBOARD_ROWS = [
     holder: 'ABS, RBA, APRA, ATO, state agencies and housing authorities',
     why: 'Rates, debt, rents and housing supply shape cost of living and social stability.',
     action: 'Separate official cash-rate/debt signals from future housing model inputs before publishing any model.',
-    page: 'AU economics',
+    page: 'Housing pressure',
   },
   {
     area: 'Defence and procurement',
@@ -84,9 +84,9 @@ const ROADMAP_SECTIONS = [
   },
   {
     title: 'Housing and economic pressure',
-    status: 'source-gated',
+    status: 'partial',
     fields: ['RBA cash rate', 'mortgage pressure', 'household debt', 'first-home buyers', 'investor loans/ownership', 'rental stress', 'dwelling approvals / housing supply', 'negative gearing modelling'],
-    note: 'The RBA latest cash-rate target is loaded elsewhere; housing model inputs remain gated.',
+    note: 'A dedicated Housing pressure page now reuses RBA, ABS and NHSAC envelopes while keeping repayment, rental, investor and negative-gearing model inputs gated.',
   },
   {
     title: 'Defence procurement watch',
@@ -191,7 +191,7 @@ const PRIORITY_MATRIX_ROWS = [
     decision: 'cost-of-living and housing-pressure interpretation',
     blocker: 'housing stress concepts differ across debt, rents, tax, approvals and ownership datasets',
     action: 'separate each official indicator before creating any housing pressure view',
-    page: 'AU economics / Roadmap',
+    page: 'Housing pressure',
   },
   {
     band: 'High',

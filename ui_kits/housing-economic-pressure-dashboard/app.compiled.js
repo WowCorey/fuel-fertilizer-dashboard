@@ -973,147 +973,95 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const COMPANIES = [{
-  id: 'company_exxonmobil_au',
-  short: 'ExxonMobil Australia'
+const SERIES = ['rba_cash_rate_latest', 'rba_cash_rate', 'rba_household_debt_to_income', 'rba_standard_variable_mortgage_rate', 'rba_credit_card_debt_accruing_interest', 'abs_cpi_inflation', 'abs_unemployment_rate', 'abs_residential_dwelling_stock', 'nhsac_housing_target_progress'];
+const QUICK_GUIDE = [['1', 'Interest-rate signal', 'Start with the latest official RBA cash-rate target and its monthly history.'], ['2', 'Household-debt pressure', 'Read RBA household debt and mortgage-rate context before any stress interpretation.'], ['3', 'Housing market source gaps', 'Check which housing indicators are source-backed, partial or still gated.'], ['4', 'Policy/model gaps', 'Do not treat repayment, rental stress or negative-gearing claims as observed data.'], ['5', 'What still needs publishing', 'Use the missing-feed list as a public-data request, not an estimate prompt.']];
+const HOUSING_GAPS = [{
+  label: 'Mortgage repayment pressure',
+  status: 'source-gated',
+  why: 'Repayment pressure is what many households feel, but it depends on loan size, rate type, term, offset balances and income.',
+  blocker: 'No named source and method are loaded for a national repayment-pressure model.',
+  action: 'Load source-backed loan, rate, term and income assumptions before publishing a model.'
 }, {
-  id: 'company_chevron_au',
-  short: 'Chevron Australia'
+  label: 'First-home buyer indicators',
+  status: 'roadmap',
+  why: 'First-home buyer access shows whether new households can enter the market.',
+  blocker: 'No clean first-home buyer source row is loaded on this page.',
+  action: 'Scope ABS, APRA or official housing finance rows with period, unit and geography.'
 }, {
-  id: 'company_viva_energy',
-  short: 'Viva Energy (ASX:VEA)'
+  label: 'Investor ownership / investor lending',
+  status: 'roadmap',
+  why: 'Investor activity affects competition for housing and policy debate.',
+  blocker: 'Investor lending, ownership and tax concepts are different datasets.',
+  action: 'Keep ownership, lending and tax rows separate until exact official fields are verified.'
 }, {
-  id: 'company_ampol',
-  short: 'Ampol (ASX:ALD)'
+  label: 'Rental stress',
+  status: 'source-gated',
+  why: 'Rent stress requires rent, income and geography definitions.',
+  blocker: 'No official/public rent-to-income stress series is loaded.',
+  action: 'Use safe aggregate rental stress indicators only after source and method are explicit.'
 }, {
-  id: 'company_bp_au',
-  short: 'BP Australia'
+  label: 'Dwelling approvals / housing supply',
+  status: 'partial',
+  why: 'Supply pressure needs both stock and pipeline views.',
+  blocker: 'National dwelling stock and NHSAC target progress are loaded, but approvals/completions by region are not.',
+  action: 'Add approvals, completions or pipeline rows only from named ABS/NHSAC/state sources.'
 }, {
-  id: 'company_shell_au',
-  short: 'Shell Australia'
+  label: 'Negative gearing model',
+  status: 'roadmap',
+  why: 'Negative gearing claims need tax data, ownership structure, income bands and a transparent method.',
+  blocker: 'No tax model or assumptions are loaded.',
+  action: 'Keep as methodology-gated until source fields and model assumptions are public.'
 }, {
-  id: 'company_woodside',
-  short: 'Woodside Energy (ASX:WDS)'
-}, {
-  id: 'company_santos',
-  short: 'Santos (ASX:STO)'
+  label: 'Household debt expansion',
+  status: 'partial',
+  why: 'RBA household debt-to-income is loaded, but it is not a full housing stress model.',
+  blocker: 'Debt-to-income does not include repayment burden, arrears or regional distribution.',
+  action: 'Extend only with verified RBA, ABS, APRA or other official rows.'
 }];
-const SERIES = ['ato_corporate_tax', 'ato_prrt_details', 'australia_institute_gas_export_tax_proposal', 'australia_institute_gas_giveaway_analysis', 'accc_petroleum_monitoring', 'accc_petrol_mogas95_component', 'accc_petrol_tax_component', 'accc_petrol_other_costs_margins_component', 'accc_petrol_gird_component', 'accc_petrol_breakdown_series', ...COMPANIES.map(c => c.id)];
-const TAX_FIELDS = ['fiscal_year', 'total_income', 'taxable_income', 'income_tax_paid', 'prrt_paid', 'net_profit'];
-const PUMP_COMPONENTS = [{
-  id: 'accc_petrol_mogas95_component',
-  eyebrow: 'Pump $',
-  label: 'International refined petrol cost',
-  plain: 'Mogas 95 component in the ACCC December quarter 2025 pump-price split.'
-}, {
-  id: 'accc_petrol_tax_component',
-  eyebrow: 'Pump $',
-  label: 'Excise and GST',
-  plain: 'Combined excise and goods and services tax component reported by the ACCC.'
-}, {
-  id: 'accc_petrol_other_costs_margins_component',
-  eyebrow: 'Pump $',
-  label: 'Other costs and margins',
-  plain: 'Other wholesale and retail costs and margins in the ACCC petrol snapshot.'
-}, {
-  id: 'accc_petrol_gird_component',
-  eyebrow: 'Pump $',
-  label: 'Gross indicative retail difference',
-  plain: 'Broad retail costs and margins indicator; not pure retailer profit.'
-}];
-function pick(env, key) {
-  if (!env || env.status !== 'ok') return null;
-  if (env.extra && env.extra.fields && !Array.isArray(env.extra.fields) && env.extra.fields[key] != null) {
-    return env.extra.fields[key];
-  }
-  if (env.extra && env.extra[key] != null) return env.extra[key];
-  if (Array.isArray(env.values)) {
-    const hit = env.values.find(p => p.t === key);
-    if (hit) return hit.v;
-  }
-  return null;
+const PUBLISH_ROWS = [['Machine-readable first-home buyer indicators', 'Safe public rows with period, geography, unit and source rights.'], ['Investor lending / investor ownership fields', 'Separate lending flow, ownership stock and tax concepts.'], ['Rental stress by region', 'Safe aggregate rent/income definitions without identifying households.'], ['Dwelling approvals / completions by region', 'Comparable approvals, completions and pipeline status.'], ['Mortgage arrears / hardship where public and safe', 'Aggregate hardship indicators with privacy boundaries.'], ['Negative gearing tax data by region/income band if publicly available', 'Tax model inputs need source fields and assumptions.'], ['Household debt and repayment pressure inputs', 'Loan balance, rate, term and income assumptions for any model.'], ['Housing supply pipeline status', 'Public project/status fields that can be tracked over time.'], ['Public boundary for what cannot be published', 'Clear privacy and sensitivity rules for housing finance data.']];
+function latest(env) {
+  if (!env || env.status !== 'ok' || !env.values?.length) return null;
+  return env.values.at(-1);
 }
-function money(v, unit = 'A$m') {
-  if (v == null) return null;
-  if (typeof v === 'number') {
-    const sign = v < 0 ? '-' : '';
-    const abs = Math.abs(v);
-    if (unit === 'A$m') return sign + 'A$' + abs.toLocaleString('en-AU', {
-      maximumFractionDigits: 1
-    }) + 'm';
-    if (unit === 'US$m') return sign + 'US$' + abs.toLocaleString('en-AU', {
-      maximumFractionDigits: 1
-    }) + 'm';
-    if (unit === '%') return v.toFixed(1) + '%';
-    if (unit === 'A$/L') return 'A$' + v.toFixed(3);
-    return String(v);
-  }
-  return String(v);
+function cashRateDelta(env) {
+  const fields = env?.extra?.fields || {};
+  const change = fields.target_change_percentage_points;
+  const previous = fields.previous_target_value;
+  if (typeof change !== 'number' || typeof previous !== 'number') return null;
+  const direction = fields.change_direction === 'down' ? 'down' : fields.change_direction === 'up' ? 'up' : 'flat';
+  const verb = direction === 'up' ? 'up' : direction === 'down' ? 'down' : 'unchanged';
+  const pp = Math.abs(change).toLocaleString('en-AU', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  const prevText = previous.toLocaleString('en-AU', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  const dateText = fields.previous_observation_date ? ` from ${fields.previous_observation_date}` : '';
+  return {
+    dir: direction,
+    text: `${verb} ${pp} pp vs previous RBA decision target (${prevText}%)${dateText}`
+  };
 }
-function Cell({
-  env,
-  fieldKey,
-  unit,
-  atoEnv,
-  prrtEnv
+function GatedCard({
+  row
 }) {
-  const v = pick(env, fieldKey);
-  if (v == null) {
-    if (fieldKey === 'prrt_paid' && pick(env, 'prrt_note')) {
-      return React.createElement("td", {
-        className: "unavail",
-        "aria-label": "Not a PRRT payer",
-        title: pick(env, 'prrt_note')
-      }, "n/a");
-    }
-    return React.createElement("td", {
-      className: "unavail",
-      "aria-label": "Source unavailable"
-    }, "\u2014");
-  }
-  const atoFields = new Set(['total_income', 'taxable_income', 'income_tax_paid', 'fiscal_year']);
-  let linkEnv = env;
-  if (atoFields.has(fieldKey)) linkEnv = atoEnv || env;
-  if (fieldKey === 'prrt_paid') linkEnv = prrtEnv || env;
-  const href = linkEnv && linkEnv.source_url;
-  const displayUnit = fieldKey === 'net_profit' ? pick(env, 'net_profit_unit') || unit : unit;
-  return React.createElement("td", null, href ? React.createElement("a", {
-    href: href,
-    rel: "noopener",
-    title: `Source: ${linkEnv.source_name}`
-  }, money(v, displayUnit)) : money(v, displayUnit));
-}
-function SourceCell({
-  env
-}) {
-  if (!env || !env.source_url) {
-    return React.createElement("td", {
-      className: "unavail"
-    }, "\u2014");
-  }
-  const label = env.source_name.length > 34 ? env.source_name.slice(0, 32) + '…' : env.source_name;
-  return React.createElement("td", null, React.createElement("a", {
-    href: env.source_url,
-    rel: "noopener"
-  }, label), env.status !== 'ok' && React.createElement("div", {
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, row.label), React.createElement(TrustBadge, {
+    kind: row.status
+  })), React.createElement("h4", null, row.label), React.createElement("p", {
+    className: "body-sm"
+  }, row.why), React.createElement("p", {
     className: "caption"
-  }, "pending"));
-}
-function effectiveRate(env) {
-  const paid = pick(env, 'income_tax_paid');
-  const taxable = pick(env, 'taxable_income');
-  if (paid == null || taxable == null || !taxable) return null;
-  return paid / taxable * 100;
-}
-function sourceSummary(env) {
-  if (!env || env.status !== 'ok') {
-    return 'Awaiting hand-keyed values from the named public source.';
-  }
-  const fields = env.extra && env.extra.fields && !Array.isArray(env.extra.fields) ? Object.keys(env.extra.fields).length : 0;
-  if (fields) {
-    return `Verified. ${fields} fields; latest ${env.last_data_point || 'unknown'}.`;
-  }
-  return `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.`;
+  }, React.createElement("b", null, "Current blocker:"), " ", row.blocker), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Next source action:"), " ", row.action));
 }
 function App() {
   const [data, setData] = React.useState(null);
@@ -1126,7 +1074,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "who_pays_what",
+      active: "housing_pressure",
       refreshStatus: refreshStatus
     }), React.createElement("main", {
       id: "main"
@@ -1136,31 +1084,35 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const populatedCompanyCount = COMPANIES.filter(c => TAX_FIELDS.some(field => pick(data[c.id], field) != null)).length;
-  const profitCompanyCount = COMPANIES.filter(c => pick(data[c.id], 'net_profit') != null).length;
-  const verifiedPumpComponents = PUMP_COMPONENTS.filter(c => data[c.id]?.status === 'ok').length;
-  const allPumpComponentsVerified = verifiedPumpComponents === PUMP_COMPONENTS.length;
-  const pumpSeriesVerified = data.accc_petrol_breakdown_series?.status === 'ok';
+  const cashFields = data.rba_cash_rate_latest?.extra?.fields || {};
+  const dwellLatest = latest(data.abs_residential_dwelling_stock);
+  const nhsacFields = data.nhsac_housing_target_progress?.extra?.fields || {};
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "who_pays_what",
+    active: "housing_pressure",
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "who-pays-what"
+    id: "housing-pressure"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Who pays what \xB7 v1.3"), React.createElement("h1", {
+  }, "Housing and economic pressure - v0.1"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What companies earn, what tax they pay, and what consumers pay."), React.createElement("p", {
+  }, "Housing and economic pressure"), React.createElement("p", {
     className: "intro__lede"
-  }, "This page shows what major energy companies earn in Australia, what tax they pay, and what consumers pay at the pump \u2014 using figures filed with the ATO, ACCC and ASX. Nothing here is estimated. Populated numbers link to the document they came from.")), React.createElement("aside", {
+  }, "Tracks source-backed interest-rate, household-debt and housing-pressure signals while keeping mortgage stress, investor ownership, rental stress, first-home buyer and negative-gearing gaps visible until official/public sources are loaded."), React.createElement("p", {
+    className: "body-sm",
+    style: {
+      marginTop: 16,
+      color: 'var(--ink-2)'
+    }
+  }, "This page is an independent public-source prototype. It does not estimate household repayments, rental stress, negative-gearing effects or housing affordability unless a named source and transparent method are loaded.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1169,300 +1121,256 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Source check"), React.createElement("span", null, "Populated cells link to public reports."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Observed indicators only - no repayment, rental or tax model"))), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
-    className: "section section--why"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Start here"), React.createElement("h2", {
-    style: {
-      marginTop: 8
-    }
-  }, "How to read this page")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, React.createElement("b", null, "Total income"), " is the gross revenue a company declares to the ATO. It is not profit. A company can have billions in total income and still record a loss."), React.createElement("p", null, React.createElement("b", null, "Taxable income"), " is what's left after the ATO lets the company deduct costs, depreciation, past losses and some concessions. Corporate tax is charged on this, not on total income."), React.createElement("p", null, React.createElement("b", null, "Income tax paid"), " is what actually landed in Commonwealth coffers for that fiscal year. Zero is legal when taxable income is zero or there are carried-forward losses; it is still worth noting."), React.createElement("p", null, React.createElement("b", null, "PRRT paid"), " is the Petroleum Resource Rent Tax \u2014 a separate Commonwealth tax charged on petroleum project profits, on top of company tax. It is project-level, so it appears against operating subsidiaries (e.g. Esso Australia Resources, several Woodside and Santos subsidiaries) rather than the parent group. Numbers shown here are summed across each corporate group's subsidiaries listed in the ATO PRRT details sheet. \"n/a\" means the company is downstream-only (refining, retail) and does not fall within the PRRT regime; \"\u2014\" means no data."), React.createElement("p", null, React.createElement("b", null, "Net profit"), " comes from the company's own annual report and follows accounting standards, not tax law. It will usually differ from the ATO's taxable income, sometimes by a lot."), React.createElement("p", null, React.createElement("b", null, "Effective tax rate"), " here = income tax paid \xF7 taxable income. Australia's statutory rate is 30%. Lower effective rates typically reflect R&D offsets, past losses, or the Petroleum Resource Rent Tax regime.")))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-tax"
+    className: "section section--why",
+    "aria-labelledby": "guide-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Section 1 \xB7 Who pays"), React.createElement("h2", {
-    id: "h-tax"
-  }, "Revenue, profit and tax \u2014 major energy companies in Australia"), React.createElement("p", {
+  }, "Use this page in order"), React.createElement("h2", {
+    id: "guide-h"
+  }, "Read indicators before interpreting pressure"), React.createElement("p", {
     className: "section__lede"
-  }, "Figures are copied directly from ATO Corporate Tax Transparency, ASX annual reports and ASIC-lodged financial statements. Blank cells mean \"Source unavailable\" \u2014 we leave them empty rather than estimate."))), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Company tax source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Company rows awaiting manual verification"), React.createElement("p", {
-    className: "body-sm"
-  }, populatedCompanyCount, " of ", COMPANIES.length, " company envelopes currently contain verified ATO tax fields. ", profitCompanyCount, " of ", COMPANIES.length, " contain verified net-profit fields. Values should be entered only after checking the ATO release and the company's annual report or ASIC-lodged statements."))), React.createElement("div", {
-    className: "data-table-wrap",
-    role: "region",
-    "aria-label": "Company tax and profit table"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", {
-    scope: "col"
-  }, "Company"), React.createElement("th", {
-    scope: "col"
-  }, "Fiscal year"), React.createElement("th", {
-    scope: "col"
-  }, "Total income (ATO)"), React.createElement("th", {
-    scope: "col"
-  }, "Taxable income (ATO)"), React.createElement("th", {
-    scope: "col"
-  }, "Income tax paid (ATO)"), React.createElement("th", {
-    scope: "col"
-  }, "PRRT paid (ATO group total)"), React.createElement("th", {
-    scope: "col"
-  }, "Net profit (report)"), React.createElement("th", {
-    scope: "col"
-  }, "Effective tax rate"), React.createElement("th", {
-    scope: "col"
-  }, "Source"))), React.createElement("tbody", null, COMPANIES.map(c => {
-    const env = data[c.id];
-    const er = effectiveRate(env);
-    return React.createElement("tr", {
-      key: c.id
-    }, React.createElement("td", null, React.createElement("b", null, c.short)), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "fiscal_year"
-    }), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "total_income",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "taxable_income",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      atoEnv: data.ato_corporate_tax,
-      fieldKey: "income_tax_paid",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      prrtEnv: data.ato_prrt_details,
-      fieldKey: "prrt_paid",
-      unit: "A$m"
-    }), React.createElement(Cell, {
-      env: env,
-      fieldKey: "net_profit",
-      unit: "A$m"
-    }), er == null ? React.createElement("td", {
-      className: "unavail"
-    }, "\u2014") : React.createElement("td", null, er.toFixed(1), "%"), React.createElement(SourceCell, {
-      env: env
-    }));
-  })))), React.createElement("p", {
-    className: "caption",
-    style: {
-      marginTop: 12
-    }
-  }, "\"\u2014\" means the figure has not yet been hand-keyed from the company's latest filed report. \"n/a\" in the PRRT column means the company is downstream-only and does not fall within the PRRT regime. Cross-check with the ATO Corporate Tax Transparency dataset before publishing:", ' ', React.createElement("a", {
-    href: data.ato_corporate_tax.source_url
-  }, data.ato_corporate_tax.source_name), ".")), data.ato_prrt_details?.status === 'ok' && React.createElement("section", {
+  }, "The strongest rows are official interest-rate and macro indicators. The housing stress rows are deliberately source-gated until the source and method are explicit."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--5"
+  }, QUICK_GUIDE.map(([step, title, copy]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, step), React.createElement("h3", null, title), React.createElement("p", null, copy))))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "h-prrt-total"
+    "aria-labelledby": "signals-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Section 1b \xB7 Industry PRRT"), React.createElement("h2", {
-    id: "h-prrt-total"
-  }, "All Petroleum Resource Rent Tax paid in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), React.createElement("p", {
+  }, "Source-backed signals"), React.createElement("h2", {
+    id: "signals-h"
+  }, "Official indicators loaded now"), React.createElement("p", {
     className: "section__lede"
-  }, "Across the entire petroleum industry, every entity that paid PRRT and how much, directly from the ATO's PRRT details sheet."))), React.createElement("div", {
-    className: "metric-grid metric-grid--3"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Industry total",
-    label: "Total PRRT paid",
-    plain: `Sum of PRRT payable across all ${pick(data.ato_prrt_details, 'entity_count') || 0} entities listed in the ATO PRRT details sheet for ${pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'}.`,
-    value: pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions'),
-    unit: " A$m",
-    source: data.ato_prrt_details.source_name,
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Coverage",
-    label: "Entities that paid PRRT",
-    plain: "Number of corporate entities appearing in the ATO PRRT details sheet.",
-    value: pick(data.ato_prrt_details, 'entity_count'),
-    unit: " entities",
-    source: data.ato_prrt_details.source_name
-  }), React.createElement(MetricCard, {
-    eyebrow: "Statutory rate",
-    label: "PRRT statutory rate",
-    plain: "The headline PRRT rate is 40% of project taxable profit, charged in addition to company tax.",
-    value: 40,
-    unit: "%",
-    source: "PRRT Assessment Act 1987"
-  })), React.createElement("div", {
-    className: "data-table-wrap",
-    role: "region",
-    "aria-label": "PRRT paid by entity, full ATO list"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", {
-    scope: "col"
-  }, "Entity (ATO name)"), React.createElement("th", {
-    scope: "col"
-  }, "ABN"), React.createElement("th", {
-    scope: "col",
-    style: {
-      textAlign: 'right'
-    }
-  }, "PRRT paid (AUD)"))), React.createElement("tbody", null, (pick(data.ato_prrt_details, 'entities') || []).map(row => React.createElement("tr", {
-    key: row.abn
-  }, React.createElement("td", null, row.entity), React.createElement("td", {
-    className: "mono"
-  }, row.abn), React.createElement("td", {
-    style: {
-      textAlign: 'right'
-    }
-  }, row.prrt_paid_aud.toLocaleString('en-AU')))))))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-policy"
-  }, data.ato_prrt_details?.status === 'ok' && data.australia_institute_gas_giveaway_analysis?.status === 'ok' && data.australia_institute_gas_export_tax_proposal?.status === 'ok' && React.createElement("aside", {
-    role: "note",
-    "aria-label": "Headline takeaway",
-    style: {
-      margin: 'var(--s-4) 0 var(--s-6)',
-      padding: 'var(--s-5) var(--s-6)',
-      background: 'var(--paper-sunk)',
-      border: '1px solid var(--rule)',
-      borderLeft: '4px solid var(--accent)',
-      borderRadius: 'var(--r-2)'
-    }
-  }, React.createElement("div", {
-    className: "eyebrow"
-  }, "If you only read one number"), React.createElement("p", {
-    style: {
-      marginTop: 'var(--s-2)',
-      fontSize: 'var(--fs-18)',
-      lineHeight: 1.5,
-      maxWidth: '70ch'
-    }
-  }, "Australia's entire petroleum industry paid ", React.createElement("b", null, "A$", (pick(data.ato_prrt_details, 'total_prrt_paid_aud_millions') / 1000).toFixed(2), " billion"), " in PRRT in ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24', " \u2014 less than the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_giveaway_analysis, 'japan_gas_import_tax_total_aud_billions_per_year'), " billion"), " Japan raises taxing its gas imports each year \u2014 and well under half of the ", React.createElement("b", null, "A$", pick(data.australia_institute_gas_export_tax_proposal, 'modelled_revenue_aud_billions'), " billion"), " a 25% gas export tax would have raised since 2022, modelled by The Australia Institute."), React.createElement("p", {
-    className: "caption mono",
-    style: {
-      marginTop: 'var(--s-3)'
-    }
-  }, "Sources: ", React.createElement("a", {
-    href: data.ato_prrt_details.source_url
-  }, "ATO PRRT details ", pick(data.ato_prrt_details, 'fiscal_year') || '2023-24'), " \xB7", ' ', React.createElement("a", {
-    href: data.australia_institute_gas_giveaway_analysis.source_url
-  }, "Australia Institute, \"Taxing gas in Australia and Japan\""), " \xB7", ' ', React.createElement("a", {
-    href: data.australia_institute_gas_export_tax_proposal.source_url
-  }, "Australia Institute, \"We have already missed out on $63.8 billion\""))), React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Section 1c \xB7 Policy comparisons"), React.createElement("h2", {
-    id: "h-policy"
-  }, "\"What if Australia taxed gas differently?\""), React.createElement("p", {
-    className: "section__lede"
-  }, "Researchers and policy think-tanks publish alternative fiscal regimes \u2014 from Norway's 78% petroleum tax to The Australia Institute's proposal for a 25% gas export tax. These cards link to each named publication; the dashboard does not publish the proposed-revenue figures until they are hand-keyed from the source."))), React.createElement("div", {
-    className: "metric-grid metric-grid--3"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Modelled revenue forgone",
-    label: "25% gas export tax (since 2022)",
-    plain: "The Australia Institute (Denniss & Saunders, 20 Mar 2026) calculates that a 25 per cent Commonwealth tax on the gross value of Australian gas exports, if enacted in 2022, would have already raised A$63.8 billion by March 2026.",
-    fromEnvelope: data.australia_institute_gas_export_tax_proposal,
-    unit: " AUD billions",
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Australia vs Japan, per year",
-    label: "PRRT (AU) vs gas-import tax (Japan)",
-    plain: "The Australia Institute (Denniss, Campbell & Saunders, 21 Apr 2026) reports Australia's PRRT raises about A$1.4 billion per year, while Japan's gas-import tax raises A$1.8 billion per year overall \u2014 including A$710 million per year specifically from Australian gas imports. Japan collects more in gas tax from our exports than our entire national PRRT take.",
-    fromEnvelope: data.australia_institute_gas_giveaway_analysis,
-    unit: " AUD billions/year"
-  }), React.createElement(MetricCard, {
-    eyebrow: "International comparison",
-    label: "Norway - statutory petroleum tax rate",
-    plain: "Norway charges 22% company tax plus a 56% special petroleum tax on offshore profits, for a 78% statutory rate. Comparison only; not directly portable to Australia without also reflecting state ownership and field-level fiscal design. See the Resource value dashboard for full Norway state-revenue context.",
-    value: 78,
-    unit: "%",
-    source: "Norwegian Petroleum Tax Act"
-  })), React.createElement("p", {
-    className: "caption",
-    style: {
-      marginTop: 12
-    }
-  }, "Each Australia Institute card links to the named, dated report. Headline figures are modelled by The Australia Institute, not by this site. We do not recompute or estimate; we cite. The Norway 78 per cent figure is the statutory rate from the Norwegian Petroleum Tax Act and is shown as comparison context only.")), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "h-consumer"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Section 2 \xB7 What consumers pay"), React.createElement("h2", {
-    id: "h-consumer"
-  }, "Retail petrol price breakdown"), React.createElement("p", {
-    className: "section__lede"
-  }, "Where each dollar at the pump goes \u2014 international refined petrol cost, taxes, other costs and margins, and the ACCC gross indicative retail difference."))), allPumpComponentsVerified ? React.createElement("div", {
+  }, "These cards reuse existing RBA, ABS and NHSAC source envelopes. They are not converted into a housing stress score."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
-  }, PUMP_COMPONENTS.map(component => React.createElement(MetricCard, {
-    key: component.id,
-    eyebrow: component.eyebrow,
-    label: component.label,
-    plain: component.plain,
-    fromEnvelope: data[component.id],
-    unit: " A$/L"
-  }))) : React.createElement("div", {
+  }, React.createElement(MetricCard, {
+    eyebrow: "Interest-rate signal",
+    label: "Latest RBA cash-rate target",
+    plain: `Latest official cash-rate decision row. Effective date: ${cashFields.latest_observation_date || data.rba_cash_rate_latest?.last_data_point || 'unknown'}.`,
+    fromEnvelope: data.rba_cash_rate_latest,
+    unit: "%",
+    delta: cashRateDelta(data.rba_cash_rate_latest),
+    highlight: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "Mortgage rate context",
+    label: "Standard variable owner-occupier rate",
+    plain: "RBA indicator standard variable owner-occupier housing loan rate. This is a rate signal, not a repayment model.",
+    fromEnvelope: data.rba_standard_variable_mortgage_rate,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Household debt pressure",
+    label: "Household debt to disposable income",
+    plain: "RBA household debt as a per cent of annualised household disposable income. This is partial pressure context, not a stress score.",
+    fromEnvelope: data.rba_household_debt_to_income,
+    unit: "%",
+    partial: true
+  }), React.createElement(MetricCard, {
+    eyebrow: "Card debt context",
+    label: "Credit-card balances accruing interest",
+    plain: "RBA card balances accruing interest. Useful cost-of-living context, but not a housing-specific repayment metric.",
+    fromEnvelope: data.rba_credit_card_debt_accruing_interest,
+    unit: " AUD millions"
+  })), React.createElement("div", {
+    style: {
+      height: 16
+    }
+  }), React.createElement("div", {
+    className: "metric-grid metric-grid--4"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Inflation context",
+    label: "CPI inflation, annual",
+    plain: "ABS all-groups CPI annual percentage change. This gives cost-of-living context, not housing causation.",
+    fromEnvelope: data.abs_cpi_inflation,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Labour context",
+    label: "Unemployment rate",
+    plain: "ABS headline seasonally adjusted unemployment rate. Labour-market context only.",
+    fromEnvelope: data.abs_unemployment_rate,
+    unit: "%"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Housing stock",
+    label: "Residential dwellings",
+    plain: "ABS national residential dwelling stock, in thousands. This is stock context, not approvals or affordability.",
+    fromEnvelope: data.abs_residential_dwelling_stock,
+    unit: " thousand dwellings"
+  }), React.createElement(MetricCard, {
+    eyebrow: "Housing supply target",
+    label: "National Housing Accord progress",
+    plain: `NHSAC progress against the 1.2 million homes target${nhsacFields.completion_period ? `, ${nhsacFields.completion_period}` : ''}.`,
+    fromEnvelope: data.nhsac_housing_target_progress,
+    unit: "% of target built to date",
+    partial: true
+  })), React.createElement("div", {
     className: "pending-list",
-    "aria-label": "Pending ACCC retail breakdown coverage"
+    "aria-label": "Loaded housing source boundaries"
   }, React.createElement("article", {
     className: "source-card"
-  }, React.createElement("h4", null, "Retail breakdown pending"), React.createElement("p", {
+  }, React.createElement("h4", null, "What is real here"), React.createElement("p", {
     className: "body-sm"
-  }, verifiedPumpComponents, " of ", PUMP_COMPONENTS.length, " ACCC petrol-breakdown components are verified. The component cards stay hidden until the ACCC December quarter 2025 petrol-price components are all populated from the same report."), data.accc_petroleum_monitoring?.source_url && React.createElement("a", {
-    href: data.accc_petroleum_monitoring.source_url
-  }, data.accc_petroleum_monitoring.source_name, " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })))), pumpSeriesVerified && React.createElement(React.Fragment, null, React.createElement("div", {
+  }, "The latest RBA target, monthly cash-rate history, RBA mortgage-rate context, RBA household debt, CPI, unemployment, residential dwelling stock and NHSAC housing-target progress are loaded from existing source envelopes. No repayment, rental stress, investor ownership, first-home buyer or negative-gearing value is created from these inputs.")), React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("h4", null, "Housing stock context"), React.createElement("p", {
+    className: "body-sm"
+  }, dwellLatest ? `The loaded ABS dwelling-stock envelope latest value is ${dwellLatest.v.toLocaleString('en-AU')} thousand dwellings for ${dwellLatest.t}.` : 'The dwelling-stock card will populate only when the ABS envelope is verified.', ' ', "This remains separate from regional approvals, completions, rents and prices.")))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "charts-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "History"), React.createElement("h2", {
+    id: "charts-h"
+  }, "Cash-rate history and pressure context"), React.createElement("p", {
+    className: "section__lede"
+  }, "The headline cash-rate card uses the latest official decision row. The chart keeps the existing monthly mean/history series."))), React.createElement("div", {
+    className: "charts-grid charts-grid--full"
+  }, React.createElement(ChartCard, {
+    eyebrow: "Interest-rate history",
+    title: "RBA cash-rate target, monthly history",
+    unit: "%",
+    fromEnvelope: data.rba_cash_rate,
+    ranges: ['1Y', '3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#1F3A8A",
+    takeaway: "Monthly-average cash-rate target history from RBA Statistical Table F1.1. The latest decision headline is shown above.",
+    yAxisLabel: "Cash-rate target (%)"
+  })), React.createElement("div", {
     style: {
       height: 24
     }
   }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
+    className: "charts-grid"
   }, React.createElement(ChartCard, {
-    eyebrow: "Trailing 12 months",
-    title: "Monthly retail petrol price breakdown",
-    unit: "A$/L",
-    fromEnvelope: data.accc_petrol_breakdown_series,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "1Y",
+    eyebrow: "Household debt",
+    title: "Household debt to disposable income",
+    unit: "%",
+    fromEnvelope: data.rba_household_debt_to_income,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#0F766E",
+    takeaway: "Quarter-end household debt-to-income from RBA Table E2.",
+    yAxisLabel: "Household debt to income (%)"
+  }), React.createElement(ChartCard, {
+    eyebrow: "Mortgage rate context",
+    title: "Standard variable owner-occupier rate",
+    unit: "%",
+    fromEnvelope: data.rba_standard_variable_mortgage_rate,
+    ranges: ['1Y', '3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#B45309",
+    takeaway: "RBA indicator lending rate for standard variable owner-occupier housing loans. No repayment assumptions are added.",
+    yAxisLabel: "Indicator rate (%)"
+  })), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement("div", {
+    className: "charts-grid"
+  }, React.createElement(ChartCard, {
+    eyebrow: "Inflation",
+    title: "CPI inflation, annual",
+    unit: "%",
+    fromEnvelope: data.abs_cpi_inflation,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
+    accent: "#6B7280",
+    takeaway: "ABS all-groups CPI annual percentage change.",
+    yAxisLabel: "Annual change (%)"
+  }), React.createElement(ChartCard, {
+    eyebrow: "Housing stock",
+    title: "Residential dwelling stock",
+    unit: "thousand dwellings",
+    fromEnvelope: data.abs_residential_dwelling_stock,
+    ranges: ['3Y', '5Y'],
+    defaultRange: "5Y",
     accent: "#1F3A8A",
-    takeaway: "Monthly ACCC retail petrol price breakdown from verified component series.",
-    yAxisLabel: "Australian dollars per litre (A$/L)"
+    takeaway: "ABS national residential dwelling stock, quarterly.",
+    yAxisLabel: "Dwellings (thousands)"
+  }))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "gaps-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Housing pressure gaps"), React.createElement("h2", {
+    id: "gaps-h"
+  }, "What remains source-gated"), React.createElement("p", {
+    className: "section__lede"
+  }, "These are not hidden calculations. They stay visible as public-data and methodology gaps."))), React.createElement("div", {
+    className: "source-grid"
+  }, HOUSING_GAPS.map(row => React.createElement(GatedCard, {
+    key: row.label,
+    row: row
   })))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "boundary-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Policy and model boundary"), React.createElement("h2", {
+    id: "boundary-h",
+    style: {
+      marginTop: 8
+    }
+  }, "Official indicators are not models")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "RBA cash rate is a source-backed official policy signal. Mortgage repayment pressure requires loan-size, rate, term and household-income assumptions. Rental stress requires rent, income and geography definitions. Investor ownership and negative gearing require tax/housing datasets and a documented method."), React.createElement("p", null, "This dashboard separates official indicators from models. A model can be useful, but it must be labelled as a model, show its assumptions, and avoid pretending to be observed data."), React.createElement("p", {
+    className: "body-sm",
+    style: {
+      color: 'var(--ink-3)',
+      marginTop: 12
+    }
+  }, "The page will not combine these rows into a stress score until the method and sources are explicit.")))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "publish-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "What government still needs to publish"), React.createElement("h2", {
+    id: "publish-h"
+  }, "Safe aggregate indicators, not private household detail"), React.createElement("p", {
+    className: "section__lede"
+  }, "Some finance and tax data is privacy-sensitive. The useful public request is for safe aggregate indicators with dates, definitions, units and reuse terms."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Missing feed"), React.createElement("th", null, "What would make it publishable"), React.createElement("th", null, "Status"))), React.createElement("tbody", null, PUBLISH_ROWS.map(([gap, action]) => React.createElement("tr", {
+    key: gap
+  }, React.createElement("td", null, React.createElement("b", null, gap)), React.createElement("td", null, action), React.createElement("td", null, React.createElement(TrustBadge, {
+    kind: "source-gated"
+  })))))))), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every source cited on this page"), React.createElement("p", {
+  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "ATO Corporate Tax Transparency Report, ACCC Petroleum Monitoring Reports, and each company's latest annual report or ASIC-lodged financial statements."))), React.createElement("div", {
+  }, "All loaded values come from existing source envelopes. Cards marked source-gated do not have a value until a named public source and method are loaded."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
     className: "source-card"
   }, React.createElement("h4", null, env.source_name), React.createElement("p", {
     className: "body-sm"
-  }, sourceSummary(env)), React.createElement("p", {
+  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting values from the named public source.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
@@ -1473,9 +1381,9 @@ function App() {
     size: 12
   })), React.createElement("p", {
     className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Total income / taxable income / income tax paid"), React.createElement("dd", null, "Copied from the ATO Corporate Tax Transparency Report for the relevant fiscal year. The ATO publishes these for every corporate entity with total income above A$100m."), React.createElement("dt", null, "Net profit"), React.createElement("dd", null, "From the company's own annual report (ASX-listed) or ASIC-lodged financial statements (private Australian subsidiaries). Follows accounting standards, not tax law."), React.createElement("dt", null, "Effective tax rate"), React.createElement("dd", null, "Income tax paid divided by taxable income, as a percentage. Australia's statutory rate is 30%. An effective rate below that is not by itself evidence of avoidance \u2014 it often reflects R&D offsets, past losses, or PRRT. Zero is possible when taxable income is zero."), React.createElement("dt", null, "Retail petrol breakdown"), React.createElement("dd", null, "From the ACCC Petroleum Monitoring Report's \"Where does the money go?\" breakdown, converted to Australian dollars per litre.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How to read the housing page"), React.createElement("dl", null, React.createElement("dt", null, "Latest RBA cash-rate target"), React.createElement("dd", null, "Headline value from `rba_cash_rate_latest`, the official RBA cash-rate decisions table. Previous target and change direction are source fields from that envelope."), React.createElement("dt", null, "Cash-rate history"), React.createElement("dd", null, "Historical chart from `rba_cash_rate`, the existing RBA F1.1 monthly-average cash-rate target series."), React.createElement("dt", null, "Household debt pressure"), React.createElement("dd", null, "RBA household debt-to-disposable-income is an observed ratio. It is not a repayment-burden or stress model."), React.createElement("dt", null, "Mortgage rate context"), React.createElement("dd", null, "RBA standard variable owner-occupier indicator rate gives rate pressure context only. No loan-size, term, offset or repayment calculation is added."), React.createElement("dt", null, "Housing stock and supply context"), React.createElement("dd", null, "ABS residential dwelling stock and NHSAC Accord progress are source-backed supply context. They are not rental stress, affordability or regional supply pipeline models."), React.createElement("dt", null, "No-estimate rule"), React.createElement("dd", null, "Mortgage repayments, rental stress, investor ownership, first-home buyer access and negative-gearing effects remain source-gated until source fields and methods are explicit.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   })));

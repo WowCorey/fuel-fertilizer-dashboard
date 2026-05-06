@@ -13,6 +13,7 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
     { id: 'oil',           label: 'Oil & production',      href: '../oil-and-production/index.html' },
     { id: 'who_pays_what', label: 'Who pays what',         href: '../who-pays-what/index.html' },
     { id: 'au_economics',  label: 'AU economics',          href: '../au-economics-dashboard/index.html' },
+    { id: 'housing_pressure', label: 'Housing pressure',   href: '../housing-economic-pressure-dashboard/index.html' },
     { id: 'manufacturing', label: 'Manufacturing',         href: '../manufacturing-dashboard/index.html' },
     { id: 'power_grid',    label: 'Power grid',            href: '../power-grid-dashboard/index.html' },
     { id: 'infrastructure',label: 'Infrastructure',        href: '../infrastructure-dashboard/index.html' },
