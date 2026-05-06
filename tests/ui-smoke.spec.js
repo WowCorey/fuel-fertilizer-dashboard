@@ -64,6 +64,8 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'MPs and policy staff' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Public-data gaps are now tracked as a product' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
 });
 
 test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {
@@ -72,6 +74,25 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByRole('heading', { name: 'Unavailable data is evidence of a public-data gap' })).toBeVisible();
   await expect(page.getByText('Source-backed and current enough for its cadence.')).toBeVisible();
   await expect(page.getByText('Waiting for a verified source, field, period, unit and reuse rights.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
+  await expect(page.getByText('Priority bands are editorial/product triage only, not official risk ratings or numeric scores.')).toBeVisible();
+  await expect(page.getByText('Immediate').first()).toBeVisible();
+  await expect(page.getByText('High').first()).toBeVisible();
+  await expect(page.getByText('Medium').first()).toBeVisible();
+  await expect(page.getByText('Roadmap').first()).toBeVisible();
+  await expect(page.getByText('Product-level fuel days cover and MSO reserves')).toBeVisible();
+  await expect(page.getByText('Forward fuel/fertiliser contract coverage')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Next action queue' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source verification' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Data access request' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Methodology needed' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Grouped by who needs the missing data' })).toBeVisible();
+  await expect(page.getByText('Public / travellers')).toBeVisible();
+  await expect(page.getByText('Defence / national security')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What would make this operational?' })).toBeVisible();
+  await expect(page.getByText('machine-readable official/public feeds')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'No-estimate rule' })).toBeVisible();
+  await expect(page.getByText('This dashboard does not fill missing government or industry feeds with guesses.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Missing data scoreboard' })).toBeVisible();
   await expect(page.getByText('Fuel security').first()).toBeVisible();
   await expect(page.getByText('Queensland fuel sovereignty').first()).toBeVisible();

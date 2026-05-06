@@ -1051,12 +1051,191 @@ const ROADMAP_SECTIONS = [{
   fields: ['sector automation exposure', 'displacement risk', 'productivity upside/downside', 'retraining capacity', 'regional workforce exposure', 'labour market indicators'],
   note: 'No AI causation or fake exposure score is published.'
 }];
+const PRIORITY_MATRIX_ROWS = [{
+  band: 'Immediate',
+  statusKind: 'stale',
+  status: 'Stale / partial',
+  gap: 'Product-level fuel days cover and MSO reserves',
+  affected: 'tourism, freight, emergency planning, government',
+  holder: 'Commonwealth / PM&C / DCCEEW',
+  decision: 'national fuel risk visibility',
+  blocker: 'latest machine-readable/public feed not loaded',
+  action: 'verify latest official source and update or automate envelope',
+  page: 'National fuel security'
+}, {
+  band: 'Immediate',
+  statusKind: 'unavailable',
+  status: 'Unavailable / partial',
+  gap: 'Live or near-live station availability and regional stock-outs',
+  affected: 'travellers, tourism operators, regional communities',
+  holder: 'industry / states / fuel retailers / government',
+  decision: 'travel and refuelling planning',
+  blocker: 'no national public live station outage API',
+  action: 'identify public state feeds or industry/government publication pathway',
+  page: 'National fuel security'
+}, {
+  band: 'Immediate',
+  statusKind: 'unavailable',
+  status: 'Unavailable',
+  gap: 'Forward fuel/fertiliser contract coverage',
+  affected: 'farms, freight, tourism, government planners',
+  holder: 'government / industry',
+  decision: 'supply certainty beyond the month',
+  blocker: 'contracts are not public',
+  action: 'keep as government/industry feed request',
+  page: 'National fuel security / Food farms water'
+}, {
+  band: 'Immediate',
+  statusKind: 'source-gated',
+  status: 'Partial / source-gated',
+  gap: 'Queensland AFIP EOI / six-port delivery status',
+  affected: 'Queensland communities, industry, tourism, government',
+  holder: 'Queensland Government / Coordinator-General / port authorities',
+  decision: 'fuel sovereignty delivery tracking',
+  blocker: 'public context exists, but proponents/capacity/land/status are not published',
+  action: 're-check official AFIP/Coordinator-General pages for update tables',
+  page: 'National fuel security'
+}, {
+  band: 'High',
+  statusKind: 'unavailable',
+  status: 'Unavailable / source-gated',
+  gap: 'Fertiliser stock cover and farm diesel risk',
+  affected: 'farmers, freight, regional communities',
+  holder: 'government / industry / farm-input suppliers',
+  decision: 'planting and input-purchase planning',
+  blocker: 'import value is loaded, but cover, contracts and farm diesel availability are not public',
+  action: 'verify whether official or industry public stock-cover and farm-diesel feeds exist',
+  page: 'Food, farms & water security'
+}, {
+  band: 'High',
+  statusKind: 'unavailable',
+  status: 'Unavailable',
+  gap: 'Water allocation by food-producing region',
+  affected: 'farmers, processors, regional communities',
+  holder: 'states, water authorities, MDBA/BOM candidate sources',
+  decision: 'crop, irrigation and regional production planning',
+  blocker: 'storage/allocation sources have not been mapped to food-producing regions with a safe method',
+  action: 'scope one official geography and water concept before publishing values',
+  page: 'Food, farms & water security'
+}, {
+  band: 'High',
+  statusKind: 'source-gated',
+  status: 'Source-gated',
+  gap: 'Housing pressure indicators beyond RBA cash rate',
+  affected: 'households, renters, first-home buyers, policy staff',
+  holder: 'ABS / RBA / APRA / ATO / state agencies',
+  decision: 'cost-of-living and housing-pressure interpretation',
+  blocker: 'housing stress concepts differ across debt, rents, tax, approvals and ownership datasets',
+  action: 'separate each official indicator before creating any housing pressure view',
+  page: 'AU economics / Roadmap'
+}, {
+  band: 'High',
+  statusKind: 'source-gated',
+  status: 'Source-gated',
+  gap: 'Defence/naval procurement verification',
+  affected: 'defence planners, industry, national-security readers',
+  holder: 'Defence / official procurement sources',
+  decision: 'procurement pathway and logistics context',
+  blocker: 'no official procurement row is loaded for supplier, contract, delivery or logistics implication',
+  action: 'load only official Defence/procurement material before asserting pathway facts',
+  page: 'Defence posture / Roadmap'
+}, {
+  band: 'High',
+  statusKind: 'partial',
+  status: 'Partial / source-gated',
+  gap: 'Power/infrastructure resilience bottlenecks',
+  affected: 'households, industry, operators, government',
+  holder: 'AEMO, regulators, infrastructure agencies, utilities',
+  decision: 'outage resilience, delivery risk and logistics planning',
+  blocker: 'existing pages show selected public signals, not complete bottleneck or delivery-status feeds',
+  action: 'scope official outage, constraint and project-delivery datasets one at a time',
+  page: 'Power grid / Infrastructure'
+}, {
+  band: 'Medium',
+  statusKind: 'roadmap',
+  status: 'Roadmap',
+  gap: 'AI workforce exposure',
+  affected: 'workers, employers, training providers, policy staff',
+  holder: 'ABS / Jobs and Skills Australia / Productivity Commission / Treasury',
+  decision: 'skills, retraining and regional workforce planning',
+  blocker: 'no source-safe Australian automation exposure score is loaded',
+  action: 'identify official Australian exposure or skills datasets before publishing any exposure view',
+  page: 'Employment & Automation'
+}, {
+  band: 'Medium',
+  statusKind: 'roadmap',
+  status: 'Roadmap',
+  gap: 'Olympics readiness',
+  affected: 'tourism operators, residents, infrastructure planners, emergency services',
+  holder: 'delivery authority, Queensland agencies, councils, utilities and operators',
+  decision: 'transport, accommodation, power, tourism and emergency logistics readiness',
+  blocker: 'readiness categories are not yet wired to official delivery/capacity sources',
+  action: 'scope official delivery authority and capacity feeds before building indicators',
+  page: 'Roadmap'
+}, {
+  band: 'Medium',
+  statusKind: 'source-gated',
+  status: 'Source-gated',
+  gap: 'Manufacturing bottlenecks',
+  affected: 'manufacturers, suppliers, workforce planners, government',
+  holder: 'ABS / Department of Industry / industry and logistics sources',
+  decision: 'industrial capacity and supply-chain pressure interpretation',
+  blocker: 'current manufacturing page loads core ABS rows, not bottleneck, logistics or input-constraint feeds',
+  action: 'verify official bottleneck or constraint datasets before adding rows',
+  page: 'Manufacturing'
+}, {
+  band: 'Medium',
+  statusKind: 'source-gated',
+  status: 'Source-gated',
+  gap: 'Strategic resources project readiness',
+  affected: 'industry, defence, manufacturers, trade planners',
+  holder: 'DISR / Geoscience Australia / state resources departments',
+  decision: 'critical-mineral and strategic-resource readiness context',
+  blocker: 'resource production/export/reserve rows are separate from project readiness and delivery status',
+  action: 'add project-readiness rows only from official project tables with clear period and scope',
+  page: 'Strategic resources'
+}];
+const ACTION_QUEUE = [{
+  title: 'Source verification',
+  status: 'source-gated',
+  copy: 'Find the official source, exact field, period, unit and reuse boundary before a gap can become a dashboard value.'
+}, {
+  title: 'Data access request',
+  status: 'unavailable',
+  copy: 'Where public data is unavailable, this becomes a government/industry data request rather than a dashboard bug.'
+}, {
+  title: 'Automation candidate',
+  status: 'derived',
+  copy: 'Where a stable CSV/JSON/XLSX source exists, the next step is programmatic ingestion and envelope validation.'
+}, {
+  title: 'Methodology needed',
+  status: 'manual',
+  copy: 'Where multiple concepts must be combined, a transparent method is required before publishing an index or status model.'
+}, {
+  title: 'Public/private boundary needed',
+  status: 'partial',
+  copy: 'Some fuel, defence and supply-chain data may be sensitive. The dashboard should ask for safe aggregate indicators, not hidden operational detail.'
+}, {
+  title: 'Roadmap build',
+  status: 'roadmap',
+  copy: 'Future pages such as housing, AI workforce and Olympics readiness need source scoping before values are loaded.'
+}];
+const DECISION_GROUPS = [['Public / travellers', 'station availability, regional stock-outs, fuel price pressure, travel-route disruption visibility'], ['Farmers', 'fertiliser cover, farm diesel risk, water allocation, rainfall/drought pressure, freight disruption'], ['Small business', 'fuel and energy pressure, freight delays, tourism route pressure, workforce and demand signals'], ['Government / MPs', 'public-data gaps, source cadence, policy delivery status and missing operational feeds'], ['Defence / national security', 'fuel resilience, naval procurement source gates, strategic-resource readiness and logistics boundaries'], ['Industry / infrastructure', 'terminal, port, project delivery, manufacturing bottleneck and power resilience feeds'], ['Future pressure', 'housing, AI workforce, Olympics readiness and other source-scoping roadmap areas']];
+const OPERATIONAL_CHECKLIST = ['machine-readable official/public feeds', 'consistent update cadence', 'clear product/geography definitions', 'source rights and reuse terms', 'public/private sensitivity boundary', 'validation rules', 'methodology for derived status models', 'government/industry contact pathway', 'maintenance and refresh ownership'];
 function StatusBadge({
   status
 }) {
   return React.createElement(TrustBadge, {
     kind: status
   }, status === 'source-gated' ? 'Source-gated' : status.charAt(0).toUpperCase() + status.slice(1));
+}
+function PriorityBand({
+  band
+}) {
+  const key = String(band).toLowerCase();
+  return React.createElement("span", {
+    className: `priority-band priority-band--${key}`
+  }, band);
 }
 function App() {
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1108,6 +1287,87 @@ function App() {
   }, React.createElement(StatusBadge, {
     status: kind
   }), React.createElement("h3", null, label), React.createElement("p", null, copy))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "priority-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Decision-useful triage"), React.createElement("h2", {
+    id: "priority-h"
+  }, "National readiness priority matrix"), React.createElement("p", {
+    className: "section__lede"
+  }, "This matrix groups high-value missing, stale and partial feeds by decision need. Priority bands are editorial/product triage only, not official risk ratings or numeric scores."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain priority-matrix"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Priority band"), React.createElement("th", null, "Data gap"), React.createElement("th", null, "Status"), React.createElement("th", null, "Affected users"), React.createElement("th", null, "Likely holder / publisher"), React.createElement("th", null, "Decision supported"), React.createElement("th", null, "Current blocker"), React.createElement("th", null, "Next action"), React.createElement("th", null, "Dashboard page"))), React.createElement("tbody", null, PRIORITY_MATRIX_ROWS.map(row => React.createElement("tr", {
+    key: `${row.band}-${row.gap}`
+  }, React.createElement("td", null, React.createElement(PriorityBand, {
+    band: row.band
+  })), React.createElement("td", null, row.gap), React.createElement("td", null, React.createElement(TrustBadge, {
+    kind: row.statusKind
+  }, row.status)), React.createElement("td", null, row.affected), React.createElement("td", null, row.holder), React.createElement("td", null, row.decision), React.createElement("td", null, row.blocker), React.createElement("td", null, row.action), React.createElement("td", null, row.page))))))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "queue-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Action queue"), React.createElement("h2", {
+    id: "queue-h"
+  }, "Next action queue"), React.createElement("p", {
+    className: "section__lede"
+  }, "The next action depends on the blocker. Some gaps need a source check, some need a data-access request, and some need methodology before they can become public dashboard values."))), React.createElement("div", {
+    className: "source-grid"
+  }, ACTION_QUEUE.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement(StatusBadge, {
+    status: item.status
+  }), React.createElement("h3", null, item.title), React.createElement("p", null, item.copy))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "decision-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Decision view"), React.createElement("h2", {
+    id: "decision-h"
+  }, "Grouped by who needs the missing data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Static groupings are used instead of complex filters so the page stays robust as a static public site."))), React.createElement("div", {
+    className: "source-grid"
+  }, DECISION_GROUPS.map(([title, copy]) => React.createElement("article", {
+    className: "source-card",
+    key: title
+  }, React.createElement("h3", null, title), React.createElement("p", null, copy))))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "operational-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Pilot readiness"), React.createElement("h2", {
+    id: "operational-h"
+  }, "What would make this operational?")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "An operational public dashboard needs more than a page layout. It needs stable source access, clear public/private boundaries and ownership for the refresh cycle."), React.createElement("ul", {
+    className: "gap-list"
+  }, OPERATIONAL_CHECKLIST.map(item => React.createElement("li", {
+    key: item
+  }, item)))))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "no-estimate-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "No-estimate rule"), React.createElement("h2", {
+    id: "no-estimate-h"
+  }, "No-estimate rule")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "This dashboard does not fill missing government or industry feeds with guesses. If a value is unavailable, stale or source-gated, it stays visible as a gap until a named source provides the exact field, period, unit and reuse boundary.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "scoreboard-h"
   }, React.createElement("div", {

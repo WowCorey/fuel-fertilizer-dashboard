@@ -10,7 +10,15 @@ JSON envelope.
 The public missing-data scoreboard lives at
 `ui_kits/missing-data-scoreboard/index.html`. It does not add new values; it
 turns the gaps below into a visible public-policy view of what is verified,
-partial, stale, unavailable, source-gated or roadmap-only.
+partial, stale, unavailable, source-gated or roadmap-only. The scoreboard also
+uses this register to build a national readiness priority matrix and action
+queue.
+
+Priority bands in the public scoreboard are editorial/product triage only. They
+are not official risk ratings, not numeric scores, and not a substitute for
+verified source data. No value moves out of unavailable, stale or source-gated
+status until a named public source provides the exact field, reporting period,
+unit and reuse boundary.
 
 ## Status legend
 
