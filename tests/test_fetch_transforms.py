@@ -51,6 +51,71 @@ class FetchTransformTests(unittest.TestCase):
              mock.patch.object(sys, "argv", ["fetch_data.py", "--check"]):
             self.assertEqual(fetch_data.main(), 1)
 
+    def test_non_required_fetch_failure_keeps_existing_generated_envelope(self):
+        source = {
+            "id": "slow_optional_source",
+            "human_name": "Slow optional source",
+            "fetch": "programmatic",
+            "fetch_url": "https://example.test/slow.xlsx",
+            "fetch_required": False,
+        }
+
+        def fail_fetch(_source):
+            raise fetch_data.requests.exceptions.ReadTimeout("timed out")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            generated = pathlib.Path(tmp)
+            (generated / "slow_optional_source.json").write_text("{}", encoding="utf-8")
+            old_generated = fetch_data.GENERATED_DIR
+            fetch_data.GENERATED_DIR = generated
+            try:
+                with mock.patch.object(fetch_data, "load_sources", return_value=[source]), \
+                     mock.patch.dict(fetch_data.FETCHERS, {"slow_optional_source": fail_fetch}), \
+                     mock.patch.object(sys, "argv", ["fetch_data.py"]):
+                    self.assertEqual(fetch_data.main(), 0)
+            finally:
+                fetch_data.GENERATED_DIR = old_generated
+
+    def test_non_required_fetch_failure_without_existing_envelope_blocks(self):
+        source = {
+            "id": "slow_optional_source",
+            "human_name": "Slow optional source",
+            "fetch": "programmatic",
+            "fetch_url": "https://example.test/slow.xlsx",
+            "fetch_required": False,
+        }
+
+        def fail_fetch(_source):
+            raise fetch_data.requests.exceptions.ReadTimeout("timed out")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            old_generated = fetch_data.GENERATED_DIR
+            fetch_data.GENERATED_DIR = pathlib.Path(tmp)
+            try:
+                with mock.patch.object(fetch_data, "load_sources", return_value=[source]), \
+                     mock.patch.dict(fetch_data.FETCHERS, {"slow_optional_source": fail_fetch}), \
+                     mock.patch.object(sys, "argv", ["fetch_data.py"]):
+                    self.assertEqual(fetch_data.main(), 1)
+            finally:
+                fetch_data.GENERATED_DIR = old_generated
+
+    def test_fetch_failure_detail_includes_source_context(self):
+        source = {
+            "id": "slow_optional_source",
+            "human_name": "Slow optional source",
+            "fetch_url": "https://example.test/slow.xlsx",
+        }
+        detail = fetch_data.fetch_failure_detail(
+            source,
+            fetch_data.requests.exceptions.ReadTimeout("timed out"),
+            required=False,
+        )
+        self.assertIn("slow_optional_source", detail)
+        self.assertIn("Slow optional source", detail)
+        self.assertIn("https://example.test/slow.xlsx", detail)
+        self.assertIn("fetch_required=False", detail)
+        self.assertIn("non-blocking", detail)
+
     def test_abs_sdmx_parses_single_series(self):
         doc = {
             "dataSets": [
