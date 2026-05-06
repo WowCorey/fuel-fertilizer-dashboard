@@ -35,12 +35,16 @@ function cashRateDelta(env) {
 
 function App() {
   const [data, setData] = React.useState(null);
-  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+  const [refreshStatus, setRefreshStatus] = React.useState(null);
+  React.useEffect(() => {
+    window.FR.load(SERIES).then(setData);
+    window.FR.loadRefreshStatus().then(setRefreshStatus);
+  }, []);
 
   if (!data) {
     return (
       <div className="page">
-        <Header active="au_economics"/>
+        <Header active="au_economics" refreshStatus={refreshStatus}/>
         <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
@@ -51,7 +55,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="au_economics" updated={latestRetrieved ? updatedDisplay : ''}/>
+      <Header active="au_economics" refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         {/* INTRO */}
@@ -75,7 +79,7 @@ function App() {
           </aside>
         </section>
 
-        <DataCoverage data={data}/>
+        <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         {/* WHY THIS MATTERS */}
         <section className="section section--why" aria-labelledby="why">
@@ -428,7 +432,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
+        <Footer refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );

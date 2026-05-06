@@ -1,6 +1,6 @@
 // Header.jsx - shared masthead across dashboard pages.
 // Cross-links to sibling dashboards so every page has the same nav.
-function Header({ active = 'fuel', updated = '' }) {
+function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
   const nav = [
     { id: 'national_status', label: 'National status',      href: '../national-status-dashboard/index.html' },
     { id: 'fuel_security',   label: 'National fuel security', href: '../fuel-security-dashboard/index.html' },
@@ -19,6 +19,11 @@ function Header({ active = 'fuel', updated = '' }) {
     { id: 'employment_automation', label: 'Employment & Automation', href: '../employment-automation-dashboard/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },
   ];
+  const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';
+  const hasSiteRefresh = refreshStatus?.status === 'success' && refreshStatus?.refreshed_at;
+  const stampLabel = refreshStatus
+    ? (hasSiteRefresh ? `Refreshed ${siteRefresh}` : siteRefresh)
+    : (updated ? `Page data retrieved ${updated}` : '');
   return (
     <header className="site-header">
       <div className="site-header__inner">
@@ -35,7 +40,7 @@ function Header({ active = 'fuel', updated = '' }) {
           ))}
         </nav>
         <div className="site-header__right">
-          {updated && <span className="stamp" aria-label="Last updated">Updated {updated}</span>}
+          {stampLabel && <span className="stamp" aria-label="Refresh status">{stampLabel}</span>}
         </div>
       </div>
     </header>

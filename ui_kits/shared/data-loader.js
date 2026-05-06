@@ -19,7 +19,9 @@
   const GEN_BASE = '../../data/generated/';
   const MAN_BASE = '../../data/manual/';
   const MANIFEST_URL = '../../data/source_manifest.json';
+  const REFRESH_STATUS_URL = '../../data/last_successful_refresh.json';
   let manifestPromise = null;
+  let refreshStatusPromise = null;
 
   async function tryFetch(url) {
     try {
@@ -42,6 +44,24 @@
       ));
     }
     return manifestPromise;
+  }
+
+  async function loadRefreshStatus() {
+    if (!refreshStatusPromise) {
+      refreshStatusPromise = tryFetch(REFRESH_STATUS_URL).then(doc => (
+        doc && doc.schema === 'fuel_resilience_refresh_status.v1'
+          ? doc
+          : {
+              schema: 'fuel_resilience_refresh_status.v1',
+              status: 'unavailable',
+              refreshed_at: null,
+              workflow: null,
+              run_id: null,
+              run_attempt: null,
+            }
+      ));
+    }
+    return refreshStatusPromise;
   }
 
   function attachMeta(env, meta) {
@@ -165,8 +185,43 @@
     return dates.length ? dates[dates.length - 1] : null;
   }
 
+  function latestPageRetrieved(data) {
+    return latestVerifiedRetrieved(data);
+  }
+
+  function parsePeriodDate(value) {
+    if (!value) return null;
+    const text = String(value);
+    let normalized = text;
+    const quarter = text.match(/^(\d{4})-Q([1-4])$/);
+    if (quarter) {
+      const month = String(Number(quarter[2]) * 3).padStart(2, '0');
+      normalized = `${quarter[1]}-${month}-01`;
+    } else if (/^\d{4}-\d{2}$/.test(text)) {
+      normalized = `${text}-01`;
+    }
+    const d = new Date(normalized.includes('T') ? normalized : `${normalized}T00:00:00Z`);
+    return isNaN(d) ? null : d;
+  }
+
+  function latestPageDataPoint(data) {
+    const points = Object.values(data || {})
+      .filter(env => env && env.status === 'ok' && env.last_data_point)
+      .map(env => ({ raw: env.last_data_point, date: parsePeriodDate(env.last_data_point) }))
+      .filter(item => item.date)
+      .sort((a, b) => a.date - b.date);
+    return points.length ? points[points.length - 1].raw : null;
+  }
+
   function fmtVerifiedUpdated(iso) {
     return iso ? fmtRetrieved(iso) : 'No verified data loaded yet';
+  }
+
+  function fmtRefreshStatus(status) {
+    if (!status) return 'Refresh status unavailable';
+    if (status.status === 'success' && status.refreshed_at) return fmtRetrieved(status.refreshed_at);
+    if (status.status === 'unavailable') return 'Refresh status unavailable';
+    return 'No successful refresh recorded';
   }
 
   // Utility: "YYYY-MM" or "YYYY-MM-DD" -> "Mon YY"
@@ -196,10 +251,14 @@
     load,
     loadOne,
     loadManifest,
+    loadRefreshStatus,
     fmtRetrieved,
+    fmtRefreshStatus,
     fmtVerifiedUpdated,
     fmtMonth,
     latestVerifiedRetrieved,
+    latestPageRetrieved,
+    latestPageDataPoint,
     sourceLine,
     verifiedEnvelopes,
     freshness,

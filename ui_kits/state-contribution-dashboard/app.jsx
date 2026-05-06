@@ -486,12 +486,16 @@ function ComparisonTable({ profiles, data, aesRows }) {
 
 function App() {
   const [data, setData] = React.useState(null);
-  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+  const [refreshStatus, setRefreshStatus] = React.useState(null);
+  React.useEffect(() => {
+    window.FR.load(SERIES).then(setData);
+    window.FR.loadRefreshStatus().then(setRefreshStatus);
+  }, []);
 
   if (!data) {
     return (
       <div className="page">
-        <Header active="state_contribution"/>
+        <Header active="state_contribution" refreshStatus={refreshStatus}/>
         <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
@@ -527,7 +531,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="state_contribution" updated={latestRetrieved ? updatedDisplay : ''}/>
+      <Header active="state_contribution" refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         <section className="intro" id="state-contribution">
@@ -549,7 +553,7 @@ function App() {
           </aside>
         </section>
 
-        <DataCoverage data={data}/>
+        <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         <section className="section section--why">
           <div className="why-grid">
@@ -846,7 +850,7 @@ function App() {
           </div>
         </section>
       </main>
-      <Footer/>
+      <Footer refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
     </div>
   );
 }

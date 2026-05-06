@@ -220,12 +220,16 @@ function FarmerDecisionPressure({ data }) {
 
 function App() {
   const [data, setData] = React.useState(null);
-  React.useEffect(() => { window.FR.load(SERIES).then(setData); }, []);
+  const [refreshStatus, setRefreshStatus] = React.useState(null);
+  React.useEffect(() => {
+    window.FR.load(SERIES).then(setData);
+    window.FR.loadRefreshStatus().then(setRefreshStatus);
+  }, []);
 
   if (!data) {
     return (
       <div className="page">
-        <Header active="fertilizer"/>
+        <Header active="fertilizer" refreshStatus={refreshStatus}/>
         <main id="main"><div className="loading-wrap">Loading source envelopes...</div></main>
       </div>
     );
@@ -233,7 +237,8 @@ function App() {
 
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const refreshHeading = latestRetrieved ? `Verified data retrieved ${updatedDisplay}` : 'Programmatic refresh not recorded yet';
+  const siteRefresh = window.FR.fmtRefreshStatus(refreshStatus);
+  const refreshHeading = refreshStatus?.status === 'success' ? `Site refreshed ${siteRefresh}` : siteRefresh;
 
   const overviewRows = [
     {
@@ -420,7 +425,7 @@ function App() {
 
   return (
     <div className="page">
-      <Header active="fertilizer" updated={latestRetrieved ? updatedDisplay : ''}/>
+      <Header active="fertilizer" refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
 
       <main id="main">
         <section className="intro" id="fertilizer">
@@ -449,17 +454,20 @@ function App() {
               <span className="eyebrow">Refresh and freshness</span>
               <h2 id="freshness-title">{refreshHeading}</h2>
               <p>
+                Latest verified page data retrieved: {latestRetrieved ? updatedDisplay : 'not recorded for this page yet'}.
                 This page may include programmatic, manual, stale, partial and unavailable public-source envelopes.
-                Check the source cards below before treating any value as current. No workflow timestamp is invented here.
+                Check the source cards below before treating any value as current.
               </p>
             </div>
             <div className="trust-badges">
-              <TrustBadge kind={latestRetrieved ? 'observed' : 'unavailable'}>{latestRetrieved ? 'Verified retrieval found' : 'No recorded refresh'}</TrustBadge>
+              <TrustBadge kind={refreshStatus?.status === 'success' ? 'observed' : 'unavailable'}>
+                {refreshStatus?.status === 'success' ? 'Site refresh recorded' : 'No site refresh recorded'}
+              </TrustBadge>
             </div>
           </div>
         </section>
 
-        <DataCoverage data={data}/>
+        <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         <section className="section section--why" aria-labelledby="read-page">
           <div className="why-grid">
@@ -744,7 +752,7 @@ function App() {
           </div>
         </section>
 
-        <Footer updated={latestRetrieved ? updatedDisplay : ''}/>
+        <Footer refreshStatus={refreshStatus} updated={latestRetrieved ? updatedDisplay : ''}/>
       </main>
     </div>
   );

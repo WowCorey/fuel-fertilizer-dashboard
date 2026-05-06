@@ -1,5 +1,7 @@
 // Footer.jsx - shared footer across all dashboards.
-function Footer({ updated = '' }) {
+function Footer({ updated = '', refreshStatus = null }) {
+  const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : 'Refresh status unavailable';
+  const pageRetrieved = updated || 'No verified page data loaded yet';
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
@@ -44,7 +46,7 @@ function Footer({ updated = '' }) {
       </div>
       <div className="site-footer__base">
         <span className="caption">Code MIT · Project metadata/prose CC BY 4.0 · Upstream data rights remain with publishers</span>
-        {updated && <span className="caption mono">Last updated {updated}</span>}
+        <span className="caption mono">Site refresh: {siteRefresh} · Page data retrieved: {pageRetrieved}</span>
       </div>
     </footer>
   );

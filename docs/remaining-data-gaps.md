@@ -1,11 +1,86 @@
 # Remaining Data Gaps
 
-Last reviewed: 2026-05-01
+Last reviewed: 2026-05-06
 
 This register records the known dashboard gaps that should not be filled with
 estimates. A gap can move to "ready to populate" only when a named public source
 contains the exact field, reporting period, unit, and reuse rights needed for a
 JSON envelope.
+
+## Next data priorities
+
+These are roadmap gaps only. They should stay unavailable or source-gated until
+a named public source provides the exact field, period, unit and reuse rights.
+
+### Fuel strategy / national fuel security policy
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Latest official Australian fuel strategy release | source-gated | The roadmap needs the current official strategy/policy source before it can become a dashboard envelope. | Verify the official Commonwealth source and only then add a source registry entry such as `aus_fuel_strategy_latest`. |
+| National liquid fuel security strategy | source-gated | Strategy documents, operational feeds and emergency policy settings are not interchangeable metrics. | Verify the exact official publication and boundary before adding `aus_national_liquid_fuel_security_strategy`. |
+| Petrol/diesel/jet days-cover by product | partial | Product days-cover exists in the PM&C/DCCEEW public snapshot, but a latest machine-readable product feed is not loaded. | Keep derived product-day cards source-linked to the PM&C/DCCEEW snapshot. Add `pmc_product_days_cover_latest` only if a stable official endpoint is verified. |
+| MSO reserves and commitments | partial | MSO reserve context is hand-keyed/derived from public source material; it is not a live reserve feed. | Add or replace `pmc_mso_reserves_latest` only if an official source publishes exact current reserve rows. |
+| Public vs security-sensitive fuel data boundary | source-gated | Government may withhold operational detail for security or commercial reasons; the dashboard should not infer hidden values. | Document explicit public/non-public boundaries when official guidance is available. |
+
+### Queensland fuel sovereignty follow-up
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| AFIP EOI updates and proponents | source-gated | The public pathway and EOI form are visible, but submissions, proponents, shortlists and contract awards are not published as reusable data. | Re-check official Queensland pages for updated EOI status before adding values. |
+| Six-port project status | partial | The six named hubs are source-linked, but project status, capacity, land parcels and approvals are not published. | Keep hub rows contextual until an official project table exists. |
+| Storage/refining capacity and state-owned land parcels | unavailable | No public source-safe parcel, capacity, readiness or ownership table is loaded. | Add only from official Queensland or port authority registers with units and dates. |
+| Taroom Trough approvals status | partial | Public pages verify the pathway context, not project-level approval completion or production relevance. | Keep neutral wording until official approval registers support exact status fields. |
+| Federal/state approval duplication updates | source-gated | Policy discussion is not a structured approvals dataset. | Add rows only from official approvals or policy implementation sources. |
+
+### Live / near-live fuel operations
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Live station availability and town-level outage feeds | unavailable | No national public live dry-site/station-level API is loaded. | Add only with stable public rights, geography, product, timestamp and coverage fields. |
+| Terminal inventory and constraints | unavailable | Public APS/MSO stock context does not publish terminal-level live inventory/capacity. | Keep terminal feeds unavailable until an official or licence-safe source exists. |
+| Product cargo, port destination and tanker ETA visibility | unavailable | Aggregate tanker counts are not vessel names, cargo assignments, destinations or ETAs. | Do not infer from AIS or port calls. Add only with source-safe public feed rights. |
+| Contract-backed deliveries | unavailable | Forward import orders and shipments are not contracts. | Keep contract coverage source-gated unless government or industry publishes periods, products, volumes and counterparties. |
+
+### Food / farms / water
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Fertiliser stock cover and forward contracts | unavailable | Import value is loaded, but stock cover and contract coverage are not public source-safe. | Add only after named government/industry sources publish exact coverage fields. |
+| Farm diesel risk and farm-gate fertiliser prices | source-gated | No source-safe national/regional farm diesel availability or farm-gate input-price row is loaded. | Verify official/industry public sources before publishing any value. |
+| Water allocation by food-producing region | unavailable | Water storage/allocation sources have not been mapped to food-producing regions with a safe method. | Load one geography and concept at a time from BOM/MDBA/state sources. |
+| Drought/rainfall agricultural pressure | unavailable | Visual maps and narrative reports are not dashboard values. | Add exact rainfall-deficiency, drought class or storage rows only when table/API fields are verified. |
+| Crop planting decision pressure and freight disruption | source-gated | No crop-window or freight-risk metric is loaded. | Keep as planning questions until official/public datasets are verified. |
+
+### Defence / naval procurement
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Japan/Australia warship procurement pathway | source-gated | Source-gated: pending official Defence/public procurement source verification. No current procurement fact is asserted here. | If official Defence material is verified, add a source gate such as `defence_japan_warship_procurement_source_gate`. |
+| Frigate/general-purpose vessel contract status and delivery timeline | source-gated | No source-safe contract row, delivery schedule or industry-content field has been loaded. | Add `defence_frigate_procurement_status` only from official procurement or Defence sources. |
+| Naval logistics/fuel implication | source-gated | Procurement discussion is not itself a fuel/logistics metric. | Add `defence_naval_logistics_fuel_implication` only if an official source links the procurement path to logistics or fuel posture. |
+
+### Housing / economy coming soon
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Mortgage pressure and first-home buyer indicators | roadmap | Existing AU Economics sources do not yet include a full housing affordability view. | Scope official ABS/RBA/APRA/state sources before adding cards. |
+| Investor ownership, negative gearing, rental stress and housing supply | roadmap | Concepts differ across tax, tenancy, supply and affordability datasets. | Do not combine them until each source boundary is defined. |
+| Household debt expansion | partial | RBA household debt-to-income is loaded, but not every housing stress signal. | Extend only with verified RBA/ABS/APRA rows. |
+
+### AI automation / workforce displacement
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Sector automation exposure and displacement risk | unavailable | No source-safe Australian exposure score is loaded, and the Employment & Automation page does not assert AI causation. | Add only from named Australian official/public sources. |
+| Productivity upside/downside and retraining capacity | source-gated | Productivity and retraining metrics require separate official concepts and periods. | Keep context separate from labour-market outcomes. |
+| Regional workforce exposure | source-gated | No regional automation-exposure dataset is loaded. | Add only with geography, occupation/industry mapping and caveats. |
+
+### Olympics readiness
+
+| Gap | Current status | Why not filled yet | Next action |
+|---|---|---|---|
+| Brisbane 2032 infrastructure delivery | roadmap | No Olympics readiness dashboard surface exists yet. | Scope official delivery authority, transport and infrastructure sources first. |
+| Transport, accommodation, power, tourism and emergency logistics pressure | roadmap | These are separate datasets and cannot be rolled into a single readiness score without a documented method. | Add source-safe indicators one at a time and keep missing feeds visible. |
 
 ## National status
 
