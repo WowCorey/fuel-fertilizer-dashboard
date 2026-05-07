@@ -5,6 +5,7 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
     { id: 'national_status', label: 'National status',      href: '../national-status-dashboard/index.html' },
     { id: 'fuel_security',   label: 'National fuel security', href: '../fuel-security-dashboard/index.html' },
     { id: 'fuel_strategy',   label: 'Fuel strategy', href: '../australian-fuel-strategy-dashboard/index.html' },
+    { id: 'qld_fuel_sovereignty', label: 'QLD fuel', href: '../qld-fuel-sovereignty-dashboard/index.html' },
     { id: 'resource_value',  label: 'Resource value',       href: '../resource-value-dashboard/index.html' },
     { id: 'state_contribution', label: 'State ledger', href: '../state-contribution-dashboard/index.html' },
     { id: 'strategic_resources', label: 'Strategic resources', href: '../strategic-resources-dashboard/index.html' },

@@ -2862,7 +2862,7 @@ sources:
     citation: Queensland Government, New fuel storage and refining projects to help restore fuel security, 5 May 2026.
     reuse_notes: Official source names Brisbane, Townsville, Mackay, Gladstone, Abbot Point and Bundaberg as Government-owned sites and ports for fuel refining and/or storage proposals. Do not infer site boundaries, land parcels, storage capacity, refinery capacity, EOI counts or project approvals.
     fetch: manual
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: qld_fuel_hub_state_owned_land
     human_name: Queensland fuel hub state-owned land audit
@@ -2877,7 +2877,7 @@ sources:
     citation: Office of the Coordinator-General, Accelerating Fuel Infrastructure Program.
     reuse_notes: Official page states OCG and EDQ are undertaking a state-wide audit of suitable government-owned industrial and port land. Do not infer land parcels, ownership, availability, tenure or development status from maps or port names.
     fetch: manual
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: qld_fuel_security_eoi_portal
     human_name: Queensland fuel security EOI portal
@@ -2892,7 +2892,7 @@ sources:
     citation: Office of the Coordinator-General, Accelerating Fuel Infrastructure Program.
     reuse_notes: Official page publishes Stage 1 EOI process and online form. Do not infer number of EOIs, proponents, categories, shortlist or award status unless later published by government.
     fetch: manual
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: qld_fuel_security_private_proposals
     human_name: Queensland fuel security private proposals
@@ -2907,7 +2907,7 @@ sources:
     citation: Fuel Resilience AU source gate for Queensland fuel security private proposals.
     reuse_notes: EOI/proposal details, proponent names and proposal categories are not published as dashboard-ready data. Government-held feed required.
     fetch: unavailable
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: qld_fuel_security_bid_status
     human_name: Queensland fuel security bid and award status
@@ -2922,7 +2922,7 @@ sources:
     citation: Fuel Resilience AU source gate for Queensland fuel security bid and award status.
     reuse_notes: Submission count, shortlist, assessment status, awards and contracts are not published as source-safe public data.
     fetch: unavailable
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: qld_refining_capacity_source_gate
     human_name: Queensland refining capacity source gate
@@ -2937,7 +2937,7 @@ sources:
     citation: Fuel Resilience AU source gate for Queensland refining capacity.
     reuse_notes: No source-safe Queensland refinery capacity denominator or utilisation row is loaded. APS refinery production remains separate from capacity.
     fetch: unavailable
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: qld_refinery_option_status
     human_name: Queensland refinery option status source gate
@@ -2952,7 +2952,7 @@ sources:
     citation: Fuel Resilience AU source gate for Queensland refinery option status.
     reuse_notes: Potential refining options are policy pathway context. No source-safe project, capacity, final investment decision or build commitment is loaded.
     fetch: unavailable
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: qld_domestic_fuel_production_pathway
     human_name: Queensland domestic fuel production pathway
@@ -2967,7 +2967,7 @@ sources:
     citation: Queensland Government, New fuel storage and refining projects to help restore fuel security, 5 May 2026.
     reuse_notes: Official source frames drilling, refining and storage as a policy pathway. Do not imply production volumes, refinery construction, contract delivery or approved projects beyond named public statements.
     fetch: manual
-    used_by: [fuel_security, oil]
+    used_by: [fuel_security, oil, qld_fuel_sovereignty]
 
   - id: qld_taroom_trough_source_gate
     human_name: Taroom Trough source gate
@@ -2982,7 +2982,7 @@ sources:
     citation: Office of the Coordinator-General, Taroom Trough Development Plan.
     reuse_notes: Official page verifies the name Taroom Trough and describes a Development Plan. Do not infer reserves, production volumes, project approvals, commerciality or environmental approval completion.
     fetch: manual
-    used_by: [fuel_security, oil]
+    used_by: [fuel_security, oil, qld_fuel_sovereignty]
 
   - id: qld_drilling_approvals_pathway
     human_name: Queensland drilling approvals pathway source gate
@@ -2997,7 +2997,7 @@ sources:
     citation: Office of the Coordinator-General, Taroom Trough Development Plan.
     reuse_notes: Official page states a works regulation activates Coordinator-General powers and the plan aims to improve regulatory efficiency and certainty. Do not treat this as project-level approval, federal approval or drilling authorisation for a specific proponent.
     fetch: manual
-    used_by: [fuel_security]
+    used_by: [fuel_security, qld_fuel_sovereignty]
 
   - id: fuel_forward_contract_coverage
     human_name: Fuel forward contract coverage source gate

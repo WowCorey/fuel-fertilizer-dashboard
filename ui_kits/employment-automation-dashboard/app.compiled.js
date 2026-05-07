@@ -367,6 +367,10 @@ function Header({
     label: 'Fuel strategy',
     href: '../australian-fuel-strategy-dashboard/index.html'
   }, {
+    id: 'qld_fuel_sovereignty',
+    label: 'QLD fuel',
+    href: '../qld-fuel-sovereignty-dashboard/index.html'
+  }, {
     id: 'resource_value',
     label: 'Resource value',
     href: '../resource-value-dashboard/index.html'
@@ -933,6 +937,8 @@ function Footer({
   }, "National fuel security")), React.createElement("li", null, React.createElement("a", {
     href: "../australian-fuel-strategy-dashboard/index.html"
   }, "Fuel strategy")), React.createElement("li", null, React.createElement("a", {
+    href: "../qld-fuel-sovereignty-dashboard/index.html"
+  }, "QLD fuel sovereignty")), React.createElement("li", null, React.createElement("a", {
     href: "../resource-value-dashboard/index.html"
   }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"

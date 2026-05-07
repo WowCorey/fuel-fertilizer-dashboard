@@ -2324,7 +2324,8 @@
       "update_cadence": "ad-hoc",
       "used_by": [
         "fuel_security",
-        "oil"
+        "oil",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
       "rights": "© The State of Queensland 2026; Queensland Government website terms apply",
@@ -2340,7 +2341,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
       "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",
@@ -2356,7 +2358,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
       "rights": "© The State of Queensland 2026; Queensland Government website terms apply",
@@ -2372,7 +2375,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
       "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",
@@ -2388,7 +2392,8 @@
       "fetch": "unavailable",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
       "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
@@ -2404,7 +2409,8 @@
       "fetch": "manual",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
       "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",
@@ -2420,7 +2426,8 @@
       "fetch": "unavailable",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
       "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
@@ -2452,7 +2459,8 @@
       "fetch": "unavailable",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
       "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
@@ -2468,7 +2476,8 @@
       "fetch": "unavailable",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
       "rights": "Not applicable; unavailable/source-gated placeholder unless a named publisher page is later loaded",
@@ -2485,7 +2494,8 @@
       "update_cadence": "ad-hoc",
       "used_by": [
         "fuel_security",
-        "oil"
+        "oil",
+        "qld_fuel_sovereignty"
       ],
       "canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
       "rights": "© The State of Queensland 1995-2026; Coordinator-General website terms apply",

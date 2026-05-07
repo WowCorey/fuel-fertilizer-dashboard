@@ -1137,6 +1137,32 @@ function FuelStrategyCrossLink() {
   );
 }
 
+function QueenslandDeliveryCrossLink() {
+  return (
+    <section className="section section--why" aria-labelledby="qld-delivery-link-h">
+      <div className="why-grid">
+        <div>
+          <span className="eyebrow">Queensland delivery</span>
+          <h2 id="qld-delivery-link-h">For Queensland delivery tracking</h2>
+        </div>
+        <div className="why-body">
+          <p>
+            For Queensland delivery tracking, see Queensland Fuel Sovereignty Delivery Tracker.
+            It separates the six-port AFIP pathway, state-owned land audit, EOI status,
+            storage/refining source gates and Taroom Trough approvals context from this
+            operational fuel-security view.
+          </p>
+          <p>
+            It does not infer land parcels, proponent names, bid counts, contracts, capacities
+            or approval completion where a named official source is not loaded.
+          </p>
+          <a href="../qld-fuel-sovereignty-dashboard/index.html">Open Queensland Fuel Sovereignty Delivery Tracker</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1236,6 +1262,8 @@ function App() {
         />
 
         <QueenslandFuelSovereigntySection data={data}/>
+
+        <QueenslandDeliveryCrossLink/>
 
         <SixPortFuelHubPathway data={data}/>
 

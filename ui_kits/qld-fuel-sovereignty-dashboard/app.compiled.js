@@ -985,317 +985,70 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['state_resource_contribution_profiles', 'resource_state_production_aes', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_wa_petroleum_royalty_receipts', 'resource_qld_petroleum_royalty_receipts', 'state_nsw_minerals_petroleum_royalty_context', 'state_nt_mining_petroleum_royalty_context', 'state_petroleum_ledger_source_gates', 'state_petroleum_nopta_counts', 'state_petroleum_production_licence_map', 'state_oil_gas_major_projects_remp', 'state_operating_refinery_counts', 'resource_resource_rent_tax_receipts_budget', 'resource_prrt_policy', 'resource_company_tax_rate'];
-const STATE_ORDER = ['WA', 'QLD', 'VIC', 'SA', 'NT', 'NSW', 'TAS', 'ACT'];
+const SERIES = ['qld_fuel_hub_six_ports_official_list', 'qld_fuel_hub_state_owned_land', 'qld_fuel_security_eoi_portal', 'qld_fuel_security_private_proposals', 'qld_fuel_security_bid_status', 'qld_refining_capacity_source_gate', 'qld_refinery_option_status', 'qld_domestic_fuel_production_pathway', 'qld_taroom_trough_source_gate', 'qld_drilling_approvals_pathway'];
+const QUICK_GUIDE = [['1', 'Six-port pathway', 'Start with the public AFIP hub list and the boundary around what it does not prove.'], ['2', 'AFIP / EOI status', 'Separate the public program and form from unpublished bids, proponents and awards.'], ['3', 'State-owned land and industrial hubs', 'Treat the land audit as context until parcel-level or aggregate site-readiness rows are published.'], ['4', 'Storage and refining pathway', 'Keep policy pathway context separate from capacity, FID, build or operating claims.'], ['5', 'Taroom Trough and approvals', 'Use official naming and pathway context only; do not infer production, volumes or approval completion.'], ['6', 'Delivery blockers and missing feeds', 'Use the gaps as source requests for Queensland, ports, proponents and industry.']];
+const AFIP_ROWS = [['AFIP program page', 'qld_fuel_hub_six_ports_official_list', 'Six-port AFIP context and program scope are public.', 'Capacity, project status, land parcels and approvals are not published.', 'Queensland Government / Coordinator-General', 'Keep monitoring the official AFIP page for delivery tables.'], ['Stage 1 EOI portal/form', 'qld_fuel_security_eoi_portal', 'Public EOI pathway and proposal scope are visible.', 'Submission count, proponents, categories and shortlist are not published.', 'Queensland Government / Coordinator-General', 'Publish EOI status table with date, stage and proposal category.'], ['Submission counts', 'qld_fuel_security_private_proposals', 'No reusable public count is loaded.', 'Number of submissions and market-response depth remain unavailable.', 'Queensland Government', 'Publish aggregate submission count if source-safe.'], ['Proponent names', 'qld_fuel_security_private_proposals', 'No proponent row is loaded.', 'Company names, locations and proposals remain government-held or unpublished.', 'Queensland Government / proponents', 'Publish proponents only if official and commercially safe.'], ['Proposal categories', 'qld_fuel_security_private_proposals', 'No category table is loaded.', 'Storage/refining/import/fuel-security categories are not public as reusable data.', 'Queensland Government / proponents', 'Publish safe aggregate categories before dashboard display.'], ['Shortlist status', 'qld_fuel_security_bid_status', 'No shortlist row is loaded.', 'Assessment stage and shortlist status remain unavailable.', 'Queensland Government', 'Publish stage/status fields with update dates.'], ['Contract / award status', 'qld_fuel_security_bid_status', 'No contract or award row is loaded.', 'Awards, contract values, counterparties and delivery terms remain unavailable.', 'Queensland Government / proponents', 'Publish contract status only if official and safe.'], ['Public delivery timetable', 'qld_fuel_security_bid_status', 'No reusable timetable is loaded.', 'Milestones and expected decisions remain source-gated.', 'Queensland Government', 'Publish milestone dates, cadence and source rights.']];
+const LAND_ROWS = [['State-owned land audit', 'qld_fuel_hub_state_owned_land', 'Public statement says a statewide audit is underway.', 'No parcel-level table is loaded.', 'Partial / contextual', 'Publish audit output with site, date, owner and readiness fields.'], ['Industrial land availability', 'qld_fuel_hub_state_owned_land', 'No reusable availability table is loaded.', 'Available hectares, ownership and tenure remain source-gated.', 'Source-gated', 'Publish aggregate or parcel-safe availability rows.'], ['Port-adjacent land', 'qld_fuel_hub_state_owned_land', 'No site-by-port land row is loaded.', 'Port-adjacent parcels and boundaries remain unavailable.', 'Source-gated', 'Publish hub-level land context without inferring from maps.'], ['Parcel IDs', 'qld_fuel_hub_state_owned_land', 'No parcel IDs are loaded.', 'Parcel identifiers are not inferred from maps or planning layers.', 'Unavailable', 'Publish official parcel IDs only if appropriate for public reuse.'], ['Hectares / area', 'qld_fuel_hub_state_owned_land', 'No area value is loaded.', 'No capacity or area denominator is source-safe.', 'Unavailable', 'Publish area units and definitions.'], ['Tenure / owner', 'qld_fuel_hub_state_owned_land', 'No parcel owner row is loaded.', 'Ownership is not inferred from authority names or maps.', 'Unavailable', 'Publish official owner or tenure fields.'], ['Permitted use', 'qld_fuel_hub_state_owned_land', 'No permitted-use table is loaded.', 'No planning approval or permitted use is asserted.', 'Source-gated', 'Publish planning-use categories if source-safe.'], ['Site readiness', 'qld_fuel_hub_state_owned_land', 'No readiness row is loaded.', 'Servicing, constraints and approvals remain unpublished.', 'Source-gated', 'Publish source-safe readiness status.']];
+const STORAGE_REFINING_ROWS = [['Public drill-refine-store pathway', 'qld_domestic_fuel_production_pathway', 'Official policy pathway context is loaded.', 'No delivery date, project status or capacity value is loaded.', 'Partial', 'Keep policy pathway context separate from project delivery.'], ['Storage capacity', 'qld_refining_capacity_source_gate', 'No site or hub storage capacity is loaded.', 'Capacity requires official unit, date, site and definition.', 'Unavailable', 'Publish safe aggregate or site-level capacity rows.'], ['Refinery capacity', 'qld_refining_capacity_source_gate', 'No refinery capacity denominator is loaded.', 'APS production is not a capacity or utilisation measure.', 'Unavailable', 'Load official capacity only if a source provides exact units and date.'], ['Proposed storage projects', 'qld_refinery_option_status', 'No proposed-project table is loaded.', 'No FID, proponent, location or build commitment is published here.', 'Source-gated', 'Publish project table with status, proponent and source date.'], ['Proposed refining projects', 'qld_refinery_option_status', 'No refining project row is loaded.', 'No refinery will be built claim is made.', 'Source-gated', 'Publish official project-status row before display.'], ['Final investment decisions', 'qld_refinery_option_status', 'No FID row is loaded.', 'FID status is not inferred from EOI or policy language.', 'Unavailable', 'Publish FID status with source date.'], ['Approvals', 'qld_drilling_approvals_pathway', 'Pathway context exists; approval completion does not.', 'Specific project approval status is unavailable.', 'Source-gated', 'Publish state/federal approval status by project.'], ['Build dates', 'qld_refinery_option_status', 'No build date is loaded.', 'No start, construction or commissioning date is inferred.', 'Unavailable', 'Publish official milestone dates.'], ['Operating dates', 'qld_refinery_option_status', 'No operating date is loaded.', 'No operating project status is asserted.', 'Unavailable', 'Publish commissioning/operation rows if official.'], ['Product type', 'qld_refinery_option_status', 'No product-specific project output is loaded.', 'Diesel/petrol/jet/crude/feedstock relevance is not inferred.', 'Source-gated', 'Publish product scope only from official project data.']];
+const TAROOM_ROWS = [['Official project/pathway name', 'qld_taroom_trough_source_gate', 'Taroom Trough official naming/context is loaded.', 'No individual project delivery status is loaded.', 'Partial', 'Keep official name; do not use unverified transcript spelling.'], ['Resource-development pathway', 'qld_taroom_trough_source_gate', 'Development Plan context is loaded.', 'No resource volume or commercial production status is loaded.', 'Partial', 'Publish official development milestones if available.'], ['EOI / market engagement', 'qld_domestic_fuel_production_pathway', 'Fuel-sovereignty pathway context is loaded.', 'No Taroom-specific EOI count or proponent row is loaded.', 'Source-gated', 'Publish market engagement table if official.'], ['State approvals', 'qld_drilling_approvals_pathway', 'State pathway context is loaded.', 'No approval completion row is loaded.', 'Source-gated', 'Publish project-level state approval status.'], ['Federal approvals', 'qld_drilling_approvals_pathway', 'Federal pathway is referenced only as context.', 'No federal approval completion row is loaded.', 'Source-gated', 'Publish EPBC or relevant federal status if official.'], ['Duplicated approval concern', 'qld_drilling_approvals_pathway', 'Policy concern is referenced as context.', 'No quantified duplication metric is loaded.', 'Source-gated', 'Publish a structured policy implementation update.'], ['Production relevance', 'qld_taroom_trough_source_gate', 'Onshore oil and gas context is loaded.', 'No production volume or date is loaded.', 'Unavailable', 'Do not infer production from resource context.'], ['Fuel-security relevance', 'qld_domestic_fuel_production_pathway', 'Fuel-sovereignty policy pathway context is loaded.', 'No direct fuel output or security impact is loaded.', 'Partial', 'Publish exact production, refining or storage linkage before claiming impact.']];
+const BLOCKER_ROWS = [['Data access', 'source-gated', 'Queensland Government / industry', 'Turns public debate into reusable delivery evidence.', 'Publish machine-readable AFIP delivery tables.', 'Source-gated'], ['State-owned land detail', 'source-gated', 'Queensland Government / port authorities', 'Shows where storage/refining could actually be delivered.', 'Publish parcel-safe land and readiness rows.', 'Source-gated'], ['EOI transparency', 'unavailable', 'Queensland Government', 'Shows whether private-sector interest has moved beyond a portal.', 'Publish counts, stages and safe category summaries.', 'Unavailable'], ['Approval duplication', 'source-gated', 'Queensland and Commonwealth approval agencies', 'Shows whether the policy blocker is being resolved.', 'Publish structured state/federal approval pathway updates.', 'Source-gated'], ['Project capacity', 'unavailable', 'Government / proponents / operators', 'Separates real delivery from policy language.', 'Publish storage/refining capacity with units and definitions.', 'Unavailable'], ['Contracts / awards', 'unavailable', 'Queensland Government / proponents', 'Shows whether proposals have become commitments.', 'Publish awards or contract status if public and safe.', 'Unavailable'], ['Federal policy alignment', 'source-gated', 'Commonwealth / Queensland Government', 'Connects state delivery to national fuel strategy.', 'Publish alignment status and public/private data boundary.', 'Source-gated'], ['Environmental approvals', 'source-gated', 'Approval agencies', 'Shows whether project pathways are blocked, pending or approved.', 'Publish project-level approval status from official registers.', 'Source-gated'], ['Security/public boundary', 'source-gated', 'Commonwealth / Queensland Government / industry', 'Defines what can be public without exposing sensitive fuel infrastructure.', 'Publish safe aggregate indicators and excluded detail.', 'Source-gated'], ['Industry willingness', 'source-gated', 'Industry / Queensland Government', 'Shows whether market interest is real and current.', 'Publish safe aggregate EOI category/status rows.', 'Source-gated']];
+const PUBLISH_ROWS = [['Public AFIP delivery table', 'Queensland Government / Coordinator-General', 'Turns the pathway into accountable project tracking.', 'Source-gated', 'Publish hub, stage, source date and delivery status.'], ['Six-port hub project status', 'Queensland Government / port authorities', 'Separates official hub names from actual projects.', 'Partial', 'Publish per-hub status rows.'], ['State-owned land parcels or aggregate site-readiness table', 'Queensland Government / port authorities', 'Shows where storage/refining can physically happen.', 'Source-gated', 'Publish parcel-safe fields or aggregate readiness by hub.'], ['Storage/refining capacity by hub', 'Queensland Government / proponents / operators', 'Shows delivery scale and product relevance.', 'Unavailable', 'Publish capacity, unit, date, site and definition.'], ['EOI submission count and category', 'Queensland Government', 'Shows market response without needing commercial detail.', 'Unavailable', 'Publish aggregate count and safe categories.'], ['Shortlisted proponents, if public', 'Queensland Government', 'Shows who is moving through delivery process.', 'Unavailable', 'Publish only if official and commercially safe.'], ['Award/contract status, if public', 'Queensland Government / proponents', 'Shows whether commitments exist.', 'Unavailable', 'Publish stage, award status and date.'], ['Approval status and duplicated-approval resolution', 'Queensland and Commonwealth agencies', 'Shows whether approval blockers are current or resolved.', 'Source-gated', 'Publish structured approvals update.'], ['Taroom Trough approval pathway update', 'Queensland Government / approval agencies', 'Shows pathway status without inferring production.', 'Partial', 'Publish official approval and milestone fields.'], ['Safe public dashboard boundary', 'Queensland Government / Commonwealth / industry', 'Protects sensitive details while enabling public accountability.', 'Source-gated', 'Publish what can be safely aggregated.']];
 function fields(env) {
   return env?.extra?.fields || {};
 }
-function latestValue(env) {
-  if (!env || env.status !== 'ok' || !env.values?.length) return null;
-  return env.values.at(-1).v;
+function freshnessKind(env, fallback = 'source-gated') {
+  if (!env || env.status !== 'ok') return fallback;
+  const f = window.FR.freshness(env);
+  if (f.state === 'stale') return 'stale';
+  if (env.manual_entry) return 'manual';
+  return 'observed';
 }
-function valuePeriod(env) {
-  return env?.values?.at(-1)?.t || env?.last_data_point || '-';
+function statusLabel(env, fallback = 'Source-gated') {
+  if (!env || env.status !== 'ok') return fallback;
+  const f = window.FR.freshness(env);
+  if (f.state === 'stale') return 'Stale';
+  if (env.manual_entry) return 'Manual public source';
+  return f.label;
 }
-function hasNumber(value) {
-  return value !== null && value !== undefined && Number.isFinite(Number(value));
-}
-function sumLoaded(values) {
-  const loaded = values.filter(hasNumber).map(Number);
-  return loaded.length ? loaded.reduce((sum, value) => sum + value, 0) : null;
-}
-function formatNumber(value, digits = 1) {
-  if (!hasNumber(value)) return 'Unavailable';
-  return Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: digits
-  });
-}
-function formatProduction(value, unit) {
-  if (!hasNumber(value)) return 'Not loaded';
-  return `${formatNumber(value)} ${unit}`;
-}
-function formatRoyalty(env) {
-  const value = latestValue(env);
-  if (!hasNumber(value)) return 'Unavailable';
-  return `A$${Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: 1
-  })}m`;
-}
-function formatRoyaltyContext(env) {
-  const value = latestValue(env);
-  if (!hasNumber(value)) return 'Unavailable';
-  const scope = fields(env).reported_scope || 'combined context';
-  return `A$${Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: 1
-  })}m ${scope}`;
-}
-function coverageKind(label) {
-  return String(label || '').toLowerCase().includes('limited') ? 'unavailable' : 'partial';
-}
-function sourceStatus(env) {
-  if (!env || env.status !== 'ok') return 'Awaiting a verified method or value before publication.';
-  return `Verified envelope. ${env.values?.length || 0} data point${env.values?.length === 1 ? '' : 's'}; latest ${env.last_data_point || 'unknown'}.`;
-}
-function productionFor(profile, aesRows) {
-  const row = aesRows.find(item => item.state === profile.state_name);
-  if (!row) return {
-    gasPj: null,
-    liquidsMl: null,
-    naturalGasMcm: null,
-    summary: 'No loaded AES state production row.'
-  };
-  const gasPj = sumLoaded([row.conventional_gas_pj, row.coal_seam_gas_pj]);
-  const liquidsMl = sumLoaded([row.crude_oil_and_ngl_ml, row.naturally_occurring_lpg_ml]);
-  const naturalGasMcm = hasNumber(row.natural_gas_mcm) ? Number(row.natural_gas_mcm) : null;
-  const bits = [];
-  if (hasNumber(gasPj)) bits.push(`${formatNumber(gasPj)} PJ gas`);
-  if (hasNumber(liquidsMl)) bits.push(`${formatNumber(liquidsMl)} ML crude/NGL/LPG`);
-  return {
-    gasPj,
-    liquidsMl,
-    naturalGasMcm,
-    summary: bits.length ? bits.join('; ') : 'No loaded petroleum production value.'
-  };
-}
-function royaltyEnv(profile, data) {
-  return profile.royalty_source_id ? data[profile.royalty_source_id] : null;
-}
-function royaltyContextEnv(profile, data) {
-  return profile.royalty_context_source_id ? data[profile.royalty_context_source_id] : null;
-}
-function revenueDisplay(profile, data) {
-  const royalty = royaltyEnv(profile, data);
-  const royaltyValue = latestValue(royalty);
-  if (hasNumber(royaltyValue)) {
-    return {
-      text: `${formatRoyalty(royalty)} (${valuePeriod(royalty)})`,
-      className: '',
-      badge: React.createElement(TrustBadge, {
-        kind: "observed"
-      }, "Petroleum receipt")
-    };
-  }
-  const context = royaltyContextEnv(profile, data);
-  const contextValue = latestValue(context);
-  if (hasNumber(contextValue)) {
-    return {
-      text: `${formatRoyaltyContext(context)} (${valuePeriod(context)})`,
-      className: '',
-      badge: React.createElement(TrustBadge, {
-        kind: "partial"
-      }, "Combined context")
-    };
-  }
-  return {
-    text: profile.royalties_label || 'Unavailable',
-    className: 'unavail',
-    badge: React.createElement(TrustBadge, {
-      kind: "unavailable"
-    })
-  };
-}
-function noptaCoverage(profile, data) {
-  const rows = fields(data.state_petroleum_nopta_counts).state_rows || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function refineryCoverage(profile, data) {
-  const rows = fields(data.state_operating_refinery_counts).states || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function integerCount(value) {
-  if (!hasNumber(value)) return 'Unavailable';
-  return Number(value).toLocaleString('en-AU', {
-    maximumFractionDigits: 0
-  });
-}
-function objectCoverage(profile, data) {
-  const nopta = noptaCoverage(profile, data);
-  const refinery = refineryCoverage(profile, data);
-  return {
-    activeTitles: nopta?.title_records?.active ?? null,
-    pendingTitles: nopta?.title_records?.pending_application ?? null,
-    productionLicences: (nopta?.title_records?.by_title_type || []).find(row => row.title_type === 'Production Licence')?.count ?? null,
-    infrastructureLicences: (nopta?.title_records?.by_title_type || []).find(row => row.title_type === 'Infrastructure Licence')?.count ?? null,
-    wellLayerRecords: nopta?.well_records?.total_layer_records ?? null,
-    knownPetroleumWellRecords: nopta?.well_records?.known_petroleum_type_records ?? null,
-    refineryCount: refinery?.count ?? 0,
-    refineryFacilities: refinery?.facilities || []
-  };
-}
-function productionLicenceSummary(profile, data) {
-  const rows = fields(data.state_petroleum_production_licence_map).state_rows || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function rempProjectSummary(profile, data) {
-  const rows = fields(data.state_oil_gas_major_projects_remp).state_rows || [];
-  return rows.find(row => row.state_code === profile.state_code) || null;
-}
-function productionMappingRows(data) {
-  const noptaRows = fields(data.state_petroleum_production_licence_map).production_licence_rows || [];
-  const rempRows = fields(data.state_oil_gas_major_projects_remp).project_rows || [];
-  const mappedNopta = noptaRows.map(row => ({
-    key: `nopta-${row.title}-${row.field_name || ''}`,
-    source: 'NOPTA production licence',
-    state_code: row.state_code,
-    state_name: row.state_name,
-    basin_name: row.basin_name,
-    project_name: row.field_name || row.title,
-    field_name: row.field_name,
-    operator_name: row.title_operator,
-    company_name: row.title_holders_raw,
-    product_class: row.product_class || 'petroleum',
-    metric: 'Active production licence record',
-    period: row.production_period || fields(data.state_petroleum_production_licence_map).as_at,
-    status: row.status,
-    trust: 'Observed',
-    caveat: 'Offshore regulatory title mapping; no production volume.'
-  }));
-  const mappedRemp = rempRows.map(row => ({
-    key: `remp-${row.state_code}-${row.project_name}`,
-    source: 'REMP oil & gas project',
-    state_code: row.state_code,
-    state_name: row.state_name,
-    basin_name: row.basin_name,
-    project_name: row.project_name,
-    field_name: row.field_name,
-    operator_name: row.operator_name,
-    company_name: row.company_name,
-    product_class: row.product_class || row.resource,
-    metric: hasNumber(row.production_metric_value) ? `${formatNumber(row.production_metric_value, 1)} ${row.production_unit || ''} estimated new capacity` : 'Estimated new capacity unavailable',
-    period: row.production_period,
-    status: row.status,
-    trust: 'Partial coverage',
-    caveat: 'Major-project/development row; not current production.'
-  }));
-  return [...mappedNopta, ...mappedRemp].filter(row => row.state_code);
-}
-function ProductionMappingMini({
-  profile,
-  data
+function GateStatus({
+  env,
+  kind = null,
+  label = null,
+  partial = false
 }) {
-  const licences = productionLicenceSummary(profile, data);
-  const remp = rempProjectSummary(profile, data);
-  return React.createElement("div", {
-    className: "caption"
-  }, React.createElement("b", null, "Active production licence rows:"), " ", integerCount(licences?.production_licence_records), React.createElement("br", null), React.createElement("b", null, "REMP oil/gas project rows:"), " ", integerCount(remp?.project_rows), React.createElement("br", null), React.createElement("b", null, "Mapped companies/operators:"), " ", integerCount((licences?.mapped_operator_records || 0) + (remp?.mapped_company_rows || 0)));
-}
-function ProductionMappingTable({
-  rows
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Basin"), React.createElement("th", null, "Project / field / title"), React.createElement("th", null, "Operator / company"), React.createElement("th", null, "Product class"), React.createElement("th", null, "Metric / period"), React.createElement("th", null, "Trust"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.key
-  }, React.createElement("td", null, React.createElement("b", null, row.state_code), React.createElement("br", null), row.source), React.createElement("td", null, row.basin_name || React.createElement("span", {
-    className: "unavail"
-  }, "Unavailable")), React.createElement("td", null, row.project_name || React.createElement("span", {
-    className: "unavail"
-  }, "Unavailable"), React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.status || '')), React.createElement("td", null, row.operator_name || row.company_name || React.createElement("span", {
-    className: "unavail"
-  }, "Unavailable")), React.createElement("td", null, row.product_class || 'Unavailable'), React.createElement("td", null, row.metric, React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.period || 'Period unavailable')), React.createElement("td", null, React.createElement(TrustBadge, {
-    kind: row.trust === 'Observed' ? 'observed' : 'partial'
-  }, row.trust), React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.caveat)))))));
-}
-function ProductionMappingDetail({
-  profile,
-  data
-}) {
-  const rows = productionMappingRows(data).filter(row => row.state_code === profile.state_code);
-  if (!rows.length) {
-    return React.createElement("p", {
-      className: "body-sm unavail"
-    }, React.createElement("b", null, "Production mapping:"), " No project, field or company row is loaded for this state.");
+  if (env && env.status === 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(EnvTrustBadges, {
+      env: env,
+      partial: partial
+    }));
   }
   return React.createElement("div", {
-    style: {
-      marginTop: 12
-    }
-  }, React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Loaded production mapping rows:"), " ", rows.length), React.createElement(ProductionMappingTable, {
-    rows: rows
+    className: "trust-badges"
+  }, React.createElement(TrustBadge, {
+    kind: kind || 'source-gated'
+  }, label || (kind === 'unavailable' ? 'Unavailable' : 'Source-gated')));
+}
+function SourceLink({
+  env
+}) {
+  if (!env?.source_url) return React.createElement("span", {
+    className: "unavail"
+  }, "Source-gated");
+  return React.createElement("a", {
+    href: env.source_url
+  }, env.source_name || env.source_id, " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
   }));
-}
-function ObjectCoverageMini({
-  profile,
-  data
-}) {
-  const counts = objectCoverage(profile, data);
-  return React.createElement("div", {
-    className: "caption"
-  }, React.createElement("b", null, "NOPTA active titles:"), " ", integerCount(counts.activeTitles), React.createElement("br", null), React.createElement("b", null, "Well-layer records:"), " ", integerCount(counts.wellLayerRecords), React.createElement("br", null), React.createElement("b", null, "Operating refineries:"), " ", integerCount(counts.refineryCount));
-}
-function ObjectCoverageDetail({
-  profile,
-  data
-}) {
-  const counts = objectCoverage(profile, data);
-  return React.createElement("div", {
-    className: "data-table-wrap",
-    style: {
-      marginTop: 12
-    }
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Active NOPTA title records"), React.createElement("td", null, integerCount(counts.activeTitles), " ", React.createElement(TrustBadge, {
-    kind: "observed"
-  }, "Observed"))), React.createElement("tr", null, React.createElement("td", null, "Pending title applications"), React.createElement("td", null, integerCount(counts.pendingTitles), " ", React.createElement(TrustBadge, {
-    kind: "partial"
-  }, "Separate from active"))), React.createElement("tr", null, React.createElement("td", null, "Production licence records"), React.createElement("td", null, integerCount(counts.productionLicences), " ", React.createElement(TrustBadge, {
-    kind: "observed"
-  }, "Title type"))), React.createElement("tr", null, React.createElement("td", null, "Infrastructure licence records"), React.createElement("td", null, integerCount(counts.infrastructureLicences), " ", React.createElement(TrustBadge, {
-    kind: "observed"
-  }, "Title type"))), React.createElement("tr", null, React.createElement("td", null, "Petroleum Wells layer records"), React.createElement("td", null, integerCount(counts.wellLayerRecords), " ", React.createElement(TrustBadge, {
-    kind: "partial"
-  }, "Not active wells"))), React.createElement("tr", null, React.createElement("td", null, "Known Type=Petroleum records"), React.createElement("td", null, integerCount(counts.knownPetroleumWellRecords), " ", React.createElement(TrustBadge, {
-    kind: "partial"
-  }, "Typed subset"))), React.createElement("tr", null, React.createElement("td", null, "Operating refinery count"), React.createElement("td", null, integerCount(counts.refineryCount), " ", React.createElement(TrustBadge, {
-    kind: counts.refineryCount ? 'observed' : 'unavailable'
-  }, counts.refineryCount ? 'Observed' : 'Unavailable'))))), counts.refineryFacilities.length > 0 && React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Named refinery facilities:"), " ", counts.refineryFacilities.join('; ')));
-}
-function ObjectCoverageTable({
-  profiles,
-  data
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "NOPTA active titles"), React.createElement("th", null, "Production licence records"), React.createElement("th", null, "Infrastructure licence records"), React.createElement("th", null, "Petroleum Wells layer records"), React.createElement("th", null, "Operating refineries"), React.createElement("th", null, "Unavailable classes"))), React.createElement("tbody", null, profiles.map(profile => {
-    const counts = objectCoverage(profile, data);
-    return React.createElement("tr", {
-      key: profile.state_code
-    }, React.createElement("td", null, React.createElement("b", null, profile.state_code), React.createElement("br", null), profile.state_name), React.createElement("td", null, integerCount(counts.activeTitles), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "observed"
-    }, "Observed")), React.createElement("td", null, integerCount(counts.productionLicences), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "observed"
-    }, "Title type")), React.createElement("td", null, integerCount(counts.infrastructureLicences), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "observed"
-    }, "Title type")), React.createElement("td", null, integerCount(counts.wellLayerRecords), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: "partial"
-    }, "Not active wells")), React.createElement("td", null, integerCount(counts.refineryCount), React.createElement("br", null), React.createElement(TrustBadge, {
-      kind: counts.refineryCount ? 'observed' : 'unavailable'
-    }, counts.refineryCount ? 'Observed' : 'Unavailable')), React.createElement("td", {
-      className: "unavail"
-    }, "Producing fields; LNG plants/trains; gas processing plants; import/storage terminal counts."));
-  }))));
 }
 function SourceCard({
   id,
   env,
   partial = false
 }) {
-  const meta = env?._meta || {};
+  const f = window.FR.freshness(env);
   return React.createElement("article", {
     className: "source-card"
   }, React.createElement("div", {
@@ -1305,132 +1058,142 @@ function SourceCard({
     partial: partial
   })), React.createElement("p", {
     className: "body-sm"
-  }, sourceStatus(env)), React.createElement("p", {
+  }, env?.status === 'ok' ? `Loaded envelope. Latest data point ${env.last_data_point || 'not applicable'}; status ${f.label.toLowerCase()}.` : env?.notes || 'No source-safe envelope is loaded.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
-  }, id)), meta.rights && React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.source_url && React.createElement("a", {
+  }, id)), env?.source_url && React.createElement("a", {
     href: env.source_url
   }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
     name: "external",
     size: 12
   })));
 }
-function StateSummaryCard({
-  profile,
-  production,
+function DeliveryTable({
+  columns,
+  rows,
   data
-}) {
-  const revenue = revenueDisplay(profile, data);
-  return React.createElement("article", {
-    className: "metric-card"
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("span", {
-    className: "eyebrow"
-  }, profile.state_code), React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: "manual"
-  }), React.createElement(TrustBadge, {
-    kind: coverageKind(profile.source_coverage_label)
-  }, profile.source_coverage_label))), React.createElement("h3", {
-    className: "metric-card__label"
-  }, profile.state_name), React.createElement("p", {
-    className: "metric-card__plain"
-  }, profile.primary_role), React.createElement("div", {
-    className: "data-table-wrap",
-    style: {
-      marginTop: 12
-    }
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Loaded production"), React.createElement("td", null, production.summary)), React.createElement("tr", null, React.createElement("td", null, "State revenue"), React.createElement("td", {
-    className: revenue.className
-  }, revenue.text)), React.createElement("tr", null, React.createElement("td", null, "Federal attribution"), React.createElement("td", {
-    className: "unavail"
-  }, profile.federal_tax_attribution_status)), React.createElement("tr", null, React.createElement("td", null, "Project/company map"), React.createElement("td", {
-    className: String(profile.production_mapping_status || '').startsWith('Partial') ? '' : 'unavail'
-  }, profile.production_mapping_status || 'Unavailable')), React.createElement("tr", null, React.createElement("td", null, "Mapped production rows"), React.createElement("td", null, React.createElement(ProductionMappingMini, {
-    profile: profile,
-    data: data
-  }))), React.createElement("tr", null, React.createElement("td", null, "Defined counts"), React.createElement("td", null, React.createElement(ObjectCoverageMini, {
-    profile: profile,
-    data: data
-  })))))), React.createElement("footer", {
-    className: "metric-card__foot"
-  }, React.createElement("span", {
-    className: "metric-card__source"
-  }, profile.notes)));
-}
-function StateDetailPanel({
-  profile,
-  production,
-  data
-}) {
-  const revenue = revenueDisplay(profile, data);
-  return React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, profile.state_name), React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: "manual"
-  }), React.createElement(TrustBadge, {
-    kind: coverageKind(profile.source_coverage_label)
-  }, profile.source_coverage_label))), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Production role:"), " ", profile.production_role), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Loaded production:"), " ", production.summary), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Refining/import role:"), " ", profile.refining_role, " ", profile.import_role), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "State revenue:"), " ", revenue.text, " ", revenue.badge), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Commonwealth revenue:"), " ", profile.federal_tax_note), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Permit/title counts:"), " ", profile.permit_count_status || 'Unavailable'), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Project/company production:"), " ", profile.production_mapping_status || 'Unavailable'), React.createElement(ProductionMappingDetail, {
-    profile: profile,
-    data: data
-  }), React.createElement(ObjectCoverageDetail, {
-    profile: profile,
-    data: data
-  }), React.createElement("ul", {
-    className: "gap-list"
-  }, (profile.infrastructure_summary || []).map(item => React.createElement("li", {
-    key: item
-  }, item))));
-}
-function ComparisonTable({
-  profiles,
-  data,
-  aesRows
 }) {
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "Crude/gas/LNG relevance"), React.createElement("th", null, "Refining/import role"), React.createElement("th", null, "Loaded production"), React.createElement("th", null, "State royalties"), React.createElement("th", null, "Federal revenue status"), React.createElement("th", null, "Permit/project status"), React.createElement("th", null, "Coverage"))), React.createElement("tbody", null, profiles.map(profile => {
-    const production = productionFor(profile, aesRows);
-    const revenue = revenueDisplay(profile, data);
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
+    key: col
+  }, col)))), React.createElement("tbody", null, rows.map(row => {
+    const [name, sourceId, ...cells] = row;
+    const env = sourceId ? data[sourceId] : null;
     return React.createElement("tr", {
-      key: profile.state_code
-    }, React.createElement("td", null, React.createElement("b", null, profile.state_code), React.createElement("br", null), profile.state_name), React.createElement("td", null, "Crude: ", profile.crude_relevance, React.createElement("br", null), "Gas: ", profile.gas_relevance, React.createElement("br", null), "LNG: ", profile.lng_relevance), React.createElement("td", null, profile.refining_role, React.createElement("br", null), profile.import_role), React.createElement("td", null, production.summary), React.createElement("td", {
-      className: revenue.className
-    }, revenue.text, React.createElement("br", null), revenue.badge), React.createElement("td", {
-      className: "unavail"
-    }, profile.federal_tax_attribution_status), React.createElement("td", null, profile.permit_count_status || 'Unavailable', React.createElement("br", null), profile.production_mapping_status || 'Unavailable'), React.createElement("td", null, React.createElement(TrustBadge, {
-      kind: coverageKind(profile.source_coverage_label)
-    }, profile.source_coverage_label)));
+      key: name
+    }, React.createElement("td", null, name), React.createElement("td", null, React.createElement(GateStatus, {
+      env: env,
+      partial: env?.status === 'ok'
+    })), cells.map((cell, idx) => React.createElement("td", {
+      key: `${name}-${idx}`
+    }, cell)));
   }))));
+}
+function SimpleStatusTable({
+  columns,
+  rows
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
+    key: col
+  }, col)))), React.createElement("tbody", null, rows.map((row, idx) => React.createElement("tr", {
+    key: idx
+  }, row.map((cell, cellIdx) => React.createElement("td", {
+    key: `${idx}-${cellIdx}`
+  }, cellIdx === 1 && ['observed', 'verified', 'partial', 'stale', 'manual', 'derived', 'unavailable', 'source-gated', 'roadmap'].includes(String(cell).toLowerCase()) ? React.createElement(TrustBadge, {
+    kind: cell
+  }) : cell)))))));
+}
+function SixPortDeliveryPathway({
+  data
+}) {
+  const portsEnv = data.qld_fuel_hub_six_ports_official_list;
+  const portFields = fields(portsEnv);
+  const ports = portFields.ports || [];
+  const relevance = portFields.storage_refining_relevance || 'Official AFIP storage/refining pathway context only.';
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "six-port-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "AFIP hubs"), React.createElement("h2", {
+    id: "six-port-h"
+  }, "Six-port delivery pathway"), React.createElement("p", {
+    className: "section__lede"
+  }, "The six-port list is public context. It is not itself a project-status, capacity, land-parcel or approval dataset."))), React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Hub / port name"), React.createElement("th", null, "Official-list status"), React.createElement("th", null, "Storage/refining relevance"), React.createElement("th", null, "Public delivery status"), React.createElement("th", null, "Capacity visibility"), React.createElement("th", null, "Land parcel visibility"), React.createElement("th", null, "Approval visibility"), React.createElement("th", null, "Next source action"))), React.createElement("tbody", null, (ports.length ? ports : ['Awaiting official source confirmation']).map(port => React.createElement("tr", {
+    key: port
+  }, React.createElement("td", null, port), React.createElement("td", null, React.createElement(GateStatus, {
+    env: portsEnv,
+    partial: true
+  })), React.createElement("td", null, relevance), React.createElement("td", null, "Public context only; no project status loaded."), React.createElement("td", null, React.createElement(TrustBadge, {
+    kind: "unavailable"
+  }, "Unavailable")), React.createElement("td", null, React.createElement(TrustBadge, {
+    kind: "source-gated"
+  }, "Source-gated")), React.createElement("td", null, React.createElement(TrustBadge, {
+    kind: "source-gated"
+  }, "Source-gated")), React.createElement("td", null, "Publish hub-level delivery table with status, capacity, land and approvals.")))))));
+}
+function QuickGuide() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "guide-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Use this page in order"), React.createElement("h2", {
+    id: "guide-h"
+  }, "Delivery evidence before delivery claims"), React.createElement("p", {
+    className: "section__lede"
+  }, "The tracker is built for accountability: what is public, what is only context, and what Queensland or industry would need to publish before a row becomes operational evidence."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--3"
+  }, QUICK_GUIDE.map(([step, title, copy]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, step), React.createElement("h3", null, title), React.createElement("p", null, copy)))));
+}
+function RelationshipSection() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "relationship-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Policy and operations"), React.createElement("h2", {
+    id: "relationship-h"
+  }, "How this connects to national fuel strategy")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Australian Fuel Strategy Tracker covers national policy, MSO, reserves, days-cover and emergency response boundaries. Queensland Fuel Sovereignty Tracker covers the state delivery pathway: ports, land, EOI, storage/refining opportunities and approvals. National Fuel Security covers public operational signals and missing live feeds."), React.createElement("div", {
+    className: "hero-actions",
+    style: {
+      marginTop: 16
+    }
+  }, React.createElement("a", {
+    className: "hero-button",
+    href: "../australian-fuel-strategy-dashboard/index.html"
+  }, "Open Australian Fuel Strategy Tracker"), React.createElement("a", {
+    className: "hero-button",
+    href: "../fuel-security-dashboard/index.html"
+  }, "Open National Fuel Security"), React.createElement("a", {
+    className: "hero-button",
+    href: "../missing-data-scoreboard/index.html"
+  }, "Open Missing Data Scoreboard")))));
 }
 function App() {
   const [data, setData] = React.useState(null);
@@ -1443,7 +1206,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "state_contribution",
+      active: "qld_fuel_sovereignty",
       refreshStatus: refreshStatus
     }), React.createElement("main", {
       id: "main"
@@ -1453,49 +1216,34 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const profiles = (fields(data.state_resource_contribution_profiles).states || []).slice().sort((a, b) => STATE_ORDER.indexOf(a.state_code) - STATE_ORDER.indexOf(b.state_code));
-  const aesFields = fields(data.resource_state_production_aes);
-  const aesRows = aesFields.state_rows || [];
-  const waRoyalty = latestValue(data.resource_wa_petroleum_royalty_receipts);
-  const qldRoyalty = latestValue(data.resource_qld_petroleum_royalty_receipts);
-  const loadedRoyaltyTotal = hasNumber(waRoyalty) && hasNumber(qldRoyalty) ? waRoyalty + qldRoyalty : null;
-  const statesWithLoadedProduction = profiles.filter(profile => hasNumber(productionFor(profile, aesRows).gasPj) || hasNumber(productionFor(profile, aesRows).liquidsMl)).length;
-  const statesWithRoyalty = profiles.filter(profile => hasNumber(latestValue(royaltyEnv(profile, data)))).length;
-  const statesWithRevenueContext = profiles.filter(profile => {
-    const revenue = revenueDisplay(profile, data);
-    return revenue.className !== 'unavail';
-  }).length;
-  const statesWithActiveTitleRecords = profiles.filter(profile => hasNumber(objectCoverage(profile, data).activeTitles) && objectCoverage(profile, data).activeTitles > 0).length;
-  const statesWithWellLayerRecords = profiles.filter(profile => hasNumber(objectCoverage(profile, data).wellLayerRecords) && objectCoverage(profile, data).wellLayerRecords > 0).length;
-  const statesWithRefineries = profiles.filter(profile => objectCoverage(profile, data).refineryCount > 0).length;
-  const mappedRows = productionMappingRows(data);
-  const productionLicenceFields = fields(data.state_petroleum_production_licence_map);
-  const rempFields = fields(data.state_oil_gas_major_projects_remp);
-  const statesWithProductionLicenceRows = profiles.filter(profile => (productionLicenceSummary(profile, data)?.production_licence_records || 0) > 0).length;
-  const statesWithRempRows = profiles.filter(profile => (rempProjectSummary(profile, data)?.project_rows || 0) > 0).length;
-  const gateFields = fields(data.state_petroleum_ledger_source_gates);
-  const workstreamRows = gateFields.workstreams || [];
-  const candidateSources = gateFields.candidate_sources || [];
+  const ports = fields(data.qld_fuel_hub_six_ports_official_list).ports || [];
+  const taroomName = fields(data.qld_taroom_trough_source_gate).official_name || 'Taroom Trough';
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "state_contribution",
+    active: "qld_fuel_sovereignty",
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "state-contribution"
+    id: "qld-fuel-sovereignty"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "State petroleum ledger"), React.createElement("h1", {
+  }, "QLD fuel sovereignty - delivery tracker"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What each state contributes to Australia's petroleum system."), React.createElement("p", {
+  }, "Queensland fuel sovereignty delivery tracker"), React.createElement("p", {
     className: "intro__lede"
-  }, "This companion page separates state production and infrastructure roles from public revenue. State royalties are not the same as Commonwealth PRRT, company tax, excise or GST. Where a source does not publish a defensible state split, the field stays unavailable.")), React.createElement("aside", {
+  }, "Tracks Queensland's public fuel-sovereignty delivery pathway: six ports, AFIP, state-owned land, storage/refining opportunities, private-sector proposals, Taroom Trough approvals and what remains unpublished."), React.createElement("p", {
+    className: "body-sm",
+    style: {
+      marginTop: 16,
+      color: 'var(--ink-2)'
+    }
+  }, "This page is an independent public-source prototype. It does not infer land parcels, storage capacity, refinery capacity, proponents, bids, contracts, approvals or operational fuel holdings. If a delivery field is not published in a named official source, it remains marked as unavailable or source-gated.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1504,305 +1252,122 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "No state-level federal tax allocation is estimated."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Official list"), React.createElement("span", null, ports.length ? `${ports.length} AFIP hubs source-linked` : 'Awaiting official source confirmation'), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Delivery/accountability tracker, not an operational fuel dashboard."))), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
+  }), React.createElement(QuickGuide, null), React.createElement(SixPortDeliveryPathway, {
+    data: data
   }), React.createElement("section", {
-    className: "section section--why"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Read this first"), React.createElement("h2", {
-    style: {
-      marginTop: 8
-    }
-  }, "What the page shows and what it refuses to guess")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, "It shows loaded state/territory production rows, qualitative infrastructure roles and the state-collected royalty receipts that already exist as verified envelopes."), React.createElement("p", null, "It does not allocate PRRT, company tax, fuel excise or GST by state. Those are Commonwealth channels and the loaded sources do not publish a state-attributable receipt table."), React.createElement("p", null, "It also avoids raw \"site counts\" because that becomes misleading unless a public source defines exactly which title, field, terminal, facility or licence is being counted.")))), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "headline-h"
+    "aria-labelledby": "afip-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Headline coverage"), React.createElement("h2", {
-    id: "headline-h"
-  }, "Loaded state coverage, not a complete fiscal map"), React.createElement("p", {
+  }, "Market engagement"), React.createElement("h2", {
+    id: "afip-h"
+  }, "AFIP and private-sector proposal status"), React.createElement("p", {
     className: "section__lede"
-  }, "These cards summarise the data coverage on this page. They are not estimates of total public value."))), React.createElement("div", {
-    className: "metric-grid"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Production",
-    label: "States with loaded petroleum production rows",
-    value: `${statesWithLoadedProduction} / ${profiles.length}`,
-    plain: "AES state rows are loaded for gas and/or liquid petroleum products where the official table provides them.",
-    source: window.FR.sourceLine(data.resource_state_production_aes)
-  }), React.createElement(MetricCard, {
-    eyebrow: "State revenue",
-    label: "States with loaded petroleum royalty receipts",
-    value: `${statesWithRoyalty} / ${profiles.length}`,
-    plain: "WA/North West Shelf and Queensland petroleum royalty receipt context is loaded. Other state revenue stays unavailable.",
-    source: "Source envelopes: resource_wa_petroleum_royalty_receipts; resource_qld_petroleum_royalty_receipts."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Revenue context",
-    label: "States with any loaded revenue context",
-    value: `${statesWithRevenueContext} / ${profiles.length}`,
-    plain: "Includes petroleum-only receipt envelopes plus clearly marked combined minerals/petroleum context for NSW and NT.",
-    source: "Combined context is not petroleum-only revenue."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Loaded receipts",
-    label: "WA + Queensland petroleum receipt context",
-    value: hasNumber(loadedRoyaltyTotal) ? formatNumber(loadedRoyaltyTotal, 1) : 'Unavailable',
-    unit: hasNumber(loadedRoyaltyTotal) ? 'A$m' : '',
-    plain: "Mixed state/public receipt context only; periods and collection channels are shown in source lines.",
-    source: "Not an all-Australia royalty total."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Commonwealth tax",
-    label: "State-level federal tax attribution",
-    value: "Unavailable",
-    plain: "PRRT, company tax, fuel excise and GST are not allocated by state in the loaded sources.",
-    source: "No estimate is published."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Titles",
-    label: "States with active NOPTA petroleum title records",
-    value: `${statesWithActiveTitleRecords} / ${profiles.length}`,
-    plain: "Counts are current NOPTA non-GHG offshore title/permit records. Pending applications stay separate.",
-    source: window.FR.sourceLine(data.state_petroleum_nopta_counts)
-  }), React.createElement(MetricCard, {
-    eyebrow: "Wells layer",
-    label: "States with Petroleum Wells layer records",
-    value: `${statesWithWellLayerRecords} / ${profiles.length}`,
-    plain: "This is a public feature-layer record count, not an active-producing-well count.",
-    source: "Source envelope: state_petroleum_nopta_counts."
-  }), React.createElement(MetricCard, {
-    eyebrow: "Refineries",
-    label: "States with operating refinery count",
-    value: `${statesWithRefineries} / ${profiles.length}`,
-    plain: "Official source identifies Ampol Brisbane/Lytton and Viva Energy Geelong as Australia's two operating refineries.",
-    source: window.FR.sourceLine(data.state_operating_refinery_counts)
-  }), React.createElement(MetricCard, {
-    eyebrow: "Production mapping",
-    label: "Mapped NOPTA active production licence rows",
-    value: formatNumber(latestValue(data.state_petroleum_production_licence_map), 0),
-    plain: `${statesWithProductionLicenceRows} states/territories have active offshore production-licence rows with basin, field and title-operator metadata.`,
-    source: window.FR.sourceLine(data.state_petroleum_production_licence_map)
-  }), React.createElement(MetricCard, {
-    eyebrow: "Major projects",
-    label: "Mapped REMP oil and gas project rows",
-    value: formatNumber(latestValue(data.state_oil_gas_major_projects_remp), 0),
-    plain: `${statesWithRempRows} states have REMP oil/gas project-company rows. Capacity fields are not current production.`,
-    source: window.FR.sourceLine(data.state_oil_gas_major_projects_remp)
-  }))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "state-cards-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "State summaries"), React.createElement("h2", {
-    id: "state-cards-h"
-  }, "Production, infrastructure and revenue boundaries"))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, profiles.map(profile => React.createElement(StateSummaryCard, {
-    key: profile.state_code,
-    profile: profile,
-    production: productionFor(profile, aesRows),
-    data: data
-  })))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "mapping-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Production mapping"), React.createElement("h2", {
-    id: "mapping-h"
-  }, "State to basin to project/company, where sources publish it"), React.createElement("p", {
-    className: "section__lede"
-  }, "NOPTA rows map active offshore production licences to basin, field and title operator. REMP rows map oil and gas major projects to company, state, resource and estimated new capacity. Neither source is a complete company production-volume table."))), React.createElement(ProductionMappingTable, {
-    rows: mappedRows
-  }), React.createElement("p", {
-    className: "caption",
-    style: {
-      marginTop: 12
-    }
-  }, "NOPTA source scope: ", productionLicenceFields.source_scope, ". REMP caveat: ", rempFields.source_period_note)), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "objects-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Defined object counts"), React.createElement("h2", {
-    id: "objects-h"
-  }, "Separate petroleum object classes, not one vague site count"), React.createElement("p", {
-    className: "section__lede"
-  }, "NOPTA title, licence and well-layer records are shown separately from refinery facilities. Producing fields, LNG trains, processing plants and terminal counts remain unavailable until a source defines those objects cleanly by state."))), React.createElement(ObjectCoverageTable, {
-    profiles: profiles,
-    data: data
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "comparison-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Comparison table"), React.createElement("h2", {
-    id: "comparison-h"
-  }, "State petroleum ledger matrix"), React.createElement("p", {
-    className: "section__lede"
-  }, "The table keeps production, infrastructure context, state revenue and Commonwealth tax attribution in separate columns so the page does not blur collection channels."))), React.createElement(ComparisonTable, {
-    profiles: profiles,
+  }, "Public AFIP context and an EOI pathway are visible. Submission counts, proponents, shortlists, awards and contracts are not published as reusable public data."))), React.createElement(DeliveryTable, {
     data: data,
-    aesRows: aesRows
+    columns: ['Delivery item', 'Current public status', 'What is visible', 'What is not published', 'Likely holder / publisher', 'Next source action'],
+    rows: AFIP_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "land-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Land and hubs"), React.createElement("h2", {
+    id: "land-h"
+  }, "State-owned land and industrial fuel hubs"), React.createElement("p", {
+    className: "section__lede"
+  }, "A public statement that an audit is underway is not the same as a reusable land-register dataset."))), React.createElement(DeliveryTable, {
+    data: data,
+    columns: ['Land / hub item', 'Current public status', 'What is visible', 'What is not published', 'Dashboard status', 'Next source action'],
+    rows: LAND_ROWS
   })), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "details-h"
+    "aria-labelledby": "storage-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "State detail"), React.createElement("h2", {
-    id: "details-h"
-  }, "What is known, and what remains unavailable"))), React.createElement("div", {
-    className: "source-grid"
-  }, profiles.map(profile => React.createElement(StateDetailPanel, {
-    key: profile.state_code,
-    profile: profile,
-    production: productionFor(profile, aesRows),
-    data: data
-  })))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "gates-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Source gates"), React.createElement("h2", {
-    id: "gates-h"
-  }, "What the national petroleum ledger can and cannot publish yet"), React.createElement("p", {
+  }, "Project pathway"), React.createElement("h2", {
+    id: "storage-h"
+  }, "Storage and refining project pathway"), React.createElement("p", {
     className: "section__lede"
-  }, "This table records the seven target workstreams. Blocked rows remain explicit instead of being turned into weak counts, live maps or status labels."))), React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Workstream"), React.createElement("th", null, "Status"), React.createElement("th", null, "Result"))), React.createElement("tbody", null, workstreamRows.map(row => React.createElement("tr", {
-    key: row.id
-  }, React.createElement("td", null, React.createElement("b", null, row.id, ". ", row.name)), React.createElement("td", null, React.createElement(TrustBadge, {
-    kind: row.trust_label === 'Unavailable' ? 'unavailable' : 'partial'
-  }, row.trust_label), React.createElement("br", null), React.createElement("span", {
-    className: "mono"
-  }, row.status)), React.createElement("td", null, row.result)))))), React.createElement("div", {
-    className: "source-grid",
-    style: {
-      marginTop: 20
-    }
-  }, candidateSources.map(source => React.createElement("article", {
-    className: "source-card",
-    key: `${source.source}-${source.decision}`
-  }, React.createElement("div", {
-    className: "card-status-row"
-  }, React.createElement("h4", null, source.source), React.createElement(TrustBadge, {
-    kind: String(source.decision).includes('blocked') ? 'unavailable' : 'partial'
-  }, source.decision)), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Publisher:"), " ", source.publisher), React.createElement("p", {
-    className: "body-sm"
-  }, React.createElement("b", null, "Supports:"), " ", source.supports), React.createElement("p", {
-    className: "caption"
-  }, source.caveat))))), React.createElement("section", {
+  }, "This tracker does not derive storage or refinery capacity from broader production datasets. Capacity requires an official source with unit, date, site and definition."))), React.createElement(DeliveryTable, {
+    data: data,
+    columns: ['Pathway item', 'Current public status', 'What is verified', 'What is not published', 'Dashboard status', 'Next source action'],
+    rows: STORAGE_REFINING_ROWS
+  })), React.createElement("section", {
     className: "section section--why",
-    "aria-labelledby": "method-h"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Methodology"), React.createElement("h2", {
-    id: "method-h",
-    style: {
-      marginTop: 8
-    }
-  }, "Why federal tax stays national-only here")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, "Royalties are easier to attribute because state budget papers can publish named petroleum royalty or North West Shelf receipt lines. Commonwealth taxes are collected under different legal channels and are usually published nationally, by taxpayer, or by project concept."), React.createElement("p", null, "Allocating Commonwealth receipts to a state by production volume, company address, port, project geography or consumer spend would be a model. This first-pass page only publishes observed public rows and explicitly unavailable fields."), React.createElement("p", null, "See ", React.createElement("a", {
-    href: "../../docs/state-contribution-methodology.md"
-  }, "state petroleum ledger methodology"), "for the data contract, source gates, attribution rules and current source gaps.")))), React.createElement("section", {
-    className: "section section--sources",
-    id: "sources",
-    "aria-labelledby": "sources-h"
+    "aria-labelledby": "taroom-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", {
-    id: "sources-h"
-  }, "Every source used on this page"), React.createElement("p", {
+  }, "Resource pathway"), React.createElement("h2", {
+    id: "taroom-h"
+  }, "Taroom Trough and approvals pathway"), React.createElement("p", {
     className: "section__lede"
-  }, "Source cards show what is actually loaded. Unavailable rows remain unavailable until a named source publishes the exact field, period and unit needed."))), React.createElement("div", {
-    className: "source-grid"
-  }, React.createElement(SourceCard, {
-    id: "state_resource_contribution_profiles",
-    env: data.state_resource_contribution_profiles,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_state_production_aes",
-    env: data.resource_state_production_aes,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_gas_origin_aecr",
-    env: data.resource_gas_origin_aecr,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_oil_origin_aecr",
-    env: data.resource_oil_origin_aecr,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_wa_petroleum_royalty_receipts",
-    env: data.resource_wa_petroleum_royalty_receipts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_qld_petroleum_royalty_receipts",
-    env: data.resource_qld_petroleum_royalty_receipts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_nsw_minerals_petroleum_royalty_context",
-    env: data.state_nsw_minerals_petroleum_royalty_context,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_nt_mining_petroleum_royalty_context",
-    env: data.state_nt_mining_petroleum_royalty_context,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_petroleum_ledger_source_gates",
-    env: data.state_petroleum_ledger_source_gates,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_petroleum_nopta_counts",
-    env: data.state_petroleum_nopta_counts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_petroleum_production_licence_map",
-    env: data.state_petroleum_production_licence_map,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_oil_gas_major_projects_remp",
-    env: data.state_oil_gas_major_projects_remp,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "state_operating_refinery_counts",
-    env: data.state_operating_refinery_counts,
-    partial: true
-  }), React.createElement(SourceCard, {
-    id: "resource_resource_rent_tax_receipts_budget",
-    env: data.resource_resource_rent_tax_receipts_budget
-  }), React.createElement(SourceCard, {
-    id: "resource_prrt_policy",
-    env: data.resource_prrt_policy
-  }), React.createElement(SourceCard, {
-    id: "resource_company_tax_rate",
-    env: data.resource_company_tax_rate
-  })))), React.createElement(Footer, {
+  }, "Official wording is ", taroomName, ". The tracker does not infer production volume, approval completion, timelines or fuel-security impact unless an official source says so."))), React.createElement(DeliveryTable, {
+    data: data,
+    columns: ['Pathway item', 'Current public status', 'What is verified', 'What is not published', 'Dashboard status', 'Next source action'],
+    rows: TAROOM_ROWS
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "blockers-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Delivery blockers"), React.createElement("h2", {
+    id: "blockers-h"
+  }, "Delivery blockers matrix"), React.createElement("p", {
+    className: "section__lede"
+  }, "Categorical delivery blockers only. No numeric score, fake urgency rating or project-success claim is added."))), React.createElement(SimpleStatusTable, {
+    columns: ['Blocker', 'Current status', 'Who likely controls it', 'Why it matters', 'Next action', 'Dashboard status'],
+    rows: BLOCKER_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "publish-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Missing public feeds"), React.createElement("h2", {
+    id: "publish-h"
+  }, "What Queensland still needs to publish"), React.createElement("p", {
+    className: "section__lede"
+  }, "These are source requests, not inferred values. The page keeps missing delivery fields visible until official/public sources provide exact fields, dates, units and reuse boundaries."))), React.createElement(SimpleStatusTable, {
+    columns: ['Missing feed', 'Likely publisher', 'Why it matters', 'Current status', 'Next source action'],
+    rows: PUBLISH_ROWS
+  })), React.createElement(RelationshipSection, null), React.createElement("section", {
+    className: "section section--sources",
+    id: "sources"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Sources and methodology"), React.createElement("h2", null, "Every envelope used on this page"), React.createElement("p", {
+    className: "section__lede"
+  }, "This tracker reuses existing Queensland fuel-sovereignty envelopes. It adds no new delivery values, capacities, land parcels, proponent names, bid counts, contract awards or approvals."))), React.createElement("div", {
+    className: "sources-grid"
+  }, Object.entries(data).map(([id, env]) => React.createElement(SourceCard, {
+    key: id,
+    id: id,
+    env: env,
+    partial: ['qld_fuel_hub_six_ports_official_list', 'qld_fuel_hub_state_owned_land', 'qld_fuel_security_eoi_portal', 'qld_domestic_fuel_production_pathway', 'qld_taroom_trough_source_gate', 'qld_drilling_approvals_pathway'].includes(id)
+  }))), React.createElement("div", {
+    className: "methodology"
+  }, React.createElement("h3", null, "No-estimate rule"), React.createElement("p", null, "No land parcel, capacity, proponent, bid, contract, approval-completion or operational fuel-holding value is inferred. Source-gated means this page is waiting for a verified official/public source, exact field, period, unit and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   }));
