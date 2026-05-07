@@ -427,6 +427,10 @@ function Header({
     label: 'Infrastructure',
     href: '../infrastructure-dashboard/index.html'
   }, {
+    id: 'brisbane_2032',
+    label: '2032 readiness',
+    href: '../brisbane-2032-readiness-dashboard/index.html'
+  }, {
     id: 'employment_automation',
     label: 'Employment',
     href: '../employment-automation-dashboard/index.html'
@@ -963,6 +967,8 @@ function Footer({
   }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
     href: "../housing-economic-pressure-dashboard/index.html"
   }, "Housing pressure")), React.createElement("li", null, React.createElement("a", {
+    href: "../brisbane-2032-readiness-dashboard/index.html"
+  }, "Brisbane 2032 readiness")), React.createElement("li", null, React.createElement("a", {
     href: "../missing-data-scoreboard/index.html"
   }, "Missing data scoreboard")))), React.createElement("div", {
     className: "site-footer__col"

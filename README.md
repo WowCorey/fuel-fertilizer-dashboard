@@ -7,7 +7,7 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Nineteen dashboard surfaces plus a missing-data scoreboard read from
+**Status:** Twenty dashboard surfaces plus a missing-data scoreboard read from
 a shared JSON-envelope data pipeline. Programmatic live sources now include ABS
 petroleum imports and YoY,
 ABS fertiliser imports, food/farm/water source gates, APS net-import cover, APS refinery production series,
@@ -50,8 +50,8 @@ interpolate or estimate missing numbers.
 
 The homepage now opens with a plain-English national dashboard summary and
 best-first-click links for fuel security, fuel strategy, Queensland fuel delivery,
-missing data, readiness triage, food and farms, housing pressure, defence procurement
-and AU economics. It also links to a missing-data scoreboard that
+missing data, readiness triage, food and farms, housing pressure, Brisbane 2032 readiness,
+defence procurement and AU economics. It also links to a missing-data scoreboard that
 shows where a feed is verified, partial, stale, manual, derived, unavailable,
 source-gated or roadmap only. The scoreboard includes a national readiness
 priority matrix and action queue. Priority bands are categorical
@@ -81,6 +81,7 @@ permission to estimate.
 | [Manufacturing](ui_kits/manufacturing-dashboard/index.html) | v1.0 | Manufacturing share of GDP, employment, sales, exports, capex and food/beverage subsector | ABS Labour Force Detailed industry employment, Business Indicators manufacturing sales, International Trade SITC 5-8 manufactured exports, Private New Capex (Cat. 5625.0) and food/beverage employment now load from verified ABS latest-release XLSX tables; manufacturing GDP share and the Department of Industry profile stay unavailable until exact source-safe mappings are verified |
 | [Power grid](ui_kits/power-grid-dashboard/index.html) | v1.0 | NEM wholesale price and demand by state, fuel mix, generation register, coal retirement timeline, emissions and ISP forecasts | AEMO NEM regional wholesale price and total operational demand are fetched programmatically from the AEMO 5-minute Price and Demand archive across NSW1, VIC1, QLD1, SA1 and TAS1; Q4 2025 AEMO QED fuel mix and WEM price, January 2026 AEMO Generation Information totals and explicit coal closure-date capacity, CER 2024 NEM+SWIS renewable share, DCCEEW year-to-September 2025 electricity emissions and the 2024 ISP transmission headline are hand-keyed from named official publications |
 | [Infrastructure](ui_kits/infrastructure-dashboard/index.html) | v1.0 | Population vs dwellings, housing target progress, public transport, airports, freight, NBN busy-hour performance and the major-project pipeline | ABS quarterly population (ERP_Q), year-on-year growth rate and residential dwelling stock (RES_DWELL_ST) fetched programmatically from the ABS Data API; NHSAC Accord progress, BITRE public transport / airports / freight and ACCC Measuring Broadband Australia busy-hour performance are now hand-keyed from named official sources; Infrastructure Australia proposal count remains unavailable until a clean official extract is verified; Australian data centre capacity stays intentionally unavailable as no canonical public register exists |
+| [Brisbane 2032 readiness](ui_kits/brisbane-2032-readiness-dashboard/index.html) | v0.1 | Source-gated Olympic readiness tracker for infrastructure, venues, transport, accommodation, tourism, power, fuel, supply chains, public safety and emergency logistics | Reuses existing BITRE, AEMO, fuel-security, ABS and NHSAC envelopes as context only. Venue status, project delivery status, costs, transport capacity, accommodation pressure, tourism pressure, power reliability, public-safety readiness and emergency-logistics capacity remain unavailable/source-gated until official/public fields are loaded. |
 | [Employment & Automation](ui_kits/employment-automation-dashboard/index.html) | v0.5 | Australian labour-market change during the AI rollout era - unemployment, participation, employment-to-population, job vacancies, wages, plus context-only AI rollout milestones | ABS LF unemployment / participation / employment-to-population, ABS Job Vacancies (JV) and ABS Wage Price Index (WPI) annual % change fetched programmatically from the ABS Data API; underemployment rate and monthly hours worked stay on manual (LF dataflow standard headline keys returned 404 in initial probing); AI rollout timeline carries dated public milestone events from named publishers as context only; Australian automation/AI labour-market exposure remains intentionally unavailable as no source-safe Australian dataset has been identified. Page rule: timing is not causation. |
 | [Missing data scoreboard](ui_kits/missing-data-scoreboard/index.html) | v0.2 | Public-policy view of verified, partial, stale, unavailable, source-gated and roadmap-only dashboard gaps, plus a national readiness priority matrix | No new source values. The page maps missing feeds, likely data holders, why each gap matters, next source actions and affected dashboard surfaces; it adds categorical priority bands and an action queue without numeric scores or official risk ratings. Roadmap areas remain source-gated until exact public fields, dates, units and reuse rights are verified. |
 
@@ -133,9 +134,10 @@ envelopes without inventing values. Current priorities are:
   household debt.
 - AI automation and workforce: sector exposure, displacement risk,
   productivity effects, regional workforce exposure and retraining capacity.
-- Brisbane 2032 readiness: infrastructure delivery, transport capacity,
-  accommodation pressure, power reliability, tourism pressure, supply-chain
-  readiness, public safety and emergency logistics.
+- Brisbane 2032 readiness: dedicated source-gated page for infrastructure
+  delivery, venue readiness, transport capacity, accommodation pressure,
+  power reliability, tourism pressure, supply-chain readiness, public safety
+  and emergency logistics.
 
 ## Run locally
 
@@ -163,6 +165,7 @@ python3 -m http.server 8000
 #   http://localhost:8000/ui_kits/manufacturing-dashboard/index.html
 #   http://localhost:8000/ui_kits/power-grid-dashboard/index.html
 #   http://localhost:8000/ui_kits/infrastructure-dashboard/index.html
+#   http://localhost:8000/ui_kits/brisbane-2032-readiness-dashboard/index.html
 #   http://localhost:8000/ui_kits/employment-automation-dashboard/index.html
 #   http://localhost:8000/ui_kits/missing-data-scoreboard/index.html
 ```
@@ -432,6 +435,7 @@ ui_kits/
   strategic-resources-dashboard/ v1.0 - critical minerals and strategic resource context
   defence-alliances-dashboard/ v1.0 - public defence posture, alliances and capability context
   defence-procurement-watch/    v0.1 - source-gated defence procurement accountability tracker
+  brisbane-2032-readiness-dashboard/ v0.1 - source-gated Olympic readiness tracker
   fuel-dashboard/              v1.0 — liquid fuel
   fertilizer-dashboard/        v1.2 - food, farms and water security
   oil-and-production/          v1.2 — crude, refining, government spending

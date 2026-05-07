@@ -997,7 +997,191 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_manufacturing_gdp_share', 'abs_manufacturing_employment', 'abs_manufacturing_output_index', 'abs_manufactured_exports_total', 'abs_manufacturing_capex', 'abs_food_beverage_employment', 'doe_industry_growth_centres_summary'];
+const SERIES = ['olympics_2032_infrastructure_delivery', 'olympics_2032_venue_readiness', 'olympics_2032_transport_capacity', 'olympics_2032_accommodation_pressure', 'olympics_2032_tourism_pressure', 'olympics_2032_power_reliability', 'olympics_2032_fuel_logistics', 'olympics_2032_supply_chain_readiness', 'olympics_2032_public_safety_readiness', 'olympics_2032_emergency_logistics', 'bitre_public_transport_patronage', 'bitre_airport_passenger_movements', 'bitre_freight_volumes', 'aemo_nem_total_demand', 'aemo_nem_average_wholesale_price', 'aemo_nem_fuel_mix', 'pmc_retail_stockouts', 'qld_fuel_security_unavailable_reports', 'fuel_security_live_station_outage_feed', 'fuel_security_terminal_capacity', 'abs_population_quarterly', 'nhsac_housing_target_progress'];
+const QUICK_GUIDE = [['1', 'Infrastructure and venue delivery', 'Start with what is source-gated before reading any delivery claim.'], ['2', 'Transport and movement capacity', 'Use BITRE transport rows as historical context only, not Games capacity.'], ['3', 'Accommodation and tourism pressure', 'Do not infer hotel rooms, price pressure or visitor demand from housing context.'], ['4', 'Power, fuel and supply chains', 'Use power and fuel pages as context while event-specific resilience rows stay gated.'], ['5', 'Public safety and emergency logistics', 'Ask for safe aggregate indicators, not sensitive operational detail.'], ['6', 'What still needs publishing', 'Treat every unavailable row as a public-source request, not a value to estimate.']];
+const INFRA_VENUE_ROWS = [['Major venue delivery', 'olympics_2032_venue_readiness', 'No venue-by-venue delivery table is loaded.', 'Venue status, milestone, cost and completion claims are not published here.', 'Delivery authority / Queensland Government', 'Load official project fields with dates, scope and update cadence.'], ['Transport infrastructure', 'olympics_2032_infrastructure_delivery', 'Infrastructure context exists on other dashboards, but no Olympics delivery row is loaded.', 'Road, rail and venue-link project status is source-gated.', 'Queensland Government / infrastructure delivery bodies', 'Publish a machine-readable delivery tracker.'], ['Road / rail project readiness', 'olympics_2032_infrastructure_delivery', 'No road or rail Games-readiness status is loaded.', 'No capacity, completion, delay or risk row is inferred.', 'Transport and infrastructure agencies', 'Load official milestone rows only.'], ['Airport access', 'olympics_2032_transport_capacity', 'BITRE passenger movement context exists, but not event-day airport access capacity.', 'No event access, crowd or peak movement capacity is loaded.', 'Airport / transport agencies / operators', 'Publish safe capacity and readiness indicators.'], ['Utilities readiness', 'olympics_2032_power_reliability', 'Power grid context exists separately.', 'No event-specific utilities readiness or redundancy row is loaded.', 'Utilities / Queensland Government / AEMO where relevant', 'Publish safe aggregate reliability and readiness indicators.'], ['Project cost visibility', 'olympics_2032_infrastructure_delivery', 'No cost table is loaded.', 'No costs, overruns, budget risk or funding model is asserted.', 'Delivery authority / budgets / public project reports', 'Publish official cost and scope fields.'], ['Delivery timetable visibility', 'olympics_2032_infrastructure_delivery', 'No reusable timetable is loaded.', 'No milestone status or delivery confidence is inferred.', 'Delivery authority', 'Publish timetable and milestone update cadence.'], ['Public reporting cadence', 'olympics_2032_infrastructure_delivery', 'No dashboard-readable reporting cadence is loaded.', 'No current/stale reporting claim is made.', 'Delivery authority', 'Publish an update schedule and source file.']];
+const TRANSPORT_ROWS = [['Passenger movement capacity', 'source-gated', 'Visitors, workers and residents need confidence that movement demand can be absorbed.', 'Historical public transport and airport rows are context only; no Games capacity is loaded.', 'Publish official peak capacity indicators.'], ['Rail capacity', 'source-gated', 'Rail will carry large visitor and workforce movement loads.', 'No event-day rail capacity, service frequency or crowding metric is loaded.', 'Publish source-safe rail capacity/readiness rows.'], ['Bus capacity', 'source-gated', 'Bus and shuttle plans affect regional and venue access.', 'No official bus fleet, route or capacity row is loaded.', 'Publish aggregate event transport plan indicators.'], ['Airport capacity', 'source-gated', 'Inbound visitors affect terminals, ground transport and accommodation demand.', 'BITRE airport passenger movements are annual context only.', 'Publish official airport readiness and access fields.'], ['Road congestion pressure', 'source-gated', 'Road pressure affects residents, freight and tourism routes.', 'No event-day road disruption or congestion model is loaded.', 'Publish safe corridor-level indicators.'], ['Regional visitor movement', 'source-gated', 'Regional tourism overflow depends on transport and fuel availability.', 'No source-safe regional movement forecast is loaded.', 'Publish official regional movement assumptions.'], ['Event-day disruption planning', 'source-gated', 'Operators need to know what disruption planning is public.', 'No source-backed disruption feed is loaded.', 'Publish public disruption readiness indicators.'], ['Accessible transport readiness', 'source-gated', 'Accessibility determines whether the event can serve all users.', 'No official accessibility capacity/readiness row is loaded.', 'Publish safe accessibility indicators.']];
+const ACCOMMODATION_ROWS = [['Hotel room supply', 'source-gated', 'Accommodation supply affects tourists, workers and price pressure.', 'No official hotel-room supply or Games allocation row is loaded.', 'Scope official tourism/accommodation source.'], ['Short-stay accommodation pressure', 'source-gated', 'Short-stay demand can affect residents and visitors.', 'No source-safe short-stay pressure indicator is loaded.', 'Publish aggregate pressure indicators if public and safe.'], ['Regional visitor overflow', 'source-gated', 'Visitor overflow can shift pressure into regional centres.', 'No regional overflow forecast is loaded.', 'Publish official regional visitor assumptions.'], ['Tourism-route fuel risk', 'partial', 'Visitors and operators need fuel availability along travel routes.', 'Fuel pages show partial public fuel/outage context, not route-specific readiness.', 'Publish source-safe route fuel indicators.'], ['Price pressure', 'source-gated', 'Accommodation and tourism price pressure affects affordability and planning.', 'No price-pressure metric is loaded.', 'Publish official/public aggregate price-pressure indicators.'], ['Workforce availability', 'source-gated', 'Tourism, hospitality, transport and events need workforce planning.', 'No Games workforce availability row is loaded.', 'Publish workforce readiness indicators.'], ['Visitor demand forecasting', 'source-gated', 'Demand assumptions drive transport, accommodation and emergency planning.', 'No official visitor forecast row is loaded.', 'Publish assumptions and update cadence.']];
+const POWER_FUEL_ROWS = [['Power reliability', 'olympics_2032_power_reliability', 'Power Grid', 'Event pressure needs reliable electricity.', 'No Games-specific reliability value is loaded.', 'Publish safe reliability/readiness indicators.'], ['Peak event demand', 'olympics_2032_power_reliability', 'Power Grid', 'Peak demand affects venues, transport and accommodation.', 'AEMO demand context is not event-demand modelling.', 'Publish event peak-demand assumptions.'], ['Backup generation / resilience', 'olympics_2032_power_reliability', 'Power Grid', 'Backup resilience matters for venues and emergency services.', 'No backup/resilience row is loaded.', 'Publish safe aggregate backup readiness.'], ['Fuel availability for tourism routes', 'olympics_2032_fuel_logistics', 'National Fuel Security', 'Tourists and operators need fuel certainty.', 'No live route or station-level feed is loaded.', 'Publish route-level or safe regional availability indicators.'], ['Emergency fuel logistics', 'olympics_2032_emergency_logistics', 'Fuel Strategy / National Fuel Security', 'Emergency response depends on fuel and logistics capacity.', 'No operational fuel logistics capacity is loaded.', 'Publish safe aggregate emergency logistics indicators.'], ['Freight and supply-chain readiness', 'olympics_2032_supply_chain_readiness', 'Infrastructure / Food, Farms & Water', 'Food, equipment and venue supplies depend on freight resilience.', 'No event-specific supply-chain readiness row is loaded.', 'Publish official supply-chain readiness fields.'], ['Food/water supply pressure', 'olympics_2032_supply_chain_readiness', 'Food, Farms & Water', 'Event demand may add pressure to food and water systems.', 'No event-specific food/water pressure indicator is loaded.', 'Publish safe aggregate demand and supply indicators.'], ['Infrastructure dependencies', 'olympics_2032_infrastructure_delivery', 'Infrastructure', 'Project dependencies determine readiness.', 'No dependency map or status table is loaded.', 'Publish dependency and milestone table.']];
+const SAFETY_ROWS = [['Emergency service capacity', 'Safe aggregate only', 'Source-gated', 'Exact deployment detail may be sensitive.', 'Publish aggregate readiness indicators if safe.'], ['Hospital / health surge readiness', 'Safe aggregate only', 'Source-gated', 'Health surge planning can be sensitive and privacy-linked.', 'Publish safe capacity/readiness indicators.'], ['Public safety staffing', 'Safe aggregate only', 'Source-gated', 'Exact staffing deployments may be sensitive.', 'Publish aggregate staffing readiness if appropriate.'], ['Crowd movement', 'Safe aggregate only', 'Source-gated', 'Detailed crowd movement plans may be operationally sensitive.', 'Publish public movement readiness boundaries.'], ['Heat / weather risk', 'Yes, if official', 'Source-gated', 'No Games-specific heat/weather risk row is loaded.', 'Publish official risk and response indicators.'], ['Flood / disaster contingency', 'Safe aggregate only', 'Source-gated', 'Exact contingency operations may be sensitive.', 'Publish public aggregate preparedness indicators.'], ['Communications resilience', 'Safe aggregate only', 'Source-gated', 'Network resilience detail may include private/operator data.', 'Publish safe aggregate service readiness.'], ['Fuel / logistics support', 'Safe aggregate only', 'Source-gated', 'Exact emergency fuel holdings or routes may be sensitive.', 'Publish safe aggregate logistics indicators.']];
+const BLOCKER_ROWS = [['Project delivery visibility', 'source-gated', 'Delivery authority / Queensland Government', 'Shows whether venues and infrastructure are on track.', 'Publish delivery table with milestone dates.', 'Source-gated'], ['Cost transparency', 'source-gated', 'Delivery authority / budgets', 'Shows public accountability without inventing project cost.', 'Publish official cost and scope rows.', 'Source-gated'], ['Transport capacity', 'source-gated', 'Transport agencies / operators', 'Supports event movement and disruption planning.', 'Publish capacity/readiness indicators.', 'Source-gated'], ['Accommodation pressure', 'source-gated', 'Tourism agencies / industry / government', 'Supports visitor, worker and resident planning.', 'Publish safe aggregate supply/pressure rows.', 'Source-gated'], ['Power resilience', 'source-gated', 'Utilities / AEMO / Queensland Government', 'Supports venue, transport and public safety readiness.', 'Publish safe aggregate reliability/readiness indicators.', 'Source-gated'], ['Tourism route fuel certainty', 'partial', 'Government / fuel industry / retailers', 'Supports travel and regional tourism planning.', 'Publish route or regional fuel availability indicators.', 'Partial'], ['Emergency logistics', 'source-gated', 'Emergency agencies / government / operators', 'Supports public safety and continuity planning.', 'Publish safe aggregate logistics indicators.', 'Source-gated'], ['Supply-chain readiness', 'source-gated', 'Government / industry / freight operators', 'Supports food, equipment and venue operations.', 'Publish supply-chain readiness fields.', 'Source-gated'], ['Public reporting cadence', 'source-gated', 'Delivery authority', 'Prevents stale delivery claims.', 'Publish update cadence and latest status date.', 'Source-gated'], ['Government / industry coordination', 'source-gated', 'Commonwealth, Queensland, councils, utilities and operators', 'Shows who owns the missing data path.', 'Publish public boundary and source ownership.', 'Source-gated']];
+const PUBLISH_ROWS = [['Public venue/project delivery table', 'Delivery authority / Queensland Government', 'Separates delivery evidence from announcements.', 'Source-gated', 'Publish project, milestone, status, source date and cadence.'], ['Project timetable and milestone updates', 'Delivery authority', 'Shows accountable delivery without guessing dates.', 'Source-gated', 'Publish machine-readable milestone fields.'], ['Cost and budget status where public', 'Budgets / delivery authority', 'Shows public accountability.', 'Source-gated', 'Publish official cost, scope and date rows.'], ['Transport capacity and event-day readiness indicators', 'Transport agencies / operators', 'Supports movement planning.', 'Source-gated', 'Publish safe capacity and disruption indicators.'], ['Accommodation pressure indicators', 'Tourism agencies / industry / government', 'Supports visitors, workers and residents.', 'Source-gated', 'Publish safe aggregate accommodation indicators.'], ['Tourism-route fuel risk indicators', 'Fuel industry / government / tourism agencies', 'Supports regional travel planning.', 'Partial', 'Publish safe route or regional availability indicators.'], ['Power resilience and peak-demand readiness indicators', 'Utilities / AEMO / Queensland Government', 'Supports venues, transport and emergency services.', 'Source-gated', 'Publish safe aggregate power readiness rows.'], ['Emergency logistics aggregate indicators', 'Emergency agencies / government / operators', 'Supports public safety without exposing operations.', 'Source-gated', 'Publish safe aggregate indicators.'], ['Supply-chain readiness indicators', 'Government / freight / industry', 'Supports food, equipment and venue continuity.', 'Source-gated', 'Publish official supply-chain readiness rows.'], ['Update cadence and public dashboard boundary', 'Delivery authority / Queensland Government', 'Prevents stale or overbroad claims.', 'Source-gated', 'Publish cadence, scope and what cannot be public.']];
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function statusKind(label) {
+  const text = String(label || '').toLowerCase();
+  if (text.includes('unavailable')) return 'unavailable';
+  if (text.includes('partial')) return 'partial';
+  if (text.includes('manual')) return 'manual';
+  if (text.includes('stale')) return 'stale';
+  if (text.includes('roadmap')) return 'roadmap';
+  if (text.includes('source')) return 'source-gated';
+  return 'observed';
+}
+function GateStatus({
+  env,
+  fallback = 'Source-gated',
+  partial = false
+}) {
+  if (env?.status === 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(EnvTrustBadges, {
+      env: env,
+      partial: partial
+    }));
+  }
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, React.createElement(TrustBadge, {
+    kind: statusKind(fallback)
+  }, fallback));
+}
+function PlainTable({
+  columns,
+  rows
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
+    key: col
+  }, col)))), React.createElement("tbody", null, rows.map((row, idx) => React.createElement("tr", {
+    key: idx
+  }, row.map((cell, cellIdx) => React.createElement("td", {
+    key: `${idx}-${cellIdx}`
+  }, cellIdx === 1 && ['verified', 'partial', 'stale', 'manual', 'derived', 'unavailable', 'source-gated', 'roadmap'].includes(String(cell).toLowerCase()) ? React.createElement(TrustBadge, {
+    kind: statusKind(cell)
+  }, cell) : cell)))))));
+}
+function GateTable({
+  columns,
+  rows,
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
+    key: col
+  }, col)))), React.createElement("tbody", null, rows.map(([name, sourceId, ...cells]) => React.createElement("tr", {
+    key: name
+  }, React.createElement("td", null, name), React.createElement("td", null, React.createElement(GateStatus, {
+    env: data[sourceId]
+  })), cells.map((cell, idx) => React.createElement("td", {
+    key: `${name}-${idx}`
+  }, cell)))))));
+}
+function ContextCard({
+  env,
+  label,
+  eyebrow,
+  copy,
+  unit = ''
+}) {
+  return React.createElement(MetricCard, {
+    eyebrow: eyebrow,
+    label: label,
+    plain: copy,
+    fromEnvelope: env,
+    unit: unit,
+    partial: true
+  });
+}
+function QuickGuide() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "guide-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Use this page in order"), React.createElement("h2", {
+    id: "guide-h"
+  }, "Readiness evidence before readiness claims"), React.createElement("p", {
+    className: "section__lede"
+  }, "Existing dashboards provide useful context, but this page keeps Brisbane 2032 delivery, capacity, safety and logistics rows source-gated until official public fields are loaded."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--3"
+  }, QUICK_GUIDE.map(([step, title, copy]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, step), React.createElement("h3", null, title), React.createElement("p", null, copy)))));
+}
+function SourceCard({
+  id,
+  env,
+  partial = false
+}) {
+  const meta = env?._meta || {};
+  return React.createElement("article", {
+    className: "source-card"
+  }, React.createElement("div", {
+    className: "card-status-row"
+  }, React.createElement("h4", null, env?.source_name || meta.human_name || id), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("p", {
+    className: "body-sm"
+  }, env?.status === 'ok' ? `Loaded envelope. Latest data point ${env.last_data_point || 'not applicable'}.` : env?.notes || 'Source gate intentionally unavailable until a public, source-safe field exists.'), React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
+    className: "mono"
+  }, id)), meta.rights && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.source_url && React.createElement("a", {
+    href: env.source_url
+  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  })));
+}
+function RelationshipSection() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "relationship-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Connected dashboards"), React.createElement("h2", {
+    id: "relationship-h",
+    style: {
+      marginTop: 8
+    }
+  }, "How this connects to the national dashboard")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Brisbane 2032 Readiness tracks Olympic delivery and event-pressure readiness. Infrastructure tracks broader national project and delivery context. Power Grid tracks energy reliability context. National Fuel Security tracks fuel availability and missing live feeds. Housing Pressure tracks accommodation and cost-pressure context. Missing Data Scoreboard tracks what is not yet published."), React.createElement("div", {
+    className: "hero-actions",
+    style: {
+      marginTop: 16
+    }
+  }, React.createElement("a", {
+    className: "hero-button",
+    href: "../infrastructure-dashboard/index.html"
+  }, "Open Infrastructure"), React.createElement("a", {
+    className: "hero-button",
+    href: "../power-grid-dashboard/index.html"
+  }, "Open Power Grid"), React.createElement("a", {
+    className: "hero-button",
+    href: "../fuel-security-dashboard/index.html"
+  }, "Open National Fuel Security"), React.createElement("a", {
+    className: "hero-button",
+    href: "../housing-economic-pressure-dashboard/index.html"
+  }, "Open Housing Pressure"), React.createElement("a", {
+    className: "hero-button",
+    href: "../missing-data-scoreboard/index.html"
+  }, "Open Missing Data Scoreboard"), React.createElement("a", {
+    className: "hero-button",
+    href: "../missing-data-scoreboard/index.html#priority-h"
+  }, "Open National Readiness Priority Matrix")))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1009,7 +1193,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "manufacturing",
+      active: "brisbane_2032",
       refreshStatus: refreshStatus
     }), React.createElement("main", {
       id: "main"
@@ -1019,26 +1203,34 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
+  const latestDataPoint = window.FR.latestPageDataPoint(data);
+  const qldReportsFields = fields(data.qld_fuel_security_unavailable_reports);
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "manufacturing",
+    active: "brisbane_2032",
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "manufacturing"
+    id: "brisbane-2032-readiness"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Manufacturing \xB7 v1.0"), React.createElement("h1", {
+  }, "Brisbane 2032 readiness - source-gated tracker"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What Australia still makes, in plain English."), React.createElement("p", {
+  }, "Brisbane 2032 readiness"), React.createElement("p", {
     className: "intro__lede"
-  }, "Manufacturing is a smaller share of the Australian economy than it used to be, but it still feeds, fuels and equips the country. This page tracks the public numbers that show how much value, employment and exports come from Australian factories, and where new capital is being spent.")), React.createElement("aside", {
+  }, "Tracks public-source readiness gaps for infrastructure, venues, transport, accommodation, tourism, power, fuel, supply chains and emergency logistics ahead of Brisbane 2032."), React.createElement("p", {
+    className: "body-sm",
+    style: {
+      marginTop: 16,
+      color: 'var(--ink-2)'
+    }
+  }, "This page is an independent public-source prototype. It does not infer venue delivery, project status, costs, transport capacity, accommodation pressure, power reliability, public safety or emergency logistics unless a named official/public source provides the exact field, period, unit and reuse boundary.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1047,212 +1239,174 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Latest source data point"), React.createElement("span", null, latestDataPoint || 'No source-backed readiness data point loaded'), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Readiness and public-delivery tracker, not an official Olympic operations dashboard."))), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
-  }), React.createElement("section", {
-    className: "section section--why",
-    "aria-labelledby": "why"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "What this is"), React.createElement("h2", {
-    id: "why",
-    style: {
-      marginTop: 8
-    }
-  }, "Why this matters to you")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, "A country that can make things has more options when overseas supply gets disrupted. Manufacturing also pays measurable wages and produces measurable exports. The ABS publishes the headline numbers \u2014 value added, employment, sales, exports and private capex \u2014 by industry division (ANZSIC C is manufacturing) and subdivision (food, beverages, machinery, transport equipment, chemicals)."), React.createElement("p", null, "This page collects the named sources for each of those measures. Values appear only when the named publisher has been verified. Anything we can't verify shows up as \"Source unavailable\" \u2014 never an estimate."), React.createElement("p", {
-    className: "body-sm",
-    style: {
-      color: 'var(--ink-3)',
-      marginTop: 12
-    }
-  }, "Acronyms used here: ", React.createElement("b", null, "ABS"), " = Australian Bureau of Statistics.", React.createElement("b", null, " ANZSIC"), " = Australian and New Zealand Standard Industrial Classification.", React.createElement("b", null, " SITC"), " = Standard International Trade Classification.", React.createElement("b", null, " GVA"), " = Gross Value Added (industry contribution to GDP).")))), React.createElement("section", {
+  }), React.createElement(QuickGuide, null), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "metrics-h"
+    "aria-labelledby": "context-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Headline numbers"), React.createElement("h2", {
-    id: "metrics-h"
-  }, "As of the latest publisher update"), React.createElement("p", {
+  }, "Source-backed context"), React.createElement("h2", {
+    id: "context-h"
+  }, "Existing public indicators used only as context"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
+  }, "These envelopes are real, but none of them is treated as a Brisbane 2032 readiness value. They explain why the missing Olympic-specific feeds matter."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Share of GDP",
-    label: "Manufacturing share of GDP",
-    plain: "ANZSIC division C (manufacturing) gross value added as a share of total industry GVA, ABS quarterly National Accounts.",
-    fromEnvelope: data.abs_manufacturing_gdp_share,
-    unit: "%",
-    highlight: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Jobs",
-    label: "Manufacturing employment",
-    plain: "Employed persons in ANZSIC division C (manufacturing), ABS Labour Force Detailed release, quarterly.",
-    fromEnvelope: data.abs_manufacturing_employment,
-    unit: " thousand persons"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Output",
-    label: "Manufacturing sales (chain volume)",
-    plain: "ABS Business Indicators income from sales of goods and services for manufacturing, chain volume measures, seasonally adjusted, quarterly.",
-    fromEnvelope: data.abs_manufacturing_output_index,
-    unit: " chain volume $m"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Exports",
-    label: "Manufactured exports",
-    plain: "Combined SITC sections 5-8 (chemicals, manufactured materials, machinery, miscellaneous manufactures) export value.",
-    fromEnvelope: data.abs_manufactured_exports_total,
-    unit: " AUD millions"
-  })), React.createElement("div", {
-    style: {
-      height: 16
-    }
-  }), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Investment",
-    label: "Manufacturing private new capex",
-    plain: "ABS Cat. 5625.0 actual private new capital expenditure for ANZSIC division C, quarterly.",
-    fromEnvelope: data.abs_manufacturing_capex,
-    unit: " AUD millions"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Food sector",
-    label: "Food and beverage manufacturing employment",
-    plain: "Employed persons in ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco).",
-    fromEnvelope: data.abs_food_beverage_employment,
-    unit: " thousand persons"
-  }), React.createElement(MetricCard, {
-    eyebrow: "Industry profile",
-    label: "Industry profile (DoIS)",
-    plain: "Department of Industry, Science and Resources published manufacturing industry profiles. Hand-keyed when verified factual headcounts or revenue values are available.",
-    fromEnvelope: data.doe_industry_growth_centres_summary,
-    unit: ""
-  })), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending manufacturing source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Pending source coverage"), React.createElement("p", {
-    className: "body-sm"
-  }, "Five ABS manufacturing series now load from verified ABS latest-release XLSX tables. Manufacturing GDP share remains unavailable until the exact National Accounts table/API mapping is verified. The Department of Industry profile slot also stays unavailable until a named factual publication is loaded.")))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "charts-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "How it's changed"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Manufacturing's share, employment, output and exports over time"), React.createElement("p", {
-    className: "section__lede"
-  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Share of GDP",
-    title: "Manufacturing share of total industry GVA, quarterly",
-    unit: "%",
-    fromEnvelope: data.abs_manufacturing_gdp_share,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#1F3A8A",
-    takeaway: "ANZSIC division C (manufacturing) gross value added as a percentage of total industry GVA, ABS National Accounts.",
-    yAxisLabel: "Manufacturing share of total GVA (%)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Jobs",
-    title: "Manufacturing employment, quarterly",
-    unit: "thousand persons",
-    fromEnvelope: data.abs_manufacturing_employment,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#0F766E",
-    takeaway: "Employed persons in ANZSIC division C, ABS Labour Force Detailed.",
-    yAxisLabel: "Employed persons (thousand)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Output",
-    title: "Manufacturing sales, chain volume, quarterly",
-    unit: "chain volume $m",
-    fromEnvelope: data.abs_manufacturing_output_index,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#B45309",
-    takeaway: "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, ABS Business Indicators.",
-    yAxisLabel: "Manufacturing sales (chain volume $m)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Exports",
-    title: "Manufactured exports, monthly",
-    unit: "AUD millions",
-    fromEnvelope: data.abs_manufactured_exports_total,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Total export value across SITC sections 5-8 (chemicals, manufactured materials, machinery, miscellaneous manufactures).",
-    yAxisLabel: "Export value (AUD millions per month)"
-  }), React.createElement(ChartCard, {
-    eyebrow: "Investment",
-    title: "Manufacturing private new capex, quarterly",
-    unit: "AUD millions",
-    fromEnvelope: data.abs_manufacturing_capex,
-    ranges: ['3Y', '5Y'],
-    defaultRange: "5Y",
-    accent: "#6B7280",
-    takeaway: "Actual private new capital expenditure for ANZSIC division C (manufacturing), ABS Cat. 5625.0.",
-    yAxisLabel: "Manufacturing capex (AUD millions)"
+  }, React.createElement(ContextCard, {
+    eyebrow: "Transport context",
+    label: "Capital-city public transport patronage",
+    env: data.bitre_public_transport_patronage,
+    copy: "BITRE annual patronage context only; not Games rail, bus or event-day movement capacity.",
+    unit: " million passenger trips"
+  }), React.createElement(ContextCard, {
+    eyebrow: "Airport context",
+    label: "Capital-city airport movements",
+    env: data.bitre_airport_passenger_movements,
+    copy: "BITRE annual airport movement context only; not Brisbane 2032 airport capacity.",
+    unit: " passenger movements"
+  }), React.createElement(ContextCard, {
+    eyebrow: "Power context",
+    label: "NEM total operational demand",
+    env: data.aemo_nem_total_demand,
+    copy: "AEMO NEM demand context only; not event-specific peak demand or power reliability.",
+    unit: " MW"
+  }), React.createElement(ContextCard, {
+    eyebrow: "Fuel context",
+    label: "QLD unavailable fuel reports",
+    env: data.qld_fuel_security_unavailable_reports,
+    copy: `Monthly QLD fuel reporting context${qldReportsFields.latest_unavailable_report_date ? `; latest unavailable report date ${qldReportsFields.latest_unavailable_report_date}` : ''}. Not live route fuel readiness.`,
+    unit: " reports"
   }))), React.createElement("section", {
-    className: "section"
-  }, React.createElement(InsightFeed, {
-    items: [],
-    title: "What changed",
-    lede: "Populated from ABS / DoIS release notes as verified data arrives.",
-    emptyMessage: "Awaiting verified release notes for the loaded manufacturing source envelopes."
-  })), React.createElement("section", {
-    className: "section section--sources",
-    id: "sources"
+    className: "section",
+    "aria-labelledby": "infra-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+  }, "Delivery source gates"), React.createElement("h2", {
+    id: "infra-h"
+  }, "Infrastructure and venue delivery"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
+  }, "A venue announcement is not the same as a machine-readable delivery tracker. This page keeps delivery status source-gated until official project fields are loaded."))), React.createElement(GateTable, {
+    data: data,
+    columns: ['Delivery item', 'Current status', 'What is verified', 'What is not published', 'Likely holder / publisher', 'Next source action'],
+    rows: INFRA_VENUE_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "transport-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Movement planning"), React.createElement("h2", {
+    id: "transport-h"
+  }, "Transport and movement capacity"), React.createElement("p", {
+    className: "section__lede"
+  }, "No transport capacity numbers are created. Historical infrastructure rows stay separate from Games transport planning fields."))), React.createElement(PlainTable, {
+    columns: ['Transport question', 'Status', 'Why it matters', 'Current blocker', 'Next source action'],
+    rows: TRANSPORT_ROWS
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "accommodation-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Visitor pressure"), React.createElement("h2", {
+    id: "accommodation-h"
+  }, "Accommodation and tourism pressure"), React.createElement("p", {
+    className: "section__lede"
+  }, "Accommodation counts, price pressure and visitor-demand forecasts remain source-gated until official/public rows are loaded."))), React.createElement(PlainTable, {
+    columns: ['Pressure question', 'Status', 'Why it matters', 'What is missing', 'Next source action'],
+    rows: ACCOMMODATION_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "power-fuel-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Resilience dependencies"), React.createElement("h2", {
+    id: "power-fuel-h"
+  }, "Power, fuel and supply-chain readiness"), React.createElement("p", {
+    className: "section__lede"
+  }, "Existing power, fuel, infrastructure and food-system pages provide context. Event-specific readiness, peak demand and logistics rows stay source-gated."))), React.createElement(GateTable, {
+    data: data,
+    columns: ['Readiness row', 'Current status', 'Linked dashboard', 'Why it matters', 'Current blocker', 'Next source action'],
+    rows: POWER_FUEL_ROWS
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "safety-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Safe public aggregates"), React.createElement("h2", {
+    id: "safety-h"
+  }, "Public safety and emergency logistics"), React.createElement("p", {
+    className: "section__lede"
+  }, "This dashboard asks for safe aggregate readiness indicators, not sensitive operational detail."))), React.createElement(PlainTable, {
+    columns: ['Emergency readiness row', 'Safe public aggregate possible?', 'Current publication status', 'Sensitivity note', 'Next action'],
+    rows: SAFETY_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "blockers-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Delivery blockers"), React.createElement("h2", {
+    id: "blockers-h"
+  }, "Brisbane 2032 delivery blockers matrix"), React.createElement("p", {
+    className: "section__lede"
+  }, "Categorical blockers only. No numeric score, official risk rating or fake readiness model is added."))), React.createElement(PlainTable, {
+    columns: ['Blocker', 'Current status', 'Who likely controls it', 'Why it matters', 'Next action', 'Dashboard status'],
+    rows: BLOCKER_ROWS
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "publish-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Missing public feeds"), React.createElement("h2", {
+    id: "publish-h"
+  }, "What government still needs to publish"), React.createElement("p", {
+    className: "section__lede"
+  }, "These are source requests. They do not imply that detailed operational data should be public or that missing values can be estimated."))), React.createElement(PlainTable, {
+    columns: ['Missing feed', 'Likely publisher', 'Why it matters', 'Current status', 'Next source action'],
+    rows: PUBLISH_ROWS
+  })), React.createElement(RelationshipSection, null), React.createElement("section", {
+    className: "section section--sources",
+    id: "sources",
+    "aria-labelledby": "sources-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Sources and methodology"), React.createElement("h2", {
+    id: "sources-h"
+  }, "Every envelope used on this page"), React.createElement("p", {
+    className: "section__lede"
+  }, "This page deliberately loads source gates for Brisbane 2032 readiness fields that are not yet verified. It adds no venue status, project delivery status, costs, capacity, accommodation, power-reliability, tourism, public-safety or emergency-logistics values."))), React.createElement("div", {
     className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+  }, Object.entries(data).map(([id, env]) => React.createElement(SourceCard, {
     key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+    id: id,
+    env: env,
+    partial: ['bitre_public_transport_patronage', 'bitre_airport_passenger_movements', 'bitre_freight_volumes', 'aemo_nem_total_demand', 'aemo_nem_average_wholesale_price', 'aemo_nem_fuel_mix', 'pmc_retail_stockouts', 'qld_fuel_security_unavailable_reports', 'fuel_security_live_station_outage_feed', 'fuel_security_terminal_capacity', 'abs_population_quarterly', 'nhsac_housing_target_progress'].includes(id)
+  }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). This remains unavailable until the exact source table or API mapping for the share calculation is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001) Table 04, seasonally adjusted, quarterly."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, from ABS Business Indicators Australia (Cat. 5676.0) Table 4, quarterly. This is a source-backed sales/output proxy, not a separate production-index series."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined original FOB export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods Table 12a. The ABS workbook unit is AUD millions."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual total private new capital expenditure for ANZSIC division C (manufacturing), current prices, from ABS Private New Capital Expenditure (Cat. 5625.0) Table 4, seasonally adjusted, quarterly."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Sum of original employed-persons series for ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed Table 06, quarterly."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. This remains unavailable until a named publication supports a clean factual row; aggregated estimates are never published.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "No-estimate rule"), React.createElement("p", null, "No Brisbane 2032 value is filled from announcements, commentary, inferred project status, tourism assumptions, transport assumptions, venue speculation or operational safety assumptions. A row stays unavailable or source-gated until a named official/public source provides the exact field, period, unit and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
-  })));
+  }));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App, null));

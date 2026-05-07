@@ -20,6 +20,7 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
     { id: 'manufacturing', label: 'Manufacturing',         href: '../manufacturing-dashboard/index.html' },
     { id: 'power_grid',    label: 'Power grid',            href: '../power-grid-dashboard/index.html' },
     { id: 'infrastructure',label: 'Infrastructure',        href: '../infrastructure-dashboard/index.html' },
+    { id: 'brisbane_2032', label: '2032 readiness',        href: '../brisbane-2032-readiness-dashboard/index.html' },
     { id: 'employment_automation', label: 'Employment', href: '../employment-automation-dashboard/index.html' },
     { id: 'missing_data', label: 'Missing data', href: '../missing-data-scoreboard/index.html' },
     { id: 'sources',       label: 'Sources & methodology', href: '#sources' },

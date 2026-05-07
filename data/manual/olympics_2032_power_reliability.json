@@ -1,0 +1,29 @@
+{
+  "series_id": "olympics_2032_power_reliability",
+  "source_id": "olympics_2032_power_reliability",
+  "source_name": "Brisbane 2032 power reliability source gate",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-05-07T00:00:00+10:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No Brisbane 2032 power reliability or peak event demand indicator is loaded. AEMO/NEM context is not event reliability.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0",
+  "citation": "Fuel Resilience AU source gate for Brisbane 2032 power reliability.",
+  "extra": {
+    "schema": "source_gate.v1",
+    "fields": {
+      "decision": "source-gated",
+      "required_public_feed": "Safe aggregate power reliability, peak demand or backup readiness indicators for Brisbane 2032 scope.",
+      "do_not_infer_from": [
+        "monthly NEM demand",
+        "wholesale prices",
+        "fuel mix",
+        "generic reliability discussion"
+      ]
+    }
+  }
+}

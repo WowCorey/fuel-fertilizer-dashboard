@@ -132,8 +132,12 @@ or public procurement sources provide exact fields.
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Brisbane 2032 infrastructure delivery | roadmap | No Olympics readiness dashboard surface exists yet. | Scope official delivery authority, transport and infrastructure sources first. |
-| Transport, accommodation, power, tourism and emergency logistics pressure | roadmap | These are separate datasets and cannot be rolled into a single readiness score without a documented method. | Add source-safe indicators one at a time and keep missing feeds visible. |
+| Brisbane 2032 Readiness page | source-gated | A dedicated page now exists, but it intentionally loads source gates rather than venue/project/capacity values. | Wire official delivery authority and public capacity sources one field at a time. |
+| Venue and infrastructure delivery | source-gated | No official machine-readable venue/project delivery table is loaded. Announcements are not treated as status rows. | Add official project, milestone, scope, cost and reporting-cadence fields only when source-safe. |
+| Transport capacity and movement readiness | source-gated | BITRE public transport and airport data are historical context only, not event-day rail, bus, road or airport capacity. | Scope official transport readiness and capacity indicators with mode, geography, period and unit. |
+| Accommodation and tourism pressure | source-gated | No source-safe hotel-room, short-stay, regional overflow, tourism-route or visitor-demand indicator is loaded. | Add safe aggregate tourism/accommodation indicators only from named public sources. |
+| Power, fuel and supply-chain readiness | source-gated / partial context | AEMO, fuel-security and freight rows provide context, but no Brisbane 2032 peak-demand, route-fuel, emergency-fuel or supply-chain readiness row is loaded. | Keep event-specific readiness source-gated until official safe aggregate indicators exist. |
+| Public safety and emergency logistics | source-gated | Emergency services, health surge, crowd movement, communications resilience and emergency logistics may include sensitive operational detail. | Request safe public aggregate indicators, not detailed operational plans. |
 
 ## National status
 

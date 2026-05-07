@@ -31,6 +31,7 @@ function Footer({ updated = '', refreshStatus = null }) {
             <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>
             <li><a href="../who-pays-what/index.html">Who pays what</a></li>
             <li><a href="../housing-economic-pressure-dashboard/index.html">Housing pressure</a></li>
+            <li><a href="../brisbane-2032-readiness-dashboard/index.html">Brisbane 2032 readiness</a></li>
             <li><a href="../missing-data-scoreboard/index.html">Missing data scoreboard</a></li>
           </ul>
         </div>

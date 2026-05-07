@@ -20,6 +20,7 @@ const routes = [
   { path: '/ui_kits/manufacturing-dashboard/index.html', heading: 'What Australia still makes, in plain English.' },
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
   { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
+  { path: '/ui_kits/brisbane-2032-readiness-dashboard/index.html', heading: 'Brisbane 2032 readiness' },
   { path: '/ui_kits/employment-automation-dashboard/index.html', heading: "Australia's labour market during the AI rollout era." },
   { path: '/ui_kits/missing-data-scoreboard/index.html', heading: 'What Australia can see, and what is still missing.' },
 ];
@@ -61,6 +62,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(heroLinks.getByRole('link', { name: 'View National Readiness Matrix' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Food, Farms & Water' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View Housing Pressure' })).toBeVisible();
+  await expect(heroLinks.getByRole('link', { name: 'View Brisbane 2032' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'View AU Economics' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Where to start' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For the fuel dashboard request' })).toBeVisible();
@@ -69,6 +71,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Defence procurement' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For what still needs publishing' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For housing pressure' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For Brisbane 2032 readiness' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
   await expect(page.getByText('This site is an independent public-source prototype, not an official government dashboard.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel security' }).first()).toBeVisible();
@@ -88,6 +91,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Fuel strategy' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'QLD fuel sovereignty' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open defence procurement watch' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Brisbane 2032 readiness', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
@@ -138,6 +142,7 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByRole('heading', { name: 'Brisbane 2032 readiness' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'AI automation and workforce pressure' })).toBeVisible();
   await expect(page.getByText('A dedicated Defence Procurement Watch page now surfaces these source gates.')).toBeVisible();
+  await expect(page.getByText('A dedicated Brisbane 2032 Readiness page now surfaces these source gates.')).toBeVisible();
   await expect(page.getByText('No AI causation or fake exposure score is published.')).toBeVisible();
   await expect(page.getByText('It does not invent government strategy facts')).toBeVisible();
 });
@@ -177,6 +182,7 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'For policy, reserves and MSO context' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Australian Fuel Strategy Tracker' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Brisbane 2032 Readiness' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel sovereignty pathway' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For Queensland delivery tracking' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Queensland Fuel Sovereignty Delivery Tracker' })).toBeVisible();
@@ -314,6 +320,37 @@ test('defence procurement watch keeps procurement facts source-gated', async ({ 
   await expect(page.getByRole('link', { name: 'Open Strategic Resources' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Fuel Strategy' })).toBeVisible();
   await expect(page.getByText('No procurement fact is filled from media discussion')).toBeVisible();
+});
+
+test('Brisbane 2032 readiness keeps Olympic delivery data source-gated', async ({ page }) => {
+  await page.goto('/ui_kits/brisbane-2032-readiness-dashboard/index.html');
+  await expect(page.getByRole('heading', { name: 'Brisbane 2032 readiness' })).toBeVisible();
+  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(page.getByText('It does not infer venue delivery, project status, costs, transport capacity')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Readiness evidence before readiness claims' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Existing public indicators used only as context' })).toBeVisible();
+  await expect(page.getByText('none of them is treated as a Brisbane 2032 readiness value')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="infra-h"]').getByRole('heading', { name: 'Infrastructure and venue delivery' })).toBeVisible();
+  await expect(page.getByText('A venue announcement is not the same as a machine-readable delivery tracker.')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Major venue delivery' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Project cost visibility' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="transport-h"]').getByRole('heading', { name: 'Transport and movement capacity' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Passenger movement capacity' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="accommodation-h"]').getByRole('heading', { name: 'Accommodation and tourism pressure' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Hotel room supply' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="power-fuel-h"]').getByRole('heading', { name: 'Power, fuel and supply-chain readiness' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Emergency fuel logistics' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="safety-h"]').getByRole('heading', { name: 'Public safety and emergency logistics' })).toBeVisible();
+  await expect(page.getByText('safe aggregate readiness indicators, not sensitive operational detail')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="blockers-h"]').getByRole('heading', { name: 'Brisbane 2032 delivery blockers matrix' })).toBeVisible();
+  await expect(page.getByText('No numeric score, official risk rating or fake readiness model is added.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What government still needs to publish' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How this connects to the national dashboard' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Power Grid' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Housing Pressure' })).toBeVisible();
+  await expect(page.getByText('No Brisbane 2032 value is filled from announcements')).toBeVisible();
 });
 
 test('AU economics page separates latest cash rate from monthly history', async ({ page }) => {
