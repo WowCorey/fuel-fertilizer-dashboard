@@ -1130,7 +1130,13 @@ function FuelStrategyCrossLink() {
             It does not infer strategy facts, contracts, cargoes, terminal inventories or emergency
             settings where an official/public source is not loaded.
           </p>
+          <p>
+            Defence procurement and naval logistics source gates are tracked separately so this
+            operational fuel-security view does not imply military procurement or capability facts.
+          </p>
           <a href="../australian-fuel-strategy-dashboard/index.html">Open Australian Fuel Strategy Tracker</a>
+          <br/>
+          <a href="../defence-procurement-watch/index.html">Open Defence Procurement Watch</a>
         </div>
       </div>
     </section>

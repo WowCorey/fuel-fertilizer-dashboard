@@ -7,7 +7,7 @@ bits of the energy and agricultural supply chain that most shape prices at the
 pump and at the farm gate. Written in plain English, sourced from named public
 Australian and international sources, and explicit when data is unavailable.
 
-**Status:** Eighteen dashboard surfaces plus a missing-data scoreboard read from
+**Status:** Nineteen dashboard surfaces plus a missing-data scoreboard read from
 a shared JSON-envelope data pipeline. Programmatic live sources now include ABS
 petroleum imports and YoY,
 ABS fertiliser imports, food/farm/water source gates, APS net-import cover, APS refinery production series,
@@ -50,7 +50,8 @@ interpolate or estimate missing numbers.
 
 The homepage now opens with a plain-English national dashboard summary and
 best-first-click links for fuel security, fuel strategy, Queensland fuel delivery,
-missing data, readiness triage, food and farms, housing pressure and AU economics. It also links to a missing-data scoreboard that
+missing data, readiness triage, food and farms, housing pressure, defence procurement
+and AU economics. It also links to a missing-data scoreboard that
 shows where a feed is verified, partial, stale, manual, derived, unavailable,
 source-gated or roadmap only. The scoreboard includes a national readiness
 priority matrix and action queue. Priority bands are categorical
@@ -70,6 +71,7 @@ permission to estimate.
 | [State petroleum ledger](ui_kits/state-contribution-dashboard/index.html) | v1.3 | State/territory petroleum and gas production roles, defined object counts, partial project/operator mapping, infrastructure context, state royalty receipts, combined royalty context and source gates | AES state production rows, NOPTA offshore title/well-layer counts, NOPTA active production-licence field/operator rows, REMP oil/gas major-project rows, QLD/VIC operating refinery counts, WA/NWS and Queensland petroleum receipts, NSW/NT combined royalty context and source-gate workstreams are loaded; Commonwealth tax attribution by state, current project/company production volumes, terminal capacity, LNG train counts and raw site totals remain unavailable |
 | [Strategic resources](ui_kits/strategic-resources-dashboard/index.html) | v1.0 | Iron ore, coal, uranium, bauxite/alumina, copper, nickel, lithium, rare earths, gold, zinc and sulphur source-gate context | DISR REQ export rows, GA AIMR 2025 production/reserve/resource rows and GA/Digital Atlas operating-mines footprint rows are loaded where source-safe; rare-earth individual export value and sulphur production/export/reserve rows remain unavailable |
 | [Defence posture](ui_kits/defence-alliances-dashboard/index.html) | v1.1 | Defence spending, selected public ADF capability rows, force-structure context, uncrewed systems and counter-drone, alliances/frameworks and sovereign defence-industry context | 2026 NDS budget rows, Defence Annual Report workforce rows, selected Navy/Air Force/Army public capability rows, selected uncrewed-systems rows (Triton, Ghost Bat, Integrator, LAND 156 counter-small UAS, Ghost Shark, SDIP autonomous systems, RAN maritime autonomous context), ANZUS/AUKUS/Five Eyes/Quad/AUSMIN/PNG framework profiles and SDIP/GWEO industry context are loaded; readiness, mission-capable rates, live availability, munitions stockpile depth, classified posture, GDP-share fields and a clean drone-only budget remain unavailable |
+| [Defence procurement](ui_kits/defence-procurement-watch/index.html) | v0.1 | Public-source procurement watch for source-gated contract pathways, delivery timelines, industry-content questions, logistics implications and public/private defence-data boundaries | Adds source-gated procurement envelopes and reuses existing defence posture / strategic-resource context. No Japan/Australia warship fact, vessel class, supplier, contract, value, delivery timeline, industry-content claim, fuel/logistics metric or operational posture is asserted without official source material. |
 | [Fuel](ui_kits/fuel-dashboard/index.html) | v1.0 | Imports, prices, days of net import cover | ABS imports, ABS YoY, APS net-import cover, AIP TGP and public-feed retail averages for ULP 91, diesel, premium 95 and E10 fetched; AIP national retail reports remain manual |
 | [Food, farms & water security](ui_kits/fertilizer-dashboard/index.html) | v1.3 | Food-system visibility, fertiliser and farm inputs, farmer decision-pressure, agricultural production/export source gates, food import source gates, water and seasonal pressure | ABS SITC 562 total fertiliser imports and source-country top-3 concentration are loaded; agricultural production, food imports, agricultural exports, farm diesel risk, crop planting-window pressure, water storage/allocation, rainfall/drought pressure, freight disruption, nutrient subseries, ABARES price and stock cover remain unavailable placeholders until source-safe values are wired |
 | [Oil & production](ui_kits/oil-and-production/index.html) | v1.2 | Brent/WTI/Tapis, domestic refining, IEA gap, Fuel Security payments | Brent/WTI, AUD conversions, EIA diesel/jet, APS production and APS product-flow series fetched; DCCEEW FSSP/offshore disclosures are hand-keyed; Tapis and refinery utilisation remain unavailable |
@@ -152,6 +154,7 @@ python3 -m http.server 8000
 #   http://localhost:8000/ui_kits/state-contribution-dashboard/index.html
 #   http://localhost:8000/ui_kits/strategic-resources-dashboard/index.html
 #   http://localhost:8000/ui_kits/defence-alliances-dashboard/index.html
+#   http://localhost:8000/ui_kits/defence-procurement-watch/index.html
 #   http://localhost:8000/ui_kits/fuel-dashboard/index.html
 #   http://localhost:8000/ui_kits/fertilizer-dashboard/index.html
 #   http://localhost:8000/ui_kits/oil-and-production/index.html
@@ -428,6 +431,7 @@ ui_kits/
     state-contribution-dashboard/ v1.3 - state petroleum ledger, source gates, defined object counts and partial production mapping
   strategic-resources-dashboard/ v1.0 - critical minerals and strategic resource context
   defence-alliances-dashboard/ v1.0 - public defence posture, alliances and capability context
+  defence-procurement-watch/    v0.1 - source-gated defence procurement accountability tracker
   fuel-dashboard/              v1.0 — liquid fuel
   fertilizer-dashboard/        v1.2 - food, farms and water security
   oil-and-production/          v1.2 — crude, refining, government spending

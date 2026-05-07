@@ -399,7 +399,14 @@ function QueenslandDeliveryCrossLink() {
             It keeps land parcels, capacities, proponents, bids, contracts and approval
             completion source-gated unless named official sources publish exact fields.
           </p>
+          <p>
+            Defence procurement and naval logistics questions are handled separately in
+            Defence Procurement Watch so national fuel policy rows are not turned into
+            procurement or operational military claims.
+          </p>
           <a href="../qld-fuel-sovereignty-dashboard/index.html">Open Queensland Fuel Sovereignty Delivery Tracker</a>
+          <br/>
+          <a href="../defence-procurement-watch/index.html">Open Defence Procurement Watch</a>
         </div>
       </div>
     </section>

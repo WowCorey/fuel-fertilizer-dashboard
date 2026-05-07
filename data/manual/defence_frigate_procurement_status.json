@@ -1,0 +1,30 @@
+{
+  "series_id": "defence_frigate_procurement_status",
+  "source_id": "defence_frigate_procurement_status",
+  "source_name": "Frigate/general-purpose vessel procurement status source gate",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-05-07T00:00:00+10:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No source-safe contract, vessel class, vessel count, delivery or in-service row is loaded for frigate/general-purpose vessel procurement.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0",
+  "citation": "Fuel Resilience AU source gate for frigate/general-purpose vessel procurement status.",
+  "extra": {
+    "schema": "source_gate.v1",
+    "fields": {
+      "decision": "source-gated",
+      "required_public_feed": "Official Defence or procurement source with contract, program, class, count and delivery fields.",
+      "do_not_infer_from": [
+        "media discussion",
+        "political commentary",
+        "budget totals",
+        "capability asset counts",
+        "alliance context"
+      ]
+    }
+  }
+}

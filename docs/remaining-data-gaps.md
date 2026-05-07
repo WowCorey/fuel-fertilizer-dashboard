@@ -96,11 +96,19 @@ names, bid counts, contracts, awards, approval completion or operational fuel ho
 
 ### Defence / naval procurement
 
+A dedicated Defence Procurement Watch page now surfaces these rows as source gates.
+The page adds no supplier, vessel class, contract, value, delivery timeline,
+industry-content, logistics or operational posture values until official Defence
+or public procurement sources provide exact fields.
+
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Japan/Australia warship procurement pathway | source-gated | Source-gated: pending official Defence/public procurement source verification. No current procurement fact is asserted here. | If official Defence material is verified, add a source gate such as `defence_japan_warship_procurement_source_gate`. |
-| Frigate/general-purpose vessel contract status and delivery timeline | source-gated | No source-safe contract row, delivery schedule or industry-content field has been loaded. | Add `defence_frigate_procurement_status` only from official procurement or Defence sources. |
-| Naval logistics/fuel implication | source-gated | Procurement discussion is not itself a fuel/logistics metric. | Add `defence_naval_logistics_fuel_implication` only if an official source links the procurement path to logistics or fuel posture. |
+| Japan/Australia warship procurement pathway | source-gated | Source-gated: pending official Defence/public procurement source verification. No current procurement fact is asserted here. | `defence_japan_warship_procurement_source_gate` remains unavailable until official material verifies the program, supplier pathway, contract status and delivery timeline. |
+| Frigate/general-purpose vessel contract status and delivery timeline | source-gated | No source-safe contract row, delivery schedule or industry-content field has been loaded. | `defence_frigate_procurement_status` and `defence_procurement_delivery_timeline_gate` remain unavailable until official procurement or Defence sources publish exact fields. |
+| Naval logistics/fuel implication | source-gated | Procurement discussion is not itself a fuel/logistics metric. | `defence_naval_logistics_fuel_implication` remains unavailable unless an official source links the procurement path to logistics or fuel posture. |
+| Contract value and supplier pathway | source-gated | No official value, currency, supplier or scope row is loaded. | `defence_procurement_contract_value_gate` remains unavailable until official source material is loaded. |
+| Australian industry content and shipbuilding dependency | source-gated | Existing sovereign-industry context is not a project-specific workshare, sustainment, workforce or dockyard commitment. | `defence_shipbuilding_industry_content_gate` remains unavailable until official industry-content source material is loaded. |
+| Public/private defence data boundary | source-gated | Procurement facts and sensitive operational details need different publication rules. | `defence_procurement_public_boundary_gate` records the boundary; request safe aggregate indicators, not live readiness or operational details. |
 
 ### Housing / economy
 

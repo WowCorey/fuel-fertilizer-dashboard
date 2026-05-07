@@ -991,198 +991,199 @@ function Footer({
 Object.assign(window, {
   Footer
 });
-const SERIES = ['abs_fertiliser_imports', 'abs_fertiliser_imports_urea', 'abs_fertiliser_imports_potash', 'abs_fertiliser_imports_phosphate', 'abs_fertiliser_imports_compound', 'abs_fertiliser_source_concentration', 'abares_fertiliser_price', 'abares_fertiliser_stock_cover', 'abares_agricultural_exports', 'abares_agricultural_commodities_wheat', 'abares_agricultural_commodities_beef', 'abs_food_imports', 'abs_agricultural_exports', 'bom_rainfall_deficiency', 'bom_water_storage', 'mdba_water_storage', 'daff_agricultural_trade', 'farm_diesel_risk_source_gate', 'fertiliser_stock_cover_regional', 'fertiliser_price_pressure_farm_gate', 'crop_planting_window_pressure', 'water_allocation_food_regions', 'drought_pressure_agriculture_regions', 'freight_disruption_farm_regions', 'fertiliser_forward_contract_coverage'];
-const latestPoint = env => env?.values?.length ? env.values.at(-1) : null;
-const fmtNumber = value => typeof value === 'number' ? new Intl.NumberFormat('en-AU').format(value) : 'Awaiting data';
-const latestValue = env => {
-  const point = latestPoint(env);
-  return point ? fmtNumber(point.v) : 'Unavailable';
-};
-const latestPeriod = env => latestPoint(env)?.t || env?.last_data_point || 'Awaiting verified source data';
-function SourceStatusCard({
+const SERIES = ['defence_japan_warship_procurement_source_gate', 'defence_frigate_procurement_status', 'defence_naval_logistics_fuel_implication', 'defence_surface_fleet_procurement_pathway', 'defence_shipbuilding_industry_content_gate', 'defence_procurement_delivery_timeline_gate', 'defence_procurement_contract_value_gate', 'defence_procurement_public_boundary_gate', 'defence_sovereign_industry_context', 'defence_public_capability_assets', 'defence_readiness_gap', 'strategic_resources_critical_minerals_context'];
+const QUICK_GUIDE = [['1', 'Procurement pathway', 'Start with whether an official procurement pathway has been loaded.'], ['2', 'Contract and delivery status', 'Treat supplier, value, class, count and delivery rows as unavailable until official source material exists.'], ['3', 'Australian industry content', 'Keep industry-content questions separate from procurement facts.'], ['4', 'Logistics and fuel implications', 'Do not convert procurement discussion into fuel or sustainment metrics.'], ['5', 'Strategic dependencies', 'Link procurement questions to resources, manufacturing and infrastructure only as context.'], ['6', 'What still needs publishing', 'Use missing rows as source requests, not as dashboard values.']];
+const PROCUREMENT_ROWS = [['Japan/Australia warship procurement pathway', 'defence_japan_warship_procurement_source_gate', 'No official pathway row loaded.', 'Program, supplier pathway, contract status and delivery timeline are not asserted.', 'Official Defence or public procurement source with exact row and date.'], ['Frigate / general-purpose vessel pathway', 'defence_frigate_procurement_status', 'No source-safe contract or program row loaded.', 'Vessel class, number, delivery schedule and in-service target remain source-gated.', 'Load only official Defence/procurement material.'], ['Surface fleet procurement context', 'defence_surface_fleet_procurement_pathway', 'Source-gated pathway placeholder only.', 'No decision, supplier, fleet count or readiness implication is published.', 'Verify official public pathway source before display.'], ['Contracting stage', 'defence_frigate_procurement_status', 'No contract-stage row loaded.', 'No award, shortlist, negotiation or procurement-stage claim is made.', 'Publish official stage/status field.'], ['Supplier / partner nation', 'defence_japan_warship_procurement_source_gate', 'No supplier or partner-nation procurement row loaded.', 'No Japan/Australia supplier pathway is asserted.', 'Use official source material only.'], ['Decision status', 'defence_surface_fleet_procurement_pathway', 'No decision-status field loaded.', 'No decision, selection or approval is inferred.', 'Load official decision announcement if published.'], ['Public announcement status', 'defence_surface_fleet_procurement_pathway', 'No reusable announcement table loaded.', 'Media discussion or political commentary is not treated as a procurement row.', 'Create row only from official/public procurement source.']];
+const CONTRACT_ROWS = [['Contract awarded?', 'defence_frigate_procurement_status', 'Unavailable', 'No official contract-award row is loaded.', 'Do not infer from media discussion or broad procurement interest.'], ['Contract value', 'defence_procurement_contract_value_gate', 'Source-gated', 'No public value row is loaded.', 'Requires official value, currency, period and scope.'], ['Supplier / prime contractor', 'defence_japan_warship_procurement_source_gate', 'Source-gated', 'No supplier row is loaded.', 'Requires official supplier/procurement source.'], ['Vessel class / program', 'defence_frigate_procurement_status', 'Source-gated', 'No class or program row is loaded.', 'Do not publish class/program unless official.'], ['Number of vessels', 'defence_frigate_procurement_status', 'Unavailable', 'No vessel-count row is loaded.', 'Requires official quantity and scope.'], ['Delivery schedule', 'defence_procurement_delivery_timeline_gate', 'Source-gated', 'No delivery schedule row is loaded.', 'Requires official milestone/date fields.'], ['In-service target', 'defence_procurement_delivery_timeline_gate', 'Source-gated', 'No in-service target row is loaded.', 'Requires official public target.'], ['Sustainment arrangement', 'defence_shipbuilding_industry_content_gate', 'Source-gated', 'No sustainment row is loaded.', 'Requires official sustainment or industry-content source.'], ['Australian industry content', 'defence_shipbuilding_industry_content_gate', 'Source-gated', 'No project-specific industry-content row is loaded.', 'Requires official local-content or procurement source.']];
+const INDUSTRY_ROWS = [['Australian shipbuilding contribution', 'defence_sovereign_industry_context', 'Public industrial priority context is loaded, but no project-specific shipbuilding contribution row is loaded.', 'Current blocker: procurement-specific local-content source not loaded.', 'Manufacturing / Strategic resources'], ['Local sustainment', 'defence_shipbuilding_industry_content_gate', 'No sustainment arrangement row is loaded.', 'Current blocker: official sustainment scope and location not loaded.', 'Manufacturing / Infrastructure'], ['Supply-chain readiness', 'defence_shipbuilding_industry_content_gate', 'No supply-chain depth or readiness metric is loaded.', 'Current blocker: no public source-safe capacity field.', 'Manufacturing / Strategic resources'], ['Workforce / skills pressure', 'defence_shipbuilding_industry_content_gate', 'No procurement-specific workforce row is loaded.', 'Current blocker: no official workforce/skills denominator loaded.', 'Employment / Manufacturing'], ['Steel / critical materials', 'strategic_resources_critical_minerals_context', 'Strategic resources context exists, but no procurement bill-of-materials or supplier dependency is loaded.', 'Current blocker: no official project material dependency row.', 'Strategic resources'], ['Electronics / systems integration', 'defence_shipbuilding_industry_content_gate', 'No systems-integration capacity row is loaded.', 'Current blocker: no public project-specific integration source.', 'Manufacturing / Defence posture'], ['Port / dockyard infrastructure', 'defence_shipbuilding_industry_content_gate', 'No dockyard or port readiness row is loaded.', 'Current blocker: no official infrastructure dependency row.', 'Infrastructure']];
+const LOGISTICS_ROWS = [['Fuel type / logistics demand', 'Source-gated', 'No fuel type, demand or consumption row is loaded.', 'Official logistics/fuel basis required.'], ['Refuelling / sustainment burden', 'Source-gated', 'No sustainment burden metric is loaded.', 'Do not infer from ship type or procurement discussion.'], ['Port infrastructure requirement', 'Source-gated', 'No port requirement row is loaded.', 'Requires official infrastructure/logistics source.'], ['Supply-chain resilience', 'Source-gated', 'No supply-chain resilience metric is loaded.', 'Requires public aggregate indicator.'], ['Allied interoperability', 'Source-gated', 'No procurement-specific interoperability row is loaded.', 'Requires official program source.'], ['Fuel-security relevance', 'Source-gated', 'No direct fuel-security implication is loaded.', 'Use only official linkage.'], ['Emergency logistics relevance', 'Source-gated', 'No emergency logistics row is loaded.', 'Do not infer operational posture.']];
+const DEPENDENCY_ROWS = [['Regional posture relevance', 'defence_readiness_gap', 'Readiness and live posture stay unavailable.', 'Defence posture', 'No classified posture or readiness asserted.'], ['Maritime security relevance', 'defence_surface_fleet_procurement_pathway', 'Source-gated until official procurement pathway is loaded.', 'Defence posture', 'No operational capability claim.'], ['Critical mineral / strategic resource dependency', 'strategic_resources_critical_minerals_context', 'Resource context can inform dependency questions only.', 'Strategic resources', 'No procurement material dependency row loaded.'], ['Manufacturing readiness', 'defence_shipbuilding_industry_content_gate', 'No procurement-specific readiness row loaded.', 'Manufacturing', 'No industrial capacity inferred.'], ['Infrastructure readiness', 'defence_shipbuilding_industry_content_gate', 'No dockyard, port or infrastructure readiness row loaded.', 'Infrastructure', 'No facility capability inferred.'], ['Fuel/logistics dependency', 'defence_naval_logistics_fuel_implication', 'Source-gated until official fuel/logistics basis is loaded.', 'Fuel strategy / National fuel security', 'No fuel requirement inferred.'], ['Public-source confidence', 'defence_procurement_public_boundary_gate', 'Boundary source gate records what can and cannot be treated as a public row.', 'Missing Data Scoreboard', 'No sensitive operational detail requested.']];
+const BOUNDARY_ROWS = [['Procurement announcement', 'Yes', 'Source-gated', 'Safe to publish when official; no row loaded here yet.', 'Load official announcement.'], ['Contract value', 'Yes, if officially released', 'Source-gated', 'May require scope and currency boundaries.', 'Load official value row only.'], ['Delivery schedule', 'Yes, if officially released', 'Source-gated', 'Milestones should be official and dated.', 'Load official delivery timeline.'], ['Industry content', 'Yes, if officially released', 'Source-gated', 'Should avoid unsupported local-content claims.', 'Load official industry-content source.'], ['Operational readiness', 'No exact live detail', 'Unavailable', 'Readiness may be sensitive and is not inferred.', 'Keep unavailable unless safe aggregate is officially published.'], ['Live vessel movement', 'No', 'Unavailable', 'Live operational movement is outside this public prototype.', 'Do not add live movement feeds.'], ['Fuel logistics detail', 'Aggregate only if official', 'Source-gated', 'Exact fuel holdings or vulnerabilities may be sensitive.', 'Ask for safe aggregate indicators only.'], ['Sustainment risk', 'Aggregate only if official', 'Source-gated', 'Risk models require method and source boundary.', 'Do not create fake risk scores.']];
+const PUBLISH_ROWS = [['Official procurement pathway', 'Defence / official procurement sources', 'Shows whether the pathway is real and current.', 'Source-gated', 'Publish official pathway and update cadence.'], ['Contract status', 'Defence / procurement agency', 'Separates discussion from awarded commitments.', 'Unavailable', 'Publish award/status row if public.'], ['Delivery timeline', 'Defence / supplier if officially released', 'Shows delivery accountability.', 'Source-gated', 'Publish dated milestones and scope.'], ['Australian industry content', 'Defence / industry portfolio / prime contractor if official', 'Shows local work, sustainment and workforce implications.', 'Source-gated', 'Publish local-content fields only from official sources.'], ['Sustainment plan summary', 'Defence', 'Shows long-term capability support without live operational detail.', 'Source-gated', 'Publish safe public sustainment summary.'], ['Public cost/value range', 'Defence / budget papers / procurement notices', 'Shows fiscal scale and accountability.', 'Source-gated', 'Publish official value and scope.'], ['Shipbuilding workforce readiness', 'Defence / Jobs and Skills / industry', 'Shows whether workforce is a delivery constraint.', 'Source-gated', 'Publish safe workforce indicators.'], ['Infrastructure dependency', 'Defence / infrastructure agencies', 'Shows dockyard, port and sustainment needs.', 'Source-gated', 'Publish non-sensitive aggregate dependency rows.'], ['Logistics/fuel public aggregate', 'Defence / fuel policy agencies', 'Connects procurement to national fuel resilience only where safe.', 'Source-gated', 'Publish aggregate public indicator if appropriate.'], ['Procurement update cadence', 'Defence / procurement agency', 'Prevents stale procurement claims.', 'Source-gated', 'Publish update cadence and latest status.']];
+function fields(env) {
+  return env?.extra?.fields || {};
+}
+function trustKind(label) {
+  const text = String(label || '').toLowerCase();
+  if (text.includes('unavailable')) return 'unavailable';
+  if (text.includes('partial')) return 'partial';
+  if (text.includes('manual')) return 'manual';
+  if (text.includes('stale')) return 'stale';
+  if (text.includes('roadmap')) return 'roadmap';
+  if (text.includes('source')) return 'source-gated';
+  return 'observed';
+}
+function GateStatus({
   env,
-  title,
-  plain,
-  status = 'Awaiting source data'
+  fallback = 'Source-gated'
 }) {
+  if (env?.status === 'ok') {
+    return React.createElement("div", {
+      className: "trust-badges"
+    }, React.createElement(EnvTrustBadges, {
+      env: env,
+      partial: true
+    }));
+  }
+  return React.createElement("div", {
+    className: "trust-badges"
+  }, React.createElement(TrustBadge, {
+    kind: trustKind(fallback)
+  }, fallback));
+}
+function SourceAnchor({
+  href,
+  children
+}) {
+  if (!href) return React.createElement("span", {
+    className: "unavail"
+  }, "Source-gated");
+  return React.createElement("a", {
+    href: href
+  }, children || href.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
+    name: "external",
+    size: 12
+  }));
+}
+function SourceCard({
+  id,
+  env,
+  partial = false
+}) {
+  const meta = env?._meta || {};
+  const ok = env?.status === 'ok';
   return React.createElement("article", {
-    className: `source-card ${env?.status === 'ok' ? '' : 'metric-card--unavailable'}`
+    className: "source-card"
   }, React.createElement("div", {
     className: "card-status-row"
-  }, React.createElement("span", {
-    className: "eyebrow"
-  }, status), window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
-    env: env
-  }) : null), React.createElement("h4", null, title), React.createElement("p", {
+  }, React.createElement("h4", null, env?.source_name || meta.human_name || id), React.createElement(EnvTrustBadges, {
+    env: env,
+    partial: partial
+  })), React.createElement("p", {
     className: "body-sm"
-  }, plain), React.createElement("p", {
+  }, ok ? `Loaded envelope. Latest data point ${env.last_data_point || 'not applicable'}.` : env?.notes || 'Source gate intentionally unavailable until a public, source-safe field exists.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
-  }, env?.series_id || 'not loaded')), React.createElement("p", {
-    className: "caption mono"
-  }, "Latest period: ", latestPeriod(env)), env?.source_url && React.createElement("a", {
+  }, id)), meta.rights && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Rights:"), " ", meta.rights), meta.citation && React.createElement("p", {
+    className: "caption"
+  }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.source_url && React.createElement(SourceAnchor, {
     href: env.source_url
-  }, env.source_name || 'Source', " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })));
+  }));
 }
-function DatasetTable({
-  rows
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table data-table--plain"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Signal"), React.createElement("th", null, "Current page status"), React.createElement("th", null, "Envelope"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.id
-  }, React.createElement("td", null, row.label), React.createElement("td", null, window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
-    env: row.env,
-    partial: row.partial
-  }) : row.status), React.createElement("td", {
-    className: "mono"
-  }, row.env?.series_id || row.id), React.createElement("td", null, row.meaning))))));
+function QuickGuide() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "guide-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Use this page in order"), React.createElement("h2", {
+    id: "guide-h"
+  }, "Procurement evidence before procurement claims"), React.createElement("p", {
+    className: "section__lede"
+  }, "This page separates public procurement evidence from source-gated contract, delivery, industry and logistics questions."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--3"
+  }, QUICK_GUIDE.map(([step, title, copy]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, step), React.createElement("h3", null, title), React.createElement("p", null, copy)))));
 }
-function ChecklistTable({
-  rows
-}) {
-  return React.createElement("div", {
-    className: "data-table-wrap"
-  }, React.createElement("table", {
-    className: "data-table data-table--plain"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Missing feed"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Current status"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.item
-  }, React.createElement("td", null, row.item), React.createElement("td", null, row.why), React.createElement("td", null, React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: row.kind
-  }, row.status))))))));
-}
-function FarmerDecisionPressure({
+function ProcurementTable({
+  rows,
   data
 }) {
-  const rows = [{
-    id: 'fertiliser_stock_cover_regional',
-    question: 'Can farmers see fertiliser cover?',
-    answer: 'Not yet. National or regional fertiliser cover by nutrient type is not loaded.',
-    current: 'Unavailable',
-    env: data.fertiliser_stock_cover_regional,
-    missing: 'Public fertiliser stocks, usage and cover by nutrient and production region.',
-    why: 'Fertiliser cover affects planting, top-dressing and cash-flow timing.'
-  }, {
-    id: 'fertiliser_price_pressure_farm_gate',
-    question: 'Can farmers see fertiliser price pressure?',
-    answer: 'Partially. Import value and source-country concentration are visible, but farm-gate price pressure is not loaded.',
-    current: 'Partial',
-    env: data.fertiliser_price_pressure_farm_gate,
-    partial: true,
-    missing: 'Farm-gate or wholesale fertiliser price rows tied to nutrient type and region.',
-    why: 'Import value is not a farm-gate price and should not be treated as one.'
-  }, {
-    id: 'farm_diesel_risk_source_gate',
-    question: 'Can farmers see farm diesel risk?',
-    answer: 'Not yet. The fuel page has national fuel-security context, not farm-region diesel availability.',
-    current: 'Unavailable',
-    env: data.farm_diesel_risk_source_gate,
-    missing: 'Farm diesel availability, price and disruption signal by production region.',
-    why: 'Diesel risk affects planting, harvest, irrigation pumping and freight.'
-  }, {
-    id: 'water_allocation_food_regions',
-    question: 'Can farmers see water allocation by production region?',
-    answer: 'Not yet. No source-safe water allocation table by food-producing region is loaded.',
-    current: 'Unavailable',
-    env: data.water_allocation_food_regions,
-    missing: 'Allocation and storage rows by irrigated production region.',
-    why: 'Water availability can decide whether a crop can be planted or finished.'
-  }, {
-    id: 'drought_pressure_agriculture_regions',
-    question: 'Can farmers see rainfall/drought pressure?',
-    answer: 'Not yet. BOM source gates are registered, but no agricultural-region drought metric is wired.',
-    current: 'Unavailable',
-    env: data.drought_pressure_agriculture_regions,
-    missing: 'Rainfall deficiency or drought stress by agricultural region, with period and class boundary.',
-    why: 'Regional rainfall pressure changes planting and stocking decisions.'
-  }, {
-    id: 'crop_planting_window_pressure',
-    question: 'Can farmers see crop-region exposure?',
-    answer: 'Not yet. No crop planting-window exposure indicator is loaded.',
-    current: 'Unavailable',
-    env: data.crop_planting_window_pressure,
-    missing: 'Crop calendar, region exposure and input availability method from a named source.',
-    why: 'Farm decisions are timing-sensitive, not just annual totals.'
-  }, {
-    id: 'freight_disruption_farm_regions',
-    question: 'Can farmers see freight disruption risk?',
-    answer: 'Not yet. No farm-region freight disruption feed is loaded.',
-    current: 'Unavailable',
-    env: data.freight_disruption_farm_regions,
-    missing: 'Freight disruption or route risk indicator for farm regions.',
-    why: 'Inputs and produce both depend on fuel, freight and cold-chain resilience.'
-  }];
-  return React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "farmer-pressure-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Farmer planning"), React.createElement("h2", {
-    id: "farmer-pressure-h"
-  }, "Farmer decision pressure"), React.createElement("p", {
-    className: "section__lede"
-  }, "Farmers need source-safe signals for planting and operating decisions. This section shows what the page can currently answer and which farm-planning feeds remain missing."))), React.createElement("div", {
+  return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
     className: "data-table data-table--plain"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Planning question"), React.createElement("th", null, "Current dashboard status"), React.createElement("th", null, "Available public source"), React.createElement("th", null, "Missing source feed"), React.createElement("th", null, "Why it matters"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
-    key: row.id
-  }, React.createElement("td", null, row.question, React.createElement("br", null), React.createElement("span", {
-    className: "caption"
-  }, row.answer)), React.createElement("td", null, window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
-    env: row.env,
-    partial: row.partial
-  }) : row.current), React.createElement("td", {
-    className: "mono"
-  }, row.env?.series_id || row.id), React.createElement("td", null, row.missing), React.createElement("td", null, row.why)))))));
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Procurement row"), React.createElement("th", null, "Current status"), React.createElement("th", null, "What is verified"), React.createElement("th", null, "What is not published"), React.createElement("th", null, "Next source action"))), React.createElement("tbody", null, rows.map(([name, sourceId, verified, unpublished, action]) => React.createElement("tr", {
+    key: name
+  }, React.createElement("td", null, name), React.createElement("td", null, React.createElement(GateStatus, {
+    env: data[sourceId],
+    fallback: "Source-gated"
+  })), React.createElement("td", null, verified), React.createElement("td", null, unpublished), React.createElement("td", null, action))))));
 }
-function FoodPageQuickGuide() {
-  const items = [{
-    title: 'Real now',
-    copy: 'Fertiliser import value and source-country concentration are loaded from verified envelopes.',
-    href: '#inputs-h'
-  }, {
-    title: 'Farm planning gaps',
-    copy: 'Farm diesel, fertiliser cover, water allocation and drought pressure are source-gated rather than estimated.',
-    href: '#farmer-pressure-h'
-  }, {
-    title: 'Food trade gates',
-    copy: 'Production, food import and export sections show what still needs clean ABS, ABARES, DAFF or BOM wiring.',
-    href: '#grows-h'
-  }, {
-    title: 'Not a forecast',
-    copy: 'This page is not a live farm forecast, planting model, water-allocation service or commodity-trading tool.',
-    href: '#sources'
-  }];
+function ContractTable({
+  rows,
+  data
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Contract field"), React.createElement("th", null, "Status"), React.createElement("th", null, "Publication state"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(([field, sourceId, status, state, boundary]) => React.createElement("tr", {
+    key: field
+  }, React.createElement("td", null, field), React.createElement("td", null, React.createElement(GateStatus, {
+    env: data[sourceId],
+    fallback: status
+  })), React.createElement("td", null, state), React.createElement("td", null, boundary))))));
+}
+function PlainTable({
+  columns,
+  rows
+}) {
+  return React.createElement("div", {
+    className: "data-table-wrap"
+  }, React.createElement("table", {
+    className: "data-table data-table--plain"
+  }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
+    key: col
+  }, col)))), React.createElement("tbody", null, rows.map((row, idx) => React.createElement("tr", {
+    key: idx
+  }, row.map((cell, cellIdx) => React.createElement("td", {
+    key: `${idx}-${cellIdx}`
+  }, cellIdx === 1 && ['verified', 'partial', 'stale', 'manual', 'unavailable', 'source-gated', 'roadmap'].includes(String(cell).toLowerCase()) ? React.createElement(TrustBadge, {
+    kind: trustKind(cell)
+  }, cell) : cell)))))));
+}
+function RelationshipSection() {
   return React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "food-quick-guide-h"
+    className: "section section--why",
+    "aria-labelledby": "relationship-h"
   }, React.createElement("div", {
-    className: "section__head"
+    className: "why-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Best first clicks"), React.createElement("h2", {
-    id: "food-quick-guide-h"
-  }, "How to use this food and farm page"), React.createElement("p", {
-    className: "section__lede"
-  }, "Fertiliser is the verified starting point. Wider food, farm diesel and water questions stay visible as public-data gaps until source-safe feeds are loaded."))), React.createElement("div", {
-    className: "quick-link-grid quick-link-grid--4"
-  }, items.map(item => React.createElement("article", {
-    className: "quick-link-card",
-    key: item.title
-  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy), React.createElement("a", {
-    href: item.href
-  }, "Jump to section")))));
+  }, "Connected dashboards"), React.createElement("h2", {
+    id: "relationship-h",
+    style: {
+      marginTop: 8
+    }
+  }, "How this connects to the national dashboard")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Defence Procurement Watch tracks public procurement and delivery accountability. Defence Posture tracks broader strategic posture. Strategic Resources tracks material and resource dependencies. Manufacturing and Infrastructure track industrial and delivery context. Fuel Strategy and National Fuel Security track energy and fuel resilience."), React.createElement("div", {
+    className: "hero-actions",
+    style: {
+      marginTop: 16
+    }
+  }, React.createElement("a", {
+    className: "hero-button",
+    href: "../defence-alliances-dashboard/index.html"
+  }, "Open Defence Posture"), React.createElement("a", {
+    className: "hero-button",
+    href: "../strategic-resources-dashboard/index.html"
+  }, "Open Strategic Resources"), React.createElement("a", {
+    className: "hero-button",
+    href: "../manufacturing-dashboard/index.html"
+  }, "Open Manufacturing"), React.createElement("a", {
+    className: "hero-button",
+    href: "../infrastructure-dashboard/index.html"
+  }, "Open Infrastructure"), React.createElement("a", {
+    className: "hero-button",
+    href: "../australian-fuel-strategy-dashboard/index.html"
+  }, "Open Fuel Strategy"), React.createElement("a", {
+    className: "hero-button",
+    href: "../fuel-security-dashboard/index.html"
+  }, "Open National Fuel Security"), React.createElement("a", {
+    className: "hero-button",
+    href: "../missing-data-scoreboard/index.html"
+  }, "Open Missing Data Scoreboard")))));
 }
 function App() {
   const [data, setData] = React.useState(null);
@@ -1195,7 +1196,7 @@ function App() {
     return React.createElement("div", {
       className: "page"
     }, React.createElement(Header, {
-      active: "fertilizer",
+      active: "defence_procurement",
       refreshStatus: refreshStatus
     }), React.createElement("main", {
       id: "main"
@@ -1205,406 +1206,157 @@ function App() {
   }
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
-  const siteRefresh = window.FR.fmtRefreshStatus(refreshStatus);
-  const refreshHeading = refreshStatus?.status === 'success' ? `Site refreshed ${siteRefresh}` : siteRefresh;
-  const overviewRows = [{
-    id: 'abares_agricultural_exports',
-    label: 'Major agricultural exports',
-    env: data.abares_agricultural_exports,
-    meaning: 'A source-safe national agricultural export row is registered, but no value is published until the exact ABARES table and period are wired.'
-  }, {
-    id: 'abs_food_imports',
-    label: 'Major food imports',
-    env: data.abs_food_imports,
-    meaning: 'Food-import exposure needs a verified ABS trade concept before a dashboard value is shown.'
-  }, {
-    id: 'abs_fertiliser_imports',
-    label: 'Fertiliser import value',
-    env: data.abs_fertiliser_imports,
-    partial: true,
-    meaning: 'Loaded from ABS SITC 562 manufactured fertiliser imports. This is a farm-input signal, not total food-system import dependence.'
-  }, {
-    id: 'bom_rainfall_deficiency',
-    label: 'Water and rainfall pressure',
-    env: data.bom_rainfall_deficiency,
-    meaning: 'Rainfall deficiency is registered as a public-source candidate, but no national agricultural-pressure metric is wired yet.'
-  }, {
-    id: 'abares_fertiliser_price',
-    label: 'Farm input cost pressure',
-    env: data.abares_fertiliser_price,
-    meaning: 'ABARES fertiliser price coverage remains unavailable until a named table is hand-keyed or parsed safely.'
-  }];
-  const growsRows = [{
-    id: 'abares_agricultural_commodities_wheat',
-    label: 'Wheat production and trade context',
-    env: data.abares_agricultural_commodities_wheat,
-    meaning: 'Awaiting a verified ABARES commodity table with period, unit and whether the row is production, exports or stocks.'
-  }, {
-    id: 'abares_agricultural_commodities_beef',
-    label: 'Beef production and trade context',
-    env: data.abares_agricultural_commodities_beef,
-    meaning: 'Awaiting a verified ABARES commodity table. Development-program or forecast numbers are not treated as current production.'
-  }, {
-    id: 'daff_agricultural_trade',
-    label: 'Broader farm-sector trade context',
-    env: data.daff_agricultural_trade,
-    meaning: 'Registered for DAFF/ABARES trade publications, but no aggregate is displayed until the exact concept is loaded.'
-  }];
-  const buysRows = [{
-    id: 'abs_food_imports',
-    label: 'Food import value',
-    env: data.abs_food_imports,
-    meaning: 'Awaiting a verified ABS import grouping. This avoids mixing grocery, agricultural input and broader merchandise concepts.'
-  }, {
-    id: 'abs_fertiliser_imports',
-    label: 'Manufactured fertiliser imports',
-    env: data.abs_fertiliser_imports,
-    partial: true,
-    meaning: 'Verified monthly ABS SITC 562 import value. Shown as a farm-input dependency signal.'
-  }, {
-    id: 'abs_fertiliser_source_concentration',
-    label: 'Fertiliser source-country concentration',
-    env: data.abs_fertiliser_source_concentration,
-    partial: true,
-    meaning: 'Top-3 source-country share for manufactured fertiliser import value, not a complete nutrient-level dependency model.'
-  }];
-  const sellsRows = [{
-    id: 'abares_agricultural_exports',
-    label: 'Agricultural export value',
-    env: data.abares_agricultural_exports,
-    meaning: 'Awaiting a verified ABARES source row. No export-value total is invented from narrative summaries.'
-  }, {
-    id: 'abs_agricultural_exports',
-    label: 'ABS agricultural goods exports',
-    env: data.abs_agricultural_exports,
-    meaning: 'Awaiting an ABS trade grouping with clear commodity scope and units.'
-  }, {
-    id: 'daff_agricultural_trade',
-    label: 'DAFF agricultural trade context',
-    env: data.daff_agricultural_trade,
-    meaning: 'Awaiting a hand-keyed row from a named DAFF/ABARES trade publication.'
-  }];
-  const waterRows = [{
-    id: 'bom_rainfall_deficiency',
-    label: 'Rainfall deficiency or drought signal',
-    env: data.bom_rainfall_deficiency,
-    meaning: 'Awaiting a source-safe national or agricultural-region indicator. This page does not infer drought from a map by eye.'
-  }, {
-    id: 'bom_water_storage',
-    label: 'National water storage context',
-    env: data.bom_water_storage,
-    meaning: 'Awaiting a verified public water-storage row with unit, period and geography.'
-  }, {
-    id: 'mdba_water_storage',
-    label: 'Murray-Darling Basin storage context',
-    env: data.mdba_water_storage,
-    meaning: 'Awaiting a source-safe MDBA storage or allocation row. No irrigation allocation value is guessed.'
-  }];
-  const governmentNeeds = [{
-    item: 'National food import and export exposure by category',
-    why: 'Shows which food categories are domestically secure, import-dependent or export-exposed.',
-    status: 'Awaiting source-safe feed',
-    kind: 'unavailable'
-  }, {
-    item: 'Fertiliser stock or cover by nutrient type',
-    why: 'Shows whether urea, phosphate, potash and compound fertiliser have enough cover for a disruption.',
-    status: 'Unavailable',
-    kind: 'unavailable'
-  }, {
-    item: 'Farm diesel exposure',
-    why: 'Connects fuel-security pressure to planting, harvesting, freight and irrigation pumping.',
-    status: 'Awaiting method',
-    kind: 'partial'
-  }, {
-    item: 'Forward fertiliser contract coverage',
-    why: 'Shows whether fertiliser supply is committed beyond current import shipments.',
-    status: 'Unavailable',
-    kind: 'unavailable'
-  }, {
-    item: 'Crop planting-window pressure',
-    why: 'Makes input, diesel and water risk visible against planting decisions.',
-    status: 'Source-gated',
-    kind: 'unavailable'
-  }, {
-    item: 'Water allocation and storage by food-producing region',
-    why: 'National averages are not enough for irrigated production or regional planning.',
-    status: 'Awaiting verified datasets',
-    kind: 'unavailable'
-  }, {
-    item: 'Drought and rainfall stress by agricultural region',
-    why: 'Makes seasonal production pressure visible without implying a farm-level forecast.',
-    status: 'Awaiting verified datasets',
-    kind: 'unavailable'
-  }, {
-    item: 'Cold-chain and logistics disruption indicators',
-    why: 'Food availability depends on transport, storage and refrigeration as well as production.',
-    status: 'Not wired',
-    kind: 'unavailable'
-  }, {
-    item: 'Critical grocery availability or reserve data',
-    why: 'A public food-security dashboard needs transparent availability coverage if such data exists.',
-    status: 'No source loaded',
-    kind: 'unavailable'
-  }, {
-    item: 'Price pressure from farm gate to supermarket shelf',
-    why: 'Helps separate farm-input pressure, processor margins, logistics and retail effects.',
-    status: 'Partial only',
-    kind: 'partial'
-  }];
+  const latestDataPoint = window.FR.latestPageDataPoint(data);
+  const industry = fields(data.defence_sovereign_industry_context);
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
-    active: "fertilizer",
+    active: "defence_procurement",
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   }), React.createElement("main", {
     id: "main"
   }, React.createElement("section", {
     className: "intro",
-    id: "fertilizer"
+    id: "defence-procurement-watch"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Food, farms & water security - prototype"), React.createElement("h1", {
+  }, "Defence procurement watch"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's food, farm inputs and water pressure, in plain English."), React.createElement("p", {
+  }, "Defence procurement watch"), React.createElement("p", {
     className: "intro__lede"
-  }, "Australia grows and exports huge volumes of food, but farms still depend on imported fertiliser, fuel, water availability, seasonal rainfall and global markets. This page tracks the public-source signals that show whether the food system is under pressure, and what government still does not publish clearly enough.")), React.createElement("aside", {
+  }, "Tracks public-source defence procurement signals, source-gated contract pathways, delivery timelines, industry-content questions and logistics implications without inventing sensitive or unpublished capability data."), React.createElement("p", {
+    className: "body-sm",
+    style: {
+      marginTop: 16,
+      color: 'var(--ink-2)'
+    }
+  }, "This page is an independent public-source prototype. It does not infer contracts, prices, suppliers, delivery dates, capability, fleet readiness, fuel requirements or operational posture unless a named official/public source provides the exact field, period, unit and reuse boundary.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Boundary"), React.createElement("span", null, "This is an independent public-source prototype, not an official government dashboard, live farm forecast, live water-allocation service or commodity-trading tool."), React.createElement("div", {
+  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+    className: "mono"
+  }, updatedDisplay), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, latestRetrieved ? updatedDisplay : 'No verified retrieval recorded'))), React.createElement("section", {
-    className: "freshness-notice",
-    "aria-labelledby": "freshness-title"
-  }, React.createElement("div", {
-    className: "freshness-notice__inner"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Refresh and freshness"), React.createElement("h2", {
-    id: "freshness-title"
-  }, refreshHeading), React.createElement("p", null, "Latest verified page data retrieved: ", latestRetrieved ? updatedDisplay : 'not recorded for this page yet', ". This page may include programmatic, manual, stale, partial and unavailable public-source envelopes. Check the source cards below before treating any value as current.")), React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: refreshStatus?.status === 'success' ? 'observed' : 'unavailable'
-  }, refreshStatus?.status === 'success' ? 'Site refresh recorded' : 'No site refresh recorded')))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Latest source data point"), React.createElement("span", null, latestDataPoint || 'No source-backed procurement data point loaded'), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Procurement accountability tracker, not a live military capability dashboard."))), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
-  }), React.createElement("section", {
-    className: "section section--why",
-    "aria-labelledby": "read-page"
-  }, React.createElement("div", {
-    className: "why-grid"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "How to read this page"), React.createElement("h2", {
-    id: "read-page",
-    style: {
-      marginTop: 8
-    }
-  }, "Source status comes first")), React.createElement("div", {
-    className: "why-body"
-  }, React.createElement("p", null, "Verified means the number is backed by a loaded JSON envelope. Manual means it was hand-keyed from a named public source. Derived means the page calculated or selected a value from verified envelopes. Stale means the latest source period is outside its cadence window."), React.createElement("p", null, "Unavailable means a source has not been safely wired or the public source does not publish the exact field needed. This page leaves those gaps visible instead of filling them with estimates.")))), React.createElement(FoodPageQuickGuide, null), React.createElement("section", {
+  }), React.createElement(QuickGuide, null), React.createElement("section", {
     className: "section",
-    "aria-labelledby": "overview-h"
+    "aria-labelledby": "pathway-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Food system overview"), React.createElement("h2", {
-    id: "overview-h"
-  }, "What is visible now, and what is still missing"), React.createElement("p", {
+  }, "Procurement pathway"), React.createElement("h2", {
+    id: "pathway-h"
+  }, "Procurement pathway"), React.createElement("p", {
     className: "section__lede"
-  }, "The first pass keeps real fertiliser import coverage and registers the broader food, farm and water signals as explicit source gaps."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Farm inputs",
-    label: "Monthly fertiliser imports",
-    plain: "ABS SITC 562 manufactured fertiliser import value in the latest loaded month.",
-    fromEnvelope: data.abs_fertiliser_imports,
-    valueFn: env => fmtNumber(latestPoint(env)?.v),
-    unit: " AUD thousands",
-    highlight: true,
-    partial: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Supplier exposure",
-    label: "Top-3 fertiliser source countries",
-    plain: "Share of manufactured fertiliser import value from the three largest non-total source countries.",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    valueFn: env => fmtNumber(latestPoint(env)?.v),
-    unit: "%",
-    partial: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Food imports",
-    label: "Food import value",
-    plain: "Awaiting a verified ABS food-import grouping.",
-    fromEnvelope: data.abs_food_imports
-  }), React.createElement(MetricCard, {
-    eyebrow: "Water pressure",
-    label: "Rainfall deficiency",
-    plain: "Awaiting a verified BOM drought or rainfall-deficiency indicator.",
-    fromEnvelope: data.bom_rainfall_deficiency
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement(DatasetTable, {
-    rows: overviewRows
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "grows-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Agricultural production"), React.createElement("h2", {
-    id: "grows-h"
-  }, "What Australia grows"), React.createElement("p", {
-    className: "section__lede"
-  }, "Wheat, beef and broader commodity rows are ready as source gates. They remain unavailable until the exact public table, period and unit are loaded."))), React.createElement(DatasetTable, {
-    rows: growsRows
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "buys-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Import exposure"), React.createElement("h2", {
-    id: "buys-h"
-  }, "What Australia buys"), React.createElement("p", {
-    className: "section__lede"
-  }, "Fertiliser imports are loaded. Food imports remain unavailable until a clean ABS category is wired without mixing concepts."))), React.createElement(DatasetTable, {
-    rows: buysRows
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "sells-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Export exposure"), React.createElement("h2", {
-    id: "sells-h"
-  }, "What Australia sells"), React.createElement("p", {
-    className: "section__lede"
-  }, "Export rows need exact source boundaries. The page does not convert narrative trade summaries into dashboard values."))), React.createElement(DatasetTable, {
-    rows: sellsRows
-  })), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "inputs-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Original verified coverage"), React.createElement("h2", {
-    id: "inputs-h"
-  }, "Fertiliser and farm inputs"), React.createElement("p", {
-    className: "section__lede"
-  }, "The verified coverage remains monthly manufactured fertiliser import value and source-country concentration. Nutrient-level, price-index and stock-cover fields stay unavailable until source-safe."))), React.createElement("div", {
-    className: "metric-grid metric-grid--4"
-  }, React.createElement(MetricCard, {
-    eyebrow: "Value",
-    label: "Monthly fertiliser imports",
-    plain: "Total value of manufactured fertiliser (SITC 562) cleared into Australia in the latest month.",
-    fromEnvelope: data.abs_fertiliser_imports,
-    valueFn: env => fmtNumber(latestPoint(env)?.v),
-    unit: " AUD thousands",
-    highlight: true,
-    partial: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Concentration",
-    label: "Top-3 source countries",
-    plain: "Share of monthly SITC 562 manufactured fertiliser import value from the three largest source countries.",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    valueFn: env => fmtNumber(latestPoint(env)?.v),
-    unit: "%",
-    partial: true
-  }), React.createElement(MetricCard, {
-    eyebrow: "Price",
-    label: "Fertiliser price index",
-    plain: "ABARES price coverage is not wired to a source-safe table yet.",
-    fromEnvelope: data.abares_fertiliser_price
-  }), React.createElement(MetricCard, {
-    eyebrow: "Stock cover",
-    label: "Fertiliser stock cover",
-    plain: "No public Australian fertiliser cover row is loaded.",
-    fromEnvelope: data.abares_fertiliser_stock_cover
-  })), React.createElement("div", {
-    className: "pending-list",
-    "aria-label": "Pending fertiliser source coverage"
-  }, React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Pending nutrient-level coverage"), React.createElement("p", {
-    className: "body-sm"
-  }, "Urea, potash, phosphate and compound fertiliser subseries remain unavailable because the checked ABS API paths did not expose verified monthly nutrient-level value rows."), React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: "unavailable"
-  }))), React.createElement("article", {
-    className: "source-card"
-  }, React.createElement("h4", null, "Fertiliser stock-cover boundary"), React.createElement("p", {
-    className: "body-sm"
-  }, "No public Australian fertiliser cover row is loaded. Stock cover stays unavailable until a named source publishes stock and usage inputs or a direct cover figure."), React.createElement("div", {
-    className: "trust-badges"
-  }, React.createElement(TrustBadge, {
-    kind: "unavailable"
-  }))))), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "charts-h"
-  }, React.createElement("div", {
-    className: "section__head"
-  }, React.createElement("div", null, React.createElement("span", {
-    className: "eyebrow"
-  }, "Verified charts"), React.createElement("h2", {
-    id: "charts-h"
-  }, "Fertiliser import value and supplier concentration over time"), React.createElement("p", {
-    className: "section__lede"
-  }, "Charts only render where verified monthly source envelopes are loaded."))), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Value",
-    title: "Monthly fertiliser imports",
-    unit: "AUD thousands",
-    fromEnvelope: data.abs_fertiliser_imports,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#1F3A8A",
-    takeaway: "Monthly value of manufactured fertiliser (SITC 562) cleared into Australia, from ABS International Merchandise Trade.",
-    yAxisLabel: "Import value (AUD thousands per month)"
-  })), React.createElement("div", {
-    style: {
-      height: 24
-    }
-  }), React.createElement("div", {
-    className: "charts-grid charts-grid--full"
-  }, React.createElement(ChartCard, {
-    eyebrow: "Supplier mix",
-    title: "Top-3 source countries' combined share, over time",
-    unit: "%",
-    fromEnvelope: data.abs_fertiliser_source_concentration,
-    ranges: ['1Y', '3Y'],
-    defaultRange: "3Y",
-    accent: "#6B7280",
-    takeaway: "Share of monthly SITC 562 manufactured fertiliser import value from the three largest non-total source countries.",
-    yAxisLabel: "Top-3 share of SITC 562 import value (%)"
-  }))), React.createElement(FarmerDecisionPressure, {
+  }, "The dashboard records this as a source-gated procurement pathway until official Defence or public procurement sources verify the program, supplier pathway, contract status and delivery timeline."))), React.createElement(ProcurementTable, {
+    rows: PROCUREMENT_ROWS,
     data: data
-  }), React.createElement("section", {
-    className: "section",
-    "aria-labelledby": "water-h"
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "contract-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Awaiting verified public water datasets"), React.createElement("h2", {
-    id: "water-h"
-  }, "Water and seasonal pressure"), React.createElement("p", {
+  }, "Contract evidence"), React.createElement("h2", {
+    id: "contract-h"
+  }, "Contract and delivery status"), React.createElement("p", {
     className: "section__lede"
-  }, "The page does not publish a drought, allocation or water-storage number until the source, geography, unit and period are wired."))), React.createElement(DatasetTable, {
-    rows: waterRows
+  }, "Media discussion, political commentary or broad procurement interest is not treated as a contract row. A contract row requires official source material."))), React.createElement(ContractTable, {
+    rows: CONTRACT_ROWS,
+    data: data
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "industry-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Industry content"), React.createElement("h2", {
+    id: "industry-h"
+  }, "Industry content and manufacturing dependency"), React.createElement("p", {
+    className: "section__lede"
+  }, "Defence industrial priority context is useful, but it is not the same as a project-specific shipbuilding, sustainment or local-content commitment."))), React.createElement("div", {
+    className: "metric-grid metric-grid--3"
+  }, React.createElement(MetricCard, {
+    eyebrow: "Public context",
+    label: "Sovereign industrial priorities",
+    value: industry.sdip_count ? `${industry.sdip_count}` : 'Partial',
+    plain: "Official industrial-priority context is loaded, but project-specific procurement local content is source-gated.",
+    source: window.FR.sourceLine(data.defence_sovereign_industry_context)
+  }), React.createElement(MetricCard, {
+    eyebrow: "Boundary",
+    label: "Procurement-specific local content",
+    value: "Source-gated",
+    plain: "No supplier, workshare, sustainment or workforce commitment is asserted.",
+    source: window.FR.sourceLine(data.defence_shipbuilding_industry_content_gate)
+  }), React.createElement(MetricCard, {
+    eyebrow: "Dependencies",
+    label: "Resources and infrastructure",
+    value: "Context only",
+    plain: "Strategic-resource and infrastructure pages are linked for dependency questions, not procurement conclusions.",
+    source: window.FR.sourceLine(data.strategic_resources_critical_minerals_context)
+  })), React.createElement("div", {
+    style: {
+      height: 24
+    }
+  }), React.createElement(PlainTable, {
+    columns: ['Dependency', 'Source / status', 'Why it matters', 'Current blocker', 'Linked dashboard page'],
+    rows: INDUSTRY_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "logistics-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Logistics boundary"), React.createElement("h2", {
+    id: "logistics-h"
+  }, "Naval logistics and fuel implication"), React.createElement("p", {
+    className: "section__lede"
+  }, "Procurement discussion is not itself a fuel/logistics metric. This page only links procurement to fuel security where official sources provide a clear public basis."))), React.createElement(PlainTable, {
+    columns: ['Logistics question', 'Status', 'Current publication state', 'Boundary'],
+    rows: LOGISTICS_ROWS
+  })), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "dependency-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Strategic dependencies"), React.createElement("h2", {
+    id: "dependency-h"
+  }, "Defence posture and strategic-resource dependency"), React.createElement("p", {
+    className: "section__lede"
+  }, "Dependencies are shown as questions and links to existing dashboards. No classified posture, readiness or supplier dependency is asserted."))), React.createElement(PlainTable, {
+    columns: ['Dependency row', 'Source / status', 'What the public source supports', 'Linked page', 'Boundary'],
+    rows: DEPENDENCY_ROWS
+  })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Public/private boundary"), React.createElement("h2", {
+    id: "boundary-h"
+  }, "Public/private defence data boundary"), React.createElement("p", {
+    className: "section__lede"
+  }, "Some procurement facts should be public, while some operational facts may be sensitive. The dashboard asks for safe public aggregate indicators, not hidden operational detail."))), React.createElement(PlainTable, {
+    columns: ['Defence data row', 'Safe public aggregate possible?', 'Current publication status', 'Sensitivity note', 'Next action'],
+    rows: BOUNDARY_ROWS
   })), React.createElement("section", {
     className: "section",
     "aria-labelledby": "publish-h"
@@ -1612,48 +1364,37 @@ function App() {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Public data gaps"), React.createElement("h2", {
+  }, "Missing public feeds"), React.createElement("h2", {
     id: "publish-h"
   }, "What government still needs to publish"), React.createElement("p", {
     className: "section__lede"
-  }, "A useful national food-security dashboard needs more than commodity headlines. These feeds stay visible as gaps until public data can support them."))), React.createElement(ChecklistTable, {
-    rows: governmentNeeds
-  })), React.createElement("section", {
+  }, "These rows are source requests. They do not imply the data exists publicly or should include sensitive operational detail."))), React.createElement(PlainTable, {
+    columns: ['Missing feed', 'Likely publisher', 'Why it matters', 'Current status', 'Next source action'],
+    rows: PUBLISH_ROWS
+  })), React.createElement(RelationshipSection, null), React.createElement("section", {
     className: "section section--sources",
-    id: "sources"
+    id: "sources",
+    "aria-labelledby": "sources-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
+  }, "Sources and methodology"), React.createElement("h2", {
+    id: "sources-h"
+  }, "Every envelope used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked unavailable are awaiting verified values. Production, imports, exports, water pressure and price indicators are not mixed into one number."))), React.createElement("div", {
+  }, "This page deliberately loads source gates for procurement facts that are not yet verified. It adds no contract, supplier, delivery, vessel class, value, industry-content or fuel/logistics values."))), React.createElement("div", {
     className: "sources-grid"
-  }, Object.entries(data).map(([id, env]) => React.createElement("article", {
+  }, Object.entries(data).map(([id, env]) => React.createElement(SourceCard, {
     key: id,
-    className: "source-card"
-  }, React.createElement("h4", null, env.source_name), React.createElement("p", {
-    className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting verified values from the named public source or source gate.'), React.createElement("div", {
-    className: "trust-badges"
-  }, window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
-    env: env
-  }) : null), React.createElement("p", {
-    className: "caption"
-  }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
-    className: "mono"
-  }, id)), env.source_url && React.createElement("a", {
-    href: env.source_url
-  }, env.source_url.replace(/^https?:\/\//, ''), " ", React.createElement(Icon, {
-    name: "external",
-    size: 12
-  })), React.createElement("p", {
-    className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-')))), React.createElement("div", {
+    id: id,
+    env: env,
+    partial: ['defence_sovereign_industry_context', 'defence_public_capability_assets', 'strategic_resources_critical_minerals_context'].includes(id)
+  }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we separate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Fertiliser imports"), React.createElement("dd", null, "Total import value (AUD thousands) of manufactured fertilisers, fetched from the ABS Data API MERCH_IMP dataflow using SITC 562. This is not HS 31 and is not a nutrient-level stock-cover measure."), React.createElement("dt", null, "Supplier concentration"), React.createElement("dd", null, "Top-3 non-total source-country share of monthly SITC 562 import value divided by total SITC 562 import value for the same month. It is a concentration signal, not an import-dependency score."), React.createElement("dt", null, "Agricultural production"), React.createElement("dd", null, "Crop and livestock rows remain unavailable until a named ABARES or ABS table supports the exact production period, unit and commodity boundary."), React.createElement("dt", null, "Agricultural exports and food imports"), React.createElement("dd", null, "Trade rows must distinguish imports from exports, food from farm inputs, and merchandise value from production volume. No broad food-trade total is published until the category boundary is source-safe."), React.createElement("dt", null, "Water, rainfall and drought"), React.createElement("dd", null, "Rainfall deficiency, water storage and irrigation allocation indicators are separate concepts. This page does not infer drought or farm-level water availability from maps or commentary."), React.createElement("dt", null, "No-estimate rule"), React.createElement("dd", null, "If a value cannot be verified from a named public source, this dashboard labels it unavailable, partial or stale rather than filling the gap with estimates.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "No-estimate rule"), React.createElement("p", null, "No procurement fact is filled from media discussion, political commentary, inferred strategy, platform speculation or operational assumptions. A value stays unavailable or source-gated until a named official/public source provides the exact field, period, unit and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
-  })));
+  }));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App, null));

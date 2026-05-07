@@ -431,6 +431,27 @@ function App() {
           </div>
         </section>
 
+        <section className="section section--why" aria-labelledby="procurement-link-h">
+          <div className="why-grid">
+            <div>
+              <span className="eyebrow">Procurement dependencies</span>
+              <h2 id="procurement-link-h" style={{ marginTop: 8 }}>Procurement claims need their own source gate</h2>
+            </div>
+            <div className="why-body">
+              <p>
+                Strategic resource rows can show production, export, reserve/resource and
+                footprint context. They do not prove a defence procurement supplier pathway,
+                contract status, material bill, delivery timeline or logistics implication.
+              </p>
+              <p>
+                For procurement dependencies and public/private boundaries, see Defence
+                Procurement Watch.
+              </p>
+              <a className="hero-button" href="../defence-procurement-watch/index.html">Open Defence Procurement Watch</a>
+            </div>
+          </div>
+        </section>
+
         <section className="section section--sources" id="sources" aria-labelledby="sources-h">
           <div className="section__head">
             <div>

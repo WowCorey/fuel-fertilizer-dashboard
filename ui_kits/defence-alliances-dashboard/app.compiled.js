@@ -387,6 +387,10 @@ function Header({
     label: 'Defence posture',
     href: '../defence-alliances-dashboard/index.html'
   }, {
+    id: 'defence_procurement',
+    label: 'Procurement',
+    href: '../defence-procurement-watch/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -947,6 +951,8 @@ function Footer({
   }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
     href: "../defence-alliances-dashboard/index.html"
   }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-procurement-watch/index.html"
+  }, "Defence procurement")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
@@ -1565,6 +1571,23 @@ function App() {
   }, (profile.methodology_caveats || []).map(item => React.createElement("li", {
     key: item
   }, item)))))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "procurement-watch-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Procurement accountability"), React.createElement("h2", {
+    id: "procurement-watch-h",
+    style: {
+      marginTop: 8
+    }
+  }, "Procurement tracking is separate from posture")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Defence posture rows show public budget, selected capability, alliance and industry context. Contract pathways, delivery timelines, industry-content questions and logistics implications are tracked separately so this page does not turn posture context into procurement claims."), React.createElement("p", null, "For contract, delivery and industry-content source gates, see Defence Procurement Watch."), React.createElement("a", {
+    className: "hero-button",
+    href: "../defence-procurement-watch/index.html"
+  }, "Open Defence Procurement Watch")))), React.createElement("section", {
     className: "section section--sources",
     id: "sources",
     "aria-labelledby": "sources-h"

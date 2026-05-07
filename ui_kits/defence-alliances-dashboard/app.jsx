@@ -685,6 +685,28 @@ function App() {
           </div>
         </section>
 
+        <section className="section section--why" aria-labelledby="procurement-watch-h">
+          <div className="why-grid">
+            <div>
+              <span className="eyebrow">Procurement accountability</span>
+              <h2 id="procurement-watch-h" style={{ marginTop: 8 }}>Procurement tracking is separate from posture</h2>
+            </div>
+            <div className="why-body">
+              <p>
+                Defence posture rows show public budget, selected capability, alliance and
+                industry context. Contract pathways, delivery timelines, industry-content
+                questions and logistics implications are tracked separately so this page does
+                not turn posture context into procurement claims.
+              </p>
+              <p>
+                For contract, delivery and industry-content source gates, see Defence
+                Procurement Watch.
+              </p>
+              <a className="hero-button" href="../defence-procurement-watch/index.html">Open Defence Procurement Watch</a>
+            </div>
+          </div>
+        </section>
+
         <section className="section section--sources" id="sources" aria-labelledby="sources-h">
           <div className="section__head">
             <div>

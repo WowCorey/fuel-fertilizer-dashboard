@@ -10,6 +10,7 @@ const routes = [
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
   { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: "Australia's defence posture, in plain English." },
+  { path: '/ui_kits/defence-procurement-watch/index.html', heading: 'Defence procurement watch' },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
   { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's food, farm inputs and water pressure, in plain English." },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
@@ -65,6 +66,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'For the fuel dashboard request' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For fuel strategy and reserves' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For Queensland fuel delivery' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Defence procurement' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For what still needs publishing' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For housing pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
@@ -85,6 +87,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Housing pressure' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel strategy' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'QLD fuel sovereignty' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open defence procurement watch' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
@@ -134,7 +137,7 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByRole('heading', { name: 'Defence procurement watch' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Brisbane 2032 readiness' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'AI automation and workforce pressure' })).toBeVisible();
-  await expect(page.getByText('Pending official Defence or procurement source verification.')).toBeVisible();
+  await expect(page.getByText('A dedicated Defence Procurement Watch page now surfaces these source gates.')).toBeVisible();
   await expect(page.getByText('No AI causation or fake exposure score is published.')).toBeVisible();
   await expect(page.getByText('It does not invent government strategy facts')).toBeVisible();
 });
@@ -173,6 +176,7 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'Use this fuel page in order' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For policy, reserves and MSO context' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Australian Fuel Strategy Tracker' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel sovereignty pathway' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For Queensland delivery tracking' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Queensland Fuel Sovereignty Delivery Tracker' })).toBeVisible();
@@ -237,6 +241,7 @@ test('fuel strategy tracker keeps policy and operational data source-gated', asy
   await expect(page.getByRole('heading', { name: 'Australian fuel strategy tracker' })).toBeVisible();
   await expect(page.getByText('independent public-source prototype')).toBeVisible();
   await expect(page.getByText('It does not infer fuel reserves, contracts, cargoes, emergency powers or security-sensitive holdings')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Policy evidence before operational claims' })).toBeVisible();
   await expect(page.locator('section[aria-labelledby="policy-docs-h"]').getByRole('heading', { name: 'Official strategy and policy documents' })).toBeVisible();
   await expect(page.locator('section[aria-labelledby="reserve-indicators-h"]').getByRole('heading', { name: 'Public reserve and MSO indicators' })).toBeVisible();
@@ -284,6 +289,33 @@ test('Queensland fuel sovereignty tracker keeps delivery data source-gated', asy
   await expect(page.getByText('No land parcel, capacity, proponent, bid, contract, approval-completion or operational fuel-holding value is inferred.')).toBeVisible();
 });
 
+test('defence procurement watch keeps procurement facts source-gated', async ({ page }) => {
+  await page.goto('/ui_kits/defence-procurement-watch/index.html');
+  await expect(page.getByRole('heading', { name: 'Defence procurement watch' })).toBeVisible();
+  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(page.getByText('It does not infer contracts, prices, suppliers, delivery dates')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Procurement evidence before procurement claims' })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="pathway-h"]').getByRole('heading', { name: 'Procurement pathway' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Japan/Australia warship procurement pathway' })).toBeVisible();
+  await expect(page.getByText('No Japan/Australia supplier pathway is asserted.')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="contract-h"]').getByRole('heading', { name: 'Contract and delivery status' })).toBeVisible();
+  await expect(page.getByText('Media discussion, political commentary or broad procurement interest is not treated as a contract row.')).toBeVisible();
+  const contractSection = page.locator('section[aria-labelledby="contract-h"]');
+  await expect(contractSection.getByRole('cell', { name: 'Contract value' })).toBeVisible();
+  await expect(contractSection.getByRole('cell', { name: 'Delivery schedule', exact: true })).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="industry-h"]').getByRole('heading', { name: 'Industry content and manufacturing dependency' })).toBeVisible();
+  await expect(page.getByText('No supplier, workshare, sustainment or workforce commitment is asserted.')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="logistics-h"]').getByRole('heading', { name: 'Naval logistics and fuel implication' })).toBeVisible();
+  await expect(page.getByText('Procurement discussion is not itself a fuel/logistics metric.')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="boundary-h"]').getByRole('heading', { name: 'Public/private defence data boundary' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What government still needs to publish' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How this connects to the national dashboard' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Defence Posture' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Strategic Resources' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Fuel Strategy' })).toBeVisible();
+  await expect(page.getByText('No procurement fact is filled from media discussion')).toBeVisible();
+});
+
 test('AU economics page separates latest cash rate from monthly history', async ({ page }) => {
   await page.goto('/ui_kits/au-economics-dashboard/index.html');
   await expect(page.getByRole('heading', { name: "Australia's economy, in plain English." })).toBeVisible();
@@ -311,6 +343,7 @@ test('strategic resources page keeps metric types and gaps explicit', async ({ p
   await page.goto('/ui_kits/strategic-resources-dashboard/index.html');
   await expect(page.getByRole('heading', { name: "Australia's strategic resources, in plain English." })).toBeVisible();
   await expect(page.getByText('No underground-wealth total is published.')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
   await expect(page.getByText('Production, exports, reserves/resources and strategic role are separate fields.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Resource comparison table' })).toBeVisible();
   await expect(page.getByText('Rare earths').first()).toBeVisible();
@@ -322,6 +355,7 @@ test('defence posture page keeps readiness and alliance boundaries explicit', as
   await page.goto('/ui_kits/defence-alliances-dashboard/index.html');
   await expect(page.getByRole('heading', { name: "Australia's defence posture, in plain English." })).toBeVisible();
   await expect(page.getByText('No readiness, mission-capable or live operational availability metric is loaded.')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
   await expect(page.getByText('Budget, public assets, alliances and readiness are separate fields.')).toBeVisible();
   await expect(page.getByText('Defence spending as share of GDP')).toBeVisible();
   await expect(page.getByText('Quad').first()).toBeVisible();

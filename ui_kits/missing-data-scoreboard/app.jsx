@@ -53,7 +53,7 @@ const SCOREBOARD_ROWS = [
     holder: 'Defence, procurement agencies and official program sources',
     why: 'Ships, fuel logistics, industry content and delivery schedules are national-security issues.',
     action: 'Load only official Defence or procurement source material before asserting supplier, contract or delivery status.',
-    page: 'Defence posture',
+    page: 'Defence procurement / Defence posture',
   },
   {
     area: 'Brisbane 2032 readiness',
@@ -92,7 +92,7 @@ const ROADMAP_SECTIONS = [
     title: 'Defence procurement watch',
     status: 'source-gated',
     fields: ['procurement pathway', 'vessel/frigate/general-purpose ship program', 'supplier nation', 'contract status', 'delivery timeline', 'Australian industry content', 'logistics/fuel implication', 'defence posture impact'],
-    note: 'Pending official Defence or procurement source verification. No contract, delivery or supplier-pathway fact is asserted here.',
+    note: 'A dedicated Defence Procurement Watch page now surfaces these source gates. No contract, delivery or supplier-pathway fact is asserted until official Defence or public procurement source material is loaded.',
   },
   {
     title: 'Brisbane 2032 readiness',
@@ -203,7 +203,7 @@ const PRIORITY_MATRIX_ROWS = [
     decision: 'procurement pathway and logistics context',
     blocker: 'no official procurement row is loaded for supplier, contract, delivery or logistics implication',
     action: 'load only official Defence/procurement material before asserting pathway facts',
-    page: 'Defence posture / Roadmap',
+    page: 'Defence procurement / Defence posture',
   },
   {
     band: 'High',

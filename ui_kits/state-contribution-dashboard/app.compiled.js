@@ -387,6 +387,10 @@ function Header({
     label: 'Defence posture',
     href: '../defence-alliances-dashboard/index.html'
   }, {
+    id: 'defence_procurement',
+    label: 'Procurement',
+    href: '../defence-procurement-watch/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -947,6 +951,8 @@ function Footer({
   }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
     href: "../defence-alliances-dashboard/index.html"
   }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-procurement-watch/index.html"
+  }, "Defence procurement")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
