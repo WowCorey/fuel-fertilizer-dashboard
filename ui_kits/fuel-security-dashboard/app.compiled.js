@@ -387,6 +387,10 @@ function Header({
     label: 'Defence posture',
     href: '../defence-alliances-dashboard/index.html'
   }, {
+    id: 'defence_procurement',
+    label: 'Procurement',
+    href: '../defence-procurement-watch/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -947,6 +951,8 @@ function Footer({
   }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
     href: "../defence-alliances-dashboard/index.html"
   }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-procurement-watch/index.html"
+  }, "Defence procurement")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
@@ -2025,9 +2031,11 @@ function FuelStrategyCrossLink() {
     id: "fuel-strategy-link-h"
   }, "For policy, reserves and MSO context")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "The National Fuel Security page shows the public dashboard structure. The Australian Fuel Strategy Tracker separates official policy documents, MSO/reserve indicators, product-level days-cover visibility, emergency-response source gates and public/private data boundaries."), React.createElement("p", null, "It does not infer strategy facts, contracts, cargoes, terminal inventories or emergency settings where an official/public source is not loaded."), React.createElement("a", {
+  }, React.createElement("p", null, "The National Fuel Security page shows the public dashboard structure. The Australian Fuel Strategy Tracker separates official policy documents, MSO/reserve indicators, product-level days-cover visibility, emergency-response source gates and public/private data boundaries."), React.createElement("p", null, "It does not infer strategy facts, contracts, cargoes, terminal inventories or emergency settings where an official/public source is not loaded."), React.createElement("p", null, "Defence procurement and naval logistics source gates are tracked separately so this operational fuel-security view does not imply military procurement or capability facts."), React.createElement("a", {
     href: "../australian-fuel-strategy-dashboard/index.html"
-  }, "Open Australian Fuel Strategy Tracker"))));
+  }, "Open Australian Fuel Strategy Tracker"), React.createElement("br", null), React.createElement("a", {
+    href: "../defence-procurement-watch/index.html"
+  }, "Open Defence Procurement Watch"))));
 }
 function QueenslandDeliveryCrossLink() {
   return React.createElement("section", {

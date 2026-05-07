@@ -1,0 +1,30 @@
+{
+  "series_id": "defence_procurement_contract_value_gate",
+  "source_id": "defence_procurement_contract_value_gate",
+  "source_name": "Defence procurement contract value source gate",
+  "source_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+  "unit": "",
+  "retrieved_at": null,
+  "stub_created_at": "2026-05-07T00:00:00+10:00",
+  "last_data_point": null,
+  "values": [],
+  "notes": "No contract value, cost range, supplier value or fiscal estimate row is loaded.",
+  "status": "unavailable",
+  "manual_entry": true,
+  "source_rights": "Project metadata/prose CC BY 4.0",
+  "citation": "Fuel Resilience AU source gate for defence procurement contract value.",
+  "extra": {
+    "schema": "source_gate.v1",
+    "fields": {
+      "decision": "source-gated",
+      "required_public_feed": "Official contract value or cost range with currency, period, scope and source date.",
+      "do_not_infer_from": [
+        "media estimates",
+        "budget aggregates",
+        "foreign program prices",
+        "supplier marketing",
+        "political commentary"
+      ]
+    }
+  }
+}

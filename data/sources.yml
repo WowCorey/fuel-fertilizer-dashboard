@@ -2701,6 +2701,126 @@ sources:
     fetch: unavailable
     used_by: [defence_posture]
 
+  - id: defence_japan_warship_procurement_source_gate
+    human_name: Japan/Australia warship procurement source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Japan/Australia warship procurement pathway.
+    reuse_notes: Deliberate unavailable placeholder. Do not assert supplier nation, vessel class, contract status, delivery timeline, capability or fleet number until official Defence or public procurement source material supports the exact field.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
+  - id: defence_frigate_procurement_status
+    human_name: Frigate/general-purpose vessel procurement status source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for frigate/general-purpose vessel procurement status.
+    reuse_notes: Deliberate unavailable placeholder. Do not add contract, vessel class, vessel count, delivery or in-service rows unless official Defence or public procurement sources provide the exact field and scope.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
+  - id: defence_naval_logistics_fuel_implication
+    human_name: Naval logistics and fuel implication source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for naval logistics and fuel implications.
+    reuse_notes: Deliberate unavailable placeholder. Procurement discussion is not a fuel/logistics metric; only add safe public aggregate logistics or fuel rows from official sources.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
+  - id: defence_surface_fleet_procurement_pathway
+    human_name: Surface fleet procurement pathway source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for surface fleet procurement pathway.
+    reuse_notes: Deliberate unavailable placeholder. Do not infer procurement pathway, decision status, public announcement status or capability effect without a named official/public source.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
+  - id: defence_shipbuilding_industry_content_gate
+    human_name: Defence shipbuilding industry-content source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for defence shipbuilding industry content.
+    reuse_notes: Deliberate unavailable placeholder. Do not infer Australian industry content, sustainment, workforce, material, systems-integration or dockyard commitments without official procurement or program source material.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
+  - id: defence_procurement_delivery_timeline_gate
+    human_name: Defence procurement delivery timeline source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for defence procurement delivery timeline.
+    reuse_notes: Deliberate unavailable placeholder. Do not publish delivery schedules, in-service targets or milestone dates unless official sources provide dated fields and scope.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
+  - id: defence_procurement_contract_value_gate
+    human_name: Defence procurement contract value source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for defence procurement contract value.
+    reuse_notes: Deliberate unavailable placeholder. Do not add contract values, cost ranges, supplier values or fiscal estimates without official value, currency, period and scope.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
+  - id: defence_procurement_public_boundary_gate
+    human_name: Defence procurement public/private data boundary source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for defence procurement public/private data boundary.
+    reuse_notes: Deliberate unavailable placeholder. Keep public procurement facts separate from sensitive readiness, live movement, exact fuel holdings or operational vulnerability data; request safe aggregate indicators only.
+    fetch: unavailable
+    used_by: [defence_procurement]
+
   # =========================================================
   # EMPLOYMENT & AUTOMATION - v0.5 (ABS labour-market data + AI rollout context)
   # =========================================================

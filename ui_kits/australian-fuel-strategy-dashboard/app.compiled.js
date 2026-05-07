@@ -387,6 +387,10 @@ function Header({
     label: 'Defence posture',
     href: '../defence-alliances-dashboard/index.html'
   }, {
+    id: 'defence_procurement',
+    label: 'Procurement',
+    href: '../defence-procurement-watch/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -947,6 +951,8 @@ function Footer({
   }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
     href: "../defence-alliances-dashboard/index.html"
   }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-procurement-watch/index.html"
+  }, "Defence procurement")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
@@ -1253,9 +1259,11 @@ function QueenslandDeliveryCrossLink() {
     id: "qld-delivery-link-h"
   }, "Queensland delivery pathway")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "For state delivery and six-port AFIP context, see Queensland Fuel Sovereignty Delivery Tracker. The national tracker covers fuel-security policy, MSO, reserves, days-cover and emergency-response boundaries. The Queensland tracker covers ports, land, EOI, storage/refining opportunities and approvals."), React.createElement("p", null, "It keeps land parcels, capacities, proponents, bids, contracts and approval completion source-gated unless named official sources publish exact fields."), React.createElement("a", {
+  }, React.createElement("p", null, "For state delivery and six-port AFIP context, see Queensland Fuel Sovereignty Delivery Tracker. The national tracker covers fuel-security policy, MSO, reserves, days-cover and emergency-response boundaries. The Queensland tracker covers ports, land, EOI, storage/refining opportunities and approvals."), React.createElement("p", null, "It keeps land parcels, capacities, proponents, bids, contracts and approval completion source-gated unless named official sources publish exact fields."), React.createElement("p", null, "Defence procurement and naval logistics questions are handled separately in Defence Procurement Watch so national fuel policy rows are not turned into procurement or operational military claims."), React.createElement("a", {
     href: "../qld-fuel-sovereignty-dashboard/index.html"
-  }, "Open Queensland Fuel Sovereignty Delivery Tracker"))));
+  }, "Open Queensland Fuel Sovereignty Delivery Tracker"), React.createElement("br", null), React.createElement("a", {
+    href: "../defence-procurement-watch/index.html"
+  }, "Open Defence Procurement Watch"))));
 }
 function App() {
   const [data, setData] = React.useState(null);

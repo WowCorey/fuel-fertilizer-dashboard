@@ -1588,6 +1588,54 @@
       "has_generated": false,
       "has_manual": true
     },
+    "defence_frigate_procurement_status": {
+      "id": "defence_frigate_procurement_status",
+      "human_name": "Frigate/general-purpose vessel procurement status source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for frigate/general-purpose vessel procurement status.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_japan_warship_procurement_source_gate": {
+      "id": "defence_japan_warship_procurement_source_gate",
+      "human_name": "Japan/Australia warship procurement source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Japan/Australia warship procurement pathway.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_naval_logistics_fuel_implication": {
+      "id": "defence_naval_logistics_fuel_implication",
+      "human_name": "Naval logistics and fuel implication source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for naval logistics and fuel implications.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "defence_posture_profiles": {
       "id": "defence_posture_profiles",
       "human_name": "Defence alliances and strategic posture compiled profiles",
@@ -1600,6 +1648,54 @@
       "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
       "rights": "Project metadata/prose CC BY 4.0; upstream source rights remain with each publisher",
       "citation": "Fuel Resilience AU defence, alliances and strategic posture methodology; Department of Defence; DFAT; Office of National Intelligence; Australian Submarine Agency.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_procurement_contract_value_gate": {
+      "id": "defence_procurement_contract_value_gate",
+      "human_name": "Defence procurement contract value source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for defence procurement contract value.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_procurement_delivery_timeline_gate": {
+      "id": "defence_procurement_delivery_timeline_gate",
+      "human_name": "Defence procurement delivery timeline source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for defence procurement delivery timeline.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_procurement_public_boundary_gate": {
+      "id": "defence_procurement_public_boundary_gate",
+      "human_name": "Defence procurement public/private data boundary source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for defence procurement public/private data boundary.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -1636,6 +1732,22 @@
       "has_generated": false,
       "has_manual": true
     },
+    "defence_shipbuilding_industry_content_gate": {
+      "id": "defence_shipbuilding_industry_content_gate",
+      "human_name": "Defence shipbuilding industry-content source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for defence shipbuilding industry content.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
     "defence_sovereign_industry_context": {
       "id": "defence_sovereign_industry_context",
       "human_name": "Defence sovereign industry and resilience context",
@@ -1648,6 +1760,22 @@
       "canonical_url": "https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities",
       "rights": "Commonwealth copyright; Defence copyright terms apply",
       "citation": "Department of Defence, Sovereign Defence Industrial Priorities; Guided Weapons and Explosive Ordnance Enterprise; Australian Submarine Agency industry pages.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "defence_surface_fleet_procurement_pathway": {
+      "id": "defence_surface_fleet_procurement_pathway",
+      "human_name": "Surface fleet procurement pathway source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "defence_procurement"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for surface fleet procurement pathway.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

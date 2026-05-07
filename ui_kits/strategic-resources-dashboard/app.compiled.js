@@ -387,6 +387,10 @@ function Header({
     label: 'Defence posture',
     href: '../defence-alliances-dashboard/index.html'
   }, {
+    id: 'defence_procurement',
+    label: 'Procurement',
+    href: '../defence-procurement-watch/index.html'
+  }, {
     id: 'fuel',
     label: 'Fuel',
     href: '../fuel-dashboard/index.html'
@@ -947,6 +951,8 @@ function Footer({
   }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
     href: "../defence-alliances-dashboard/index.html"
   }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
+    href: "../defence-procurement-watch/index.html"
+  }, "Defence procurement")), React.createElement("li", null, React.createElement("a", {
     href: "../fuel-dashboard/index.html"
   }, "Fuel")), React.createElement("li", null, React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
@@ -1371,6 +1377,23 @@ function App() {
   }, "Why the page is fail-closed")), React.createElement("div", {
     className: "why-body"
   }, React.createElement("p", null, "Mine production is the amount produced in a period. Export value is money earned from exports in a period. Export volume is a traded physical quantity. Ore Reserves and Mineral Resources are in-ground economic or geological inventory concepts as at a date. The dashboard never adds these into one number."), React.createElement("p", null, "State footprint uses the GA/Digital Atlas operating mines layer as a structured qualitative footprint. It counts source rows by status and state; it does not allocate national production or export value to states."), React.createElement("p", null, "Resources with weak source coverage are left partial or unavailable. Sulphur is included as a source-gate row only: no official national sulphur production or export row is loaded.")))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "procurement-link-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Procurement dependencies"), React.createElement("h2", {
+    id: "procurement-link-h",
+    style: {
+      marginTop: 8
+    }
+  }, "Procurement claims need their own source gate")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "Strategic resource rows can show production, export, reserve/resource and footprint context. They do not prove a defence procurement supplier pathway, contract status, material bill, delivery timeline or logistics implication."), React.createElement("p", null, "For procurement dependencies and public/private boundaries, see Defence Procurement Watch."), React.createElement("a", {
+    className: "hero-button",
+    href: "../defence-procurement-watch/index.html"
+  }, "Open Defence Procurement Watch")))), React.createElement("section", {
     className: "section section--sources",
     id: "sources",
     "aria-labelledby": "sources-h"
