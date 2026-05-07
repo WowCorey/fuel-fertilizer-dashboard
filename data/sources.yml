@@ -1086,7 +1086,7 @@ sources:
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; retail stock-outs table provided by state and territory governments.
     reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one. Rechecked 2026-04-23; no live station-level outage API or stable CSV/JSON/XLSX endpoint was exposed.
     fetch: manual
-    used_by: [national_status, fuel_security]
+    used_by: [national_status, fuel_security, brisbane_2032]
 
   - id: wa_fuel_security_stockouts
     human_name: WA Government weekly fuel update - statewide stockouts
@@ -1120,7 +1120,7 @@ sources:
     citation: Queensland Government Open Data, Fuel Price Reporting 2026.
     reuse_notes: Programmatic partial outage/availability signal. In the official column explanation, Price = 9999 denotes fuel stock temporarily unavailable, such as a tank empty and awaiting new stock. Use as monthly unavailable fuel-type report coverage only; do not describe as live station outage coverage, a complete current statewide stockout count, or national coverage.
     fetch: programmatic
-    used_by: [fuel_security]
+    used_by: [fuel_security, brisbane_2032]
 
   - id: fuel_security_petrol_days_remaining
     human_name: Fuel security - petrol days remaining
@@ -1207,7 +1207,7 @@ sources:
     citation: Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.
     reuse_notes: Do not imply live national station outage visibility. Use PM&C retail stock-outs for the dated partial public snapshot until a stable, licence-safe public feed exists. Rechecked 2026-04-23; no national live dry-station feed was verified.
     fetch: unavailable
-    used_by: [fuel_security]
+    used_by: [fuel_security, brisbane_2032]
 
   - id: fuel_security_live_vessel_tracking
     human_name: Live shipment-level tanker tracking
@@ -1237,7 +1237,7 @@ sources:
     citation: Fuel Resilience AU source review; PM&C MSO reserve volumes and APS stock series remain the loaded public storage context.
     reuse_notes: Do not fabricate terminal-by-terminal capacity. Publish only national/product stock context until a public, reusable terminal-capacity dataset is verified. Rechecked 2026-04-23; Geoscience Australia's National Liquid Fuel Terminals 2015 dataset is a location snapshot, not capacity or live inventory.
     fetch: unavailable
-    used_by: [fuel_security]
+    used_by: [fuel_security, brisbane_2032]
 
   # =========================================================
   # RESOURCE VALUE - v1.5 (who captures oil and gas value)
@@ -2178,7 +2178,7 @@ sources:
     citation: Australian Bureau of Statistics, National, state and territory population (Cat. 3101.0), Estimated Resident Population.
     reuse_notes: Fetched from the live ABS Data API ERP_Q dataflow. Returns the headline quarterly national ERP, all ages, both sexes.
     fetch: programmatic
-    used_by: [infrastructure]
+    used_by: [infrastructure, brisbane_2032]
 
   - id: abs_population_growth_rate
     human_name: ABS population growth rate - Australia, year-on-year %, quarterly
@@ -2233,7 +2233,7 @@ sources:
     citation: National Housing Supply and Affordability Council, Quarterly Report - March 2026.
     reuse_notes: Hand-key Australia's share of the 1.2 million Accord target built to date from the NHSAC Quarterly Report. The loaded row uses the March 2026 report's 18% national share built to date and 219,000 completions over the first five Accord quarters; do not substitute forecasts for actual completions.
     fetch: manual
-    used_by: [infrastructure]
+    used_by: [infrastructure, brisbane_2032]
 
   - id: bitre_public_transport_patronage
     human_name: BITRE Yearbook 2025 - public transport patronage by capital city
@@ -2248,7 +2248,7 @@ sources:
     citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, passenger tables.
     reuse_notes: Hand-key the Australian capital cities total from BITRE Yearbook 2025 Table 2.5i. The loaded value is 2024-25 capital-city public transport patronage in million passenger trips, with city and mode breakdowns in extra fields; it is not all Australian passenger travel.
     fetch: manual
-    used_by: [infrastructure]
+    used_by: [infrastructure, brisbane_2032]
 
   - id: bitre_airport_passenger_movements
     human_name: BITRE Airport Traffic Data - capital city airport passenger movements
@@ -2263,7 +2263,7 @@ sources:
     citation: Bureau of Infrastructure and Transport Research Economics, Airport Traffic Data 1985-86 to 2024-25.
     reuse_notes: Hand-key the annual financial-year workbook total revenue passenger movements for the eight capital city airports. The loaded value is 2024-25 annual movements and excludes non-capital airports; do not describe it as a monthly national total.
     fetch: manual
-    used_by: [infrastructure]
+    used_by: [infrastructure, brisbane_2032]
 
   - id: bitre_freight_volumes
     human_name: BITRE Yearbook 2025 - domestic freight task by mode
@@ -2278,7 +2278,7 @@ sources:
     citation: Bureau of Infrastructure and Transport Research Economics, Australian Infrastructure and Transport Statistics Yearbook 2025, freight tables.
     reuse_notes: Hand-key the domestic freight task from BITRE Yearbook 2025 Table 1.1c. The loaded value is 2024-25 total bulk and non-bulk domestic freight in billion tonne-kilometres; do not mix it with tonnes or international freight.
     fetch: manual
-    used_by: [infrastructure]
+    used_by: [infrastructure, brisbane_2032]
 
   - id: infrastructure_australia_priority_list
     human_name: Infrastructure Australia - 2026 Infrastructure Priority List
@@ -2359,7 +2359,7 @@ sources:
     citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
     reuse_notes: AEMO publishes 5-minute interval price (RRP, AUD per MWh) and demand (MW) per NEM region (NSW1, VIC1, QLD1, SA1, TAS1) at the static URL pattern aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv. The fetcher pulls the last several full months across all five regions, averages RRP across all 5-minute TRADE intervals to a monthly mean per region, then computes a NEM-wide mean of region means. Per-region latest-month values are kept in extra.fields.
     fetch: programmatic
-    used_by: [power_grid]
+    used_by: [power_grid, brisbane_2032]
 
   - id: aemo_nem_total_demand
     human_name: AEMO NEM total operational demand, monthly mean MW
@@ -2376,7 +2376,7 @@ sources:
     citation: Australian Energy Market Operator, NEM Price and Demand monthly archives.
     reuse_notes: Same source files as aemo_nem_average_wholesale_price. The fetcher averages TOTALDEMAND (MW) across all 5-minute TRADE intervals to a monthly mean per region, then sums region means to a NEM-wide monthly mean total operational demand. Per-region latest-month values are kept in extra.fields.
     fetch: programmatic
-    used_by: [power_grid]
+    used_by: [power_grid, brisbane_2032]
 
   - id: aemo_nem_fuel_mix
     human_name: AEMO NEM generation fuel mix (% by source)
@@ -2391,7 +2391,7 @@ sources:
     citation: Australian Energy Market Operator, Quarterly Energy Dynamics Q4 2025, Table 3 NEM supply mix contribution by fuel type.
     reuse_notes: AEMO Quarterly Energy Dynamics Q4 2025 Table 3 publishes the NEM supply mix contribution by fuel type for Q4 2025. The dashboard headline records the renewable-plus-battery share and keeps black coal, brown coal, gas and other shares separated in typed extra fields. This remains manual because no stable dashboard-safe aggregate fuel-mix endpoint is wired.
     fetch: manual
-    used_by: [power_grid]
+    used_by: [power_grid, brisbane_2032]
 
   - id: aemo_generation_information_register
     human_name: AEMO Generation Information register - capacity by fuel type
@@ -2820,6 +2820,160 @@ sources:
     reuse_notes: Deliberate unavailable placeholder. Keep public procurement facts separate from sensitive readiness, live movement, exact fuel holdings or operational vulnerability data; request safe aggregate indicators only.
     fetch: unavailable
     used_by: [defence_procurement]
+
+  # =========================================================
+  # BRISBANE 2032 READINESS - v0.1 (source-gated readiness tracker)
+  # =========================================================
+
+  - id: olympics_2032_infrastructure_delivery
+    human_name: Brisbane 2032 infrastructure delivery source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 infrastructure delivery.
+    reuse_notes: Deliberate unavailable placeholder. Do not publish venue, project, milestone, cost or delivery-status claims unless official delivery authority or public project sources provide exact fields, dates, scope and cadence.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_venue_readiness
+    human_name: Brisbane 2032 venue readiness source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 venue readiness.
+    reuse_notes: Deliberate unavailable placeholder. A venue announcement is not a delivery tracker; do not infer venue readiness, completion, capacity, cost or operational status without official fields.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_transport_capacity
+    human_name: Brisbane 2032 transport capacity source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 transport capacity.
+    reuse_notes: Deliberate unavailable placeholder. Historical BITRE patronage or airport movement rows are context only; do not convert them into Games rail, bus, airport, road or accessible transport capacity.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_accommodation_pressure
+    human_name: Brisbane 2032 accommodation pressure source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 accommodation pressure.
+    reuse_notes: Deliberate unavailable placeholder. Do not infer hotel-room supply, short-stay pressure, regional overflow, price pressure or visitor demand without source-safe aggregate fields and method.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_tourism_pressure
+    human_name: Brisbane 2032 tourism pressure source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 tourism pressure.
+    reuse_notes: Deliberate unavailable placeholder. Do not infer tourism route pressure, price pressure, workforce availability or visitor-demand forecasts from commentary, housing context or fuel source gates.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_power_reliability
+    human_name: Brisbane 2032 power reliability source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 power reliability.
+    reuse_notes: Deliberate unavailable placeholder. AEMO NEM price, demand and fuel-mix context is not an event-specific reliability or peak-demand readiness value; keep event power readiness source-gated until official safe aggregate indicators are loaded.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_fuel_logistics
+    human_name: Brisbane 2032 fuel logistics source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 fuel logistics.
+    reuse_notes: Deliberate unavailable placeholder. Existing fuel-security data is context only; do not publish Games fuel logistics, tourism-route fuel readiness, emergency fuel capacity, terminal detail or contract coverage without a named public source and safety boundary.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_supply_chain_readiness
+    human_name: Brisbane 2032 supply-chain readiness source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 supply-chain readiness.
+    reuse_notes: Deliberate unavailable placeholder. Do not infer event food, freight, equipment, water, venue-supply or infrastructure-dependency readiness from generic freight totals, farm source gates or project announcements.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_public_safety_readiness
+    human_name: Brisbane 2032 public safety readiness source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 public safety readiness.
+    reuse_notes: Deliberate unavailable placeholder. Request safe aggregate public-safety readiness indicators only; do not publish sensitive staffing, deployment, crowd movement, health surge, communications or contingency detail.
+    fetch: unavailable
+    used_by: [brisbane_2032]
+
+  - id: olympics_2032_emergency_logistics
+    human_name: Brisbane 2032 emergency logistics source gate
+    publisher: Fuel Resilience AU
+    url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md
+    format: JSON
+    update_cadence: ad-hoc
+    last_verified: 2026-05-07
+    rights: Project metadata/prose CC BY 4.0
+    rights_url: https://creativecommons.org/licenses/by/4.0/
+    citation: Fuel Resilience AU source gate for Brisbane 2032 emergency logistics.
+    reuse_notes: Deliberate unavailable placeholder. Do not publish emergency logistics capacity, routes, fuel holdings, incident response plans or operator-specific vulnerabilities without safe aggregate official/public indicators.
+    fetch: unavailable
+    used_by: [brisbane_2032]
 
   # =========================================================
   # EMPLOYMENT & AUTOMATION - v0.5 (ABS labour-market data + AI rollout context)

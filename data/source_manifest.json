@@ -458,7 +458,8 @@
       "fetch": "programmatic",
       "update_cadence": "quarterly",
       "used_by": [
-        "infrastructure"
+        "infrastructure",
+        "brisbane_2032"
       ],
       "canonical_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
       "rights": "CC BY 4.0 where stated by publisher",
@@ -763,7 +764,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "power_grid"
+        "power_grid",
+        "brisbane_2032"
       ],
       "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
       "rights": "AEMO terms of use for tabular data",
@@ -779,7 +781,8 @@
       "fetch": "manual",
       "update_cadence": "quarterly",
       "used_by": [
-        "power_grid"
+        "power_grid",
+        "brisbane_2032"
       ],
       "canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
       "rights": "AEMO terms of use for tabular data",
@@ -795,7 +798,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "power_grid"
+        "power_grid",
+        "brisbane_2032"
       ],
       "canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
       "rights": "AEMO terms of use for tabular data",
@@ -1291,7 +1295,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "infrastructure"
+        "infrastructure",
+        "brisbane_2032"
       ],
       "canonical_url": "https://www.bitre.gov.au/publications/ongoing/airport_traffic_data",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
@@ -1307,7 +1312,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "infrastructure"
+        "infrastructure",
+        "brisbane_2032"
       ],
       "canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
@@ -1323,7 +1329,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "infrastructure"
+        "infrastructure",
+        "brisbane_2032"
       ],
       "canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
@@ -2076,7 +2083,8 @@
       "fetch": "unavailable",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "brisbane_2032"
       ],
       "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
       "rights": "Not applicable; unavailable placeholder",
@@ -2156,7 +2164,8 @@
       "fetch": "unavailable",
       "update_cadence": "ad-hoc",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "brisbane_2032"
       ],
       "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
       "rights": "Not applicable; unavailable placeholder",
@@ -2237,7 +2246,8 @@
       "fetch": "manual",
       "update_cadence": "annual",
       "used_by": [
-        "infrastructure"
+        "infrastructure",
+        "brisbane_2032"
       ],
       "canonical_url": "https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026",
       "rights": "CC BY 4.0 (Commonwealth of Australia)",
@@ -2322,6 +2332,166 @@
       "canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks",
       "rights": "CC BY 4.0 where stated by publisher",
       "citation": "Department of Climate Change, Energy, the Environment and Water, offshore ticket disclosures.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_accommodation_pressure": {
+      "id": "olympics_2032_accommodation_pressure",
+      "human_name": "Brisbane 2032 accommodation pressure source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 accommodation pressure.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_emergency_logistics": {
+      "id": "olympics_2032_emergency_logistics",
+      "human_name": "Brisbane 2032 emergency logistics source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 emergency logistics.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_fuel_logistics": {
+      "id": "olympics_2032_fuel_logistics",
+      "human_name": "Brisbane 2032 fuel logistics source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 fuel logistics.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_infrastructure_delivery": {
+      "id": "olympics_2032_infrastructure_delivery",
+      "human_name": "Brisbane 2032 infrastructure delivery source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 infrastructure delivery.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_power_reliability": {
+      "id": "olympics_2032_power_reliability",
+      "human_name": "Brisbane 2032 power reliability source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 power reliability.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_public_safety_readiness": {
+      "id": "olympics_2032_public_safety_readiness",
+      "human_name": "Brisbane 2032 public safety readiness source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 public safety readiness.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_supply_chain_readiness": {
+      "id": "olympics_2032_supply_chain_readiness",
+      "human_name": "Brisbane 2032 supply-chain readiness source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 supply-chain readiness.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_tourism_pressure": {
+      "id": "olympics_2032_tourism_pressure",
+      "human_name": "Brisbane 2032 tourism pressure source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 tourism pressure.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_transport_capacity": {
+      "id": "olympics_2032_transport_capacity",
+      "human_name": "Brisbane 2032 transport capacity source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 transport capacity.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "olympics_2032_venue_readiness": {
+      "id": "olympics_2032_venue_readiness",
+      "human_name": "Brisbane 2032 venue readiness source gate",
+      "publisher": "Fuel Resilience AU",
+      "fetch": "unavailable",
+      "update_cadence": "ad-hoc",
+      "used_by": [
+        "brisbane_2032"
+      ],
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "rights": "Project metadata/prose CC BY 4.0",
+      "citation": "Fuel Resilience AU source gate for Brisbane 2032 venue readiness.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true
@@ -2418,7 +2588,8 @@
       "update_cadence": "weekly",
       "used_by": [
         "national_status",
-        "fuel_security"
+        "fuel_security",
+        "brisbane_2032"
       ],
       "canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
       "rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
@@ -2571,7 +2742,8 @@
       "fetch": "programmatic",
       "update_cadence": "monthly",
       "used_by": [
-        "fuel_security"
+        "fuel_security",
+        "brisbane_2032"
       ],
       "canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
       "rights": "Creative Commons Attribution 4.0",

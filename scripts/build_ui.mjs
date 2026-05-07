@@ -38,6 +38,7 @@ const dashboards = [
   'manufacturing-dashboard',
   'power-grid-dashboard',
   'infrastructure-dashboard',
+  'brisbane-2032-readiness-dashboard',
   'employment-automation-dashboard',
   'missing-data-scoreboard',
 ];

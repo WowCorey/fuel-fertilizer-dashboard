@@ -57,12 +57,12 @@ const SCOREBOARD_ROWS = [
   },
   {
     area: 'Brisbane 2032 readiness',
-    status: 'roadmap',
+    status: 'source-gated',
     gap: 'Infrastructure delivery, transport, accommodation, power, tourism pressure and emergency logistics',
     holder: 'Delivery authority, Queensland agencies, councils, utilities and operators',
     why: 'The Olympics will stress transport, accommodation, power, tourism and emergency systems.',
-    action: 'Scope official delivery and capacity sources before creating readiness indicators.',
-    page: 'Roadmap',
+    action: 'Use the Brisbane 2032 Readiness page to keep official delivery, capacity and emergency-readiness source gates visible.',
+    page: 'Brisbane 2032 readiness',
   },
   {
     area: 'AI and workforce',
@@ -96,9 +96,9 @@ const ROADMAP_SECTIONS = [
   },
   {
     title: 'Brisbane 2032 readiness',
-    status: 'roadmap',
+    status: 'source-gated',
     fields: ['infrastructure delivery', 'transport capacity', 'accommodation pressure', 'power reliability', 'tourism pressure', 'supply-chain readiness', 'public safety and emergency logistics'],
-    note: 'Roadmap only until official delivery authority and public capacity sources are wired.',
+    note: 'A dedicated Brisbane 2032 Readiness page now surfaces these source gates. No venue status, costs, capacity, tourism pressure, public-safety readiness or emergency-logistics values are asserted until official/public sources are loaded.',
   },
   {
     title: 'AI automation and workforce pressure',
@@ -231,15 +231,15 @@ const PRIORITY_MATRIX_ROWS = [
   },
   {
     band: 'Medium',
-    statusKind: 'roadmap',
-    status: 'Roadmap',
+    statusKind: 'source-gated',
+    status: 'Source-gated',
     gap: 'Olympics readiness',
     affected: 'tourism operators, residents, infrastructure planners, emergency services',
     holder: 'delivery authority, Queensland agencies, councils, utilities and operators',
     decision: 'transport, accommodation, power, tourism and emergency logistics readiness',
     blocker: 'readiness categories are not yet wired to official delivery/capacity sources',
-    action: 'scope official delivery authority and capacity feeds before building indicators',
-    page: 'Roadmap',
+    action: 'use the dedicated Brisbane 2032 Readiness page to track official/public source gates',
+    page: 'Brisbane 2032 readiness',
   },
   {
     band: 'Medium',
@@ -296,7 +296,7 @@ const ACTION_QUEUE = [
   {
     title: 'Roadmap build',
     status: 'roadmap',
-    copy: 'Future pages such as housing, AI workforce and Olympics readiness need source scoping before values are loaded.',
+    copy: 'Future pages and source-gated areas such as AI workforce need source scoping before values are loaded; Brisbane 2032 readiness now has a dedicated source-gated tracker.',
   },
 ];
 

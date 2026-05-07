@@ -427,6 +427,10 @@ function Header({
     label: 'Infrastructure',
     href: '../infrastructure-dashboard/index.html'
   }, {
+    id: 'brisbane_2032',
+    label: '2032 readiness',
+    href: '../brisbane-2032-readiness-dashboard/index.html'
+  }, {
     id: 'employment_automation',
     label: 'Employment',
     href: '../employment-automation-dashboard/index.html'
@@ -963,6 +967,8 @@ function Footer({
   }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
     href: "../housing-economic-pressure-dashboard/index.html"
   }, "Housing pressure")), React.createElement("li", null, React.createElement("a", {
+    href: "../brisbane-2032-readiness-dashboard/index.html"
+  }, "Brisbane 2032 readiness")), React.createElement("li", null, React.createElement("a", {
     href: "../missing-data-scoreboard/index.html"
   }, "Missing data scoreboard")))), React.createElement("div", {
     className: "site-footer__col"
@@ -1245,6 +1251,22 @@ function App() {
     lede: "Populated from ABS / BITRE / ACCC / NHSAC / Infrastructure Australia release notes as verified data arrives.",
     emptyMessage: "Awaiting verified release notes for the loaded infrastructure source envelopes."
   })), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "brisbane-2032-link-h"
+  }, React.createElement("div", {
+    className: "why-grid"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Brisbane 2032"), React.createElement("h2", {
+    id: "brisbane-2032-link-h",
+    style: {
+      marginTop: 8
+    }
+  }, "For Olympic readiness gaps")), React.createElement("div", {
+    className: "why-body"
+  }, React.createElement("p", null, "This Infrastructure page provides population, housing, transport, freight and digital context. Brisbane 2032 Readiness keeps Olympic venue delivery, event transport capacity, accommodation, power, fuel and emergency-logistics rows source-gated until official public fields are loaded."), React.createElement("a", {
+    href: "../brisbane-2032-readiness-dashboard/index.html"
+  }, "Open Brisbane 2032 Readiness")))), React.createElement("section", {
     className: "section section--sources",
     id: "sources"
   }, React.createElement("div", {

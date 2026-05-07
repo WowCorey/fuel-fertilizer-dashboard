@@ -297,6 +297,24 @@ function App() {
           />
         </section>
 
+        <section className="section section--why" aria-labelledby="brisbane-2032-link-h">
+          <div className="why-grid">
+            <div>
+              <span className="eyebrow">Brisbane 2032</span>
+              <h2 id="brisbane-2032-link-h" style={{ marginTop: 8 }}>For event power-readiness gaps</h2>
+            </div>
+            <div className="why-body">
+              <p>
+                This Power Grid page shows NEM price, demand, fuel-mix and planning context.
+                It is not a Brisbane 2032 reliability or peak-event-demand model. The
+                Brisbane 2032 Readiness page keeps event-specific power, backup and emergency
+                logistics rows source-gated until official safe aggregate indicators are loaded.
+              </p>
+              <a href="../brisbane-2032-readiness-dashboard/index.html">Open Brisbane 2032 Readiness</a>
+            </div>
+          </div>
+        </section>
+
         {/* SOURCES & METHODOLOGY */}
         <section className="section section--sources" id="sources">
           <div className="section__head">

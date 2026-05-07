@@ -427,6 +427,10 @@ function Header({
     label: 'Infrastructure',
     href: '../infrastructure-dashboard/index.html'
   }, {
+    id: 'brisbane_2032',
+    label: '2032 readiness',
+    href: '../brisbane-2032-readiness-dashboard/index.html'
+  }, {
     id: 'employment_automation',
     label: 'Employment',
     href: '../employment-automation-dashboard/index.html'
@@ -963,6 +967,8 @@ function Footer({
   }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
     href: "../housing-economic-pressure-dashboard/index.html"
   }, "Housing pressure")), React.createElement("li", null, React.createElement("a", {
+    href: "../brisbane-2032-readiness-dashboard/index.html"
+  }, "Brisbane 2032 readiness")), React.createElement("li", null, React.createElement("a", {
     href: "../missing-data-scoreboard/index.html"
   }, "Missing data scoreboard")))), React.createElement("div", {
     className: "site-footer__col"
@@ -1034,12 +1040,12 @@ const SCOREBOARD_ROWS = [{
   page: 'Defence procurement / Defence posture'
 }, {
   area: 'Brisbane 2032 readiness',
-  status: 'roadmap',
+  status: 'source-gated',
   gap: 'Infrastructure delivery, transport, accommodation, power, tourism pressure and emergency logistics',
   holder: 'Delivery authority, Queensland agencies, councils, utilities and operators',
   why: 'The Olympics will stress transport, accommodation, power, tourism and emergency systems.',
-  action: 'Scope official delivery and capacity sources before creating readiness indicators.',
-  page: 'Roadmap'
+  action: 'Use the Brisbane 2032 Readiness page to keep official delivery, capacity and emergency-readiness source gates visible.',
+  page: 'Brisbane 2032 readiness'
 }, {
   area: 'AI and workforce',
   status: 'roadmap',
@@ -1066,9 +1072,9 @@ const ROADMAP_SECTIONS = [{
   note: 'A dedicated Defence Procurement Watch page now surfaces these source gates. No contract, delivery or supplier-pathway fact is asserted until official Defence or public procurement source material is loaded.'
 }, {
   title: 'Brisbane 2032 readiness',
-  status: 'roadmap',
+  status: 'source-gated',
   fields: ['infrastructure delivery', 'transport capacity', 'accommodation pressure', 'power reliability', 'tourism pressure', 'supply-chain readiness', 'public safety and emergency logistics'],
-  note: 'Roadmap only until official delivery authority and public capacity sources are wired.'
+  note: 'A dedicated Brisbane 2032 Readiness page now surfaces these source gates. No venue status, costs, capacity, tourism pressure, public-safety readiness or emergency-logistics values are asserted until official/public sources are loaded.'
 }, {
   title: 'AI automation and workforce pressure',
   status: 'roadmap',
@@ -1187,15 +1193,15 @@ const PRIORITY_MATRIX_ROWS = [{
   page: 'Employment & Automation'
 }, {
   band: 'Medium',
-  statusKind: 'roadmap',
-  status: 'Roadmap',
+  statusKind: 'source-gated',
+  status: 'Source-gated',
   gap: 'Olympics readiness',
   affected: 'tourism operators, residents, infrastructure planners, emergency services',
   holder: 'delivery authority, Queensland agencies, councils, utilities and operators',
   decision: 'transport, accommodation, power, tourism and emergency logistics readiness',
   blocker: 'readiness categories are not yet wired to official delivery/capacity sources',
-  action: 'scope official delivery authority and capacity feeds before building indicators',
-  page: 'Roadmap'
+  action: 'use the dedicated Brisbane 2032 Readiness page to track official/public source gates',
+  page: 'Brisbane 2032 readiness'
 }, {
   band: 'Medium',
   statusKind: 'source-gated',
@@ -1242,7 +1248,7 @@ const ACTION_QUEUE = [{
 }, {
   title: 'Roadmap build',
   status: 'roadmap',
-  copy: 'Future pages such as housing, AI workforce and Olympics readiness need source scoping before values are loaded.'
+  copy: 'Future pages and source-gated areas such as AI workforce need source scoping before values are loaded; Brisbane 2032 readiness now has a dedicated source-gated tracker.'
 }];
 const DECISION_GROUPS = [['Public / travellers', 'station availability, regional stock-outs, fuel price pressure, travel-route disruption visibility'], ['Farmers', 'fertiliser cover, farm diesel risk, water allocation, rainfall/drought pressure, freight disruption'], ['Small business', 'fuel and energy pressure, freight delays, tourism route pressure, workforce and demand signals'], ['Government / MPs', 'public-data gaps, source cadence, policy delivery status and missing operational feeds'], ['Defence / national security', 'fuel resilience, naval procurement source gates, strategic-resource readiness and logistics boundaries'], ['Industry / infrastructure', 'terminal, port, project delivery, manufacturing bottleneck and power resilience feeds'], ['Future pressure', 'housing, AI workforce, Olympics readiness and other source-scoping roadmap areas']];
 const OPERATIONAL_CHECKLIST = ['machine-readable official/public feeds', 'consistent update cadence', 'clear product/geography definitions', 'source rights and reuse terms', 'public/private sensitivity boundary', 'validation rules', 'methodology for derived status models', 'government/industry contact pathway', 'maintenance and refresh ownership'];

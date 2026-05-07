@@ -1134,9 +1134,15 @@ function FuelStrategyCrossLink() {
             Defence procurement and naval logistics source gates are tracked separately so this
             operational fuel-security view does not imply military procurement or capability facts.
           </p>
+          <p>
+            Brisbane 2032 fuel and emergency-logistics questions are tracked separately so this
+            national fuel page does not imply event route, venue or public-safety readiness.
+          </p>
           <a href="../australian-fuel-strategy-dashboard/index.html">Open Australian Fuel Strategy Tracker</a>
           <br/>
           <a href="../defence-procurement-watch/index.html">Open Defence Procurement Watch</a>
+          <br/>
+          <a href="../brisbane-2032-readiness-dashboard/index.html">Open Brisbane 2032 Readiness</a>
         </div>
       </div>
     </section>
