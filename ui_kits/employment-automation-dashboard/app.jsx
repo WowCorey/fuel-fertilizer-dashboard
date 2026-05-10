@@ -284,7 +284,7 @@ function App() {
           </div>
           {aiEvents.length > 0 ? (
             <div className="data-table-wrap">
-              <table className="data-table">
+              <table className="data-table data-table--sticky">
                 <thead>
                   <tr>
                     <th>Date</th>

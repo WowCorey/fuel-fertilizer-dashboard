@@ -1332,7 +1332,7 @@ function App() {
     }, "Eight jurisdiction values are hand-keyed from official Treasury Budget Paper PDFs. Rows shown as Partial coverage are verified but use a different public-sector boundary from the preferred GGS concept. ", React.createElement("b", null, "No national aggregate is published"), " \u2014 rows are not safe to sum (definitions, scope, and rounding differ between jurisdictions; ACT and NT have smaller jurisdictional scope than mainland states). Commonwealth AOFM debt is shown separately above."), React.createElement("div", {
       className: "data-table-wrap"
     }, React.createElement("table", {
-      className: "data-table"
+      className: "data-table data-table--sticky"
     }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Jurisdiction"), React.createElement("th", null, "Concept"), React.createElement("th", null, "Budget year"), React.createElement("th", {
       style: {
         textAlign: 'right'

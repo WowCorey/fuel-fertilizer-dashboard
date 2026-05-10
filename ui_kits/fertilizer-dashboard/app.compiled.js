@@ -1166,7 +1166,7 @@ function DatasetTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain"
+    className: "data-table data-table--plain data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Signal"), React.createElement("th", null, "Current page status"), React.createElement("th", null, "Envelope"), React.createElement("th", null, "What it means"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.id
   }, React.createElement("td", null, row.label), React.createElement("td", null, window.EnvTrustBadges ? React.createElement(EnvTrustBadges, {
@@ -1182,7 +1182,7 @@ function ChecklistTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain"
+    className: "data-table data-table--plain data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Missing feed"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Current status"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.item
   }, React.createElement("td", null, row.item), React.createElement("td", null, row.why), React.createElement("td", null, React.createElement("div", {
@@ -1266,7 +1266,7 @@ function FarmerDecisionPressure({
   }, "Farmers need source-safe signals for planting and operating decisions. This section shows what the page can currently answer and which farm-planning feeds remain missing."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain"
+    className: "data-table data-table--plain data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Planning question"), React.createElement("th", null, "Current dashboard status"), React.createElement("th", null, "Available public source"), React.createElement("th", null, "Missing source feed"), React.createElement("th", null, "Why it matters"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.id
   }, React.createElement("td", null, row.question, React.createElement("br", null), React.createElement("span", {

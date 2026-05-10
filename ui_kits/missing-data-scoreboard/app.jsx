@@ -574,7 +574,7 @@ function App() {
             </div>
           </div>
           <div className="data-table-wrap">
-            <table className="data-table data-table--plain">
+            <table className="data-table data-table--plain data-table--sticky">
               <thead>
                 <tr>
                   <th>Area</th>

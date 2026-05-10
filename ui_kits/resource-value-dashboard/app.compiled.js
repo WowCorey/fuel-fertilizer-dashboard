@@ -1203,7 +1203,7 @@ function ScenarioCard({
       marginTop: 16
     }
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Loaded export base"), React.createElement("td", null, audBillions(exportBase))), React.createElement("tr", null, React.createElement("td", null, "25% gross scenario"), React.createElement("td", null, audBillions(scenario))), React.createElement("tr", null, React.createElement("td", null, "Loaded receipt context, mixed periods"), React.createElement("td", null, audBillions(loadedReceiptContext))), React.createElement("tr", null, React.createElement("td", null, "Difference before missing channels"), React.createElement("td", null, audBillions(difference))))))) : React.createElement("div", {
     className: "metric-card__unavail"
   }, React.createElement(Icon, {
@@ -1443,7 +1443,7 @@ function App() {
   }, "This table describes the channel. It does not claim how much cash each channel captured."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Channel"), React.createElement("th", null, "Basis"), React.createElement("th", null, "Current envelope"), React.createElement("th", null, "Missing before full value analysis"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Company income tax"), React.createElement("td", null, "Taxable income at the company level."), React.createElement("td", null, latestValue(data.resource_company_tax_rate), "% full company tax rate."), React.createElement("td", null, "Already separate from company-level ATO values on Who pays what.")), React.createElement("tr", null, React.createElement("td", null, "PRRT"), React.createElement("td", null, "Taxable profit of petroleum projects."), React.createElement("td", null, latestValue(data.resource_prrt_policy), "% policy rate; Budget resource-rent tax receipts ", audBillions(latestValue(data.resource_resource_rent_tax_receipts_budget)), " for ", rentTaxFields.latest_actual_period, " actual."), React.createElement("td", null, "Exact project-level PRRT receipts, company/project scope, deductions and uplift treatment.")), React.createElement("tr", null, React.createElement("td", null, "Petroleum royalties"), React.createElement("td", null, "Field-specific royalty systems such as wellhead value or net cash flow."), React.createElement("td", null, "Barrow Island ", latestValue(data.resource_wa_petroleum_royalties), "% RRR; NWS ", royaltyFields.north_west_shelf_primary_production_licence_rate_percent, "% / ", royaltyFields.north_west_shelf_secondary_production_licence_rate_percent, "% royalty rates; WA petroleum/NWS receipt context ", audBillions(latestValue(data.resource_wa_petroleum_royalty_receipts)), "; Queensland petroleum royalty actual ", audBillions(latestValue(data.resource_qld_petroleum_royalty_receipts)), " for ", qldRoyaltyReceiptFields.latest_actual_period, "."), React.createElement("td", null, "Other state/federal petroleum royalty receipts and field-level/project coverage.")), React.createElement("tr", null, React.createElement("td", null, "Direct state ownership"), React.createElement("td", null, "Norway comparison channel through SDFI and Equinor shareholding."), React.createElement("td", null, "Norway source lists taxes, SDFI, dividends, fees and environmental taxes."), React.createElement("td", null, "Australian equivalent does not exist at the same scale; comparison needs careful framing.")))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "flows-h"
@@ -1480,7 +1480,7 @@ function App() {
   }), React.createElement("h3", null, "Gas production and export flow"), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Flow"), React.createElement("th", null, "Value"), React.createElement("th", null, "Context"))), React.createElement("tbody", null, gasFlowRows.map(row => React.createElement("tr", {
     key: `${row.flow}-${row.value_pj || row.value_mt || row.value_aud_billion}`
   }, React.createElement("td", null, row.flow), React.createElement("td", null, row.value_pj != null ? `${oneDecimal(row.value_pj)} PJ` : row.value_mt != null ? `${oneDecimal(row.value_mt)} Mt` : audBillionsFromBillion(row.value_aud_billion)), React.createElement("td", null, gasFields.year)))))), React.createElement("p", {
@@ -1492,7 +1492,7 @@ function App() {
   }), React.createElement("h3", null, "Gas basin/source context"), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Group"), React.createElement("th", null, "Basins"), React.createElement("th", null, "Production"), React.createElement("th", null, "Source note"))), React.createElement("tbody", null, gasBasinRows.map(row => React.createElement("tr", {
     key: row.group
   }, React.createElement("td", null, row.group), React.createElement("td", null, row.basins), React.createElement("td", null, oneDecimal(row.production_pj), " PJ"), React.createElement("td", null, row.share_note)))))), React.createElement("div", {
@@ -1502,7 +1502,7 @@ function App() {
   }), React.createElement("h3", null, "State and territory production"), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "Conventional gas"), React.createElement("th", null, "Coal seam gas"), React.createElement("th", null, "Crude oil and NGL"), React.createElement("th", null, "LPG"))), React.createElement("tbody", null, stateProductionRows.map(row => React.createElement("tr", {
     key: row.state
   }, React.createElement("td", null, row.state), React.createElement("td", null, withUnit(row.conventional_gas_pj, 'PJ')), React.createElement("td", null, withUnit(row.coal_seam_gas_pj, 'PJ')), React.createElement("td", null, withUnit(row.crude_oil_and_ngl_ml, 'ML')), React.createElement("td", null, withUnit(row.naturally_occurring_lpg_ml, 'ML'))))))), React.createElement("p", {
@@ -1516,7 +1516,7 @@ function App() {
   }), React.createElement("h3", null, "Oil production and trade flow"), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Measure"), React.createElement("th", null, "Value"), React.createElement("th", null, "Context"))), React.createElement("tbody", null, oilFlowRows.map(row => React.createElement("tr", {
     key: row[0]
   }, React.createElement("td", null, row[0]), React.createElement("td", null, row[1]), React.createElement("td", null, row[2])))))), React.createElement("p", {
@@ -1528,7 +1528,7 @@ function App() {
   }), React.createElement("h3", null, "Oil basin context"), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Product"), React.createElement("th", null, "Basin"), React.createElement("th", null, "Annual production"))), React.createElement("tbody", null, oilBasinRows.map(row => React.createElement("tr", {
     key: `${row.product}-${row.basin}`
   }, React.createElement("td", null, row.product), React.createElement("td", null, row.basin), React.createElement("td", null, oneDecimal(row.annual_production_pj), " PJ")))))), React.createElement("div", {
@@ -1538,7 +1538,7 @@ function App() {
   }), React.createElement("h3", null, "LNG export destinations"), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "LNG destination"), React.createElement("th", null, "Export value"), React.createElement("th", null, "Share of listed total"))), React.createElement("tbody", null, destinations.map(row => React.createElement("tr", {
     key: row.destination
   }, React.createElement("td", null, row.destination), React.createElement("td", null, audBillions(row.value)), React.createElement("td", null, (row.value / fields(data.resource_lng_export_destinations_req).total * 100).toFixed(1), "%")))))), React.createElement("p", {
@@ -1557,7 +1557,7 @@ function App() {
   }, "This comparison is contextual only. Domestic long-term contract prices and LNG netback are related market signals, not identical products."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Measure"), React.createElement("th", null, "Period"), React.createElement("th", null, "Value"), React.createElement("th", null, "Scope"))), React.createElement("tbody", null, domesticRows.map(row => React.createElement("tr", {
     key: `${row.segment}-${row.period}`
   }, React.createElement("td", null, row.segment), React.createElement("td", null, row.period), React.createElement("td", null, price(row.volume_weighted_average)), React.createElement("td", null, "2026 east coast gas supply contracts; range ", price(row.min_price), " to ", price(row.max_price)))), netbackRows.map(row => React.createElement("tr", {
@@ -1604,7 +1604,7 @@ function App() {
       marginTop: 24
     }
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Line"), React.createElement("th", null, "Loaded value"), React.createElement("th", null, "Period/source caveat"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "LNG export earnings"), React.createElement("td", null, audBillions(lngExportValue)), React.createElement("td", null, valuePeriod(data.resource_lng_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Oil export earnings"), React.createElement("td", null, audBillions(oilExportValue)), React.createElement("td", null, valuePeriod(data.resource_oil_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Loaded export base"), React.createElement("td", null, audBillions(exportValueBase)), React.createElement("td", null, "Only LNG and oil export-value envelopes currently loaded.")), React.createElement("tr", null, React.createElement("td", null, "25% gross scenario"), React.createElement("td", null, audBillions(grossScenario25)), React.createElement("td", null, "Gross export-value scenario, not profits-based tax law.")), React.createElement("tr", null, React.createElement("td", null, "Loaded receipt context"), React.createElement("td", null, audBillions(loadedReceiptContext)), React.createElement("td", null, "Mixed-period Budget resource-rent taxes plus WA petroleum/NWS and Queensland petroleum royalty receipts; not full Australian public capture.")), React.createElement("tr", null, React.createElement("td", null, "Scenario less loaded receipt context"), React.createElement("td", null, audBillions(scenarioLessLoadedReceipts)), React.createElement("td", null, "Displayed as a gap in loaded rows only. It is not value leaked.")))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "norway-h"
@@ -1642,7 +1642,7 @@ function App() {
       marginTop: 24
     }
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Country/context"), React.createElement("th", null, "Loaded capture channels"), React.createElement("th", null, "What can be said now"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Norway"), React.createElement("td", null, "Taxes ", oneDecimal(norwayRevenue.taxes_nok_billion), " NOKb; SDFI ", oneDecimal(norwayRevenue.sdfi_net_cashflow_nok_billion), " NOKb; Equinor dividend ", oneDecimal(norwayRevenue.equinor_dividend_nok_billion), " NOKb; fees/taxes ", oneDecimal(norwayRevenue.environmental_taxes_and_area_fees_nok_billion), " NOKb."), React.createElement("td", null, "Official comparison source shows multiple public capture channels, not just a tax rate.")), React.createElement("tr", null, React.createElement("td", null, "Australia"), React.createElement("td", null, "Budget resource-rent tax actuals plus WA petroleum/NWS and Queensland petroleum royalty receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here."), React.createElement("td", null, "Enough for a structured explainer and scenario, not enough for a retained-value or leaked-value claim.")), React.createElement("tr", null, React.createElement("td", null, "Method gate"), React.createElement("td", null, "Needs matched periods, full receipt channels, company profit scope, export denominator and domestic-price method."), React.createElement("td", null, "Until those inputs exist, the dashboard will keep the leakage envelope unavailable."))))), React.createElement("p", {
     className: "caption mono"
   }, window.FR.sourceLine(data.resource_norway_state_revenue_model)), React.createElement("p", {

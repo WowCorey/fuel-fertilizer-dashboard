@@ -99,6 +99,7 @@ test('homepage presents the national summary and status legend', async ({ page }
 
 test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {
   await page.goto('/ui_kits/missing-data-scoreboard/index.html');
+  const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'What Australia can see, and what is still missing.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Unavailable data is evidence of a public-data gap' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Start with the gap, then the action' })).toBeVisible();
@@ -127,13 +128,13 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.locator('section[aria-labelledby="no-estimate-h"]').getByRole('heading', { name: 'No-estimate rule' })).toBeVisible();
   await expect(page.getByText('This dashboard does not fill missing government or industry feeds with guesses.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Missing data scoreboard' })).toBeVisible();
-  await expect(page.getByText('Fuel security').first()).toBeVisible();
-  await expect(page.getByText('Queensland fuel sovereignty').first()).toBeVisible();
-  await expect(page.getByText('Food, farms and water').first()).toBeVisible();
-  await expect(page.getByText('Economy and housing').first()).toBeVisible();
-  await expect(page.getByText('Defence and procurement').first()).toBeVisible();
-  await expect(page.getByText('Brisbane 2032 readiness').first()).toBeVisible();
-  await expect(page.getByText('AI and workforce').first()).toBeVisible();
+  await expect(main.getByText('Fuel security').first()).toBeVisible();
+  await expect(main.getByText('Queensland fuel sovereignty').first()).toBeVisible();
+  await expect(main.getByText('Food, farms and water').first()).toBeVisible();
+  await expect(main.getByText('Economy and housing').first()).toBeVisible();
+  await expect(main.getByText('Defence and procurement').first()).toBeVisible();
+  await expect(main.getByText('Brisbane 2032 readiness').first()).toBeVisible();
+  await expect(main.getByText('AI and workforce').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Next national dashboard areas' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Australian fuel strategy tracker' })).toBeVisible();
   await expect(page.getByText('dedicated Fuel Strategy page now surfaces existing PM&C/DCCEEW indicators')).toBeVisible();
@@ -149,8 +150,9 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
 
 test('housing pressure page keeps models source-gated', async ({ page }) => {
   await page.goto('/ui_kits/housing-economic-pressure-dashboard/index.html');
+  const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'Housing and economic pressure' })).toBeVisible();
-  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not estimate household repayments, rental stress, negative-gearing effects or housing affordability')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Read indicators before interpreting pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Interest-rate signal' })).toBeVisible();
@@ -215,10 +217,11 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
 
 test('food farms and water page keeps unavailable source gates explicit', async ({ page }) => {
   await page.goto('/ui_kits/fertilizer-dashboard/index.html');
+  const main = page.locator('main');
   await expect(page.getByText('Food, farms & water security')).toBeVisible();
   await expect(page.getByRole('heading', { name: "Australia's food, farm inputs and water pressure, in plain English." })).toBeVisible();
-  await expect(page.getByText('independent public-source prototype')).toBeVisible();
-  await expect(page.getByText('not an official government dashboard')).toBeVisible();
+  await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
+  await expect(main.getByText('not an official government dashboard').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: /Site refreshed|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
   await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Source status comes first' })).toBeVisible();
@@ -244,8 +247,9 @@ test('food farms and water page keeps unavailable source gates explicit', async 
 
 test('fuel strategy tracker keeps policy and operational data source-gated', async ({ page }) => {
   await page.goto('/ui_kits/australian-fuel-strategy-dashboard/index.html');
+  const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'Australian fuel strategy tracker' })).toBeVisible();
-  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer fuel reserves, contracts, cargoes, emergency powers or security-sensitive holdings')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Policy evidence before operational claims' })).toBeVisible();
@@ -268,8 +272,9 @@ test('fuel strategy tracker keeps policy and operational data source-gated', asy
 
 test('Queensland fuel sovereignty tracker keeps delivery data source-gated', async ({ page }) => {
   await page.goto('/ui_kits/qld-fuel-sovereignty-dashboard/index.html');
+  const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'Queensland fuel sovereignty delivery tracker' })).toBeVisible();
-  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer land parcels, storage capacity, refinery capacity, proponents, bids, contracts')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Delivery evidence before delivery claims' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Six-port delivery pathway' })).toBeVisible();
@@ -297,8 +302,9 @@ test('Queensland fuel sovereignty tracker keeps delivery data source-gated', asy
 
 test('defence procurement watch keeps procurement facts source-gated', async ({ page }) => {
   await page.goto('/ui_kits/defence-procurement-watch/index.html');
+  const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'Defence procurement watch' })).toBeVisible();
-  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer contracts, prices, suppliers, delivery dates')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Procurement evidence before procurement claims' })).toBeVisible();
   await expect(page.locator('section[aria-labelledby="pathway-h"]').getByRole('heading', { name: 'Procurement pathway' })).toBeVisible();
@@ -324,8 +330,9 @@ test('defence procurement watch keeps procurement facts source-gated', async ({ 
 
 test('Brisbane 2032 readiness keeps Olympic delivery data source-gated', async ({ page }) => {
   await page.goto('/ui_kits/brisbane-2032-readiness-dashboard/index.html');
+  const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'Brisbane 2032 readiness' })).toBeVisible();
-  await expect(page.getByText('independent public-source prototype')).toBeVisible();
+  await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer venue delivery, project status, costs, transport capacity')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Readiness evidence before readiness claims' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Existing public indicators used only as context' })).toBeVisible();

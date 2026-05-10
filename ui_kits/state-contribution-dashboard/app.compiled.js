@@ -1323,7 +1323,7 @@ function ProductionMappingTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Basin"), React.createElement("th", null, "Project / field / title"), React.createElement("th", null, "Operator / company"), React.createElement("th", null, "Product class"), React.createElement("th", null, "Metric / period"), React.createElement("th", null, "Trust"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.key
   }, React.createElement("td", null, React.createElement("b", null, row.state_code), React.createElement("br", null), row.source), React.createElement("td", null, row.basin_name || React.createElement("span", {
@@ -1382,7 +1382,7 @@ function ObjectCoverageDetail({
       marginTop: 12
     }
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Active NOPTA title records"), React.createElement("td", null, integerCount(counts.activeTitles), " ", React.createElement(TrustBadge, {
     kind: "observed"
   }, "Observed"))), React.createElement("tr", null, React.createElement("td", null, "Pending title applications"), React.createElement("td", null, integerCount(counts.pendingTitles), " ", React.createElement(TrustBadge, {
@@ -1408,7 +1408,7 @@ function ObjectCoverageTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "NOPTA active titles"), React.createElement("th", null, "Production licence records"), React.createElement("th", null, "Infrastructure licence records"), React.createElement("th", null, "Petroleum Wells layer records"), React.createElement("th", null, "Operating refineries"), React.createElement("th", null, "Unavailable classes"))), React.createElement("tbody", null, profiles.map(profile => {
     const counts = objectCoverage(profile, data);
     return React.createElement("tr", {
@@ -1486,7 +1486,7 @@ function StateSummaryCard({
       marginTop: 12
     }
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Loaded production"), React.createElement("td", null, production.summary)), React.createElement("tr", null, React.createElement("td", null, "State revenue"), React.createElement("td", {
     className: revenue.className
   }, revenue.text)), React.createElement("tr", null, React.createElement("td", null, "Federal attribution"), React.createElement("td", {
@@ -1555,7 +1555,7 @@ function ComparisonTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State/territory"), React.createElement("th", null, "Crude/gas/LNG relevance"), React.createElement("th", null, "Refining/import role"), React.createElement("th", null, "Loaded production"), React.createElement("th", null, "State royalties"), React.createElement("th", null, "Federal revenue status"), React.createElement("th", null, "Permit/project status"), React.createElement("th", null, "Coverage"))), React.createElement("tbody", null, profiles.map(profile => {
     const production = productionFor(profile, aesRows);
     const revenue = revenueDisplay(profile, data);
@@ -1824,7 +1824,7 @@ function App() {
   }, "This table records the seven target workstreams. Blocked rows remain explicit instead of being turned into weak counts, live maps or status labels."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Workstream"), React.createElement("th", null, "Status"), React.createElement("th", null, "Result"))), React.createElement("tbody", null, workstreamRows.map(row => React.createElement("tr", {
     key: row.id
   }, React.createElement("td", null, React.createElement("b", null, row.id, ". ", row.name)), React.createElement("td", null, React.createElement(TrustBadge, {

@@ -84,7 +84,7 @@ function ResourceCard({ row, data }) {
 function ComparisonTable({ rows, data }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Resource</th>
@@ -136,7 +136,7 @@ function StateFootprint({ rows, data }) {
   const loaded = rows.filter(row => row.state_footprint?.length);
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Resource</th>

@@ -43,7 +43,7 @@ function SourceTable({ title, source, children }) {
     <article className="source-card">
       <h4>{title}</h4>
       <div className="data-table-wrap">
-        <table className="data-table">
+        <table className="data-table data-table--sticky">
           {children}
         </table>
       </div>
@@ -271,7 +271,7 @@ function App() {
 
           <div style={{ height: 24 }}/>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr>
                   <th>State</th>

@@ -1199,7 +1199,7 @@ function GateTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain"
+    className: "data-table data-table--plain data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, columns.map(col => React.createElement("th", {
     key: col
   }, col)))), React.createElement("tbody", null, rows.map((row, idx) => React.createElement("tr", {
@@ -1565,7 +1565,7 @@ function PublishingNeedsChecklist() {
   }, "This prototype shows what can be built from public-source data. A true national fuel dashboard would need several feeds that are not currently available as source-safe public data."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain"
+    className: "data-table data-table--plain data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Needed feed"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Current status"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.item
   }, React.createElement("td", null, row.item), React.createElement("td", null, row.why), React.createElement("td", null, React.createElement(TrustBadge, {
@@ -1678,7 +1678,7 @@ function QueenslandVisibility({
   }), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain"
+    className: "data-table data-table--plain data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Queensland public signal"), React.createElement("th", null, "Loaded value"), React.createElement("th", null, "Source boundary"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "PM&C petrol stock-outs"), React.createElement("td", null, fmtNumber(stockoutFields.qld_petrol), " sites; 7-day change ", fmtChange(stockoutFields.qld_petrol_change_7d)), React.createElement("td", null, "State-level row only; no station names, towns or live availability.")), React.createElement("tr", null, React.createElement("td", null, "PM&C diesel stock-outs"), React.createElement("td", null, fmtNumber(stockoutFields.qld_diesel), " sites; 7-day change ", fmtChange(stockoutFields.qld_diesel_change_7d)), React.createElement("td", null, "State-level row only; no station names, towns or live availability.")), React.createElement("tr", null, React.createElement("td", null, "QLD unavailable fuel reports"), React.createElement("td", null, fmtNumber(latest(qldReportsEnv)), " monthly reports; latest unavailable report date ", qldFields.latest_unavailable_report_date || '-'), React.createElement("td", null, "Monthly change-report coverage where Price = 9999; not a current statewide dry-site count."))))));
 }
 function QueenslandFuelSovereigntySection({
@@ -2385,7 +2385,7 @@ function App() {
   }, "PM&C gives product MSO reserve volumes. APS gives monthly stock, sales and import context where the workbook exposes those product series."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Product"), React.createElement("th", null, "Days remaining"), React.createElement("th", null, "PM&C MSO reserves"), React.createElement("th", null, "APS stocks"), React.createElement("th", null, "APS sales/demand context"), React.createElement("th", null, "APS imports"))), React.createElement("tbody", null, PRODUCTS.map(product => React.createElement("tr", {
     key: product.name
   }, React.createElement("td", null, product.name), React.createElement("td", null, fmtMetric(latest(data[product.daysId]), 'days')), React.createElement("td", null, fmtMetric(reserves[product.reserveField], 'ML')), React.createElement("td", {
@@ -2458,7 +2458,7 @@ function App() {
   }), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Petrol stock-outs"), React.createElement("th", null, "7-day change"), React.createElement("th", null, "Diesel stock-outs"), React.createElement("th", null, "7-day change"))), React.createElement("tbody", null, stockoutRows.map(row => React.createElement("tr", {
     key: row[0]
   }, React.createElement("td", null, row[0]), React.createElement("td", {

@@ -233,7 +233,7 @@ function App() {
                   debt is shown separately above.
                 </p>
                 <div className="data-table-wrap">
-                  <table className="data-table">
+                  <table className="data-table data-table--sticky">
                     <thead>
                       <tr>
                         <th>Jurisdiction</th>

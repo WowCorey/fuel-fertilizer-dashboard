@@ -1162,7 +1162,7 @@ function SourceTable({
   }, React.createElement("h4", null, title), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, children)), React.createElement("p", {
     className: "caption mono"
   }, source));
@@ -1353,7 +1353,7 @@ function App() {
   }), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "State"), React.createElement("th", null, "Petrol stock-outs"), React.createElement("th", null, "7-day change"), React.createElement("th", null, "Diesel stock-outs"), React.createElement("th", null, "7-day change"))), React.createElement("tbody", null, stockoutRows.map(row => React.createElement("tr", {
     key: row[0]
   }, React.createElement("td", null, row[0]), React.createElement("td", {
