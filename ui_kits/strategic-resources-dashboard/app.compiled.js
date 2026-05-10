@@ -1208,7 +1208,7 @@ function ComparisonTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Resource"), React.createElement("th", null, "Production status"), React.createElement("th", null, "Export status"), React.createElement("th", null, "State footprint"), React.createElement("th", null, "Strategic role"), React.createElement("th", null, "Source coverage"))), React.createElement("tbody", null, rows.map(row => {
     const production = row.production || {};
     const exports = row.exports || [];
@@ -1247,7 +1247,7 @@ function StateFootprint({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Resource"), React.createElement("th", null, "States with operating rows"), React.createElement("th", null, "Developing/care rows"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, loaded.map(row => {
     const operating = row.state_footprint.filter(item => item.operating > 0).map(item => `${item.state}: ${item.operating}`).join('; ');
     const other = row.state_footprint.filter(item => (item.developing || item.care_and_maintenance) > 0).map(item => `${item.state}: ${item.developing || 0} developing, ${item.care_and_maintenance || 0} care`).join('; ');

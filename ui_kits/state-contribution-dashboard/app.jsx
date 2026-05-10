@@ -230,7 +230,7 @@ function ProductionMappingMini({ profile, data }) {
 function ProductionMappingTable({ rows }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>State</th>
@@ -294,7 +294,7 @@ function ObjectCoverageDetail({ profile, data }) {
   const counts = objectCoverage(profile, data);
   return (
     <div className="data-table-wrap" style={{ marginTop: 12 }}>
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <tbody>
           <tr>
             <td>Active NOPTA title records</td>
@@ -336,7 +336,7 @@ function ObjectCoverageDetail({ profile, data }) {
 function ObjectCoverageTable({ profiles, data }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>State/territory</th>
@@ -400,7 +400,7 @@ function StateSummaryCard({ profile, production, data }) {
       <h3 className="metric-card__label">{profile.state_name}</h3>
       <p className="metric-card__plain">{profile.primary_role}</p>
       <div className="data-table-wrap" style={{ marginTop: 12 }}>
-        <table className="data-table">
+        <table className="data-table data-table--sticky">
           <tbody>
             <tr><td>Loaded production</td><td>{production.summary}</td></tr>
             <tr><td>State revenue</td><td className={revenue.className}>{revenue.text}</td></tr>
@@ -448,7 +448,7 @@ function StateDetailPanel({ profile, production, data }) {
 function ComparisonTable({ profiles, data, aesRows }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>State/territory</th>
@@ -760,7 +760,7 @@ function App() {
             </div>
           </div>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr>
                   <th>Workstream</th>

@@ -57,7 +57,7 @@ function SourceStatusCard({ env, title, plain, status = 'Awaiting source data' }
 function DatasetTable({ rows }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table data-table--plain">
+      <table className="data-table data-table--plain data-table--sticky">
         <thead>
           <tr>
             <th>Signal</th>
@@ -84,7 +84,7 @@ function DatasetTable({ rows }) {
 function ChecklistTable({ rows }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table data-table--plain">
+      <table className="data-table data-table--plain data-table--sticky">
         <thead>
           <tr>
             <th>Missing feed</th>
@@ -191,7 +191,7 @@ function FarmerDecisionPressure({ data }) {
         </div>
       </div>
       <div className="data-table-wrap">
-        <table className="data-table data-table--plain">
+        <table className="data-table data-table--plain data-table--sticky">
           <thead>
             <tr>
               <th>Planning question</th>

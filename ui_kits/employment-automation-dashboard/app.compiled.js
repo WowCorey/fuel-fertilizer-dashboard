@@ -1362,7 +1362,7 @@ function App() {
   }, "These are dated events published by the named organisation. They are shown so readers can place labour-market movements in time relative to the public AI rollout. ", React.createElement("b", null, "None of these events is asserted to have caused any labour-market movement on this page.")))), aiEvents.length > 0 ? React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Date"), React.createElement("th", null, "Event"), React.createElement("th", null, "Publisher"), React.createElement("th", null, "Trust"), React.createElement("th", null, "Source"))), React.createElement("tbody", null, aiEvents.map(ev => React.createElement("tr", {
     key: ev.date + ev.title
   }, React.createElement("td", {

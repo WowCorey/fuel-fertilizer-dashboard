@@ -1566,7 +1566,7 @@ function App() {
   }, "Each row names the gap, the likely holder or publisher, why the gap matters, the next source action and the dashboard surface affected."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain"
+    className: "data-table data-table--plain data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Area"), React.createElement("th", null, "Status"), React.createElement("th", null, "Missing feed or source gate"), React.createElement("th", null, "Likely holder / publisher"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Next source action"), React.createElement("th", null, "Dashboard"))), React.createElement("tbody", null, SCOREBOARD_ROWS.map(row => React.createElement("tr", {
     key: row.area
   }, React.createElement("td", null, row.area), React.createElement("td", null, React.createElement(StatusBadge, {

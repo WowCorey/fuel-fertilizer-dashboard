@@ -94,7 +94,7 @@ function BudgetMetricCard({ metric, data }) {
 function BudgetTable({ rows, data }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Metric</th>
@@ -125,7 +125,7 @@ function BudgetTable({ rows, data }) {
 function ForceStructureTable({ rows, data }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Row</th>
@@ -165,7 +165,7 @@ function CapabilitySection({ rows }) {
               <TrustBadge kind={branch === 'Joint' ? 'unavailable' : 'partial'}>{branch === 'Joint' ? 'Unavailable' : 'Partial coverage'}</TrustBadge>
             </div>
             <div className="data-table-wrap">
-              <table className="data-table">
+              <table className="data-table data-table--sticky">
                 <thead>
                   <tr>
                     <th>Capability</th>
@@ -198,7 +198,7 @@ function CapabilitySection({ rows }) {
 function AllianceSection({ frameworks }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Framework</th>
@@ -230,7 +230,7 @@ function UncrewedSystemsTable({ rows, data }) {
   if (!rows.length) return null;
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>System</th>
@@ -265,7 +265,7 @@ function UncrewedProgramsTable({ rows, data }) {
   if (!rows.length) return null;
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Program</th>
@@ -295,7 +295,7 @@ function UncrewedFundingTable({ rows, data }) {
   if (!rows.length) return null;
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Funding row</th>
@@ -363,7 +363,7 @@ function IndustrySection({ fields }) {
 function CoverageTable({ rows }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table">
+      <table className="data-table data-table--sticky">
         <thead>
           <tr>
             <th>Section</th>

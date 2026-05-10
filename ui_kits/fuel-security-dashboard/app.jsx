@@ -128,7 +128,7 @@ function textOrUnavailable(value) {
 function GateTable({ columns, rows }) {
   return (
     <div className="data-table-wrap">
-      <table className="data-table data-table--plain">
+      <table className="data-table data-table--plain data-table--sticky">
         <thead>
           <tr>{columns.map(col => <th key={col}>{col}</th>)}</tr>
         </thead>
@@ -538,7 +538,7 @@ function PublishingNeedsChecklist() {
         </div>
       </div>
       <div className="data-table-wrap">
-        <table className="data-table data-table--plain">
+        <table className="data-table data-table--plain data-table--sticky">
           <thead>
             <tr>
               <th>Needed feed</th>
@@ -655,7 +655,7 @@ function QueenslandVisibility({ stockoutsEnv, qldReportsEnv }) {
       </div>
       <div style={{ height: 20 }}/>
       <div className="data-table-wrap">
-        <table className="data-table data-table--plain">
+        <table className="data-table data-table--plain data-table--sticky">
           <thead>
             <tr>
               <th>Queensland public signal</th>
@@ -1385,7 +1385,7 @@ function App() {
             </div>
           </div>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr>
                   <th>Product</th>
@@ -1472,7 +1472,7 @@ function App() {
           </div>
           <div style={{ height: 24 }}/>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr>
                   <th>State</th>

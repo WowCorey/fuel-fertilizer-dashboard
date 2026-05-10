@@ -1219,7 +1219,7 @@ function BudgetTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Metric"), React.createElement("th", null, "Period"), React.createElement("th", null, "Value"), React.createElement("th", null, "Type"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.metric_id
   }, React.createElement("td", null, React.createElement("b", null, row.metric_name), React.createElement("br", null), React.createElement("span", {
@@ -1239,7 +1239,7 @@ function ForceStructureTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Row"), React.createElement("th", null, "Type"), React.createElement("th", null, "What the public source supports"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.name
   }, React.createElement("td", null, React.createElement("b", null, row.name)), React.createElement("td", null, row.type), React.createElement("td", null, row.summary, React.createElement("br", null), React.createElement(SourceAnchor, {
@@ -1269,7 +1269,7 @@ function CapabilitySection({
     }, branch === 'Joint' ? 'Unavailable' : 'Partial coverage')), React.createElement("div", {
       className: "data-table-wrap"
     }, React.createElement("table", {
-      className: "data-table"
+      className: "data-table data-table--sticky"
     }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Capability"), React.createElement("th", null, "Public row"), React.createElement("th", null, "Status"))), React.createElement("tbody", null, branchRows.map(row => React.createElement("tr", {
       key: row.capability_id
     }, React.createElement("td", null, React.createElement("b", null, row.capability_name), React.createElement("br", null), React.createElement("span", {
@@ -1291,7 +1291,7 @@ function AllianceSection({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Framework"), React.createElement("th", null, "Type"), React.createElement("th", null, "Members"), React.createElement("th", null, "Public status"), React.createElement("th", null, "Purpose"), React.createElement("th", null, "Trust"))), React.createElement("tbody", null, frameworks.map(row => React.createElement("tr", {
     key: row.framework_id
   }, React.createElement("td", null, React.createElement("b", null, row.framework_name), React.createElement("br", null), React.createElement(SourceAnchor, {
@@ -1310,7 +1310,7 @@ function UncrewedSystemsTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "System"), React.createElement("th", null, "Domain"), React.createElement("th", null, "Public status"), React.createElement("th", null, "Operator / program"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.system_id
   }, React.createElement("td", null, React.createElement("b", null, row.system_name), React.createElement("br", null), React.createElement("span", {
@@ -1333,7 +1333,7 @@ function UncrewedProgramsTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Program"), React.createElement("th", null, "Type"), React.createElement("th", null, "Public headline"), React.createElement("th", null, "Status"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.program_id
   }, React.createElement("td", null, React.createElement("b", null, row.program_name), React.createElement("br", null), React.createElement(SourceAnchor, {
@@ -1352,7 +1352,7 @@ function UncrewedFundingTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Funding row"), React.createElement("th", null, "Status"), React.createElement("th", null, "Value"), React.createElement("th", null, "Period"), React.createElement("th", null, "Boundary"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.funding_id
   }, React.createElement("td", null, React.createElement("b", null, row.program_name), React.createElement("br", null), React.createElement(SourceAnchor, {
@@ -1406,7 +1406,7 @@ function CoverageTable({
   return React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table"
+    className: "data-table data-table--sticky"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Section"), React.createElement("th", null, "Coverage"), React.createElement("th", null, "What that means"))), React.createElement("tbody", null, rows.map(row => React.createElement("tr", {
     key: row.section
   }, React.createElement("td", null, React.createElement("b", null, row.section)), React.createElement("td", null, React.createElement(MetricStatus, {

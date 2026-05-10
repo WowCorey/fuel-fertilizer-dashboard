@@ -86,7 +86,7 @@ function ScenarioCard({ lngEnv, oilEnv, rentTaxEnv, royaltyReceiptEnvs }) {
             <span className="metric-unit">A$b</span>
           </div>
           <div className="data-table-wrap" style={{ marginTop: 16 }}>
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <tbody>
                 <tr><td>Loaded export base</td><td>{audBillions(exportBase)}</td></tr>
                 <tr><td>25% gross scenario</td><td>{audBillions(scenario)}</td></tr>
@@ -352,7 +352,7 @@ function App() {
             </div>
           </div>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Channel</th><th>Basis</th><th>Current envelope</th><th>Missing before full value analysis</th></tr>
               </thead>
@@ -425,7 +425,7 @@ function App() {
           <div style={{ height: 24 }}/>
           <h3>Gas production and export flow</h3>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Flow</th><th>Value</th><th>Context</th></tr>
               </thead>
@@ -445,7 +445,7 @@ function App() {
           <div style={{ height: 24 }}/>
           <h3>Gas basin/source context</h3>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Group</th><th>Basins</th><th>Production</th><th>Source note</th></tr>
               </thead>
@@ -465,7 +465,7 @@ function App() {
           <div style={{ height: 24 }}/>
           <h3>State and territory production</h3>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>State/territory</th><th>Conventional gas</th><th>Coal seam gas</th><th>Crude oil and NGL</th><th>LPG</th></tr>
               </thead>
@@ -488,7 +488,7 @@ function App() {
           <div style={{ height: 24 }}/>
           <h3>Oil production and trade flow</h3>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Measure</th><th>Value</th><th>Context</th></tr>
               </thead>
@@ -508,7 +508,7 @@ function App() {
           <div style={{ height: 24 }}/>
           <h3>Oil basin context</h3>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Product</th><th>Basin</th><th>Annual production</th></tr>
               </thead>
@@ -527,7 +527,7 @@ function App() {
           <div style={{ height: 24 }}/>
           <h3>LNG export destinations</h3>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>LNG destination</th><th>Export value</th><th>Share of listed total</th></tr>
               </thead>
@@ -556,7 +556,7 @@ function App() {
             </div>
           </div>
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Measure</th><th>Period</th><th>Value</th><th>Scope</th></tr>
               </thead>
@@ -630,7 +630,7 @@ function App() {
             />
           </div>
           <div className="data-table-wrap" style={{ marginTop: 24 }}>
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Line</th><th>Loaded value</th><th>Period/source caveat</th></tr>
               </thead>
@@ -681,7 +681,7 @@ function App() {
             />
           </div>
           <div className="data-table-wrap" style={{ marginTop: 24 }}>
-            <table className="data-table">
+            <table className="data-table data-table--sticky">
               <thead>
                 <tr><th>Country/context</th><th>Loaded capture channels</th><th>What can be said now</th></tr>
               </thead>
