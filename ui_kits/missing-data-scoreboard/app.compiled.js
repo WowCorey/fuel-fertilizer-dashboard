@@ -1124,62 +1124,155 @@ Object.assign(window, {
   Footer
 });
 const STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const GAP_CATEGORIES = [{
+  slug: 'fuel',
+  title: 'Fuel operations and supply visibility',
+  anchor: 'cat-fuel-h',
+  intro: 'National fuel cover, retail availability, terminal/cargo/contract visibility and Queensland delivery.',
+  dashboards: [{
+    label: 'Open National Fuel Security',
+    href: '../fuel-security-dashboard/index.html'
+  }, {
+    label: 'Open Australian Fuel Strategy Tracker',
+    href: '../australian-fuel-strategy-dashboard/index.html'
+  }, {
+    label: 'Open Queensland Fuel Sovereignty',
+    href: '../qld-fuel-sovereignty-dashboard/index.html'
+  }]
+}, {
+  slug: 'food',
+  title: 'Food, farms and water',
+  anchor: 'cat-food-h',
+  intro: 'Fertiliser cover, farm diesel risk, water allocation by food-producing region and drought pressure.',
+  dashboards: [{
+    label: 'Open Food, Farms & Water',
+    href: '../fertilizer-dashboard/index.html'
+  }]
+}, {
+  slug: 'economy',
+  title: 'Economy and households',
+  anchor: 'cat-economy-h',
+  intro: 'Cash-rate signal, household debt, mortgage and rental stress models, first-home buyer indicators and tax-model gaps.',
+  dashboards: [{
+    label: 'Open AU Economics',
+    href: '../au-economics-dashboard/index.html'
+  }, {
+    label: 'Open Housing Pressure',
+    href: '../housing-economic-pressure-dashboard/index.html'
+  }]
+}, {
+  slug: 'defence',
+  title: 'Defence and strategic posture',
+  anchor: 'cat-defence-h',
+  intro: 'Procurement pathway, contract and delivery rows, naval logistics implications and critical-mineral readiness.',
+  dashboards: [{
+    label: 'Open Defence Posture',
+    href: '../defence-alliances-dashboard/index.html'
+  }, {
+    label: 'Open Defence Procurement Watch',
+    href: '../defence-procurement-watch/index.html'
+  }, {
+    label: 'Open Strategic Resources',
+    href: '../strategic-resources-dashboard/index.html'
+  }]
+}, {
+  slug: 'infrastructure',
+  title: 'Infrastructure and Brisbane 2032',
+  anchor: 'cat-infrastructure-h',
+  intro: 'Power resilience, manufacturing bottlenecks, project delivery status and Olympics readiness.',
+  dashboards: [{
+    label: 'Open Infrastructure',
+    href: '../infrastructure-dashboard/index.html'
+  }, {
+    label: 'Open Power Grid',
+    href: '../power-grid-dashboard/index.html'
+  }, {
+    label: 'Open Manufacturing',
+    href: '../manufacturing-dashboard/index.html'
+  }, {
+    label: 'Open Brisbane 2032 Readiness',
+    href: '../brisbane-2032-readiness-dashboard/index.html'
+  }]
+}, {
+  slug: 'workforce',
+  title: 'Workforce and automation',
+  anchor: 'cat-workforce-h',
+  intro: 'Sector automation exposure, displacement risk, retraining capacity and regional workforce exposure.',
+  dashboards: [{
+    label: 'Open Employment & Automation',
+    href: '../employment-automation-dashboard/index.html'
+  }]
+}];
 const SCOREBOARD_ROWS = [{
+  category: 'fuel',
   area: 'Fuel security',
   status: 'partial',
   gap: 'Latest fuel strategy source, station availability, terminal inventory, vessel ETA/cargo/product and forward contracts',
   holder: 'Commonwealth, state/territory agencies, industry and private operators',
   why: 'Fuel affects tourism, freight, farms, emergency services, defence posture and regional resilience.',
   action: 'Publish source-safe station, terminal, cargo and contract fields with product, date, geography and reuse terms.',
-  page: 'Fuel strategy / National fuel security'
+  page: 'Fuel strategy / National fuel security',
+  last_reviewed: null
 }, {
+  category: 'fuel',
   area: 'Queensland fuel sovereignty',
   status: 'source-gated',
   gap: 'Land parcels, EOI/bid counts, proponents, contracts, storage/refining capacity and approvals completion',
   holder: 'Queensland Government, port corporations, proponents and approval agencies',
   why: 'Public debate now includes delivery tracking, not only national fuel status.',
   action: 'Publish official AFIP delivery tables with hub, land, capacity, approval, proponent and contract status fields.',
-  page: 'QLD fuel sovereignty'
+  page: 'QLD fuel sovereignty',
+  last_reviewed: null
 }, {
+  category: 'food',
   area: 'Food, farms and water',
   status: 'partial',
   gap: 'Farm diesel, fertiliser cover, water allocations by food region, drought pressure and freight disruption',
   holder: 'Commonwealth, states, water authorities, industry and logistics operators',
   why: 'Fuel, fertiliser and water determine whether farms can produce and move food.',
   action: 'Wire one exact public dataset at a time; do not infer drought, allocations or cover from maps or commentary.',
-  page: 'Food, farms & water security'
+  page: 'Food, farms & water security',
+  last_reviewed: null
 }, {
+  category: 'economy',
   area: 'Economy and housing',
   status: 'source-gated',
   gap: 'Housing affordability model, investor ownership, first-home buyers, negative gearing and rental stress',
   holder: 'ABS, RBA, APRA, ATO, state agencies and housing authorities',
   why: 'Rates, debt, rents and housing supply shape cost of living and social stability.',
   action: 'Separate official cash-rate/debt signals from future housing model inputs before publishing any model.',
-  page: 'Housing pressure'
+  page: 'Housing pressure',
+  last_reviewed: null
 }, {
+  category: 'defence',
   area: 'Defence and procurement',
   status: 'source-gated',
   gap: 'Japan/warship procurement source verification, contract status, delivery timelines and logistics/fuel implications',
   holder: 'Defence, procurement agencies and official program sources',
   why: 'Ships, fuel logistics, industry content and delivery schedules are national-security issues.',
   action: 'Load only official Defence or procurement source material before asserting supplier, contract or delivery status.',
-  page: 'Defence procurement / Defence posture'
+  page: 'Defence procurement / Defence posture',
+  last_reviewed: null
 }, {
+  category: 'infrastructure',
   area: 'Brisbane 2032 readiness',
   status: 'source-gated',
   gap: 'Infrastructure delivery, transport, accommodation, power, tourism pressure and emergency logistics',
   holder: 'Delivery authority, Queensland agencies, councils, utilities and operators',
   why: 'The Olympics will stress transport, accommodation, power, tourism and emergency systems.',
   action: 'Use the Brisbane 2032 Readiness page to keep official delivery, capacity and emergency-readiness source gates visible.',
-  page: 'Brisbane 2032 readiness'
+  page: 'Brisbane 2032 readiness',
+  last_reviewed: null
 }, {
+  category: 'workforce',
   area: 'AI and workforce',
   status: 'roadmap',
   gap: 'Sector exposure, displacement risk, retraining capacity and regional workforce exposure',
   holder: 'ABS, Jobs and Skills Australia, Treasury, Productivity Commission and education agencies',
   why: 'AI may reshape productivity, jobs, skills and government service demand, but timing is not causation.',
   action: 'Do not publish AI displacement scores until an Australian source-safe methodology exists.',
-  page: 'Employment & Automation'
+  page: 'Employment & Automation',
+  last_reviewed: null
 }];
 const ROADMAP_SECTIONS = [{
   title: 'Australian fuel strategy tracker',
@@ -1378,6 +1471,25 @@ const ACTION_QUEUE = [{
 }];
 const DECISION_GROUPS = [['Public / travellers', 'station availability, regional stock-outs, fuel price pressure, travel-route disruption visibility'], ['Farmers', 'fertiliser cover, farm diesel risk, water allocation, rainfall/drought pressure, freight disruption'], ['Small business', 'fuel and energy pressure, freight delays, tourism route pressure, workforce and demand signals'], ['Government / MPs', 'public-data gaps, source cadence, policy delivery status and missing operational feeds'], ['Defence / national security', 'fuel resilience, naval procurement source gates, strategic-resource readiness and logistics boundaries'], ['Industry / infrastructure', 'terminal, port, project delivery, manufacturing bottleneck and power resilience feeds'], ['Future pressure', 'housing, AI workforce, Olympics readiness and other source-scoping roadmap areas']];
 const OPERATIONAL_CHECKLIST = ['machine-readable official/public feeds', 'consistent update cadence', 'clear product/geography definitions', 'source rights and reuse terms', 'public/private sensitivity boundary', 'validation rules', 'methodology for derived status models', 'government/industry contact pathway', 'maintenance and refresh ownership'];
+const EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that the underlying value is zero, low, or negligible.'
+}, {
+  title: 'Source-gated is a publishing boundary',
+  copy: 'Source-gated means a verified source, exact field, period, unit and reuse-rights pathway has not been loaded. The page does not estimate a value while the gate is open.'
+}, {
+  title: 'No estimates fill missing values',
+  copy: 'The project does not generate estimates, projections or fill values to close visibility gaps. Missing data stays visible until a named public source supports it.'
+}, {
+  title: 'Priority bands are editorial triage',
+  copy: 'Priority bands are an editorial/product triage view, not official risk ratings or numeric scores. They reflect what is decision-useful for readers, not formal government assessments.'
+}, {
+  title: 'A visibility gap is not proof of misconduct',
+  copy: 'A missing public feed is a visibility gap, not evidence of wrongdoing. Some data may be sensitive, in roll-out, or simply not yet published in a machine-readable form.'
+}, {
+  title: 'Holder/publisher fields are likely sources',
+  copy: 'Likely holder/publisher entries name the agencies most plausibly responsible for the data based on existing public mandates. They are starting points for verification, not assertions of custody.'
+}];
 function StatusBadge({
   status
 }) {
@@ -1393,11 +1505,38 @@ function PriorityBand({
     className: `priority-band priority-band--${key}`
   }, band);
 }
+function LastReviewed({
+  value
+}) {
+  return React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: ", value || 'metadata pending');
+}
 function App() {
   const [refreshStatus, setRefreshStatus] = React.useState(null);
   React.useEffect(() => {
     window.FR.loadRefreshStatus().then(setRefreshStatus);
   }, []);
+  const totalGaps = SCOREBOARD_ROWS.length;
+  const totalCategories = GAP_CATEGORIES.length;
+  const totalActions = ACTION_QUEUE.length;
+  const matrixCounts = PRIORITY_MATRIX_ROWS.reduce((acc, row) => {
+    acc[row.band] = (acc[row.band] || 0) + 1;
+    return acc;
+  }, {});
+  const rowsByCategory = GAP_CATEGORIES.map(cat => ({
+    ...cat,
+    rows: SCOREBOARD_ROWS.filter(r => r.category === cat.slug),
+    matrixRows: PRIORITY_MATRIX_ROWS.filter(r => {
+      if (cat.slug === 'fuel') return /Fuel|MSO|Queensland/i.test(r.gap);
+      if (cat.slug === 'food') return /Fertilis|Farm|Water allocation/i.test(r.gap);
+      if (cat.slug === 'economy') return /Housing pressure indicators/i.test(r.gap);
+      if (cat.slug === 'defence') return /Defence|naval/i.test(r.gap);
+      if (cat.slug === 'infrastructure') return /Power\/infrastructure|Olympics|Manufacturing|Strategic resources/i.test(r.gap);
+      if (cat.slug === 'workforce') return /AI workforce/i.test(r.gap);
+      return false;
+    })
+  }));
   return React.createElement("div", {
     className: "page"
   }, React.createElement(Header, {
@@ -1409,9 +1548,14 @@ function App() {
     className: "intro"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Missing data scoreboard"), React.createElement("h1", null, "What Australia can see, and what is still missing."), React.createElement("p", {
+  }, "Public-data resilience audit"), React.createElement("h1", null, "The public-data gaps behind Australia\u2019s resilience picture"), React.createElement("p", {
     className: "lede"
-  }, "This page turns dashboard gaps into a public-policy product. It separates verified data, partial coverage, stale sources, unavailable feeds, source-gated work and roadmap-only areas without inventing values.")), React.createElement("aside", {
+  }, "This scoreboard separates verified feeds from missing, stale, partial and source-gated data, so readers can see what Australia can verify \u2014 and what still depends on unpublished or hard-to-access information."), React.createElement("p", {
+    className: "lede",
+    style: {
+      marginTop: 'var(--s-3)'
+    }
+  }, React.createElement("strong", null, "What Australia can see, and what is still missing."), " The audit covers fuel, food, economy, defence, infrastructure and workforce. Priority bands are editorial/product triage only, not official risk ratings.")), React.createElement("aside", {
     className: "intro-card"
   }, React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype"), React.createElement("div", {
     style: {
@@ -1425,6 +1569,65 @@ function App() {
   }, "Data currency"), React.createElement("p", null, "Refreshed means the automated pipeline last ran successfully. This scoreboard does not publish new data values; it maps public-data gaps and the likely source owner.")), React.createElement("dl", {
     className: "data-currency__list"
   }, React.createElement("div", null, React.createElement("dt", null, "Site refreshed"), React.createElement("dd", null, window.FR.fmtRefreshStatus(refreshStatus))), React.createElement("div", null, React.createElement("dt", null, "Page data retrieved"), React.createElement("dd", null, "No source envelopes loaded on this scoreboard page")), React.createElement("div", null, React.createElement("dt", null, "Latest source data point"), React.createElement("dd", null, "Not applicable")))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "audit-30s-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second audit summary"), React.createElement("h2", {
+    id: "audit-30s-h"
+  }, "A 30-second view of public-data visibility"), React.createElement("p", {
+    className: "section__lede"
+  }, "Counts below are derived from the editorial gap and triage lists on this page. They describe what the audit currently tracks. They are not invented totals or official risk ratings."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Tracked categories"), React.createElement("h3", null, totalCategories, " category areas"), React.createElement("p", null, "Fuel, food, economy, defence, infrastructure and workforce. Each has an audit row, a likely holder and links to the relevant dashboard."), React.createElement("a", {
+    href: "#cat-fuel-h"
+  }, "Jump to first category")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit rows"), React.createElement("h3", null, totalGaps, " category gap rows"), React.createElement("p", null, "One row per category area names the gap, why it matters, the likely publisher and what would close it. Status mixes verified, partial, source-gated, unavailable and roadmap."), React.createElement("a", {
+    href: "#scoreboard-h"
+  }, "Jump to scoreboard")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Priority triage"), React.createElement("h3", null, matrixCounts.Immediate || 0, " immediate / ", matrixCounts.High || 0, " high / ", matrixCounts.Medium || 0, " medium"), React.createElement("p", null, "Priority bands group the most decision-useful gaps. They are editorial/product triage only, not official risk ratings or numeric scores."), React.createElement("a", {
+    href: "#priority-h"
+  }, "Jump to priority matrix")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Next source actions"), React.createElement("h3", null, totalActions, " action types"), React.createElement("p", null, "Source verification, data-access request, automation candidate, methodology, public/private boundary and roadmap-build work needed before gaps become dashboard values."), React.createElement("a", {
+    href: "#queue-h"
+  }, "Jump to action queue")))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "scan-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Scan by category"), React.createElement("h2", {
+    id: "scan-h"
+  }, "Scan the audit by category"), React.createElement("p", {
+    className: "section__lede"
+  }, "Lightweight category anchors so readers can jump straight to a gap area without filtering."))), React.createElement("nav", {
+    className: "audit-anchors",
+    "aria-label": "Audit category anchors"
+  }, GAP_CATEGORIES.map(cat => React.createElement("a", {
+    key: cat.slug,
+    className: "audit-anchor",
+    href: `#${cat.anchor}`
+  }, React.createElement("span", {
+    className: "audit-anchor__title"
+  }, cat.title), React.createElement("span", {
+    className: "audit-anchor__intro"
+  }, cat.intro))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "scoreboard-read-h"
   }, React.createElement("div", {
@@ -1472,6 +1675,67 @@ function App() {
   }, React.createElement(StatusBadge, {
     status: kind
   }), React.createElement("h3", null, label), React.createElement("p", null, copy))))), React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "evidence-boundary-h"
+  }, "What this scoreboard is, and is not"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting any row, status or priority band on this page. They define how the audit treats missing public data."))), React.createElement("div", {
+    className: "source-grid"
+  }, EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "categories-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit by category"), React.createElement("h2", {
+    id: "categories-h"
+  }, "Public-data gaps grouped by category"), React.createElement("p", {
+    className: "section__lede"
+  }, "Each section names the gap, the likely publisher, why it matters, what would close it and the affected dashboard surface. Last-reviewed metadata is shown only where it exists."))), rowsByCategory.map(cat => React.createElement("div", {
+    className: "audit-category",
+    key: cat.slug
+  }, React.createElement("div", {
+    className: "audit-category__head"
+  }, React.createElement("h3", {
+    id: cat.anchor
+  }, cat.title), React.createElement("p", null, cat.intro), React.createElement("div", {
+    className: "audit-category__ctas"
+  }, cat.dashboards.map(link => React.createElement("a", {
+    key: link.href,
+    className: "audit-category__cta",
+    href: link.href
+  }, link.label)))), React.createElement("div", {
+    className: "source-grid"
+  }, cat.rows.map(row => React.createElement("article", {
+    className: "source-card audit-card",
+    key: `${cat.slug}-${row.area}`
+  }, React.createElement("div", {
+    className: "audit-card__head"
+  }, React.createElement(StatusBadge, {
+    status: row.status
+  }), React.createElement("h4", null, row.area)), React.createElement("dl", {
+    className: "audit-card__dl"
+  }, React.createElement("div", null, React.createElement("dt", null, "Gap or feed"), React.createElement("dd", null, row.gap)), React.createElement("div", null, React.createElement("dt", null, "Likely holder / publisher"), React.createElement("dd", null, row.holder)), React.createElement("div", null, React.createElement("dt", null, "Why it matters"), React.createElement("dd", null, row.why)), React.createElement("div", null, React.createElement("dt", null, "What would close the gap"), React.createElement("dd", null, row.action)), React.createElement("div", null, React.createElement("dt", null, "Dashboard surface"), React.createElement("dd", null, row.page))), React.createElement(LastReviewed, {
+    value: row.last_reviewed
+  })))), cat.matrixRows.length > 0 && React.createElement("div", {
+    className: "audit-category__matrix"
+  }, React.createElement("h4", null, "Priority triage rows in this category"), React.createElement("ul", {
+    className: "audit-category__matrix-list"
+  }, cat.matrixRows.map(row => React.createElement("li", {
+    key: `${cat.slug}-${row.gap}`
+  }, React.createElement(PriorityBand, {
+    band: row.band
+  }), React.createElement("strong", null, row.gap), React.createElement("span", null, row.action)))))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "priority-h"
   }, React.createElement("div", {
@@ -1563,15 +1827,15 @@ function App() {
     id: "scoreboard-h"
   }, "Missing data scoreboard"), React.createElement("p", {
     className: "section__lede"
-  }, "Each row names the gap, the likely holder or publisher, why the gap matters, the next source action and the dashboard surface affected."))), React.createElement("div", {
+  }, "Each row names the gap, the likely holder or publisher, why the gap matters, the next source action and the dashboard surface affected. Last-reviewed metadata is shown only where it exists."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
     className: "data-table data-table--plain data-table--sticky"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Area"), React.createElement("th", null, "Status"), React.createElement("th", null, "Missing feed or source gate"), React.createElement("th", null, "Likely holder / publisher"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Next source action"), React.createElement("th", null, "Dashboard"))), React.createElement("tbody", null, SCOREBOARD_ROWS.map(row => React.createElement("tr", {
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Area"), React.createElement("th", null, "Status"), React.createElement("th", null, "Missing feed or source gate"), React.createElement("th", null, "Likely holder / publisher"), React.createElement("th", null, "Why it matters"), React.createElement("th", null, "Next source action"), React.createElement("th", null, "Dashboard"), React.createElement("th", null, "Last reviewed"))), React.createElement("tbody", null, SCOREBOARD_ROWS.map(row => React.createElement("tr", {
     key: row.area
   }, React.createElement("td", null, row.area), React.createElement("td", null, React.createElement(StatusBadge, {
     status: row.status
-  })), React.createElement("td", null, row.gap), React.createElement("td", null, row.holder), React.createElement("td", null, row.why), React.createElement("td", null, row.action), React.createElement("td", null, row.page))))))), React.createElement("section", {
+  })), React.createElement("td", null, row.gap), React.createElement("td", null, row.holder), React.createElement("td", null, row.why), React.createElement("td", null, row.action), React.createElement("td", null, row.page), React.createElement("td", null, row.last_reviewed || 'metadata pending'))))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "roadmap-h"
   }, React.createElement("div", {
@@ -1594,6 +1858,51 @@ function App() {
   }, section.fields.map(field => React.createElement("li", {
     key: field
   }, field))), React.createElement("p", null, section.note))))), React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "cta-flow-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Where to go next"), React.createElement("h2", {
+    id: "cta-flow-h"
+  }, "Open the dashboards behind these gaps"), React.createElement("p", {
+    className: "section__lede"
+  }, "Each link opens the dashboard surface where the gap will appear once a public source is loaded."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "National Fuel Security"), React.createElement("p", null, "Days-cover, MSO context, aggregate import visibility and Queensland visibility sections."), React.createElement("a", {
+    href: "../fuel-security-dashboard/index.html"
+  }, "Open National Fuel Security")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Queensland Fuel Sovereignty"), React.createElement("p", null, "Six-port AFIP pathway, state-owned land audit, Taroom Trough context and approval blockers."), React.createElement("a", {
+    href: "../qld-fuel-sovereignty-dashboard/index.html"
+  }, "Open Queensland Fuel Sovereignty")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Food, Farms & Water"), React.createElement("p", null, "Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds."), React.createElement("a", {
+    href: "../fertilizer-dashboard/index.html"
+  }, "Open Food, Farms & Water")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "AU Economics"), React.createElement("p", null, "Latest RBA cash-rate target and selected public macro indicators."), React.createElement("a", {
+    href: "../au-economics-dashboard/index.html"
+  }, "Open AU Economics")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Defence Posture"), React.createElement("p", null, "Defence budget rows, alliances, frameworks and selected public capability rows."), React.createElement("a", {
+    href: "../defence-alliances-dashboard/index.html"
+  }, "Open Defence Posture")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Infrastructure"), React.createElement("p", null, "Population vs housing, public transport, airports, freight, NBN and the major-project pipeline."), React.createElement("a", {
+    href: "../infrastructure-dashboard/index.html"
+  }, "Open Infrastructure")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Employment & Automation"), React.createElement("p", null, "Australian labour-market change since the AI rollout era, with no AI-causation claim."), React.createElement("a", {
+    href: "../employment-automation-dashboard/index.html"
+  }, "Open Employment & Automation")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("h3", null, "Brisbane 2032 Readiness"), React.createElement("p", null, "Source-gated venue, transport, accommodation, power, fuel and emergency-logistics readiness gaps."), React.createElement("a", {
+    href: "../brisbane-2032-readiness-dashboard/index.html"
+  }, "Open Brisbane 2032 Readiness")))), React.createElement("section", {
     className: "section section--why",
     "aria-labelledby": "truth-h"
   }, React.createElement("div", {
