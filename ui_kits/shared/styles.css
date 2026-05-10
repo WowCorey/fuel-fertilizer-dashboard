@@ -672,3 +672,260 @@ a.skip-link:focus, a.skip-link:focus-visible {
   }
   .data-table-wrap::after { display: block; }
 }
+
+/* ==============================================================
+   UX Polish — shared design primitives
+   Goal: civic-tech briefing-board look. Off-white paper, deep
+   navy/ink hierarchy, calm accents, strong source transparency.
+   Every primitive below is opt-in; existing dashboards keep
+   working unless they adopt these classes.
+   ============================================================== */
+
+/* Grouped header nav — replaces the long flat scroll-strip with
+   six labelled categories. Each top-level button reveals a
+   dropdown panel of dashboards in that category. */
+.site-nav--grouped { gap: var(--s-3); overflow: visible; }
+.nav-group { position: relative; height: 100%; display: flex; align-items: center; }
+.nav-group__btn {
+  appearance: none; background: transparent; border: 0;
+  height: 100%; padding: 0 var(--s-2);
+  font-family: inherit; font-size: var(--fs-14); font-weight: 500;
+  color: var(--ink-2); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+  border-bottom: 2px solid transparent;
+}
+.nav-group__btn:hover { color: var(--ink); }
+.nav-group__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-1); }
+.nav-group__btn[aria-expanded="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-group--active > .nav-group__btn { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-group__caret { font-size: 10px; color: var(--ink-3); transition: transform var(--t-fast) var(--ease-out); }
+.nav-group__btn[aria-expanded="true"] .nav-group__caret { transform: rotate(180deg); }
+
+/* Dropdown panel anchored under each top-level group. */
+.nav-group__panel {
+  position: absolute; top: calc(100% - 1px); left: 0;
+  min-width: 240px; padding: var(--s-3);
+  background: var(--paper); border: 1px solid var(--rule);
+  border-radius: var(--r-2); box-shadow: var(--shadow-1);
+  display: flex; flex-direction: column; gap: 2px;
+  z-index: 50;
+}
+.nav-group__panel a {
+  display: block; padding: 8px 10px;
+  font-size: var(--fs-14); color: var(--ink-2);
+  border: 0; border-radius: var(--r-1); white-space: nowrap;
+}
+.nav-group__panel a:hover { background: var(--paper-sunk); color: var(--ink); }
+.nav-group__panel a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-group__panel a.active { color: var(--accent); background: var(--accent-tint); }
+
+/* Mobile / narrow-viewport drawer trigger and sheet. */
+.nav-toggle {
+  display: none;
+  appearance: none; background: transparent; border: 1px solid var(--rule);
+  border-radius: var(--r-1); padding: 6px 10px; color: var(--ink-2);
+  font-family: var(--font-mono); font-size: var(--fs-12); cursor: pointer;
+}
+.nav-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-sheet {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(15, 23, 42, 0.32);
+  display: none;
+}
+.nav-sheet[data-open="true"] { display: block; }
+.nav-sheet__panel {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(86vw, 360px);
+  background: var(--paper); border-left: 1px solid var(--rule);
+  padding: var(--s-5) var(--s-5) var(--s-7);
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: var(--s-5);
+}
+.nav-sheet__head { display:flex; align-items:center; justify-content: space-between; }
+.nav-sheet__close {
+  appearance: none; background: transparent; border: 0;
+  font-size: var(--fs-20); color: var(--ink-2); cursor: pointer; line-height: 1;
+}
+.nav-sheet__group { display: flex; flex-direction: column; gap: 4px; }
+.nav-sheet__group .eyebrow { color: var(--ink-3); }
+.nav-sheet__group a {
+  display: block; padding: 8px 10px; border: 0; border-radius: var(--r-1);
+  color: var(--ink-2); font-size: var(--fs-15);
+}
+.nav-sheet__group a:hover { background: var(--paper-sunk); color: var(--ink); }
+.nav-sheet__group a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-sheet__group a.active { color: var(--accent); background: var(--accent-tint); }
+
+/* Homepage national-read strip — short summary of how many
+   dashboards are healthy / partial / unavailable, sits directly
+   under the hero. Counts come from envelope freshness. */
+.national-read {
+  max-width: var(--max-content); margin: 0 auto;
+  padding: var(--s-5) var(--s-6);
+  display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: var(--s-4);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-sunk);
+}
+.national-read__lede { color: var(--ink-2); font-size: var(--fs-15); line-height: 1.5; max-width: 60ch; }
+.national-read__lede strong { color: var(--ink); }
+.national-read__cell {
+  background: var(--card); border: 1px solid var(--rule);
+  border-radius: var(--r-2); padding: var(--s-3) var(--s-4);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.national-read__cell dt { font-size: var(--fs-12); color: var(--ink-3); margin: 0; }
+.national-read__cell dd {
+  margin: 0; font-family: var(--font-serif);
+  font-size: var(--fs-32); line-height: 1; font-variant-numeric: tabular-nums;
+}
+.national-read__cell--ok dd { color: var(--surplus); }
+.national-read__cell--partial dd { color: var(--caution); }
+.national-read__cell--missing dd { color: var(--deficit); }
+
+/* "How to read this page" — small panel directly under section
+   heads on dashboards, plain language guide to the chart/table. */
+.how-to-read {
+  border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+  background: var(--card); border-radius: var(--r-2);
+  padding: var(--s-4) var(--s-5);
+  margin-bottom: var(--s-5);
+  display: flex; flex-direction: column; gap: var(--s-2);
+}
+.how-to-read__label {
+  font-family: var(--font-mono); font-size: var(--fs-12);
+  color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em;
+}
+.how-to-read p { color: var(--ink-2); line-height: 1.55; max-width: 72ch; margin: 0; }
+
+/* Metric card status bar — small horizontal strip at the bottom
+   of a metric card combining trust badge + last-updated stamp. */
+.metric-card__statusbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-2); padding-top: var(--s-3); margin-top: auto;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: var(--fs-12); color: var(--ink-3);
+}
+.metric-card__statusbar time { font-variant-numeric: tabular-nums; }
+
+/* Chart caveat strip — a single line under a chart that marks
+   coverage gaps, methodology notes, or "estimate" framing. */
+.chart-caveat {
+  margin-top: var(--s-3); padding: 6px var(--s-3);
+  background: var(--paper-sunk); border: 1px solid var(--rule);
+  border-radius: var(--r-1);
+  font-size: var(--fs-12); color: var(--ink-2); line-height: 1.4;
+  display: flex; align-items: center; gap: 8px;
+}
+.chart-caveat--warn { background: var(--caution-tint); border-color: transparent; color: var(--ink); }
+.chart-caveat__label {
+  font-family: var(--font-mono); text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--ink-3); font-size: 10px;
+}
+
+/* Source-card status row — adds a one-line refresh/coverage row
+   to a source card so readers see at a glance whether it's live. */
+.source-card__statusrow {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-2);
+  padding-top: var(--s-2); margin-top: auto;
+  border-top: 1px dashed var(--rule);
+  font-family: var(--font-mono); font-size: var(--fs-12); color: var(--ink-3);
+}
+
+/* Missing-data card — used on the homepage and dashboards to
+   surface known gaps without faking a number. Dashed border
+   signals "no live value here". */
+.missing-data-card {
+  background: var(--paper); border: 1px dashed var(--rule-strong);
+  border-radius: var(--r-2); padding: var(--s-5);
+  display: flex; flex-direction: column; gap: var(--s-2);
+}
+.missing-data-card h3 {
+  font-family: var(--font-serif); font-size: var(--fs-20); font-weight: 500;
+  color: var(--ink);
+}
+.missing-data-card p { color: var(--ink-2); line-height: 1.5; }
+.missing-data-card__what {
+  font-family: var(--font-mono); font-size: var(--fs-12);
+  color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em;
+}
+.missing-data-card a { font-family: var(--font-mono); font-size: var(--fs-12); }
+
+/* Table caveat row — appears at the head of a data table to
+   describe units / methodology, keeping the table itself clean. */
+.data-table__caveat {
+  padding: var(--s-3) var(--s-4);
+  background: var(--paper-sunk); border-bottom: 1px solid var(--rule);
+  color: var(--ink-2); font-size: var(--fs-13); line-height: 1.45;
+  display: flex; flex-wrap: wrap; gap: var(--s-2);
+  align-items: center;
+}
+.data-table__caveat strong { color: var(--ink); font-weight: 600; }
+
+/* Sticky header rows for long tables. Header sits beneath the
+   page sticky header (var(--header-h)) so it never overlaps. */
+.data-table--sticky thead th {
+  position: sticky; top: var(--header-h); z-index: 1;
+  box-shadow: 0 1px 0 var(--rule);
+}
+
+/* Confidence legend — a small inline strip the homepage uses to
+   explain badge meanings before grouped dashboard rails. */
+.confidence-legend {
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-4);
+  align-items: center; padding: var(--s-3) 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: var(--s-6);
+}
+.confidence-legend__label {
+  font-family: var(--font-mono); font-size: var(--fs-12);
+  color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em;
+}
+.confidence-legend dl {
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-4);
+  margin: 0; padding: 0;
+}
+.confidence-legend dt { display: inline-flex; }
+.confidence-legend dd {
+  margin: 0 0 0 6px; color: var(--ink-2); font-size: var(--fs-13);
+  display: inline; line-height: 1.4;
+}
+.confidence-legend dt + dd { margin-right: var(--s-3); }
+
+/* Dashboard rail — homepage section that groups dashboard tiles
+   under a category eyebrow heading. */
+.rail { margin-top: var(--s-7); }
+.rail__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s-3); margin-bottom: var(--s-4);
+  padding-bottom: var(--s-2); border-bottom: 1px solid var(--rule);
+}
+.rail__head h2 {
+  font-family: var(--font-serif); font-size: var(--fs-24);
+  font-weight: 500; letter-spacing: -0.01em;
+}
+.rail__head p { color: var(--ink-3); font-size: var(--fs-13); max-width: 48ch; }
+
+/* Footer disclaimer — visible on every page so readers
+   understand this is an independent prototype, not official. */
+.site-footer__disclaimer {
+  color: var(--ink-3); font-size: var(--fs-13); line-height: 1.5;
+  max-width: 60ch;
+}
+.site-footer__disclaimer strong { color: var(--ink-2); font-weight: 600; }
+
+/* Responsive — collapse the grouped nav into the sheet drawer. */
+@media (max-width: 1080px) {
+  .site-nav--grouped { display: none; }
+  .nav-toggle { display: inline-flex; align-items: center; }
+}
+@media (max-width: 1000px) {
+  .national-read { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .national-read { grid-template-columns: 1fr; }
+  .confidence-legend { flex-direction: column; align-items: flex-start; gap: var(--s-2); }
+  .rail__head { flex-direction: column; align-items: flex-start; }
+}
