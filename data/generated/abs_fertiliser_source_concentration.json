@@ -4,13 +4,9 @@
   "source_name": "ABS International Merchandise Trade - fertiliser source-country concentration",
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "%",
-  "retrieved_at": "2026-05-06T03:54:13+00:00",
-  "last_data_point": "2026-02-28",
+  "retrieved_at": "2026-05-10T17:32:51+00:00",
+  "last_data_point": "2026-03-31",
   "values": [
-    {
-      "t": "2021-03",
-      "v": 64.9
-    },
     {
       "t": "2021-04",
       "v": 64.9
@@ -245,7 +241,11 @@
     },
     {
       "t": "2026-02",
-      "v": 58.3
+      "v": 58.7
+    },
+    {
+      "t": "2026-03",
+      "v": 63.6
     }
   ],
   "notes": "Fetched from ABS Data API MERCH_IMP using SITC 562 by country of origin. Each value is the share of monthly SITC 562 import value from the three largest non-total source countries. Values are trimmed to the last 60 monthly observations.",
@@ -257,27 +257,27 @@
     "schema": "abs_sitc562_source_concentration.v1",
     "fields": {
       "commodity": "SITC 562 manufactured fertilisers",
-      "period": "2026-02",
-      "total_import_value_aud_thousands": 474117,
-      "top3_share_percent": 58.3,
-      "top3_value_aud_thousands": 276629,
-      "positive_country_count": 34,
-      "hhi": 1481.0,
+      "period": "2026-03",
+      "total_import_value_aud_thousands": 672328,
+      "top3_share_percent": 63.6,
+      "top3_value_aud_thousands": 427868,
+      "positive_country_count": 40,
+      "hhi": 1883.6,
       "top_countries": [
         {
           "country": "Saudi Arabia",
-          "value_aud_thousands": 111070,
-          "share_percent": 23.4
+          "value_aud_thousands": 245070,
+          "share_percent": 36.5
         },
         {
           "country": "Morocco",
-          "value_aud_thousands": 101275,
-          "share_percent": 21.4
+          "value_aud_thousands": 105025,
+          "share_percent": 15.6
         },
         {
           "country": "China (excludes SARs and Taiwan)",
-          "value_aud_thousands": 64284,
-          "share_percent": 13.6
+          "value_aud_thousands": 77773,
+          "share_percent": 11.6
         }
       ]
     }
