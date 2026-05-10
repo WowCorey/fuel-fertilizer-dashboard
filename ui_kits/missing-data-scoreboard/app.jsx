@@ -458,15 +458,6 @@ function App() {
   const rowsByCategory = GAP_CATEGORIES.map(cat => ({
     ...cat,
     rows: SCOREBOARD_ROWS.filter(r => r.category === cat.slug),
-    matrixRows: PRIORITY_MATRIX_ROWS.filter(r => {
-      if (cat.slug === 'fuel') return /Fuel|MSO|Queensland/i.test(r.gap);
-      if (cat.slug === 'food') return /Fertilis|Farm|Water allocation/i.test(r.gap);
-      if (cat.slug === 'economy') return /Housing pressure indicators/i.test(r.gap);
-      if (cat.slug === 'defence') return /Defence|naval/i.test(r.gap);
-      if (cat.slug === 'infrastructure') return /Power\/infrastructure|Olympics|Manufacturing|Strategic resources/i.test(r.gap);
-      if (cat.slug === 'workforce') return /AI workforce/i.test(r.gap);
-      return false;
-    }),
   }));
 
   return (
@@ -697,7 +688,7 @@ function App() {
                   <article className="source-card audit-card" key={`${cat.slug}-${row.area}`}>
                     <div className="audit-card__head">
                       <StatusBadge status={row.status}/>
-                      <h4>{row.area}</h4>
+                      <span className="audit-card__title">{row.area}</span>
                     </div>
                     <dl className="audit-card__dl">
                       <div>
@@ -725,20 +716,6 @@ function App() {
                   </article>
                 ))}
               </div>
-              {cat.matrixRows.length > 0 && (
-                <div className="audit-category__matrix">
-                  <h4>Priority triage rows in this category</h4>
-                  <ul className="audit-category__matrix-list">
-                    {cat.matrixRows.map(row => (
-                      <li key={`${cat.slug}-${row.gap}`}>
-                        <PriorityBand band={row.band}/>
-                        <strong>{row.gap}</strong>
-                        <span>{row.action}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
           ))}
         </section>
@@ -943,43 +920,43 @@ function App() {
             </div>
           </div>
           <div className="quick-link-grid quick-link-grid--4">
-            <article className="quick-link-card">
-              <h3>National Fuel Security</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">National Fuel Security</span>
               <p>Days-cover, MSO context, aggregate import visibility and Queensland visibility sections.</p>
               <a href="../fuel-security-dashboard/index.html">Open National Fuel Security</a>
             </article>
-            <article className="quick-link-card">
-              <h3>Queensland Fuel Sovereignty</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Queensland Fuel Sovereignty</span>
               <p>Six-port AFIP pathway, state-owned land audit, Taroom Trough context and approval blockers.</p>
               <a href="../qld-fuel-sovereignty-dashboard/index.html">Open Queensland Fuel Sovereignty</a>
             </article>
-            <article className="quick-link-card">
-              <h3>Food, Farms &amp; Water</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Food, Farms &amp; Water</span>
               <p>Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds.</p>
               <a href="../fertilizer-dashboard/index.html">Open Food, Farms &amp; Water</a>
             </article>
-            <article className="quick-link-card">
-              <h3>AU Economics</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">AU Economics</span>
               <p>Latest RBA cash-rate target and selected public macro indicators.</p>
               <a href="../au-economics-dashboard/index.html">Open AU Economics</a>
             </article>
-            <article className="quick-link-card">
-              <h3>Defence Posture</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Defence Posture</span>
               <p>Defence budget rows, alliances, frameworks and selected public capability rows.</p>
               <a href="../defence-alliances-dashboard/index.html">Open Defence Posture</a>
             </article>
-            <article className="quick-link-card">
-              <h3>Infrastructure</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Infrastructure</span>
               <p>Population vs housing, public transport, airports, freight, NBN and the major-project pipeline.</p>
               <a href="../infrastructure-dashboard/index.html">Open Infrastructure</a>
             </article>
-            <article className="quick-link-card">
-              <h3>Employment &amp; Automation</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Employment &amp; Automation</span>
               <p>Australian labour-market change since the AI rollout era, with no AI-causation claim.</p>
               <a href="../employment-automation-dashboard/index.html">Open Employment &amp; Automation</a>
             </article>
-            <article className="quick-link-card">
-              <h3>Brisbane 2032 Readiness</h3>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Brisbane 2032 Readiness</span>
               <p>Source-gated venue, transport, accommodation, power, fuel and emergency-logistics readiness gaps.</p>
               <a href="../brisbane-2032-readiness-dashboard/index.html">Open Brisbane 2032 Readiness</a>
             </article>

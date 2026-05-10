@@ -1526,16 +1526,7 @@ function App() {
   }, {});
   const rowsByCategory = GAP_CATEGORIES.map(cat => ({
     ...cat,
-    rows: SCOREBOARD_ROWS.filter(r => r.category === cat.slug),
-    matrixRows: PRIORITY_MATRIX_ROWS.filter(r => {
-      if (cat.slug === 'fuel') return /Fuel|MSO|Queensland/i.test(r.gap);
-      if (cat.slug === 'food') return /Fertilis|Farm|Water allocation/i.test(r.gap);
-      if (cat.slug === 'economy') return /Housing pressure indicators/i.test(r.gap);
-      if (cat.slug === 'defence') return /Defence|naval/i.test(r.gap);
-      if (cat.slug === 'infrastructure') return /Power\/infrastructure|Olympics|Manufacturing|Strategic resources/i.test(r.gap);
-      if (cat.slug === 'workforce') return /AI workforce/i.test(r.gap);
-      return false;
-    })
+    rows: SCOREBOARD_ROWS.filter(r => r.category === cat.slug)
   }));
   return React.createElement("div", {
     className: "page"
@@ -1723,19 +1714,13 @@ function App() {
     className: "audit-card__head"
   }, React.createElement(StatusBadge, {
     status: row.status
-  }), React.createElement("h4", null, row.area)), React.createElement("dl", {
+  }), React.createElement("span", {
+    className: "audit-card__title"
+  }, row.area)), React.createElement("dl", {
     className: "audit-card__dl"
   }, React.createElement("div", null, React.createElement("dt", null, "Gap or feed"), React.createElement("dd", null, row.gap)), React.createElement("div", null, React.createElement("dt", null, "Likely holder / publisher"), React.createElement("dd", null, row.holder)), React.createElement("div", null, React.createElement("dt", null, "Why it matters"), React.createElement("dd", null, row.why)), React.createElement("div", null, React.createElement("dt", null, "What would close the gap"), React.createElement("dd", null, row.action)), React.createElement("div", null, React.createElement("dt", null, "Dashboard surface"), React.createElement("dd", null, row.page))), React.createElement(LastReviewed, {
     value: row.last_reviewed
-  })))), cat.matrixRows.length > 0 && React.createElement("div", {
-    className: "audit-category__matrix"
-  }, React.createElement("h4", null, "Priority triage rows in this category"), React.createElement("ul", {
-    className: "audit-category__matrix-list"
-  }, cat.matrixRows.map(row => React.createElement("li", {
-    key: `${cat.slug}-${row.gap}`
-  }, React.createElement(PriorityBand, {
-    band: row.band
-  }), React.createElement("strong", null, row.gap), React.createElement("span", null, row.action)))))))), React.createElement("section", {
+  }))))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "priority-h"
   }, React.createElement("div", {
@@ -1871,36 +1856,52 @@ function App() {
   }, "Each link opens the dashboard surface where the gap will appear once a public source is loaded."))), React.createElement("div", {
     className: "quick-link-grid quick-link-grid--4"
   }, React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "National Fuel Security"), React.createElement("p", null, "Days-cover, MSO context, aggregate import visibility and Queensland visibility sections."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "National Fuel Security"), React.createElement("p", null, "Days-cover, MSO context, aggregate import visibility and Queensland visibility sections."), React.createElement("a", {
     href: "../fuel-security-dashboard/index.html"
   }, "Open National Fuel Security")), React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "Queensland Fuel Sovereignty"), React.createElement("p", null, "Six-port AFIP pathway, state-owned land audit, Taroom Trough context and approval blockers."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Queensland Fuel Sovereignty"), React.createElement("p", null, "Six-port AFIP pathway, state-owned land audit, Taroom Trough context and approval blockers."), React.createElement("a", {
     href: "../qld-fuel-sovereignty-dashboard/index.html"
   }, "Open Queensland Fuel Sovereignty")), React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "Food, Farms & Water"), React.createElement("p", null, "Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Food, Farms & Water"), React.createElement("p", null, "Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds."), React.createElement("a", {
     href: "../fertilizer-dashboard/index.html"
   }, "Open Food, Farms & Water")), React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "AU Economics"), React.createElement("p", null, "Latest RBA cash-rate target and selected public macro indicators."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "AU Economics"), React.createElement("p", null, "Latest RBA cash-rate target and selected public macro indicators."), React.createElement("a", {
     href: "../au-economics-dashboard/index.html"
   }, "Open AU Economics")), React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "Defence Posture"), React.createElement("p", null, "Defence budget rows, alliances, frameworks and selected public capability rows."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Defence Posture"), React.createElement("p", null, "Defence budget rows, alliances, frameworks and selected public capability rows."), React.createElement("a", {
     href: "../defence-alliances-dashboard/index.html"
   }, "Open Defence Posture")), React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "Infrastructure"), React.createElement("p", null, "Population vs housing, public transport, airports, freight, NBN and the major-project pipeline."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Infrastructure"), React.createElement("p", null, "Population vs housing, public transport, airports, freight, NBN and the major-project pipeline."), React.createElement("a", {
     href: "../infrastructure-dashboard/index.html"
   }, "Open Infrastructure")), React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "Employment & Automation"), React.createElement("p", null, "Australian labour-market change since the AI rollout era, with no AI-causation claim."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Employment & Automation"), React.createElement("p", null, "Australian labour-market change since the AI rollout era, with no AI-causation claim."), React.createElement("a", {
     href: "../employment-automation-dashboard/index.html"
   }, "Open Employment & Automation")), React.createElement("article", {
-    className: "quick-link-card"
-  }, React.createElement("h3", null, "Brisbane 2032 Readiness"), React.createElement("p", null, "Source-gated venue, transport, accommodation, power, fuel and emergency-logistics readiness gaps."), React.createElement("a", {
+    className: "quick-link-card cta-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Brisbane 2032 Readiness"), React.createElement("p", null, "Source-gated venue, transport, accommodation, power, fuel and emergency-logistics readiness gaps."), React.createElement("a", {
     href: "../brisbane-2032-readiness-dashboard/index.html"
   }, "Open Brisbane 2032 Readiness")))), React.createElement("section", {
     className: "section section--why",
