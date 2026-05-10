@@ -7,11 +7,12 @@ function Footer({ updated = '', refreshStatus = null }) {
       <div className="site-footer__inner">
         <div className="site-footer__col">
           <span className="eyebrow">About</span>
-          <p className="body-sm">
-            Fuel Resilience AU is a public-interest dashboard. Not affiliated with any
+          <p className="site-footer__disclaimer">
+            <strong>Independent public-source prototype. Not an official government dashboard.</strong>
+            {' '}Fuel Resilience AU is built from public data and is not affiliated with any
             government department or industry body. Project code, prose and metadata are
-            maintained here; upstream source data remains under the rights and terms listed
-            in data/sources.yml.
+            maintained in this repository; upstream source data remains under the rights and
+            terms listed in <a href="../../data/sources.yml">data/sources.yml</a>.
           </p>
         </div>
         <div className="site-footer__col">
@@ -21,17 +22,22 @@ function Footer({ updated = '', refreshStatus = null }) {
             <li><a href="../fuel-security-dashboard/index.html">National fuel security</a></li>
             <li><a href="../australian-fuel-strategy-dashboard/index.html">Fuel strategy</a></li>
             <li><a href="../qld-fuel-sovereignty-dashboard/index.html">QLD fuel sovereignty</a></li>
-            <li><a href="../resource-value-dashboard/index.html">Resource value</a></li>
+            <li><a href="../fuel-dashboard/index.html">Fuel</a></li>
+            <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>
+            <li><a href="../power-grid-dashboard/index.html">Power grid</a></li>
+            <li><a href="../fertilizer-dashboard/index.html">Food &amp; farms</a></li>
+            <li><a href="../who-pays-what/index.html">Who pays what</a></li>
+            <li><a href="../au-economics-dashboard/index.html">AU economics</a></li>
+            <li><a href="../housing-economic-pressure-dashboard/index.html">Housing pressure</a></li>
             <li><a href="../state-contribution-dashboard/index.html">State ledger</a></li>
+            <li><a href="../resource-value-dashboard/index.html">Resource value</a></li>
             <li><a href="../strategic-resources-dashboard/index.html">Strategic resources</a></li>
             <li><a href="../defence-alliances-dashboard/index.html">Defence posture</a></li>
             <li><a href="../defence-procurement-watch/index.html">Defence procurement</a></li>
-            <li><a href="../fuel-dashboard/index.html">Fuel</a></li>
-            <li><a href="../fertilizer-dashboard/index.html">Food &amp; farms</a></li>
-            <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>
-            <li><a href="../who-pays-what/index.html">Who pays what</a></li>
-            <li><a href="../housing-economic-pressure-dashboard/index.html">Housing pressure</a></li>
+            <li><a href="../infrastructure-dashboard/index.html">Infrastructure</a></li>
+            <li><a href="../manufacturing-dashboard/index.html">Manufacturing</a></li>
             <li><a href="../brisbane-2032-readiness-dashboard/index.html">Brisbane 2032 readiness</a></li>
+            <li><a href="../employment-automation-dashboard/index.html">Employment &amp; automation</a></li>
             <li><a href="../missing-data-scoreboard/index.html">Missing data scoreboard</a></li>
           </ul>
         </div>

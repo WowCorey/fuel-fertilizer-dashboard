@@ -453,7 +453,7 @@ function App() {
             </div>
           </div>
           <div className="data-table-wrap">
-            <table className="data-table data-table--plain priority-matrix">
+            <table className="data-table data-table--plain data-table--sticky priority-matrix">
               <thead>
                 <tr>
                   <th>Priority band</th>

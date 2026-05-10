@@ -354,98 +354,153 @@ function Header({
   updated = '',
   refreshStatus = null
 }) {
-  const nav = [{
-    id: 'national_status',
-    label: 'National status',
-    href: '../national-status-dashboard/index.html'
+  const groups = [{
+    id: 'fuel_energy',
+    label: 'Fuel & energy',
+    items: [{
+      id: 'national_status',
+      label: 'National status',
+      href: '../national-status-dashboard/index.html'
+    }, {
+      id: 'fuel_security',
+      label: 'National fuel security',
+      href: '../fuel-security-dashboard/index.html'
+    }, {
+      id: 'fuel_strategy',
+      label: 'Fuel strategy',
+      href: '../australian-fuel-strategy-dashboard/index.html'
+    }, {
+      id: 'qld_fuel_sovereignty',
+      label: 'QLD fuel sovereignty',
+      href: '../qld-fuel-sovereignty-dashboard/index.html'
+    }, {
+      id: 'fuel',
+      label: 'Fuel',
+      href: '../fuel-dashboard/index.html'
+    }, {
+      id: 'oil',
+      label: 'Oil & production',
+      href: '../oil-and-production/index.html'
+    }, {
+      id: 'power_grid',
+      label: 'Power grid',
+      href: '../power-grid-dashboard/index.html'
+    }]
   }, {
-    id: 'fuel_security',
-    label: 'National fuel security',
-    href: '../fuel-security-dashboard/index.html'
-  }, {
-    id: 'fuel_strategy',
-    label: 'Fuel strategy',
-    href: '../australian-fuel-strategy-dashboard/index.html'
-  }, {
-    id: 'qld_fuel_sovereignty',
-    label: 'QLD fuel',
-    href: '../qld-fuel-sovereignty-dashboard/index.html'
-  }, {
-    id: 'resource_value',
-    label: 'Resource value',
-    href: '../resource-value-dashboard/index.html'
-  }, {
-    id: 'state_contribution',
-    label: 'State ledger',
-    href: '../state-contribution-dashboard/index.html'
-  }, {
-    id: 'strategic_resources',
-    label: 'Strategic resources',
-    href: '../strategic-resources-dashboard/index.html'
-  }, {
-    id: 'defence_posture',
-    label: 'Defence posture',
-    href: '../defence-alliances-dashboard/index.html'
-  }, {
-    id: 'defence_procurement',
-    label: 'Procurement',
-    href: '../defence-procurement-watch/index.html'
-  }, {
-    id: 'fuel',
-    label: 'Fuel',
-    href: '../fuel-dashboard/index.html'
-  }, {
-    id: 'fertilizer',
+    id: 'food_farms',
     label: 'Food & farms',
-    href: '../fertilizer-dashboard/index.html'
+    items: [{
+      id: 'fertilizer',
+      label: 'Food & farms',
+      href: '../fertilizer-dashboard/index.html'
+    }]
   }, {
-    id: 'oil',
-    label: 'Oil & production',
-    href: '../oil-and-production/index.html'
+    id: 'economy',
+    label: 'Economy & households',
+    items: [{
+      id: 'who_pays_what',
+      label: 'Who pays what',
+      href: '../who-pays-what/index.html'
+    }, {
+      id: 'au_economics',
+      label: 'AU economics',
+      href: '../au-economics-dashboard/index.html'
+    }, {
+      id: 'housing_pressure',
+      label: 'Housing pressure',
+      href: '../housing-economic-pressure-dashboard/index.html'
+    }, {
+      id: 'state_contribution',
+      label: 'State ledger',
+      href: '../state-contribution-dashboard/index.html'
+    }, {
+      id: 'resource_value',
+      label: 'Resource value',
+      href: '../resource-value-dashboard/index.html'
+    }]
   }, {
-    id: 'who_pays_what',
-    label: 'Who pays what',
-    href: '../who-pays-what/index.html'
-  }, {
-    id: 'au_economics',
-    label: 'AU economics',
-    href: '../au-economics-dashboard/index.html'
-  }, {
-    id: 'housing_pressure',
-    label: 'Housing pressure',
-    href: '../housing-economic-pressure-dashboard/index.html'
-  }, {
-    id: 'manufacturing',
-    label: 'Manufacturing',
-    href: '../manufacturing-dashboard/index.html'
-  }, {
-    id: 'power_grid',
-    label: 'Power grid',
-    href: '../power-grid-dashboard/index.html'
+    id: 'defence',
+    label: 'Defence & strategic',
+    items: [{
+      id: 'defence_posture',
+      label: 'Defence posture',
+      href: '../defence-alliances-dashboard/index.html'
+    }, {
+      id: 'defence_procurement',
+      label: 'Defence procurement',
+      href: '../defence-procurement-watch/index.html'
+    }, {
+      id: 'strategic_resources',
+      label: 'Strategic resources',
+      href: '../strategic-resources-dashboard/index.html'
+    }]
   }, {
     id: 'infrastructure',
-    label: 'Infrastructure',
-    href: '../infrastructure-dashboard/index.html'
+    label: 'Infrastructure & systems',
+    items: [{
+      id: 'infrastructure',
+      label: 'Infrastructure',
+      href: '../infrastructure-dashboard/index.html'
+    }, {
+      id: 'manufacturing',
+      label: 'Manufacturing',
+      href: '../manufacturing-dashboard/index.html'
+    }, {
+      id: 'brisbane_2032',
+      label: '2032 readiness',
+      href: '../brisbane-2032-readiness-dashboard/index.html'
+    }]
   }, {
-    id: 'brisbane_2032',
-    label: '2032 readiness',
-    href: '../brisbane-2032-readiness-dashboard/index.html'
-  }, {
-    id: 'employment_automation',
-    label: 'Employment',
-    href: '../employment-automation-dashboard/index.html'
-  }, {
-    id: 'missing_data',
-    label: 'Missing data',
-    href: '../missing-data-scoreboard/index.html'
-  }, {
-    id: 'sources',
-    label: 'Sources & methodology',
-    href: '#sources'
+    id: 'workforce',
+    label: 'Workforce & data',
+    items: [{
+      id: 'employment_automation',
+      label: 'Employment & automation',
+      href: '../employment-automation-dashboard/index.html'
+    }, {
+      id: 'missing_data',
+      label: 'Missing data scoreboard',
+      href: '../missing-data-scoreboard/index.html'
+    }, {
+      id: 'sources',
+      label: 'Sources & methodology',
+      href: '#sources'
+    }]
   }];
+  const [openGroup, setOpenGroup] = React.useState(null);
+  const [sheetOpen, setSheetOpen] = React.useState(false);
+  const navRef = React.useRef(null);
+  React.useEffect(() => {
+    function onDocClick(ev) {
+      if (!navRef.current) return;
+      if (!navRef.current.contains(ev.target)) setOpenGroup(null);
+    }
+    function onKey(ev) {
+      if (ev.key === 'Escape') {
+        setOpenGroup(null);
+        setSheetOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, []);
+  React.useEffect(() => {
+    if (sheetOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [sheetOpen]);
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';
   const hasSiteRefresh = refreshStatus?.status === 'success' && refreshStatus?.refreshed_at;
   const stampLabel = refreshStatus ? hasSiteRefresh ? `Refreshed ${siteRefresh}` : siteRefresh : updated ? `Page data retrieved ${updated}` : '';
+  const groupIsActive = g => g.items.some(it => it.id === active);
   return React.createElement("header", {
     className: "site-header"
   }, React.createElement("div", {
@@ -457,19 +512,78 @@ function Header({
   }, React.createElement("span", {
     className: "brand__name"
   }, "Fuel Resilience AU")), React.createElement("nav", {
-    className: "site-nav",
+    ref: navRef,
+    className: "site-nav site-nav--grouped",
     "aria-label": "Primary"
-  }, nav.map(n => React.createElement("a", {
-    key: n.id,
-    href: n.href,
-    className: n.id === active ? 'active' : '',
-    "aria-current": n.id === active ? 'page' : undefined
-  }, n.label))), React.createElement("div", {
+  }, groups.map(g => {
+    const isOpen = openGroup === g.id;
+    const isActive = groupIsActive(g);
+    return React.createElement("div", {
+      key: g.id,
+      className: `nav-group${isActive ? ' nav-group--active' : ''}`
+    }, React.createElement("button", {
+      type: "button",
+      className: "nav-group__btn",
+      "aria-expanded": isOpen ? 'true' : 'false',
+      "aria-haspopup": "true",
+      onClick: () => setOpenGroup(isOpen ? null : g.id)
+    }, g.label, React.createElement("span", {
+      className: "nav-group__caret",
+      "aria-hidden": true
+    }, '▾')), isOpen && React.createElement("div", {
+      className: "nav-group__panel",
+      role: "menu"
+    }, g.items.map(it => React.createElement("a", {
+      key: it.id,
+      href: it.href,
+      role: "menuitem",
+      className: it.id === active ? 'active' : '',
+      "aria-current": it.id === active ? 'page' : undefined,
+      onClick: () => setOpenGroup(null)
+    }, it.label))));
+  })), React.createElement("button", {
+    type: "button",
+    className: "nav-toggle",
+    "aria-label": "Open navigation",
+    "aria-expanded": sheetOpen ? 'true' : 'false',
+    onClick: () => setSheetOpen(true)
+  }, "Menu"), React.createElement("div", {
     className: "site-header__right"
   }, stampLabel && React.createElement("span", {
     className: "stamp",
     "aria-label": "Refresh status"
-  }, stampLabel))));
+  }, stampLabel))), React.createElement("div", {
+    className: "nav-sheet",
+    "data-open": sheetOpen ? 'true' : 'false',
+    "aria-hidden": sheetOpen ? 'false' : 'true',
+    onClick: ev => {
+      if (ev.target === ev.currentTarget) setSheetOpen(false);
+    }
+  }, React.createElement("div", {
+    className: "nav-sheet__panel",
+    role: "dialog",
+    "aria-label": "Site navigation"
+  }, React.createElement("div", {
+    className: "nav-sheet__head"
+  }, React.createElement("span", {
+    className: "brand__name"
+  }, "Fuel Resilience AU"), React.createElement("button", {
+    type: "button",
+    className: "nav-sheet__close",
+    "aria-label": "Close navigation",
+    onClick: () => setSheetOpen(false)
+  }, '×')), groups.map(g => React.createElement("div", {
+    key: g.id,
+    className: "nav-sheet__group"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, g.label), g.items.map(it => React.createElement("a", {
+    key: it.id,
+    href: it.href,
+    className: it.id === active ? 'active' : '',
+    "aria-current": it.id === active ? 'page' : undefined,
+    onClick: () => setSheetOpen(false)
+  }, it.label)))))));
 }
 function Icon({
   name,
@@ -933,8 +1047,10 @@ function Footer({
   }, React.createElement("span", {
     className: "eyebrow"
   }, "About"), React.createElement("p", {
-    className: "body-sm"
-  }, "Fuel Resilience AU is a public-interest dashboard. Not affiliated with any government department or industry body. Project code, prose and metadata are maintained here; upstream source data remains under the rights and terms listed in data/sources.yml.")), React.createElement("div", {
+    className: "site-footer__disclaimer"
+  }, React.createElement("strong", null, "Independent public-source prototype. Not an official government dashboard."), ' ', "Fuel Resilience AU is built from public data and is not affiliated with any government department or industry body. Project code, prose and metadata are maintained in this repository; upstream source data remains under the rights and terms listed in ", React.createElement("a", {
+    href: "../../data/sources.yml"
+  }, "data/sources.yml"), ".")), React.createElement("div", {
     className: "site-footer__col"
   }, React.createElement("span", {
     className: "eyebrow"
@@ -947,28 +1063,38 @@ function Footer({
   }, "Fuel strategy")), React.createElement("li", null, React.createElement("a", {
     href: "../qld-fuel-sovereignty-dashboard/index.html"
   }, "QLD fuel sovereignty")), React.createElement("li", null, React.createElement("a", {
-    href: "../resource-value-dashboard/index.html"
-  }, "Resource value")), React.createElement("li", null, React.createElement("a", {
+    href: "../fuel-dashboard/index.html"
+  }, "Fuel")), React.createElement("li", null, React.createElement("a", {
+    href: "../oil-and-production/index.html"
+  }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
+    href: "../power-grid-dashboard/index.html"
+  }, "Power grid")), React.createElement("li", null, React.createElement("a", {
+    href: "../fertilizer-dashboard/index.html"
+  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
+    href: "../who-pays-what/index.html"
+  }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
+    href: "../au-economics-dashboard/index.html"
+  }, "AU economics")), React.createElement("li", null, React.createElement("a", {
+    href: "../housing-economic-pressure-dashboard/index.html"
+  }, "Housing pressure")), React.createElement("li", null, React.createElement("a", {
     href: "../state-contribution-dashboard/index.html"
   }, "State ledger")), React.createElement("li", null, React.createElement("a", {
+    href: "../resource-value-dashboard/index.html"
+  }, "Resource value")), React.createElement("li", null, React.createElement("a", {
     href: "../strategic-resources-dashboard/index.html"
   }, "Strategic resources")), React.createElement("li", null, React.createElement("a", {
     href: "../defence-alliances-dashboard/index.html"
   }, "Defence posture")), React.createElement("li", null, React.createElement("a", {
     href: "../defence-procurement-watch/index.html"
   }, "Defence procurement")), React.createElement("li", null, React.createElement("a", {
-    href: "../fuel-dashboard/index.html"
-  }, "Fuel")), React.createElement("li", null, React.createElement("a", {
-    href: "../fertilizer-dashboard/index.html"
-  }, "Food & farms")), React.createElement("li", null, React.createElement("a", {
-    href: "../oil-and-production/index.html"
-  }, "Oil & production")), React.createElement("li", null, React.createElement("a", {
-    href: "../who-pays-what/index.html"
-  }, "Who pays what")), React.createElement("li", null, React.createElement("a", {
-    href: "../housing-economic-pressure-dashboard/index.html"
-  }, "Housing pressure")), React.createElement("li", null, React.createElement("a", {
+    href: "../infrastructure-dashboard/index.html"
+  }, "Infrastructure")), React.createElement("li", null, React.createElement("a", {
+    href: "../manufacturing-dashboard/index.html"
+  }, "Manufacturing")), React.createElement("li", null, React.createElement("a", {
     href: "../brisbane-2032-readiness-dashboard/index.html"
   }, "Brisbane 2032 readiness")), React.createElement("li", null, React.createElement("a", {
+    href: "../employment-automation-dashboard/index.html"
+  }, "Employment & automation")), React.createElement("li", null, React.createElement("a", {
     href: "../missing-data-scoreboard/index.html"
   }, "Missing data scoreboard")))), React.createElement("div", {
     className: "site-footer__col"
@@ -1359,7 +1485,7 @@ function App() {
   }, "This matrix groups high-value missing, stale and partial feeds by decision need. Priority bands are editorial/product triage only, not official risk ratings or numeric scores."))), React.createElement("div", {
     className: "data-table-wrap"
   }, React.createElement("table", {
-    className: "data-table data-table--plain priority-matrix"
+    className: "data-table data-table--plain data-table--sticky priority-matrix"
   }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Priority band"), React.createElement("th", null, "Data gap"), React.createElement("th", null, "Status"), React.createElement("th", null, "Affected users"), React.createElement("th", null, "Likely holder / publisher"), React.createElement("th", null, "Decision supported"), React.createElement("th", null, "Current blocker"), React.createElement("th", null, "Next action"), React.createElement("th", null, "Dashboard page"))), React.createElement("tbody", null, PRIORITY_MATRIX_ROWS.map(row => React.createElement("tr", {
     key: `${row.band}-${row.gap}`
   }, React.createElement("td", null, React.createElement(PriorityBand, {

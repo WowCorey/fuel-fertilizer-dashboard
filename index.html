@@ -573,141 +573,192 @@
           <span class="eyebrow">Dashboards</span>
           <h2 id="dashboards-title">Choose a dashboard</h2>
           <p class="section__lede">
-            Programmatic envelopes now cover ABS trade, APS petroleum statistics, AIP terminal
-            gate prices, RBA AUD/USD, EIA/FRED benchmarks and public-feed retail fuel by product. The national
-            status, national fuel-security and resource-value pages add manually verified public policy and supply snapshots.
-            Strategic resources adds official mineral production, export and footprint context without underground-wealth estimates;
-            defence posture adds public budget, capability, alliance and industry context without readiness claims.
+            Pages are grouped by what they cover. Programmatic envelopes (ABS, RBA, AEMO, APS, EIA/FRED)
+            sit beside hand-keyed public sources; missing feeds stay visible rather than being filled
+            with estimates.
           </p>
         </div>
       </div>
-      <div class="home-grid">
-        <article class="home-card">
-          <h3>National status</h3>
-          <p>Public fuel-security level, MSO reserves, incoming tankers and retail stock-outs.</p>
-          <a class="home-card__link" href="ui_kits/national-status-dashboard/index.html">Open national status</a>
-          <div class="home-card__status">Status: PM&C/DCCEEW public supply snapshot hand-keyed; direct programmatic fetch is deferred until a stable machine-readable endpoint is available.</div>
-        </article>
-        <article class="home-card">
-          <h3>National fuel security</h3>
-          <p>Public-source view of Australia's fuel cover, reserves, stocks, imports, inbound supply visibility, Queensland fuel-sovereignty gaps, retail pressure, outages and missing government/industry feeds.</p>
-          <a class="home-card__link" href="ui_kits/fuel-security-dashboard/index.html">Open national fuel security</a>
-          <div class="home-card__status">Status: PM&C/DCCEEW product days and stocks, APS context and aggregate import/tanker snapshots are labelled observed, derived, manual, partial or unavailable. Includes Queensland fuel-sovereignty, forward-contract, farmer-planning and small-business visibility gaps; no live station feed, vessel feed, terminal-capacity feed or national risk score is published yet.</div>
-        </article>
-        <article class="home-card">
-          <h3>Fuel strategy</h3>
-          <p>Tracks official fuel-security policy, MSO/reserve indicators, product-level days-cover and the missing public feeds needed for a real national fuel-security dashboard.</p>
-          <a class="home-card__link" href="ui_kits/australian-fuel-strategy-dashboard/index.html">Open fuel strategy tracker</a>
-          <div class="home-card__status">Status: reuses existing PM&C/DCCEEW fuel-security envelopes. Latest strategy, emergency response settings, terminal/storage visibility and forward contract coverage remain source-gated; no policy fact or reserve value is invented.</div>
-        </article>
-        <article class="home-card">
-          <h3>QLD fuel sovereignty</h3>
-          <p>Tracks Queensland's six-port AFIP pathway, state-owned land audit, storage/refining delivery gaps, Taroom Trough context, EOI transparency and approval blockers.</p>
-          <a class="home-card__link" href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">Open Queensland fuel sovereignty</a>
-          <div class="home-card__status">Status: official six-port, AFIP/EOI, state-owned land audit and Taroom pathway context is source-linked; bid counts, contracts, land parcels, project approvals, proponent names and capacity remain unavailable/source-gated.</div>
-        </article>
-        <article class="home-card">
-          <h3>Resource value</h3>
-          <p>Tax, royalty, PRRT, export-value and Norway comparison sources.</p>
-          <a class="home-card__link" href="ui_kits/resource-value-dashboard/index.html">Open resource value</a>
-          <div class="home-card__status">Status: official receipts, export values, production tables, destination rows and domestic-vs-netback context are loaded; leakage estimates stay unavailable until the method is defensible.</div>
-        </article>
-        <article class="home-card">
-          <h3>State petroleum ledger</h3>
-          <p>State and territory petroleum production roles, defined object counts, infrastructure context, royalty receipts and source gates.</p>
-          <a class="home-card__link" href="ui_kits/state-contribution-dashboard/index.html">Open state ledger</a>
-          <div class="home-card__status">Status: AES state production rows, NOPTA title/well-layer counts, NOPTA active production-licence field/operator rows, REMP oil/gas major-project rows, QLD/VIC refinery counts and state receipt context are loaded; Commonwealth tax attribution by state remains unavailable.</div>
-        </article>
-        <article class="home-card">
-          <h3>Strategic resources</h3>
-          <p>Critical minerals and strategic resources: production, exports, reserves/resources, state footprint and strategic role.</p>
-          <a class="home-card__link" href="ui_kits/strategic-resources-dashboard/index.html">Open strategic resources</a>
-          <div class="home-card__status">Status: DISR REQ export rows, GA AIMR 2025 production/reserve rows and GA/Digital Atlas operating-mines footprint rows are loaded; rare-earth individual export value and sulphur stay unavailable.</div>
-        </article>
-        <article class="home-card">
-          <h3>Defence posture</h3>
-          <p>Defence spending, selected public ADF capability rows, alliances, strategic frameworks and sovereign-industry context.</p>
-          <a class="home-card__link" href="ui_kits/defence-alliances-dashboard/index.html">Open defence posture</a>
-          <div class="home-card__status">Status: 2026 NDS budget rows, Defence annual-report workforce rows, selected public capability rows and alliance/framework profiles are loaded; readiness, live availability, stockpile depth, classified posture and GDP-share fields stay unavailable.</div>
-        </article>
-        <article class="home-card">
-          <h3>Defence procurement</h3>
-          <p>Tracks public-source procurement pathways, contract and delivery gaps, industry-content questions, logistics implications and defence/public data boundaries.</p>
-          <a class="home-card__link" href="ui_kits/defence-procurement-watch/index.html">Open defence procurement watch</a>
-          <div class="home-card__status">Status: source-gated accountability tracker. No supplier, vessel class, contract value, delivery timeline, industry-content claim, logistics metric or operational posture is asserted without official source material.</div>
-        </article>
-        <article class="home-card">
-          <h3>Fuel</h3>
-          <p>Imports, pump prices and days of net import cover.</p>
-          <a class="home-card__link" href="ui_kits/fuel-dashboard/index.html">Open fuel dashboard</a>
-          <div class="home-card__status">Status: ABS imports, APS cover, AIP TGP and ULP 91, diesel, premium 95 and E10 public-feed retail averages live; AIP national retail reports remain manual.</div>
-        </article>
-        <article class="home-card">
-          <h3>Food, farms &amp; water security</h3>
-          <p>Public-source view of food-system signals: fertiliser imports, farm-input exposure, agricultural production and trade source gates, water pressure and missing public feeds.</p>
-          <a class="home-card__link" href="ui_kits/fertilizer-dashboard/index.html">Open food and farms dashboard</a>
-          <div class="home-card__status">Status: ABS total fertiliser imports and source-country concentration are loaded; food imports, agricultural production/export rows, nutrient subseries, ABARES price/stock-cover and water-pressure datasets remain unavailable until source-safe values are wired.</div>
-        </article>
-        <article class="home-card">
-          <h3>Oil &amp; production</h3>
-          <p>Crude benchmarks, domestic production and fuel-security disclosures.</p>
-          <a class="home-card__link" href="ui_kits/oil-and-production/index.html">Open oil dashboard</a>
-          <div class="home-card__status">Status: Brent, WTI, RBA AUD/USD, EIA refined fuels, APS production and APS product-flow series live; DCCEEW FSSP/offshore disclosures hand-keyed; Tapis and refinery utilisation remain pending.</div>
-        </article>
-        <article class="home-card">
-          <h3>Who pays what</h3>
-          <p>Company tax table and ACCC retail-price breakdown slots.</p>
-          <a class="home-card__link" href="ui_kits/who-pays-what/index.html">Open tax and price dashboard</a>
-          <div class="home-card__status">Status: ATO corporate tax fields, five company profit rows and ACCC December quarter 2025 petrol components hand-keyed; remaining private Australian subsidiary profit stays unavailable until source filings are verified.</div>
-        </article>
-        <article class="home-card">
-          <h3>AU economics</h3>
-          <p>RBA cash rate, household and government debt, mortgages, unemployment and inflation.</p>
-          <a class="home-card__link" href="ui_kits/au-economics-dashboard/index.html">Open economics dashboard</a>
-          <div class="home-card__status">Status: latest RBA cash-rate target, monthly cash-rate history, household debt, mortgage rate, credit-card balances, GDP, unemployment and CPI load from verified RBA/ABS sources. AOFM AGS face value and state debt are hand-keyed from official sources; no state-debt aggregate is published.</div>
-        </article>
-        <article class="home-card">
-          <h3>Housing pressure</h3>
-          <p>Latest RBA cash-rate signal, household debt, mortgage-rate context, inflation, unemployment, dwelling stock and source-gated housing pressure gaps.</p>
-          <a class="home-card__link" href="ui_kits/housing-economic-pressure-dashboard/index.html">Open housing pressure dashboard</a>
-          <div class="home-card__status">Status: reuses existing RBA, ABS and NHSAC envelopes. Mortgage repayments, rental stress, investor ownership, first-home buyer indicators and negative-gearing effects remain source-gated; no housing stress model is invented.</div>
-        </article>
-        <article class="home-card">
-          <h3>Manufacturing</h3>
-          <p>What Australia makes — share of GDP, employment, sales, exports and capex by industry division.</p>
-          <a class="home-card__link" href="ui_kits/manufacturing-dashboard/index.html">Open manufacturing dashboard</a>
-          <div class="home-card__status">Status: ABS employment, manufacturing sales, manufactured exports, capex and food/beverage employment rows are loaded from verified ABS releases; manufacturing GDP share and the Department of Industry profile remain unavailable until exact source-safe mappings are verified.</div>
-        </article>
-        <article class="home-card">
-          <h3>Power grid</h3>
-          <p>NEM wholesale price and demand by state, fuel mix, capacity register, coal retirement timeline and emissions.</p>
-          <a class="home-card__link" href="ui_kits/power-grid-dashboard/index.html">Open power grid dashboard</a>
-          <div class="home-card__status">Status: AEMO NEM regional price and total demand are fetched programmatically across NSW, VIC, QLD, SA and TAS; fuel mix, generation register, coal retirement schedule, RET progress, electricity emissions, ISP forecast and WEM summary are hand-keyed from named official publications.</div>
-        </article>
-        <article class="home-card">
-          <h3>Infrastructure</h3>
-          <p>Population vs housing, public transport, airports, freight, NBN speeds and the major-project pipeline.</p>
-          <a class="home-card__link" href="ui_kits/infrastructure-dashboard/index.html">Open infrastructure dashboard</a>
-          <div class="home-card__status">Status: ABS quarterly population, year-on-year growth and residential dwelling stock are fetched programmatically; NHSAC housing target, BITRE public transport / airports / freight and ACCC NBN speeds are hand-keyed from named official sources. Infrastructure Australia count/cost and Australian data-centre capacity remain unavailable.</div>
-        </article>
-        <article class="home-card">
-          <h3>Brisbane 2032 readiness</h3>
-          <p>Tracks source-gated Olympic readiness gaps across infrastructure, venues, transport, accommodation, tourism, power, fuel, supply chains and emergency logistics.</p>
-          <a class="home-card__link" href="ui_kits/brisbane-2032-readiness-dashboard/index.html">Open Brisbane 2032 readiness</a>
-          <div class="home-card__status">Status: source-gated readiness tracker. Existing BITRE, AEMO, fuel and housing envelopes are context only; no venue status, project delivery status, costs, transport capacity, accommodation pressure, power reliability, tourism pressure, public-safety readiness or emergency-logistics capacity is invented.</div>
-        </article>
-        <article class="home-card">
-          <h3>Employment &amp; Automation</h3>
-          <p>Australian labour-market change since the AI rollout era - unemployment, participation, employment-to-population, job vacancies and wages, with an explicit "no AI causation" rule.</p>
-          <a class="home-card__link" href="ui_kits/employment-automation-dashboard/index.html">Open employment dashboard</a>
-          <div class="home-card__status">Status: ABS unemployment, participation, employment-to-population, job vacancies and Wage Price Index wired programmatically from the ABS Data API; underemployment rate and monthly hours worked stay on manual until verified key combinations or hand-keyed workbook values are loaded. AI rollout timeline is context-only with named publisher events; Australian automation/AI exposure stays intentionally unavailable - no source-safe Australian dataset has been identified, and the page does not assert AI causation.</div>
-        </article>
-        <article class="home-card">
-          <h3>Missing data scoreboard</h3>
-          <p>Public-policy view of verified, partial, stale, unavailable, source-gated and roadmap-only dashboard gaps.</p>
-          <a class="home-card__link" href="ui_kits/missing-data-scoreboard/index.html">Open missing data scoreboard</a>
-          <div class="home-card__status">Status: no new values; maps missing feeds, likely data holders, next source actions and affected dashboard pages.</div>
-        </article>
+
+      <div class="rail" aria-labelledby="rail-fuel-title">
+        <div class="rail__head">
+          <h2 id="rail-fuel-title">Fuel &amp; energy</h2>
+          <p>Fuel cover, strategy, retail prices, oil and grid power.</p>
+        </div>
+        <div class="home-grid">
+          <article class="home-card">
+            <h3>National status</h3>
+            <p>Public fuel-security level, MSO reserves, incoming tankers and retail stock-outs.</p>
+            <a class="home-card__link" href="ui_kits/national-status-dashboard/index.html">Open national status</a>
+            <div class="home-card__status">Status: PM&C/DCCEEW public supply snapshot hand-keyed; direct programmatic fetch is deferred until a stable machine-readable endpoint is available.</div>
+          </article>
+          <article class="home-card">
+            <h3>National fuel security</h3>
+            <p>Public-source view of Australia's fuel cover, reserves, stocks, imports, inbound supply visibility, Queensland fuel-sovereignty gaps, retail pressure, outages and missing government/industry feeds.</p>
+            <a class="home-card__link" href="ui_kits/fuel-security-dashboard/index.html">Open national fuel security</a>
+            <div class="home-card__status">Status: PM&C/DCCEEW product days and stocks, APS context and aggregate import/tanker snapshots are labelled observed, derived, manual, partial or unavailable.</div>
+          </article>
+          <article class="home-card">
+            <h3>Fuel strategy</h3>
+            <p>Tracks official fuel-security policy, MSO/reserve indicators, product-level days-cover and missing public feeds.</p>
+            <a class="home-card__link" href="ui_kits/australian-fuel-strategy-dashboard/index.html">Open fuel strategy tracker</a>
+            <div class="home-card__status">Status: reuses existing PM&C/DCCEEW fuel-security envelopes. Latest strategy, emergency response settings, terminal/storage visibility and forward contract coverage remain source-gated.</div>
+          </article>
+          <article class="home-card">
+            <h3>QLD fuel sovereignty</h3>
+            <p>Tracks Queensland's six-port AFIP pathway, state-owned land audit, storage/refining delivery gaps, Taroom Trough context, EOI transparency and approval blockers.</p>
+            <a class="home-card__link" href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">Open Queensland fuel sovereignty</a>
+            <div class="home-card__status">Status: official six-port, AFIP/EOI, state-owned land audit and Taroom pathway context is source-linked; bid counts, contracts, land parcels, project approvals and capacity remain unavailable.</div>
+          </article>
+          <article class="home-card">
+            <h3>Fuel</h3>
+            <p>Imports, pump prices and days of net import cover.</p>
+            <a class="home-card__link" href="ui_kits/fuel-dashboard/index.html">Open fuel dashboard</a>
+            <div class="home-card__status">Status: ABS imports, APS cover, AIP TGP and ULP 91, diesel, premium 95 and E10 public-feed retail averages live; AIP national retail reports remain manual.</div>
+          </article>
+          <article class="home-card">
+            <h3>Oil &amp; production</h3>
+            <p>Crude benchmarks, domestic production and fuel-security disclosures.</p>
+            <a class="home-card__link" href="ui_kits/oil-and-production/index.html">Open oil dashboard</a>
+            <div class="home-card__status">Status: Brent, WTI, RBA AUD/USD, EIA refined fuels, APS production and APS product-flow series live; DCCEEW FSSP/offshore disclosures hand-keyed; Tapis and refinery utilisation remain pending.</div>
+          </article>
+          <article class="home-card">
+            <h3>Power grid</h3>
+            <p>NEM wholesale price and demand by state, fuel mix, capacity register, coal retirement timeline and emissions.</p>
+            <a class="home-card__link" href="ui_kits/power-grid-dashboard/index.html">Open power grid dashboard</a>
+            <div class="home-card__status">Status: AEMO NEM regional price and total demand are fetched programmatically across NSW, VIC, QLD, SA and TAS; fuel mix, generation register, coal retirement, RET progress, electricity emissions, ISP forecast and WEM summary are hand-keyed.</div>
+          </article>
+        </div>
+      </div>
+
+      <div class="rail" aria-labelledby="rail-food-title">
+        <div class="rail__head">
+          <h2 id="rail-food-title">Food &amp; farms</h2>
+          <p>Fertiliser, food, water and farm-input pressure.</p>
+        </div>
+        <div class="home-grid">
+          <article class="home-card">
+            <h3>Food, farms &amp; water security</h3>
+            <p>Public-source view of food-system signals: fertiliser imports, farm-input exposure, agricultural production and trade source gates, water pressure and missing public feeds.</p>
+            <a class="home-card__link" href="ui_kits/fertilizer-dashboard/index.html">Open food and farms dashboard</a>
+            <div class="home-card__status">Status: ABS total fertiliser imports and source-country concentration are loaded; food imports, agricultural production/export rows, nutrient subseries, ABARES price/stock-cover and water-pressure datasets remain unavailable.</div>
+          </article>
+        </div>
+      </div>
+
+      <div class="rail" aria-labelledby="rail-economy-title">
+        <div class="rail__head">
+          <h2 id="rail-economy-title">Economy &amp; households</h2>
+          <p>Tax, debt, interest rates, housing pressure and resource receipts.</p>
+        </div>
+        <div class="home-grid">
+          <article class="home-card">
+            <h3>Who pays what</h3>
+            <p>Company tax table and ACCC retail-price breakdown slots.</p>
+            <a class="home-card__link" href="ui_kits/who-pays-what/index.html">Open tax and price dashboard</a>
+            <div class="home-card__status">Status: ATO corporate tax fields, five company profit rows and ACCC December quarter 2025 petrol components hand-keyed; remaining private Australian subsidiary profit stays unavailable.</div>
+          </article>
+          <article class="home-card">
+            <h3>AU economics</h3>
+            <p>RBA cash rate, household and government debt, mortgages, unemployment and inflation.</p>
+            <a class="home-card__link" href="ui_kits/au-economics-dashboard/index.html">Open economics dashboard</a>
+            <div class="home-card__status">Status: latest RBA cash-rate target, monthly cash-rate history, household debt, mortgage rate, credit-card balances, GDP, unemployment and CPI load from verified RBA/ABS sources. AOFM AGS face value and state debt are hand-keyed from official sources; no state-debt aggregate is published.</div>
+          </article>
+          <article class="home-card">
+            <h3>Housing pressure</h3>
+            <p>Latest RBA cash-rate signal, household debt, mortgage-rate context, inflation, unemployment, dwelling stock and source-gated housing pressure gaps.</p>
+            <a class="home-card__link" href="ui_kits/housing-economic-pressure-dashboard/index.html">Open housing pressure dashboard</a>
+            <div class="home-card__status">Status: reuses existing RBA, ABS and NHSAC envelopes. Mortgage repayments, rental stress, investor ownership, first-home buyer indicators and negative-gearing effects remain source-gated.</div>
+          </article>
+          <article class="home-card">
+            <h3>State petroleum ledger</h3>
+            <p>State and territory petroleum production roles, defined object counts, infrastructure context and royalty receipts.</p>
+            <a class="home-card__link" href="ui_kits/state-contribution-dashboard/index.html">Open state ledger</a>
+            <div class="home-card__status">Status: AES state production rows, NOPTA title/well counts, REMP oil/gas major-project rows, QLD/VIC refinery counts and state receipt context are loaded; Commonwealth tax attribution by state remains unavailable.</div>
+          </article>
+          <article class="home-card">
+            <h3>Resource value</h3>
+            <p>Tax, royalty, PRRT, export-value and Norway comparison sources.</p>
+            <a class="home-card__link" href="ui_kits/resource-value-dashboard/index.html">Open resource value</a>
+            <div class="home-card__status">Status: official receipts, export values, production tables, destination rows and domestic-vs-netback context are loaded; leakage estimates stay unavailable until the method is defensible.</div>
+          </article>
+        </div>
+      </div>
+
+      <div class="rail" aria-labelledby="rail-defence-title">
+        <div class="rail__head">
+          <h2 id="rail-defence-title">Defence &amp; strategic</h2>
+          <p>Defence posture, procurement and critical minerals.</p>
+        </div>
+        <div class="home-grid">
+          <article class="home-card">
+            <h3>Defence posture</h3>
+            <p>Defence spending, selected public ADF capability rows, alliances, strategic frameworks and sovereign-industry context.</p>
+            <a class="home-card__link" href="ui_kits/defence-alliances-dashboard/index.html">Open defence posture</a>
+            <div class="home-card__status">Status: 2026 NDS budget rows, Defence annual-report workforce rows, selected public capability rows and alliance/framework profiles are loaded; readiness, live availability, stockpile depth and classified posture stay unavailable.</div>
+          </article>
+          <article class="home-card">
+            <h3>Defence procurement</h3>
+            <p>Tracks public-source procurement pathways, contract and delivery gaps, industry-content questions and logistics implications.</p>
+            <a class="home-card__link" href="ui_kits/defence-procurement-watch/index.html">Open defence procurement watch</a>
+            <div class="home-card__status">Status: source-gated accountability tracker. No supplier, vessel class, contract value, delivery timeline, industry-content claim, logistics metric or operational posture is asserted without official source material.</div>
+          </article>
+          <article class="home-card">
+            <h3>Strategic resources</h3>
+            <p>Critical minerals: production, exports, reserves/resources, state footprint and strategic role.</p>
+            <a class="home-card__link" href="ui_kits/strategic-resources-dashboard/index.html">Open strategic resources</a>
+            <div class="home-card__status">Status: DISR REQ export rows, GA AIMR 2025 production/reserve rows and GA/Digital Atlas operating-mines footprint rows are loaded; rare-earth individual export value and sulphur stay unavailable.</div>
+          </article>
+        </div>
+      </div>
+
+      <div class="rail" aria-labelledby="rail-infra-title">
+        <div class="rail__head">
+          <h2 id="rail-infra-title">Infrastructure &amp; systems</h2>
+          <p>Manufacturing, transport, housing supply and Olympics readiness.</p>
+        </div>
+        <div class="home-grid">
+          <article class="home-card">
+            <h3>Manufacturing</h3>
+            <p>What Australia makes — share of GDP, employment, sales, exports and capex by industry division.</p>
+            <a class="home-card__link" href="ui_kits/manufacturing-dashboard/index.html">Open manufacturing dashboard</a>
+            <div class="home-card__status">Status: ABS employment, manufacturing sales, manufactured exports, capex and food/beverage employment rows are loaded from verified ABS releases; manufacturing GDP share and Department of Industry profile remain unavailable.</div>
+          </article>
+          <article class="home-card">
+            <h3>Infrastructure</h3>
+            <p>Population vs housing, public transport, airports, freight, NBN speeds and the major-project pipeline.</p>
+            <a class="home-card__link" href="ui_kits/infrastructure-dashboard/index.html">Open infrastructure dashboard</a>
+            <div class="home-card__status">Status: ABS quarterly population, year-on-year growth and residential dwelling stock are fetched programmatically; NHSAC housing target, BITRE public transport / airports / freight and ACCC NBN speeds are hand-keyed.</div>
+          </article>
+          <article class="home-card">
+            <h3>Brisbane 2032 readiness</h3>
+            <p>Tracks source-gated Olympic readiness gaps across infrastructure, venues, transport, accommodation, tourism, power, fuel, supply chains and emergency logistics.</p>
+            <a class="home-card__link" href="ui_kits/brisbane-2032-readiness-dashboard/index.html">Open Brisbane 2032 readiness</a>
+            <div class="home-card__status">Status: source-gated readiness tracker. Existing BITRE, AEMO, fuel and housing envelopes are context only; no venue status, project delivery status, costs or capacity is invented.</div>
+          </article>
+        </div>
+      </div>
+
+      <div class="rail" aria-labelledby="rail-workforce-title">
+        <div class="rail__head">
+          <h2 id="rail-workforce-title">Workforce &amp; data</h2>
+          <p>Labour market and the publishing-gap scoreboard.</p>
+        </div>
+        <div class="home-grid">
+          <article class="home-card">
+            <h3>Employment &amp; automation</h3>
+            <p>Australian labour-market change since the AI rollout era — unemployment, participation, employment-to-population, job vacancies and wages, with an explicit "no AI causation" rule.</p>
+            <a class="home-card__link" href="ui_kits/employment-automation-dashboard/index.html">Open employment dashboard</a>
+            <div class="home-card__status">Status: ABS unemployment, participation, employment-to-population, job vacancies and Wage Price Index wired programmatically; Australian automation/AI exposure stays intentionally unavailable; the page does not assert AI causation.</div>
+          </article>
+          <article class="home-card missing-data-card">
+            <span class="missing-data-card__what">Missing data</span>
+            <h3>Missing data scoreboard</h3>
+            <p>Public-policy view of verified, partial, stale, unavailable, source-gated and roadmap-only dashboard gaps.</p>
+            <a class="home-card__link" href="ui_kits/missing-data-scoreboard/index.html">Open missing data scoreboard</a>
+            <div class="home-card__status">Status: maps missing feeds, likely data holders, next source actions and affected dashboard pages.</div>
+          </article>
+        </div>
       </div>
     </section>
 
