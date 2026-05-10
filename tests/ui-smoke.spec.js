@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const routes = [
-  { path: '/', heading: 'Australian resilience dashboard prototype' },
+  { path: '/', heading: /Tracking what Australia.{1,5}s resilience data shows/ },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What a transparent Australian fuel dashboard should show.' },
   { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: 'Australian fuel strategy tracker' },
@@ -52,26 +52,29 @@ for (const route of routes) {
 
 test('homepage presents the national summary and status legend', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Australian resilience dashboard prototype' })).toBeVisible();
-  await expect(page.getByText('A public-source dashboard showing what can be verified')).toBeVisible();
-  const heroLinks = page.getByLabel('Best first dashboard links');
+  await expect(page.getByRole('heading', { name: /Tracking what Australia.{1,5}s resilience data shows/ })).toBeVisible();
+  await expect(page.getByText('A public-interest dashboard that separates verified public data from missing, stale, partial and source-gated feeds')).toBeVisible();
+  const heroLinks = page.getByLabel('Hero actions');
+  await expect(heroLinks.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
   await expect(heroLinks.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View Fuel Strategy' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View QLD Fuel Delivery' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View Missing Data Scoreboard' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View National Readiness Matrix' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View Food, Farms & Water' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View Housing Pressure' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View Brisbane 2032' })).toBeVisible();
-  await expect(heroLinks.getByRole('link', { name: 'View AU Economics' })).toBeVisible();
+  await expect(heroLinks.getByRole('link')).toHaveCount(2);
+  await expect(page.getByRole('heading', { name: 'Status labels are part of the evidence' })).toBeVisible();
+  await expect(page.getByText('Unavailable and source-gated data is not a dashboard failure.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Where to start' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For the fuel dashboard request' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For fuel strategy and reserves' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For Queensland fuel delivery' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Defence procurement' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For Defence procurement' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For what still needs publishing' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For housing pressure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'For Brisbane 2032 readiness' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View Fuel Strategy' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View QLD Fuel Delivery' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View National Readiness Matrix' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View Food, Farms & Water' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View Housing Pressure' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View Brisbane 2032' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View AU Economics' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'A 30-second view of national resilience signals' })).toBeVisible();
   await expect(page.getByText('This site is an independent public-source prototype, not an official government dashboard.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel security' }).first()).toBeVisible();
@@ -80,8 +83,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Power, manufacturing and infrastructure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Defence and strategic resources' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'AI, workforce and future pressure' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Status labels are part of the evidence' })).toBeVisible();
-  await expect(page.getByText('Unavailable and source-gated data is not a dashboard failure.')).toBeVisible();
+  await expect(page.getByText('Last updated: source metadata pending').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Who is this for?' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Travellers and tourism operators' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Farmers' })).toBeVisible();
@@ -95,6 +97,40 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
+});
+
+test('homepage hero shows neutral deployment status line', async ({ page }) => {
+  await page.goto('/');
+  const status = page.locator('#refresh-badge');
+  await expect(status).toContainText('Last deployed:');
+  await expect(status).toContainText('Programmatic refresh: in rollout');
+  await expect(status).toContainText('Manual public-source snapshots are labelled where used');
+  await expect(status).not.toContainText('no successful refresh recorded');
+});
+
+test('homepage shows audit snapshot derived from source manifest', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'What public sources we track' })).toBeVisible();
+  await expect(page.locator('[data-band="verified"]')).not.toHaveText('—');
+  await expect(page.locator('[data-band="manual"]')).not.toHaveText('—');
+  await expect(page.locator('[data-band="derived"]')).not.toHaveText('—');
+  await expect(page.locator('[data-band="unavailable"]')).not.toHaveText('—');
+});
+
+test('homepage primary nav exposes category groups', async ({ page }) => {
+  await page.goto('/');
+  const nav = page.getByRole('navigation', { name: 'Primary' });
+  await expect(nav.getByRole('link', { name: 'Home', exact: true })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Missing Data Scoreboard', exact: true })).toBeVisible();
+  await expect(nav.getByRole('button', { name: /Fuel & Energy/ })).toBeVisible();
+  await expect(nav.getByRole('button', { name: /Food & Farms/ })).toBeVisible();
+  await expect(nav.getByRole('button', { name: /Economy & Households/ })).toBeVisible();
+  await expect(nav.getByRole('button', { name: /Defence & Strategic/ })).toBeVisible();
+  await expect(nav.getByRole('button', { name: /Infrastructure/ })).toBeVisible();
+  await expect(nav.getByRole('button', { name: /Workforce/ })).toBeVisible();
+  await nav.getByRole('button', { name: /Fuel & Energy/ }).click();
+  await expect(nav.getByRole('menuitem', { name: 'National fuel security' })).toBeVisible();
+  await expect(nav.getByRole('menuitem', { name: 'Power grid' })).toBeVisible();
 });
 
 test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {

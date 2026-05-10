@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fuel Resilience AU</title>
-<meta name="description" content="Independent Australian resilience dashboard prototype showing verified public data, visible gaps and missing government or industry feeds across fuel, food, water, infrastructure and economic pressure.">
+<title>Fuel Resilience AU — Australian resilience data audit</title>
+<meta name="description" content="A public-interest Australian resilience data audit that separates verified public data from missing, stale, partial and source-gated feeds across fuel, food, energy, infrastructure, defence and the economy.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="colors_and_type.css">
 <link rel="stylesheet" href="ui_kits/shared/styles.css">
@@ -13,16 +13,18 @@
   .home-hero {
     max-width: var(--max-content);
     margin: 0 auto;
-    padding: var(--s-9) var(--s-6) var(--s-7);
+    padding: var(--s-8) var(--s-6) var(--s-7);
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
     gap: var(--s-7);
-    align-items: end;
+    align-items: start;
     border-bottom: 1px solid var(--rule);
   }
   .home-hero h1 {
-    max-width: 18ch;
+    max-width: 24ch;
     margin-top: var(--s-3);
+    font-size: var(--fs-44);
+    line-height: 1.12;
   }
   .home-hero__lede {
     max-width: 64ch;
@@ -30,11 +32,6 @@
     color: var(--ink-2);
     font-size: var(--fs-18);
     line-height: 1.5;
-  }
-  .home-hero__art {
-    justify-self: end;
-    width: min(320px, 100%);
-    opacity: 0.82;
   }
   .hero-actions {
     display: flex;
@@ -45,7 +42,7 @@
   .hero-button {
     display: inline-flex;
     align-items: center;
-    min-height: 38px;
+    min-height: 40px;
     padding: 0 var(--s-4);
     border: 1px solid var(--rule);
     border-radius: var(--r-1);
@@ -66,6 +63,138 @@
     background: var(--accent);
     color: var(--paper);
     border-color: var(--accent);
+  }
+  .home-status {
+    margin-top: var(--s-5);
+    padding: 10px var(--s-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-1);
+    background: var(--paper-sunk);
+    color: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-13);
+    line-height: 1.5;
+    max-width: 72ch;
+  }
+  .home-status strong { color: var(--ink); font-weight: 600; }
+  .deploy-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: var(--s-3);
+  }
+  .deploy-badge img { display: block; max-height: 18px; }
+  .audit-preview {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-2);
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    align-self: start;
+  }
+  .audit-preview__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .audit-preview h2 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-20);
+    font-weight: 500;
+  }
+  .audit-bands {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+  }
+  .audit-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s-3);
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .audit-band:last-child { border-bottom: 0; }
+  .audit-band__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fs-13);
+    color: var(--ink-2);
+  }
+  .audit-band__count {
+    font-family: var(--font-serif);
+    font-size: var(--fs-24);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .audit-bar {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 4px;
+    background: var(--paper-sunk);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .audit-bar__fill {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    width: 0;
+    transition: width 0.3s var(--ease-out, ease-out);
+  }
+  .audit-band--verified .audit-bar__fill { background: var(--surplus); }
+  .audit-band--manual .audit-bar__fill { background: var(--ink-2); }
+  .audit-band--derived .audit-bar__fill { background: var(--accent); }
+  .audit-band--unavailable .audit-bar__fill { background: var(--caution); }
+  .audit-preview__note {
+    color: var(--ink-3);
+    font-size: var(--fs-12);
+    line-height: 1.45;
+    font-family: var(--font-mono);
+  }
+  .legend-band {
+    background: var(--paper-sunk);
+    border-bottom: 1px solid var(--rule);
+  }
+  .legend-band__inner {
+    max-width: var(--max-content);
+    margin: 0 auto;
+    padding: var(--s-5) var(--s-6);
+  }
+  .legend-band__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-bottom: var(--s-3);
+  }
+  .legend-band h2 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-24);
+    font-weight: 500;
+  }
+  .legend-band p { color: var(--ink-2); margin: 0; max-width: 70ch; }
+  .legend-band dl {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s-3) var(--s-4);
+    margin: var(--s-3) 0 0;
+  }
+  .legend-band dt { display: inline-flex; }
+  .legend-band dd {
+    margin: 4px 0 0;
+    color: var(--ink-2);
+    font-size: var(--fs-13);
+    line-height: 1.45;
   }
   .home-grid {
     display: grid;
@@ -91,15 +220,32 @@
     font-size: var(--fs-24);
     font-weight: 500;
   }
-  .summary-card dl { display: grid; gap: var(--s-3); margin: 0; }
-  .summary-card dt {
+  .summary-card__headline {
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.45;
+    margin: 0;
+  }
+  .summary-card__missing,
+  .summary-card__why {
+    color: var(--ink-2);
+    line-height: 1.45;
+    margin: 0;
+    font-size: var(--fs-14);
+  }
+  .summary-card__missing strong,
+  .summary-card__why strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .summary-card__updated {
+    margin-top: auto;
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--rule);
     color: var(--ink-3);
     font-family: var(--font-mono);
     font-size: var(--fs-12);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
-  .summary-card dd { margin: 2px 0 0; color: var(--ink-2); line-height: 1.45; }
   .first-clicks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -143,6 +289,7 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
+  .status-label[title] { cursor: help; }
   .status-label--verified { color: var(--surplus); background: var(--surplus-tint); border-color: transparent; }
   .status-label--partial,
   .status-label--derived { color: var(--accent); background: var(--accent-tint); border-color: transparent; }
@@ -151,20 +298,17 @@
   .status-label--unavailable,
   .status-label--source-gated,
   .status-label--roadmap { color: var(--ink-3); background: var(--paper-sunk); }
-  .legend-grid,
   .decision-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--s-4);
   }
-  .legend-card,
   .decision-card {
     background: var(--card);
     border: 1px solid var(--rule);
     border-radius: var(--r-2);
     padding: var(--s-4);
   }
-  .legend-card p,
   .decision-card p { color: var(--ink-2); margin-top: var(--s-2); }
   .home-card {
     background: var(--card);
@@ -184,9 +328,7 @@
     font-size: var(--fs-24);
     font-weight: 500;
   }
-  .home-card p {
-    color: var(--ink-2);
-  }
+  .home-card p { color: var(--ink-2); }
   .home-card__status {
     margin-top: auto;
     padding-top: var(--s-4);
@@ -198,37 +340,10 @@
     align-self: flex-start;
     font-weight: 600;
   }
-  .refresh-badge {
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
-    margin-top: var(--s-4);
-    padding: 6px 8px;
-    border: 1px solid var(--rule);
-    border-radius: var(--r-1);
-    color: var(--ink-3);
+  .rail__updated {
     font-family: var(--font-mono);
     font-size: var(--fs-12);
-  }
-  .home-badge-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-2);
-    align-items: center;
-    margin-top: var(--s-4);
-  }
-  .home-badge-row .refresh-badge {
-    margin-top: 0;
-  }
-  .deploy-badge {
-    display: inline-flex;
-    align-items: center;
-    min-height: 28px;
-    border: 0;
-  }
-  .deploy-badge img {
-    display: block;
-    max-height: 20px;
+    color: var(--ink-3);
   }
   .home-note {
     background: var(--paper-sunk);
@@ -243,10 +358,7 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--s-6);
   }
-  .home-note p {
-    color: var(--ink-2);
-    margin-top: var(--s-2);
-  }
+  .home-note p { color: var(--ink-2); margin-top: var(--s-2); }
   .home-footer {
     max-width: var(--max-content);
     margin: 0 auto;
@@ -265,32 +377,24 @@
     .home-grid { grid-template-columns: repeat(2, 1fr); }
     .summary-grid,
     .first-clicks-grid,
-    .legend-grid,
     .decision-grid { grid-template-columns: repeat(2, 1fr); }
+    .legend-band dl { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 760px) {
     .home-hero {
       grid-template-columns: 1fr;
       padding-top: var(--s-7);
     }
-    .home-hero__art {
-      justify-self: start;
-      width: min(220px, 70%);
-    }
     .home-grid,
     .summary-grid,
     .first-clicks-grid,
-    .legend-grid,
     .decision-grid,
     .home-note__inner {
       grid-template-columns: 1fr;
     }
-    .home-card {
-      min-height: auto;
-    }
-    .home-footer {
-      flex-direction: column;
-    }
+    .legend-band dl { grid-template-columns: 1fr; }
+    .home-card { min-height: auto; }
+    .home-footer { flex-direction: column; }
   }
 </style>
 </head>
@@ -302,63 +406,198 @@
       <a href="index.html" class="brand" aria-label="Fuel Resilience AU home">
         <span class="brand__name">Fuel Resilience AU</span>
       </a>
-      <nav class="site-nav" aria-label="Primary">
+      <nav id="primary-nav" class="site-nav site-nav--grouped" aria-label="Primary">
         <a class="active" aria-current="page" href="index.html">Home</a>
+        <div class="nav-group" data-group="fuel_energy">
+          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-fuel-energy">
+            Fuel &amp; Energy <span class="nav-group__caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="nav-panel-fuel-energy" class="nav-group__panel" role="menu" hidden>
+            <a role="menuitem" href="ui_kits/national-status-dashboard/index.html">National status</a>
+            <a role="menuitem" href="ui_kits/fuel-security-dashboard/index.html">National fuel security</a>
+            <a role="menuitem" href="ui_kits/australian-fuel-strategy-dashboard/index.html">Fuel strategy</a>
+            <a role="menuitem" href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">QLD fuel sovereignty</a>
+            <a role="menuitem" href="ui_kits/fuel-dashboard/index.html">Fuel</a>
+            <a role="menuitem" href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
+            <a role="menuitem" href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
+          </div>
+        </div>
+        <div class="nav-group" data-group="food_farms">
+          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-food-farms">
+            Food &amp; Farms <span class="nav-group__caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="nav-panel-food-farms" class="nav-group__panel" role="menu" hidden>
+            <a role="menuitem" href="ui_kits/fertilizer-dashboard/index.html">Food, farms &amp; water</a>
+          </div>
+        </div>
+        <div class="nav-group" data-group="economy">
+          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-economy">
+            Economy &amp; Households <span class="nav-group__caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="nav-panel-economy" class="nav-group__panel" role="menu" hidden>
+            <a role="menuitem" href="ui_kits/who-pays-what/index.html">Who pays what</a>
+            <a role="menuitem" href="ui_kits/au-economics-dashboard/index.html">AU economics</a>
+            <a role="menuitem" href="ui_kits/housing-economic-pressure-dashboard/index.html">Housing pressure</a>
+            <a role="menuitem" href="ui_kits/state-contribution-dashboard/index.html">State petroleum ledger</a>
+            <a role="menuitem" href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
+          </div>
+        </div>
+        <div class="nav-group" data-group="defence">
+          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-defence">
+            Defence &amp; Strategic <span class="nav-group__caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="nav-panel-defence" class="nav-group__panel" role="menu" hidden>
+            <a role="menuitem" href="ui_kits/defence-alliances-dashboard/index.html">Defence posture</a>
+            <a role="menuitem" href="ui_kits/defence-procurement-watch/index.html">Defence procurement</a>
+            <a role="menuitem" href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
+          </div>
+        </div>
+        <div class="nav-group" data-group="infrastructure">
+          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-infrastructure">
+            Infrastructure <span class="nav-group__caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="nav-panel-infrastructure" class="nav-group__panel" role="menu" hidden>
+            <a role="menuitem" href="ui_kits/infrastructure-dashboard/index.html">Infrastructure</a>
+            <a role="menuitem" href="ui_kits/manufacturing-dashboard/index.html">Manufacturing</a>
+            <a role="menuitem" href="ui_kits/brisbane-2032-readiness-dashboard/index.html">Brisbane 2032 readiness</a>
+          </div>
+        </div>
+        <div class="nav-group" data-group="workforce">
+          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-workforce">
+            Workforce <span class="nav-group__caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="nav-panel-workforce" class="nav-group__panel" role="menu" hidden>
+            <a role="menuitem" href="ui_kits/employment-automation-dashboard/index.html">Employment &amp; automation</a>
+          </div>
+        </div>
+        <a class="nav-scoreboard" href="ui_kits/missing-data-scoreboard/index.html">Missing Data Scoreboard</a>
+      </nav>
+      <button type="button" class="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-nav-sheet">Menu</button>
+    </div>
+  </header>
+  <div id="primary-nav-sheet" class="nav-sheet" data-open="false" aria-hidden="true">
+    <div class="nav-sheet__panel" role="dialog" aria-label="Site navigation">
+      <div class="nav-sheet__head">
+        <span class="brand__name">Fuel Resilience AU</span>
+        <button type="button" class="nav-sheet__close" aria-label="Close navigation">×</button>
+      </div>
+      <div class="nav-sheet__group">
+        <a class="active" aria-current="page" href="index.html">Home</a>
+      </div>
+      <div class="nav-sheet__group">
+        <span class="eyebrow">Fuel &amp; Energy</span>
         <a href="ui_kits/national-status-dashboard/index.html">National status</a>
         <a href="ui_kits/fuel-security-dashboard/index.html">National fuel security</a>
         <a href="ui_kits/australian-fuel-strategy-dashboard/index.html">Fuel strategy</a>
-        <a href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">QLD fuel</a>
-        <a href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
-        <a href="ui_kits/state-contribution-dashboard/index.html">State ledger</a>
-        <a href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
-        <a href="ui_kits/defence-alliances-dashboard/index.html">Defence posture</a>
-        <a href="ui_kits/defence-procurement-watch/index.html">Defence procurement</a>
+        <a href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">QLD fuel sovereignty</a>
         <a href="ui_kits/fuel-dashboard/index.html">Fuel</a>
-        <a href="ui_kits/fertilizer-dashboard/index.html">Food &amp; farms</a>
         <a href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
+        <a href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
+      </div>
+      <div class="nav-sheet__group">
+        <span class="eyebrow">Food &amp; Farms</span>
+        <a href="ui_kits/fertilizer-dashboard/index.html">Food, farms &amp; water</a>
+      </div>
+      <div class="nav-sheet__group">
+        <span class="eyebrow">Economy &amp; Households</span>
         <a href="ui_kits/who-pays-what/index.html">Who pays what</a>
         <a href="ui_kits/au-economics-dashboard/index.html">AU economics</a>
         <a href="ui_kits/housing-economic-pressure-dashboard/index.html">Housing pressure</a>
-        <a href="ui_kits/manufacturing-dashboard/index.html">Manufacturing</a>
-        <a href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
+        <a href="ui_kits/state-contribution-dashboard/index.html">State petroleum ledger</a>
+        <a href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
+      </div>
+      <div class="nav-sheet__group">
+        <span class="eyebrow">Defence &amp; Strategic</span>
+        <a href="ui_kits/defence-alliances-dashboard/index.html">Defence posture</a>
+        <a href="ui_kits/defence-procurement-watch/index.html">Defence procurement</a>
+        <a href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
+      </div>
+      <div class="nav-sheet__group">
+        <span class="eyebrow">Infrastructure</span>
         <a href="ui_kits/infrastructure-dashboard/index.html">Infrastructure</a>
-        <a href="ui_kits/brisbane-2032-readiness-dashboard/index.html">2032 readiness</a>
-        <a href="ui_kits/employment-automation-dashboard/index.html">Employment</a>
-        <a href="ui_kits/missing-data-scoreboard/index.html">Missing data</a>
-      </nav>
+        <a href="ui_kits/manufacturing-dashboard/index.html">Manufacturing</a>
+        <a href="ui_kits/brisbane-2032-readiness-dashboard/index.html">Brisbane 2032 readiness</a>
+      </div>
+      <div class="nav-sheet__group">
+        <span class="eyebrow">Workforce</span>
+        <a href="ui_kits/employment-automation-dashboard/index.html">Employment &amp; automation</a>
+      </div>
+      <div class="nav-sheet__group">
+        <a href="ui_kits/missing-data-scoreboard/index.html"><strong>Missing Data Scoreboard</strong></a>
+      </div>
     </div>
-  </header>
+  </div>
 
   <main id="main">
     <section class="home-hero" aria-labelledby="home-title">
       <div>
-        <span class="eyebrow">Independent public-source prototype</span>
-        <h1 id="home-title">Australian resilience dashboard prototype</h1>
-          <p class="home-hero__lede">
-            A public-source dashboard showing what can be verified, what is missing, and what
-            government or industry would need to publish for real fuel, food, water, infrastructure
-            and economic certainty. It is not an official government dashboard and it does not fill
-            missing feeds with estimates.
+        <span class="eyebrow">Public-interest resilience data audit</span>
+        <h1 id="home-title">Tracking what Australia&rsquo;s resilience data shows &mdash; and what it still does not.</h1>
+        <p class="home-hero__lede">
+          A public-interest dashboard that separates verified public data from missing, stale, partial and source-gated feeds across fuel, food, energy, infrastructure, defence and the economy.
         </p>
-        <div class="hero-actions" aria-label="Best first dashboard links">
-          <a class="hero-button hero-button--primary" href="ui_kits/fuel-security-dashboard/index.html">Open National Fuel Security</a>
-          <a class="hero-button" href="ui_kits/australian-fuel-strategy-dashboard/index.html">View Fuel Strategy</a>
-          <a class="hero-button" href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">View QLD Fuel Delivery</a>
-          <a class="hero-button" href="ui_kits/missing-data-scoreboard/index.html">View Missing Data Scoreboard</a>
-          <a class="hero-button" href="ui_kits/missing-data-scoreboard/index.html#priority-h">View National Readiness Matrix</a>
-          <a class="hero-button" href="ui_kits/fertilizer-dashboard/index.html">View Food, Farms &amp; Water</a>
-          <a class="hero-button" href="ui_kits/housing-economic-pressure-dashboard/index.html">View Housing Pressure</a>
-          <a class="hero-button" href="ui_kits/brisbane-2032-readiness-dashboard/index.html">View Brisbane 2032</a>
-          <a class="hero-button" href="ui_kits/au-economics-dashboard/index.html">View AU Economics</a>
+        <div class="hero-actions" aria-label="Hero actions">
+          <a class="hero-button hero-button--primary" href="ui_kits/missing-data-scoreboard/index.html">Open Missing Data Scoreboard</a>
+          <a class="hero-button" href="ui_kits/fuel-security-dashboard/index.html">Open National Fuel Security</a>
         </div>
-        <div class="home-badge-row">
-          <span class="refresh-badge" id="refresh-badge">Programmatic refresh: no successful refresh recorded</span>
+        <p class="home-status" id="refresh-badge" aria-live="polite">
+          <strong>Last deployed:</strong> <span id="refresh-date">date pending</span>.
+          <strong>Programmatic refresh:</strong> in rollout.
+          Manual public-source snapshots are labelled where used.
           <a class="deploy-badge" href="https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml" aria-label="Open GitHub Pages deploy workflow status">
             <img src="https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml/badge.svg" alt="Deploy GitHub Pages workflow status">
           </a>
-        </div>
+        </p>
       </div>
-      <img class="home-hero__art" src="assets/au-outline.svg" alt="Outline map of Australia">
+      <aside class="audit-preview" aria-labelledby="audit-preview-title">
+        <span class="audit-preview__eyebrow">Audit snapshot</span>
+        <h2 id="audit-preview-title">What public sources we track</h2>
+        <ul class="audit-bands" id="audit-bands">
+          <li class="audit-band audit-band--verified">
+            <span class="audit-band__label"><span class="status-label status-label--verified" title="Source-backed and current enough for its cadence.">Verified</span> programmatic feeds</span>
+            <span class="audit-band__count" data-band="verified">—</span>
+            <span class="audit-bar"><span class="audit-bar__fill" data-band-fill="verified"></span></span>
+          </li>
+          <li class="audit-band audit-band--manual">
+            <span class="audit-band__label"><span class="status-label status-label--manual" title="Hand-keyed from a named public source.">Manual</span> public-source snapshots</span>
+            <span class="audit-band__count" data-band="manual">—</span>
+            <span class="audit-bar"><span class="audit-bar__fill" data-band-fill="manual"></span></span>
+          </li>
+          <li class="audit-band audit-band--derived">
+            <span class="audit-band__label"><span class="status-label status-label--derived" title="Calculated or selected from a named source envelope.">Derived</span> from named envelopes</span>
+            <span class="audit-band__count" data-band="derived">—</span>
+            <span class="audit-bar"><span class="audit-bar__fill" data-band-fill="derived"></span></span>
+          </li>
+          <li class="audit-band audit-band--unavailable">
+            <span class="audit-band__label"><span class="status-label status-label--unavailable" title="No public source-safe feed is loaded; waiting on verified source, field, period, unit and reuse rights.">Source-gated / unavailable</span></span>
+            <span class="audit-band__count" data-band="unavailable">—</span>
+            <span class="audit-bar"><span class="audit-bar__fill" data-band-fill="unavailable"></span></span>
+          </li>
+        </ul>
+        <p class="audit-preview__note" id="audit-preview-note">Counts derived from <a href="data/source_manifest.json">data/source_manifest.json</a>. No numbers are invented.</p>
+      </aside>
+    </section>
+
+    <section class="legend-band" aria-labelledby="legend-title">
+      <div class="legend-band__inner">
+        <div class="legend-band__head">
+          <div>
+            <span class="eyebrow">Status legend</span>
+            <h2 id="legend-title">Status labels are part of the evidence</h2>
+          </div>
+          <p>Unavailable and source-gated data is not a dashboard failure. It is evidence of a public-data gap. Hover any pill on this site to see its meaning.</p>
+        </div>
+        <dl>
+          <div><dt><span class="status-label status-label--verified" title="Source-backed and current enough for its cadence.">Verified</span></dt><dd>Source-backed and current enough for its cadence.</dd></div>
+          <div><dt><span class="status-label status-label--partial" title="Source-backed, but incomplete by geography, product, timing or concept.">Partial</span></dt><dd>Source-backed, but incomplete by geography, product, timing or concept.</dd></div>
+          <div><dt><span class="status-label status-label--stale" title="Source-backed, but outside expected cadence.">Stale</span></dt><dd>Source-backed, but outside expected cadence.</dd></div>
+          <div><dt><span class="status-label status-label--manual" title="Hand-keyed from a named public source.">Manual</span></dt><dd>Hand-keyed from a named public source.</dd></div>
+          <div><dt><span class="status-label status-label--derived" title="Calculated or selected from a named source envelope.">Derived</span></dt><dd>Calculated or selected from a named source envelope.</dd></div>
+          <div><dt><span class="status-label status-label--unavailable" title="No public source-safe feed is loaded.">Unavailable</span></dt><dd>No public source-safe feed is loaded.</dd></div>
+          <div><dt><span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">Source-gated</span></dt><dd>Waiting for verified source, field, period, unit and reuse rights.</dd></div>
+          <div><dt><span class="status-label status-label--roadmap" title="Planned dashboard area, not yet populated.">Roadmap</span></dt><dd>Planned dashboard area, not yet populated.</dd></div>
+        </dl>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="first-clicks-title">
@@ -367,65 +606,71 @@
           <span class="eyebrow">Best first clicks</span>
           <h2 id="first-clicks-title">Where to start</h2>
           <p class="section__lede">
-            This prototype is designed to show what can already be built from public data, and what
-            cannot be shown until government or industry publishes safer, machine-readable feeds.
+            This prototype shows what can already be built from public data, and what cannot
+            be shown until government or industry publishes safer, machine-readable feeds.
           </p>
         </div>
       </div>
       <div class="first-clicks-grid">
         <article class="first-click-card">
-          <span class="status-label status-label--partial">Fuel request</span>
-          <h3>For the fuel dashboard request</h3>
-          <p>Start with the national fuel-security prototype and its Queensland visibility sections.</p>
-          <a href="ui_kits/fuel-security-dashboard/index.html">Open National Fuel Security</a>
-        </article>
-        <article class="first-click-card">
-          <span class="status-label status-label--source-gated">Fuel policy</span>
-          <h3>For fuel strategy and reserves</h3>
-          <p>Track official fuel-security policy gates, MSO/reserve indicators and missing public feeds.</p>
-          <a href="ui_kits/australian-fuel-strategy-dashboard/index.html">Open Fuel Strategy</a>
-        </article>
-        <article class="first-click-card">
-          <span class="status-label status-label--source-gated">QLD delivery</span>
-          <h3>For Queensland fuel delivery</h3>
-          <p>Track the six-port AFIP pathway, state-owned land audit, EOI status, Taroom Trough context and missing delivery feeds.</p>
-          <a href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">Open QLD Fuel Sovereignty</a>
-        </article>
-        <article class="first-click-card">
-          <span class="status-label status-label--source-gated">Data gaps</span>
+          <span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">Data gaps</span>
           <h3>For what still needs publishing</h3>
           <p>Use the scoreboard to see missing feeds, likely holders and next source actions.</p>
           <a href="ui_kits/missing-data-scoreboard/index.html">Open Missing Data Scoreboard</a>
         </article>
         <article class="first-click-card">
-          <span class="status-label status-label--manual">Priority view</span>
+          <span class="status-label status-label--partial" title="Source-backed, but incomplete by geography, product, timing or concept.">Fuel request</span>
+          <h3>For the fuel dashboard request</h3>
+          <p>Start with the national fuel-security prototype and its Queensland visibility sections.</p>
+          <a href="ui_kits/fuel-security-dashboard/index.html">Open National Fuel Security</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">Fuel policy</span>
+          <h3>For fuel strategy and reserves</h3>
+          <p>Track official fuel-security policy gates, MSO/reserve indicators and missing public feeds.</p>
+          <a href="ui_kits/australian-fuel-strategy-dashboard/index.html">View Fuel Strategy</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">QLD delivery</span>
+          <h3>For Queensland fuel delivery</h3>
+          <p>Track the six-port AFIP pathway, state-owned land audit, EOI status, Taroom Trough context and missing delivery feeds.</p>
+          <a href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">View QLD Fuel Delivery</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--manual" title="Hand-keyed from a named public source.">Priority view</span>
           <h3>For the highest-priority gaps</h3>
           <p>Use categorical triage bands to see which gaps matter most for decisions.</p>
-          <a href="ui_kits/missing-data-scoreboard/index.html#priority-h">Open National Readiness Matrix</a>
+          <a href="ui_kits/missing-data-scoreboard/index.html#priority-h">View National Readiness Matrix</a>
         </article>
         <article class="first-click-card">
-          <span class="status-label status-label--partial">Food system</span>
+          <span class="status-label status-label--partial" title="Source-backed, but incomplete by geography, product, timing or concept.">Food system</span>
           <h3>For food, farms and water</h3>
           <p>See real fertiliser signals beside source-gated farm diesel, water and drought feeds.</p>
-          <a href="ui_kits/fertilizer-dashboard/index.html">Open Food, Farms &amp; Water</a>
+          <a href="ui_kits/fertilizer-dashboard/index.html">View Food, Farms &amp; Water</a>
         </article>
         <article class="first-click-card">
-          <span class="status-label status-label--partial">Housing</span>
+          <span class="status-label status-label--partial" title="Source-backed, but incomplete by geography, product, timing or concept.">Housing</span>
           <h3>For housing pressure</h3>
           <p>See the latest RBA signal beside source-gated mortgage, rental and tax-model gaps.</p>
-          <a href="ui_kits/housing-economic-pressure-dashboard/index.html">Open Housing Pressure</a>
+          <a href="ui_kits/housing-economic-pressure-dashboard/index.html">View Housing Pressure</a>
         </article>
         <article class="first-click-card">
-          <span class="status-label status-label--source-gated">2032 readiness</span>
+          <span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">2032 readiness</span>
           <h3>For Brisbane 2032 readiness</h3>
           <p>Track source-gated venue, transport, accommodation, power, fuel and emergency-logistics readiness gaps.</p>
-          <a href="ui_kits/brisbane-2032-readiness-dashboard/index.html">Open Brisbane 2032 Readiness</a>
+          <a href="ui_kits/brisbane-2032-readiness-dashboard/index.html">View Brisbane 2032</a>
         </article>
         <article class="first-click-card">
-          <span class="status-label status-label--verified">Economy</span>
+          <span class="status-label status-label--verified" title="Source-backed and current enough for its cadence.">Economy</span>
           <h3>For interest rates and pressure</h3>
           <p>See the latest RBA cash-rate target and selected public macro indicators.</p>
-          <a href="ui_kits/au-economics-dashboard/index.html">Open AU Economics</a>
+          <a href="ui_kits/au-economics-dashboard/index.html">View AU Economics</a>
+        </article>
+        <article class="first-click-card">
+          <span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">Procurement</span>
+          <h3>For Defence procurement</h3>
+          <p>Track public-source procurement pathways, contract gaps and logistics implications.</p>
+          <a href="ui_kits/defence-procurement-watch/index.html">View Defence Procurement</a>
         </article>
       </div>
     </section>
@@ -443,79 +688,53 @@
       </div>
       <div class="summary-grid">
         <article class="summary-card">
-          <span class="status-label status-label--partial">Partial</span>
+          <span class="status-label status-label--partial" title="Source-backed, but incomplete by geography, product, timing or concept.">Partial</span>
           <h3>Fuel security</h3>
-          <dl>
-            <div><dt>Current signal</dt><dd>Days-cover, MSO/reserve context, inbound aggregate tanker visibility and Queensland visibility where public data exists.</dd></div>
-            <div><dt>Biggest missing feed</dt><dd>Current official strategy source, live station-level availability, terminal inventory, product cargo, tanker ETAs and forward contracts.</dd></div>
-            <div><dt>Why it matters</dt><dd>Fuel affects tourism, freight, farms, emergency services, defence posture and regional resilience.</dd></div>
-          </dl>
+          <p class="summary-card__headline">Days-cover, MSO context and aggregate import visibility wired; live operational data still missing.</p>
+          <p class="summary-card__missing"><strong>Missing feed:</strong> live station-level availability, terminal inventory, tanker ETAs and forward contracts.</p>
+          <p class="summary-card__why"><strong>Why it matters:</strong> fuel affects freight, farms, emergency services, defence posture and regional resilience.</p>
+          <p class="summary-card__updated">Last updated: source metadata pending</p>
         </article>
         <article class="summary-card">
-          <span class="status-label status-label--source-gated">Source-gated / partial</span>
+          <span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">Source-gated</span>
           <h3>Food, farms and water</h3>
-          <dl>
-            <div><dt>Current signal</dt><dd>Fertiliser imports and source concentration are loaded.</dd></div>
-            <div><dt>Biggest missing feed</dt><dd>Fertiliser stock cover, farm diesel risk, water allocation by food-producing region and drought pressure.</dd></div>
-            <div><dt>Why it matters</dt><dd>Fuel, fertiliser and water determine whether farms can produce and move food.</dd></div>
-          </dl>
+          <p class="summary-card__headline">Fertiliser imports and source concentration loaded; farm diesel, water and drought feeds source-gated.</p>
+          <p class="summary-card__missing"><strong>Missing feed:</strong> fertiliser stock cover, farm diesel risk, water allocation by food-producing region.</p>
+          <p class="summary-card__why"><strong>Why it matters:</strong> fuel, fertiliser and water determine whether farms can produce and move food.</p>
+          <p class="summary-card__updated">Last updated: source metadata pending</p>
         </article>
         <article class="summary-card">
-          <span class="status-label status-label--partial">Partial / roadmap</span>
+          <span class="status-label status-label--partial" title="Source-backed, but incomplete by geography, product, timing or concept.">Partial</span>
           <h3>Economy and housing pressure</h3>
-          <dl>
-            <div><dt>Current signal</dt><dd>AU Economics includes the latest official RBA cash-rate target and selected macro indicators.</dd></div>
-            <div><dt>Biggest missing feed</dt><dd>The Housing pressure page now separates verified RBA/ABS/NHSAC signals from missing ownership, investor, first-home buyer, negative gearing and rental-stress models.</dd></div>
-            <div><dt>Why it matters</dt><dd>Interest rates, household debt and housing pressure shape cost of living and social stability.</dd></div>
-          </dl>
+          <p class="summary-card__headline">Latest RBA cash-rate target and selected macro indicators are verified; housing models stay source-gated.</p>
+          <p class="summary-card__missing"><strong>Missing feed:</strong> mortgage repayment, rental stress, investor ownership, first-home buyer and negative-gearing models.</p>
+          <p class="summary-card__why"><strong>Why it matters:</strong> rates, debt and housing pressure shape cost of living and social stability.</p>
+          <p class="summary-card__updated">Last updated: source metadata pending</p>
         </article>
         <article class="summary-card">
-          <span class="status-label status-label--partial">Partial / source-gated</span>
+          <span class="status-label status-label--partial" title="Source-backed, but incomplete by geography, product, timing or concept.">Partial</span>
           <h3>Power, manufacturing and infrastructure</h3>
-          <dl>
-            <div><dt>Current signal</dt><dd>Power, manufacturing and infrastructure pages provide public-source visibility where wired.</dd></div>
-            <div><dt>Biggest missing feed</dt><dd>Outage resilience, manufacturing bottlenecks, Brisbane 2032 readiness, project delivery status and logistics constraints.</dd></div>
-            <div><dt>Why it matters</dt><dd>National resilience depends on power reliability, industrial capacity and infrastructure delivery.</dd></div>
-          </dl>
+          <p class="summary-card__headline">AEMO regional price/demand and ABS infrastructure indicators wired; resilience and project-delivery views still missing.</p>
+          <p class="summary-card__missing"><strong>Missing feed:</strong> outage resilience, manufacturing bottlenecks, project delivery status, logistics constraints.</p>
+          <p class="summary-card__why"><strong>Why it matters:</strong> resilience depends on power reliability, industrial capacity and infrastructure delivery.</p>
+          <p class="summary-card__updated">Last updated: source metadata pending</p>
         </article>
         <article class="summary-card">
-          <span class="status-label status-label--source-gated">Source-gated / partial</span>
+          <span class="status-label status-label--source-gated" title="Waiting for verified source, field, period, unit and reuse rights.">Source-gated</span>
           <h3>Defence and strategic resources</h3>
-          <dl>
-            <div><dt>Current signal</dt><dd>Strategic resources, defence posture, defence procurement watch and resource-value pages are live with public-source caveats.</dd></div>
-            <div><dt>Biggest missing feed</dt><dd>Verified procurement pathways, contract and delivery rows, naval logistics implications and critical mineral project readiness.</dd></div>
-            <div><dt>Why it matters</dt><dd>Fuel, ships, resources and industrial capacity are national-security issues.</dd></div>
-          </dl>
+          <p class="summary-card__headline">Public capability rows, alliance frameworks and critical-mineral production tables loaded; operational defence detail unavailable.</p>
+          <p class="summary-card__missing"><strong>Missing feed:</strong> verified procurement contracts, delivery rows, naval logistics implications, critical mineral project readiness.</p>
+          <p class="summary-card__why"><strong>Why it matters:</strong> fuel, ships, resources and industrial capacity are national-security issues.</p>
+          <p class="summary-card__updated">Last updated: source metadata pending</p>
         </article>
         <article class="summary-card">
-          <span class="status-label status-label--roadmap">Roadmap</span>
+          <span class="status-label status-label--roadmap" title="Planned dashboard area, not yet populated.">Roadmap</span>
           <h3>AI, workforce and future pressure</h3>
-          <dl>
-            <div><dt>Current signal</dt><dd>Employment &amp; Automation tracks labour-market changes during the AI rollout era without asserting AI causation.</dd></div>
-            <div><dt>Biggest missing feed</dt><dd>Sector automation exposure, displacement risk, retraining capacity and regional workforce exposure.</dd></div>
-            <div><dt>Why it matters</dt><dd>AI may reshape productivity, jobs, skills and government service demand.</dd></div>
-          </dl>
+          <p class="summary-card__headline">Labour-market indicators wired; the page does not assert AI causation.</p>
+          <p class="summary-card__missing"><strong>Missing feed:</strong> sector automation exposure, displacement risk, retraining capacity, regional workforce exposure.</p>
+          <p class="summary-card__why"><strong>Why it matters:</strong> AI may reshape productivity, jobs, skills and government service demand.</p>
+          <p class="summary-card__updated">Last updated: source metadata pending</p>
         </article>
-      </div>
-    </section>
-
-    <section class="section section--why" aria-labelledby="legend-title">
-      <div class="section__head">
-        <div>
-          <span class="eyebrow">Unified confidence legend</span>
-          <h2 id="legend-title">Status labels are part of the evidence</h2>
-          <p class="section__lede">Unavailable and source-gated data is not a dashboard failure. It is evidence of a public-data gap.</p>
-        </div>
-      </div>
-      <div class="legend-grid">
-        <article class="legend-card"><span class="status-label status-label--verified">Verified</span><p>Source-backed and current enough for its cadence.</p></article>
-        <article class="legend-card"><span class="status-label status-label--partial">Partial</span><p>Source-backed, but incomplete by geography, product, timing or concept.</p></article>
-        <article class="legend-card"><span class="status-label status-label--stale">Stale</span><p>Source-backed, but outside expected cadence.</p></article>
-        <article class="legend-card"><span class="status-label status-label--manual">Manual</span><p>Hand-keyed from a named public source.</p></article>
-        <article class="legend-card"><span class="status-label status-label--derived">Derived</span><p>Calculated or selected from a named source envelope.</p></article>
-        <article class="legend-card"><span class="status-label status-label--unavailable">Unavailable</span><p>No public source-safe feed is loaded.</p></article>
-        <article class="legend-card"><span class="status-label status-label--source-gated">Source-gated</span><p>Waiting for verified source, field, period, unit and reuse rights.</p></article>
-        <article class="legend-card"><span class="status-label status-label--roadmap">Roadmap</span><p>Planned dashboard area, not yet populated.</p></article>
       </div>
     </section>
 
@@ -584,25 +803,26 @@
         <div class="rail__head">
           <h2 id="rail-fuel-title">Fuel &amp; energy</h2>
           <p>Fuel cover, strategy, retail prices, oil and grid power.</p>
+          <span class="rail__updated">Last updated: source metadata pending</span>
         </div>
         <div class="home-grid">
           <article class="home-card">
             <h3>National status</h3>
             <p>Public fuel-security level, MSO reserves, incoming tankers and retail stock-outs.</p>
             <a class="home-card__link" href="ui_kits/national-status-dashboard/index.html">Open national status</a>
-            <div class="home-card__status">Status: PM&C/DCCEEW public supply snapshot hand-keyed; direct programmatic fetch is deferred until a stable machine-readable endpoint is available.</div>
+            <div class="home-card__status">Status: PM&amp;C/DCCEEW public supply snapshot hand-keyed; direct programmatic fetch is deferred until a stable machine-readable endpoint is available.</div>
           </article>
           <article class="home-card">
             <h3>National fuel security</h3>
             <p>Public-source view of Australia's fuel cover, reserves, stocks, imports, inbound supply visibility, Queensland fuel-sovereignty gaps, retail pressure, outages and missing government/industry feeds.</p>
             <a class="home-card__link" href="ui_kits/fuel-security-dashboard/index.html">Open national fuel security</a>
-            <div class="home-card__status">Status: PM&C/DCCEEW product days and stocks, APS context and aggregate import/tanker snapshots are labelled observed, derived, manual, partial or unavailable.</div>
+            <div class="home-card__status">Status: PM&amp;C/DCCEEW product days and stocks, APS context and aggregate import/tanker snapshots are labelled observed, derived, manual, partial or unavailable.</div>
           </article>
           <article class="home-card">
             <h3>Fuel strategy</h3>
             <p>Tracks official fuel-security policy, MSO/reserve indicators, product-level days-cover and missing public feeds.</p>
             <a class="home-card__link" href="ui_kits/australian-fuel-strategy-dashboard/index.html">Open fuel strategy tracker</a>
-            <div class="home-card__status">Status: reuses existing PM&C/DCCEEW fuel-security envelopes. Latest strategy, emergency response settings, terminal/storage visibility and forward contract coverage remain source-gated.</div>
+            <div class="home-card__status">Status: reuses existing PM&amp;C/DCCEEW fuel-security envelopes. Latest strategy, emergency response settings, terminal/storage visibility and forward contract coverage remain source-gated.</div>
           </article>
           <article class="home-card">
             <h3>QLD fuel sovereignty</h3>
@@ -635,6 +855,7 @@
         <div class="rail__head">
           <h2 id="rail-food-title">Food &amp; farms</h2>
           <p>Fertiliser, food, water and farm-input pressure.</p>
+          <span class="rail__updated">Last updated: source metadata pending</span>
         </div>
         <div class="home-grid">
           <article class="home-card">
@@ -650,6 +871,7 @@
         <div class="rail__head">
           <h2 id="rail-economy-title">Economy &amp; households</h2>
           <p>Tax, debt, interest rates, housing pressure and resource receipts.</p>
+          <span class="rail__updated">Last updated: source metadata pending</span>
         </div>
         <div class="home-grid">
           <article class="home-card">
@@ -689,6 +911,7 @@
         <div class="rail__head">
           <h2 id="rail-defence-title">Defence &amp; strategic</h2>
           <p>Defence posture, procurement and critical minerals.</p>
+          <span class="rail__updated">Last updated: source metadata pending</span>
         </div>
         <div class="home-grid">
           <article class="home-card">
@@ -714,8 +937,9 @@
 
       <div class="rail" aria-labelledby="rail-infra-title">
         <div class="rail__head">
-          <h2 id="rail-infra-title">Infrastructure &amp; systems</h2>
+          <h2 id="rail-infra-title">Infrastructure</h2>
           <p>Manufacturing, transport, housing supply and Olympics readiness.</p>
+          <span class="rail__updated">Last updated: source metadata pending</span>
         </div>
         <div class="home-grid">
           <article class="home-card">
@@ -741,8 +965,9 @@
 
       <div class="rail" aria-labelledby="rail-workforce-title">
         <div class="rail__head">
-          <h2 id="rail-workforce-title">Workforce &amp; data</h2>
-          <p>Labour market and the publishing-gap scoreboard.</p>
+          <h2 id="rail-workforce-title">Workforce</h2>
+          <p>Labour-market change during the AI rollout era.</p>
+          <span class="rail__updated">Last updated: source metadata pending</span>
         </div>
         <div class="home-grid">
           <article class="home-card">
@@ -751,6 +976,16 @@
             <a class="home-card__link" href="ui_kits/employment-automation-dashboard/index.html">Open employment dashboard</a>
             <div class="home-card__status">Status: ABS unemployment, participation, employment-to-population, job vacancies and Wage Price Index wired programmatically; Australian automation/AI exposure stays intentionally unavailable; the page does not assert AI causation.</div>
           </article>
+        </div>
+      </div>
+
+      <div class="rail" aria-labelledby="rail-missing-title">
+        <div class="rail__head">
+          <h2 id="rail-missing-title">Missing Data Scoreboard</h2>
+          <p>The publishing-gap scoreboard for the whole site.</p>
+          <span class="rail__updated">Last updated: source metadata pending</span>
+        </div>
+        <div class="home-grid">
           <article class="home-card missing-data-card">
             <span class="missing-data-card__what">Missing data</span>
             <h3>Missing data scoreboard</h3>
@@ -814,26 +1049,143 @@
   </footer>
 </div>
 <script>
-  fetch('data/last_successful_refresh.json')
-    .then(response => response.ok ? response.json() : null)
-    .then(status => {
-      const badge = document.getElementById('refresh-badge');
-      if (!badge) return;
-      if (!status) {
-        badge.textContent = 'Programmatic refresh: status unavailable';
-        return;
+  (function () {
+    function formatDate(iso) {
+      try {
+        return new Date(iso).toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' });
+      } catch (err) {
+        return null;
       }
-      if (status.status !== 'success' || !status.refreshed_at) {
-        badge.textContent = 'Programmatic refresh: no successful refresh recorded';
-        return;
+    }
+
+    function setRefreshDate() {
+      var dateEl = document.getElementById('refresh-date');
+      if (!dateEl) return;
+      fetch('data/last_successful_refresh.json')
+        .then(function (response) { return response.ok ? response.json() : null; })
+        .then(function (status) {
+          if (status && status.status === 'success' && status.refreshed_at) {
+            var formatted = formatDate(status.refreshed_at);
+            dateEl.textContent = formatted || 'date pending';
+          } else {
+            dateEl.textContent = 'date pending';
+          }
+        })
+        .catch(function () {
+          dateEl.textContent = 'date pending';
+        });
+    }
+
+    function setAuditCounts() {
+      var bands = ['verified', 'manual', 'derived', 'unavailable'];
+      var note = document.getElementById('audit-preview-note');
+      fetch('data/source_manifest.json')
+        .then(function (response) { return response.ok ? response.json() : null; })
+        .then(function (manifest) {
+          if (!manifest || !manifest.sources) {
+            if (note) note.textContent = 'Source manifest unavailable. No counts shown.';
+            return;
+          }
+          var counts = { verified: 0, manual: 0, derived: 0, unavailable: 0 };
+          var total = 0;
+          Object.keys(manifest.sources).forEach(function (id) {
+            var fetchKind = manifest.sources[id] && manifest.sources[id].fetch;
+            total += 1;
+            if (fetchKind === 'programmatic') counts.verified += 1;
+            else if (fetchKind === 'manual') counts.manual += 1;
+            else if (fetchKind === 'derived') counts.derived += 1;
+            else if (fetchKind === 'unavailable') counts.unavailable += 1;
+          });
+          var max = Math.max(counts.verified, counts.manual, counts.derived, counts.unavailable, 1);
+          bands.forEach(function (band) {
+            var countEl = document.querySelector('[data-band="' + band + '"]');
+            var fillEl = document.querySelector('[data-band-fill="' + band + '"]');
+            if (countEl) countEl.textContent = counts[band].toString();
+            if (fillEl) fillEl.style.width = (counts[band] / max * 100) + '%';
+          });
+          if (note) {
+            note.innerHTML = 'Counts derived from <a href="data/source_manifest.json">data/source_manifest.json</a> (' + total + ' tracked sources). No numbers are invented.';
+          }
+        })
+        .catch(function () {
+          if (note) note.textContent = 'Source manifest unavailable. No counts shown.';
+        });
+    }
+
+    function setupNav() {
+      var nav = document.getElementById('primary-nav');
+      var groups = nav ? nav.querySelectorAll('.nav-group') : [];
+      function closeAll() {
+        groups.forEach(function (group) {
+          var btn = group.querySelector('.nav-group__btn');
+          var panel = group.querySelector('.nav-group__panel');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+          if (panel) panel.hidden = true;
+        });
       }
-      const when = new Date(status.refreshed_at);
-      badge.textContent = `Site refresh: ${when.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' })}`;
-    })
-    .catch(() => {
-      const badge = document.getElementById('refresh-badge');
-      if (badge) badge.textContent = 'Programmatic refresh: status unavailable';
-    });
+      groups.forEach(function (group) {
+        var btn = group.querySelector('.nav-group__btn');
+        var panel = group.querySelector('.nav-group__panel');
+        if (!btn || !panel) return;
+        btn.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          var isOpen = btn.getAttribute('aria-expanded') === 'true';
+          closeAll();
+          if (!isOpen) {
+            btn.setAttribute('aria-expanded', 'true');
+            panel.hidden = false;
+          }
+        });
+      });
+      document.addEventListener('click', function (ev) {
+        if (!nav || !nav.contains(ev.target)) closeAll();
+      });
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape') {
+          closeAll();
+          closeSheet();
+        }
+      });
+
+      var toggle = document.querySelector('.nav-toggle');
+      var sheet = document.getElementById('primary-nav-sheet');
+      var close = sheet ? sheet.querySelector('.nav-sheet__close') : null;
+
+      function openSheet() {
+        if (!sheet || !toggle) return;
+        sheet.setAttribute('data-open', 'true');
+        sheet.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSheet() {
+        if (!sheet || !toggle) return;
+        sheet.setAttribute('data-open', 'false');
+        sheet.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+      if (toggle) toggle.addEventListener('click', openSheet);
+      if (close) close.addEventListener('click', closeSheet);
+      if (sheet) {
+        sheet.addEventListener('click', function (ev) {
+          if (ev.target === sheet) closeSheet();
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        setRefreshDate();
+        setAuditCounts();
+        setupNav();
+      });
+    } else {
+      setRefreshDate();
+      setAuditCounts();
+      setupNav();
+    }
+  }());
 </script>
 </body>
 </html>
