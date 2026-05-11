@@ -4,7 +4,7 @@ const routes = [
   { path: '/', heading: /Tracking what Australia.{1,5}s resilience data shows/ },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-security data can verify/ },
-  { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: 'Australian fuel strategy tracker' },
+  { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-strategy data can verify/ },
   { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
@@ -320,7 +320,20 @@ test('food farms and water page keeps unavailable source gates explicit', async 
 test('fuel strategy tracker keeps policy and operational data source-gated', async ({ page }) => {
   await page.goto('/ui_kits/australian-fuel-strategy-dashboard/index.html');
   const main = page.locator('main');
-  await expect(page.getByRole('heading', { name: 'Australian fuel strategy tracker' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public fuel-strategy data can verify/ })).toBeVisible();
+  await expect(page.getByText('This tracker separates source-backed national fuel-policy signals from partial, manual and source-gated feeds')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this tracker can verify in 30 seconds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this page' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this tracker does, and does not, claim' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap, not evidence of wrongdoing.')).toBeVisible();
+  await expect(page.getByText('Likely holder/publisher entries name the agencies most plausibly responsible for the data')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Queensland Fuel Sovereignty', exact: true })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer fuel reserves, contracts, cargoes, emergency powers or security-sensitive holdings')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
@@ -336,7 +349,7 @@ test('fuel strategy tracker keeps policy and operational data source-gated', asy
   await expect(page.getByText('For state delivery and six-port AFIP context, see Queensland Fuel Sovereignty')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Queensland Fuel Sovereignty Delivery Tracker' })).toBeVisible();
   await expect(page.getByText('Latest national fuel strategy')).toBeVisible();
-  await expect(page.getByText('Terminal inventory')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="boundary-h"]').getByRole('cell', { name: 'Terminal inventory' })).toBeVisible();
   await expect(page.getByText('Forward supply/contract coverage')).toBeVisible();
   await expect(page.getByText('No fuel reserves, contracts, cargoes or emergency powers are inferred.')).toBeVisible();
   await expect(page.getByText('No fuel strategy facts, reserve values, days-cover values, emergency policy settings')).toBeVisible();
