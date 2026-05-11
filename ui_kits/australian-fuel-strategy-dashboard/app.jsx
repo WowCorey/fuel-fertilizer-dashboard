@@ -413,6 +413,199 @@ function QueenslandDeliveryCrossLink() {
   );
 }
 
+function OperationalSummary30s({ data }) {
+  const cov = window.FR.coverage(data);
+  return (
+    <section className="section" aria-labelledby="ops-30s-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second policy summary</span>
+          <h2 id="ops-30s-h">What this tracker can verify in 30 seconds</h2>
+          <p className="section__lede">
+            Counts come from the page&rsquo;s loaded source envelopes via window.FR.coverage(). They
+            describe what the tracker is currently wired to read. They are not invented totals,
+            risk ratings or official classifications.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        <article className="quick-link-card">
+          <span className="eyebrow">Publicly visible policy signals</span>
+          <span className="ops-30s__count">{cov.verified + cov.derived}</span>
+          <p>
+            Source-backed envelopes currently fresh enough for their cadence: the PM&amp;C MSO days
+            table, MSO reserve volumes, the FSSP payment table and the derived petrol/diesel/jet
+            days-cover envelopes.
+          </p>
+          <a href="#reserve-indicators-h">Jump to reserve and MSO indicators</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Partial / manual feeds</span>
+          <span className="ops-30s__count">{cov.manual + cov.stale}</span>
+          <p>
+            Hand-keyed public-source snapshots and stale rows: PM&amp;C/DCCEEW MSO tables, the
+            FSSP payment-disclosure context, aggregate tanker counts and forward import orders.
+          </p>
+          <a href="#product-days-h">Jump to product-level visibility</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Source-gated implementation feeds</span>
+          <span className="ops-30s__count">{cov.awaiting}</span>
+          <p>
+            Strategy document status, emergency response settings, terminal capacity, live station
+            outages, live vessel ETAs and forward fuel/fertiliser contract coverage stay labelled
+            until a named public source is loaded.
+          </p>
+          <a href="#publish-h">Jump to publishing needs</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Highest-priority visibility gaps</span>
+          <span className="ops-30s__count">{IMPLEMENTATION_ROWS.length}</span>
+          <p>
+            Categorical implementation tracker rows: document publication, machine-readable feeds,
+            product-level days-cover, MSO reserves, emergency settings, state integration,
+            Queensland delivery linkage, forward contracts and public dashboard ownership.
+          </p>
+          <a href="#implementation-h">Jump to implementation tracker</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+const STRATEGY_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+function StatusLegendAtGlance() {
+  return (
+    <section className="section section--why" aria-labelledby="legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="legend-h">Status labels used on this page</h2>
+          <p className="section__lede">
+            The same vocabulary is used across the Missing Data Scoreboard, the National Fuel
+            Security dashboard, the Queensland Fuel Sovereignty tracker and this page. Status
+            labels are categorical, not numeric scores.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {STRATEGY_STATUS_LEGEND.map(([kind, label, copy]) => (
+          <article className="source-card" key={kind}>
+            <TrustBadge kind={kind}>{label}</TrustBadge>
+            <h3>{label}</h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const STRATEGY_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that strategy commitments, reserve levels, days cover, emergency settings, terminal inventory, contracts or any other policy or operational value is zero, low or negligible.',
+  },
+  {
+    title: 'Source-gated is a publishing boundary',
+    copy: 'Source-gated means a verified source, exact field, period, unit and reuse-rights pathway has not been loaded. The tracker does not estimate the value while the gate is open.',
+  },
+  {
+    title: 'No estimates fill missing policy milestones',
+    copy: 'The tracker does not invent national fuel strategy commitments, policy milestones, implementation status, reserve/storage/refinery/port/pipeline metrics, procurement or consultation status, or official classifications. Missing data stays visible until a named public source supports it.',
+  },
+  {
+    title: 'Priority bands are editorial triage',
+    copy: 'Where the audit calls a gap immediate, high or medium priority, that is editorial/product triage only, not an official risk rating or government assessment.',
+  },
+  {
+    title: 'A visibility gap is not proof of misconduct',
+    copy: 'A missing public feed is a public visibility gap, not evidence of wrongdoing. Some data may be sensitive, in roll-out or simply not yet published in a machine-readable form.',
+  },
+  {
+    title: 'Holder fields are likely sources, not custody',
+    copy: 'Likely holder/publisher entries name the agencies most plausibly responsible for the data based on existing public mandates. They are starting points for verification, not assertions of custody.',
+  },
+];
+
+function EvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="evidence-boundary-h">What this tracker does, and does not, claim</h2>
+          <p className="section__lede">
+            Read these statements before interpreting any indicator, status or priority band on this
+            page. They define how the audit treats missing public fuel-strategy data.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {STRATEGY_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function OpenRelatedSurfaces() {
+  return (
+    <section className="section" aria-labelledby="related-surfaces-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Where to go next</span>
+          <h2 id="related-surfaces-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            The audit splits policy tracking from operational fuel-security and regional delivery.
+            These links open the related pages.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        <article className="quick-link-card">
+          <span className="cta-card__title">National Fuel Security</span>
+          <p>Operational audit: days cover, MSO context, aggregate import visibility and missing live feeds.</p>
+          <a href="../fuel-security-dashboard/index.html">Open National Fuel Security</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Queensland Fuel Sovereignty</span>
+          <p>Regional delivery: six-port AFIP pathway, state-owned land audit, EOI status and Taroom Trough context.</p>
+          <a href="../qld-fuel-sovereignty-dashboard/index.html">Open Queensland Fuel Sovereignty</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Missing Data Scoreboard</span>
+          <p>The flagship audit page. Names every public-data gap, the likely publisher and the next source action.</p>
+          <a href="../missing-data-scoreboard/index.html">Open Missing Data Scoreboard</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Food, Farms &amp; Water</span>
+          <p>Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds.</p>
+          <a href="../fertilizer-dashboard/index.html">Open Food, Farms &amp; Water</a>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -442,12 +635,17 @@ function App() {
       <main id="main">
         <section className="intro" id="fuel-strategy">
           <div>
-            <span className="eyebrow">Fuel strategy - source tracker</span>
-            <h1 style={{ marginTop: 12 }}>Australian fuel strategy tracker</h1>
+            <span className="eyebrow">Australian fuel strategy tracker</span>
+            <h1 style={{ marginTop: 12 }}>What Australia&rsquo;s public fuel-strategy data can verify &mdash; and what remains source-gated</h1>
             <p className="intro__lede">
-              Tracks official fuel-security policy, reserve commitments, days-cover indicators and
-              missing public feeds, while keeping security-sensitive or unpublished operational data
-              clearly source-gated.
+              This tracker separates source-backed national fuel-policy signals from partial, manual
+              and source-gated feeds so readers can see which strategy claims are publicly visible,
+              and which still require publisher verification.
+            </p>
+            <p className="intro__lede" style={{ marginTop: 12 }}>
+              It tracks official fuel-security policy, reserve commitments, days-cover indicators
+              and missing public feeds, while keeping security-sensitive or unpublished operational
+              data clearly source-gated.
             </p>
             <p className="body-sm" style={{ marginTop: 16, color: 'var(--ink-2)' }}>
               This page is an independent public-source prototype. It does not infer fuel reserves,
@@ -462,10 +660,21 @@ function App() {
             <div style={{ height: 12 }}/>
             <strong>Boundary</strong>
             <span>No fuel reserves, contracts, cargoes or emergency powers are inferred.</span>
+            <div style={{ height: 12 }}/>
+            <strong>Last reviewed</strong>
+            <span className="mono">metadata pending</span>
           </aside>
         </section>
 
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
+
+        <OperationalSummary30s data={data}/>
+
+        <StatusLegendAtGlance/>
+
+        <EvidenceBoundary/>
+
+        <OpenRelatedSurfaces/>
 
         <section className="section section--why" aria-labelledby="guide-h">
           <div className="section__head">
