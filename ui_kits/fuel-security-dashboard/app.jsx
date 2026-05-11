@@ -391,6 +391,204 @@ function FreshnessNotice({ refreshStatus, latestRetrieved, updatedDisplay }) {
   );
 }
 
+function OperationalSummary30s({ data }) {
+  const cov = window.FR.coverage(data);
+  const verifiedCount = cov.verified;
+  const derivedCount = cov.derived;
+  const staleCount = cov.stale;
+  const manualCount = cov.manual;
+  const partialOrManual = manualCount + cov.programmatic - cov.verified - cov.derived;
+  // Fall back to direct counts if math is off
+  const awaitingCount = cov.awaiting;
+  return (
+    <section className="section" aria-labelledby="ops-30s-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second operational summary</span>
+          <h2 id="ops-30s-h">What this page can verify in 30 seconds</h2>
+          <p className="section__lede">
+            Counts come from the page&rsquo;s loaded source envelopes via window.FR.coverage(). They
+            describe what the dashboard tracks. They are not invented totals, risk ratings or official
+            classifications.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        <article className="quick-link-card">
+          <span className="eyebrow">Verified indicators</span>
+          <span className="ops-30s__count">{verifiedCount}</span>
+          <p>
+            Source-backed envelopes currently fresh enough for their cadence (PM&amp;C/DCCEEW public
+            level, MSO reserves and days, APS stocks/sales/imports, ABS petroleum imports).
+          </p>
+          <a href="#national-summary">Jump to public national signals</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Derived feeds</span>
+          <span className="ops-30s__count">{derivedCount}</span>
+          <p>
+            Reshaped from named envelopes (petrol, diesel and jet fuel days remaining, derived from
+            the public MSO table; no hidden demand assumptions are introduced).
+          </p>
+          <a href="#days-remaining">Jump to days remaining</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Partial / manual snapshots</span>
+          <span className="ops-30s__count">{manualCount + (staleCount > 0 ? staleCount : 0)}</span>
+          <p>
+            Aggregate tanker counts, forward orders, PM&amp;C/WA/QLD retail stock-out rows and
+            multi-state ULP 91 price pressure. These are manual or partial public-source snapshots,
+            not live operational coverage.
+          </p>
+          <a href="#outages">Jump to outage visibility</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Source-gated / unavailable</span>
+          <span className="ops-30s__count">{awaitingCount}</span>
+          <p>
+            Live station availability, vessel-level shipment visibility, terminal-by-terminal
+            capacity, forward fuel/fertiliser contract coverage and the dashboard status model
+            stay labelled until a named public source is loaded.
+          </p>
+          <a href="#publish-needed-h">Jump to publishing needs</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+const FUEL_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+function StatusLegendAtGlance() {
+  return (
+    <section className="section section--why" aria-labelledby="legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="legend-h">Status labels used on this page</h2>
+          <p className="section__lede">
+            The same vocabulary is used across the Missing Data Scoreboard, this dashboard and every
+            other surface in the audit. Status labels are categorical, not numeric scores.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {FUEL_STATUS_LEGEND.map(([kind, label, copy]) => (
+          <article className="source-card" key={kind}>
+            <TrustBadge kind={kind}>{label}</TrustBadge>
+            <h3>{label}</h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const FUEL_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed is loaded yet. It is not a statement that fuel cover, stocks, reserves, imports, station availability or terminal capacity is zero, low or negligible.',
+  },
+  {
+    title: 'Source-gated is a publishing boundary',
+    copy: 'Source-gated means a verified source, exact field, period, unit and reuse-rights pathway has not been loaded. The dashboard does not estimate the value while the gate is open.',
+  },
+  {
+    title: 'No estimates fill missing values',
+    copy: 'The page does not invent fuel stockpile days, reserve levels, storage capacity, import dependence, refinery throughput, shipping metrics or risk ratings. Missing data stays visible until a named public source supports it.',
+  },
+  {
+    title: 'No published status model',
+    copy: 'The dashboard does not publish its own Stable / Tight / Disrupted / Critical national status until the underlying coverage is observed. The official PM&C/DCCEEW public level stays visible without being reinterpreted.',
+  },
+  {
+    title: 'Priority bands are editorial triage',
+    copy: 'Where the audit calls a gap immediate, high or medium priority, that is editorial/product triage only, not an official risk rating or government assessment.',
+  },
+  {
+    title: 'A visibility gap is not proof of misconduct',
+    copy: 'A missing public feed is a public visibility gap, not evidence of wrongdoing. Some data may be sensitive, in roll-out, or simply not yet published in a machine-readable form.',
+  },
+];
+
+function EvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="evidence-boundary-h">What this dashboard does, and does not, claim</h2>
+          <p className="section__lede">
+            Read these statements before interpreting any indicator, status or priority band on this
+            page. They define how the audit treats missing public fuel-security data.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {FUEL_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function OpenRelatedSurfaces() {
+  return (
+    <section className="section" aria-labelledby="related-surfaces-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Where to go next</span>
+          <h2 id="related-surfaces-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            The audit splits operational fuel-security from the public-data scoreboard, Queensland
+            delivery tracking and food-system feeds. These links open the related pages.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        <article className="quick-link-card">
+          <span className="cta-card__title">Missing Data Scoreboard</span>
+          <p>The flagship audit page. Names every public-data gap, the likely publisher and the next source action.</p>
+          <a href="../missing-data-scoreboard/index.html">Open Missing Data Scoreboard</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Queensland Fuel Sovereignty</span>
+          <p>Six-port AFIP pathway, state-owned land audit, EOI status and Taroom Trough context. Mostly source-gated.</p>
+          <a href="../qld-fuel-sovereignty-dashboard/index.html">Open Queensland Fuel Sovereignty</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Food, Farms &amp; Water</span>
+          <p>Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds.</p>
+          <a href="../fertilizer-dashboard/index.html">Open Food, Farms &amp; Water</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Source coverage</span>
+          <p>Every envelope used on this page, with observed/partial/manual/unavailable labels and source links.</p>
+          <a href="#sources">Open source coverage on this page</a>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 function HowToReadPage() {
   return (
     <section className="section section--why" aria-labelledby="how-read-h">
@@ -401,10 +599,11 @@ function HowToReadPage() {
         </div>
         <div className="why-body">
           <p>
-            This independent page shows what Australia can currently see from public
-            fuel-security data, and what remains hidden because government or industry
-            feeds are not published. Treat it as a public-source prototype, not an
-            official government dashboard or live service-station finder.
+            This independent page shows what Australia can currently verify from public
+            fuel-security data, and what is not yet supported by a named public source
+            because the relevant government or industry feeds have not been published in
+            a source-safe form. Treat it as a public-source prototype, not an official
+            government dashboard or live service-station finder.
           </p>
           <div className="trust-badges" aria-label="How to read trust labels">
             <TrustBadge kind="observed"/>
@@ -1231,14 +1430,19 @@ function App() {
       <main id="main">
         <section className="intro" id="fuel-security">
           <div>
-            <span className="eyebrow">National fuel security dashboard</span>
-            <h1 style={{ marginTop: 12 }}>What a transparent Australian fuel dashboard should show.</h1>
+            <span className="eyebrow">National fuel security audit</span>
+            <h1 style={{ marginTop: 12 }}>What Australia&rsquo;s public fuel-security data can verify &mdash; and what it still cannot</h1>
             <p className="intro__lede">
-              This independent public-source prototype shows Australia's fuel security position using only
-              source-linked data: official public status, days of cover, MSO reserves, product stocks,
-              imports, inbound tanker visibility, retail stock-outs, price pressure and known missing
-              feeds. It does not invent live values where government or industry data is not publicly
-              available, and it is not an official government dashboard or live service-station finder.
+              This dashboard separates source-backed fuel-security indicators from partial, stale,
+              manual and source-gated feeds so readers can see the operational picture without
+              invented certainty.
+            </p>
+            <p className="intro__lede" style={{ marginTop: 12 }}>
+              It uses only source-linked public data: official public status, days of cover, MSO
+              reserves, product stocks, imports, inbound tanker visibility, retail stock-outs, price
+              pressure and known missing feeds. It does not invent live values where government or
+              industry data is not publicly available, and it is not an official government
+              dashboard or live service-station finder.
             </p>
           </div>
           <aside className="intro__meta" aria-label="National fuel security status">
@@ -1247,12 +1451,23 @@ function App() {
             <div style={{ height: 12 }}/>
             <strong>Dashboard status model</strong>
             <span className="mono">Status unavailable</span>
+            <div style={{ height: 12 }}/>
+            <strong>Last reviewed</strong>
+            <span className="mono">metadata pending</span>
           </aside>
         </section>
 
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         <FreshnessNotice refreshStatus={refreshStatus} latestRetrieved={latestRetrieved} updatedDisplay={updatedDisplay}/>
+
+        <OperationalSummary30s data={data}/>
+
+        <StatusLegendAtGlance/>
+
+        <EvidenceBoundary/>
+
+        <OpenRelatedSurfaces/>
 
         <HowToReadPage/>
 
