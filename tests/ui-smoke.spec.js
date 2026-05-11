@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const routes = [
   { path: '/', heading: /Tracking what Australia.{1,5}s resilience data shows/ },
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
-  { path: '/ui_kits/fuel-security-dashboard/index.html', heading: 'What a transparent Australian fuel dashboard should show.' },
+  { path: '/ui_kits/fuel-security-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-security data can verify/ },
   { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: 'Australian fuel strategy tracker' },
   { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: 'Queensland fuel sovereignty delivery tracker' },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
@@ -235,7 +235,19 @@ test('housing pressure page keeps models source-gated', async ({ page }) => {
 
 test('fuel security page keeps operational gaps fail-closed', async ({ page }) => {
   await page.goto('/ui_kits/fuel-security-dashboard/index.html');
-  await expect(page.getByRole('heading', { name: 'What a transparent Australian fuel dashboard should show.' })).toBeVisible();
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public fuel-security data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed fuel-security indicators from partial, stale, manual and source-gated feeds')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this page can verify in 30 seconds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this page' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this dashboard does, and does not, claim' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed is loaded yet.')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap, not evidence of wrongdoing.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Queensland Fuel Sovereignty', exact: true })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
   await expect(page.getByText('Public calls for a national fuel dashboard are about certainty')).toBeVisible();
   await expect(page.getByRole('heading', { name: /Site refresh:|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
   await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
