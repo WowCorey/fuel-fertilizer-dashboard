@@ -9,8 +9,74 @@ const STATUS_LEGEND = [
   ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
 ];
 
+const GAP_CATEGORIES = [
+  {
+    slug: 'fuel',
+    title: 'Fuel operations and supply visibility',
+    anchor: 'cat-fuel-h',
+    intro: 'National fuel cover, retail availability, terminal/cargo/contract visibility and Queensland delivery.',
+    dashboards: [
+      { label: 'Open National Fuel Security', href: '../fuel-security-dashboard/index.html' },
+      { label: 'Open Australian Fuel Strategy Tracker', href: '../australian-fuel-strategy-dashboard/index.html' },
+      { label: 'Open Queensland Fuel Sovereignty', href: '../qld-fuel-sovereignty-dashboard/index.html' },
+    ],
+  },
+  {
+    slug: 'food',
+    title: 'Food, farms and water',
+    anchor: 'cat-food-h',
+    intro: 'Fertiliser cover, farm diesel risk, water allocation by food-producing region and drought pressure.',
+    dashboards: [
+      { label: 'Open Food, Farms & Water', href: '../fertilizer-dashboard/index.html' },
+    ],
+  },
+  {
+    slug: 'economy',
+    title: 'Economy and households',
+    anchor: 'cat-economy-h',
+    intro: 'Cash-rate signal, household debt, mortgage and rental stress models, first-home buyer indicators and tax-model gaps.',
+    dashboards: [
+      { label: 'Open AU Economics', href: '../au-economics-dashboard/index.html' },
+      { label: 'Open Housing Pressure', href: '../housing-economic-pressure-dashboard/index.html' },
+    ],
+  },
+  {
+    slug: 'defence',
+    title: 'Defence and strategic posture',
+    anchor: 'cat-defence-h',
+    intro: 'Procurement pathway, contract and delivery rows, naval logistics implications and critical-mineral readiness.',
+    dashboards: [
+      { label: 'Open Defence Posture', href: '../defence-alliances-dashboard/index.html' },
+      { label: 'Open Defence Procurement Watch', href: '../defence-procurement-watch/index.html' },
+      { label: 'Open Strategic Resources', href: '../strategic-resources-dashboard/index.html' },
+    ],
+  },
+  {
+    slug: 'infrastructure',
+    title: 'Infrastructure and Brisbane 2032',
+    anchor: 'cat-infrastructure-h',
+    intro: 'Power resilience, manufacturing bottlenecks, project delivery status and Olympics readiness.',
+    dashboards: [
+      { label: 'Open Infrastructure', href: '../infrastructure-dashboard/index.html' },
+      { label: 'Open Power Grid', href: '../power-grid-dashboard/index.html' },
+      { label: 'Open Manufacturing', href: '../manufacturing-dashboard/index.html' },
+      { label: 'Open Brisbane 2032 Readiness', href: '../brisbane-2032-readiness-dashboard/index.html' },
+    ],
+  },
+  {
+    slug: 'workforce',
+    title: 'Workforce and automation',
+    anchor: 'cat-workforce-h',
+    intro: 'Sector automation exposure, displacement risk, retraining capacity and regional workforce exposure.',
+    dashboards: [
+      { label: 'Open Employment & Automation', href: '../employment-automation-dashboard/index.html' },
+    ],
+  },
+];
+
 const SCOREBOARD_ROWS = [
   {
+    category: 'fuel',
     area: 'Fuel security',
     status: 'partial',
     gap: 'Latest fuel strategy source, station availability, terminal inventory, vessel ETA/cargo/product and forward contracts',
@@ -18,8 +84,10 @@ const SCOREBOARD_ROWS = [
     why: 'Fuel affects tourism, freight, farms, emergency services, defence posture and regional resilience.',
     action: 'Publish source-safe station, terminal, cargo and contract fields with product, date, geography and reuse terms.',
     page: 'Fuel strategy / National fuel security',
+    last_reviewed: null,
   },
   {
+    category: 'fuel',
     area: 'Queensland fuel sovereignty',
     status: 'source-gated',
     gap: 'Land parcels, EOI/bid counts, proponents, contracts, storage/refining capacity and approvals completion',
@@ -27,8 +95,10 @@ const SCOREBOARD_ROWS = [
     why: 'Public debate now includes delivery tracking, not only national fuel status.',
     action: 'Publish official AFIP delivery tables with hub, land, capacity, approval, proponent and contract status fields.',
     page: 'QLD fuel sovereignty',
+    last_reviewed: null,
   },
   {
+    category: 'food',
     area: 'Food, farms and water',
     status: 'partial',
     gap: 'Farm diesel, fertiliser cover, water allocations by food region, drought pressure and freight disruption',
@@ -36,8 +106,10 @@ const SCOREBOARD_ROWS = [
     why: 'Fuel, fertiliser and water determine whether farms can produce and move food.',
     action: 'Wire one exact public dataset at a time; do not infer drought, allocations or cover from maps or commentary.',
     page: 'Food, farms & water security',
+    last_reviewed: null,
   },
   {
+    category: 'economy',
     area: 'Economy and housing',
     status: 'source-gated',
     gap: 'Housing affordability model, investor ownership, first-home buyers, negative gearing and rental stress',
@@ -45,8 +117,10 @@ const SCOREBOARD_ROWS = [
     why: 'Rates, debt, rents and housing supply shape cost of living and social stability.',
     action: 'Separate official cash-rate/debt signals from future housing model inputs before publishing any model.',
     page: 'Housing pressure',
+    last_reviewed: null,
   },
   {
+    category: 'defence',
     area: 'Defence and procurement',
     status: 'source-gated',
     gap: 'Japan/warship procurement source verification, contract status, delivery timelines and logistics/fuel implications',
@@ -54,8 +128,10 @@ const SCOREBOARD_ROWS = [
     why: 'Ships, fuel logistics, industry content and delivery schedules are national-security issues.',
     action: 'Load only official Defence or procurement source material before asserting supplier, contract or delivery status.',
     page: 'Defence procurement / Defence posture',
+    last_reviewed: null,
   },
   {
+    category: 'infrastructure',
     area: 'Brisbane 2032 readiness',
     status: 'source-gated',
     gap: 'Infrastructure delivery, transport, accommodation, power, tourism pressure and emergency logistics',
@@ -63,8 +139,10 @@ const SCOREBOARD_ROWS = [
     why: 'The Olympics will stress transport, accommodation, power, tourism and emergency systems.',
     action: 'Use the Brisbane 2032 Readiness page to keep official delivery, capacity and emergency-readiness source gates visible.',
     page: 'Brisbane 2032 readiness',
+    last_reviewed: null,
   },
   {
+    category: 'workforce',
     area: 'AI and workforce',
     status: 'roadmap',
     gap: 'Sector exposure, displacement risk, retraining capacity and regional workforce exposure',
@@ -72,6 +150,7 @@ const SCOREBOARD_ROWS = [
     why: 'AI may reshape productivity, jobs, skills and government service demand, but timing is not causation.',
     action: 'Do not publish AI displacement scores until an Australian source-safe methodology exists.',
     page: 'Employment & Automation',
+    last_reviewed: null,
   },
 ];
 
@@ -322,6 +401,33 @@ const OPERATIONAL_CHECKLIST = [
   'maintenance and refresh ownership',
 ];
 
+const EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that the underlying value is zero, low, or negligible.',
+  },
+  {
+    title: 'Source-gated is a publishing boundary',
+    copy: 'Source-gated means a verified source, exact field, period, unit and reuse-rights pathway has not been loaded. The page does not estimate a value while the gate is open.',
+  },
+  {
+    title: 'No estimates fill missing values',
+    copy: 'The project does not generate estimates, projections or fill values to close visibility gaps. Missing data stays visible until a named public source supports it.',
+  },
+  {
+    title: 'Priority bands are editorial triage',
+    copy: 'Priority bands are an editorial/product triage view, not official risk ratings or numeric scores. They reflect what is decision-useful for readers, not formal government assessments.',
+  },
+  {
+    title: 'A visibility gap is not proof of misconduct',
+    copy: 'A missing public feed is a visibility gap, not evidence of wrongdoing. Some data may be sensitive, in roll-out, or simply not yet published in a machine-readable form.',
+  },
+  {
+    title: 'Holder/publisher fields are likely sources',
+    copy: 'Likely holder/publisher entries name the agencies most plausibly responsible for the data based on existing public mandates. They are starting points for verification, not assertions of custody.',
+  },
+];
+
 function StatusBadge({ status }) {
   return <TrustBadge kind={status}>{status === 'source-gated' ? 'Source-gated' : status.charAt(0).toUpperCase() + status.slice(1)}</TrustBadge>;
 }
@@ -331,11 +437,28 @@ function PriorityBand({ band }) {
   return <span className={`priority-band priority-band--${key}`}>{band}</span>;
 }
 
+function LastReviewed({ value }) {
+  return <span className="audit-stamp">Last reviewed: {value || 'metadata pending'}</span>;
+}
+
 function App() {
   const [refreshStatus, setRefreshStatus] = React.useState(null);
   React.useEffect(() => {
     window.FR.loadRefreshStatus().then(setRefreshStatus);
   }, []);
+
+  const totalGaps = SCOREBOARD_ROWS.length;
+  const totalCategories = GAP_CATEGORIES.length;
+  const totalActions = ACTION_QUEUE.length;
+  const matrixCounts = PRIORITY_MATRIX_ROWS.reduce((acc, row) => {
+    acc[row.band] = (acc[row.band] || 0) + 1;
+    return acc;
+  }, {});
+
+  const rowsByCategory = GAP_CATEGORIES.map(cat => ({
+    ...cat,
+    rows: SCOREBOARD_ROWS.filter(r => r.category === cat.slug),
+  }));
 
   return (
     <div className="page">
@@ -343,12 +466,17 @@ function App() {
       <main id="main">
         <section className="intro">
           <div>
-            <span className="eyebrow">Missing data scoreboard</span>
-            <h1>What Australia can see, and what is still missing.</h1>
+            <span className="eyebrow">Public-data resilience audit</span>
+            <h1>The public-data gaps behind Australia&rsquo;s resilience picture</h1>
             <p className="lede">
-              This page turns dashboard gaps into a public-policy product. It separates verified data,
-              partial coverage, stale sources, unavailable feeds, source-gated work and roadmap-only
-              areas without inventing values.
+              This scoreboard separates verified feeds from missing, stale, partial and source-gated data,
+              so readers can see what Australia can verify &mdash; and what still depends on unpublished or
+              hard-to-access information.
+            </p>
+            <p className="lede" style={{ marginTop: 'var(--s-3)' }}>
+              <strong>What Australia can see, and what is still missing.</strong> The audit covers fuel,
+              food, economy, defence, infrastructure and workforce. Priority bands are editorial/product
+              triage only, not official risk ratings.
             </p>
           </div>
           <aside className="intro-card">
@@ -382,6 +510,77 @@ function App() {
               <dd>Not applicable</dd>
             </div>
           </dl>
+        </section>
+
+        <section className="section" aria-labelledby="audit-30s-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">30-second audit summary</span>
+              <h2 id="audit-30s-h">A 30-second view of public-data visibility</h2>
+              <p className="section__lede">
+                Counts below are derived from the editorial gap and triage lists on this page. They describe
+                what the audit currently tracks. They are not invented totals or official risk ratings.
+              </p>
+            </div>
+          </div>
+          <div className="quick-link-grid quick-link-grid--4">
+            <article className="quick-link-card">
+              <span className="eyebrow">Tracked categories</span>
+              <h3>{totalCategories} category areas</h3>
+              <p>
+                Fuel, food, economy, defence, infrastructure and workforce. Each has an audit row, a likely
+                holder and links to the relevant dashboard.
+              </p>
+              <a href="#cat-fuel-h">Jump to first category</a>
+            </article>
+            <article className="quick-link-card">
+              <span className="eyebrow">Audit rows</span>
+              <h3>{totalGaps} category gap rows</h3>
+              <p>
+                One row per category area names the gap, why it matters, the likely publisher and what would
+                close it. Status mixes verified, partial, source-gated, unavailable and roadmap.
+              </p>
+              <a href="#scoreboard-h">Jump to scoreboard</a>
+            </article>
+            <article className="quick-link-card">
+              <span className="eyebrow">Priority triage</span>
+              <h3>{matrixCounts.Immediate || 0} immediate / {matrixCounts.High || 0} high / {matrixCounts.Medium || 0} medium</h3>
+              <p>
+                Priority bands group the most decision-useful gaps. They are editorial/product triage only,
+                not official risk ratings or numeric scores.
+              </p>
+              <a href="#priority-h">Jump to priority matrix</a>
+            </article>
+            <article className="quick-link-card">
+              <span className="eyebrow">Next source actions</span>
+              <h3>{totalActions} action types</h3>
+              <p>
+                Source verification, data-access request, automation candidate, methodology, public/private
+                boundary and roadmap-build work needed before gaps become dashboard values.
+              </p>
+              <a href="#queue-h">Jump to action queue</a>
+            </article>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="scan-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Scan by category</span>
+              <h2 id="scan-h">Scan the audit by category</h2>
+              <p className="section__lede">
+                Lightweight category anchors so readers can jump straight to a gap area without filtering.
+              </p>
+            </div>
+          </div>
+          <nav className="audit-anchors" aria-label="Audit category anchors">
+            {GAP_CATEGORIES.map(cat => (
+              <a key={cat.slug} className="audit-anchor" href={`#${cat.anchor}`}>
+                <span className="audit-anchor__title">{cat.title}</span>
+                <span className="audit-anchor__intro">{cat.intro}</span>
+              </a>
+            ))}
+          </nav>
         </section>
 
         <section className="section" aria-labelledby="scoreboard-read-h">
@@ -439,6 +638,86 @@ function App() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="section section--why" aria-labelledby="evidence-boundary-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Evidence boundary</span>
+              <h2 id="evidence-boundary-h">What this scoreboard is, and is not</h2>
+              <p className="section__lede">
+                Read these statements before interpreting any row, status or priority band on this page.
+                They define how the audit treats missing public data.
+              </p>
+            </div>
+          </div>
+          <div className="source-grid">
+            {EVIDENCE_BOUNDARY.map(item => (
+              <article className="source-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="categories-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Audit by category</span>
+              <h2 id="categories-h">Public-data gaps grouped by category</h2>
+              <p className="section__lede">
+                Each section names the gap, the likely publisher, why it matters, what would close it
+                and the affected dashboard surface. Last-reviewed metadata is shown only where it exists.
+              </p>
+            </div>
+          </div>
+          {rowsByCategory.map(cat => (
+            <div className="audit-category" key={cat.slug}>
+              <div className="audit-category__head">
+                <h3 id={cat.anchor}>{cat.title}</h3>
+                <p>{cat.intro}</p>
+                <div className="audit-category__ctas">
+                  {cat.dashboards.map(link => (
+                    <a key={link.href} className="audit-category__cta" href={link.href}>{link.label}</a>
+                  ))}
+                </div>
+              </div>
+              <div className="source-grid">
+                {cat.rows.map(row => (
+                  <article className="source-card audit-card" key={`${cat.slug}-${row.area}`}>
+                    <div className="audit-card__head">
+                      <StatusBadge status={row.status}/>
+                      <span className="audit-card__title">{row.area}</span>
+                    </div>
+                    <dl className="audit-card__dl">
+                      <div>
+                        <dt>Gap or feed</dt>
+                        <dd>{row.gap}</dd>
+                      </div>
+                      <div>
+                        <dt>Likely holder / publisher</dt>
+                        <dd>{row.holder}</dd>
+                      </div>
+                      <div>
+                        <dt>Why it matters</dt>
+                        <dd>{row.why}</dd>
+                      </div>
+                      <div>
+                        <dt>What would close the gap</dt>
+                        <dd>{row.action}</dd>
+                      </div>
+                      <div>
+                        <dt>Dashboard surface</dt>
+                        <dd>{row.page}</dd>
+                      </div>
+                    </dl>
+                    <LastReviewed value={row.last_reviewed}/>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))}
         </section>
 
         <section className="section" aria-labelledby="priority-h">
@@ -569,7 +848,7 @@ function App() {
               <h2 id="scoreboard-h">Missing data scoreboard</h2>
               <p className="section__lede">
                 Each row names the gap, the likely holder or publisher, why the gap matters, the next source action
-                and the dashboard surface affected.
+                and the dashboard surface affected. Last-reviewed metadata is shown only where it exists.
               </p>
             </div>
           </div>
@@ -584,6 +863,7 @@ function App() {
                   <th>Why it matters</th>
                   <th>Next source action</th>
                   <th>Dashboard</th>
+                  <th>Last reviewed</th>
                 </tr>
               </thead>
               <tbody>
@@ -596,6 +876,7 @@ function App() {
                     <td>{row.why}</td>
                     <td>{row.action}</td>
                     <td>{row.page}</td>
+                    <td>{row.last_reviewed || 'metadata pending'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -625,6 +906,60 @@ function App() {
                 <p>{section.note}</p>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="cta-flow-h">
+          <div className="section__head">
+            <div>
+              <span className="eyebrow">Where to go next</span>
+              <h2 id="cta-flow-h">Open the dashboards behind these gaps</h2>
+              <p className="section__lede">
+                Each link opens the dashboard surface where the gap will appear once a public source is loaded.
+              </p>
+            </div>
+          </div>
+          <div className="quick-link-grid quick-link-grid--4">
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">National Fuel Security</span>
+              <p>Days-cover, MSO context, aggregate import visibility and Queensland visibility sections.</p>
+              <a href="../fuel-security-dashboard/index.html">Open National Fuel Security</a>
+            </article>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Queensland Fuel Sovereignty</span>
+              <p>Six-port AFIP pathway, state-owned land audit, Taroom Trough context and approval blockers.</p>
+              <a href="../qld-fuel-sovereignty-dashboard/index.html">Open Queensland Fuel Sovereignty</a>
+            </article>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Food, Farms &amp; Water</span>
+              <p>Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds.</p>
+              <a href="../fertilizer-dashboard/index.html">Open Food, Farms &amp; Water</a>
+            </article>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">AU Economics</span>
+              <p>Latest RBA cash-rate target and selected public macro indicators.</p>
+              <a href="../au-economics-dashboard/index.html">Open AU Economics</a>
+            </article>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Defence Posture</span>
+              <p>Defence budget rows, alliances, frameworks and selected public capability rows.</p>
+              <a href="../defence-alliances-dashboard/index.html">Open Defence Posture</a>
+            </article>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Infrastructure</span>
+              <p>Population vs housing, public transport, airports, freight, NBN and the major-project pipeline.</p>
+              <a href="../infrastructure-dashboard/index.html">Open Infrastructure</a>
+            </article>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Employment &amp; Automation</span>
+              <p>Australian labour-market change since the AI rollout era, with no AI-causation claim.</p>
+              <a href="../employment-automation-dashboard/index.html">Open Employment &amp; Automation</a>
+            </article>
+            <article className="quick-link-card cta-card">
+              <span className="cta-card__title">Brisbane 2032 Readiness</span>
+              <p>Source-gated venue, transport, accommodation, power, fuel and emergency-logistics readiness gaps.</p>
+              <a href="../brisbane-2032-readiness-dashboard/index.html">Open Brisbane 2032 Readiness</a>
+            </article>
           </div>
         </section>
 

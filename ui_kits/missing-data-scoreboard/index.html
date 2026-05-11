@@ -8,6 +8,155 @@
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../colors_and_type.css">
 <link rel="stylesheet" href="../shared/styles.css">
+<style>
+  .audit-stamp {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    margin-top: var(--s-2);
+    padding: 4px 8px;
+    border-radius: var(--r-1);
+    background: var(--paper-sunk);
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    color: var(--ink-3);
+    line-height: 1.3;
+  }
+
+  .audit-anchors {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+  .audit-anchor {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--s-3) var(--s-4);
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--r-2);
+    color: var(--ink);
+  }
+  .audit-anchor:hover {
+    border-color: var(--accent);
+    background: var(--accent-tint);
+    color: var(--accent);
+  }
+  .audit-anchor__title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-18);
+    font-weight: 500;
+  }
+  .audit-anchor__intro {
+    color: var(--ink-2);
+    font-size: var(--fs-13);
+    line-height: 1.45;
+  }
+  .audit-anchor:hover .audit-anchor__intro { color: var(--accent); }
+
+  .audit-category {
+    border-top: 1px solid var(--rule);
+    padding-top: var(--s-6);
+    margin-top: var(--s-6);
+  }
+  .audit-category:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 0;
+  }
+  .audit-category__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .audit-category__head h3 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-24);
+    font-weight: 500;
+    scroll-margin-top: calc(var(--header-h) + var(--s-3));
+  }
+  .audit-category__head p {
+    color: var(--ink-2);
+    line-height: 1.5;
+    max-width: 70ch;
+  }
+  .audit-category__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-2);
+  }
+  .audit-category__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 var(--s-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-1);
+    background: var(--card);
+    color: var(--ink);
+    font-size: var(--fs-13);
+    font-weight: 600;
+  }
+  .audit-category__cta:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .audit-card {
+    gap: var(--s-2);
+  }
+  .audit-card__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .audit-card__title,
+  .cta-card__title {
+    font-family: var(--font-serif);
+    font-size: var(--fs-20);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .cta-card { gap: var(--s-2); }
+  .cta-card .cta-card__title { display: block; }
+  .audit-card__dl {
+    display: grid;
+    gap: var(--s-2);
+    margin: var(--s-2) 0 0;
+  }
+  .audit-card__dl > div {
+    display: grid;
+    grid-template-columns: minmax(140px, 32%) 1fr;
+    gap: var(--s-2);
+  }
+  .audit-card__dl dt {
+    color: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+  }
+  .audit-card__dl dd {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1100px) {
+    .audit-anchors { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .audit-anchors { grid-template-columns: 1fr; }
+    .audit-card__dl > div { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to main content</a>

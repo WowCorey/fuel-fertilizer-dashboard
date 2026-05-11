@@ -22,7 +22,7 @@ const routes = [
   { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
   { path: '/ui_kits/brisbane-2032-readiness-dashboard/index.html', heading: 'Brisbane 2032 readiness' },
   { path: '/ui_kits/employment-automation-dashboard/index.html', heading: "Australia's labour market during the AI rollout era." },
-  { path: '/ui_kits/missing-data-scoreboard/index.html', heading: 'What Australia can see, and what is still missing.' },
+  { path: '/ui_kits/missing-data-scoreboard/index.html', heading: /The public-data gaps behind Australia.{1,5}s resilience picture/ },
 ];
 
 for (const route of routes) {
@@ -136,7 +136,31 @@ test('homepage primary nav exposes category groups', async ({ page }) => {
 test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {
   await page.goto('/ui_kits/missing-data-scoreboard/index.html');
   const main = page.locator('main');
-  await expect(page.getByRole('heading', { name: 'What Australia can see, and what is still missing.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /The public-data gaps behind Australia.{1,5}s resilience picture/ })).toBeVisible();
+  await expect(page.getByText('This scoreboard separates verified feeds from missing, stale, partial and source-gated data')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'A 30-second view of public-data visibility' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Scan the audit by category' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this scoreboard is, and is not' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a visibility gap, not evidence of wrongdoing.')).toBeVisible();
+  await expect(page.getByText('Priority bands are an editorial/product triage view, not official risk ratings or numeric scores.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Public-data gaps grouped by category' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Fuel operations and supply visibility' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Food, farms and water', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Economy and households' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Defence and strategic posture' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Infrastructure and Brisbane 2032' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Workforce and automation' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open the dashboards behind these gaps' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Queensland Fuel Sovereignty' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open AU Economics' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Defence Posture' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Infrastructure' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Employment & Automation' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Brisbane 2032 Readiness' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Unavailable data is evidence of a public-data gap' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Start with the gap, then the action' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Scoreboard', exact: true })).toBeVisible();
@@ -150,7 +174,7 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByText('High').first()).toBeVisible();
   await expect(page.getByText('Medium').first()).toBeVisible();
   await expect(page.getByText('Roadmap').first()).toBeVisible();
-  await expect(page.getByText('Product-level fuel days cover and MSO reserves')).toBeVisible();
+  await expect(page.getByText('Product-level fuel days cover and MSO reserves').first()).toBeVisible();
   await expect(page.getByText('Forward fuel/fertiliser contract coverage')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Next action queue' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Source verification' })).toBeVisible();
