@@ -306,6 +306,199 @@ function RelationshipSection() {
   );
 }
 
+function OperationalSummary30s({ data }) {
+  const cov = window.FR.coverage(data);
+  return (
+    <section className="section" aria-labelledby="ops-30s-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second regional delivery summary</span>
+          <h2 id="ops-30s-h">What this tracker can verify in 30 seconds</h2>
+          <p className="section__lede">
+            Counts come from the page&rsquo;s loaded source envelopes via window.FR.coverage(). They
+            describe what the tracker is currently wired to read. They are not invented totals,
+            risk ratings or official classifications.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        <article className="quick-link-card">
+          <span className="eyebrow">Publicly visible delivery signals</span>
+          <span className="ops-30s__count">{cov.verified + cov.derived}</span>
+          <p>
+            Source-backed envelopes currently fresh enough for their cadence: the official six-port
+            AFIP list, the public EOI portal/form, the Taroom Trough naming/context and the
+            domestic-fuel pathway context.
+          </p>
+          <a href="#six-port-h">Jump to six-port pathway</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Partial / manual feeds</span>
+          <span className="ops-30s__count">{cov.manual + cov.stale}</span>
+          <p>
+            Public statements and hand-keyed snapshots: the state-owned land audit statement, the
+            public approvals pathway context and the AFIP program scope. These are partial public
+            signals, not parcel-level or project-level coverage.
+          </p>
+          <a href="#land-h">Jump to land and hubs</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Source-gated project feeds</span>
+          <span className="ops-30s__count">{cov.awaiting}</span>
+          <p>
+            Project-level fields that need an official source, exact field, period, unit and reuse
+            rights: refining/storage capacity, proposed projects, FIDs, bid status, contract awards
+            and approval completion rows.
+          </p>
+          <a href="#storage-h">Jump to project pathway</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+        <article className="quick-link-card">
+          <span className="eyebrow">Highest-priority visibility gaps</span>
+          <span className="ops-30s__count">{BLOCKER_ROWS.length}</span>
+          <p>
+            Categorical delivery blockers tracked editorially: data access, state-owned land detail,
+            EOI transparency, approval duplication, project capacity, contracts/awards and
+            federal/state policy alignment.
+          </p>
+          <a href="#blockers-h">Jump to delivery blockers</a>
+          <span className="audit-stamp">Last reviewed: metadata pending</span>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+const QLD_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+function StatusLegendAtGlance() {
+  return (
+    <section className="section section--why" aria-labelledby="legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="legend-h">Status labels used on this page</h2>
+          <p className="section__lede">
+            The same vocabulary is used across the Missing Data Scoreboard, the National Fuel
+            Security dashboard and this tracker. Status labels are categorical, not numeric scores.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {QLD_STATUS_LEGEND.map(([kind, label, copy]) => (
+          <article className="source-card" key={kind}>
+            <TrustBadge kind={kind}>{label}</TrustBadge>
+            <h3>{label}</h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const QLD_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that storage, refining capacity, EOI activity, proponents, contracts, land parcels or approvals are zero, low or negligible.',
+  },
+  {
+    title: 'Source-gated is a publishing boundary',
+    copy: 'Source-gated means a verified source, exact field, period, unit and reuse-rights pathway has not been loaded. The tracker does not estimate the value while the gate is open.',
+  },
+  {
+    title: 'No estimates fill missing delivery milestones',
+    copy: 'The tracker does not invent delivery milestones, government commitments, EOI status, state-owned land audit results, Taroom Trough details or reserve/storage/refinery/pipeline metrics. Missing data stays visible until a named public source supports it.',
+  },
+  {
+    title: 'Priority bands are editorial triage',
+    copy: 'Where the audit calls a gap immediate, high or medium priority, that is editorial/product triage only, not an official risk rating or government assessment.',
+  },
+  {
+    title: 'A visibility gap is not proof of misconduct',
+    copy: 'A missing public feed is a public visibility gap, not evidence of wrongdoing. Some data may be sensitive, in roll-out or simply not yet published in a machine-readable form.',
+  },
+  {
+    title: 'Holder fields are likely sources, not custody',
+    copy: 'Likely holder/publisher entries name the agencies most plausibly responsible for the data based on existing public mandates. They are starting points for verification, not assertions of custody.',
+  },
+];
+
+function EvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="evidence-boundary-h">What this tracker does, and does not, claim</h2>
+          <p className="section__lede">
+            Read these statements before interpreting any row, status or priority band on this page.
+            They define how the audit treats missing public Queensland fuel-sovereignty data.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {QLD_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function OpenRelatedSurfaces() {
+  return (
+    <section className="section" aria-labelledby="related-surfaces-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Where to go next</span>
+          <h2 id="related-surfaces-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            The audit splits regional delivery tracking from national fuel security, fuel strategy,
+            the public-data scoreboard and food-system feeds. These links open the related pages.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        <article className="quick-link-card">
+          <span className="cta-card__title">National Fuel Security</span>
+          <p>Operational fuel-security audit: days cover, MSO context, aggregate import visibility and missing live feeds.</p>
+          <a href="../fuel-security-dashboard/index.html">Open National Fuel Security</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Missing Data Scoreboard</span>
+          <p>The flagship audit page. Names every public-data gap, the likely publisher and the next source action.</p>
+          <a href="../missing-data-scoreboard/index.html">Open Missing Data Scoreboard</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Australian Fuel Strategy Tracker</span>
+          <p>National policy, MSO and reserve indicators, with public/private boundary and source-gated emergency settings.</p>
+          <a href="../australian-fuel-strategy-dashboard/index.html">Open Australian Fuel Strategy Tracker</a>
+        </article>
+        <article className="quick-link-card">
+          <span className="cta-card__title">Food, Farms &amp; Water</span>
+          <p>Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds.</p>
+          <a href="../fertilizer-dashboard/index.html">Open Food, Farms &amp; Water</a>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -335,12 +528,17 @@ function App() {
       <main id="main">
         <section className="intro" id="qld-fuel-sovereignty">
           <div>
-            <span className="eyebrow">QLD fuel sovereignty - delivery tracker</span>
-            <h1 style={{ marginTop: 12 }}>Queensland fuel sovereignty delivery tracker</h1>
+            <span className="eyebrow">Queensland fuel sovereignty delivery tracker</span>
+            <h1 style={{ marginTop: 12 }}>What Queensland&rsquo;s public fuel-sovereignty data can verify &mdash; and what remains source-gated</h1>
             <p className="intro__lede">
-              Tracks Queensland's public fuel-sovereignty delivery pathway: six ports,
-              AFIP, state-owned land, storage/refining opportunities, private-sector
-              proposals, Taroom Trough approvals and what remains unpublished.
+              This tracker separates source-backed delivery signals from partial, manual and
+              source-gated feeds so readers can see which Queensland fuel-sovereignty claims are
+              publicly visible, and which still require publisher verification.
+            </p>
+            <p className="intro__lede" style={{ marginTop: 12 }}>
+              It tracks the public fuel-sovereignty delivery pathway: six ports, AFIP, state-owned
+              land, storage/refining opportunities, private-sector proposals, Taroom Trough
+              approvals and what remains unpublished.
             </p>
             <p className="body-sm" style={{ marginTop: 16, color: 'var(--ink-2)' }}>
               This page is an independent public-source prototype. It does not infer land
@@ -358,10 +556,21 @@ function App() {
             <div style={{ height: 12 }}/>
             <strong>Boundary</strong>
             <span>Delivery/accountability tracker, not an operational fuel dashboard.</span>
+            <div style={{ height: 12 }}/>
+            <strong>Last reviewed</strong>
+            <span className="mono">metadata pending</span>
           </aside>
         </section>
 
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
+
+        <OperationalSummary30s data={data}/>
+
+        <StatusLegendAtGlance/>
+
+        <EvidenceBoundary/>
+
+        <OpenRelatedSurfaces/>
 
         <QuickGuide/>
 
