@@ -5,7 +5,7 @@ const routes = [
   { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-security data can verify/ },
   { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: 'Australian fuel strategy tracker' },
-  { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: 'Queensland fuel sovereignty delivery tracker' },
+  { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
@@ -345,7 +345,20 @@ test('fuel strategy tracker keeps policy and operational data source-gated', asy
 test('Queensland fuel sovereignty tracker keeps delivery data source-gated', async ({ page }) => {
   await page.goto('/ui_kits/qld-fuel-sovereignty-dashboard/index.html');
   const main = page.locator('main');
-  await expect(page.getByRole('heading', { name: 'Queensland fuel sovereignty delivery tracker' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ })).toBeVisible();
+  await expect(page.getByText('This tracker separates source-backed delivery signals from partial, manual and source-gated feeds')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this tracker can verify in 30 seconds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this page' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this tracker does, and does not, claim' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap, not evidence of wrongdoing.')).toBeVisible();
+  await expect(page.getByText('Likely holder/publisher entries name the agencies most plausibly responsible for the data')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Australian Fuel Strategy Tracker' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer land parcels, storage capacity, refinery capacity, proponents, bids, contracts')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Delivery evidence before delivery claims' })).toBeVisible();

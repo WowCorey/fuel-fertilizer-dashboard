@@ -1333,6 +1333,165 @@ function RelationshipSection() {
     href: "../missing-data-scoreboard/index.html"
   }, "Open Missing Data Scoreboard")))));
 }
+function OperationalSummary30s({
+  data
+}) {
+  const cov = window.FR.coverage(data);
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "ops-30s-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second regional delivery summary"), React.createElement("h2", {
+    id: "ops-30s-h"
+  }, "What this tracker can verify in 30 seconds"), React.createElement("p", {
+    className: "section__lede"
+  }, "Counts come from the page\u2019s loaded source envelopes via window.FR.coverage(). They describe what the tracker is currently wired to read. They are not invented totals, risk ratings or official classifications."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Publicly visible delivery signals"), React.createElement("span", {
+    className: "ops-30s__count"
+  }, cov.verified + cov.derived), React.createElement("p", null, "Source-backed envelopes currently fresh enough for their cadence: the official six-port AFIP list, the public EOI portal/form, the Taroom Trough naming/context and the domestic-fuel pathway context."), React.createElement("a", {
+    href: "#six-port-h"
+  }, "Jump to six-port pathway"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Partial / manual feeds"), React.createElement("span", {
+    className: "ops-30s__count"
+  }, cov.manual + cov.stale), React.createElement("p", null, "Public statements and hand-keyed snapshots: the state-owned land audit statement, the public approvals pathway context and the AFIP program scope. These are partial public signals, not parcel-level or project-level coverage."), React.createElement("a", {
+    href: "#land-h"
+  }, "Jump to land and hubs"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Source-gated project feeds"), React.createElement("span", {
+    className: "ops-30s__count"
+  }, cov.awaiting), React.createElement("p", null, "Project-level fields that need an official source, exact field, period, unit and reuse rights: refining/storage capacity, proposed projects, FIDs, bid status, contract awards and approval completion rows."), React.createElement("a", {
+    href: "#storage-h"
+  }, "Jump to project pathway"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, "Highest-priority visibility gaps"), React.createElement("span", {
+    className: "ops-30s__count"
+  }, BLOCKER_ROWS.length), React.createElement("p", null, "Categorical delivery blockers tracked editorially: data access, state-owned land detail, EOI transparency, approval duplication, project capacity, contracts/awards and federal/state policy alignment."), React.createElement("a", {
+    href: "#blockers-h"
+  }, "Jump to delivery blockers"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending"))));
+}
+const QLD_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+function StatusLegendAtGlance() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "legend-h"
+  }, "Status labels used on this page"), React.createElement("p", {
+    className: "section__lede"
+  }, "The same vocabulary is used across the Missing Data Scoreboard, the National Fuel Security dashboard and this tracker. Status labels are categorical, not numeric scores."))), React.createElement("div", {
+    className: "source-grid"
+  }, QLD_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement("article", {
+    className: "source-card",
+    key: kind
+  }, React.createElement(TrustBadge, {
+    kind: kind
+  }, label), React.createElement("h3", null, label), React.createElement("p", null, copy)))));
+}
+const QLD_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that storage, refining capacity, EOI activity, proponents, contracts, land parcels or approvals are zero, low or negligible.'
+}, {
+  title: 'Source-gated is a publishing boundary',
+  copy: 'Source-gated means a verified source, exact field, period, unit and reuse-rights pathway has not been loaded. The tracker does not estimate the value while the gate is open.'
+}, {
+  title: 'No estimates fill missing delivery milestones',
+  copy: 'The tracker does not invent delivery milestones, government commitments, EOI status, state-owned land audit results, Taroom Trough details or reserve/storage/refinery/pipeline metrics. Missing data stays visible until a named public source supports it.'
+}, {
+  title: 'Priority bands are editorial triage',
+  copy: 'Where the audit calls a gap immediate, high or medium priority, that is editorial/product triage only, not an official risk rating or government assessment.'
+}, {
+  title: 'A visibility gap is not proof of misconduct',
+  copy: 'A missing public feed is a public visibility gap, not evidence of wrongdoing. Some data may be sensitive, in roll-out or simply not yet published in a machine-readable form.'
+}, {
+  title: 'Holder fields are likely sources, not custody',
+  copy: 'Likely holder/publisher entries name the agencies most plausibly responsible for the data based on existing public mandates. They are starting points for verification, not assertions of custody.'
+}];
+function EvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "evidence-boundary-h"
+  }, "What this tracker does, and does not, claim"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting any row, status or priority band on this page. They define how the audit treats missing public Queensland fuel-sovereignty data."))), React.createElement("div", {
+    className: "source-grid"
+  }, QLD_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function OpenRelatedSurfaces() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "related-surfaces-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Where to go next"), React.createElement("h2", {
+    id: "related-surfaces-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "The audit splits regional delivery tracking from national fuel security, fuel strategy, the public-data scoreboard and food-system feeds. These links open the related pages."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "National Fuel Security"), React.createElement("p", null, "Operational fuel-security audit: days cover, MSO context, aggregate import visibility and missing live feeds."), React.createElement("a", {
+    href: "../fuel-security-dashboard/index.html"
+  }, "Open National Fuel Security")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Missing Data Scoreboard"), React.createElement("p", null, "The flagship audit page. Names every public-data gap, the likely publisher and the next source action."), React.createElement("a", {
+    href: "../missing-data-scoreboard/index.html"
+  }, "Open Missing Data Scoreboard")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Australian Fuel Strategy Tracker"), React.createElement("p", null, "National policy, MSO and reserve indicators, with public/private boundary and source-gated emergency settings."), React.createElement("a", {
+    href: "../australian-fuel-strategy-dashboard/index.html"
+  }, "Open Australian Fuel Strategy Tracker")), React.createElement("article", {
+    className: "quick-link-card"
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, "Food, Farms & Water"), React.createElement("p", null, "Fertiliser imports beside source-gated farm-diesel, water-allocation and drought feeds."), React.createElement("a", {
+    href: "../fertilizer-dashboard/index.html"
+  }, "Open Food, Farms & Water"))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1369,13 +1528,18 @@ function App() {
     id: "qld-fuel-sovereignty"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "QLD fuel sovereignty - delivery tracker"), React.createElement("h1", {
+  }, "Queensland fuel sovereignty delivery tracker"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Queensland fuel sovereignty delivery tracker"), React.createElement("p", {
+  }, "What Queensland\u2019s public fuel-sovereignty data can verify \u2014 and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "Tracks Queensland's public fuel-sovereignty delivery pathway: six ports, AFIP, state-owned land, storage/refining opportunities, private-sector proposals, Taroom Trough approvals and what remains unpublished."), React.createElement("p", {
+  }, "This tracker separates source-backed delivery signals from partial, manual and source-gated feeds so readers can see which Queensland fuel-sovereignty claims are publicly visible, and which still require publisher verification."), React.createElement("p", {
+    className: "intro__lede",
+    style: {
+      marginTop: 12
+    }
+  }, "It tracks the public fuel-sovereignty delivery pathway: six ports, AFIP, state-owned land, storage/refining opportunities, private-sector proposals, Taroom Trough approvals and what remains unpublished."), React.createElement("p", {
     className: "body-sm",
     style: {
       marginTop: 16,
@@ -1394,10 +1558,18 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Delivery/accountability tracker, not an operational fuel dashboard."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Delivery/accountability tracker, not an operational fuel dashboard."), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", {
+    className: "mono"
+  }, "metadata pending"))), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
-  }), React.createElement(QuickGuide, null), React.createElement(SixPortDeliveryPathway, {
+  }), React.createElement(OperationalSummary30s, {
+    data: data
+  }), React.createElement(StatusLegendAtGlance, null), React.createElement(EvidenceBoundary, null), React.createElement(OpenRelatedSurfaces, null), React.createElement(QuickGuide, null), React.createElement(SixPortDeliveryPathway, {
     data: data
   }), React.createElement("section", {
     className: "section",
