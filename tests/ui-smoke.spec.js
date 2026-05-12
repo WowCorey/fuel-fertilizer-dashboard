@@ -19,7 +19,7 @@ const routes = [
   { path: '/ui_kits/housing-economic-pressure-dashboard/index.html', heading: 'Housing and economic pressure' },
   { path: '/ui_kits/manufacturing-dashboard/index.html', heading: /What Australia.{1,5}s public manufacturing-capacity data can verify/ },
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
-  { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
+  { path: '/ui_kits/infrastructure-dashboard/index.html', heading: /What Australia.{1,5}s public infrastructure-delivery data can verify/ },
   { path: '/ui_kits/brisbane-2032-readiness-dashboard/index.html', heading: 'Brisbane 2032 readiness' },
   { path: '/ui_kits/employment-automation-dashboard/index.html', heading: /What Australia.{1,5}s public employment and automation data can verify/ },
   { path: '/ui_kits/missing-data-scoreboard/index.html', heading: /The public-data gaps behind Australia.{1,5}s resilience picture/ },
@@ -422,6 +422,52 @@ test('manufacturing page separates industrial signals from sovereign capability 
   await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial industrial data' })).toHaveCount(1);
   const legendOrder = await page.evaluate(() => {
     const legend = document.querySelector('#manufacturing-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
+});
+
+test('infrastructure page separates delivery signals from readiness claims', async ({ page }) => {
+  await page.goto('/ui_kits/infrastructure-dashboard/index.html');
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public infrastructure-delivery data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed infrastructure, logistics and')).toBeVisible();
+  await expect(page.getByText('delivery-readiness signals without invented certainty')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this infrastructure page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, Manufacturing, Employment & Automation and National Fuel Security.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the infrastructure audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible infrastructure signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated logistics or readiness feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial infrastructure data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Infrastructure signals are not readiness proof')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByText('Priority language on this page is editorial/product triage only.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Manufacturing' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Housing Pressure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Brisbane 2032 Readiness' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Power Grid' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Infrastructure source status comes first' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'As of the latest publisher update' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Population, growth rate and housing stock over time' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What changed' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'For Olympic readiness gaps' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Every dataset used on this page' })).toBeVisible();
+  await expect(page.getByText('How we calculate the numbers, and what we do not claim')).toBeVisible();
+  await expect(page.getByText('What this does not prove')).toBeVisible();
+  await expect(page.getByText('These indicators do not prove project delivery readiness')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public infrastructure-delivery data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this infrastructure page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial infrastructure data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#infrastructure-status-legend-h')?.closest('section');
     const coverage = document.querySelector('.coverage-strip');
     return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
   });
