@@ -21,7 +21,7 @@ const routes = [
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
   { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
   { path: '/ui_kits/brisbane-2032-readiness-dashboard/index.html', heading: 'Brisbane 2032 readiness' },
-  { path: '/ui_kits/employment-automation-dashboard/index.html', heading: "Australia's labour market during the AI rollout era." },
+  { path: '/ui_kits/employment-automation-dashboard/index.html', heading: /What Australia.{1,5}s public employment and automation data can verify/ },
   { path: '/ui_kits/missing-data-scoreboard/index.html', heading: /The public-data gaps behind Australia.{1,5}s resilience picture/ },
 ];
 
@@ -336,6 +336,48 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(page.getByRole('heading', { name: 'What the food-system audit can and cannot show' })).toHaveCount(1);
   const legendOrder = await page.evaluate(() => {
     const legend = document.querySelector('#food-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
+});
+
+test('employment automation page separates observed labour signals from AI causation', async ({ page }) => {
+  await page.goto('/ui_kits/employment-automation-dashboard/index.html');
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public employment and automation data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed labour-market indicators from partial')).toBeVisible();
+  await expect(page.getByText('workforce-transition signals without invented causation')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this labour and automation page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, fuel-security cluster and Food/Farms/Water page.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the labour and automation audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible labour-market signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated automation or AI-impact feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial labour data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Observed movement is not AI causation')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByText('Priority language on this page is editorial/product triage only.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open AU Economics' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Housing Pressure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Labour-market source status comes first' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'As of the latest ABS publication' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Labour-market trends since 2018' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Public AI milestone events, not a causal explanation' })).toBeVisible();
+  await expect(page.getByText('None of these events is asserted to have caused any labour-market')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Every dataset used on this page' })).toBeVisible();
+  await expect(page.getByText('Why we do not publish an automation exposure score')).toBeVisible();
+  await expect(page.getByText('What the AI rollout timeline does NOT do')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public employment and automation data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this labour and automation page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial labour data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#employment-status-legend-h')?.closest('section');
     const coverage = document.querySelector('.coverage-strip');
     return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
   });
