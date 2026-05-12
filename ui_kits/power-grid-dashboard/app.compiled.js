@@ -1124,6 +1124,171 @@ Object.assign(window, {
   Footer
 });
 const SERIES = ['aemo_nem_average_wholesale_price', 'aemo_nem_total_demand', 'aemo_nem_fuel_mix', 'aemo_generation_information_register', 'aemo_coal_retirement_timeline', 'cer_renewable_energy_target_progress', 'dcceew_electricity_emissions', 'aemo_2024_isp_summary', 'aemo_wem_summary'];
+const POWER_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by region, market, asset class, reliability concept or update cadence.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const POWER_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that outages, generation constraints, reserve-margin pressure, storage limits, transmission issues or reliability problems are zero, low or negligible.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a grid, reliability or transmission value can be published.'
+}, {
+  title: 'Grid signals are not reliability proof',
+  copy: 'Observed grid signals are not treated as proof of reliability or failure unless a named source explicitly supports that link.'
+}, {
+  title: 'No estimates fill reliability gaps',
+  copy: 'This page does not estimate missing generation, outage, reserve-margin, transmission, storage, coal/gas availability, renewable output, project readiness, cost-impact or reliability values.'
+}, {
+  title: 'Priority is product triage',
+  copy: 'Priority language on this page is editorial/product triage only. It is not an official risk rating, Power Grid Stress Index or reliability score.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
+function PowerStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "power-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "power-status-legend-h"
+  }, "Status labels used on this energy-reliability page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard, Infrastructure, Manufacturing and National Fuel Security. They are part of the evidence, not decoration."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Power-grid and energy-reliability status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, POWER_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function PowerAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible grid signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'AEMO NEM price and demand are fetched where verified. Fuel mix, generation-register totals, coal closure rows, RET context, emissions, ISP and WEM rows are loaded as named public snapshots.',
+    href: '#metrics-h'
+  }, {
+    title: 'Partial and manual reliability feeds',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'Manual rows provide official context, but they are not live outage feeds, reserve margins, unit availability, project-readiness values or transmission constraint datasets.',
+    href: '#sources'
+  }, {
+    title: 'Source-gated transmission or generation feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Generation availability, outage totals, reserve margins, storage availability, transmission constraints, coal/gas availability, renewable output and project readiness are not inferred from broad grid indicators.',
+    href: '#sources'
+  }, {
+    title: 'Highest-priority grid visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most useful next feeds would separate live/near-live outage visibility, reserve margin, transmission constraints, storage availability, generation availability, fuel dependency and event-readiness boundaries.',
+    href: '#sources'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "power-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second power-grid summary"), React.createElement("h2", {
+    id: "power-summary-h"
+  }, "What the energy-reliability audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented counts. They explain what is verifiable, what is partial, and what readers should not infer about reliability or collapse."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function PowerEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "power-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "power-evidence-boundary-h"
+  }, "What readers should not assume from missing or partial grid data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting any grid, reliability, transmission or readiness gap. They define how this public-source audit treats unavailable and source-gated information."))), React.createElement("div", {
+    className: "source-grid"
+  }, POWER_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function PowerRelatedSurfaces() {
+  const links = [{
+    title: 'Missing Data Scoreboard',
+    copy: 'Open the national audit of public-data gaps, likely publishers and next source actions.',
+    href: '../missing-data-scoreboard/index.html',
+    label: 'Open Missing Data Scoreboard'
+  }, {
+    title: 'Infrastructure',
+    copy: 'Project-delivery, transport and logistics signals that depend on reliable energy systems.',
+    href: '../infrastructure-dashboard/index.html',
+    label: 'Open Infrastructure'
+  }, {
+    title: 'Manufacturing',
+    copy: 'Industrial-capacity signals that depend on energy reliability and input visibility.',
+    href: '../manufacturing-dashboard/index.html',
+    label: 'Open Manufacturing'
+  }, {
+    title: 'National Fuel Security',
+    copy: 'Fuel availability, reserve context and missing operational feeds that shape backup and logistics resilience.',
+    href: '../fuel-security-dashboard/index.html',
+    label: 'Open National Fuel Security'
+  }, {
+    title: 'Housing Pressure',
+    copy: 'Household pressure context that overlaps with bills, rates, supply, construction and population growth.',
+    href: '../housing-economic-pressure-dashboard/index.html',
+    label: 'Open Housing Pressure'
+  }, {
+    title: 'Brisbane 2032 Readiness',
+    copy: 'Event power, backup, public-safety and emergency-logistics gaps that must stay separate from general grid context.',
+    href: '../brisbane-2032-readiness-dashboard/index.html',
+    label: 'Open Brisbane 2032 Readiness'
+  }, {
+    title: 'Sources and methodology',
+    copy: 'Jump to the source envelopes loaded by this page and the no-reliability-claim methodology.',
+    href: '#sources',
+    label: 'Open power-grid methodology'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "power-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "power-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Power-grid reliability connects to infrastructure, manufacturing, fuel, housing pressure, event readiness, freight and logistics. These links keep observed grid data separate from unsupported reliability claims."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, links.map(link => React.createElement("article", {
+    className: "quick-link-card",
+    key: link.title
+  }, React.createElement("h3", null, link.title), React.createElement("p", null, link.copy), React.createElement("a", {
+    href: link.href
+  }, link.label)))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1164,7 +1329,7 @@ function App() {
     minimumFractionDigits: dp,
     maximumFractionDigits: dp
   });
-  const fmt = (n, dp) => n === null ? '—' : n.toLocaleString('en-AU', {
+  const fmt = (n, dp) => n === null ? '-' : n.toLocaleString('en-AU', {
     minimumFractionDigits: dp,
     maximumFractionDigits: dp
   });
@@ -1182,13 +1347,15 @@ function App() {
     id: "power-grid"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Power grid \xB7 v1.0"), React.createElement("h1", {
+  }, "Power grid and energy reliability audit prototype"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's power grid, in plain English."), React.createElement("p", {
+  }, "What Australia\u2019s public power-grid data can verify - and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "How much electricity Australia uses, what it costs at the wholesale level, what fuels generate it, where the plants are, and which ones are scheduled to retire. The National Electricity Market (NEM) covers the eastern states and South Australia; Western Australia runs its own separate market (the WEM).")), React.createElement("aside", {
+  }, "This dashboard separates source-backed power-grid and energy-reliability indicators from partial, manual and source-gated feeds so readers can see grid-readiness signals without invented certainty."), React.createElement("p", {
+    className: "intro__lede"
+  }, "How much electricity Australia uses, what it costs at the wholesale level, what fuels generate it, where the plants are, and which ones are scheduled to retire. The National Electricity Market (NEM) covers the eastern states and South Australia; Western Australia runs its own separate market (the WEM). These broad signals are not verified outage totals, reserve margins, transmission constraints, storage availability, project readiness or proof of reliability or failure.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1197,7 +1364,11 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. No reliability claim is invented from partial grid data."), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"))), React.createElement(PowerStatusLegend, null), React.createElement(PowerAuditSummary, null), React.createElement(PowerEvidenceBoundary, null), React.createElement(PowerRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
@@ -1212,9 +1383,9 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "Why this matters to you")), React.createElement("div", {
+  }, "Grid source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Wholesale electricity prices flow through to retail bills with a lag of months to a year. The fuel mix decides emissions, vulnerability to coal-plant outages, and how much firming the grid needs as more solar and wind come on. Coal retirement timing drives every transmission and battery decision in the AEMO Integrated System Plan."), React.createElement("p", null, "This page tracks the public numbers behind those choices: NEM-wide and per-state wholesale price, total operational demand, fuel mix, the AEMO Generation Information register (every plant in the country with capacity and expected closure year), and headline forecasts from AEMO's Integrated System Plan. Values appear only when the named publisher has been verified."), React.createElement("p", {
+  }, React.createElement("p", null, "Wholesale electricity prices flow through to retail bills with a lag of months to a year. The fuel mix decides emissions, vulnerability to coal-plant outages, and how much firming the grid needs as more solar and wind come on. Coal retirement timing drives every transmission and battery decision in the AEMO Integrated System Plan."), React.createElement("p", null, "This page tracks the public numbers behind those choices: NEM-wide and per-state wholesale price, total operational demand, fuel mix, the AEMO Generation Information register (every plant in the country with capacity and expected closure year), and headline forecasts from AEMO's Integrated System Plan. Values appear only when the named publisher has been verified."), React.createElement("p", null, "A missing outage, generation availability, reserve-margin, transmission, storage or reliability feed is a public visibility gap. It is not evidence that the grid is reliable, unreliable, collapsing, unconstrained or fully secure."), React.createElement("p", {
     className: "body-sm",
     style: {
       color: 'var(--ink-3)',
@@ -1231,7 +1402,7 @@ function App() {
     id: "metrics-h"
   }, "As of the latest publisher update"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
+  }, "Cards marked source-gated, manual or unavailable are waiting on a verified publisher field, table or factual row. We do not estimate."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Wholesale price",
@@ -1384,7 +1555,7 @@ function App() {
     }
   }, "Latest month: ", React.createElement("span", {
     className: "mono"
-  }, priceFields.latest_month || '—'))), React.createElement("section", {
+  }, priceFields.latest_month || '-'))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "charts-h"
   }, React.createElement("div", {
@@ -1395,7 +1566,7 @@ function App() {
     id: "charts-h"
   }, "NEM-wide price and demand over time"), React.createElement("p", {
     className: "section__lede"
-  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
+  }, "Charts populate when verified source data is available. Hover any point, or use arrow keys, to read the value."))), React.createElement("div", {
     className: "charts-grid"
   }, React.createElement(ChartCard, {
     eyebrow: "Wholesale price",
@@ -1449,14 +1620,14 @@ function App() {
     className: "eyebrow"
   }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
+  }, "All sources are public. Cards marked source-gated, manual or unavailable are awaiting verified values. We do not estimate, and we do not invent reliability claims."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
     className: "source-card"
   }, React.createElement("h4", null, env.source_name), React.createElement("p", {
     className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
+  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source, or intentionally unavailable.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
@@ -1467,11 +1638,11 @@ function App() {
     size: 12
   })), React.createElement("p", {
     className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "NEM average wholesale price"), React.createElement("dd", null, "For each of the five NEM regions (NSW1, VIC1, QLD1, SA1, TAS1), the AEMO Price and Demand monthly archive is fetched from ", React.createElement("span", {
+  }, React.createElement("h3", null, "How we calculate the numbers, and what we do not claim"), React.createElement("dl", null, React.createElement("dt", null, "NEM average wholesale price"), React.createElement("dd", null, "For each of the five NEM regions (NSW1, VIC1, QLD1, SA1, TAS1), the AEMO Price and Demand monthly archive is fetched from ", React.createElement("span", {
     className: "mono"
-  }, "aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv"), ". All 5-minute TRADE intervals in each month are averaged to a regional monthly mean, then the five regional means are averaged to a NEM-wide series. Per-region latest-month values are kept in extra.fields."), React.createElement("dt", null, "NEM total operational demand"), React.createElement("dd", null, "Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand."), React.createElement("dt", null, "NEM fuel mix"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 Table 3, which publishes NEM supply mix contributions by black coal, brown coal, gas, liquid fuel, distributed PV, wind, grid solar, hydro, biomass and battery. The headline card shows the renewable-plus-battery share; fossil-fuel shares remain separate in the envelope fields."), React.createElement("dt", null, "NEM Generation Information register"), React.createElement("dd", null, "Hand-keyed from the January 2026 AEMO Generation Information workbook Summary table. The headline is listed nameplate capacity across existing and new-development rows, including anticipated and publicly announced projects. It is not available capacity, reliability or a construction guarantee."), React.createElement("dt", null, "Scheduled coal retirements"), React.createElement("dd", null, "Subset of January 2026 AEMO coal rows with an explicit closure date. Coal units with an expected closure year but no explicit date are retained in the envelope notes rather than mixed into the headline."), React.createElement("dt", null, "RET progress"), React.createElement("dd", null, "Hand-keyed from the Clean Energy Regulator's 2024 Renewable Energy Target Administrative Report. The headline is the reported 2024 renewable generation share across the NEM and Western Australia's SWIS, not an LRET compliance percentage."), React.createElement("dt", null, "Electricity sector emissions"), React.createElement("dd", null, "Annual Energy - Electricity emissions in megatonnes of CO2-equivalent for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory Quarterly Update. It is not a single-quarter value."), React.createElement("dt", null, "AEMO ISP headline"), React.createElement("dd", null, "Hand-keyed from the 2024 AEMO Integrated System Plan. The card shows the rounded transmission need by 2050 under Step Change and Progressive Change scenarios."), React.createElement("dt", null, "WEM summary"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 WEM market dynamics. The card shows Western Australia's quarterly average WEM energy price; the WEM is separate from the NEM.")))), React.createElement(Footer, {
+  }, "aemo.com.au/aemo/data/nem/priceanddemand/PRICE_AND_DEMAND_YYYYMM_REGION.csv"), ". All 5-minute TRADE intervals in each month are averaged to a regional monthly mean, then the five regional means are averaged to a NEM-wide series. Per-region latest-month values are kept in extra.fields."), React.createElement("dt", null, "NEM total operational demand"), React.createElement("dd", null, "Same source files; TOTALDEMAND (MW) is averaged within each region-month, then summed across regions to a NEM-wide monthly mean total operational demand."), React.createElement("dt", null, "NEM fuel mix"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 Table 3, which publishes NEM supply mix contributions by black coal, brown coal, gas, liquid fuel, distributed PV, wind, grid solar, hydro, biomass and battery. The headline card shows the renewable-plus-battery share; fossil-fuel shares remain separate in the envelope fields."), React.createElement("dt", null, "NEM Generation Information register"), React.createElement("dd", null, "Hand-keyed from the January 2026 AEMO Generation Information workbook Summary table. The headline is listed nameplate capacity across existing and new-development rows, including anticipated and publicly announced projects. It is not available capacity, reliability or a construction guarantee."), React.createElement("dt", null, "Scheduled coal retirements"), React.createElement("dd", null, "Subset of January 2026 AEMO coal rows with an explicit closure date. Coal units with an expected closure year but no explicit date are retained in the envelope notes rather than mixed into the headline."), React.createElement("dt", null, "RET progress"), React.createElement("dd", null, "Hand-keyed from the Clean Energy Regulator's 2024 Renewable Energy Target Administrative Report. The headline is the reported 2024 renewable generation share across the NEM and Western Australia's SWIS, not an LRET compliance percentage."), React.createElement("dt", null, "Electricity sector emissions"), React.createElement("dd", null, "Annual Energy - Electricity emissions in megatonnes of CO2-equivalent for the year to September 2025 from DCCEEW's National Greenhouse Gas Inventory Quarterly Update. It is not a single-quarter value."), React.createElement("dt", null, "AEMO ISP headline"), React.createElement("dd", null, "Hand-keyed from the 2024 AEMO Integrated System Plan. The card shows the rounded transmission need by 2050 under Step Change and Progressive Change scenarios."), React.createElement("dt", null, "WEM summary"), React.createElement("dd", null, "Hand-keyed from AEMO Quarterly Energy Dynamics Q4 2025 WEM market dynamics. The card shows Western Australia's quarterly average WEM energy price; the WEM is separate from the NEM."), React.createElement("dt", null, "What this does not prove"), React.createElement("dd", null, "These indicators do not prove generation availability, outage totals, reserve margins, transmission constraints, storage availability, coal/gas availability, renewable output, project readiness, cost impacts, reliability or grid failure. A reliability row requires a named public source with a field, period, unit and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   })));
