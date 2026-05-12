@@ -1131,6 +1131,160 @@ const latestValue = env => {
   return point ? fmtNumber(point.v) : 'Unavailable';
 };
 const latestPeriod = env => latestPoint(env)?.t || env?.last_data_point || 'Awaiting verified source data';
+const FOOD_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const FOOD_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that fertiliser cover, farm diesel pressure, water allocation, drought stress, food prices or logistics pressure is zero, low or negligible.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a value can be published.'
+}, {
+  title: 'No estimates fill food-system gaps',
+  copy: 'This page does not estimate missing fertiliser prices, supply levels, farm diesel exposure, water allocations, drought indicators, crop impacts, food prices or logistics metrics.'
+}, {
+  title: 'Priority is product triage',
+  copy: 'Priority language on this page is editorial/product triage only. It is not an official risk rating, farm forecast, policy classification or implementation status.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
+function FoodStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "food-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "food-status-legend-h"
+  }, "Status labels used on this food-system page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard and the fuel-security audit cluster. They are part of the evidence, not decoration."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Food-system status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, FOOD_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function FoodSystemAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible food-system signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'Manufactured fertiliser import value and top-3 source-country concentration are loaded from verified public envelopes. They are farm-input signals, not a complete food-security model.',
+    href: '#inputs-h'
+  }, {
+    title: 'Partial and manual farm visibility',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'The page keeps fertiliser import coverage visible while marking broader agricultural production, trade and water rows as incomplete until exact source tables are loaded.',
+    href: '#overview-h'
+  }, {
+    title: 'Source-gated fertiliser and water feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Fertiliser stock cover, farm-gate price pressure, farm diesel exposure, water allocation, rainfall/drought pressure and freight disruption remain source-gated or unavailable.',
+    href: '#farmer-pressure-h'
+  }, {
+    title: 'Highest-priority visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most operationally useful feeds would be nutrient-level fertiliser cover, farm diesel risk, water allocation by production region, agricultural drought pressure and input/freight disruption indicators.',
+    href: '#publish-h'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "food-system-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second food-system summary"), React.createElement("h2", {
+    id: "food-system-summary-h"
+  }, "What the food-system audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented counts. They explain what is verifiable, what is partial, and what remains a public visibility gap."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function FoodEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "food-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "food-evidence-boundary-h"
+  }, "What readers should not assume from missing food-system data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting any food, farm, fertiliser or water gap. They define how this public-source audit treats unavailable and source-gated information."))), React.createElement("div", {
+    className: "source-grid"
+  }, FOOD_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function FoodRelatedSurfaces() {
+  const links = [{
+    title: 'Missing Data Scoreboard',
+    copy: 'Open the national audit of public-data gaps, likely publishers and next source actions.',
+    href: '../missing-data-scoreboard/index.html',
+    label: 'Open Missing Data Scoreboard'
+  }, {
+    title: 'National Fuel Security',
+    copy: 'Fuel availability, days-cover context, aggregate inbound supply and missing live fuel feeds.',
+    href: '../fuel-security-dashboard/index.html',
+    label: 'Open National Fuel Security'
+  }, {
+    title: 'Australian Fuel Strategy',
+    copy: 'Policy, reserve, MSO and product-days-cover source gates that affect farm fuel and logistics context.',
+    href: '../australian-fuel-strategy-dashboard/index.html',
+    label: 'Open Australian Fuel Strategy'
+  }, {
+    title: 'AU Economics',
+    copy: 'Interest rates, inflation, wages and macro context that sit beside food-system pressure.',
+    href: '../au-economics-dashboard/index.html',
+    label: 'Open AU Economics'
+  }, {
+    title: 'Sources and methodology',
+    copy: 'Jump to the source envelopes loaded by this page and the no-estimate methodology.',
+    href: '#sources',
+    label: 'Open food-system methodology'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "food-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "food-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Food-system resilience depends on inputs, fuel, water, trade and household pressure. These links keep the page connected to the wider public-source audit."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--5"
+  }, links.map(link => React.createElement("article", {
+    className: "quick-link-card",
+    key: link.title
+  }, React.createElement("span", {
+    className: "cta-card__title"
+  }, link.title), React.createElement("p", null, link.copy), React.createElement("a", {
+    href: link.href
+  }, link.label)))));
+}
 function SourceStatusCard({
   env,
   title,
@@ -1496,20 +1650,33 @@ function App() {
     id: "fertilizer"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Food, farms & water security - prototype"), React.createElement("h1", {
+  }, "Food, farms & water security - public-source audit"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's food, farm inputs and water pressure, in plain English."), React.createElement("p", {
+  }, "What Australia\u2019s public food-system data can verify \u2014 and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "Australia grows and exports huge volumes of food, but farms still depend on imported fertiliser, fuel, water availability, seasonal rainfall and global markets. This page tracks the public-source signals that show whether the food system is under pressure, and what government still does not publish clearly enough.")), React.createElement("aside", {
+  }, "This dashboard separates source-backed food, farm, fertiliser and water indicators from partial, manual and source-gated feeds so readers can see the food-system resilience picture without invented certainty."), React.createElement("p", {
+    className: "intro__lede",
+    style: {
+      marginTop: 12
+    }
+  }, "It shows which food-system signals are currently verifiable, which feeds remain public visibility gaps, and which assumptions should not be made from missing data.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Boundary"), React.createElement("span", null, "This is an independent public-source prototype, not an official government dashboard, live farm forecast, live water-allocation service or commodity-trading tool."), React.createElement("div", {
+  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+    className: "mono"
+  }, latestRetrieved ? updatedDisplay : 'No verified retrieval recorded'), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, latestRetrieved ? updatedDisplay : 'No verified retrieval recorded'))), React.createElement("section", {
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. Not an official government dashboard, live farm forecast, water-allocation service or commodity-trading tool."), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", {
+    className: "mono"
+  }, "metadata pending"))), React.createElement("section", {
     className: "freshness-notice",
     "aria-labelledby": "freshness-title"
   }, React.createElement("div", {
@@ -1522,7 +1689,7 @@ function App() {
     className: "trust-badges"
   }, React.createElement(TrustBadge, {
     kind: refreshStatus?.status === 'success' ? 'observed' : 'unavailable'
-  }, refreshStatus?.status === 'success' ? 'Site refresh recorded' : 'No site refresh recorded')))), React.createElement(DataCoverage, {
+  }, refreshStatus?.status === 'success' ? 'Site refresh recorded' : 'No site refresh recorded')))), React.createElement(FoodStatusLegend, null), React.createElement(FoodSystemAuditSummary, null), React.createElement(FoodEvidenceBoundary, null), React.createElement(FoodRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
@@ -1537,9 +1704,9 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "Source status comes first")), React.createElement("div", {
+  }, "Food-system source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Verified means the number is backed by a loaded JSON envelope. Manual means it was hand-keyed from a named public source. Derived means the page calculated or selected a value from verified envelopes. Stale means the latest source period is outside its cadence window."), React.createElement("p", null, "Unavailable means a source has not been safely wired or the public source does not publish the exact field needed. This page leaves those gaps visible instead of filling them with estimates.")))), React.createElement(FoodPageQuickGuide, null), React.createElement("section", {
+  }, React.createElement("p", null, "Verified means the number is backed by a loaded JSON envelope. Manual means it was hand-keyed from a named public source. Derived means the page calculated or selected a value from verified envelopes. Stale means the latest source period is outside its cadence window."), React.createElement("p", null, "Source-gated and unavailable fields mean a public-safe source has not been loaded or the public source does not publish the exact field needed. This page leaves those public visibility gaps visible instead of filling them with estimates.")))), React.createElement(FoodPageQuickGuide, null), React.createElement("section", {
     className: "section",
     "aria-labelledby": "overview-h"
   }, React.createElement("div", {
