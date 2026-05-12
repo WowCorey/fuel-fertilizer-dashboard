@@ -1124,6 +1124,171 @@ Object.assign(window, {
   Footer
 });
 const SERIES = ['rba_cash_rate', 'rba_cash_rate_latest', 'rba_household_debt_to_income', 'rba_standard_variable_mortgage_rate', 'rba_credit_card_debt_accruing_interest', 'aofm_gov_gross_debt', 'state_government_debt_summary', 'abs_gdp_real_growth', 'abs_unemployment_rate', 'abs_cpi_inflation'];
+const ECON_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, household group, macro concept or update cadence.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const ECON_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that inflation pressure, wage pressure, debt stress, business conditions, arrears, hardship or household stress are zero, low or negligible.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before an economic or household-stress value can be published.'
+}, {
+  title: 'Economic movement is not causation proof',
+  copy: 'Observed economic movement is not treated as proof of policy, rate, labour-market, housing, fuel, energy or food-system causation unless a named source explicitly supports that link.'
+}, {
+  title: 'No estimates fill economic gaps',
+  copy: 'This page does not estimate missing inflation, wage, debt, GDP, household-stress, business-condition, forecast, recession or causal values.'
+}, {
+  title: 'Priority is product triage',
+  copy: 'Priority language on this page is editorial/product triage only. It is not an Economics Stress Index, recession probability model, official risk rating or forecast.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
+function EconomicsStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "economics-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "economics-status-legend-h"
+  }, "Status labels used on this macroeconomic page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard, Employment & Automation, Housing Pressure, Infrastructure and Power Grid. They are part of the evidence, not decoration."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Macroeconomic and household-stress status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, ECON_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function EconomicsAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible economic signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'RBA cash-rate, mortgage-rate, household-debt and credit-card series are loaded where verified. ABS GDP, unemployment and CPI, plus AOFM Commonwealth securities and state debt context, remain separate source-backed signals.',
+    href: '#metrics-h'
+  }, {
+    title: 'Partial and manual macroeconomic feeds',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'State and territory debt rows are hand-keyed from named Treasury budget papers, with concept differences kept visible. AOFM securities outstanding is not treated as Budget Paper gross debt.',
+    href: '#sources'
+  }, {
+    title: 'Source-gated household-stress or business-condition feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Mortgage stress, rental stress, arrears, hardship, business conditions, regional household stress, policy effects and recession probability are not inferred from headline economic indicators.',
+    href: '#sources'
+  }, {
+    title: 'Highest-priority economic visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most useful next feeds would separate safe aggregate mortgage pressure, arrears/hardship, rental stress, wages, business conditions, regional household stress and method-labelled housing models.',
+    href: '../missing-data-scoreboard/index.html'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "economics-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second macroeconomic summary"), React.createElement("h2", {
+    id: "economics-summary-h"
+  }, "What the macroeconomic resilience audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented counts. They explain what is verifiable, what is partial, and what readers should not infer about causation, forecasts or economic collapse."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function EconomicsEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "economics-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "economics-evidence-boundary-h"
+  }, "What readers should not assume from missing or partial economic data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting any macroeconomic, household-stress, inflation, debt, business-condition or resilience gap. They define how this public-source audit treats unavailable and source-gated information."))), React.createElement("div", {
+    className: "source-grid"
+  }, ECON_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function EconomicsRelatedSurfaces() {
+  const links = [{
+    title: 'Missing Data Scoreboard',
+    copy: 'Open the national audit of public-data gaps, likely publishers and next source actions.',
+    href: '../missing-data-scoreboard/index.html',
+    label: 'Open Missing Data Scoreboard'
+  }, {
+    title: 'Employment & Automation',
+    copy: 'Observed labour-market and workforce-transition signals that should not be turned into unsupported causation claims.',
+    href: '../employment-automation-dashboard/index.html',
+    label: 'Open Employment & Automation'
+  }, {
+    title: 'Housing Pressure',
+    copy: 'Source-backed housing-pressure signals and source-gated mortgage, rental, ownership and policy-model gaps.',
+    href: '../housing-economic-pressure-dashboard/index.html',
+    label: 'Open Housing Pressure'
+  }, {
+    title: 'Infrastructure',
+    copy: 'Project-delivery, logistics and readiness signals that shape economic capacity and cost pressure.',
+    href: '../infrastructure-dashboard/index.html',
+    label: 'Open Infrastructure'
+  }, {
+    title: 'Power Grid',
+    copy: 'Energy-reliability and wholesale power signals that feed into household, business and industrial pressure.',
+    href: '../power-grid-dashboard/index.html',
+    label: 'Open Power Grid'
+  }, {
+    title: 'Food, Farms & Water',
+    copy: 'Food-system, fertiliser, water and farm-input gaps that can affect prices, production and regional resilience.',
+    href: '../fertilizer-dashboard/index.html',
+    label: 'Open Food, Farms & Water'
+  }, {
+    title: 'Sources and methodology',
+    copy: 'Jump to the source envelopes loaded by this page and the no-causation-claim methodology.',
+    href: '#sources',
+    label: 'Open AU Economics methodology'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "economics-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "economics-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Macroeconomic resilience connects to jobs, housing, infrastructure, energy, food, household stress, business conditions and public finance. These links keep observed economic indicators separate from unsupported causal claims."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, links.map(link => React.createElement("article", {
+    className: "quick-link-card",
+    key: link.title
+  }, React.createElement("h3", null, link.title), React.createElement("p", null, link.copy), React.createElement("a", {
+    href: link.href
+  }, link.label)))));
+}
 function cashRateDelta(env) {
   const fields = env?.extra?.fields || {};
   const change = fields.target_change_percentage_points;
@@ -1179,22 +1344,22 @@ function App() {
     id: "au-economics"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "AU economics \xB7 v1.0"), React.createElement("h1", {
+  }, "Macroeconomic resilience audit prototype"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's economy, in plain English."), React.createElement("p", {
+  }, "What Australia\u2019s public economic data can verify - and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "The cost of money, the size of the debts the country and its households carry, and the rate at which people are working or losing work. These are the public numbers that decide how much your mortgage costs, how hard it is to get a job, and whether the government has room to spend.")), React.createElement("aside", {
+  }, "This dashboard separates source-backed macroeconomic and household-stress indicators from partial, manual and source-gated feeds so readers can see economic resilience signals without invented certainty."), React.createElement("p", {
+    className: "intro__lede"
+  }, "It tracks interest rates, debt, activity, unemployment and inflation where public sources support them. It does not estimate missing wages, household stress, business conditions, forecasts, recession probability or causal claims.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
-    className: "mono"
-  }, updatedDisplay), React.createElement("div", {
+  }, React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. No economic cause, stress score or forecast is invented from partial data."), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"))), React.createElement(EconomicsStatusLegend, null), React.createElement(EconomicsAuditSummary, null), React.createElement(EconomicsEvidenceBoundary, null), React.createElement(EconomicsRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
@@ -1209,9 +1374,9 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "Why this matters to you")), React.createElement("div", {
+  }, "Macroeconomic source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "The cash rate set by the Reserve Bank flows through to every variable mortgage, every business loan, and every credit card balance accruing interest. When debt is high relative to income \u2014 for households, for the federal government, or for the states \u2014 even small moves in the cash rate change a lot of household budgets and a lot of public budgets."), React.createElement("p", null, "This page tracks the public numbers that drive those decisions: the RBA cash rate, household debt-to-income, headline mortgage rates, credit card balances, Commonwealth and state debt, GDP growth, unemployment and CPI. Values appear only when the named publisher has been verified."), React.createElement("p", {
+  }, React.createElement("p", null, "The cash rate set by the Reserve Bank flows through to every variable mortgage, every business loan, and every credit card balance accruing interest. When debt is high relative to income - for households, for the federal government, or for the states - even small moves in the cash rate change a lot of household budgets and a lot of public budgets."), React.createElement("p", null, "This page tracks the public numbers that drive those decisions: the RBA cash rate, household debt-to-income, headline mortgage rates, credit card balances, Commonwealth and state debt, GDP growth, unemployment and CPI. Values appear only when the named publisher has been verified."), React.createElement("p", null, "A missing wage, household-stress, arrears, hardship, business-condition or recession-probability feed is a public visibility gap. It is not evidence that pressure is zero, that the economy is collapsing, or that any single policy, sector or source caused a movement."), React.createElement("p", {
     className: "body-sm",
     style: {
       color: 'var(--ink-3)',
@@ -1228,7 +1393,7 @@ function App() {
     id: "metrics-h"
   }, "As of the latest publisher update"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
+  }, "Cards marked source-gated, manual, partial, stale or unavailable are waiting on a verified publisher field, table, factual row or cadence update. We do not estimate."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Interest rate",
@@ -1277,7 +1442,7 @@ function App() {
       const total = f.jurisdictions_total;
       const sources = f.rows_with_named_source;
       if (typeof loaded === 'number' && typeof total === 'number') {
-        return `Coverage: ${loaded}/${total} jurisdiction values populated, ${sources}/${total} named Treasury source URLs identified. ${f.national_aggregate_status === 'Not published' ? 'No national aggregate published — rows are not safe to sum.' : ''}`;
+        return `Coverage: ${loaded}/${total} jurisdiction values populated, ${sources}/${total} named Treasury source URLs identified. ${f.national_aggregate_status === 'Not published' ? 'No national aggregate published - rows are not safe to sum.' : ''}`;
       }
       return 'General government net debt by state and territory, hand-keyed from each Treasury budget paper.';
     })(),
@@ -1324,12 +1489,12 @@ function App() {
       style: {
         marginBottom: 8
       }
-    }, "State and territory government net debt \u2014 coverage table"), React.createElement("p", {
+    }, "State and territory government net debt - coverage table"), React.createElement("p", {
       className: "caption",
       style: {
         marginBottom: 12
       }
-    }, "Eight jurisdiction values are hand-keyed from official Treasury Budget Paper PDFs. Rows shown as Partial coverage are verified but use a different public-sector boundary from the preferred GGS concept. ", React.createElement("b", null, "No national aggregate is published"), " \u2014 rows are not safe to sum (definitions, scope, and rounding differ between jurisdictions; ACT and NT have smaller jurisdictional scope than mainland states). Commonwealth AOFM debt is shown separately above."), React.createElement("div", {
+    }, "Eight jurisdiction values are hand-keyed from official Treasury Budget Paper PDFs. Rows shown as Partial coverage are verified but use a different public-sector boundary from the preferred GGS concept. ", React.createElement("b", null, "No national aggregate is published"), " - rows are not safe to sum (definitions, scope, and rounding differ between jurisdictions; ACT and NT have smaller jurisdictional scope than mainland states). Commonwealth AOFM debt is shown separately above."), React.createElement("div", {
       className: "data-table-wrap"
     }, React.createElement("table", {
       className: "data-table data-table--sticky"
@@ -1348,7 +1513,7 @@ function App() {
         textAlign: 'right'
       },
       className: row.value == null ? 'unavail' : ''
-    }, row.value == null ? '—' : `A$${row.value.toLocaleString('en-AU', {
+    }, row.value == null ? '-' : `A$${row.value.toLocaleString('en-AU', {
       maximumFractionDigits: 1
     })}b`), React.createElement("td", null, React.createElement("span", {
       className: "caption"
@@ -1383,7 +1548,7 @@ function App() {
     id: "charts-h"
   }, "The cash rate, debt and prices over time"), React.createElement("p", {
     className: "section__lede"
-  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
+  }, "Charts populate when verified source data is available. Hover any point, or use arrow keys, to read the value."))), React.createElement("div", {
     className: "charts-grid charts-grid--full"
   }, React.createElement(ChartCard, {
     eyebrow: "Interest rate",
@@ -1463,14 +1628,14 @@ function App() {
     className: "eyebrow"
   }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
+  }, "All sources are public. Cards marked source-gated, manual or unavailable are awaiting verified values. We do not estimate, and we do not invent causal claims."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
     className: "source-card"
   }, React.createElement("h4", null, env.source_name), React.createElement("p", {
     className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
+  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source, or intentionally unavailable until publisher verification is complete.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
@@ -1481,9 +1646,9 @@ function App() {
     size: 12
   })), React.createElement("p", {
     className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "RBA cash rate target"), React.createElement("dd", null, "The headline card uses the latest official cash-rate target row from the RBA cash-rate decisions table. The chart preserves the F1.1 monthly-average cash-rate target history. No forecast, interpolation or estimate is used."), React.createElement("dt", null, "Standard variable home loan rate"), React.createElement("dd", null, "Indicator standard variable owner-occupier rate from RBA Statistical Table F5. The fetcher selects the verified Table F5 CSV column whose title is \"Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier\"."), React.createElement("dt", null, "Household debt to disposable income"), React.createElement("dd", null, "Total household debt expressed as a per cent of household disposable income, from RBA Statistical Table E2 (Selected Household Finances Ratios). Quarter-end values."), React.createElement("dt", null, "Credit card balances accruing interest"), React.createElement("dd", null, "Total credit and charge card balances on which interest is being charged, from the RBA Statistical Table C1.1 aggregate CSV column \"Balances accruing interest\". Values are AUD millions for larger Australian card issuers, preserving the RBA source boundary."), React.createElement("dt", null, "Australian Government Securities outstanding"), React.createElement("dd", null, "Annual Australian Government Securities face value in AUD billions, hand-keyed from AOFM stock_ags.csv. This card is not Commonwealth general government gross debt from Budget Papers."), React.createElement("dt", null, "State and territory net debt"), React.createElement("dd", null, "General government net debt for each state and territory, hand-keyed once a year from the named Budget Paper or Budget Statement (typically Budget Paper 2). No single Commonwealth dataset consolidates these on a comparable basis."), React.createElement("dt", null, "Real GDP growth"), React.createElement("dd", null, "Seasonally adjusted percentage change in real Gross Domestic Product, from the ABS Data API ANA_AGG dataflow and the quarterly National Accounts release (Cat. 5206.0)."), React.createElement("dt", null, "Unemployment rate"), React.createElement("dd", null, "Headline monthly seasonally adjusted unemployment rate, from the ABS Data API LF dataflow and Labour Force Australia (Cat. 6202.0)."), React.createElement("dt", null, "CPI inflation"), React.createElement("dd", null, "All-groups Consumer Price Index annual percentage change, from the ABS Data API CPI dataflow and Consumer Price Index Australia (Cat. 6401.0).")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers, and what we do not claim"), React.createElement("dl", null, React.createElement("dt", null, "RBA cash rate target"), React.createElement("dd", null, "The headline card uses the latest official cash-rate target row from the RBA cash-rate decisions table. The chart preserves the F1.1 monthly-average cash-rate target history. No forecast, interpolation or estimate is used."), React.createElement("dt", null, "Standard variable home loan rate"), React.createElement("dd", null, "Indicator standard variable owner-occupier rate from RBA Statistical Table F5. The fetcher selects the verified Table F5 CSV column whose title is \"Lending rates; Housing loans; Banks; Variable; Standard; Owner-occupier\"."), React.createElement("dt", null, "Household debt to disposable income"), React.createElement("dd", null, "Total household debt expressed as a per cent of household disposable income, from RBA Statistical Table E2 (Selected Household Finances Ratios). Quarter-end values."), React.createElement("dt", null, "Credit card balances accruing interest"), React.createElement("dd", null, "Total credit and charge card balances on which interest is being charged, from the RBA Statistical Table C1.1 aggregate CSV column \"Balances accruing interest\". Values are AUD millions for larger Australian card issuers, preserving the RBA source boundary."), React.createElement("dt", null, "Australian Government Securities outstanding"), React.createElement("dd", null, "Annual Australian Government Securities face value in AUD billions, hand-keyed from AOFM stock_ags.csv. This card is not Commonwealth general government gross debt from Budget Papers."), React.createElement("dt", null, "State and territory net debt"), React.createElement("dd", null, "General government net debt for each state and territory, hand-keyed once a year from the named Budget Paper or Budget Statement (typically Budget Paper 2). No single Commonwealth dataset consolidates these on a comparable basis."), React.createElement("dt", null, "Real GDP growth"), React.createElement("dd", null, "Seasonally adjusted percentage change in real Gross Domestic Product, from the ABS Data API ANA_AGG dataflow and the quarterly National Accounts release (Cat. 5206.0)."), React.createElement("dt", null, "Unemployment rate"), React.createElement("dd", null, "Headline monthly seasonally adjusted unemployment rate, from the ABS Data API LF dataflow and Labour Force Australia (Cat. 6202.0)."), React.createElement("dt", null, "CPI inflation"), React.createElement("dd", null, "All-groups Consumer Price Index annual percentage change, from the ABS Data API CPI dataflow and Consumer Price Index Australia (Cat. 6401.0)."), React.createElement("dt", null, "What this does not prove"), React.createElement("dd", null, "These indicators do not prove economic recovery, economic collapse, household stress, business conditions, wage pressure, mortgage hardship, rental stress, recession probability or policy causation. A causal or stress row requires a named public source with a field, period, unit, method and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   })));
