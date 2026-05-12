@@ -7,6 +7,225 @@ const SERIES = [
   'strategic_resources_sulphur_gap',
 ];
 
+const RESOURCE_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by resource, processing stage, export concept, state footprint or update cadence.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+const RESOURCE_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that reserves, production, export exposure, processing capacity, supply risk or sovereign capability are zero, low or negligible.',
+  },
+  {
+    title: 'Source-gated requires publisher verification',
+    copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a resource, processing, export or capability value can be published.',
+  },
+  {
+    title: 'Resource signals are not capability proof',
+    copy: 'Observed resource signals are not treated as proof of sovereign capability unless a named source explicitly supports that link.',
+  },
+  {
+    title: 'No estimates fill resource gaps',
+    copy: 'This page does not estimate missing reserves, production, export exposure, domestic processing capacity, project status, supply risk, defence relevance or sovereign-capability values.',
+  },
+  {
+    title: 'Priority is product triage',
+    copy: 'Priority language on this page is editorial/product triage only. It is not a Strategic Resources Stress Index, Sovereign Capability Index or official risk rating.',
+  },
+  {
+    title: 'Visibility gap, not misconduct proof',
+    copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.',
+  },
+];
+
+function ResourceStatusLegend() {
+  return (
+    <section className="section" aria-labelledby="resource-status-legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="resource-status-legend-h">Status labels used on this resource-resilience page</h2>
+          <p className="section__lede">
+            These labels match the Missing Data Scoreboard, Manufacturing, Infrastructure, Power Grid
+            and National Fuel Security. They are part of the evidence, not decoration.
+          </p>
+        </div>
+      </div>
+      <div className="confidence-legend" aria-label="Strategic-resource and processing status legend">
+        <span className="confidence-legend__label">Legend</span>
+        <dl>
+          {RESOURCE_STATUS_LEGEND.map(([kind, label, copy]) => (
+            <React.Fragment key={kind}>
+              <dt><TrustBadge kind={kind}>{label}</TrustBadge></dt>
+              <dd>{copy}</dd>
+            </React.Fragment>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+function ResourceAuditSummary() {
+  const cards = [
+    {
+      title: 'Publicly visible resource signals',
+      eyebrow: 'Source-backed indicator',
+      copy: 'Loaded source envelopes separate mine production, exports, reserve/resource context, state footprint and strategic role where named public sources support those fields.',
+      href: '#headline-h',
+    },
+    {
+      title: 'Partial and manual processing feeds',
+      eyebrow: 'Partial feed / manual snapshot',
+      copy: 'Some rows provide official context or feature counts, but they are not domestic processing capacity, project readiness, supply-chain depth or defence-production capability datasets.',
+      href: '#sources',
+    },
+    {
+      title: 'Source-gated production or export feeds',
+      eyebrow: 'Requires publisher verification',
+      copy: 'Missing reserves, production, export concentration, processing capacity, project status, domestic use, supply risk and sovereign-capability rows are not inferred from broader resource indicators.',
+      href: '#sources',
+    },
+    {
+      title: 'Highest-priority resource visibility gaps',
+      eyebrow: 'Editorial/product triage only',
+      copy: 'The most useful next feeds would separate domestic processing capacity, export exposure, reserve/resource updates, project readiness, defence relevance, supply-chain dependency and safe public capability boundaries.',
+      href: '../missing-data-scoreboard/index.html',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="resource-summary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second strategic-resource summary</span>
+          <h2 id="resource-summary-h">What the resource-resilience audit can and cannot show</h2>
+          <p className="section__lede">
+            These cards use categorical summaries rather than invented counts. They explain what is verifiable,
+            what is partial, and what readers should not infer about sovereign capability or strategic certainty.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {cards.map(card => (
+          <article className="quick-link-card" key={card.title}>
+            <span className="eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.copy}</p>
+            <a href={card.href}>Jump to evidence</a>
+            <span className="audit-stamp">Last reviewed: metadata pending</span>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ResourceEvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="resource-evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="resource-evidence-boundary-h">What readers should not assume from missing or partial resource data</h2>
+          <p className="section__lede">
+            Read these statements before interpreting any strategic-resource, processing,
+            export, supply-risk or sovereign-capability gap. They define how this public-source
+            audit treats unavailable and source-gated information.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {RESOURCE_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ResourceRelatedSurfaces() {
+  const links = [
+    {
+      title: 'Missing Data Scoreboard',
+      copy: 'Open the national audit of public-data gaps, likely publishers and next source actions.',
+      href: '../missing-data-scoreboard/index.html',
+      label: 'Open Missing Data Scoreboard',
+    },
+    {
+      title: 'Manufacturing',
+      copy: 'Industrial-capacity signals that depend on source-backed resource and processing visibility.',
+      href: '../manufacturing-dashboard/index.html',
+      label: 'Open Manufacturing',
+    },
+    {
+      title: 'Infrastructure',
+      copy: 'Project-delivery and logistics signals that shape mine, processing and export capability.',
+      href: '../infrastructure-dashboard/index.html',
+      label: 'Open Infrastructure',
+    },
+    {
+      title: 'Power Grid',
+      copy: 'Energy-reliability signals that matter for processing, manufacturing and resource logistics.',
+      href: '../power-grid-dashboard/index.html',
+      label: 'Open Power Grid',
+    },
+    {
+      title: 'National Fuel Security',
+      copy: 'Fuel and logistics visibility that affects mining, processing, freight and strategic resilience.',
+      href: '../fuel-security-dashboard/index.html',
+      label: 'Open National Fuel Security',
+    },
+    {
+      title: 'Defence Procurement Watch',
+      copy: 'Procurement pathways and public/private boundaries that must not be inferred from resource context alone.',
+      href: '../defence-procurement-watch/index.html',
+      label: 'Open Defence Procurement Watch',
+    },
+    {
+      title: 'Sources and methodology',
+      copy: 'Jump to the source envelopes loaded by this page and the no-capability-claim methodology.',
+      href: '#sources',
+      label: 'Open Strategic Resources methodology',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="resource-related-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Audit navigation</span>
+          <h2 id="resource-related-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            Strategic resources connect to manufacturing, infrastructure, energy, fuel,
+            defence procurement, exports, sovereign capability and macroeconomic resilience.
+            These links keep observed resource indicators separate from unsupported capability claims.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {links.map(link => (
+          <article className="quick-link-card" key={link.title}>
+            <h3>{link.title}</h3>
+            <p>{link.copy}</p>
+            <a href={link.href}>{link.label}</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function fields(env) {
   return env?.extra?.fields || {};
 }
@@ -244,31 +463,39 @@ function App() {
       <main id="main">
         <section className="intro" id="strategic-resources">
           <div>
-            <span className="eyebrow">Critical minerals and strategic resources</span>
-            <h1 style={{ marginTop: 12 }}>Australia's strategic resources, in plain English.</h1>
+            <span className="eyebrow">Strategic resource resilience audit prototype</span>
+            <h1 style={{ marginTop: 12 }}>What Australia&rsquo;s public strategic-resource data can verify - and what remains source-gated</h1>
             <p className="intro__lede">
-              This page shows what Australia extracts from the ground that matters for trade,
-              industry, defence and the energy transition. It separates mine production,
-              export value, export volume, reserves/resources, state footprint and strategic
-              role. No underground-wealth total is published.
+              This dashboard separates source-backed strategic-resource and processing indicators
+              from partial, manual and source-gated feeds so readers can see resilience signals
+              without invented certainty.
+            </p>
+            <p className="intro__lede">
+              It keeps mine production, export value, export volume, reserves/resources,
+              state footprint and strategic role separate. It does not estimate missing reserves,
+              processing capacity, export exposure, project status, supply risk or sovereign capability.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Verified data retrieved</strong>
-            <span className="mono">{updatedDisplay}</span>
+            <strong>Boundary</strong>
+            <span>Independent public-source prototype. No sovereign capability, supply-risk or project-status claim is invented from partial data.</span>
             <div style={{ height: 12 }}/>
-            <strong>Rule</strong>
-            <span>Production, exports, reserves/resources and strategic role are separate fields.</span>
+            <strong>Last reviewed</strong>
+            <span>metadata pending</span>
           </aside>
         </section>
 
+        <ResourceStatusLegend/>
+        <ResourceAuditSummary/>
+        <ResourceEvidenceBoundary/>
+        <ResourceRelatedSurfaces/>
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         <section className="section section--why">
           <div className="why-grid">
             <div>
               <span className="eyebrow">Read this first</span>
-              <h2 style={{ marginTop: 8 }}>What this page measures</h2>
+              <h2 style={{ marginTop: 8 }}>Resource source status comes first</h2>
             </div>
             <div className="why-body">
               <p>
@@ -286,6 +513,12 @@ function App() {
                 This page does not value everything still in the ground. Reserve and resource
                 rows are shown only when Geoscience Australia publishes a clear unit and date,
                 and they are not combined with production or exports.
+              </p>
+              <p>
+                A missing reserve, production, processing, export exposure, project-status,
+                defence relevance or supply-risk feed is a public visibility gap. It is not
+                evidence that Australia has or lacks sovereign capability unless a named
+                public source supports that specific claim.
               </p>
             </div>
           </div>
@@ -321,7 +554,7 @@ function App() {
               <h2 id="headline-h">A first-pass subset, not every mineral</h2>
               <p className="section__lede">
                 Each card shows one headline metric with its own type and source boundary.
-                Weaker rows stay partial or unavailable.
+                Weaker rows stay partial, source-gated or unavailable. We do not estimate.
               </p>
             </div>
           </div>
@@ -427,6 +660,12 @@ function App() {
                 included as a source-gate row only: no official national sulphur production or
                 export row is loaded.
               </p>
+              <p>
+                These indicators do not prove sovereign capability, domestic processing depth,
+                supply risk, defence relevance, project status, export exposure or strategic
+                certainty. A capability row requires a named public source with a field, period,
+                unit, method and reuse boundary.
+              </p>
             </div>
           </div>
         </section>
@@ -460,6 +699,7 @@ function App() {
               <p className="section__lede">
                 Source cards show the envelope status, rights and citation. Candidate or weak
                 sources are documented in the methodology instead of being converted into numbers.
+                We do not estimate, and we do not invent capability claims.
               </p>
             </div>
           </div>
