@@ -36,6 +36,207 @@ const latestValue = env => {
 };
 const latestPeriod = env => latestPoint(env)?.t || env?.last_data_point || 'Awaiting verified source data';
 
+const FOOD_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+const FOOD_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that fertiliser cover, farm diesel pressure, water allocation, drought stress, food prices or logistics pressure is zero, low or negligible.',
+  },
+  {
+    title: 'Source-gated requires publisher verification',
+    copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a value can be published.',
+  },
+  {
+    title: 'No estimates fill food-system gaps',
+    copy: 'This page does not estimate missing fertiliser prices, supply levels, farm diesel exposure, water allocations, drought indicators, crop impacts, food prices or logistics metrics.',
+  },
+  {
+    title: 'Priority is product triage',
+    copy: 'Priority language on this page is editorial/product triage only. It is not an official risk rating, farm forecast, policy classification or implementation status.',
+  },
+  {
+    title: 'Visibility gap, not misconduct proof',
+    copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.',
+  },
+];
+
+function FoodStatusLegend() {
+  return (
+    <section className="section" aria-labelledby="food-status-legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="food-status-legend-h">Status labels used on this food-system page</h2>
+          <p className="section__lede">
+            These labels match the Missing Data Scoreboard and the fuel-security audit cluster. They are part
+            of the evidence, not decoration.
+          </p>
+        </div>
+      </div>
+      <div className="confidence-legend" aria-label="Food-system status legend">
+        <span className="confidence-legend__label">Legend</span>
+        <dl>
+          {FOOD_STATUS_LEGEND.map(([kind, label, copy]) => (
+            <React.Fragment key={kind}>
+              <dt><TrustBadge kind={kind}>{label}</TrustBadge></dt>
+              <dd>{copy}</dd>
+            </React.Fragment>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+function FoodSystemAuditSummary() {
+  const cards = [
+    {
+      title: 'Publicly visible food-system signals',
+      eyebrow: 'Source-backed indicator',
+      copy: 'Manufactured fertiliser import value and top-3 source-country concentration are loaded from verified public envelopes. They are farm-input signals, not a complete food-security model.',
+      href: '#inputs-h',
+    },
+    {
+      title: 'Partial and manual farm visibility',
+      eyebrow: 'Partial feed / manual snapshot',
+      copy: 'The page keeps fertiliser import coverage visible while marking broader agricultural production, trade and water rows as incomplete until exact source tables are loaded.',
+      href: '#overview-h',
+    },
+    {
+      title: 'Source-gated fertiliser and water feeds',
+      eyebrow: 'Requires publisher verification',
+      copy: 'Fertiliser stock cover, farm-gate price pressure, farm diesel exposure, water allocation, rainfall/drought pressure and freight disruption remain source-gated or unavailable.',
+      href: '#farmer-pressure-h',
+    },
+    {
+      title: 'Highest-priority visibility gaps',
+      eyebrow: 'Editorial/product triage only',
+      copy: 'The most operationally useful feeds would be nutrient-level fertiliser cover, farm diesel risk, water allocation by production region, agricultural drought pressure and input/freight disruption indicators.',
+      href: '#publish-h',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="food-system-summary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second food-system summary</span>
+          <h2 id="food-system-summary-h">What the food-system audit can and cannot show</h2>
+          <p className="section__lede">
+            These cards use categorical summaries rather than invented counts. They explain what is verifiable,
+            what is partial, and what remains a public visibility gap.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {cards.map(card => (
+          <article className="quick-link-card" key={card.title}>
+            <span className="eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.copy}</p>
+            <a href={card.href}>Jump to evidence</a>
+            <span className="audit-stamp">Last reviewed: metadata pending</span>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FoodEvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="food-evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="food-evidence-boundary-h">What readers should not assume from missing food-system data</h2>
+          <p className="section__lede">
+            Read these statements before interpreting any food, farm, fertiliser or water gap. They define
+            how this public-source audit treats unavailable and source-gated information.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {FOOD_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FoodRelatedSurfaces() {
+  const links = [
+    {
+      title: 'Missing Data Scoreboard',
+      copy: 'Open the national audit of public-data gaps, likely publishers and next source actions.',
+      href: '../missing-data-scoreboard/index.html',
+      label: 'Open Missing Data Scoreboard',
+    },
+    {
+      title: 'National Fuel Security',
+      copy: 'Fuel availability, days-cover context, aggregate inbound supply and missing live fuel feeds.',
+      href: '../fuel-security-dashboard/index.html',
+      label: 'Open National Fuel Security',
+    },
+    {
+      title: 'Australian Fuel Strategy',
+      copy: 'Policy, reserve, MSO and product-days-cover source gates that affect farm fuel and logistics context.',
+      href: '../australian-fuel-strategy-dashboard/index.html',
+      label: 'Open Australian Fuel Strategy',
+    },
+    {
+      title: 'AU Economics',
+      copy: 'Interest rates, inflation, wages and macro context that sit beside food-system pressure.',
+      href: '../au-economics-dashboard/index.html',
+      label: 'Open AU Economics',
+    },
+    {
+      title: 'Sources and methodology',
+      copy: 'Jump to the source envelopes loaded by this page and the no-estimate methodology.',
+      href: '#sources',
+      label: 'Open food-system methodology',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="food-related-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Audit navigation</span>
+          <h2 id="food-related-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            Food-system resilience depends on inputs, fuel, water, trade and household pressure. These links
+            keep the page connected to the wider public-source audit.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--5">
+        {links.map(link => (
+          <article className="quick-link-card" key={link.title}>
+            <span className="cta-card__title">{link.title}</span>
+            <p>{link.copy}</p>
+            <a href={link.href}>{link.label}</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function SourceStatusCard({ env, title, plain, status = 'Awaiting source data' }) {
   return (
     <article className={`source-card ${env?.status === 'ok' ? '' : 'metric-card--unavailable'}`}>
@@ -478,21 +679,27 @@ function App() {
       <main id="main">
         <section className="intro" id="fertilizer">
           <div>
-            <span className="eyebrow">Food, farms &amp; water security - prototype</span>
-            <h1 style={{ marginTop: 12 }}>Australia's food, farm inputs and water pressure, in plain English.</h1>
+            <span className="eyebrow">Food, farms &amp; water security - public-source audit</span>
+            <h1 style={{ marginTop: 12 }}>What Australia&rsquo;s public food-system data can verify &mdash; and what remains source-gated</h1>
             <p className="intro__lede">
-              Australia grows and exports huge volumes of food, but farms still depend on imported fertiliser,
-              fuel, water availability, seasonal rainfall and global markets. This page tracks the public-source
-              signals that show whether the food system is under pressure, and what government still does not
-              publish clearly enough.
+              This dashboard separates source-backed food, farm, fertiliser and water indicators from partial,
+              manual and source-gated feeds so readers can see the food-system resilience picture without
+              invented certainty.
+            </p>
+            <p className="intro__lede" style={{ marginTop: 12 }}>
+              It shows which food-system signals are currently verifiable, which feeds remain public visibility
+              gaps, and which assumptions should not be made from missing data.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Boundary</strong>
-            <span>This is an independent public-source prototype, not an official government dashboard, live farm forecast, live water-allocation service or commodity-trading tool.</span>
+            <strong>Verified data retrieved</strong>
+            <span className="mono">{latestRetrieved ? updatedDisplay : 'No verified retrieval recorded'}</span>
             <div style={{ height: 12 }}/>
-            <strong>Refresh</strong>
-            <span>{latestRetrieved ? updatedDisplay : 'No verified retrieval recorded'}</span>
+            <strong>Boundary</strong>
+            <span>Independent public-source prototype. Not an official government dashboard, live farm forecast, water-allocation service or commodity-trading tool.</span>
+            <div style={{ height: 12 }}/>
+            <strong>Last reviewed</strong>
+            <span className="mono">metadata pending</span>
           </aside>
         </section>
 
@@ -515,13 +722,21 @@ function App() {
           </div>
         </section>
 
+        <FoodStatusLegend/>
+
+        <FoodSystemAuditSummary/>
+
+        <FoodEvidenceBoundary/>
+
+        <FoodRelatedSurfaces/>
+
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
         <section className="section section--why" aria-labelledby="read-page">
           <div className="why-grid">
             <div>
               <span className="eyebrow">How to read this page</span>
-              <h2 id="read-page" style={{ marginTop: 8 }}>Source status comes first</h2>
+              <h2 id="read-page" style={{ marginTop: 8 }}>Food-system source status comes first</h2>
             </div>
             <div className="why-body">
               <p>
@@ -530,8 +745,9 @@ function App() {
                 envelopes. Stale means the latest source period is outside its cadence window.
               </p>
               <p>
-                Unavailable means a source has not been safely wired or the public source does not publish the
-                exact field needed. This page leaves those gaps visible instead of filling them with estimates.
+                Source-gated and unavailable fields mean a public-safe source has not been loaded or the public
+                source does not publish the exact field needed. This page leaves those public visibility gaps
+                visible instead of filling them with estimates.
               </p>
             </div>
           </div>

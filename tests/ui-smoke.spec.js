@@ -12,7 +12,7 @@ const routes = [
   { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: "Australia's defence posture, in plain English." },
   { path: '/ui_kits/defence-procurement-watch/index.html', heading: 'Defence procurement watch' },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
-  { path: '/ui_kits/fertilizer-dashboard/index.html', heading: "Australia's food, farm inputs and water pressure, in plain English." },
+  { path: '/ui_kits/fertilizer-dashboard/index.html', heading: /What Australia.{1,5}s public food-system data can verify/ },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
   { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
   { path: '/ui_kits/au-economics-dashboard/index.html', heading: "Australia's economy, in plain English." },
@@ -291,12 +291,28 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await page.goto('/ui_kits/fertilizer-dashboard/index.html');
   const main = page.locator('main');
   await expect(page.getByText('Food, farms & water security')).toBeVisible();
-  await expect(page.getByRole('heading', { name: "Australia's food, farm inputs and water pressure, in plain English." })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public food-system data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed food, farm, fertiliser and water indicators from partial')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this food-system page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard and the fuel-security audit cluster.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the food-system audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible food-system signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated fertiliser and water feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing food-system data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByText('Priority language on this page is editorial/product triage only.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Australian Fuel Strategy' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open AU Economics' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(main.getByText('not an official government dashboard').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: /Site refreshed|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
   await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Source status comes first' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Food-system source status comes first' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'How to use this food and farm page' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Real now' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Farm planning gaps' })).toBeVisible();
@@ -315,6 +331,15 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(page.getByText('Food-import exposure needs a verified ABS trade concept')).toBeVisible();
   await expect(page.getByText('No public Australian fertiliser cover row is loaded.')).toBeVisible();
   await expect(page.getByText('This page does not infer drought or farm-level water availability from maps or commentary.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public food-system data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this food-system page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What the food-system audit can and cannot show' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#food-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
 });
 
 test('fuel strategy tracker keeps policy and operational data source-gated', async ({ page }) => {
