@@ -15,7 +15,7 @@ const routes = [
   { path: '/ui_kits/fertilizer-dashboard/index.html', heading: /What Australia.{1,5}s public food-system data can verify/ },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
   { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
-  { path: '/ui_kits/au-economics-dashboard/index.html', heading: "Australia's economy, in plain English." },
+  { path: '/ui_kits/au-economics-dashboard/index.html', heading: /What Australia.{1,5}s public economic data can verify/ },
   { path: '/ui_kits/housing-economic-pressure-dashboard/index.html', heading: 'Housing and economic pressure' },
   { path: '/ui_kits/manufacturing-dashboard/index.html', heading: /What Australia.{1,5}s public manufacturing-capacity data can verify/ },
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: /What Australia.{1,5}s public power-grid data can verify/ },
@@ -661,12 +661,53 @@ test('Brisbane 2032 readiness keeps Olympic delivery data source-gated', async (
   await expect(page.getByText('No Brisbane 2032 value is filled from announcements')).toBeVisible();
 });
 
-test('AU economics page separates latest cash rate from monthly history', async ({ page }) => {
+test('AU economics page separates macro signals from causal claims', async ({ page }) => {
   await page.goto('/ui_kits/au-economics-dashboard/index.html');
-  await expect(page.getByRole('heading', { name: "Australia's economy, in plain English." })).toBeVisible();
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public economic data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed macroeconomic and household-stress indicators')).toBeVisible();
+  await expect(page.getByText('economic resilience signals without invented certainty')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this macroeconomic page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, Employment & Automation, Housing Pressure,')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the macroeconomic resilience audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible economic signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated household-stress or business-condition feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial economic data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Economic movement is not causation proof')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByText('Priority language on this page is editorial/product triage only.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Employment & Automation' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Housing Pressure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Power Grid' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Macroeconomic source status comes first' })).toBeVisible();
+  await expect(page.getByText('A missing wage, household-stress, arrears, hardship, business-condition')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'As of the latest publisher update' })).toBeVisible();
   await expect(page.getByText('Latest official cash-rate target decision published by the RBA. No forecast or estimate is used.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'State and territory government net debt - coverage table' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The cash rate, debt and prices over time' })).toBeVisible();
   await expect(page.getByText('The headline card above uses the latest official decision-table row instead.')).toBeVisible();
   await expect(page.getByText('The chart preserves the F1.1 monthly-average cash-rate target history.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What changed' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Every dataset used on this page' })).toBeVisible();
+  await expect(page.getByText('How we calculate the numbers, and what we do not claim')).toBeVisible();
+  await expect(page.getByText('What this does not prove')).toBeVisible();
+  await expect(page.getByText('These indicators do not prove economic recovery')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public economic data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this macroeconomic page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial economic data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#economics-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
 });
 
 test('state contribution page keeps tax attribution boundaries explicit', async ({ page }) => {
