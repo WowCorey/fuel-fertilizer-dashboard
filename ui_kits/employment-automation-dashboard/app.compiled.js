@@ -1124,6 +1124,161 @@ Object.assign(window, {
   Footer
 });
 const SERIES = ['abs_unemployment_rate', 'abs_underemployment_rate', 'abs_participation_rate', 'abs_employment_population_ratio', 'abs_hours_worked', 'abs_job_vacancies', 'abs_wage_price_index', 'ai_rollout_timeline_context', 'automation_exposure_context'];
+const EMPLOYMENT_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, occupation, industry, timing or concept.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified key.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const EMPLOYMENT_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that job loss, automation exposure, AI displacement, retraining need or workforce-transition pressure is zero, low or negligible.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a value can be published.'
+}, {
+  title: 'Observed movement is not AI causation',
+  copy: 'Official labour-market indicators can move for many reasons. This page does not treat observed labour-market movement as AI or automation causation unless a named source explicitly supports that link.'
+}, {
+  title: 'No estimates fill workforce gaps',
+  copy: 'This page does not estimate missing job-loss, automation-exposure, AI-displacement, retraining, program-uptake, wage-impact or vacancy values.'
+}, {
+  title: 'Priority is product triage',
+  copy: 'Priority language on this page is editorial/product triage only. It is not an official risk rating, forecast, employment-stress index, automation-risk index or AI-displacement index.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
+function EmploymentStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "employment-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "employment-status-legend-h"
+  }, "Status labels used on this labour and automation page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard, fuel-security cluster and Food/Farms/Water page. They are part of the evidence, not decoration."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Employment and automation status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, EMPLOYMENT_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function EmploymentAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible labour-market signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'ABS unemployment, participation, employment-to-population, job vacancies and wage-price signals are loaded where verified. They are labour-market signals, not an AI-causation model.',
+    href: '#metrics-h'
+  }, {
+    title: 'Partial and manual workforce feeds',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'Underemployment and monthly hours worked remain manual or partial until a verified ABS key combination or named workbook row is loaded.',
+    href: '#sources'
+  }, {
+    title: 'Source-gated automation or AI-impact feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Australian automation exposure, AI displacement, retraining outcomes and sector-transition metrics remain source-gated unless a public Australian publisher provides a directly comparable method.',
+    href: '#ai-h'
+  }, {
+    title: 'Highest-priority workforce visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most useful next feeds would separate occupation, industry, skills-shortage, retraining and automation-exposure signals without turning timing into causation.',
+    href: '#sources'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "employment-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second employment summary"), React.createElement("h2", {
+    id: "employment-summary-h"
+  }, "What the labour and automation audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented counts. They explain what is verifiable, what is partial, what remains source-gated, and what readers should not infer about AI causation."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function EmploymentEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "employment-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "employment-evidence-boundary-h"
+  }, "What readers should not assume from missing or partial labour data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting any employment, automation or AI-impact gap. They define how this public-source audit treats unavailable, source-gated and contextual information."))), React.createElement("div", {
+    className: "source-grid"
+  }, EMPLOYMENT_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function EmploymentRelatedSurfaces() {
+  const links = [{
+    title: 'Missing Data Scoreboard',
+    copy: 'Open the national audit of public-data gaps, likely publishers and next source actions.',
+    href: '../missing-data-scoreboard/index.html',
+    label: 'Open Missing Data Scoreboard'
+  }, {
+    title: 'AU Economics',
+    copy: 'Interest rates, inflation, wages, unemployment and macro context that sit beside labour-market pressure.',
+    href: '../au-economics-dashboard/index.html',
+    label: 'Open AU Economics'
+  }, {
+    title: 'Housing Pressure',
+    copy: 'Household debt, RBA cash-rate context and source-gated housing pressure models.',
+    href: '../housing-economic-pressure-dashboard/index.html',
+    label: 'Open Housing Pressure'
+  }, {
+    title: 'Food, Farms & Water',
+    copy: 'Farm-input, water and food-system pressure where workforce and regional exposure may intersect later.',
+    href: '../fertilizer-dashboard/index.html',
+    label: 'Open Food, Farms & Water'
+  }, {
+    title: 'Sources and methodology',
+    copy: 'Jump to the source envelopes loaded by this page and the no-causation methodology.',
+    href: '#sources',
+    label: 'Open labour methodology'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "employment-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "employment-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Employment and automation interpretation depends on adjacent economic, household and regional context. These links keep observed labour data separate from unsupported automation claims."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--5"
+  }, links.map(link => React.createElement("article", {
+    className: "quick-link-card",
+    key: link.title
+  }, React.createElement("h3", null, link.title), React.createElement("p", null, link.copy), React.createElement("a", {
+    href: link.href
+  }, link.label)))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1160,13 +1315,15 @@ function App() {
     id: "employment-automation"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Employment & Automation \xB7 v0.5"), React.createElement("h1", {
+  }, "Employment and Automation audit prototype"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's labour market during the AI rollout era."), React.createElement("p", {
+  }, "What Australia\u2019s public employment and automation data can verify \u2014 and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "This page tracks Australian labour-market change since around the public AI rollout era (ChatGPT public launch, late 2022) using official ABS labour-market series. It does ", React.createElement("b", null, "not"), " claim AI caused these movements. Timing is context, not causation.")), React.createElement("aside", {
+  }, "This dashboard separates source-backed labour-market indicators from partial, manual and source-gated automation feeds so readers can see workforce-transition signals without invented causation."), React.createElement("p", {
+    className: "intro__lede"
+  }, "It tracks Australian labour-market change during the public AI rollout era using official/public data where available. It does ", React.createElement("b", null, "not"), " claim AI caused these movements unless a named source explicitly supports that link.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1175,7 +1332,11 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "Labour-market data is observed. AI-causation claims are not made."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. Labour-market data is observed; AI-causation claims are not invented."), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"))), React.createElement(EmploymentStatusLegend, null), React.createElement(EmploymentAuditSummary, null), React.createElement(EmploymentEvidenceBoundary, null), React.createElement(EmploymentRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
@@ -1190,9 +1351,9 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "What this page measures and what it does not")), React.createElement("div", {
+  }, "Labour-market source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "This page shows two separate things side by side: (1) official Australian labour-market indicators from the ABS, and (2) a contextual timeline of public AI-product rollout milestones. The two are not joined by a causal claim."), React.createElement("p", null, "There is no current Australian government dataset of automation/AI labour-market exposure that is source-safe to publish without estimation. International \"occupational exposure\" studies cannot be silently mapped to Australian rows because their methodology and concept boundaries differ. Where a clean row does not exist, this page leaves it unavailable rather than guessing."), React.createElement("p", {
+  }, React.createElement("p", null, "This page shows two separate things side by side: (1) official Australian labour-market signals from the ABS, and (2) workforce-transition context and a public AI-product rollout timeline. The two are not joined by a causal claim."), React.createElement("p", null, "There is no current Australian government dataset of automation/AI labour-market exposure that is source-safe to publish without estimation. International \"occupational exposure\" studies cannot be silently mapped to Australian rows because their methodology and concept boundaries differ. Where a clean row does not exist, this page leaves it source-gated or unavailable rather than guessing."), React.createElement("p", null, "A missing automation, job-loss, retraining or occupation-impact feed is a public visibility gap. It is not evidence that AI caused a labour-market movement, and it is not proof of misconduct by a likely publisher or data holder."), React.createElement("p", {
     className: "body-sm",
     style: {
       color: 'var(--ink-3)',
@@ -1209,7 +1370,7 @@ function App() {
     id: "metrics-h"
   }, "As of the latest ABS publication"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verified key combination from the named ABS dataflow. We do not estimate."))), React.createElement("div", {
+  }, "Cards marked source-gated, manual or unavailable are waiting on a verified key combination, named workbook value or public Australian method. We do not estimate."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Unemployment",
@@ -1355,7 +1516,7 @@ function App() {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "AI rollout timeline \xB7 context only"), React.createElement("h2", {
+  }, "AI rollout timeline - context only"), React.createElement("h2", {
     id: "ai-h"
   }, "Public AI milestone events, not a causal explanation"), React.createElement("p", {
     className: "section__lede"
@@ -1374,7 +1535,7 @@ function App() {
   }, ev.url.replace(/^https?:\/\//, '').slice(0, 50), " ", React.createElement(Icon, {
     name: "external",
     size: 12
-  })) : '—')))))) : React.createElement("p", {
+  })) : '-')))))) : React.createElement("p", {
     className: "caption"
   }, "AI rollout timeline envelope not yet loaded."), React.createElement("p", {
     className: "caption",
@@ -1390,7 +1551,7 @@ function App() {
     className: "eyebrow"
   }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate, and we do not assert AI causation."))), React.createElement("div", {
+  }, "All sources are public. Cards marked source-gated, manual or unavailable are awaiting verified values. We do not estimate, and we do not assert AI causation."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
@@ -1408,7 +1569,7 @@ function App() {
     size: 12
   })), React.createElement("p", {
     className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-')))), React.createElement("div", {
     className: "methodology"
   }, React.createElement("h3", null, "How we calculate the numbers, and what we do not do"), React.createElement("dl", null, React.createElement("dt", null, "Strongest coverage"), React.createElement("dd", null, "The ABS labour-market series (unemployment, participation, employment-to-population, job vacancies and wages) are fetched live from the ABS Data API. Each card cites its dataflow + key."), React.createElement("dt", null, "Weaker coverage"), React.createElement("dd", null, "Underemployment rate and monthly hours worked stay on manual because the standard headline key combination returned 404 from the LF dataflow in initial probing. They will be promoted to programmatic when a verified key or a hand-keyed workbook value is loaded."), React.createElement("dt", null, "Why we do not publish an automation exposure score"), React.createElement("dd", null, "There is no current Australian government dataset of automation or AI labour-market exposure by occupation or industry that is source-safe to publish. International \"occupational exposure\" methodologies are not directly mappable to Australian rows because their concept boundaries differ. The exposure card stays Unavailable until a named Australian publisher (Productivity Commission, DEWR, DISR, ABS) releases a directly comparable Australian indicator."), React.createElement("dt", null, "What the AI rollout timeline does NOT do"), React.createElement("dd", null, "The AI timeline is a list of dated, named events published by the listed organisations. It is shown so labour-market movements can be placed in time. ", React.createElement("b", null, "It is not a causal model."), " No label, takeaway, table cell or chart annotation on this page asserts that an AI rollout event caused any labour-market change."), React.createElement("dt", null, "What still requires human review"), React.createElement("dd", null, "Whenever an Australian publisher (PC, DEWR, DISR or ABS) releases an automation/AI exposure indicator with clear methodology, the unavailable card can be reviewed and populated. Until then, it stays unavailable.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
