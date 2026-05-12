@@ -8,7 +8,7 @@ const routes = [
   { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ },
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
-  { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: "Australia's strategic resources, in plain English." },
+  { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: /What Australia.{1,5}s public strategic-resource data can verify/ },
   { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: "Australia's defence posture, in plain English." },
   { path: '/ui_kits/defence-procurement-watch/index.html', heading: 'Defence procurement watch' },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
@@ -725,16 +725,55 @@ test('state contribution page keeps tax attribution boundaries explicit', async 
   await expect(page.getByText('Operating refineries').first()).toBeVisible();
 });
 
-test('strategic resources page keeps metric types and gaps explicit', async ({ page }) => {
+test('strategic resources page separates resource signals from capability claims', async ({ page }) => {
   await page.goto('/ui_kits/strategic-resources-dashboard/index.html');
-  await expect(page.getByRole('heading', { name: "Australia's strategic resources, in plain English." })).toBeVisible();
-  await expect(page.getByText('No underground-wealth total is published.')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
-  await expect(page.getByText('Production, exports, reserves/resources and strategic role are separate fields.')).toBeVisible();
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public strategic-resource data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed strategic-resource and processing indicators')).toBeVisible();
+  await expect(page.getByText('resilience signals without invented certainty')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this resource-resilience page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, Manufacturing, Infrastructure, Power Grid')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the resource-resilience audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible resource signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated production or export feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial resource data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Resource signals are not capability proof')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByText('Priority language on this page is editorial/product triage only.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Manufacturing' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Power Grid' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Defence Procurement Watch' }).first()).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Resource source status comes first' })).toBeVisible();
+  await expect(page.getByText('A missing reserve, production, processing, export exposure')).toBeVisible();
+  await expect(page.getByText('It keeps mine production, export value, export volume, reserves/resources,')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Resource comparison table' })).toBeVisible();
   await expect(page.getByText('Rare earths').first()).toBeVisible();
   await expect(page.getByText('Sulphur').first()).toBeVisible();
   await expect(page.getByText('No official national sulphur production or export row is loaded.', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Where the loaded operating-mines source places activity' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Why these resources matter' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Strong, partial and unavailable rows' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Why the page is fail-closed' })).toBeVisible();
+  await expect(page.getByText('These indicators do not prove sovereign capability')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Procurement claims need their own source gate' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Every source used on this page' })).toBeVisible();
+  await expect(page.getByText('we do not invent capability claims')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public strategic-resource data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this resource-resilience page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial resource data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#resource-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
 });
 
 test('defence posture page keeps readiness and alliance boundaries explicit', async ({ page }) => {
