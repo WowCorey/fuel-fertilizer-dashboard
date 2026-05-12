@@ -17,7 +17,7 @@ const routes = [
   { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
   { path: '/ui_kits/au-economics-dashboard/index.html', heading: "Australia's economy, in plain English." },
   { path: '/ui_kits/housing-economic-pressure-dashboard/index.html', heading: 'Housing and economic pressure' },
-  { path: '/ui_kits/manufacturing-dashboard/index.html', heading: 'What Australia still makes, in plain English.' },
+  { path: '/ui_kits/manufacturing-dashboard/index.html', heading: /What Australia.{1,5}s public manufacturing-capacity data can verify/ },
   { path: '/ui_kits/power-grid-dashboard/index.html', heading: "Australia's power grid, in plain English." },
   { path: '/ui_kits/infrastructure-dashboard/index.html', heading: "Australia's infrastructure, in plain English." },
   { path: '/ui_kits/brisbane-2032-readiness-dashboard/index.html', heading: 'Brisbane 2032 readiness' },
@@ -378,6 +378,50 @@ test('employment automation page separates observed labour signals from AI causa
   await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial labour data' })).toHaveCount(1);
   const legendOrder = await page.evaluate(() => {
     const legend = document.querySelector('#employment-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
+});
+
+test('manufacturing page separates industrial signals from sovereign capability claims', async ({ page }) => {
+  await page.goto('/ui_kits/manufacturing-dashboard/index.html');
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public manufacturing-capacity data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed manufacturing and industrial-capacity')).toBeVisible();
+  await expect(page.getByText('sovereign capability signals without invented certainty')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this industrial-capacity page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, Employment & Automation and National Fuel Security.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the industrial-capacity audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible industrial-capacity signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated supply-chain or defence-production feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial industrial data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Industrial signals are not capability proof')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByText('Priority language on this page is editorial/product triage only.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Employment & Automation' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Strategic Resources' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Industrial-capacity source status comes first' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'As of the latest publisher update' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: "Manufacturing's share, employment, output and exports over time" })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What changed' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Every dataset used on this page' })).toBeVisible();
+  await expect(page.getByText('How we calculate the numbers, and what we do not claim')).toBeVisible();
+  await expect(page.getByText('What this does not prove')).toBeVisible();
+  await expect(page.getByText('These indicators do not prove factory capacity')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public manufacturing-capacity data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this industrial-capacity page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial industrial data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#manufacturing-status-legend-h')?.closest('section');
     const coverage = document.querySelector('.coverage-strip');
     return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
   });

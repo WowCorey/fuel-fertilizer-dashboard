@@ -1124,6 +1124,171 @@ Object.assign(window, {
   Footer
 });
 const SERIES = ['abs_manufacturing_gdp_share', 'abs_manufacturing_employment', 'abs_manufacturing_output_index', 'abs_manufactured_exports_total', 'abs_manufacturing_capex', 'abs_food_beverage_employment', 'doe_industry_growth_centres_summary'];
+const MANUFACTURING_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, industry, product, supply chain or concept.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const MANUFACTURING_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that factory capacity, sovereign capability, defence-production depth, supply-chain depth or industrial-input pressure is zero, low or negligible.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a value can be published.'
+}, {
+  title: 'Industrial signals are not capability proof',
+  copy: 'Observed manufacturing signals are not treated as proof of sovereign capability unless a named source explicitly supports that link.'
+}, {
+  title: 'No estimates fill capacity gaps',
+  copy: 'This page does not estimate missing factory capacity, sovereign capability, defence-production output, supply-chain depth, workforce availability, energy exposure or input-cost values.'
+}, {
+  title: 'Priority is product triage',
+  copy: 'Priority language on this page is editorial/product triage only. It is not an official risk rating, manufacturing-stress index, sovereign-capability index or industrial-risk index.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
+function ManufacturingStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "manufacturing-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "manufacturing-status-legend-h"
+  }, "Status labels used on this industrial-capacity page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard, Employment & Automation and National Fuel Security. They are part of the evidence, not decoration."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Manufacturing and industrial-capacity status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, MANUFACTURING_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function ManufacturingAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible industrial-capacity signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'ABS manufacturing employment, sales, exports, private capex and food/beverage employment are loaded where verified. These are manufacturing signals, not a complete sovereign-capability model.',
+    href: '#metrics-h'
+  }, {
+    title: 'Partial and manual manufacturing feeds',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'Manufacturing GDP share and Department of Industry profile rows remain unavailable or manual until exact source tables, fields and factual rows are verified.',
+    href: '#sources'
+  }, {
+    title: 'Source-gated supply-chain or defence-production feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Factory capacity, defence-production depth, supply-chain depth, industrial-input exposure, workforce availability and procurement status are not inferred from broad manufacturing indicators.',
+    href: '#sources'
+  }, {
+    title: 'Highest-priority manufacturing visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most useful next feeds would separate capacity, product class, inputs, energy exposure, workforce skills, defence relevance and critical supply-chain dependencies without inventing capability claims.',
+    href: '#sources'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "manufacturing-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second manufacturing summary"), React.createElement("h2", {
+    id: "manufacturing-summary-h"
+  }, "What the industrial-capacity audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented counts. They explain what is verifiable, what is partial, and what readers should not infer about sovereign capability."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function ManufacturingEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "manufacturing-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "manufacturing-evidence-boundary-h"
+  }, "What readers should not assume from missing or partial industrial data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting any manufacturing, supply-chain or sovereign-capability gap. They define how this public-source audit treats unavailable and source-gated information."))), React.createElement("div", {
+    className: "source-grid"
+  }, MANUFACTURING_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function ManufacturingRelatedSurfaces() {
+  const links = [{
+    title: 'Missing Data Scoreboard',
+    copy: 'Open the national audit of public-data gaps, likely publishers and next source actions.',
+    href: '../missing-data-scoreboard/index.html',
+    label: 'Open Missing Data Scoreboard'
+  }, {
+    title: 'Employment & Automation',
+    copy: 'Labour-market and workforce-transition signals that shape industrial capacity.',
+    href: '../employment-automation-dashboard/index.html',
+    label: 'Open Employment & Automation'
+  }, {
+    title: 'Defence Procurement Watch',
+    copy: 'Procurement and industry-content source gates that must stay separate from operational capability claims.',
+    href: '../defence-procurement-watch/index.html',
+    label: 'Open Defence Procurement Watch'
+  }, {
+    title: 'Strategic Resources',
+    copy: 'Critical materials, resource profiles and gaps that affect manufacturing input visibility.',
+    href: '../strategic-resources-dashboard/index.html',
+    label: 'Open Strategic Resources'
+  }, {
+    title: 'Infrastructure',
+    copy: 'Freight, transport and project-delivery context for industrial resilience.',
+    href: '../infrastructure-dashboard/index.html',
+    label: 'Open Infrastructure'
+  }, {
+    title: 'National Fuel Security',
+    copy: 'Fuel availability, supply-chain and energy exposure context for manufacturing continuity.',
+    href: '../fuel-security-dashboard/index.html',
+    label: 'Open National Fuel Security'
+  }, {
+    title: 'Sources and methodology',
+    copy: 'Jump to the source envelopes loaded by this page and the no-capability-claim methodology.',
+    href: '#sources',
+    label: 'Open manufacturing methodology'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "manufacturing-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "manufacturing-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Manufacturing capacity depends on workforce, fuel, inputs, infrastructure, procurement and strategic resources. These links keep observed manufacturing data separate from unsupported capability claims."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, links.map(link => React.createElement("article", {
+    className: "quick-link-card",
+    key: link.title
+  }, React.createElement("h3", null, link.title), React.createElement("p", null, link.copy), React.createElement("a", {
+    href: link.href
+  }, link.label)))));
+}
 function App() {
   const [data, setData] = React.useState(null);
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1158,13 +1323,15 @@ function App() {
     id: "manufacturing"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Manufacturing \xB7 v1.0"), React.createElement("h1", {
+  }, "Manufacturing and industrial capacity audit prototype"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "What Australia still makes, in plain English."), React.createElement("p", {
+  }, "What Australia\u2019s public manufacturing-capacity data can verify \u2014 and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "Manufacturing is a smaller share of the Australian economy than it used to be, but it still feeds, fuels and equips the country. This page tracks the public numbers that show how much value, employment and exports come from Australian factories, and where new capital is being spent.")), React.createElement("aside", {
+  }, "This dashboard separates source-backed manufacturing and industrial-capacity indicators from partial, manual and source-gated feeds so readers can see sovereign capability signals without invented certainty."), React.createElement("p", {
+    className: "intro__lede"
+  }, "Manufacturing feeds, fuels and equips parts of the country, but broad ABS industry signals are not the same as verified factory capacity, supply-chain depth, defence-production capability or procurement status.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
   }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
@@ -1173,7 +1340,11 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Refresh"), React.createElement("span", null, "Live where fetched \xB7 manual only after verification"))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. No sovereign-capability claim is invented from partial manufacturing data."), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"))), React.createElement(ManufacturingStatusLegend, null), React.createElement(ManufacturingAuditSummary, null), React.createElement(ManufacturingEvidenceBoundary, null), React.createElement(ManufacturingRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
@@ -1188,9 +1359,9 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "Why this matters to you")), React.createElement("div", {
+  }, "Industrial-capacity source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "A country that can make things has more options when overseas supply gets disrupted. Manufacturing also pays measurable wages and produces measurable exports. The ABS publishes the headline numbers \u2014 value added, employment, sales, exports and private capex \u2014 by industry division (ANZSIC C is manufacturing) and subdivision (food, beverages, machinery, transport equipment, chemicals)."), React.createElement("p", null, "This page collects the named sources for each of those measures. Values appear only when the named publisher has been verified. Anything we can't verify shows up as \"Source unavailable\" \u2014 never an estimate."), React.createElement("p", {
+  }, React.createElement("p", null, "A country that can make things has more options when overseas supply gets disrupted. Manufacturing also pays measurable wages and produces measurable exports. The ABS publishes headline manufacturing signals: value added, employment, sales, exports and private capex by industry division (ANZSIC C is manufacturing) and subdivision (food, beverages, machinery, transport equipment, chemicals)."), React.createElement("p", null, "This page collects the named sources for each of those measures. Values appear only when the named publisher has been verified. Anything we can't verify shows up as source-gated or unavailable, never an estimate."), React.createElement("p", null, "A missing supply-chain, defence-production, workforce or industrial-input feed is a public visibility gap. It is not evidence that Australia has or lacks a specific sovereign manufacturing capability."), React.createElement("p", {
     className: "body-sm",
     style: {
       color: 'var(--ink-3)',
@@ -1207,7 +1378,7 @@ function App() {
     id: "metrics-h"
   }, "As of the latest publisher update"), React.createElement("p", {
     className: "section__lede"
-  }, "Cards marked \"Source unavailable\" are waiting on a verifiable figure from the named source. We do not estimate."))), React.createElement("div", {
+  }, "Cards marked source-gated, manual or unavailable are waiting on a verified publisher field, table or factual row. We do not estimate."))), React.createElement("div", {
     className: "metric-grid metric-grid--4"
   }, React.createElement(MetricCard, {
     eyebrow: "Share of GDP",
@@ -1276,7 +1447,7 @@ function App() {
     id: "charts-h"
   }, "Manufacturing's share, employment, output and exports over time"), React.createElement("p", {
     className: "section__lede"
-  }, "Charts populate when verified source data is available. Hover any point \u2014 or use arrow keys \u2014 to read the value."))), React.createElement("div", {
+  }, "Charts populate when verified source data is available. Hover any point, or use arrow keys, to read the value."))), React.createElement("div", {
     className: "charts-grid charts-grid--full"
   }, React.createElement(ChartCard, {
     eyebrow: "Share of GDP",
@@ -1356,14 +1527,14 @@ function App() {
     className: "eyebrow"
   }, "Sources & methodology"), React.createElement("h2", null, "Every dataset used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "All sources are public. Cards marked \"Source unavailable\" are awaiting verified values \u2014 we do not estimate."))), React.createElement("div", {
+  }, "All sources are public. Cards marked source-gated, manual or unavailable are awaiting verified values. We do not estimate, and we do not invent sovereign-capability claims."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement("article", {
     key: id,
     className: "source-card"
   }, React.createElement("h4", null, env.source_name), React.createElement("p", {
     className: "body-sm"
-  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source.'), React.createElement("p", {
+  }, env.status === 'ok' ? `Verified. ${env.values.length} data points; latest ${env.last_data_point || 'unknown'}.` : 'Awaiting hand-keyed values from the named public source, or intentionally unavailable.'), React.createElement("p", {
     className: "caption"
   }, React.createElement("b", null, "Envelope:"), " ", React.createElement("span", {
     className: "mono"
@@ -1374,9 +1545,9 @@ function App() {
     size: 12
   })), React.createElement("p", {
     className: "caption mono"
-  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '—')))), React.createElement("div", {
+  }, "Retrieved: ", env.retrieved_at ? window.FR.fmtRetrieved(env.retrieved_at) : '-')))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "How we calculate the numbers"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). This remains unavailable until the exact source table or API mapping for the share calculation is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001) Table 04, seasonally adjusted, quarterly."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, from ABS Business Indicators Australia (Cat. 5676.0) Table 4, quarterly. This is a source-backed sales/output proxy, not a separate production-index series."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined original FOB export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods Table 12a. The ABS workbook unit is AUD millions."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual total private new capital expenditure for ANZSIC division C (manufacturing), current prices, from ABS Private New Capital Expenditure (Cat. 5625.0) Table 4, seasonally adjusted, quarterly."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Sum of original employed-persons series for ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed Table 06, quarterly."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. This remains unavailable until a named publication supports a clean factual row; aggregated estimates are never published.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "How we calculate the numbers, and what we do not claim"), React.createElement("dl", null, React.createElement("dt", null, "Manufacturing share of GDP"), React.createElement("dd", null, "ANZSIC division C (manufacturing) gross value added expressed as a percentage of total industry gross value added (chain volume measure), from ABS quarterly National Accounts (Cat. 5206.0). This remains unavailable until the exact source table or API mapping for the share calculation is verified."), React.createElement("dt", null, "Manufacturing employment"), React.createElement("dd", null, "Employed persons (full-time and part-time, both sexes) in ANZSIC division C, from ABS Labour Force Detailed (Cat. 6291.0.55.001) Table 04, seasonally adjusted, quarterly."), React.createElement("dt", null, "Manufacturing sales"), React.createElement("dd", null, "Seasonally adjusted manufacturing income from sales of goods and services, chain volume measures, from ABS Business Indicators Australia (Cat. 5676.0) Table 4, quarterly. This is a source-backed sales/output proxy, not a separate production-index series."), React.createElement("dt", null, "Manufactured exports"), React.createElement("dd", null, "Combined original FOB export value for SITC sections 5 (chemicals), 6 (manufactured goods classified by material), 7 (machinery and transport equipment) and 8 (miscellaneous manufactured articles), from ABS International Trade in Goods Table 12a. The ABS workbook unit is AUD millions."), React.createElement("dt", null, "Manufacturing private new capex"), React.createElement("dd", null, "Actual total private new capital expenditure for ANZSIC division C (manufacturing), current prices, from ABS Private New Capital Expenditure (Cat. 5625.0) Table 4, seasonally adjusted, quarterly."), React.createElement("dt", null, "Food and beverage manufacturing employment"), React.createElement("dd", null, "Sum of original employed-persons series for ANZSIC subdivisions 11 (food product manufacturing) and 12 (beverage and tobacco product manufacturing), from ABS Labour Force Detailed Table 06, quarterly."), React.createElement("dt", null, "Industry profile (DoIS)"), React.createElement("dd", null, "Hand-keyed factual headcounts and revenue values from named publications by the Department of Industry, Science and Resources. This remains unavailable until a named publication supports a clean factual row; aggregated estimates are never published."), React.createElement("dt", null, "What this does not prove"), React.createElement("dd", null, "These indicators do not prove factory capacity, supply-chain depth, defence-production capability, procurement status or sovereign capability. A capability row requires a named public source with a field, period, unit and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   })));
