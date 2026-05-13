@@ -6,7 +6,7 @@ const routes = [
   { path: '/ui_kits/fuel-security-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-security data can verify/ },
   { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-strategy data can verify/ },
   { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ },
-  { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
+  { path: '/ui_kits/resource-value-dashboard/index.html', heading: /What Australia.{1,5}s public resource-value data can verify/ },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: /What Australia.{1,5}s public strategic-resource data can verify/ },
   { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: /What Australia.{1,5}s public defence-posture data can verify/ },
@@ -733,6 +733,61 @@ test('AU economics page separates macro signals from causal claims', async ({ pa
   await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial economic data' })).toHaveCount(1);
   const legendOrder = await page.evaluate(() => {
     const legend = document.querySelector('#economics-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
+});
+
+test('resource value page separates value signals from value-capture claims', async ({ page }) => {
+  await page.goto('/ui_kits/resource-value-dashboard/index.html');
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public resource-value data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed royalty, export, processing and value')).toBeVisible();
+  await expect(page.getByText('public value-capture signals without invented certainty')).toBeVisible();
+  await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this value-capture page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, Strategic Resources, AU Economics,')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the value-capture audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible value signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated export or value-capture feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial value data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Value signals are not value-capture proof')).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByText('Priority language on this page is editorial/product triage only.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Strategic Resources' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open AU Economics' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Manufacturing' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Resource value source status comes first' })).toBeVisible();
+  await expect(page.getByText('A missing royalty, tax-attribution, export, processing, company contribution')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Policy rates, receipts and export-value context' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Full company tax rate' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Petroleum Resource Rent Tax rate' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'LNG export earnings', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What exists now' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Company income tax' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'PRRT', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Where oil and gas come from, and where exports go' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'ACCC gas contract prices and LNG netback' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '25% gross export-value calculator', level: 2 })).toBeVisible();
+  await expect(page.getByText('This is a transparent arithmetic scenario, not current law and not a PRRT model.')).toBeVisible();
+  await expect(page.getByText('It is not a value-capture finding.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Value-capture comparison stays method-gated' })).toBeVisible();
+  await expect(page.getByText('not enough for a retained-value or value-capture claim')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Every source used on this page' })).toBeVisible();
+  await expect(page.getByText('We do not estimate missing royalty, tax, export, processing or value-capture values.')).toBeVisible();
+  await expect(page.getByText('These indicators do not prove economic benefit')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public resource-value data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this value-capture page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial value data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#resource-value-status-legend-h')?.closest('section');
     const coverage = document.querySelector('.coverage-strip');
     return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
   });

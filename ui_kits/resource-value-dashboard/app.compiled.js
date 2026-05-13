@@ -1124,9 +1124,150 @@ Object.assign(window, {
   Footer
 });
 const SERIES = ['resource_company_tax_rate', 'resource_prrt_policy', 'resource_resource_rent_tax_receipts_budget', 'resource_wa_petroleum_royalties', 'resource_wa_petroleum_royalty_receipts', 'resource_qld_petroleum_royalty_receipts', 'resource_lng_export_value_req', 'resource_oil_export_value_req', 'resource_lng_export_destinations_req', 'resource_gas_origin_aecr', 'resource_oil_origin_aecr', 'resource_domestic_gas_prices_accc', 'resource_lng_netback_accc', 'resource_state_production_aes', 'resource_norway_petroleum_tax_model', 'resource_norway_state_revenue_model', 'resource_value_leakage_model'];
+const VALUE_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by channel, geography, company/project scope, period, value-chain stage or update cadence.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const VALUE_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that royalty, tax, export, processing, company contribution, project value or public value capture is zero, low or negligible.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a royalty, tax, export, processing or value-capture row can be published.'
+}, {
+  title: 'Value signals are not value-capture proof',
+  copy: 'Observed value signals are not treated as proof of economic benefit or sovereign value capture unless a named source explicitly supports that link.'
+}, {
+  title: 'No estimates fill value gaps',
+  copy: 'This page does not estimate missing royalty totals, tax attribution, export values, processing values, company contribution, state contribution, project value or value-capture claims.'
+}, {
+  title: 'Priority is product triage',
+  copy: 'Priority language on this page is editorial/product triage only. It is not a Resource Value Index, Value Capture Index or official risk rating.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
 function latestValue(env) {
   if (!env || env.status !== 'ok' || !env.values?.length) return null;
   return env.values.at(-1).v;
+}
+function trustKind(label) {
+  const text = String(label || '').toLowerCase();
+  if (text.includes('unavailable')) return 'unavailable';
+  if (text.includes('partial')) return 'partial';
+  if (text.includes('derived')) return 'derived';
+  if (text.includes('manual')) return 'manual';
+  if (text.includes('stale')) return 'stale';
+  if (text.includes('source')) return 'source-gated';
+  if (text.includes('roadmap')) return 'roadmap';
+  return 'observed';
+}
+function ResourceValueStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "resource-value-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "resource-value-status-legend-h"
+  }, "Status labels used on this value-capture page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard, Strategic Resources, AU Economics, Manufacturing and Infrastructure. They define evidence status before royalty, tax, export, processing or value-capture interpretation."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Resource-value status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, VALUE_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function ResourceValueAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible value signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'Loaded envelopes separate company tax policy rate, PRRT policy rate, resource-rent receipts, selected royalty receipts, LNG/oil export earnings, origin flows and price context where named sources support those fields.',
+    href: '#headline-h'
+  }, {
+    title: 'Partial and manual royalty or processing feeds',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'Some rows provide official rates, receipts or origin context, but they are not complete royalty totals, company/project tax attribution, processing value, project value or state contribution datasets.',
+    href: '#capture-h'
+  }, {
+    title: 'Source-gated export or value-capture feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Missing company contribution, project-level PRRT, full state royalties, processing value, domestic value added, export exposure and value-capture rows are not inferred from partial signals.',
+    href: '#sources'
+  }, {
+    title: 'Highest-priority value visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most useful next feeds would publish matched-period royalty/tax/export/processing fields, company/project scope, value-chain stage, denominator choice and safe public attribution boundaries.',
+    href: '../missing-data-scoreboard/index.html'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "resource-value-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second resource-value summary"), React.createElement("h2", {
+    id: "resource-value-summary-h"
+  }, "What the value-capture audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented totals. They explain what is verifiable, what is partial, and what readers should not infer about economic benefit, tax attribution or value capture."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function ResourceValueEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "resource-value-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "resource-value-evidence-boundary-h"
+  }, "What readers should not assume from missing or partial value data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting royalty, tax, export, processing, company contribution, project value or value-capture gaps."))), React.createElement("div", {
+    className: "source-grid"
+  }, VALUE_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function ResourceValueRelatedSurfaces() {
+  const links = [['Missing Data Scoreboard', 'Open the national audit of public-data gaps, likely publishers and next source actions.', '../missing-data-scoreboard/index.html', 'Open Missing Data Scoreboard'], ['Strategic Resources', 'Resource and processing signals that should not be converted into unsupported value-capture claims.', '../strategic-resources-dashboard/index.html', 'Open Strategic Resources'], ['AU Economics', 'Macroeconomic and household-stress signals kept separate from royalty, tax and export attribution.', '../au-economics-dashboard/index.html', 'Open AU Economics'], ['Manufacturing', 'Industrial-capacity signals relevant to processing value and domestic value-chain questions.', '../manufacturing-dashboard/index.html', 'Open Manufacturing'], ['Infrastructure', 'Project-delivery and logistics signals that shape processing, export and value-chain visibility.', '../infrastructure-dashboard/index.html', 'Open Infrastructure'], ['National Fuel Security', 'Fuel and logistics visibility that affects resource extraction, processing and export flows.', '../fuel-security-dashboard/index.html', 'Open National Fuel Security'], ['Sources and methodology', 'Jump to the source envelopes and method gates loaded by this page.', '#sources', 'Open Resource Value methodology']];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "resource-value-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "resource-value-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Resource value connects to strategic resources, exports, processing, tax, royalties, manufacturing, infrastructure and macroeconomic resilience. These links keep observed value signals separate from unsupported value-capture claims."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, links.map(([title, copy, href, label]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("h3", null, title), React.createElement("p", null, copy), React.createElement("a", {
+    href: href
+  }, label)))));
 }
 function fields(env) {
   return env?.extra?.fields || {};
@@ -1209,11 +1350,11 @@ function ScenarioCard({
   }, React.createElement(Icon, {
     name: "alert",
     size: 18
-  }), React.createElement("span", null, "Calculator hidden until export-value and receipt-context envelopes are verified.")), React.createElement("footer", {
+  }), React.createElement("span", null, "Calculator withheld until export-value and receipt-context envelopes are verified.")), React.createElement("footer", {
     className: "metric-card__foot"
   }, React.createElement("span", {
     className: "metric-card__source"
-  }, "Not a leakage estimate. Loaded receipt context is not period-aligned and excludes company tax, other royalty systems, timing effects, deductions, project boundaries and denominator choice.")));
+  }, "Not a value-capture estimate. Loaded receipt context is not period-aligned and excludes company tax, other royalty systems, timing effects, deductions, project boundaries and denominator choice.")));
 }
 function SourceSummary({
   id,
@@ -1309,22 +1450,28 @@ function App() {
     id: "resource-value"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Resource value"), React.createElement("h1", {
+  }, "Resource value-capture audit prototype"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Who captures Australian oil and gas value?"), React.createElement("p", {
+  }, "What Australia's public resource-value data can verify - and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "This page separates the resource-value question from the company-tax dashboard. It shows official policy rates, receipt context, production and export flows, domestic gas-price context, a gross export-tax scenario and the Norway comparison without turning them into a leakage claim before the denominator and method are defensible.")), React.createElement("aside", {
+  }, "This dashboard separates source-backed royalty, export, processing and value indicators from partial, manual and source-gated feeds so readers can see public value-capture signals without invented certainty."), React.createElement("p", {
+    className: "intro__lede"
+  }, "Official policy rates, receipt context, production and export flows, domestic gas-price context, a gross export-value scenario and the Norway comparison are kept separate. They are not converted into a Resource Value Index, Value Capture Index or unsupported economic-benefit claim.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+  }, React.createElement("strong", null, "Page data retrieved"), React.createElement("span", {
     className: "mono"
   }, updatedDisplay), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "No leakage estimate is published yet."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. No royalty, tax, export, processing or value-capture claim is invented."))), React.createElement(ResourceValueStatusLegend, null), React.createElement(ResourceValueAuditSummary, null), React.createElement(ResourceValueEvidenceBoundary, null), React.createElement(ResourceValueRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
@@ -1337,9 +1484,9 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "What this page does and does not claim")), React.createElement("div", {
+  }, "Resource value source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, React.createElement("b", null, "Company tax"), ", ", React.createElement("b", null, "PRRT"), " and ", React.createElement("b", null, "royalties"), " are different capture channels. A policy rate is not the same thing as cash received by government."), React.createElement("p", null, "The 25% export-tax card is a transparent scenario using the currently loaded export value envelopes. It is not current law, not a PRRT model and not a recommendation."), React.createElement("p", null, "\"Value leaked\" stays blank until the repo has verified Australian royalty receipts, resource-rent receipts, export values, company profit data and a documented denominator.")))), React.createElement("section", {
+  }, React.createElement("p", null, React.createElement("b", null, "Company tax"), ", ", React.createElement("b", null, "PRRT"), " and ", React.createElement("b", null, "royalties"), " are different capture channels. A policy rate is not the same thing as cash received by government."), React.createElement("p", null, "The 25% export-tax card is a transparent scenario using the currently loaded export value envelopes. It is not current law, not a PRRT model and not a recommendation."), React.createElement("p", null, "A missing royalty, tax-attribution, export, processing, company contribution, project value or state contribution feed is a public visibility gap. It is not evidence of value capture, lost value, economic benefit or misconduct unless a named public source supports that specific claim."), React.createElement("p", null, "Value-capture claims stay unavailable until the repo has verified Australian royalty receipts, resource-rent receipts, export values, company profit data, processing-value data and a documented denominator.")))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "headline-h"
   }, React.createElement("div", {
@@ -1427,7 +1574,7 @@ function App() {
     unit: "%"
   }), React.createElement(MetricCard, {
     eyebrow: "Not published",
-    label: "Value retained vs leaked",
+    label: "Value-capture claim",
     fromEnvelope: data.resource_value_leakage_model
   }))), React.createElement("section", {
     className: "section",
@@ -1562,7 +1709,7 @@ function App() {
     key: `${row.segment}-${row.period}`
   }, React.createElement("td", null, row.segment), React.createElement("td", null, row.period), React.createElement("td", null, price(row.volume_weighted_average)), React.createElement("td", null, "2026 east coast gas supply contracts; range ", price(row.min_price), " to ", price(row.max_price)))), netbackRows.map(row => React.createElement("tr", {
     key: row.period
-  }, React.createElement("td", null, "ACCC LNG netback"), React.createElement("td", null, row.period), React.createElement("td", null, price(row.value)), React.createElement("td", null, "Wallumbilla export-parity benchmark."))), netbackGap != null && React.createElement("tr", null, React.createElement("td", null, "Simple gap"), React.createElement("td", null, "2026 producer contract VWA vs 2026 netback average"), React.createElement("td", null, price(netbackGap)), React.createElement("td", null, "Arithmetic difference only; not a margin, leakage estimate or delivered customer bill."))))), React.createElement("p", {
+  }, React.createElement("td", null, "ACCC LNG netback"), React.createElement("td", null, row.period), React.createElement("td", null, price(row.value)), React.createElement("td", null, "Wallumbilla export-parity benchmark."))), netbackGap != null && React.createElement("tr", null, React.createElement("td", null, "Simple gap"), React.createElement("td", null, "2026 producer contract VWA vs 2026 netback average"), React.createElement("td", null, price(netbackGap)), React.createElement("td", null, "Arithmetic difference only; not a margin, value-capture estimate or delivered customer bill."))))), React.createElement("p", {
     className: "caption mono"
   }, window.FR.sourceLine(data.resource_domestic_gas_prices_accc)), React.createElement("p", {
     className: "caption mono"
@@ -1605,7 +1752,7 @@ function App() {
     }
   }, React.createElement("table", {
     className: "data-table data-table--sticky"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Line"), React.createElement("th", null, "Loaded value"), React.createElement("th", null, "Period/source caveat"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "LNG export earnings"), React.createElement("td", null, audBillions(lngExportValue)), React.createElement("td", null, valuePeriod(data.resource_lng_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Oil export earnings"), React.createElement("td", null, audBillions(oilExportValue)), React.createElement("td", null, valuePeriod(data.resource_oil_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Loaded export base"), React.createElement("td", null, audBillions(exportValueBase)), React.createElement("td", null, "Only LNG and oil export-value envelopes currently loaded.")), React.createElement("tr", null, React.createElement("td", null, "25% gross scenario"), React.createElement("td", null, audBillions(grossScenario25)), React.createElement("td", null, "Gross export-value scenario, not profits-based tax law.")), React.createElement("tr", null, React.createElement("td", null, "Loaded receipt context"), React.createElement("td", null, audBillions(loadedReceiptContext)), React.createElement("td", null, "Mixed-period Budget resource-rent taxes plus WA petroleum/NWS and Queensland petroleum royalty receipts; not full Australian public capture.")), React.createElement("tr", null, React.createElement("td", null, "Scenario less loaded receipt context"), React.createElement("td", null, audBillions(scenarioLessLoadedReceipts)), React.createElement("td", null, "Displayed as a gap in loaded rows only. It is not value leaked.")))))), React.createElement("section", {
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Line"), React.createElement("th", null, "Loaded value"), React.createElement("th", null, "Period/source caveat"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "LNG export earnings"), React.createElement("td", null, audBillions(lngExportValue)), React.createElement("td", null, valuePeriod(data.resource_lng_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Oil export earnings"), React.createElement("td", null, audBillions(oilExportValue)), React.createElement("td", null, valuePeriod(data.resource_oil_export_value_req), " REQ envelope.")), React.createElement("tr", null, React.createElement("td", null, "Loaded export base"), React.createElement("td", null, audBillions(exportValueBase)), React.createElement("td", null, "Only LNG and oil export-value envelopes currently loaded.")), React.createElement("tr", null, React.createElement("td", null, "25% gross scenario"), React.createElement("td", null, audBillions(grossScenario25)), React.createElement("td", null, "Gross export-value scenario, not profits-based tax law.")), React.createElement("tr", null, React.createElement("td", null, "Loaded receipt context"), React.createElement("td", null, audBillions(loadedReceiptContext)), React.createElement("td", null, "Mixed-period Budget resource-rent taxes plus WA petroleum/NWS and Queensland petroleum royalty receipts; not full Australian public capture.")), React.createElement("tr", null, React.createElement("td", null, "Scenario less loaded receipt context"), React.createElement("td", null, audBillions(scenarioLessLoadedReceipts)), React.createElement("td", null, "Displayed as a gap in loaded rows only. It is not a value-capture finding.")))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "norway-h"
   }, React.createElement("div", {
@@ -1614,9 +1761,9 @@ function App() {
     className: "eyebrow"
   }, "5. Norway comparison"), React.createElement("h2", {
     id: "norway-h"
-  }, "Value retained versus value leaked stays method-gated"), React.createElement("p", {
+  }, "Value-capture comparison stays method-gated"), React.createElement("p", {
     className: "section__lede"
-  }, "Norway is shown as a capture-channel comparison. Australia does not yet have a complete matched receipt model, so this page does not publish a retained/leaked percentage."))), React.createElement("div", {
+  }, "Norway is shown as a capture-channel comparison. Australia does not yet have a complete matched receipt model, so this page does not publish a retained-value or value-capture percentage."))), React.createElement("div", {
     className: "metric-grid metric-grid--3"
   }, React.createElement(MetricCard, {
     eyebrow: "Norway",
@@ -1634,7 +1781,7 @@ function App() {
     unitFn: () => ''
   }), React.createElement(MetricCard, {
     eyebrow: "Not published",
-    label: "Value retained vs leaked",
+    label: "Value-capture claim",
     fromEnvelope: data.resource_value_leakage_model
   })), React.createElement("div", {
     className: "data-table-wrap",
@@ -1643,20 +1790,23 @@ function App() {
     }
   }, React.createElement("table", {
     className: "data-table data-table--sticky"
-  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Country/context"), React.createElement("th", null, "Loaded capture channels"), React.createElement("th", null, "What can be said now"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Norway"), React.createElement("td", null, "Taxes ", oneDecimal(norwayRevenue.taxes_nok_billion), " NOKb; SDFI ", oneDecimal(norwayRevenue.sdfi_net_cashflow_nok_billion), " NOKb; Equinor dividend ", oneDecimal(norwayRevenue.equinor_dividend_nok_billion), " NOKb; fees/taxes ", oneDecimal(norwayRevenue.environmental_taxes_and_area_fees_nok_billion), " NOKb."), React.createElement("td", null, "Official comparison source shows multiple public capture channels, not just a tax rate.")), React.createElement("tr", null, React.createElement("td", null, "Australia"), React.createElement("td", null, "Budget resource-rent tax actuals plus WA petroleum/NWS and Queensland petroleum royalty receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here."), React.createElement("td", null, "Enough for a structured explainer and scenario, not enough for a retained-value or leaked-value claim.")), React.createElement("tr", null, React.createElement("td", null, "Method gate"), React.createElement("td", null, "Needs matched periods, full receipt channels, company profit scope, export denominator and domestic-price method."), React.createElement("td", null, "Until those inputs exist, the dashboard will keep the leakage envelope unavailable."))))), React.createElement("p", {
+  }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Country/context"), React.createElement("th", null, "Loaded capture channels"), React.createElement("th", null, "What can be said now"))), React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", null, "Norway"), React.createElement("td", null, "Taxes ", oneDecimal(norwayRevenue.taxes_nok_billion), " NOKb; SDFI ", oneDecimal(norwayRevenue.sdfi_net_cashflow_nok_billion), " NOKb; Equinor dividend ", oneDecimal(norwayRevenue.equinor_dividend_nok_billion), " NOKb; fees/taxes ", oneDecimal(norwayRevenue.environmental_taxes_and_area_fees_nok_billion), " NOKb."), React.createElement("td", null, "Official comparison source shows multiple public capture channels, not just a tax rate.")), React.createElement("tr", null, React.createElement("td", null, "Australia"), React.createElement("td", null, "Budget resource-rent tax actuals plus WA petroleum/NWS and Queensland petroleum royalty receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here."), React.createElement("td", null, "Enough for a structured explainer and scenario, not enough for a retained-value or value-capture claim.")), React.createElement("tr", null, React.createElement("td", null, "Method gate"), React.createElement("td", null, "Needs matched periods, full receipt channels, company profit scope, export denominator and domestic-price method."), React.createElement("td", null, "Until those inputs exist, the dashboard keeps the value-capture method gate unavailable."))))), React.createElement("p", {
     className: "caption mono"
   }, window.FR.sourceLine(data.resource_norway_state_revenue_model)), React.createElement("p", {
     className: "caption mono"
   }, window.FR.sourceLine(data.resource_value_leakage_model))), React.createElement("section", {
     className: "section section--sources",
-    id: "sources"
+    id: "sources",
+    "aria-labelledby": "sources-h"
   }, React.createElement("div", {
     className: "section__head"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Sources & methodology"), React.createElement("h2", null, "Every source used on this page"), React.createElement("p", {
+  }, "Sources & methodology"), React.createElement("h2", {
+    id: "sources-h"
+  }, "Every source used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "Source envelopes separate verified official facts from future-phase placeholders."))), React.createElement("div", {
+  }, "Source envelopes separate verified official facts from future-phase placeholders. We do not estimate missing royalty, tax, export, processing or value-capture values."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement(SourceSummary, {
     key: id,
@@ -1664,7 +1814,7 @@ function App() {
     env: env
   }))), React.createElement("div", {
     className: "methodology"
-  }, React.createElement("h3", null, "Method rules"), React.createElement("dl", null, React.createElement("dt", null, "Tax and royalty rates"), React.createElement("dd", null, "Policy rates are shown separately from receipt envelopes. Loaded receipts are context only and do not yet cover every Australian capture channel."), React.createElement("dt", null, "Domestic gas versus netback"), React.createElement("dd", null, "Domestic contract prices and LNG netback are shown side by side only as market context. They are not like-for-like delivered prices."), React.createElement("dt", null, "25% export-tax scenario"), React.createElement("dd", null, "Computed as 25% of the loaded LNG plus oil export-value envelopes, then compared with loaded receipt context. It is a gross scenario, not a profits-based tax model."), React.createElement("dt", null, "Value leakage"), React.createElement("dd", null, "Not published. It remains unavailable until the denominator, Australian receipt channels, company profit scope and comparison method are documented from source envelopes.")))), React.createElement(Footer, {
+  }, React.createElement("h3", null, "Method rules"), React.createElement("dl", null, React.createElement("dt", null, "Tax and royalty rates"), React.createElement("dd", null, "Policy rates are shown separately from receipt envelopes. Loaded receipts are context only and do not yet cover every Australian capture channel."), React.createElement("dt", null, "Domestic gas versus netback"), React.createElement("dd", null, "Domestic contract prices and LNG netback are shown side by side only as market context. They are not like-for-like delivered prices."), React.createElement("dt", null, "25% export-tax scenario"), React.createElement("dd", null, "Computed as 25% of the loaded LNG plus oil export-value envelopes, then compared with loaded receipt context. It is a gross scenario, not a profits-based tax model."), React.createElement("dt", null, "Value-capture claim"), React.createElement("dd", null, "Not published. It remains unavailable until the denominator, Australian receipt channels, processing value, company profit scope and comparison method are documented from source envelopes."), React.createElement("dt", null, "What this does not prove"), React.createElement("dd", null, "These indicators do not prove economic benefit, sovereign value capture, company contribution, project value, state contribution or lost public value. A value-capture claim requires a named public source with a field, period, unit, method and reuse boundary.")))), React.createElement(Footer, {
     refreshStatus: refreshStatus,
     updated: latestRetrieved ? updatedDisplay : ''
   })));

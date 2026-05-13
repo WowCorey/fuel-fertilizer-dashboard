@@ -18,9 +18,206 @@ const SERIES = [
   'resource_value_leakage_model',
 ];
 
+const VALUE_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by channel, geography, company/project scope, period, value-chain stage or update cadence.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+const VALUE_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that royalty, tax, export, processing, company contribution, project value or public value capture is zero, low or negligible.',
+  },
+  {
+    title: 'Source-gated requires publisher verification',
+    copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a royalty, tax, export, processing or value-capture row can be published.',
+  },
+  {
+    title: 'Value signals are not value-capture proof',
+    copy: 'Observed value signals are not treated as proof of economic benefit or sovereign value capture unless a named source explicitly supports that link.',
+  },
+  {
+    title: 'No estimates fill value gaps',
+    copy: 'This page does not estimate missing royalty totals, tax attribution, export values, processing values, company contribution, state contribution, project value or value-capture claims.',
+  },
+  {
+    title: 'Priority is product triage',
+    copy: 'Priority language on this page is editorial/product triage only. It is not a Resource Value Index, Value Capture Index or official risk rating.',
+  },
+  {
+    title: 'Visibility gap, not misconduct proof',
+    copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.',
+  },
+];
+
 function latestValue(env) {
   if (!env || env.status !== 'ok' || !env.values?.length) return null;
   return env.values.at(-1).v;
+}
+
+function trustKind(label) {
+  const text = String(label || '').toLowerCase();
+  if (text.includes('unavailable')) return 'unavailable';
+  if (text.includes('partial')) return 'partial';
+  if (text.includes('derived')) return 'derived';
+  if (text.includes('manual')) return 'manual';
+  if (text.includes('stale')) return 'stale';
+  if (text.includes('source')) return 'source-gated';
+  if (text.includes('roadmap')) return 'roadmap';
+  return 'observed';
+}
+
+function ResourceValueStatusLegend() {
+  return (
+    <section className="section" aria-labelledby="resource-value-status-legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="resource-value-status-legend-h">Status labels used on this value-capture page</h2>
+          <p className="section__lede">
+            These labels match the Missing Data Scoreboard, Strategic Resources, AU Economics,
+            Manufacturing and Infrastructure. They define evidence status before royalty,
+            tax, export, processing or value-capture interpretation.
+          </p>
+        </div>
+      </div>
+      <div className="confidence-legend" aria-label="Resource-value status legend">
+        <span className="confidence-legend__label">Legend</span>
+        <dl>
+          {VALUE_STATUS_LEGEND.map(([kind, label, copy]) => (
+            <React.Fragment key={kind}>
+              <dt><TrustBadge kind={kind}>{label}</TrustBadge></dt>
+              <dd>{copy}</dd>
+            </React.Fragment>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+function ResourceValueAuditSummary() {
+  const cards = [
+    {
+      title: 'Publicly visible value signals',
+      eyebrow: 'Source-backed indicator',
+      copy: 'Loaded envelopes separate company tax policy rate, PRRT policy rate, resource-rent receipts, selected royalty receipts, LNG/oil export earnings, origin flows and price context where named sources support those fields.',
+      href: '#headline-h',
+    },
+    {
+      title: 'Partial and manual royalty or processing feeds',
+      eyebrow: 'Partial feed / manual snapshot',
+      copy: 'Some rows provide official rates, receipts or origin context, but they are not complete royalty totals, company/project tax attribution, processing value, project value or state contribution datasets.',
+      href: '#capture-h',
+    },
+    {
+      title: 'Source-gated export or value-capture feeds',
+      eyebrow: 'Requires publisher verification',
+      copy: 'Missing company contribution, project-level PRRT, full state royalties, processing value, domestic value added, export exposure and value-capture rows are not inferred from partial signals.',
+      href: '#sources',
+    },
+    {
+      title: 'Highest-priority value visibility gaps',
+      eyebrow: 'Editorial/product triage only',
+      copy: 'The most useful next feeds would publish matched-period royalty/tax/export/processing fields, company/project scope, value-chain stage, denominator choice and safe public attribution boundaries.',
+      href: '../missing-data-scoreboard/index.html',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="resource-value-summary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second resource-value summary</span>
+          <h2 id="resource-value-summary-h">What the value-capture audit can and cannot show</h2>
+          <p className="section__lede">
+            These cards use categorical summaries rather than invented totals. They explain what is
+            verifiable, what is partial, and what readers should not infer about economic benefit,
+            tax attribution or value capture.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {cards.map(card => (
+          <article className="quick-link-card" key={card.title}>
+            <span className="eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.copy}</p>
+            <a href={card.href}>Jump to evidence</a>
+            <span className="audit-stamp">Last reviewed: metadata pending</span>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ResourceValueEvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="resource-value-evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="resource-value-evidence-boundary-h">What readers should not assume from missing or partial value data</h2>
+          <p className="section__lede">
+            Read these statements before interpreting royalty, tax, export, processing,
+            company contribution, project value or value-capture gaps.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {VALUE_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ResourceValueRelatedSurfaces() {
+  const links = [
+    ['Missing Data Scoreboard', 'Open the national audit of public-data gaps, likely publishers and next source actions.', '../missing-data-scoreboard/index.html', 'Open Missing Data Scoreboard'],
+    ['Strategic Resources', 'Resource and processing signals that should not be converted into unsupported value-capture claims.', '../strategic-resources-dashboard/index.html', 'Open Strategic Resources'],
+    ['AU Economics', 'Macroeconomic and household-stress signals kept separate from royalty, tax and export attribution.', '../au-economics-dashboard/index.html', 'Open AU Economics'],
+    ['Manufacturing', 'Industrial-capacity signals relevant to processing value and domestic value-chain questions.', '../manufacturing-dashboard/index.html', 'Open Manufacturing'],
+    ['Infrastructure', 'Project-delivery and logistics signals that shape processing, export and value-chain visibility.', '../infrastructure-dashboard/index.html', 'Open Infrastructure'],
+    ['National Fuel Security', 'Fuel and logistics visibility that affects resource extraction, processing and export flows.', '../fuel-security-dashboard/index.html', 'Open National Fuel Security'],
+    ['Sources and methodology', 'Jump to the source envelopes and method gates loaded by this page.', '#sources', 'Open Resource Value methodology'],
+  ];
+
+  return (
+    <section className="section" aria-labelledby="resource-value-related-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Audit navigation</span>
+          <h2 id="resource-value-related-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            Resource value connects to strategic resources, exports, processing, tax,
+            royalties, manufacturing, infrastructure and macroeconomic resilience. These
+            links keep observed value signals separate from unsupported value-capture claims.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {links.map(([title, copy, href, label]) => (
+          <article className="quick-link-card" key={title}>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+            <a href={href}>{label}</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 function fields(env) {
@@ -99,11 +296,11 @@ function ScenarioCard({ lngEnv, oilEnv, rentTaxEnv, royaltyReceiptEnvs }) {
       ) : (
         <div className="metric-card__unavail">
           <Icon name="alert" size={18}/>
-          <span>Calculator hidden until export-value and receipt-context envelopes are verified.</span>
+          <span>Calculator withheld until export-value and receipt-context envelopes are verified.</span>
         </div>
       )}
       <footer className="metric-card__foot">
-        <span className="metric-card__source">Not a leakage estimate. Loaded receipt context is not period-aligned and excludes company tax, other royalty systems, timing effects, deductions, project boundaries and denominator choice.</span>
+        <span className="metric-card__source">Not a value-capture estimate. Loaded receipt context is not period-aligned and excludes company tax, other royalty systems, timing effects, deductions, project boundaries and denominator choice.</span>
       </footer>
     </article>
   );
@@ -195,23 +392,36 @@ function App() {
       <main id="main">
         <section className="intro" id="resource-value">
           <div>
-            <span className="eyebrow">Resource value</span>
-            <h1 style={{ marginTop: 12 }}>Who captures Australian oil and gas value?</h1>
+            <span className="eyebrow">Resource value-capture audit prototype</span>
+            <h1 style={{ marginTop: 12 }}>What Australia's public resource-value data can verify - and what remains source-gated</h1>
             <p className="intro__lede">
-              This page separates the resource-value question from the company-tax dashboard. It shows
-              official policy rates, receipt context, production and export flows, domestic gas-price
-              context, a gross export-tax scenario and the Norway comparison without turning them into
-              a leakage claim before the denominator and method are defensible.
+              This dashboard separates source-backed royalty, export, processing and value
+              indicators from partial, manual and source-gated feeds so readers can see
+              public value-capture signals without invented certainty.
+            </p>
+            <p className="intro__lede">
+              Official policy rates, receipt context, production and export flows,
+              domestic gas-price context, a gross export-value scenario and the Norway
+              comparison are kept separate. They are not converted into a Resource Value
+              Index, Value Capture Index or unsupported economic-benefit claim.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Verified data retrieved</strong>
+            <strong>Page data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
-            <strong>Rule</strong>
-            <span>No leakage estimate is published yet.</span>
+            <strong>Last reviewed</strong>
+            <span>metadata pending</span>
+            <div style={{ height: 12 }}/>
+            <strong>Boundary</strong>
+            <span>Independent public-source prototype. No royalty, tax, export, processing or value-capture claim is invented.</span>
           </aside>
         </section>
+
+        <ResourceValueStatusLegend/>
+        <ResourceValueAuditSummary/>
+        <ResourceValueEvidenceBoundary/>
+        <ResourceValueRelatedSurfaces/>
 
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
@@ -219,7 +429,7 @@ function App() {
           <div className="why-grid">
             <div>
               <span className="eyebrow">Start here</span>
-              <h2 style={{ marginTop: 8 }}>What this page does and does not claim</h2>
+              <h2 style={{ marginTop: 8 }}>Resource value source status comes first</h2>
             </div>
             <div className="why-body">
               <p>
@@ -231,8 +441,15 @@ function App() {
                 value envelopes. It is not current law, not a PRRT model and not a recommendation.
               </p>
               <p>
-                "Value leaked" stays blank until the repo has verified Australian royalty receipts,
-                resource-rent receipts, export values, company profit data and a documented denominator.
+                A missing royalty, tax-attribution, export, processing, company contribution,
+                project value or state contribution feed is a public visibility gap. It is not
+                evidence of value capture, lost value, economic benefit or misconduct unless a
+                named public source supports that specific claim.
+              </p>
+              <p>
+                Value-capture claims stay unavailable until the repo has verified Australian
+                royalty receipts, resource-rent receipts, export values, company profit data,
+                processing-value data and a documented denominator.
               </p>
             </div>
           </div>
@@ -335,7 +552,7 @@ function App() {
             />
             <MetricCard
               eyebrow="Not published"
-              label="Value retained vs leaked"
+              label="Value-capture claim"
               fromEnvelope={data.resource_value_leakage_model}
             />
           </div>
@@ -582,7 +799,7 @@ function App() {
                     <td>Simple gap</td>
                     <td>2026 producer contract VWA vs 2026 netback average</td>
                     <td>{price(netbackGap)}</td>
-                    <td>Arithmetic difference only; not a margin, leakage estimate or delivered customer bill.</td>
+                    <td>Arithmetic difference only; not a margin, value-capture estimate or delivered customer bill.</td>
                   </tr>
                 )}
               </tbody>
@@ -640,7 +857,7 @@ function App() {
                 <tr><td>Loaded export base</td><td>{audBillions(exportValueBase)}</td><td>Only LNG and oil export-value envelopes currently loaded.</td></tr>
                 <tr><td>25% gross scenario</td><td>{audBillions(grossScenario25)}</td><td>Gross export-value scenario, not profits-based tax law.</td></tr>
                 <tr><td>Loaded receipt context</td><td>{audBillions(loadedReceiptContext)}</td><td>Mixed-period Budget resource-rent taxes plus WA petroleum/NWS and Queensland petroleum royalty receipts; not full Australian public capture.</td></tr>
-                <tr><td>Scenario less loaded receipt context</td><td>{audBillions(scenarioLessLoadedReceipts)}</td><td>Displayed as a gap in loaded rows only. It is not value leaked.</td></tr>
+                <tr><td>Scenario less loaded receipt context</td><td>{audBillions(scenarioLessLoadedReceipts)}</td><td>Displayed as a gap in loaded rows only. It is not a value-capture finding.</td></tr>
               </tbody>
             </table>
           </div>
@@ -650,10 +867,10 @@ function App() {
           <div className="section__head">
             <div>
               <span className="eyebrow">5. Norway comparison</span>
-              <h2 id="norway-h">Value retained versus value leaked stays method-gated</h2>
+              <h2 id="norway-h">Value-capture comparison stays method-gated</h2>
               <p className="section__lede">
                 Norway is shown as a capture-channel comparison. Australia does not yet have a complete matched
-                receipt model, so this page does not publish a retained/leaked percentage.
+                receipt model, so this page does not publish a retained-value or value-capture percentage.
               </p>
             </div>
           </div>
@@ -676,7 +893,7 @@ function App() {
             />
             <MetricCard
               eyebrow="Not published"
-              label="Value retained vs leaked"
+              label="Value-capture claim"
               fromEnvelope={data.resource_value_leakage_model}
             />
           </div>
@@ -694,12 +911,12 @@ function App() {
                 <tr>
                   <td>Australia</td>
                   <td>Budget resource-rent tax actuals plus WA petroleum/NWS and Queensland petroleum royalty receipt context are loaded; company tax, all royalty channels and project-level PRRT are not complete here.</td>
-                  <td>Enough for a structured explainer and scenario, not enough for a retained-value or leaked-value claim.</td>
+                  <td>Enough for a structured explainer and scenario, not enough for a retained-value or value-capture claim.</td>
                 </tr>
                 <tr>
                   <td>Method gate</td>
                   <td>Needs matched periods, full receipt channels, company profit scope, export denominator and domestic-price method.</td>
-                  <td>Until those inputs exist, the dashboard will keep the leakage envelope unavailable.</td>
+                  <td>Until those inputs exist, the dashboard keeps the value-capture method gate unavailable.</td>
                 </tr>
               </tbody>
             </table>
@@ -708,13 +925,14 @@ function App() {
           <p className="caption mono">{window.FR.sourceLine(data.resource_value_leakage_model)}</p>
         </section>
 
-        <section className="section section--sources" id="sources">
+        <section className="section section--sources" id="sources" aria-labelledby="sources-h">
           <div className="section__head">
             <div>
               <span className="eyebrow">Sources & methodology</span>
-              <h2>Every source used on this page</h2>
+              <h2 id="sources-h">Every source used on this page</h2>
               <p className="section__lede">
                 Source envelopes separate verified official facts from future-phase placeholders.
+                We do not estimate missing royalty, tax, export, processing or value-capture values.
               </p>
             </div>
           </div>
@@ -730,8 +948,10 @@ function App() {
               <dd>Domestic contract prices and LNG netback are shown side by side only as market context. They are not like-for-like delivered prices.</dd>
               <dt>25% export-tax scenario</dt>
               <dd>Computed as 25% of the loaded LNG plus oil export-value envelopes, then compared with loaded receipt context. It is a gross scenario, not a profits-based tax model.</dd>
-              <dt>Value leakage</dt>
-              <dd>Not published. It remains unavailable until the denominator, Australian receipt channels, company profit scope and comparison method are documented from source envelopes.</dd>
+              <dt>Value-capture claim</dt>
+              <dd>Not published. It remains unavailable until the denominator, Australian receipt channels, processing value, company profit scope and comparison method are documented from source envelopes.</dd>
+              <dt>What this does not prove</dt>
+              <dd>These indicators do not prove economic benefit, sovereign value capture, company contribution, project value, state contribution or lost public value. A value-capture claim requires a named public source with a field, period, unit, method and reuse boundary.</dd>
             </dl>
           </div>
         </section>
