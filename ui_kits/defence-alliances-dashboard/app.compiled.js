@@ -1124,6 +1124,26 @@ Object.assign(window, {
   Footer
 });
 const SERIES = ['defence_posture_profiles', 'defence_budget_2026_nds', 'defence_workforce_annual_report_2024_25', 'defence_public_capability_assets', 'defence_alliance_frameworks', 'defence_sovereign_industry_context', 'defence_uncrewed_systems', 'defence_readiness_gap'];
+const DEFENCE_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by force element, posture concept, geography, update cadence or public field.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const POSTURE_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that readiness, capability, stockpiles, asset availability or operational posture are zero, low or negligible.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a defence-posture value can be published.'
+}, {
+  title: 'Public defence signals are not readiness proof',
+  copy: 'Budget, selected public assets, workforce context and alliances are not treated as proof of readiness, capability or operational outcome unless a named public source explicitly supports that link.'
+}, {
+  title: 'No classified inference',
+  copy: 'This page does not infer classified or non-public information from public budget, posture, alliance, procurement, logistics or capability-related context.'
+}, {
+  title: 'No estimates fill defence gaps',
+  copy: 'This page does not estimate missing readiness, mission-capable rates, operational availability, stockpile depth, asset availability, classified basing posture or live operational fields.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
 function fields(env) {
   return env?.extra?.fields || {};
 }
@@ -1137,6 +1157,8 @@ function trustKind(label) {
   if (text.includes('derived')) return 'derived';
   if (text.includes('manual')) return 'manual';
   if (text.includes('stale')) return 'stale';
+  if (text.includes('source')) return 'source-gated';
+  if (text.includes('roadmap')) return 'roadmap';
   return 'observed';
 }
 function sourceLineFor(data, sourceId) {
@@ -1163,6 +1185,116 @@ function MetricStatus({
   }, React.createElement(TrustBadge, {
     kind: trustKind(label)
   }, label || 'Observed'));
+}
+function DefencePostureStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "defence-posture-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "defence-posture-status-legend-h"
+  }, "Status labels used on this public defence-posture page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard, Strategic Resources, Manufacturing, Infrastructure and National Fuel Security. They define evidence status before posture, capability or readiness interpretation."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Public defence-posture status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, DEFENCE_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function DefencePostureAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible defence signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'Loaded envelopes separate public budget rows, selected capability rows, workforce context, alliance frameworks and public industrial-resilience context where named sources support those fields.',
+    href: '#budget-h'
+  }, {
+    title: 'Partial and manual posture feeds',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'Some rows provide official context or selected public asset information, but they are not live readiness, mission-capable, stockpile, basing or operational-availability datasets.',
+    href: '#coverage-h'
+  }, {
+    title: 'Source-gated capability-related feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Readiness, live posture, mission availability, stockpile depth, classified basing, sensitive logistics and complete asset availability remain unavailable or source-gated.',
+    href: '#sources'
+  }, {
+    title: 'Highest-priority public visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most useful next feeds would publish safe aggregate readiness boundaries, procurement status, sustainment context, logistics/fuel links and update cadence without exposing sensitive operational detail.',
+    href: '../missing-data-scoreboard/index.html'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "defence-posture-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second defence-posture summary"), React.createElement("h2", {
+    id: "defence-posture-summary-h"
+  }, "What the public defence-posture audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented counts. They explain what is verifiable, what is partial, and what readers should not infer about readiness, capability, operational outcomes or classified matters."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function DefencePostureEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "defence-posture-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "defence-posture-evidence-boundary-h"
+  }, "What readers should not assume from missing or partial defence-posture data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting public defence signals, readiness gaps, alliance context, capability-related rows or sovereign-industry context."))), React.createElement("div", {
+    className: "source-grid"
+  }, POSTURE_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function DefencePostureRelatedSurfaces() {
+  const links = [['Missing Data Scoreboard', 'Open the national audit of public-data gaps, likely publishers and next source actions.', '../missing-data-scoreboard/index.html', 'Open Missing Data Scoreboard'], ['Strategic Resources', 'Resource and processing signals that should not be converted into unsupported capability claims.', '../strategic-resources-dashboard/index.html', 'Open Strategic Resources'], ['Manufacturing', 'Industrial-capacity signals relevant to defence production, sustainment and supply-chain questions.', '../manufacturing-dashboard/index.html', 'Open Manufacturing'], ['Infrastructure', 'Project-delivery and logistics signals that shape public readiness and sustainment questions.', '../infrastructure-dashboard/index.html', 'Open Infrastructure'], ['National Fuel Security', 'Fuel and logistics visibility that matters for defence-adjacent resilience, without live operational claims.', '../fuel-security-dashboard/index.html', 'Open National Fuel Security'], ['Defence Procurement Watch', 'Procurement pathways, contract gates and delivery visibility kept separate from posture context.', '../defence-procurement-watch/index.html', 'Open Defence Procurement Watch']];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "defence-posture-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "defence-posture-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Defence posture connects to procurement, strategic resources, manufacturing, infrastructure, fuel and logistics. These links keep public signals separate from unsupported readiness or classified inference."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--3"
+  }, links.map(([title, copy, href, label]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("h3", null, title), React.createElement("p", null, copy), React.createElement("a", {
+    href: href
+  }, label)))));
 }
 function ProfileCard({
   item,
@@ -1361,7 +1493,7 @@ function UncrewedFundingTable({
     label: row.trust_label
   })), React.createElement("td", {
     className: row.funding_status === 'Unavailable' ? 'unavail' : ''
-  }, row.funding_value == null ? 'Not separately published' : `${row.funding_value} ${row.funding_unit || ''}`.trim()), React.createElement("td", null, row.funding_period || '—'), React.createElement("td", null, row.boundary_note, React.createElement("br", null), React.createElement("span", {
+  }, row.funding_value == null ? 'Not separately published' : `${row.funding_value} ${row.funding_unit || ''}`.trim()), React.createElement("td", null, row.funding_period || '-'), React.createElement("td", null, row.boundary_note, React.createElement("br", null), React.createElement("span", {
     className: "caption mono"
   }, sourceLineFor(data, row.source_id))))))));
 }
@@ -1492,22 +1624,28 @@ function App() {
     id: "defence-posture"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Defence, alliances and strategic posture"), React.createElement("h1", {
+  }, "Defence public-data audit prototype"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Australia's defence posture, in plain English."), React.createElement("p", {
+  }, "What Australia's public defence-posture data can verify - and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "This page puts public defence spending, selected ADF capability rows, force-structure context, alliances, strategic frameworks and sovereign industry in one place. It does not publish secret, live or readiness-sensitive data.")), React.createElement("aside", {
+  }, "This dashboard separates source-backed public defence signals from partial, manual and source-gated feeds so readers can understand public visibility without invented readiness claims or classified inference."), React.createElement("p", {
+    className: "intro__lede"
+  }, "Budget rows, selected public capability rows, workforce context, alliances, strategic frameworks and sovereign-industry context are kept separate. They are not converted into a Defence Readiness Index, operational-risk rating, capability claim or non-public posture assessment.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+  }, React.createElement("strong", null, "Page data retrieved"), React.createElement("span", {
     className: "mono"
   }, updatedDisplay), React.createElement("div", {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Rule"), React.createElement("span", null, "Budget, public assets, alliances and readiness are separate fields."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. No readiness, capability, operational-outcome or classified inference is invented."))), React.createElement(DefencePostureStatusLegend, null), React.createElement(DefencePostureAuditSummary, null), React.createElement(DefencePostureEvidenceBoundary, null), React.createElement(DefencePostureRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {
@@ -1520,9 +1658,9 @@ function App() {
     style: {
       marginTop: 8
     }
-  }, "What this page measures")), React.createElement("div", {
+  }, "Public defence source status comes first")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Defence capability and alliances are shown together because Australia's posture depends on both public force structure and formal or practical international arrangements. The page keeps those concepts separate instead of turning them into one score."), React.createElement("p", null, "Budget rows describe money and planned expenditure. Capability rows describe selected public counts or acquisition statuses. Alliance rows describe framework type and purpose. No readiness, mission-capable or live operational availability metric is loaded."), React.createElement("p", null, "The page avoids secret, live and operationally sensitive data. It also avoids \"Australia can beat X\" framing and does not rank adversaries or predict conflict outcomes.")))), takeaways.length > 0 && React.createElement("section", {
+  }, React.createElement("p", null, "Defence capability-related context and alliances are shown together because Australia's public posture picture depends on both public force structure and formal or practical international arrangements. The page keeps those concepts separate instead of turning them into one score."), React.createElement("p", null, "Budget rows describe money and planned expenditure. Capability rows describe selected public counts or acquisition statuses. Alliance rows describe framework type and purpose. No readiness, mission-capable or live operational availability metric is loaded."), React.createElement("p", null, "A missing readiness, capability, stockpile, logistics, asset-availability or live posture feed is a public visibility gap. It is not evidence of readiness, capability, operational outcome, misconduct or classified posture unless a named public source supports that specific claim."), React.createElement("p", null, "The page avoids classified, live and operationally sensitive data. It also avoids \"Australia can beat X\" framing and does not rank adversaries or predict conflict outcomes.")))), takeaways.length > 0 && React.createElement("section", {
     className: "section",
     "aria-labelledby": "takeaway-h"
   }, React.createElement("div", {
@@ -1698,7 +1836,7 @@ function App() {
     }
   }, "Why the page is fail-closed")), React.createElement("div", {
     className: "why-body"
-  }, React.createElement("p", null, "Budget, assets, force structure, alliances and sovereign industry are different evidence types. A dollar value is not a platform count, a platform count is not readiness, and a diplomatic forum is not a mutual defence treaty."), React.createElement("p", null, "Framework rows preserve formal status: treaty, intelligence partnership, security and technology partnership, diplomatic forum, or consultation process. That prevents vague alliance/treaty mixing."), React.createElement("p", null, "Readiness-sensitive and unavailable fields stay unavailable. The dashboard does not estimate mission-capable rates, stockpile depth, classified basing posture or live operational availability from public budget or asset rows."), React.createElement("ul", {
+  }, React.createElement("p", null, "Budget, assets, force structure, alliances and sovereign industry are different evidence types. A dollar value is not a platform count, a platform count is not readiness, and a diplomatic forum is not a mutual defence treaty."), React.createElement("p", null, "Framework rows preserve formal status: treaty, intelligence partnership, security and technology partnership, diplomatic forum, or consultation process. That prevents vague alliance/treaty mixing."), React.createElement("p", null, "Readiness-sensitive and unavailable fields stay unavailable. The dashboard does not estimate mission-capable rates, stockpile depth, classified basing posture or live operational availability from public budget or asset rows."), React.createElement("p", null, "These indicators do not prove defence readiness, operational capability, strategic risk or sovereign capability. A readiness or capability claim requires a named public source with a field, period, unit, method and reuse boundary; classified or non-public inference is outside scope."), React.createElement("ul", {
     className: "gap-list"
   }, (profile.methodology_caveats || []).map(item => React.createElement("li", {
     key: item
@@ -1731,7 +1869,7 @@ function App() {
     id: "sources-h"
   }, "Every source envelope used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "Source cards show envelope status, rights and citation. Candidate or sensitive areas are documented as gaps instead of being converted into values."))), React.createElement("div", {
+  }, "Source cards show envelope status, rights and citation. Candidate or sensitive areas are documented as gaps instead of being converted into values. We do not estimate readiness or infer classified capability from public context."))), React.createElement("div", {
     className: "sources-grid"
   }, React.createElement(SourceSummary, {
     id: "defence_posture_profiles",

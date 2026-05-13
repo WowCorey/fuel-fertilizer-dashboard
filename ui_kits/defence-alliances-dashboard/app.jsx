@@ -9,6 +9,44 @@ const SERIES = [
   'defence_readiness_gap',
 ];
 
+const DEFENCE_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by force element, posture concept, geography, update cadence or public field.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+const POSTURE_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that readiness, capability, stockpiles, asset availability or operational posture are zero, low or negligible.',
+  },
+  {
+    title: 'Source-gated requires publisher verification',
+    copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a defence-posture value can be published.',
+  },
+  {
+    title: 'Public defence signals are not readiness proof',
+    copy: 'Budget, selected public assets, workforce context and alliances are not treated as proof of readiness, capability or operational outcome unless a named public source explicitly supports that link.',
+  },
+  {
+    title: 'No classified inference',
+    copy: 'This page does not infer classified or non-public information from public budget, posture, alliance, procurement, logistics or capability-related context.',
+  },
+  {
+    title: 'No estimates fill defence gaps',
+    copy: 'This page does not estimate missing readiness, mission-capable rates, operational availability, stockpile depth, asset availability, classified basing posture or live operational fields.',
+  },
+  {
+    title: 'Visibility gap, not misconduct proof',
+    copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.',
+  },
+];
+
 function fields(env) {
   return env?.extra?.fields || {};
 }
@@ -24,6 +62,8 @@ function trustKind(label) {
   if (text.includes('derived')) return 'derived';
   if (text.includes('manual')) return 'manual';
   if (text.includes('stale')) return 'stale';
+  if (text.includes('source')) return 'source-gated';
+  if (text.includes('roadmap')) return 'roadmap';
   return 'observed';
 }
 
@@ -46,6 +86,152 @@ function MetricStatus({ label }) {
     <div className="trust-badges">
       <TrustBadge kind={trustKind(label)}>{label || 'Observed'}</TrustBadge>
     </div>
+  );
+}
+
+function DefencePostureStatusLegend() {
+  return (
+    <section className="section" aria-labelledby="defence-posture-status-legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="defence-posture-status-legend-h">Status labels used on this public defence-posture page</h2>
+          <p className="section__lede">
+            These labels match the Missing Data Scoreboard, Strategic Resources, Manufacturing,
+            Infrastructure and National Fuel Security. They define evidence status before
+            posture, capability or readiness interpretation.
+          </p>
+        </div>
+      </div>
+      <div className="confidence-legend" aria-label="Public defence-posture status legend">
+        <span className="confidence-legend__label">Legend</span>
+        <dl>
+          {DEFENCE_STATUS_LEGEND.map(([kind, label, copy]) => (
+            <React.Fragment key={kind}>
+              <dt><TrustBadge kind={kind}>{label}</TrustBadge></dt>
+              <dd>{copy}</dd>
+            </React.Fragment>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+function DefencePostureAuditSummary() {
+  const cards = [
+    {
+      title: 'Publicly visible defence signals',
+      eyebrow: 'Source-backed indicator',
+      copy: 'Loaded envelopes separate public budget rows, selected capability rows, workforce context, alliance frameworks and public industrial-resilience context where named sources support those fields.',
+      href: '#budget-h',
+    },
+    {
+      title: 'Partial and manual posture feeds',
+      eyebrow: 'Partial feed / manual snapshot',
+      copy: 'Some rows provide official context or selected public asset information, but they are not live readiness, mission-capable, stockpile, basing or operational-availability datasets.',
+      href: '#coverage-h',
+    },
+    {
+      title: 'Source-gated capability-related feeds',
+      eyebrow: 'Requires publisher verification',
+      copy: 'Readiness, live posture, mission availability, stockpile depth, classified basing, sensitive logistics and complete asset availability remain unavailable or source-gated.',
+      href: '#sources',
+    },
+    {
+      title: 'Highest-priority public visibility gaps',
+      eyebrow: 'Editorial/product triage only',
+      copy: 'The most useful next feeds would publish safe aggregate readiness boundaries, procurement status, sustainment context, logistics/fuel links and update cadence without exposing sensitive operational detail.',
+      href: '../missing-data-scoreboard/index.html',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="defence-posture-summary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second defence-posture summary</span>
+          <h2 id="defence-posture-summary-h">What the public defence-posture audit can and cannot show</h2>
+          <p className="section__lede">
+            These cards use categorical summaries rather than invented counts. They explain what is
+            verifiable, what is partial, and what readers should not infer about readiness,
+            capability, operational outcomes or classified matters.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {cards.map(card => (
+          <article className="quick-link-card" key={card.title}>
+            <span className="eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.copy}</p>
+            <a href={card.href}>Jump to evidence</a>
+            <span className="audit-stamp">Last reviewed: metadata pending</span>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DefencePostureEvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="defence-posture-evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="defence-posture-evidence-boundary-h">What readers should not assume from missing or partial defence-posture data</h2>
+          <p className="section__lede">
+            Read these statements before interpreting public defence signals, readiness gaps,
+            alliance context, capability-related rows or sovereign-industry context.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {POSTURE_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DefencePostureRelatedSurfaces() {
+  const links = [
+    ['Missing Data Scoreboard', 'Open the national audit of public-data gaps, likely publishers and next source actions.', '../missing-data-scoreboard/index.html', 'Open Missing Data Scoreboard'],
+    ['Strategic Resources', 'Resource and processing signals that should not be converted into unsupported capability claims.', '../strategic-resources-dashboard/index.html', 'Open Strategic Resources'],
+    ['Manufacturing', 'Industrial-capacity signals relevant to defence production, sustainment and supply-chain questions.', '../manufacturing-dashboard/index.html', 'Open Manufacturing'],
+    ['Infrastructure', 'Project-delivery and logistics signals that shape public readiness and sustainment questions.', '../infrastructure-dashboard/index.html', 'Open Infrastructure'],
+    ['National Fuel Security', 'Fuel and logistics visibility that matters for defence-adjacent resilience, without live operational claims.', '../fuel-security-dashboard/index.html', 'Open National Fuel Security'],
+    ['Defence Procurement Watch', 'Procurement pathways, contract gates and delivery visibility kept separate from posture context.', '../defence-procurement-watch/index.html', 'Open Defence Procurement Watch'],
+  ];
+
+  return (
+    <section className="section" aria-labelledby="defence-posture-related-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Audit navigation</span>
+          <h2 id="defence-posture-related-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            Defence posture connects to procurement, strategic resources, manufacturing,
+            infrastructure, fuel and logistics. These links keep public signals separate from
+            unsupported readiness or classified inference.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--3">
+        {links.map(([title, copy, href, label]) => (
+          <article className="quick-link-card" key={title}>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+            <a href={href}>{label}</a>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -315,7 +501,7 @@ function UncrewedFundingTable({ rows, data }) {
                   ? 'Not separately published'
                   : `${row.funding_value} ${row.funding_unit || ''}`.trim()}
               </td>
-              <td>{row.funding_period || '—'}</td>
+              <td>{row.funding_period || '-'}</td>
               <td>{row.boundary_note}<br/><span className="caption mono">{sourceLineFor(data, row.source_id)}</span></td>
             </tr>
           ))}
@@ -450,22 +636,36 @@ function App() {
       <main id="main">
         <section className="intro" id="defence-posture">
           <div>
-            <span className="eyebrow">Defence, alliances and strategic posture</span>
-            <h1 style={{ marginTop: 12 }}>Australia's defence posture, in plain English.</h1>
+            <span className="eyebrow">Defence public-data audit prototype</span>
+            <h1 style={{ marginTop: 12 }}>What Australia's public defence-posture data can verify - and what remains source-gated</h1>
             <p className="intro__lede">
-              This page puts public defence spending, selected ADF capability rows,
-              force-structure context, alliances, strategic frameworks and sovereign
-              industry in one place. It does not publish secret, live or readiness-sensitive data.
+              This dashboard separates source-backed public defence signals from partial,
+              manual and source-gated feeds so readers can understand public visibility
+              without invented readiness claims or classified inference.
+            </p>
+            <p className="intro__lede">
+              Budget rows, selected public capability rows, workforce context, alliances,
+              strategic frameworks and sovereign-industry context are kept separate. They
+              are not converted into a Defence Readiness Index, operational-risk rating,
+              capability claim or non-public posture assessment.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Verified data retrieved</strong>
+            <strong>Page data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
-            <strong>Rule</strong>
-            <span>Budget, public assets, alliances and readiness are separate fields.</span>
+            <strong>Last reviewed</strong>
+            <span>metadata pending</span>
+            <div style={{ height: 12 }}/>
+            <strong>Boundary</strong>
+            <span>Independent public-source prototype. No readiness, capability, operational-outcome or classified inference is invented.</span>
           </aside>
         </section>
+
+        <DefencePostureStatusLegend/>
+        <DefencePostureAuditSummary/>
+        <DefencePostureEvidenceBoundary/>
+        <DefencePostureRelatedSurfaces/>
 
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
@@ -473,14 +673,14 @@ function App() {
           <div className="why-grid">
             <div>
               <span className="eyebrow">Read this first</span>
-              <h2 style={{ marginTop: 8 }}>What this page measures</h2>
+              <h2 style={{ marginTop: 8 }}>Public defence source status comes first</h2>
             </div>
             <div className="why-body">
               <p>
-                Defence capability and alliances are shown together because Australia's posture
-                depends on both public force structure and formal or practical international
-                arrangements. The page keeps those concepts separate instead of turning them
-                into one score.
+                Defence capability-related context and alliances are shown together because
+                Australia's public posture picture depends on both public force structure and
+                formal or practical international arrangements. The page keeps those concepts
+                separate instead of turning them into one score.
               </p>
               <p>
                 Budget rows describe money and planned expenditure. Capability rows describe
@@ -488,9 +688,15 @@ function App() {
                 type and purpose. No readiness, mission-capable or live operational availability metric is loaded.
               </p>
               <p>
-                The page avoids secret, live and operationally sensitive data. It also avoids
-                "Australia can beat X" framing and does not rank adversaries or predict conflict
-                outcomes.
+                A missing readiness, capability, stockpile, logistics, asset-availability or live
+                posture feed is a public visibility gap. It is not evidence of readiness,
+                capability, operational outcome, misconduct or classified posture unless a named public source supports
+                that specific claim.
+              </p>
+              <p>
+                The page avoids classified, live and operationally sensitive data. It also avoids
+                "Australia can beat X" framing and does not rank adversaries or predict
+                conflict outcomes.
               </p>
             </div>
           </div>
@@ -678,6 +884,12 @@ function App() {
                 not estimate mission-capable rates, stockpile depth, classified basing posture
                 or live operational availability from public budget or asset rows.
               </p>
+              <p>
+                These indicators do not prove defence readiness, operational capability,
+                strategic risk or sovereign capability. A readiness or
+                capability claim requires a named public source with a field, period, unit,
+                method and reuse boundary; classified or non-public inference is outside scope.
+              </p>
               <ul className="gap-list">
                 {(profile.methodology_caveats || []).map(item => <li key={item}>{item}</li>)}
               </ul>
@@ -714,7 +926,8 @@ function App() {
               <h2 id="sources-h">Every source envelope used on this page</h2>
               <p className="section__lede">
                 Source cards show envelope status, rights and citation. Candidate or sensitive
-                areas are documented as gaps instead of being converted into values.
+                areas are documented as gaps instead of being converted into values. We do not
+                estimate readiness or infer classified capability from public context.
               </p>
             </div>
           </div>

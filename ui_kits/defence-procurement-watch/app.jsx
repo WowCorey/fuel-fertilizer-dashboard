@@ -22,6 +22,44 @@ const QUICK_GUIDE = [
   ['6', 'What still needs publishing', 'Use missing rows as source requests, not as dashboard values.'],
 ];
 
+const PROCUREMENT_STATUS_LEGEND = [
+  ['observed', 'Verified', 'Source-backed and current enough for its cadence.'],
+  ['partial', 'Partial', 'Source-backed, but incomplete by procurement stage, project, contract field, delivery milestone or update cadence.'],
+  ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'],
+  ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'],
+  ['derived', 'Derived', 'Calculated or selected from a named source envelope.'],
+  ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'],
+  ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'],
+  ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.'],
+];
+
+const PROCUREMENT_EVIDENCE_BOUNDARY = [
+  {
+    title: 'Unavailable does not mean zero',
+    copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that contracts, suppliers, delivery milestones, vessel numbers, industry content, logistics demand or capability implications are zero or absent.',
+  },
+  {
+    title: 'Source-gated requires publisher verification',
+    copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a procurement value can be published.',
+  },
+  {
+    title: 'Procurement signals are not capability proof',
+    copy: 'Public procurement discussion is not treated as proof of capability, readiness, delivery certainty or operational outcome unless a named public source explicitly supports that link.',
+  },
+  {
+    title: 'No classified inference',
+    copy: 'This page does not infer classified or non-public information from procurement, industrial, logistics, sustainment, fuel or posture context.',
+  },
+  {
+    title: 'No estimates fill procurement gaps',
+    copy: 'This page does not estimate missing contract values, supplier pathways, delivery dates, vessel class, fleet count, sustainment burden, fuel demand, industry content or operational capability.',
+  },
+  {
+    title: 'Visibility gap, not misconduct proof',
+    copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.',
+  },
+];
+
 const PROCUREMENT_ROWS = [
   ['Japan/Australia warship procurement pathway', 'defence_japan_warship_procurement_source_gate', 'No official pathway row loaded.', 'Program, supplier pathway, contract status and delivery timeline are not asserted.', 'Official Defence or public procurement source with exact row and date.'],
   ['Frigate / general-purpose vessel pathway', 'defence_frigate_procurement_status', 'No source-safe contract or program row loaded.', 'Vessel class, number, delivery schedule and in-service target remain source-gated.', 'Load only official Defence/procurement material.'],
@@ -156,6 +194,152 @@ function SourceCard({ id, env, partial = false }) {
       {meta.citation && <p className="caption"><b>Citation:</b> {meta.citation}</p>}
       {env?.source_url && <SourceAnchor href={env.source_url}/>}
     </article>
+  );
+}
+
+function ProcurementStatusLegend() {
+  return (
+    <section className="section" aria-labelledby="defence-procurement-status-legend-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Status legend</span>
+          <h2 id="defence-procurement-status-legend-h">Status labels used on this defence-procurement page</h2>
+          <p className="section__lede">
+            These labels match the Missing Data Scoreboard, Strategic Resources, Manufacturing,
+            Infrastructure and National Fuel Security. They define evidence status before
+            procurement, delivery, contract or capability interpretation.
+          </p>
+        </div>
+      </div>
+      <div className="confidence-legend" aria-label="Defence-procurement status legend">
+        <span className="confidence-legend__label">Legend</span>
+        <dl>
+          {PROCUREMENT_STATUS_LEGEND.map(([kind, label, copy]) => (
+            <React.Fragment key={kind}>
+              <dt><TrustBadge kind={kind}>{label}</TrustBadge></dt>
+              <dd>{copy}</dd>
+            </React.Fragment>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+function ProcurementAuditSummary() {
+  const cards = [
+    {
+      title: 'Publicly visible procurement signals',
+      eyebrow: 'Source-backed indicator',
+      copy: 'Loaded envelopes record public procurement source gates and related industrial, resource and capability-context sources where the repo has source-backed material.',
+      href: '#pathway-h',
+    },
+    {
+      title: 'Partial and manual delivery feeds',
+      eyebrow: 'Partial feed / manual snapshot',
+      copy: 'Some rows describe official context or public source gates, but they are not contract awards, delivery schedules, supplier commitments, vessel counts or industry-content values.',
+      href: '#contract-h',
+    },
+    {
+      title: 'Source-gated contract or project feeds',
+      eyebrow: 'Requires publisher verification',
+      copy: 'Contract value, supplier, class, delivery timeline, sustainment, local content, logistics/fuel implications and operational capability remain source-gated unless official public rows are loaded.',
+      href: '#sources',
+    },
+    {
+      title: 'Highest-priority procurement visibility gaps',
+      eyebrow: 'Editorial/product triage only',
+      copy: 'The most useful next feeds would separate official pathway, contract status, delivery timeline, industry content, sustainment, safe logistics aggregates and update cadence.',
+      href: '../missing-data-scoreboard/index.html',
+    },
+  ];
+
+  return (
+    <section className="section" aria-labelledby="defence-procurement-summary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">30-second defence-procurement summary</span>
+          <h2 id="defence-procurement-summary-h">What the defence-procurement audit can and cannot show</h2>
+          <p className="section__lede">
+            These cards use categorical summaries rather than invented counts. They explain what is
+            verifiable, what is partial, and what readers should not infer about projects,
+            contracts, delivery, capability or classified matters.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--4">
+        {cards.map(card => (
+          <article className="quick-link-card" key={card.title}>
+            <span className="eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.copy}</p>
+            <a href={card.href}>Jump to evidence</a>
+            <span className="audit-stamp">Last reviewed: metadata pending</span>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProcurementEvidenceBoundary() {
+  return (
+    <section className="section section--why" aria-labelledby="defence-procurement-evidence-boundary-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Evidence boundary</span>
+          <h2 id="defence-procurement-evidence-boundary-h">What readers should not assume from missing or partial procurement data</h2>
+          <p className="section__lede">
+            Read these statements before interpreting procurement pathways, delivery status,
+            industry content, logistics implications or capability-related gaps.
+          </p>
+        </div>
+      </div>
+      <div className="source-grid">
+        {PROCUREMENT_EVIDENCE_BOUNDARY.map(item => (
+          <article className="source-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProcurementRelatedSurfaces() {
+  const links = [
+    ['Missing Data Scoreboard', 'Open the national audit of public-data gaps, likely publishers and next source actions.', '../missing-data-scoreboard/index.html', 'Open Missing Data Scoreboard'],
+    ['Defence Posture', 'Public posture, alliance and selected capability context kept separate from procurement claims.', '../defence-alliances-dashboard/index.html', 'Open Defence Posture'],
+    ['Strategic Resources', 'Resource and processing context that should not be converted into unsupported procurement dependency claims.', '../strategic-resources-dashboard/index.html', 'Open Strategic Resources'],
+    ['Manufacturing', 'Industrial-capacity signals relevant to shipbuilding, sustainment and supply-chain questions.', '../manufacturing-dashboard/index.html', 'Open Manufacturing'],
+    ['Infrastructure', 'Project-delivery and logistics signals that shape sustainment and delivery visibility.', '../infrastructure-dashboard/index.html', 'Open Infrastructure'],
+    ['National Fuel Security', 'Fuel and logistics visibility that matters only where official public sources support the link.', '../fuel-security-dashboard/index.html', 'Open National Fuel Security'],
+  ];
+
+  return (
+    <section className="section" aria-labelledby="defence-procurement-related-h">
+      <div className="section__head">
+        <div>
+          <span className="eyebrow">Audit navigation</span>
+          <h2 id="defence-procurement-related-h">Open related public-data surfaces</h2>
+          <p className="section__lede">
+            Defence procurement connects to posture, strategic resources, manufacturing,
+            infrastructure, fuel and logistics. These links keep procurement visibility
+            separate from unsupported capability or classified inference.
+          </p>
+        </div>
+      </div>
+      <div className="quick-link-grid quick-link-grid--3">
+        {links.map(([title, copy, href, label]) => (
+          <article className="quick-link-card" key={title}>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+            <a href={href}>{label}</a>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -326,31 +510,39 @@ function App() {
       <main id="main">
         <section className="intro" id="defence-procurement-watch">
           <div>
-            <span className="eyebrow">Defence procurement watch</span>
-            <h1 style={{ marginTop: 12 }}>Defence procurement watch</h1>
+            <span className="eyebrow">Defence procurement public-data audit prototype</span>
+            <h1 style={{ marginTop: 12 }}>What Australia's public defence-procurement data can verify - and what remains source-gated</h1>
             <p className="intro__lede">
-              Tracks public-source defence procurement signals, source-gated contract
-              pathways, delivery timelines, industry-content questions and logistics
-              implications without inventing sensitive or unpublished capability data.
+              This dashboard separates source-backed procurement signals from partial,
+              manual and source-gated feeds so readers can see public delivery visibility
+              without invented project, contract or capability claims.
             </p>
             <p className="body-sm" style={{ marginTop: 16, color: 'var(--ink-2)' }}>
               This page is an independent public-source prototype. It does not infer
-              contracts, prices, suppliers, delivery dates, capability, fleet readiness,
-              fuel requirements or operational posture unless a named official/public
-              source provides the exact field, period, unit and reuse boundary.
+              contracts, prices, suppliers, delivery dates, vessel class, capability,
+              fleet readiness, fuel requirements or operational posture unless a named
+              official/public source provides the exact field, period, unit and reuse boundary.
             </p>
           </div>
           <aside className="intro__meta" aria-label="Publication details">
-            <strong>Verified data retrieved</strong>
+            <strong>Page data retrieved</strong>
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Latest source data point</strong>
             <span>{latestDataPoint || 'No source-backed procurement data point loaded'}</span>
             <div style={{ height: 12 }}/>
+            <strong>Last reviewed</strong>
+            <span>metadata pending</span>
+            <div style={{ height: 12 }}/>
             <strong>Boundary</strong>
-            <span>Procurement accountability tracker, not a live military capability dashboard.</span>
+            <span>Independent public-source prototype. No project, contract, capability or classified inference is invented.</span>
           </aside>
         </section>
+
+        <ProcurementStatusLegend/>
+        <ProcurementAuditSummary/>
+        <ProcurementEvidenceBoundary/>
+        <ProcurementRelatedSurfaces/>
 
         <DataCoverage data={data} refreshStatus={refreshStatus}/>
 
@@ -467,7 +659,7 @@ function App() {
               <h2 id="boundary-h">Public/private defence data boundary</h2>
               <p className="section__lede">
                 Some procurement facts should be public, while some operational facts may be
-                sensitive. The dashboard asks for safe public aggregate indicators, not hidden
+                sensitive. The dashboard asks for safe public aggregate indicators, not sensitive
                 operational detail.
               </p>
             </div>
@@ -505,7 +697,7 @@ function App() {
               <p className="section__lede">
                 This page deliberately loads source gates for procurement facts that are not
                 yet verified. It adds no contract, supplier, delivery, vessel class, value,
-                industry-content or fuel/logistics values.
+                industry-content or fuel/logistics values, and it makes no classified inference.
               </p>
             </div>
           </div>
