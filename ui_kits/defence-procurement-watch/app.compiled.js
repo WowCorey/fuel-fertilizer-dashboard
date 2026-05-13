@@ -1125,6 +1125,26 @@ Object.assign(window, {
 });
 const SERIES = ['defence_japan_warship_procurement_source_gate', 'defence_frigate_procurement_status', 'defence_naval_logistics_fuel_implication', 'defence_surface_fleet_procurement_pathway', 'defence_shipbuilding_industry_content_gate', 'defence_procurement_delivery_timeline_gate', 'defence_procurement_contract_value_gate', 'defence_procurement_public_boundary_gate', 'defence_sovereign_industry_context', 'defence_public_capability_assets', 'defence_readiness_gap', 'strategic_resources_critical_minerals_context'];
 const QUICK_GUIDE = [['1', 'Procurement pathway', 'Start with whether an official procurement pathway has been loaded.'], ['2', 'Contract and delivery status', 'Treat supplier, value, class, count and delivery rows as unavailable until official source material exists.'], ['3', 'Australian industry content', 'Keep industry-content questions separate from procurement facts.'], ['4', 'Logistics and fuel implications', 'Do not convert procurement discussion into fuel or sustainment metrics.'], ['5', 'Strategic dependencies', 'Link procurement questions to resources, manufacturing and infrastructure only as context.'], ['6', 'What still needs publishing', 'Use missing rows as source requests, not as dashboard values.']];
+const PROCUREMENT_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by procurement stage, project, contract field, delivery milestone or update cadence.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source or held as a manual snapshot pending a verified row.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
+const PROCUREMENT_EVIDENCE_BOUNDARY = [{
+  title: 'Unavailable does not mean zero',
+  copy: 'Unavailable means no public source-safe feed has been loaded yet. It is not a statement that contracts, suppliers, delivery milestones, vessel numbers, industry content, logistics demand or capability implications are zero or absent.'
+}, {
+  title: 'Source-gated requires publisher verification',
+  copy: 'Source-gated means the dashboard still needs a verified public source, exact field, period, unit and reuse boundary before a procurement value can be published.'
+}, {
+  title: 'Procurement signals are not capability proof',
+  copy: 'Public procurement discussion is not treated as proof of capability, readiness, delivery certainty or operational outcome unless a named public source explicitly supports that link.'
+}, {
+  title: 'No classified inference',
+  copy: 'This page does not infer classified or non-public information from procurement, industrial, logistics, sustainment, fuel or posture context.'
+}, {
+  title: 'No estimates fill procurement gaps',
+  copy: 'This page does not estimate missing contract values, supplier pathways, delivery dates, vessel class, fleet count, sustainment burden, fuel demand, industry content or operational capability.'
+}, {
+  title: 'Visibility gap, not misconduct proof',
+  copy: 'A missing public feed is a public visibility gap. It is not proof of wrongdoing, and likely holder or publisher fields are starting points for verification, not custody assertions.'
+}];
 const PROCUREMENT_ROWS = [['Japan/Australia warship procurement pathway', 'defence_japan_warship_procurement_source_gate', 'No official pathway row loaded.', 'Program, supplier pathway, contract status and delivery timeline are not asserted.', 'Official Defence or public procurement source with exact row and date.'], ['Frigate / general-purpose vessel pathway', 'defence_frigate_procurement_status', 'No source-safe contract or program row loaded.', 'Vessel class, number, delivery schedule and in-service target remain source-gated.', 'Load only official Defence/procurement material.'], ['Surface fleet procurement context', 'defence_surface_fleet_procurement_pathway', 'Source-gated pathway placeholder only.', 'No decision, supplier, fleet count or readiness implication is published.', 'Verify official public pathway source before display.'], ['Contracting stage', 'defence_frigate_procurement_status', 'No contract-stage row loaded.', 'No award, shortlist, negotiation or procurement-stage claim is made.', 'Publish official stage/status field.'], ['Supplier / partner nation', 'defence_japan_warship_procurement_source_gate', 'No supplier or partner-nation procurement row loaded.', 'No Japan/Australia supplier pathway is asserted.', 'Use official source material only.'], ['Decision status', 'defence_surface_fleet_procurement_pathway', 'No decision-status field loaded.', 'No decision, selection or approval is inferred.', 'Load official decision announcement if published.'], ['Public announcement status', 'defence_surface_fleet_procurement_pathway', 'No reusable announcement table loaded.', 'Media discussion or political commentary is not treated as a procurement row.', 'Create row only from official/public procurement source.']];
 const CONTRACT_ROWS = [['Contract awarded?', 'defence_frigate_procurement_status', 'Unavailable', 'No official contract-award row is loaded.', 'Do not infer from media discussion or broad procurement interest.'], ['Contract value', 'defence_procurement_contract_value_gate', 'Source-gated', 'No public value row is loaded.', 'Requires official value, currency, period and scope.'], ['Supplier / prime contractor', 'defence_japan_warship_procurement_source_gate', 'Source-gated', 'No supplier row is loaded.', 'Requires official supplier/procurement source.'], ['Vessel class / program', 'defence_frigate_procurement_status', 'Source-gated', 'No class or program row is loaded.', 'Do not publish class/program unless official.'], ['Number of vessels', 'defence_frigate_procurement_status', 'Unavailable', 'No vessel-count row is loaded.', 'Requires official quantity and scope.'], ['Delivery schedule', 'defence_procurement_delivery_timeline_gate', 'Source-gated', 'No delivery schedule row is loaded.', 'Requires official milestone/date fields.'], ['In-service target', 'defence_procurement_delivery_timeline_gate', 'Source-gated', 'No in-service target row is loaded.', 'Requires official public target.'], ['Sustainment arrangement', 'defence_shipbuilding_industry_content_gate', 'Source-gated', 'No sustainment row is loaded.', 'Requires official sustainment or industry-content source.'], ['Australian industry content', 'defence_shipbuilding_industry_content_gate', 'Source-gated', 'No project-specific industry-content row is loaded.', 'Requires official local-content or procurement source.']];
 const INDUSTRY_ROWS = [['Australian shipbuilding contribution', 'defence_sovereign_industry_context', 'Public industrial priority context is loaded, but no project-specific shipbuilding contribution row is loaded.', 'Current blocker: procurement-specific local-content source not loaded.', 'Manufacturing / Strategic resources'], ['Local sustainment', 'defence_shipbuilding_industry_content_gate', 'No sustainment arrangement row is loaded.', 'Current blocker: official sustainment scope and location not loaded.', 'Manufacturing / Infrastructure'], ['Supply-chain readiness', 'defence_shipbuilding_industry_content_gate', 'No supply-chain depth or readiness metric is loaded.', 'Current blocker: no public source-safe capacity field.', 'Manufacturing / Strategic resources'], ['Workforce / skills pressure', 'defence_shipbuilding_industry_content_gate', 'No procurement-specific workforce row is loaded.', 'Current blocker: no official workforce/skills denominator loaded.', 'Employment / Manufacturing'], ['Steel / critical materials', 'strategic_resources_critical_minerals_context', 'Strategic resources context exists, but no procurement bill-of-materials or supplier dependency is loaded.', 'Current blocker: no official project material dependency row.', 'Strategic resources'], ['Electronics / systems integration', 'defence_shipbuilding_industry_content_gate', 'No systems-integration capacity row is loaded.', 'Current blocker: no public project-specific integration source.', 'Manufacturing / Defence posture'], ['Port / dockyard infrastructure', 'defence_shipbuilding_industry_content_gate', 'No dockyard or port readiness row is loaded.', 'Current blocker: no official infrastructure dependency row.', 'Infrastructure']];
@@ -1204,6 +1224,116 @@ function SourceCard({
   }, React.createElement("b", null, "Citation:"), " ", meta.citation), env?.source_url && React.createElement(SourceAnchor, {
     href: env.source_url
   }));
+}
+function ProcurementStatusLegend() {
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "defence-procurement-status-legend-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Status legend"), React.createElement("h2", {
+    id: "defence-procurement-status-legend-h"
+  }, "Status labels used on this defence-procurement page"), React.createElement("p", {
+    className: "section__lede"
+  }, "These labels match the Missing Data Scoreboard, Strategic Resources, Manufacturing, Infrastructure and National Fuel Security. They define evidence status before procurement, delivery, contract or capability interpretation."))), React.createElement("div", {
+    className: "confidence-legend",
+    "aria-label": "Defence-procurement status legend"
+  }, React.createElement("span", {
+    className: "confidence-legend__label"
+  }, "Legend"), React.createElement("dl", null, PROCUREMENT_STATUS_LEGEND.map(([kind, label, copy]) => React.createElement(React.Fragment, {
+    key: kind
+  }, React.createElement("dt", null, React.createElement(TrustBadge, {
+    kind: kind
+  }, label)), React.createElement("dd", null, copy))))));
+}
+function ProcurementAuditSummary() {
+  const cards = [{
+    title: 'Publicly visible procurement signals',
+    eyebrow: 'Source-backed indicator',
+    copy: 'Loaded envelopes record public procurement source gates and related industrial, resource and capability-context sources where the repo has source-backed material.',
+    href: '#pathway-h'
+  }, {
+    title: 'Partial and manual delivery feeds',
+    eyebrow: 'Partial feed / manual snapshot',
+    copy: 'Some rows describe official context or public source gates, but they are not contract awards, delivery schedules, supplier commitments, vessel counts or industry-content values.',
+    href: '#contract-h'
+  }, {
+    title: 'Source-gated contract or project feeds',
+    eyebrow: 'Requires publisher verification',
+    copy: 'Contract value, supplier, class, delivery timeline, sustainment, local content, logistics/fuel implications and operational capability remain source-gated unless official public rows are loaded.',
+    href: '#sources'
+  }, {
+    title: 'Highest-priority procurement visibility gaps',
+    eyebrow: 'Editorial/product triage only',
+    copy: 'The most useful next feeds would separate official pathway, contract status, delivery timeline, industry content, sustainment, safe logistics aggregates and update cadence.',
+    href: '../missing-data-scoreboard/index.html'
+  }];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "defence-procurement-summary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "30-second defence-procurement summary"), React.createElement("h2", {
+    id: "defence-procurement-summary-h"
+  }, "What the defence-procurement audit can and cannot show"), React.createElement("p", {
+    className: "section__lede"
+  }, "These cards use categorical summaries rather than invented counts. They explain what is verifiable, what is partial, and what readers should not infer about projects, contracts, delivery, capability or classified matters."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--4"
+  }, cards.map(card => React.createElement("article", {
+    className: "quick-link-card",
+    key: card.title
+  }, React.createElement("span", {
+    className: "eyebrow"
+  }, card.eyebrow), React.createElement("h3", null, card.title), React.createElement("p", null, card.copy), React.createElement("a", {
+    href: card.href
+  }, "Jump to evidence"), React.createElement("span", {
+    className: "audit-stamp"
+  }, "Last reviewed: metadata pending")))));
+}
+function ProcurementEvidenceBoundary() {
+  return React.createElement("section", {
+    className: "section section--why",
+    "aria-labelledby": "defence-procurement-evidence-boundary-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Evidence boundary"), React.createElement("h2", {
+    id: "defence-procurement-evidence-boundary-h"
+  }, "What readers should not assume from missing or partial procurement data"), React.createElement("p", {
+    className: "section__lede"
+  }, "Read these statements before interpreting procurement pathways, delivery status, industry content, logistics implications or capability-related gaps."))), React.createElement("div", {
+    className: "source-grid"
+  }, PROCUREMENT_EVIDENCE_BOUNDARY.map(item => React.createElement("article", {
+    className: "source-card",
+    key: item.title
+  }, React.createElement("h3", null, item.title), React.createElement("p", null, item.copy)))));
+}
+function ProcurementRelatedSurfaces() {
+  const links = [['Missing Data Scoreboard', 'Open the national audit of public-data gaps, likely publishers and next source actions.', '../missing-data-scoreboard/index.html', 'Open Missing Data Scoreboard'], ['Defence Posture', 'Public posture, alliance and selected capability context kept separate from procurement claims.', '../defence-alliances-dashboard/index.html', 'Open Defence Posture'], ['Strategic Resources', 'Resource and processing context that should not be converted into unsupported procurement dependency claims.', '../strategic-resources-dashboard/index.html', 'Open Strategic Resources'], ['Manufacturing', 'Industrial-capacity signals relevant to shipbuilding, sustainment and supply-chain questions.', '../manufacturing-dashboard/index.html', 'Open Manufacturing'], ['Infrastructure', 'Project-delivery and logistics signals that shape sustainment and delivery visibility.', '../infrastructure-dashboard/index.html', 'Open Infrastructure'], ['National Fuel Security', 'Fuel and logistics visibility that matters only where official public sources support the link.', '../fuel-security-dashboard/index.html', 'Open National Fuel Security']];
+  return React.createElement("section", {
+    className: "section",
+    "aria-labelledby": "defence-procurement-related-h"
+  }, React.createElement("div", {
+    className: "section__head"
+  }, React.createElement("div", null, React.createElement("span", {
+    className: "eyebrow"
+  }, "Audit navigation"), React.createElement("h2", {
+    id: "defence-procurement-related-h"
+  }, "Open related public-data surfaces"), React.createElement("p", {
+    className: "section__lede"
+  }, "Defence procurement connects to posture, strategic resources, manufacturing, infrastructure, fuel and logistics. These links keep procurement visibility separate from unsupported capability or classified inference."))), React.createElement("div", {
+    className: "quick-link-grid quick-link-grid--3"
+  }, links.map(([title, copy, href, label]) => React.createElement("article", {
+    className: "quick-link-card",
+    key: title
+  }, React.createElement("h3", null, title), React.createElement("p", null, copy), React.createElement("a", {
+    href: href
+  }, label)))));
 }
 function QuickGuide() {
   return React.createElement("section", {
@@ -1353,22 +1483,22 @@ function App() {
     id: "defence-procurement-watch"
   }, React.createElement("div", null, React.createElement("span", {
     className: "eyebrow"
-  }, "Defence procurement watch"), React.createElement("h1", {
+  }, "Defence procurement public-data audit prototype"), React.createElement("h1", {
     style: {
       marginTop: 12
     }
-  }, "Defence procurement watch"), React.createElement("p", {
+  }, "What Australia's public defence-procurement data can verify - and what remains source-gated"), React.createElement("p", {
     className: "intro__lede"
-  }, "Tracks public-source defence procurement signals, source-gated contract pathways, delivery timelines, industry-content questions and logistics implications without inventing sensitive or unpublished capability data."), React.createElement("p", {
+  }, "This dashboard separates source-backed procurement signals from partial, manual and source-gated feeds so readers can see public delivery visibility without invented project, contract or capability claims."), React.createElement("p", {
     className: "body-sm",
     style: {
       marginTop: 16,
       color: 'var(--ink-2)'
     }
-  }, "This page is an independent public-source prototype. It does not infer contracts, prices, suppliers, delivery dates, capability, fleet readiness, fuel requirements or operational posture unless a named official/public source provides the exact field, period, unit and reuse boundary.")), React.createElement("aside", {
+  }, "This page is an independent public-source prototype. It does not infer contracts, prices, suppliers, delivery dates, vessel class, capability, fleet readiness, fuel requirements or operational posture unless a named official/public source provides the exact field, period, unit and reuse boundary.")), React.createElement("aside", {
     className: "intro__meta",
     "aria-label": "Publication details"
-  }, React.createElement("strong", null, "Verified data retrieved"), React.createElement("span", {
+  }, React.createElement("strong", null, "Page data retrieved"), React.createElement("span", {
     className: "mono"
   }, updatedDisplay), React.createElement("div", {
     style: {
@@ -1378,7 +1508,11 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Procurement accountability tracker, not a live military capability dashboard."))), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"), React.createElement("div", {
+    style: {
+      height: 12
+    }
+  }), React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype. No project, contract, capability or classified inference is invented."))), React.createElement(ProcurementStatusLegend, null), React.createElement(ProcurementAuditSummary, null), React.createElement(ProcurementEvidenceBoundary, null), React.createElement(ProcurementRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement(QuickGuide, null), React.createElement("section", {
@@ -1486,7 +1620,7 @@ function App() {
     id: "boundary-h"
   }, "Public/private defence data boundary"), React.createElement("p", {
     className: "section__lede"
-  }, "Some procurement facts should be public, while some operational facts may be sensitive. The dashboard asks for safe public aggregate indicators, not hidden operational detail."))), React.createElement(PlainTable, {
+  }, "Some procurement facts should be public, while some operational facts may be sensitive. The dashboard asks for safe public aggregate indicators, not sensitive operational detail."))), React.createElement(PlainTable, {
     columns: ['Defence data row', 'Safe public aggregate possible?', 'Current publication status', 'Sensitivity note', 'Next action'],
     rows: BOUNDARY_ROWS
   })), React.createElement("section", {
@@ -1515,7 +1649,7 @@ function App() {
     id: "sources-h"
   }, "Every envelope used on this page"), React.createElement("p", {
     className: "section__lede"
-  }, "This page deliberately loads source gates for procurement facts that are not yet verified. It adds no contract, supplier, delivery, vessel class, value, industry-content or fuel/logistics values."))), React.createElement("div", {
+  }, "This page deliberately loads source gates for procurement facts that are not yet verified. It adds no contract, supplier, delivery, vessel class, value, industry-content or fuel/logistics values, and it makes no classified inference."))), React.createElement("div", {
     className: "sources-grid"
   }, Object.entries(data).map(([id, env]) => React.createElement(SourceCard, {
     key: id,

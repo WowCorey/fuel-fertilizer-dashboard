@@ -9,8 +9,8 @@ const routes = [
   { path: '/ui_kits/resource-value-dashboard/index.html', heading: 'Who captures Australian oil and gas value?' },
   { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
   { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: /What Australia.{1,5}s public strategic-resource data can verify/ },
-  { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: "Australia's defence posture, in plain English." },
-  { path: '/ui_kits/defence-procurement-watch/index.html', heading: 'Defence procurement watch' },
+  { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: /What Australia.{1,5}s public defence-posture data can verify/ },
+  { path: '/ui_kits/defence-procurement-watch/index.html', heading: /What Australia.{1,5}s public defence-procurement data can verify/ },
   { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
   { path: '/ui_kits/fertilizer-dashboard/index.html', heading: /What Australia.{1,5}s public food-system data can verify/ },
   { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
@@ -601,12 +601,33 @@ test('Queensland fuel sovereignty tracker keeps delivery data source-gated', asy
   await expect(page.getByText('No land parcel, capacity, proponent, bid, contract, approval-completion or operational fuel-holding value is inferred.')).toBeVisible();
 });
 
-test('defence procurement watch keeps procurement facts source-gated', async ({ page }) => {
+test('defence procurement watch separates procurement signals from capability claims', async ({ page }) => {
   await page.goto('/ui_kits/defence-procurement-watch/index.html');
   const main = page.locator('main');
-  await expect(page.getByRole('heading', { name: 'Defence procurement watch' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public defence-procurement data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed procurement signals from partial,')).toBeVisible();
+  await expect(page.getByText('public delivery visibility without invented project, contract or capability claims')).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
-  await expect(page.getByText('It does not infer contracts, prices, suppliers, delivery dates')).toBeVisible();
+  await expect(page.getByText('No project, contract, capability or classified inference is invented.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this defence-procurement page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, Strategic Resources, Manufacturing,')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the defence-procurement audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible procurement signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated contract or project feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial procurement data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Procurement signals are not capability proof')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'No classified inference' })).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Defence Posture' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Strategic Resources' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Manufacturing' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Infrastructure' }).first()).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' }).first()).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(page.getByText('It does not infer contracts, prices, suppliers, delivery dates, vessel class')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Procurement evidence before procurement claims' })).toBeVisible();
   await expect(page.locator('section[aria-labelledby="pathway-h"]').getByRole('heading', { name: 'Procurement pathway' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Japan/Australia warship procurement pathway' })).toBeVisible();
@@ -623,10 +644,18 @@ test('defence procurement watch keeps procurement facts source-gated', async ({ 
   await expect(page.locator('section[aria-labelledby="boundary-h"]').getByRole('heading', { name: 'Public/private defence data boundary' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What government still needs to publish' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'How this connects to the national dashboard' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Open Defence Posture' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Open Strategic Resources' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Fuel Strategy' })).toBeVisible();
   await expect(page.getByText('No procurement fact is filled from media discussion')).toBeVisible();
+  await expect(page.getByText('it makes no classified inference')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public defence-procurement data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this defence-procurement page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial procurement data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#defence-procurement-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
 });
 
 test('Brisbane 2032 readiness keeps Olympic delivery data source-gated', async ({ page }) => {
@@ -776,14 +805,49 @@ test('strategic resources page separates resource signals from capability claims
   expect(legendOrder).toBeTruthy();
 });
 
-test('defence posture page keeps readiness and alliance boundaries explicit', async ({ page }) => {
+test('defence posture page separates public defence signals from readiness claims', async ({ page }) => {
   await page.goto('/ui_kits/defence-alliances-dashboard/index.html');
-  await expect(page.getByRole('heading', { name: "Australia's defence posture, in plain English." })).toBeVisible();
+  const main = page.locator('main');
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public defence-posture data can verify/ })).toBeVisible();
+  await expect(page.getByText('This dashboard separates source-backed public defence signals from partial,')).toBeVisible();
+  await expect(page.getByText('without invented readiness claims or classified inference')).toBeVisible();
+  await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
+  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Status labels used on this public defence-posture page' })).toBeVisible();
+  await expect(page.getByText('These labels match the Missing Data Scoreboard, Strategic Resources, Manufacturing,')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What the public defence-posture audit can and cannot show' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Publicly visible defence signals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Source-gated capability-related feeds' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial defence-posture data' })).toBeVisible();
+  await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
+  await expect(page.getByText('Public defence signals are not readiness proof')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'No classified inference' })).toBeVisible();
+  await expect(page.getByText('A missing public feed is a public visibility gap.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open related public-data surfaces' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Strategic Resources' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Manufacturing' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Open Defence Procurement Watch' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Public defence source status comes first' })).toBeVisible();
   await expect(page.getByText('No readiness, mission-capable or live operational availability metric is loaded.')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
-  await expect(page.getByText('Budget, public assets, alliances and readiness are separate fields.')).toBeVisible();
+  await expect(page.getByText('A missing readiness, capability, stockpile, logistics, asset-availability or live')).toBeVisible();
+  await expect(page.getByText('Budget, assets, force structure, alliances and sovereign industry are different')).toBeVisible();
   await expect(page.getByText('Defence spending as share of GDP')).toBeVisible();
   await expect(page.getByText('Quad').first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Diplomatic partnership, not a formal alliance' })).toBeVisible();
   await expect(page.getByText('Unavailable').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Why the page is fail-closed' })).toBeVisible();
+  await expect(page.getByText('These indicators do not prove defence readiness')).toBeVisible();
+  await expect(page.getByText('estimate readiness or infer classified capability')).toBeVisible();
+  await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public defence-posture data can verify/ })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'Status labels used on this public defence-posture page' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { name: 'What readers should not assume from missing or partial defence-posture data' })).toHaveCount(1);
+  const legendOrder = await page.evaluate(() => {
+    const legend = document.querySelector('#defence-posture-status-legend-h')?.closest('section');
+    const coverage = document.querySelector('.coverage-strip');
+    return !!legend && !!coverage && Boolean(legend.compareDocumentPosition(coverage) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(legendOrder).toBeTruthy();
 });
