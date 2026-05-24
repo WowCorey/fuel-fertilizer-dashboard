@@ -4,13 +4,9 @@
   "source_name": "Australian Petroleum Statistics - jet fuel sales",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "ML",
-  "retrieved_at": "2026-05-10T17:32:42+00:00",
-  "last_data_point": "2026-02-28",
+  "retrieved_at": "2026-05-24T17:41:44+00:00",
+  "last_data_point": "2026-03-31",
   "values": [
-    {
-      "t": "2021-03",
-      "v": 325.9
-    },
     {
       "t": "2021-04",
       "v": 350.2
@@ -246,6 +242,10 @@
     {
       "t": "2026-02",
       "v": 822.8
+    },
+    {
+      "t": "2026-03",
+      "v": 738.9
     }
   ],
   "notes": "Fetched from the Australian Petroleum Statistics XLSX data extract. Sheet: Sales of products; column: Aviation turbine fuel total (ML). Values are trimmed to the last 60 monthly observations.",

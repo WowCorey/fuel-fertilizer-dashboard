@@ -4,8 +4,8 @@
   "source_name": "U.S. Gulf Coast jet fuel spot price (EIA/FRED monthly mean)",
   "source_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
   "unit": "USD per gallon",
-  "retrieved_at": "2026-05-10T17:33:08+00:00",
-  "last_data_point": "2026-05-04",
+  "retrieved_at": "2026-05-24T17:42:05+00:00",
+  "last_data_point": "2026-05-18",
   "values": [
     {
       "t": "2021-06",
@@ -245,7 +245,7 @@
     },
     {
       "t": "2026-05",
-      "v": 4.129
+      "v": 4.108
     }
   ],
   "notes": "Monthly mean of FRED series DJFUELUSGULF (mirror of EIA). Trimmed to last 60 months; last_data_point reflects the latest raw observation.",

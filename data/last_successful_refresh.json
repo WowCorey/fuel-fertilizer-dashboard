@@ -1,9 +1,9 @@
 {
   "schema": "fuel_resilience_refresh_status.v1",
   "status": "success",
-  "refreshed_at": "2026-05-10T17:37:52+00:00",
-  "git_sha": "c7eb5d0e4561b0fd4c37019a80b7c5bb83c2f19f",
+  "refreshed_at": "2026-05-24T17:45:38+00:00",
+  "git_sha": "fb742cc5aa090357194973b1ab900bb78011ad18",
   "workflow": "Weekly data refresh",
-  "run_id": "25634564071",
+  "run_id": "26367567099",
   "run_attempt": "1"
 }

@@ -4,8 +4,8 @@
   "source_name": "NOPTA petroleum title and well coverage counts",
   "source_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
   "unit": "structured counts",
-  "retrieved_at": "2026-05-10T17:33:15+00:00",
-  "last_data_point": "2026-05-11",
+  "retrieved_at": "2026-05-24T17:42:08+00:00",
+  "last_data_point": "2026-05-25",
   "values": [],
   "notes": "Fetched from NOPTA ArcGIS REST FeatureServer public endpoints. Counts keep titles/permits, title types, status and petroleum-wells layer records separate. Greenhouse Gas Assessment Permits are excluded from petroleum title counts. Well records are not presented as active or producing wells.",
   "status": "ok",
@@ -15,15 +15,15 @@
   "extra": {
     "schema": "state_petroleum_nopta_counts.v1",
     "fields": {
-      "as_at": "2026-05-11",
+      "as_at": "2026-05-25",
       "state_rows": [
         {
           "state_code": "WA",
           "state_name": "Western Australia",
           "title_records": {
             "total_current_non_ghg": 150,
-            "active": 130,
-            "pending_application": 20,
+            "active": 128,
+            "pending_application": 22,
             "by_title_type": [
               {
                 "title_type": "Exploration Permit",
@@ -83,13 +83,13 @@
           "state_code": "VIC",
           "state_name": "Victoria",
           "title_records": {
-            "total_current_non_ghg": 46,
-            "active": 43,
+            "total_current_non_ghg": 45,
+            "active": 42,
             "pending_application": 3,
             "by_title_type": [
               {
                 "title_type": "Exploration Permit",
-                "count": 11
+                "count": 10
               },
               {
                 "title_type": "Production Licence",
@@ -137,8 +137,8 @@
           "state_name": "Northern Territory",
           "title_records": {
             "total_current_non_ghg": 9,
-            "active": 8,
-            "pending_application": 1,
+            "active": 9,
+            "pending_application": 0,
             "by_title_type": [
               {
                 "title_type": "Exploration Permit",

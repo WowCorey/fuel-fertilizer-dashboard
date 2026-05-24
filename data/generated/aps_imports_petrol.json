@@ -4,13 +4,9 @@
   "source_name": "Australian Petroleum Statistics - automotive gasoline imports",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "ML",
-  "retrieved_at": "2026-05-10T17:32:44+00:00",
-  "last_data_point": "2026-02-28",
+  "retrieved_at": "2026-05-24T17:41:47+00:00",
+  "last_data_point": "2026-03-31",
   "values": [
-    {
-      "t": "2021-03",
-      "v": 748.9
-    },
     {
       "t": "2021-04",
       "v": 715.7
@@ -237,7 +233,7 @@
     },
     {
       "t": "2025-12",
-      "v": 829.9
+      "v": 829.8
     },
     {
       "t": "2026-01",
@@ -245,7 +241,11 @@
     },
     {
       "t": "2026-02",
-      "v": 852.1
+      "v": 861.0
+    },
+    {
+      "t": "2026-03",
+      "v": 1022.6
     }
   ],
   "notes": "Fetched from the Australian Petroleum Statistics XLSX data extract. Sheet: Imports volume; column: Automotive gasoline (ML). Values are trimmed to the last 60 monthly observations.",

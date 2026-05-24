@@ -4,13 +4,9 @@
   "source_name": "Australian Petroleum Statistics - motor spirit production",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "ML",
-  "retrieved_at": "2026-05-10T17:32:35+00:00",
-  "last_data_point": "2026-02-28",
+  "retrieved_at": "2026-05-24T17:41:37+00:00",
+  "last_data_point": "2026-03-31",
   "values": [
-    {
-      "t": "2021-03",
-      "v": 699.6
-    },
     {
       "t": "2021-04",
       "v": 655.1
@@ -246,6 +242,10 @@
     {
       "t": "2026-02",
       "v": 426.8
+    },
+    {
+      "t": "2026-03",
+      "v": 511.9
     }
   ],
   "notes": "Fetched from the Australian Petroleum Statistics XLSX data extract. Sheet: Refinery production; column: Automotive gasoline (ML). Values are trimmed to the last 60 monthly observations.",
