@@ -43,9 +43,13 @@ jobs:
           python -m py_compile scripts/review_due.py
           python -m py_compile scripts/write_refresh_status.py
           python -m py_compile scripts/validate_data.py
+          python -m py_compile scripts/validate_trust_status.py
 
       - name: Validate source registry and envelopes
         run: python scripts/validate_data.py
+
+      - name: Validate trust status manifest
+        run: python scripts/validate_trust_status.py
 
       - name: Check source manifest
         run: python scripts/build_source_manifest.py --check
