@@ -4,7 +4,7 @@
   "source_name": "WTI crude spot price (EIA)",
   "source_url": "https://www.eia.gov/dnav/pet/hist/RWTCm.htm",
   "unit": "USD per barrel",
-  "retrieved_at": "2026-05-24T17:42:03+00:00",
+  "retrieved_at": "2026-05-31T17:46:42+00:00",
   "last_data_point": "2026-05-01",
   "values": [
     {
@@ -245,7 +245,7 @@
     },
     {
       "t": "2026-05",
-      "v": 104.55
+      "v": 103.91
     }
   ],
   "notes": "Monthly mean of daily FRED series DCOILWTICO (mirror of EIA RWTC). Trimmed to last 60 months.",

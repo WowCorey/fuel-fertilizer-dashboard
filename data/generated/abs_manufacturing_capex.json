@@ -4,13 +4,9 @@
   "source_name": "ABS Private new capital expenditure - manufacturing, quarterly",
   "source_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
   "unit": "AUD millions",
-  "retrieved_at": "2026-05-24T17:43:49+00:00",
-  "last_data_point": "2025-12-31",
+  "retrieved_at": "2026-05-31T17:48:32+00:00",
+  "last_data_point": "2026-03-31",
   "values": [
-    {
-      "t": "2011-03",
-      "v": 3075
-    },
     {
       "t": "2011-06",
       "v": 3244
@@ -65,7 +61,7 @@
     },
     {
       "t": "2014-09",
-      "v": 2117
+      "v": 2116
     },
     {
       "t": "2014-12",
@@ -85,7 +81,7 @@
     },
     {
       "t": "2015-12",
-      "v": 2160
+      "v": 2159
     },
     {
       "t": "2016-03",
@@ -93,11 +89,11 @@
     },
     {
       "t": "2016-06",
-      "v": 2219
+      "v": 2220
     },
     {
       "t": "2016-09",
-      "v": 2051
+      "v": 2050
     },
     {
       "t": "2016-12",
@@ -105,75 +101,75 @@
     },
     {
       "t": "2017-03",
-      "v": 2344
-    },
-    {
-      "t": "2017-06",
-      "v": 2278
-    },
-    {
-      "t": "2017-09",
-      "v": 2269
-    },
-    {
-      "t": "2017-12",
-      "v": 2424
-    },
-    {
-      "t": "2018-03",
-      "v": 2373
-    },
-    {
-      "t": "2018-06",
-      "v": 2372
-    },
-    {
-      "t": "2018-09",
-      "v": 2465
-    },
-    {
-      "t": "2018-12",
-      "v": 2422
-    },
-    {
-      "t": "2019-03",
-      "v": 2236
-    },
-    {
-      "t": "2019-06",
-      "v": 2441
-    },
-    {
-      "t": "2019-09",
-      "v": 2620
-    },
-    {
-      "t": "2019-12",
-      "v": 2359
-    },
-    {
-      "t": "2020-03",
-      "v": 2449
-    },
-    {
-      "t": "2020-06",
       "v": 2345
     },
     {
+      "t": "2017-06",
+      "v": 2279
+    },
+    {
+      "t": "2017-09",
+      "v": 2268
+    },
+    {
+      "t": "2017-12",
+      "v": 2422
+    },
+    {
+      "t": "2018-03",
+      "v": 2374
+    },
+    {
+      "t": "2018-06",
+      "v": 2373
+    },
+    {
+      "t": "2018-09",
+      "v": 2463
+    },
+    {
+      "t": "2018-12",
+      "v": 2420
+    },
+    {
+      "t": "2019-03",
+      "v": 2238
+    },
+    {
+      "t": "2019-06",
+      "v": 2445
+    },
+    {
+      "t": "2019-09",
+      "v": 2617
+    },
+    {
+      "t": "2019-12",
+      "v": 2353
+    },
+    {
+      "t": "2020-03",
+      "v": 2454
+    },
+    {
+      "t": "2020-06",
+      "v": 2351
+    },
+    {
       "t": "2020-09",
-      "v": 2369
+      "v": 2367
     },
     {
       "t": "2020-12",
-      "v": 2458
+      "v": 2441
     },
     {
       "t": "2021-03",
-      "v": 2832
+      "v": 2850
     },
     {
       "t": "2021-06",
-      "v": 2616
+      "v": 2624
     },
     {
       "t": "2021-09",
@@ -181,71 +177,75 @@
     },
     {
       "t": "2021-12",
-      "v": 2808
+      "v": 2773
     },
     {
       "t": "2022-03",
-      "v": 2770
+      "v": 2804
     },
     {
       "t": "2022-06",
-      "v": 2939
+      "v": 2952
     },
     {
       "t": "2022-09",
-      "v": 3068
+      "v": 3071
     },
     {
       "t": "2022-12",
-      "v": 3205
+      "v": 3144
     },
     {
       "t": "2023-03",
-      "v": 3530
+      "v": 3599
     },
     {
       "t": "2023-06",
-      "v": 3749
+      "v": 3765
     },
     {
       "t": "2023-09",
-      "v": 3695
+      "v": 3696
     },
     {
       "t": "2023-12",
-      "v": 3999
+      "v": 3905
     },
     {
       "t": "2024-03",
-      "v": 3713
+      "v": 3811
     },
     {
       "t": "2024-06",
-      "v": 3519
+      "v": 3534
     },
     {
       "t": "2024-09",
-      "v": 3862
+      "v": 3858
     },
     {
       "t": "2024-12",
-      "v": 3603
+      "v": 3506
     },
     {
       "t": "2025-03",
-      "v": 3691
+      "v": 3809
     },
     {
       "t": "2025-06",
-      "v": 3879
+      "v": 3892
     },
     {
       "t": "2025-09",
-      "v": 4130
+      "v": 4121
     },
     {
       "t": "2025-12",
-      "v": 4200
+      "v": 4107
+    },
+    {
+      "t": "2026-03",
+      "v": 3533
     }
   ],
   "notes": "Fetched from ABS Private New Capital Expenditure and Expected Expenditure latest-release XLSX Table 4. Series is actual total private new capital expenditure for Manufacturing, current prices, seasonally adjusted; values are AUD millions and are trimmed to the last 60 quarterly observations.",
@@ -256,7 +256,7 @@
   "extra": {
     "schema": "abs_xlsx_series.v1",
     "fields": {
-      "workbook_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia/dec-2025/04_current_prices_seasonally_adjusted_capex.xlsx",
+      "workbook_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia/mar-2026/04_current_prices_seasonally_adjusted_capex.xlsx",
       "workbook_unit": "$ Millions",
       "component_series": [
         {
@@ -265,7 +265,7 @@
           "sheet": "Data1",
           "series_type": "Seasonally Adjusted",
           "unit": "$ Millions",
-          "value": 4200
+          "value": 3533
         }
       ]
     }
