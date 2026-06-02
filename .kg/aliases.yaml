@@ -1,0 +1,24 @@
+# Alternate strings -> canonical node IDs
+README: doc:readme
+build_source_manifest: script:build-source-manifest
+defence alliances methodology: doc:docs-defence-alliances-methodology-md
+defence alliances source audit: doc:docs-defence-alliances-source-audit-md
+enter_manual: script:enter-manual
+fetch_data: script:fetch-data
+fuel security backlog: doc:docs-fuel-security-backlog-md
+fuel security methodology: doc:docs-fuel-security-methodology-md
+fuel security source investigation: doc:docs-fuel-security-source-investigation-md
+fuel stress index spec: doc:docs-fuel-stress-index-spec-md
+init_manual_stubs: script:init-manual-stubs
+manual data review checklist: doc:docs-manual-data-review-checklist-md
+manual entry templates: doc:docs-manual-entry-templates-md
+package.json: config:package-json
+petroleum ledger source gates: doc:docs-petroleum-ledger-source-gates-md
+remaining data gaps: doc:docs-remaining-data-gaps-md
+review_due: script:review-due
+state contribution methodology: doc:docs-state-contribution-methodology-md
+strategic resources methodology: doc:docs-strategic-resources-methodology-md
+strategic resources source audit: doc:docs-strategic-resources-source-audit-md
+v1.4 plan: doc:docs-v1-4-plan-md
+validate_data: script:validate-data
+write_refresh_status: script:write-refresh-status

@@ -1,0 +1,48 @@
+version: 1
+
+graph:
+  name: fuel-fertilizer-dashboard-architecture
+  description: Focused knowledge graph for fuel-fertilizer-dashboard (node-app)
+
+entities:
+  - type: Config
+    id_prefix: config
+    properties:
+      - name: name
+        required: false
+  - type: Document
+    id_prefix: document
+    properties:
+      - name: name
+        required: false
+  - type: Package
+    id_prefix: package
+    properties:
+      - name: name
+        required: false
+  - type: Repository
+    id_prefix: repository
+    properties:
+      - name: name
+        required: false
+  - type: Script
+    id_prefix: script
+    properties:
+      - name: name
+        required: false
+
+relations:
+  - type: CONTAINS
+    cardinality: many_to_many
+  - type: HAS_CONFIG
+    cardinality: many_to_many
+  - type: ROOT_PACKAGE
+    cardinality: many_to_many
+
+provenance:
+  required_fields: [source, extracted_at]
+
+constraints:
+  - rule: unique_node_id
+  - rule: edge_endpoints_exist
+  - rule: predicate_in_schema
