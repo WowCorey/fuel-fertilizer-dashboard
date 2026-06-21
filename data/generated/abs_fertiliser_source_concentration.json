@@ -4,13 +4,9 @@
   "source_name": "ABS International Merchandise Trade - fertiliser source-country concentration",
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "%",
-  "retrieved_at": "2026-05-31T17:46:24+00:00",
-  "last_data_point": "2026-03-31",
+  "retrieved_at": "2026-06-21T18:14:11+00:00",
+  "last_data_point": "2026-04-30",
   "values": [
-    {
-      "t": "2021-04",
-      "v": 64.9
-    },
     {
       "t": "2021-05",
       "v": 49.9
@@ -241,11 +237,15 @@
     },
     {
       "t": "2026-02",
-      "v": 58.7
+      "v": 59.2
     },
     {
       "t": "2026-03",
-      "v": 63.6
+      "v": 63.9
+    },
+    {
+      "t": "2026-04",
+      "v": 44.4
     }
   ],
   "notes": "Fetched from ABS Data API MERCH_IMP using SITC 562 by country of origin. Each value is the share of monthly SITC 562 import value from the three largest non-total source countries. Values are trimmed to the last 60 monthly observations.",
@@ -257,27 +257,27 @@
     "schema": "abs_sitc562_source_concentration.v1",
     "fields": {
       "commodity": "SITC 562 manufactured fertilisers",
-      "period": "2026-03",
-      "total_import_value_aud_thousands": 672328,
-      "top3_share_percent": 63.6,
-      "top3_value_aud_thousands": 427868,
-      "positive_country_count": 40,
-      "hhi": 1883.6,
+      "period": "2026-04",
+      "total_import_value_aud_thousands": 843668,
+      "top3_share_percent": 44.4,
+      "top3_value_aud_thousands": 374458,
+      "positive_country_count": 39,
+      "hhi": 1136.5,
       "top_countries": [
         {
-          "country": "Saudi Arabia",
-          "value_aud_thousands": 245070,
-          "share_percent": 36.5
-        },
-        {
-          "country": "Morocco",
-          "value_aud_thousands": 105025,
+          "country": "China (excludes SARs and Taiwan)",
+          "value_aud_thousands": 131207,
           "share_percent": 15.6
         },
         {
-          "country": "China (excludes SARs and Taiwan)",
-          "value_aud_thousands": 77773,
-          "share_percent": 11.6
+          "country": "Morocco",
+          "value_aud_thousands": 121734,
+          "share_percent": 14.4
+        },
+        {
+          "country": "Malaysia",
+          "value_aud_thousands": 121517,
+          "share_percent": 14.4
         }
       ]
     }

@@ -4,12 +4,12 @@
   "source_name": "NOPTA active petroleum production licence map",
   "source_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
   "unit": "active offshore petroleum production licence records",
-  "retrieved_at": "2026-05-31T17:46:50+00:00",
-  "last_data_point": "2026-06-01",
+  "retrieved_at": "2026-06-21T18:14:31+00:00",
+  "last_data_point": "2026-06-22",
   "values": [
     {
-      "t": "2026-06-01",
-      "v": 93
+      "t": "2026-06-22",
+      "v": 94
     }
   ],
   "notes": "Fetched from the NOPTA Titles and Permits Current FeatureServer for active petroleum production licence records. Rows map offshore area/state, basin, field name, title, title operator and title holders where published. This is partial offshore regulatory mapping and does not contain production volumes.",
@@ -20,7 +20,7 @@
   "extra": {
     "schema": "state_petroleum_production_licence_map.v1",
     "fields": {
-      "as_at": "2026-06-01",
+      "as_at": "2026-06-22",
       "source_scope": "Active NOPTA Production Licence rows only.",
       "state_rows": [
         {
@@ -70,9 +70,9 @@
         {
           "state_code": "VIC",
           "state_name": "Victoria",
-          "production_licence_records": 29,
-          "mapped_field_records": 29,
-          "mapped_operator_records": 29,
+          "production_licence_records": 30,
+          "mapped_field_records": 30,
+          "mapped_operator_records": 30,
           "basins": [
             "Gippsland Basin",
             "Otway Basin"
@@ -1039,6 +1039,36 @@
           "blocks": 2,
           "area_km2": 133.57,
           "neats_url": "https://public.neats.nopta.gov.au/Open/Title?titleNumber=VIC/L36",
+          "product_class": "petroleum",
+          "production_metric_name": "Active offshore petroleum production licence record",
+          "production_metric_value": null,
+          "production_unit": null,
+          "production_period": "current NOPTA title record",
+          "trust_label": "Observed",
+          "mapping_status": "Mapped active production licence; source does not publish production volume in this layer.",
+          "notes": "NOPTA title/operator/field metadata. This is not a production-volume, revenue or project-output measure."
+        },
+        {
+          "state_code": "VIC",
+          "state_name": "Victoria",
+          "offshore_area": "Victoria",
+          "basin_name": "Otway Basin",
+          "sub_basin": null,
+          "title": "VIC/L37",
+          "related_title": "VIC/P44",
+          "field_name": "Annie",
+          "title_operator": "Cooper Energy (CH) Pty. Ltd.",
+          "title_holders_raw": "Cooper Energy (CH) Pty. Ltd.",
+          "title_holders": [
+            "Cooper Energy (CH) Pty. Ltd."
+          ],
+          "title_type": "Production Licence",
+          "status": "Active",
+          "grant_date": "2026-05-06",
+          "expiry_date": null,
+          "blocks": 1,
+          "area_km2": 67.05,
+          "neats_url": "https://public.neats.nopta.gov.au/Open/Title?titleNumber=VIC/L37",
           "product_class": "petroleum",
           "production_metric_name": "Active offshore petroleum production licence record",
           "production_metric_value": null,

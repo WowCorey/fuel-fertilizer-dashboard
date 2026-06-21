@@ -4,8 +4,8 @@
   "source_name": "ABS population growth rate - Australia, year-on-year %, quarterly",
   "source_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
   "unit": "PCT",
-  "retrieved_at": "2026-05-31T17:48:37+00:00",
-  "last_data_point": "2025-09-30",
+  "retrieved_at": "2026-06-21T18:16:15+00:00",
+  "last_data_point": "2025-12-31",
   "values": [
     {
       "t": "2018-Q1",
@@ -125,11 +125,15 @@
     },
     {
       "t": "2025-Q2",
-      "v": 1.54
+      "v": 1.53
     },
     {
       "t": "2025-Q3",
-      "v": 1.55
+      "v": 1.54
+    },
+    {
+      "t": "2025-Q4",
+      "v": 1.51
     }
   ],
   "notes": "Fetched from ABS Data API dataflow ERP_Q, key 3.3.TOT.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS ERP_Q dataflow MEASURE 3 (ERP Percentage Change Over Previous Year), SEX 3, AGE TOT, REGION AUS, FREQ Q. Year-on-year national population growth rate.",

@@ -4,8 +4,8 @@
   "source_name": "NOPTA petroleum title and well coverage counts",
   "source_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
   "unit": "structured counts",
-  "retrieved_at": "2026-05-31T17:46:49+00:00",
-  "last_data_point": "2026-06-01",
+  "retrieved_at": "2026-06-21T18:14:31+00:00",
+  "last_data_point": "2026-06-22",
   "values": [],
   "notes": "Fetched from NOPTA ArcGIS REST FeatureServer public endpoints. Counts keep titles/permits, title types, status and petroleum-wells layer records separate. Greenhouse Gas Assessment Permits are excluded from petroleum title counts. Well records are not presented as active or producing wells.",
   "status": "ok",
@@ -15,7 +15,7 @@
   "extra": {
     "schema": "state_petroleum_nopta_counts.v1",
     "fields": {
-      "as_at": "2026-06-01",
+      "as_at": "2026-06-22",
       "state_rows": [
         {
           "state_code": "WA",
@@ -83,17 +83,21 @@
           "state_code": "VIC",
           "state_name": "Victoria",
           "title_records": {
-            "total_current_non_ghg": 45,
-            "active": 42,
+            "total_current_non_ghg": 47,
+            "active": 44,
             "pending_application": 3,
             "by_title_type": [
+              {
+                "title_type": "Access Authority",
+                "count": 1
+              },
               {
                 "title_type": "Exploration Permit",
                 "count": 10
               },
               {
                 "title_type": "Production Licence",
-                "count": 29
+                "count": 30
               },
               {
                 "title_type": "Retention Lease",

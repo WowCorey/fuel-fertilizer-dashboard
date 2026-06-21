@@ -4,8 +4,8 @@
   "source_name": "ABS residential dwelling stock - Australia, quarterly",
   "source_url": "https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings",
   "unit": "NUM (unit multiplier 3)",
-  "retrieved_at": "2026-05-31T17:48:39+00:00",
-  "last_data_point": "2025-12-31",
+  "retrieved_at": "2026-06-21T18:16:16+00:00",
+  "last_data_point": "2026-03-31",
   "values": [
     {
       "t": "2018-Q1",
@@ -129,11 +129,15 @@
     },
     {
       "t": "2025-Q3",
-      "v": 11398.1
+      "v": 11398.3
     },
     {
       "t": "2025-Q4",
-      "v": 11452.2
+      "v": 11441
+    },
+    {
+      "t": "2026-Q1",
+      "v": 11495.2
     }
   ],
   "notes": "Fetched from ABS Data API dataflow RES_DWELL_ST, key 4.AUS.Q. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS RES_DWELL_ST dataflow MEASURE 4 (Number of residential dwellings), REGION AUS, FREQ Q. Total residential dwelling count, in thousands.",
