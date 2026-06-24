@@ -1,0 +1,120 @@
+{
+  "schema": "fuel_resilience_trust_status.v1",
+  "generated_at": "2026-05-25",
+  "status": "prototype_trust_layer",
+  "project": {
+    "name": "Fuel Resilience AU",
+    "repository": "WowCorey/fuel-fertilizer-dashboard",
+    "purpose": "Public-interest Australian resilience dashboard that separates verified public data from missing, stale, partial, manual and source-gated feeds."
+  },
+  "latest_known_refresh": {
+    "status": "success",
+    "refreshed_at": "2026-05-24T17:45:38+00:00",
+    "workflow": "Weekly data refresh",
+    "source_file": "data/last_successful_refresh.json"
+  },
+  "public_health_signals": [
+    {
+      "id": "github_pages_deploy",
+      "label": "GitHub Pages deploy",
+      "status": "configured",
+      "evidence_path": ".github/workflows/pages.yml",
+      "plain_english": "The public site is deployed through the GitHub Pages workflow on pushes to main and can also be run manually."
+    },
+    {
+      "id": "ci_validation",
+      "label": "CI validation",
+      "status": "configured",
+      "evidence_path": ".github/workflows/ci.yml",
+      "plain_english": "Pull requests and pushes run compiled-dashboard checks, the data validator, the source manifest check, unit tests and browser smoke tests."
+    },
+    {
+      "id": "weekly_data_refresh",
+      "label": "Weekly data refresh",
+      "status": "configured",
+      "evidence_path": ".github/workflows/refresh-data.yml",
+      "plain_english": "Programmatic sources are checked, fetched, validated and committed only after validation passes. Manual source snapshots remain human-reviewed."
+    },
+    {
+      "id": "manual_data_review",
+      "label": "Manual data review",
+      "status": "configured",
+      "evidence_path": ".github/workflows/manual-data-review.yml",
+      "plain_english": "A weekly advisory review reports stale, unavailable or manual sources without inventing replacement values."
+    },
+    {
+      "id": "source_registry",
+      "label": "Source registry",
+      "status": "configured",
+      "evidence_path": "data/sources.yml",
+      "plain_english": "Each dashboard source is expected to carry publisher, cadence, rights, citation, reuse notes, fetch mode and dependent surfaces."
+    },
+    {
+      "id": "browser_source_manifest",
+      "label": "Browser source manifest",
+      "status": "configured",
+      "evidence_path": "data/source_manifest.json",
+      "plain_english": "Dashboard pages read from a manifest that decides whether generated or manual envelopes should be loaded first."
+    }
+  ],
+  "source_confidence_bands": [
+    {
+      "id": "verified_programmatic",
+      "label": "Verified programmatic feeds",
+      "trust_level": "strongest_available",
+      "render_rule": "Show values only when the envelope status is ok and freshness metadata is valid.",
+      "meaning": "Fetched from a named public machine-readable endpoint and validated before publication."
+    },
+    {
+      "id": "manual_public_snapshot",
+      "label": "Manual public-source snapshots",
+      "trust_level": "source_backed_human_reviewed",
+      "render_rule": "Label as manual and keep source, period, retrieval timestamp and caveats visible.",
+      "meaning": "Hand-keyed from a named public document or page where machine retrieval is blocked, unstable or inappropriate."
+    },
+    {
+      "id": "derived_from_named_envelope",
+      "label": "Derived from named envelopes",
+      "trust_level": "method_dependent",
+      "render_rule": "Show derivation context and keep the parent source traceable.",
+      "meaning": "Calculated or selected from one or more named source envelopes, not invented independently."
+    },
+    {
+      "id": "partial_or_stale",
+      "label": "Partial or stale",
+      "trust_level": "usable_with_warning",
+      "render_rule": "Show warning language beside the value and do not promote it as complete or current.",
+      "meaning": "A public source exists, but the coverage, geography, product, timing or cadence is limited."
+    },
+    {
+      "id": "source_gated_unavailable",
+      "label": "Source-gated or unavailable",
+      "trust_level": "do_not_estimate",
+      "render_rule": "Render source unavailable, show the missing feed and name the likely holder or next source action where known.",
+      "meaning": "The dashboard does not have a verified public field, period, unit and reuse-rights path."
+    }
+  ],
+  "trust_rules": [
+    "No made-up data.",
+    "No unsupported estimates.",
+    "Unavailable rows stay visible as public-data gaps rather than being hidden.",
+    "Manual public-source snapshots must stay labelled as manual.",
+    "A page must not describe itself as live or current unless its loaded envelopes support that claim.",
+    "Source freshness, missing data and source-gated fields are evidence, not embarrassment."
+  ],
+  "known_gaps": [
+    {"area": "Live fuel operations", "gap": "Station availability, regional outage feeds, terminal inventory, tanker timing and contract-backed delivery visibility remain source-gated or unavailable."},
+    {"area": "Queensland fuel sovereignty", "gap": "Land parcels, proponents, bid counts, project delivery status, contracts, capacity and approvals remain source-gated or unavailable."},
+    {"area": "Food, farms and water", "gap": "Fertiliser cover, farm diesel risk, farm-gate fertiliser prices, water allocation, drought pressure, planting pressure and freight disruption still need source-safe feeds."},
+    {"area": "Procurement and public capability", "gap": "Sensitive or unsupported operational fields are not asserted without official public evidence."},
+    {"area": "Housing and automation", "gap": "Housing stress, rental stress, negative-gearing effects and Australian AI workforce exposure remain source-gated until source-safe models or datasets exist."}
+  ],
+  "next_build_steps": [
+    "Generate this manifest from CI, workflow metadata, source_manifest.json and data/sources.yml instead of maintaining the summary by hand.",
+    "Add a compact trust card to the homepage once the page copy is reviewed.",
+    "Add a validation script that fails closed if the trust manifest references missing paths or invalid workflow files.",
+    "Expose latest workflow run conclusions if a safe public API path is added later.",
+    "Extend the manifest with dashboard-level source counts after the source manifest shape is locked."
+  ],
+  "claim_boundary": "This trust layer reports repository health signals, source-governance rules and known data gaps. It does not certify the dashboard, validate every upstream source, or claim official government status."
+}
