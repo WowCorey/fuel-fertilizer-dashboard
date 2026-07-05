@@ -4,13 +4,9 @@
   "source_name": "AEMO NEM regional wholesale price (RRP), monthly mean",
   "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
   "unit": "AUD per MWh",
-  "retrieved_at": "2026-06-28T17:53:02+00:00",
-  "last_data_point": "2026-05-31",
+  "retrieved_at": "2026-07-05T17:02:06+00:00",
+  "last_data_point": "2026-06-30",
   "values": [
-    {
-      "t": "2025-05",
-      "v": 96.68
-    },
     {
       "t": "2025-06",
       "v": 231.98
@@ -58,6 +54,10 @@
     {
       "t": "2026-05",
       "v": 79.35
+    },
+    {
+      "t": "2026-06",
+      "v": 84.82
     }
   ],
   "notes": "Monthly mean of 5-minute TRADE-interval Regional Reference Price across NSW1, VIC1, QLD1, SA1 and TAS1. Aggregate is the simple mean of the five regional monthly means. extra.fields holds the latest-month value per region.",
@@ -68,12 +68,12 @@
   "extra": {
     "schema": "fuel_resilience_typed_fields.v1",
     "fields": {
-      "latest_month": "2026-05",
-      "region_nsw1_latest": 82.01,
-      "region_vic1_latest": 64.77,
-      "region_qld1_latest": 76.34,
-      "region_sa1_latest": 77.49,
-      "region_tas1_latest": 96.14
+      "latest_month": "2026-06",
+      "region_nsw1_latest": 83.3,
+      "region_vic1_latest": 66.81,
+      "region_qld1_latest": 71.43,
+      "region_sa1_latest": 125.73,
+      "region_tas1_latest": 76.83
     }
   }
 }

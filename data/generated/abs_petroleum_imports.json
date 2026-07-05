@@ -4,13 +4,9 @@
   "source_name": "ABS International Merchandise Trade — petroleum imports",
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "AUD thousands",
-  "retrieved_at": "2026-06-28T17:49:29+00:00",
-  "last_data_point": "2026-04-30",
+  "retrieved_at": "2026-07-05T16:58:15+00:00",
+  "last_data_point": "2026-05-31",
   "values": [
-    {
-      "t": "2021-05",
-      "v": 2177712
-    },
     {
       "t": "2021-06",
       "v": 3298082
@@ -225,27 +221,31 @@
     },
     {
       "t": "2025-11",
-      "v": 4205947
+      "v": 4204097
     },
     {
       "t": "2025-12",
-      "v": 4563815
+      "v": 4571449
     },
     {
       "t": "2026-01",
-      "v": 4365635
+      "v": 4386303
     },
     {
       "t": "2026-02",
-      "v": 4395396
+      "v": 4451953
     },
     {
       "t": "2026-03",
-      "v": 6019017
+      "v": 6275327
     },
     {
       "t": "2026-04",
-      "v": 9182466
+      "v": 9134333
+    },
+    {
+      "t": "2026-05",
+      "v": 8534234
     }
   ],
   "notes": "Fetched from ABS Data API dataflow MERCH_IMP, key 33.TOT.TOT.M. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS MERCH_IMP is a SITC commodity dataflow; this source uses SITC 33 (petroleum, petroleum products and related materials) because the live API does not expose an HS 27 monthly value series in this dataflow.",

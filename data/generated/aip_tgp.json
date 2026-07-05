@@ -4,13 +4,9 @@
   "source_name": "AIP Terminal Gate Prices (weekly)",
   "source_url": "https://www.aip.com.au/pricing",
   "unit": "cents per litre",
-  "retrieved_at": "2026-06-28T17:49:34+00:00",
-  "last_data_point": "2026-06-26",
+  "retrieved_at": "2026-07-05T16:58:21+00:00",
+  "last_data_point": "2026-07-03",
   "values": [
-    {
-      "t": "2021-07",
-      "v": 137.3
-    },
     {
       "t": "2021-08",
       "v": 137.8
@@ -245,7 +241,11 @@
     },
     {
       "t": "2026-06",
-      "v": 157.9
+      "v": 157.0
+    },
+    {
+      "t": "2026-07",
+      "v": 163.5
     }
   ],
   "notes": "Monthly mean of daily national average unleaded petrol terminal gate prices from the AIP historical TGP XLSX workbook.",

@@ -4,13 +4,9 @@
   "source_name": "RBA Cash Rate Target (F1.1)",
   "source_url": "https://www.rba.gov.au/statistics/cash-rate/",
   "unit": "per cent",
-  "retrieved_at": "2026-06-28T17:51:23+00:00",
-  "last_data_point": "2026-05-31",
+  "retrieved_at": "2026-07-05T17:00:14+00:00",
+  "last_data_point": "2026-06-30",
   "values": [
-    {
-      "t": "2021-06",
-      "v": 0.1
-    },
     {
       "t": "2021-07",
       "v": 0.1
@@ -246,6 +242,10 @@
     {
       "t": "2026-05",
       "v": 4.31
+    },
+    {
+      "t": "2026-06",
+      "v": 4.35
     }
   ],
   "notes": "RBA F1.1 monthly-average cash-rate target series. Trimmed to last 60 months; current headline target is fetched separately from the RBA cash-rate decisions table.",

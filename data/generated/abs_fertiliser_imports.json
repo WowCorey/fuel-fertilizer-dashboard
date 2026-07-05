@@ -4,13 +4,9 @@
   "source_name": "ABS International Merchandise Trade — fertiliser imports (SITC 562)",
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "AUD thousands",
-  "retrieved_at": "2026-06-28T17:49:30+00:00",
-  "last_data_point": "2026-04-30",
+  "retrieved_at": "2026-07-05T16:58:16+00:00",
+  "last_data_point": "2026-05-31",
   "values": [
-    {
-      "t": "2021-05",
-      "v": 289876
-    },
     {
       "t": "2021-06",
       "v": 324804
@@ -241,11 +237,15 @@
     },
     {
       "t": "2026-03",
-      "v": 669433
+      "v": 668235
     },
     {
       "t": "2026-04",
-      "v": 843668
+      "v": 846079
+    },
+    {
+      "t": "2026-05",
+      "v": 886656
     }
   ],
   "notes": "Fetched from ABS Data API dataflow MERCH_IMP, key 562.TOT.TOT.M. Values are sorted by TIME_PERIOD and trimmed to the last 60 monthly observations. ABS MERCH_IMP is a SITC commodity dataflow; this source uses SITC 562 (manufactured fertilisers) because the live API does not expose an HS 31 monthly value series in this dataflow.",
