@@ -4,13 +4,9 @@
   "source_name": "RBA credit card balances accruing interest (C1.1)",
   "source_url": "https://www.rba.gov.au/statistics/tables/#credit-cards",
   "unit": "AUD millions",
-  "retrieved_at": "2026-07-05T17:00:16+00:00",
-  "last_data_point": "2026-04-30",
+  "retrieved_at": "2026-07-12T17:38:04+00:00",
+  "last_data_point": "2026-05-31",
   "values": [
-    {
-      "t": "2021-05",
-      "v": 20687.0
-    },
     {
       "t": "2021-06",
       "v": 20568.4
@@ -246,6 +242,10 @@
     {
       "t": "2026-04",
       "v": 21631.3
+    },
+    {
+      "t": "2026-05",
+      "v": 21702.6
     }
   ],
   "notes": "Monthly value of credit and charge card balances accruing interest from RBA Statistical Table C1.1 aggregate credit card statistics. Trimmed to last 60 months.",
