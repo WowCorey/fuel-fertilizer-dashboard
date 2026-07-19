@@ -4,13 +4,9 @@
   "source_name": "Australian Petroleum Statistics (monthly)",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "days",
-  "retrieved_at": "2026-07-12T17:36:00+00:00",
-  "last_data_point": "2026-04-30",
+  "retrieved_at": "2026-07-19T17:34:01+00:00",
+  "last_data_point": "2026-05-31",
   "values": [
-    {
-      "t": "2021-05",
-      "v": 72.0
-    },
     {
       "t": "2021-06",
       "v": 75.0
@@ -205,7 +201,7 @@
     },
     {
       "t": "2025-06",
-      "v": 47.0
+      "v": 46.0
     },
     {
       "t": "2025-07",
@@ -246,6 +242,10 @@
     {
       "t": "2026-04",
       "v": 50.0
+    },
+    {
+      "t": "2026-05",
+      "v": 51.0
     }
   ],
   "notes": "Fetched from the Australian Petroleum Statistics XLSX data extract. Sheet: IEA days net import cover; column: IEA days of net import coverage. Values are trimmed to the last 60 monthly observations.",

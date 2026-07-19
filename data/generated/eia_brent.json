@@ -4,7 +4,7 @@
   "source_name": "Brent crude spot price (EIA)",
   "source_url": "https://www.eia.gov/dnav/pet/hist/RBRTEm.htm",
   "unit": "USD per barrel",
-  "retrieved_at": "2026-07-12T17:36:21+00:00",
+  "retrieved_at": "2026-07-19T17:34:19+00:00",
   "last_data_point": "2026-07-01",
   "values": [
     {
@@ -245,7 +245,7 @@
     },
     {
       "t": "2026-07",
-      "v": 69.0
+      "v": 72.75
     }
   ],
   "notes": "Monthly mean of daily FRED series DCOILBRENTEU (mirror of EIA RBRTE). Trimmed to last 60 months.",

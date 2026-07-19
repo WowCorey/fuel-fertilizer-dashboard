@@ -4,13 +4,9 @@
   "source_name": "Australian Petroleum Statistics - diesel imports",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "ML",
-  "retrieved_at": "2026-07-12T17:36:01+00:00",
-  "last_data_point": "2026-04-30",
+  "retrieved_at": "2026-07-19T17:34:02+00:00",
+  "last_data_point": "2026-05-31",
   "values": [
-    {
-      "t": "2021-05",
-      "v": 1726.2
-    },
     {
       "t": "2021-06",
       "v": 2325.5
@@ -233,11 +229,11 @@
     },
     {
       "t": "2026-01",
-      "v": 2654.5
+      "v": 2654.4
     },
     {
       "t": "2026-02",
-      "v": 2433.0
+      "v": 2432.6
     },
     {
       "t": "2026-03",
@@ -245,7 +241,11 @@
     },
     {
       "t": "2026-04",
-      "v": 3098.7
+      "v": 3003.7
+    },
+    {
+      "t": "2026-05",
+      "v": 3067.9
     }
   ],
   "notes": "Fetched from the Australian Petroleum Statistics XLSX data extract. Sheet: Imports volume; column: Diesel oil (ML). Values are trimmed to the last 60 monthly observations.",

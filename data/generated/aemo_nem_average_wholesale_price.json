@@ -4,7 +4,7 @@
   "source_name": "AEMO NEM regional wholesale price (RRP), monthly mean",
   "source_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
   "unit": "AUD per MWh",
-  "retrieved_at": "2026-07-12T17:39:49+00:00",
+  "retrieved_at": "2026-07-19T17:37:29+00:00",
   "last_data_point": "2026-06-30",
   "values": [
     {

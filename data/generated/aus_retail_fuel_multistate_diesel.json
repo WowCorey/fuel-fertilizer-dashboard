@@ -4,15 +4,15 @@
   "source_name": "Retail pump price - diesel multi-state average",
   "source_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today",
   "unit": "cents per litre",
-  "retrieved_at": "2026-07-12T17:36:16+00:00",
-  "last_data_point": "2026-07-13",
+  "retrieved_at": "2026-07-19T17:34:16+00:00",
+  "last_data_point": "2026-07-20",
   "values": [
     {
-      "t": "2026-07-13",
-      "v": 218.3
+      "t": "2026-07-20",
+      "v": 198.6
     }
   ],
-  "notes": "Multi-state diesel average weighted by station count. QLD: 1023 stations, avg 226.3 c/L, source date 2026-05-31; WA: 684 stations, avg 206.4 c/L, source date 2026-07-13. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
+  "notes": "Multi-state diesel average weighted by station count. QLD: 1015 stations, avg 185.2 c/L, source date 2026-06-30; WA: 677 stations, avg 218.7 c/L, source date 2026-07-20. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
   "status": "ok",
   "manual_entry": false,
   "source_rights": "Mixed state government terms; verify each source before reuse",
@@ -25,16 +25,16 @@
       "states": [
         {
           "state": "QLD",
-          "average": 226.3,
-          "stations": 1023,
-          "date": "2026-05-31",
-          "detail": "Queensland Open Data diesel latest public monthly file: Queensland Fuel Prices May 2026"
+          "average": 185.2,
+          "stations": 1015,
+          "date": "2026-06-30",
+          "detail": "Queensland Open Data diesel latest public monthly file: Queensland Fuel Prices June 2026"
         },
         {
           "state": "WA",
-          "average": 206.4,
-          "stations": 684,
-          "date": "2026-07-13",
+          "average": 218.7,
+          "stations": 677,
+          "date": "2026-07-20",
           "detail": "FuelWatch diesel RSS feed"
         }
       ]
