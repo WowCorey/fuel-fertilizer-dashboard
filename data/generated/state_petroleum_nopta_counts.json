@@ -4,8 +4,8 @@
   "source_name": "NOPTA petroleum title and well coverage counts",
   "source_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
   "unit": "structured counts",
-  "retrieved_at": "2026-07-19T17:34:27+00:00",
-  "last_data_point": "2026-07-20",
+  "retrieved_at": "2026-07-26T17:38:50+00:00",
+  "last_data_point": "2026-07-27",
   "values": [],
   "notes": "Fetched from NOPTA ArcGIS REST FeatureServer public endpoints. Counts keep titles/permits, title types, status and petroleum-wells layer records separate. Greenhouse Gas Assessment Permits are excluded from petroleum title counts. Well records are not presented as active or producing wells.",
   "status": "ok",
@@ -15,15 +15,15 @@
   "extra": {
     "schema": "state_petroleum_nopta_counts.v1",
     "fields": {
-      "as_at": "2026-07-20",
+      "as_at": "2026-07-27",
       "state_rows": [
         {
           "state_code": "WA",
           "state_name": "Western Australia",
           "title_records": {
             "total_current_non_ghg": 150,
-            "active": 131,
-            "pending_application": 19,
+            "active": 133,
+            "pending_application": 17,
             "by_title_type": [
               {
                 "title_type": "Exploration Permit",
@@ -83,8 +83,8 @@
           "state_code": "VIC",
           "state_name": "Victoria",
           "title_records": {
-            "total_current_non_ghg": 47,
-            "active": 44,
+            "total_current_non_ghg": 46,
+            "active": 43,
             "pending_application": 3,
             "by_title_type": [
               {
@@ -97,7 +97,7 @@
               },
               {
                 "title_type": "Production Licence",
-                "count": 30
+                "count": 29
               },
               {
                 "title_type": "Retention Lease",
@@ -173,15 +173,10 @@
           "state_code": "NSW",
           "state_name": "New South Wales",
           "title_records": {
-            "total_current_non_ghg": 1,
-            "active": 1,
+            "total_current_non_ghg": 0,
+            "active": 0,
             "pending_application": 0,
-            "by_title_type": [
-              {
-                "title_type": "Exploration Permit",
-                "count": 1
-              }
-            ]
+            "by_title_type": []
           },
           "well_records": {
             "total_layer_records": 243,
@@ -198,8 +193,8 @@
           "state_code": "TAS",
           "state_name": "Tasmania",
           "title_records": {
-            "total_current_non_ghg": 10,
-            "active": 10,
+            "total_current_non_ghg": 9,
+            "active": 9,
             "pending_application": 0,
             "by_title_type": [
               {
@@ -212,7 +207,7 @@
               },
               {
                 "title_type": "Retention Lease",
-                "count": 2
+                "count": 1
               }
             ]
           },

@@ -4,15 +4,15 @@
   "source_name": "Retail pump price - premium 95 multi-state average",
   "source_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today",
   "unit": "cents per litre",
-  "retrieved_at": "2026-07-19T17:34:18+00:00",
-  "last_data_point": "2026-07-20",
+  "retrieved_at": "2026-07-26T17:38:40+00:00",
+  "last_data_point": "2026-07-27",
   "values": [
     {
-      "t": "2026-07-20",
-      "v": 181.8
+      "t": "2026-07-27",
+      "v": 186.2
     }
   ],
-  "notes": "Multi-state premium 95 average weighted by station count. QLD: 914 stations, avg 175.8 c/L, source date 2026-06-30; WA: 523 stations, avg 192.4 c/L, source date 2026-07-20. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
+  "notes": "Multi-state premium 95 average weighted by station count. QLD: 914 stations, avg 175.8 c/L, source date 2026-06-30; WA: 522 stations, avg 204.3 c/L, source date 2026-07-27. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
   "status": "ok",
   "manual_entry": false,
   "source_rights": "Mixed state government terms; verify each source before reuse",
@@ -32,9 +32,9 @@
         },
         {
           "state": "WA",
-          "average": 192.4,
-          "stations": 523,
-          "date": "2026-07-20",
+          "average": 204.3,
+          "stations": 522,
+          "date": "2026-07-27",
           "detail": "FuelWatch premium 95 RSS feed"
         }
       ]

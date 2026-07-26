@@ -4,12 +4,12 @@
   "source_name": "NOPTA active petroleum production licence map",
   "source_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
   "unit": "active offshore petroleum production licence records",
-  "retrieved_at": "2026-07-19T17:34:28+00:00",
-  "last_data_point": "2026-07-20",
+  "retrieved_at": "2026-07-26T17:38:51+00:00",
+  "last_data_point": "2026-07-27",
   "values": [
     {
-      "t": "2026-07-20",
-      "v": 96
+      "t": "2026-07-27",
+      "v": 95
     }
   ],
   "notes": "Fetched from the NOPTA Titles and Permits Current FeatureServer for active petroleum production licence records. Rows map offshore area/state, basin, field name, title, title operator and title holders where published. This is partial offshore regulatory mapping and does not contain production volumes.",
@@ -20,7 +20,7 @@
   "extra": {
     "schema": "state_petroleum_production_licence_map.v1",
     "fields": {
-      "as_at": "2026-07-20",
+      "as_at": "2026-07-27",
       "source_scope": "Active NOPTA Production Licence rows only.",
       "state_rows": [
         {
@@ -70,9 +70,9 @@
         {
           "state_code": "VIC",
           "state_name": "Victoria",
-          "production_licence_records": 30,
-          "mapped_field_records": 30,
-          "mapped_operator_records": 30,
+          "production_licence_records": 29,
+          "mapped_field_records": 29,
+          "mapped_operator_records": 29,
           "basins": [
             "Gippsland Basin",
             "Otway Basin"
@@ -512,37 +512,6 @@
           "blocks": 2,
           "area_km2": 134.49,
           "neats_url": "https://public.neats.nopta.gov.au/Open/Title?titleNumber=VIC/L15",
-          "product_class": "petroleum",
-          "production_metric_name": "Active offshore petroleum production licence record",
-          "production_metric_value": null,
-          "production_unit": null,
-          "production_period": "current NOPTA title record",
-          "trust_label": "Observed",
-          "mapping_status": "Mapped active production licence; source does not publish production volume in this layer.",
-          "notes": "NOPTA title/operator/field metadata. This is not a production-volume, revenue or project-output measure."
-        },
-        {
-          "state_code": "VIC",
-          "state_name": "Victoria",
-          "offshore_area": "Victoria",
-          "basin_name": "Gippsland Basin",
-          "sub_basin": null,
-          "title": "VIC/L16",
-          "related_title": null,
-          "field_name": "Torsk",
-          "title_operator": "Woodside Energy (Bass Strait) Pty Ltd",
-          "title_holders_raw": "Woodside Energy (Bass Strait) Pty Ltd, Esso Australia Resources Pty Ltd",
-          "title_holders": [
-            "Woodside Energy (Bass Strait) Pty Ltd",
-            "Esso Australia Resources Pty Ltd"
-          ],
-          "title_type": "Production Licence",
-          "status": "Active",
-          "grant_date": "1989-06-14",
-          "expiry_date": "2032-06-14",
-          "blocks": 2,
-          "area_km2": 134.57,
-          "neats_url": "https://public.neats.nopta.gov.au/Open/Title?titleNumber=VIC/L16",
           "product_class": "petroleum",
           "production_metric_name": "Active offshore petroleum production licence record",
           "production_metric_value": null,
