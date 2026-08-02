@@ -1,6 +1,6 @@
 {
   "schema": "fuel_resilience_source_link_health.v2",
-  "generated_at": "2026-08-02T16:40:03+00:00",
+  "generated_at": "2026-08-02T17:12:51+00:00",
   "advisory": true,
   "claim_boundary": "A failed automated landing-page request is not, by itself, proof that the underlying dataset is unavailable. Categories distinguish broken links from access blocks and transient failures.",
   "registered_source_count": 219,
