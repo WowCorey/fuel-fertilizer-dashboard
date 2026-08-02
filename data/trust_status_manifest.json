@@ -1,6 +1,6 @@
 {
   "schema": "fuel_resilience_trust_status.v2",
-  "generated_at": "2026-08-02T14:20:02+00:00",
+  "generated_at": "2026-08-02T14:57:52+00:00",
   "status": "operational_with_warnings",
   "project": {
     "name": "Fuel Resilience AU",
@@ -110,12 +110,20 @@
   },
   "latest_refresh": {
     "status": "success",
+    "marker_schema": "fuel_resilience_refresh_status.v1",
+    "publication_state": "legacy_unverified",
     "refreshed_at": "2026-07-26T17:42:13+00:00",
+    "source_data_refreshed_at": "2026-07-26T17:42:13+00:00",
     "workflow": "Weekly data refresh",
     "run_id": "30211934616",
     "run_attempt": "1",
+    "ref": null,
+    "branch": null,
     "reported_git_sha": "4b26665ae87b80d3f68dc5241ae7cffe34761118",
-    "sha_semantics": "Under the current v1 marker, git_sha records the workflow input commit and may not be the later commit that contains the published refresh.",
+    "workflow_input_sha": "4b26665ae87b80d3f68dc5241ae7cffe34761118",
+    "output_commit_sha": null,
+    "output_commit_pushed": null,
+    "sha_semantics": "Under the legacy v1 marker, git_sha records the workflow input commit and may not be the later commit that contains the published refresh; no output commit or deployment is proven.",
     "evidence_path": "data/last_successful_refresh.json"
   },
   "link_health": {

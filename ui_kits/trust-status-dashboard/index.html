@@ -277,16 +277,29 @@
 
     function renderRefresh(manifest) {
       const refresh = manifest.latest_refresh || {};
-      document.getElementById('refresh-summary').textContent = refresh.status === 'success'
-        ? `The automated pipeline last recorded a successful refresh at ${formatTime(refresh.refreshed_at)}.`
-        : 'No successful committed refresh marker is currently available.';
+      let summary = 'No successful committed refresh marker is currently available.';
+      if (refresh.status === 'success' && refresh.publication_state === 'published' && refresh.output_commit_pushed === true) {
+        summary = `The pipeline recorded source-data refresh output at ${formatTime(refresh.source_data_refreshed_at)} and records its output commit as pushed.`;
+      } else if (refresh.status === 'success' && refresh.publication_state === 'legacy_unverified') {
+        summary = `A legacy marker records a successful refresh at ${formatTime(refresh.source_data_refreshed_at)}, but does not prove the output commit or deployed commit.`;
+      } else if (refresh.status === 'pending_publication') {
+        summary = `Source-data refresh output was prepared at ${formatTime(refresh.source_data_refreshed_at)}, but publication is not established.`;
+      }
+      document.getElementById('refresh-summary').textContent = summary;
       const list = document.getElementById('refresh-list');
       clear(list);
       appendEvidence(list, 'Status', titleCase(refresh.status));
-      appendEvidence(list, 'Recorded at', formatTime(refresh.refreshed_at));
+      appendEvidence(list, 'Marker schema', refresh.marker_schema || 'Not recorded', true);
+      appendEvidence(list, 'Publication state', titleCase(refresh.publication_state));
+      appendEvidence(list, 'Source data refreshed', formatTime(refresh.source_data_refreshed_at));
       appendEvidence(list, 'Workflow', refresh.workflow || 'Not recorded');
       appendEvidence(list, 'Run ID', refresh.run_id || 'Not recorded', true);
-      appendEvidence(list, 'Reported SHA', refresh.reported_git_sha || 'Not recorded', true);
+      appendEvidence(list, 'Run attempt', refresh.run_attempt || 'Not recorded', true);
+      appendEvidence(list, 'Ref', refresh.ref || 'Not recorded', true);
+      appendEvidence(list, 'Branch', refresh.branch || 'Not recorded', true);
+      appendEvidence(list, 'Workflow input SHA', refresh.workflow_input_sha || 'Not recorded', true);
+      appendEvidence(list, 'Output commit SHA', refresh.output_commit_sha || 'Not recorded', true);
+      appendEvidence(list, 'Output commit pushed', refresh.output_commit_pushed === true ? 'Yes' : (refresh.output_commit_pushed === false ? 'No' : 'Not recorded'));
       appendEvidence(list, 'SHA meaning', refresh.sha_semantics || 'Not recorded');
       appendEvidence(list, 'Evidence', refresh.evidence_path || 'Unavailable', true);
     }

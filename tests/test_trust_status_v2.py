@@ -180,6 +180,70 @@ class TrustStatusV2Tests(unittest.TestCase):
         )
         self.assertIn("input commit", result["sha_semantics"])
         self.assertIn("published refresh", result["sha_semantics"])
+        self.assertEqual(result["publication_state"], "legacy_unverified")
+        self.assertIsNone(result["output_commit_sha"])
+
+    def test_published_v2_refresh_distinguishes_input_output_and_marker_commits(self):
+        result = MODULE.refresh_summary(
+            {
+                "schema": "fuel_resilience_refresh_status.v2",
+                "status": "success",
+                "publication_state": "published",
+                "refreshed_at": "2026-08-02T16:00:00+00:00",
+                "source_data_refreshed_at": "2026-08-02T16:00:00+00:00",
+                "workflow_input_sha": "1" * 40,
+                "workflow": "Weekly data refresh",
+                "workflow_run_id": "12345",
+                "workflow_run_attempt": "2",
+                "ref": "refs/heads/main",
+                "branch": "main",
+                "output_commit_sha": "2" * 40,
+                "output_commit_pushed": True,
+            }
+        )
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["publication_state"], "published")
+        self.assertEqual(result["workflow_input_sha"], "1" * 40)
+        self.assertEqual(result["output_commit_sha"], "2" * 40)
+        self.assertTrue(result["output_commit_pushed"])
+        self.assertIn("not the later marker commit", result["sha_semantics"])
+        self.assertIn("not proof of the latest deployed commit", result["sha_semantics"])
+        errors = []
+        VALIDATOR.validate_refresh(result, errors)
+        self.assertEqual(errors, [])
+
+    def test_prepared_v2_refresh_is_not_reported_as_published(self):
+        result = MODULE.refresh_summary(
+            {
+                "schema": "fuel_resilience_refresh_status.v2",
+                "status": "pending_publication",
+                "publication_state": "prepared",
+                "refreshed_at": "2026-08-02T16:00:00+00:00",
+                "source_data_refreshed_at": "2026-08-02T16:00:00+00:00",
+                "workflow_input_sha": "1" * 40,
+                "workflow": "Weekly data refresh",
+                "workflow_run_id": "12345",
+                "workflow_run_attempt": "2",
+                "ref": "refs/heads/main",
+                "branch": "main",
+                "output_commit_sha": None,
+                "output_commit_pushed": False,
+            }
+        )
+        self.assertEqual(result["status"], "pending_publication")
+        self.assertFalse(result["output_commit_pushed"])
+        self.assertIn("not established", result["sha_semantics"])
+        self.assertEqual(
+            MODULE.overall_status(
+                {"error_count": 0, "warning_count": 0},
+                result,
+                {"status": "available", "classification_complete": True, "repair_required_count": 0},
+            ),
+            "refresh_status_unknown",
+        )
+        errors = []
+        VALIDATOR.validate_refresh(result, errors)
+        self.assertEqual(errors, [])
 
     def test_missing_refresh_marker_is_an_unknown_state(self):
         result = MODULE.refresh_summary(None)

@@ -56,7 +56,7 @@ jobs:
       - name: Validate source registry, envelopes and URL governance
         run: python scripts/validate_project.py
 
-      - name: Write last successful refresh marker
+      - name: Prepare refresh publication marker
         run: python scripts/write_refresh_status.py
 
       - name: Build Trust Status v2
@@ -65,14 +65,30 @@ jobs:
       - name: Validate Trust Status v2
         run: python scripts/validate_trust_status_v2.py
 
-      - name: Commit any changed data
+      - name: Push generated refresh output
+        id: publish-output
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain data)" ]; then
             git add data
             git commit -m "chore(data): weekly refresh $(date -u +%Y-%m-%d)"
+            output_commit_sha="$(git rev-parse HEAD)"
             git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo "output_commit_sha=${output_commit_sha}" >> "$GITHUB_OUTPUT"
           else
             echo "No data changes; nothing to commit."
+            echo "output_commit_sha=" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Finalize pushed refresh marker
+        if: steps.publish-output.outputs.output_commit_sha != ''
+        env:
+          OUTPUT_COMMIT_SHA: ${{ steps.publish-output.outputs.output_commit_sha }}
+        run: |
+          python scripts/write_refresh_status.py --finalize "$OUTPUT_COMMIT_SHA" --pushed
+          python scripts/build_trust_status.py
+          python scripts/validate_trust_status_v2.py
+          git add data/last_successful_refresh.json data/trust_status_manifest.json
+          git commit -m "chore(data): record published refresh $(date -u +%Y-%m-%d)"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

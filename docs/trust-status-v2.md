@@ -28,6 +28,8 @@ The builder writes `data/trust_status_manifest.json` from current repository evi
 - `scripts/validate_project.py --json`
 - configured workflow files under `.github/workflows/`
 
+Refresh marker v2 semantics and the v1 migration path are documented in [`docs/refresh-marker-v2.md`](refresh-marker-v2.md).
+
 ## Claim boundary
 
 Trust Status is not a certification, not an official government assessment, not a security audit and not a risk score. It is not proof that every upstream value is correct or that every source is reachable. It reports repository evidence and known limitations. A successful automated refresh does not make manual sources current, and an inaccessible landing page does not by itself prove that the underlying dataset is unavailable.

@@ -95,6 +95,8 @@ The builder reads `data/last_successful_refresh.json` and reports:
 
 The manifest explicitly discloses the current v1 SHA ambiguity: the marker records the workflow input commit and may not identify the later commit that contains the published refresh.
 
+Phase 4 subsequently introduced the fail-closed v2 two-commit publication design in `docs/refresh-marker-v2.md`. This dated Phase 3 observation remains the correct description of the still-committed historical v1 marker until the next successful weekly refresh migrates it.
+
 ### Link health
 
 When `data/source_link_health.json` exists, Trust Status publishes its classified category counts, definite-repair source count, registered/classified coverage, checker-failure count and whether classification completed. Category IDs are preserved literally.
@@ -192,9 +194,10 @@ The weekly data workflow now:
 3. applies governed URLs;
 4. generates classified link health;
 5. validates project evidence;
-6. writes the refresh marker;
+6. prepares the refresh marker;
 7. generates and validates Trust Status v2;
-8. commits changed data, including the trust and link-health reports.
+8. commits and pushes changed data, including the trust and link-health reports;
+9. finalizes and pushes v2 marker evidence in a second commit.
 
 ### GitHub Pages
 
