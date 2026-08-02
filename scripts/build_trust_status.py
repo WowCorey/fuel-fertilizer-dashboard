@@ -13,6 +13,7 @@ import collections
 import datetime as dt
 import json
 import pathlib
+import re
 import subprocess
 import sys
 from typing import Any
@@ -25,6 +26,27 @@ TRUST_MANIFEST = ROOT / "data" / "trust_status_manifest.json"
 GENERATED_DIR = ROOT / "data" / "generated"
 MANUAL_DIR = ROOT / "data" / "manual"
 VALIDATOR = ROOT / "scripts" / "validate_project.py"
+SOURCE_MODES = ("programmatic", "manual", "derived", "unavailable")
+PRESENCE_MODES = ("generated_only", "manual_only", "both", "missing")
+ENVELOPE_FIELDS = (
+    "files_total",
+    "generated_files",
+    "manual_files",
+    "unreadable",
+    "status_ok",
+    "status_unavailable",
+    "status_other",
+    "manual_entry_true",
+    "manual_entry_false",
+)
+WARNING_CATEGORIES = (
+    "manual_stale",
+    "generated_stale",
+    "rights_metadata",
+    "source_name_mismatch",
+    "source_url_mismatch",
+    "other",
+)
 
 
 def read_json(path: pathlib.Path, *, required: bool = True) -> dict[str, Any] | None:
@@ -64,15 +86,17 @@ def source_inventory(source_manifest: dict[str, Any]) -> tuple[dict[str, int], d
     if not isinstance(sources, dict):
         raise ValueError("data/source_manifest.json must contain a sources object")
 
-    modes = collections.Counter()
-    envelope_presence = collections.Counter()
+    modes = collections.Counter({mode: 0 for mode in SOURCE_MODES})
+    envelope_presence = collections.Counter({mode: 0 for mode in PRESENCE_MODES})
     unavailable_by_dashboard = collections.Counter()
 
     for source_id, source in sources.items():
         if not isinstance(source, dict):
             raise ValueError(f"source manifest entry {source_id!r} must be an object")
-        mode = source.get("fetch") or "unknown"
-        modes[str(mode)] += 1
+        mode = source.get("fetch")
+        if mode not in SOURCE_MODES:
+            raise ValueError(f"source manifest entry {source_id!r} has unknown fetch mode {mode!r}")
+        modes[mode] += 1
         has_generated = source.get("has_generated") is True
         has_manual = source.get("has_manual") is True
         if has_generated and has_manual:
@@ -100,7 +124,7 @@ def source_inventory(source_manifest: dict[str, Any]) -> tuple[dict[str, int], d
 
 
 def envelope_inventory() -> dict[str, int]:
-    counts = collections.Counter()
+    counts = collections.Counter({field: 0 for field in ENVELOPE_FIELDS})
     for directory, location in ((GENERATED_DIR, "generated"), (MANUAL_DIR, "manual")):
         for path in sorted(directory.glob("*.json")):
             counts["files_total"] += 1
@@ -127,14 +151,14 @@ def envelope_inventory() -> dict[str, int]:
 def validation_summary(report: dict[str, Any]) -> dict[str, Any]:
     errors = report.get("errors") if isinstance(report.get("errors"), list) else []
     warnings = report.get("warnings") if isinstance(report.get("warnings"), list) else []
-    buckets = collections.Counter()
+    buckets = collections.Counter({category: 0 for category in WARNING_CATEGORIES})
     examples: dict[str, list[dict[str, str]]] = collections.defaultdict(list)
 
     for warning in warnings:
         if not isinstance(warning, dict):
             continue
-        path = str(warning.get("path") or "")
-        message = str(warning.get("message") or "")
+        path = public_diagnostic_text(warning.get("path"), limit=180)
+        message = public_diagnostic_text(warning.get("message"), limit=320)
         lowered = message.lower()
         if "stale" in lowered and path.startswith("data/manual/"):
             bucket = "manual_stale"
@@ -158,9 +182,31 @@ def validation_summary(report: dict[str, Any]) -> dict[str, Any]:
         "warning_count": len(warnings),
         "warning_categories": dict(sorted(buckets.items())),
         "warning_examples": dict(sorted(examples.items())),
-        "errors": [item for item in errors[:12] if isinstance(item, dict)],
+        "errors": [public_diagnostic(item) for item in errors[:12] if isinstance(item, dict)],
         "evidence_path": "scripts/validate_project.py",
     }
+
+
+def public_diagnostic(item: dict[str, Any]) -> dict[str, str]:
+    """Publish only bounded validator path/message fields."""
+    return {
+        "path": public_diagnostic_text(item.get("path"), limit=180),
+        "message": public_diagnostic_text(item.get("message"), limit=320),
+    }
+
+
+def public_diagnostic_text(value: Any, *, limit: int) -> str:
+    """Keep public validator examples useful without publishing tokens or local paths."""
+    text = str(value or "").replace(str(ROOT), ".")
+    text = re.sub(
+        r"([?&](?:api[_-]?key|access[_-]?token|token|secret|signature|key)=)[^&\s]+",
+        r"\1[redacted]",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if len(text) > limit:
+        return text[: limit - 1].rstrip() + "…"
+    return text
 
 
 def refresh_summary(refresh: dict[str, Any] | None) -> dict[str, Any]:
@@ -196,6 +242,10 @@ def link_health_summary(report: dict[str, Any] | None) -> dict[str, Any]:
             "generated_at": None,
             "advisory": True,
             "repair_required_count": None,
+            "registered_source_count": None,
+            "classified_source_count": None,
+            "checker_failure_count": None,
+            "classification_complete": None,
             "categories": {},
             "claim_boundary": (
                 "No classified link-health report is committed yet. This does not imply that all "
@@ -207,8 +257,12 @@ def link_health_summary(report: dict[str, Any] | None) -> dict[str, Any]:
     return {
         "status": "available",
         "generated_at": report.get("generated_at"),
-        "advisory": report.get("advisory") is not False,
+        "advisory": report.get("advisory") is True,
         "repair_required_count": report.get("repair_required_count"),
+        "registered_source_count": report.get("registered_source_count"),
+        "classified_source_count": report.get("classified_source_count"),
+        "checker_failure_count": report.get("checker_failure_count"),
+        "classification_complete": report.get("classification_complete"),
         "categories": categories,
         "claim_boundary": report.get("claim_boundary"),
         "evidence_path": "data/source_link_health.json",
@@ -221,7 +275,12 @@ def overall_status(validation: dict[str, Any], refresh: dict[str, Any], links: d
     if refresh.get("status") != "success":
         return "refresh_status_unknown"
     repairs = links.get("repair_required_count")
-    if validation["warning_count"] or (isinstance(repairs, int) and repairs > 0):
+    if (
+        validation["warning_count"]
+        or links.get("status") != "available"
+        or links.get("classification_complete") is not True
+        or (isinstance(repairs, int) and repairs > 0)
+    ):
         return "operational_with_warnings"
     return "operational"
 
@@ -251,14 +310,14 @@ def build_manifest() -> dict[str, Any]:
             "label": "Weekly data refresh",
             "status": "configured",
             "evidence_path": ".github/workflows/refresh-data.yml",
-            "meaning": "Programmatic sources are fetched, validated and committed by a scheduled workflow. Manual sources remain human-reviewed."
+            "meaning": "The configured scheduled workflow fetches and validates programmatic sources. This is configuration evidence, not the latest run conclusion; manual sources remain human-reviewed."
         },
         {
             "id": "manual_review",
             "label": "Manual source review",
             "status": "configured",
             "evidence_path": ".github/workflows/manual-data-review.yml",
-            "meaning": "An advisory workflow reports manual, unavailable and overdue evidence without inventing replacement values."
+            "meaning": "The configured advisory workflow reports manual, unavailable and overdue evidence without inventing replacement values. This is not the latest run conclusion."
         },
         {
             "id": "pages_deployment",
@@ -327,7 +386,8 @@ def build_manifest() -> dict[str, Any]:
         "claim_boundary": (
             "Trust Status reports repository evidence, validation output, refresh metadata and public-source "
             "coverage. It is not a certification, not an official government assessment, not a security audit, "
-            "and not proof that every upstream source is accurate or currently reachable."
+            "not proof that every upstream value is correct, not proof that every source is reachable, and not "
+            "a risk score."
         ),
     }
 
