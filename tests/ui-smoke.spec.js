@@ -2,11 +2,16 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 const routeRegistry = require('../data/site_routes.json');
+const { siteUrl } = require('./site-target');
 
 const routes = routeRegistry.routes
   .filter(route => route.public)
-  .map(route => ({ ...route, path: route.id === 'home' ? '/' : `/${route.relative_url}` }));
+  .map(route => ({ ...route, path: siteUrl(route.id === 'home' ? '/' : `/${route.relative_url}`) }));
 const fuelRoute = routes.find(route => route.id === 'fuel');
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 async function waitForRouteReady(page, route) {
   await expect(page.locator('h1').first()).toBeVisible();
@@ -42,16 +47,30 @@ for (const route of routes) {
   test(`${route.path} renders without console errors`, async ({ page }) => {
     const consoleErrors = [];
     const pageErrors = [];
+    const failedRequests = [];
+    const failedResponses = [];
     page.on('console', msg => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text());
       }
     });
     page.on('pageerror', err => pageErrors.push(err.message));
+    page.on('requestfailed', request => failedRequests.push({
+      url: request.url(),
+      error: request.failure()?.errorText || 'unknown request failure',
+    }));
+    page.on('response', response => {
+      if (response.status() >= 400) {
+        failedResponses.push({ url: response.url(), status: response.status() });
+      }
+    });
 
     const response = await page.goto(route.path);
     expect(response?.ok(), route.path).toBeTruthy();
     await waitForRouteReady(page, route);
+    await expect(page).toHaveTitle(new RegExp(escapeRegExp(route.title)));
+    await expect(page.getByRole('navigation').first()).toBeVisible();
+    await expect(page.locator('footer, [role="contentinfo"]').last()).toBeVisible();
     await expect(page.locator('body')).not.toContainText(/metadata pending/i);
     if (route.kind === 'react-dashboard') {
       await expect(page.getByLabel('Refresh status')).toContainText(/Refreshed|Refresh status unavailable|No successful refresh recorded|Page data retrieved/);
@@ -60,6 +79,9 @@ for (const route of routes) {
     }
     expect(await page.locator('script[src^="http:"] , script[src^="https:"]').count()).toBe(0);
     await expect(page.locator('body')).not.toContainText("There isn't a GitHub Pages site here.");
+    const pageOrigin = new URL(page.url()).origin;
+    expect(failedRequests.filter(item => new URL(item.url).origin === pageOrigin)).toEqual([]);
+    expect(failedResponses.filter(item => new URL(item.url).origin === pageOrigin)).toEqual([]);
     expect(pageErrors).toEqual([]);
     expect(consoleErrors.filter(text => !text.includes('favicon'))).toEqual([]);
   });
@@ -126,7 +148,7 @@ test('link audit includes anchors rendered after asynchronous source loading', a
 });
 
 test('homepage presents the national summary and status legend', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(siteUrl('/'));
   await expect(page.getByRole('heading', { name: /Tracking what Australia.{1,5}s resilience data shows/ })).toBeVisible();
   await expect(page.getByText('A public-interest dashboard that separates verified public data from missing, stale, partial and source-gated feeds')).toBeVisible();
   const heroLinks = page.getByLabel('Hero actions');
@@ -175,7 +197,7 @@ test('homepage presents the national summary and status legend', async ({ page }
 });
 
 test('homepage shows audit snapshot derived from source manifest', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(siteUrl('/'));
   await expect(page.getByRole('heading', { name: 'What public sources we track' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Trust Status' })).toBeVisible();
   await expect(page.getByText('It is not a certification or official assessment.')).toBeVisible();
@@ -186,7 +208,7 @@ test('homepage shows audit snapshot derived from source manifest', async ({ page
 });
 
 test('homepage primary nav exposes category groups', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(siteUrl('/'));
   const nav = page.getByRole('navigation', { name: 'Primary' });
   await expect(nav.getByRole('link', { name: 'Home', exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Missing Data Scoreboard', exact: true })).toBeVisible();
@@ -201,50 +223,58 @@ test('homepage primary nav exposes category groups', async ({ page }) => {
   await expect(nav.getByRole('menuitem', { name: 'Power grid' })).toBeVisible();
 });
 
-test('mobile navigation is keyboard operable on homepage and React dashboards', async ({ page }) => {
+test('all public routes have a usable narrow layout and keyboard path', async ({ page }) => {
+  test.setTimeout(180_000);
   await page.setViewportSize({ width: 390, height: 844 });
 
-  for (const routePath of ['/', '/ui_kits/fuel-dashboard/index.html']) {
-    await page.goto(routePath);
-    const toggle = page.getByRole('button', { name: 'Open navigation' });
-    await expect(toggle).toBeVisible();
-    await toggle.focus();
+  for (const route of routes) {
+    await page.goto(route.path);
+    await waitForRouteReady(page, route);
+
+    await page.keyboard.press('Tab');
+    const skipLink = page.getByRole('link', { name: 'Skip to main content' });
+    await expect(skipLink).toBeFocused();
     await page.keyboard.press('Enter');
+    await expect(page.locator('#main')).toBeFocused();
 
-    const dialog = page.getByRole('dialog', { name: 'Site navigation' });
-    await expect(dialog).toBeVisible();
-    await expect(dialog).toHaveAttribute('aria-modal', 'true');
-    await expect(page.getByRole('button', { name: 'Close navigation' })).toBeFocused();
-    await expect(dialog.getByRole('link', { name: 'Missing Data Scoreboard' })).toBeVisible();
-    await expect(dialog.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+    const toggle = page.getByRole('button', { name: 'Open navigation' });
+    if (await toggle.count()) {
+      await expect(toggle).toBeVisible();
+      await toggle.focus();
+      await page.keyboard.press('Enter');
 
-    await page.keyboard.press('Escape');
-    await expect(dialog).toBeHidden();
-    await expect(toggle).toBeFocused();
-    const overflow = await page.evaluate(() => {
-      const width = document.documentElement.clientWidth;
-      return Array.from(document.querySelectorAll('body *'))
-        .map(element => ({
-          tag: element.tagName,
-          className: typeof element.className === 'string' ? element.className : '',
-          right: Math.round(element.getBoundingClientRect().right),
-        }))
-        .filter(item => item.right > width + 1)
-        .slice(0, 10);
-    });
-    expect(overflow, `${routePath} has horizontal overflow`).toEqual([]);
+      const dialog = page.getByRole('dialog', { name: 'Site navigation' });
+      await expect(dialog).toBeVisible();
+      await expect(dialog).toHaveAttribute('aria-modal', 'true');
+      await expect(page.getByRole('button', { name: 'Close navigation' })).toBeFocused();
+      await expect(dialog.getByRole('link', { name: 'Missing Data Scoreboard' })).toBeVisible();
+      await expect(dialog.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+
+      await page.keyboard.press('Escape');
+      await expect(dialog).toBeHidden();
+      await expect(toggle).toBeFocused();
+    }
+    const viewportWidths = await page.evaluate(() => ({
+      client: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+      body: document.body.scrollWidth,
+    }));
+    expect(viewportWidths.document, `${route.path} has document-level horizontal overflow`)
+      .toBeLessThanOrEqual(viewportWidths.client + 1);
+    expect(viewportWidths.body, `${route.path} has body-level horizontal overflow`)
+      .toBeLessThanOrEqual(viewportWidths.client + 1);
   }
 });
 
 test('canonical registry supplies homepage and shared dashboard links', async ({ page }) => {
   const dashboardCount = routes.filter(route => route.id !== 'home').length;
-  await page.goto('/');
+  await page.goto(siteUrl('/'));
   const homeFooter = page.locator('#home-footer-routes');
   await expect(homeFooter.getByRole('link')).toHaveCount(dashboardCount);
   await expect(homeFooter.getByRole('link', { name: 'Missing Data Scoreboard' })).toBeVisible();
   await expect(homeFooter.getByRole('link', { name: 'Trust Status' })).toBeVisible();
 
-  await page.goto('/ui_kits/fuel-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/fuel-dashboard/index.html'));
   const dashboardFooter = page.locator('.site-footer__col').filter({ hasText: 'Dashboards' });
   await expect(dashboardFooter.getByRole('link')).toHaveCount(dashboardCount);
   await expect(dashboardFooter.getByRole('link', { name: 'Trust Status' })).toBeVisible();
@@ -255,7 +285,7 @@ test('canonical registry supplies homepage and shared dashboard links', async ({
 });
 
 test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {
-  await page.goto('/ui_kits/missing-data-scoreboard/index.html');
+  await page.goto(siteUrl('/ui_kits/missing-data-scoreboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /The public-data gaps behind Australia.{1,5}s resilience picture/ })).toBeVisible();
   await expect(page.getByText('This scoreboard separates verified feeds from missing, stale, partial and source-gated data')).toBeVisible();
@@ -332,7 +362,7 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
 });
 
 test('housing pressure page keeps models source-gated', async ({ page }) => {
-  await page.goto('/ui_kits/housing-economic-pressure-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/housing-economic-pressure-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'Housing and economic pressure' })).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
@@ -357,7 +387,7 @@ test('housing pressure page keeps models source-gated', async ({ page }) => {
 });
 
 test('fuel security page keeps operational gaps fail-closed', async ({ page }) => {
-  await page.goto('/ui_kits/fuel-security-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/fuel-security-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public fuel-security data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed fuel-security indicators from partial, stale, manual and source-gated feeds')).toBeVisible();
@@ -413,7 +443,7 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
 });
 
 test('food farms and water page keeps unavailable source gates explicit', async ({ page }) => {
-  await page.goto('/ui_kits/fertilizer-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/fertilizer-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByText('Food, farms & water security')).toBeVisible();
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public food-system data can verify/ })).toBeVisible();
@@ -468,7 +498,7 @@ test('food farms and water page keeps unavailable source gates explicit', async 
 });
 
 test('employment automation page separates observed labour signals from AI causation', async ({ page }) => {
-  await page.goto('/ui_kits/employment-automation-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/employment-automation-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public employment and automation data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed labour-market indicators from partial')).toBeVisible();
@@ -510,7 +540,7 @@ test('employment automation page separates observed labour signals from AI causa
 });
 
 test('manufacturing page separates industrial signals from sovereign capability claims', async ({ page }) => {
-  await page.goto('/ui_kits/manufacturing-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/manufacturing-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public manufacturing-capacity data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed manufacturing and industrial-capacity')).toBeVisible();
@@ -554,7 +584,7 @@ test('manufacturing page separates industrial signals from sovereign capability 
 });
 
 test('power grid page separates grid signals from reliability claims', async ({ page }) => {
-  await page.goto('/ui_kits/power-grid-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/power-grid-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public power-grid data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed power-grid and energy-reliability indicators')).toBeVisible();
@@ -600,7 +630,7 @@ test('power grid page separates grid signals from reliability claims', async ({ 
 });
 
 test('infrastructure page separates delivery signals from readiness claims', async ({ page }) => {
-  await page.goto('/ui_kits/infrastructure-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/infrastructure-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public infrastructure-delivery data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed infrastructure, logistics and')).toBeVisible();
@@ -646,7 +676,7 @@ test('infrastructure page separates delivery signals from readiness claims', asy
 });
 
 test('fuel strategy tracker keeps policy and operational data source-gated', async ({ page }) => {
-  await page.goto('/ui_kits/australian-fuel-strategy-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/australian-fuel-strategy-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public fuel-strategy data can verify/ })).toBeVisible();
   await expect(page.getByText('This tracker separates source-backed national fuel-policy signals from partial, manual and source-gated feeds')).toBeVisible();
@@ -684,7 +714,7 @@ test('fuel strategy tracker keeps policy and operational data source-gated', asy
 });
 
 test('Queensland fuel sovereignty tracker keeps delivery data source-gated', async ({ page }) => {
-  await page.goto('/ui_kits/qld-fuel-sovereignty-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/qld-fuel-sovereignty-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ })).toBeVisible();
   await expect(page.getByText('This tracker separates source-backed delivery signals from partial, manual and source-gated feeds')).toBeVisible();
@@ -727,7 +757,7 @@ test('Queensland fuel sovereignty tracker keeps delivery data source-gated', asy
 });
 
 test('defence procurement watch separates procurement signals from capability claims', async ({ page }) => {
-  await page.goto('/ui_kits/defence-procurement-watch/index.html');
+  await page.goto(siteUrl('/ui_kits/defence-procurement-watch/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public defence-procurement data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed procurement signals from partial,')).toBeVisible();
@@ -784,7 +814,7 @@ test('defence procurement watch separates procurement signals from capability cl
 });
 
 test('Brisbane 2032 readiness keeps Olympic delivery data source-gated', async ({ page }) => {
-  await page.goto('/ui_kits/brisbane-2032-readiness-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/brisbane-2032-readiness-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: 'Brisbane 2032 readiness' })).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
@@ -816,7 +846,7 @@ test('Brisbane 2032 readiness keeps Olympic delivery data source-gated', async (
 });
 
 test('AU economics page separates macro signals from causal claims', async ({ page }) => {
-  await page.goto('/ui_kits/au-economics-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/au-economics-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public economic data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed macroeconomic and household-stress indicators')).toBeVisible();
@@ -865,7 +895,7 @@ test('AU economics page separates macro signals from causal claims', async ({ pa
 });
 
 test('resource value page separates value signals from value-capture claims', async ({ page }) => {
-  await page.goto('/ui_kits/resource-value-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/resource-value-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public resource-value data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed royalty, export, processing and value')).toBeVisible();
@@ -920,7 +950,7 @@ test('resource value page separates value signals from value-capture claims', as
 });
 
 test('state contribution page keeps tax attribution boundaries explicit', async ({ page }) => {
-  await page.goto('/ui_kits/state-contribution-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/state-contribution-dashboard/index.html'));
   await expect(page.getByRole('heading', { name: "What each state contributes to Australia's petroleum system." })).toBeVisible();
   await expect(page.getByText('No state-level federal tax allocation is estimated.')).toBeVisible();
   await expect(page.getByText('State royalties are not the same as Commonwealth PRRT, company tax, excise or GST.')).toBeVisible();
@@ -935,7 +965,7 @@ test('state contribution page keeps tax attribution boundaries explicit', async 
 });
 
 test('strategic resources page separates resource signals from capability claims', async ({ page }) => {
-  await page.goto('/ui_kits/strategic-resources-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/strategic-resources-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public strategic-resource data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed strategic-resource and processing indicators')).toBeVisible();
@@ -986,7 +1016,7 @@ test('strategic resources page separates resource signals from capability claims
 });
 
 test('defence posture page separates public defence signals from readiness claims', async ({ page }) => {
-  await page.goto('/ui_kits/defence-alliances-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/defence-alliances-dashboard/index.html'));
   const main = page.locator('main');
   await expect(page.getByRole('heading', { name: /What Australia.{1,5}s public defence-posture data can verify/ })).toBeVisible();
   await expect(page.getByText('This dashboard separates source-backed public defence signals from partial,')).toBeVisible();

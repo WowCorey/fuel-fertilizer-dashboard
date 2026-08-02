@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { siteUrl } = require('./site-target');
 
 test('Trust Status v2 renders generated repository evidence without external React', async ({ page }) => {
   const consoleErrors = [];
@@ -8,7 +9,7 @@ test('Trust Status v2 renders generated repository evidence without external Rea
   });
   page.on('pageerror', error => pageErrors.push(error.message));
 
-  const response = await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  const response = await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
   expect(response?.ok()).toBeTruthy();
 
   await expect(page.getByRole('heading', { name: 'Trust Status', exact: true })).toBeVisible();
@@ -34,21 +35,29 @@ test('Trust Status v2 renders generated repository evidence without external Rea
 });
 
 test('Trust Status v2 separates workflow configuration from run conclusions', async ({ page }) => {
-  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
   await expect(page.getByText('This section proves that controls are configured in the repository. It does not claim the conclusion of the latest CI or deployment run.')).toBeVisible();
   const workflowCards = page.locator('#workflow-grid .workflow-card');
   await expect(workflowCards).toHaveCount(4);
   await expect(workflowCards.first()).toContainText('Configured');
 });
 
-test('Trust Status labels the committed legacy refresh marker without inventing output evidence', async ({ page }) => {
-  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+test('Trust Status labels the committed refresh marker without inventing deployment evidence', async ({ page, request }) => {
+  const manifest = await (await request.get(siteUrl('/data/trust_status_manifest.json'))).json();
+  await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
   const refresh = page.locator('#refresh-list');
-  await expect(refresh).toContainText('Legacy Unverified');
   await expect(refresh).toContainText('Workflow input SHA');
   await expect(refresh).toContainText('Output commit SHA');
-  await expect(refresh).toContainText('Not recorded');
-  await expect(page.locator('#refresh-summary')).toContainText('does not prove the output commit or deployed commit');
+  if (manifest.latest_refresh.marker_schema === 'fuel_resilience_refresh_status.v2') {
+    await expect(refresh).toContainText('Published');
+    await expect(refresh).toContainText(manifest.latest_refresh.workflow_input_sha);
+    await expect(refresh).toContainText(manifest.latest_refresh.output_commit_sha);
+    await expect(page.locator('#refresh-summary')).toContainText('not proof of the latest deployed commit');
+  } else {
+    await expect(refresh).toContainText('Legacy Unverified');
+    await expect(refresh).toContainText('Not recorded');
+    await expect(page.locator('#refresh-summary')).toContainText('does not prove the output commit or deployed commit');
+  }
 });
 
 test('Trust Status renders v2 input and pushed output commits as different evidence', async ({ page }) => {
@@ -75,7 +84,7 @@ test('Trust Status renders v2 input and pushed output commits as different evide
     };
     await route.fulfill({ response, json: manifest });
   });
-  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
   const refresh = page.locator('#refresh-list');
   await expect(refresh).toContainText('Published');
   await expect(refresh).toContainText('1'.repeat(40));
@@ -87,7 +96,7 @@ test('Trust Status renders v2 input and pushed output commits as different evide
 
 test('Trust Status v2 exposes a visible unavailable state without fallback metrics', async ({ page }) => {
   await page.route('**/data/trust_status_manifest.json', route => route.fulfill({ status: 503, body: 'unavailable' }));
-  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
 
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page.locator('#overall-badge')).toHaveText('Unavailable');
@@ -102,7 +111,7 @@ test('Trust Status v2 does not coerce missing counts to zero', async ({ page }) 
     manifest.source_inventory.modes.total = null;
     await route.fulfill({ response, json: manifest });
   });
-  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
 
   const totalCard = page.locator('#source-metrics .metric-card').filter({ hasText: 'Total registered sources' });
   await expect(totalCard.locator('.metric-card__value')).toHaveText('Unavailable');
@@ -127,7 +136,7 @@ test('Trust Status v2 renders classified link category IDs literally', async ({ 
     };
     await route.fulfill({ response, json: manifest });
   });
-  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
 
   await expect(page.locator('#link-list span').filter({ hasText: 'access_blocked' })).toHaveText('access_blocked');
   await expect(page.locator('#link-list')).not.toContainText('Access Blocked');
@@ -135,7 +144,7 @@ test('Trust Status v2 renders classified link category IDs literally', async ({ 
 
 test('Trust Status v2 has a usable narrow layout and keyboard skip link', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  await page.goto(siteUrl('/ui_kits/trust-status-dashboard/index.html'));
   await expect(page.locator('#overall-badge')).not.toHaveText('Loading');
 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
