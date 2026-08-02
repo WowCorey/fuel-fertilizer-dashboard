@@ -31,6 +31,9 @@ jobs:
       - name: Validate source registry and envelopes
         run: python scripts/validate_data.py
 
+      - name: Validate national status-model readiness gate
+        run: python scripts/validate_national_status_gate.py
+
       - name: Build manual review report
         run: |
           python scripts/review_due.py --json > manual-data-review.json

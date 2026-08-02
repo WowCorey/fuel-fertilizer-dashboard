@@ -65,6 +65,9 @@ jobs:
       - name: Validate Trust Status v2
         run: python scripts/validate_trust_status_v2.py
 
+      - name: Validate national status-model readiness gate
+        run: python scripts/validate_national_status_gate.py
+
       - name: Push generated refresh output
         id: publish-output
         run: |
@@ -89,6 +92,7 @@ jobs:
           python scripts/write_refresh_status.py --finalize "$OUTPUT_COMMIT_SHA" --pushed
           python scripts/build_trust_status.py
           python scripts/validate_trust_status_v2.py
+          python scripts/validate_national_status_gate.py
           git add data/last_successful_refresh.json data/trust_status_manifest.json
           git commit -m "chore(data): record published refresh $(date -u +%Y-%m-%d)"
           git push origin "HEAD:${GITHUB_REF_NAME}"

@@ -44,6 +44,9 @@ jobs:
       - name: Validate Trust Status v2
         run: python scripts/validate_trust_status_v2.py
 
+      - name: Validate national status-model readiness gate
+        run: python scripts/validate_national_status_gate.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v6
         with:
