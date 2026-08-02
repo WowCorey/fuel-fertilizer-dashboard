@@ -43,12 +43,18 @@ jobs:
           python -m py_compile scripts/review_due.py
           python -m py_compile scripts/write_refresh_status.py
           python -m py_compile scripts/validate_data.py
-
-      - name: Validate source registry and envelopes
-        run: python scripts/validate_data.py
+          python -m py_compile scripts/apply_source_url_governance.py
+          python -m py_compile scripts/check_source_links.py
+          python -m py_compile scripts/validate_project.py
 
       - name: Check source manifest
         run: python scripts/build_source_manifest.py --check
+
+      - name: Apply governed canonical source URLs
+        run: python scripts/apply_source_url_governance.py
+
+      - name: Validate source registry, envelopes and URL governance
+        run: python scripts/validate_project.py
 
       - name: Run tests
         run: python -m unittest discover -s tests
