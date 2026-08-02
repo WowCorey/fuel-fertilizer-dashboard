@@ -66,6 +66,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
   min-width: 0;
 }
 .source-card h4 { font-family: var(--font-serif); font-size: var(--fs-20); font-weight: 500; }
+.source-card p { overflow-wrap: anywhere; }
 .source-card a { font-size: var(--fs-13); font-family: var(--font-mono); overflow-wrap: anywhere; }
 .sources-grid--compact { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .quick-link-grid {
@@ -106,9 +107,9 @@ a.skip-link:focus, a.skip-link:focus-visible {
 .pending-list { margin-top: var(--s-5); }
 .methodology { border-top: 1px solid var(--rule); padding-top: var(--s-6); }
 .methodology h3 { margin-bottom: var(--s-4); }
-.methodology dl { display: grid; grid-template-columns: 220px 1fr; gap: var(--s-3) var(--s-5); margin: 0; }
-.methodology dt { font-weight: 600; color: var(--ink); }
-.methodology dd { margin: 0; color: var(--ink-2); }
+.methodology dl { display: grid; grid-template-columns: 220px 1fr; gap: var(--s-3) var(--s-5); margin: 0; min-width: 0; }
+.methodology dt { font-weight: 600; color: var(--ink); min-width: 0; }
+.methodology dd { margin: 0; color: var(--ink-2); min-width: 0; overflow-wrap: anywhere; }
 
 .charts-grid--full { grid-template-columns: 1fr !important; }
 
@@ -303,6 +304,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
   position: relative; padding: var(--s-6);
   background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-2);
   display: flex; flex-direction: column; gap: var(--s-3);
+  min-width: 0;
   transition: border-color var(--t-fast) var(--ease-out);
 }
 .metric-card--highlight { border-color: var(--accent); border-width: 1.5px; }
@@ -312,13 +314,16 @@ a.skip-link:focus, a.skip-link:focus-visible {
   font-size: var(--fs-13); line-height: 1.4;
 }
 .metric-card__label { color: var(--ink-2); font-weight: 500; font-size: var(--fs-16); }
-.metric-card__row { display:flex; align-items: baseline; gap: 6px; margin-top: var(--s-1); }
+.metric-card__row { display:flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin-top: var(--s-1); min-width: 0; }
 .metric-card__foot {
   margin-top: auto; padding-top: var(--s-4); border-top: 1px solid var(--rule);
   display: flex; flex-direction: column; gap: 4px;
   font-size: var(--fs-13); color: var(--ink-3);
 }
-.metric-card__source { font-family: var(--font-mono); font-size: var(--fs-12); }
+.metric-card__source {
+  font-family: var(--font-mono); font-size: var(--fs-12);
+  overflow-wrap: anywhere;
+}
 .threshold { font-weight: 600; }
 .threshold--below { color: var(--deficit); }
 .threshold--above { color: var(--surplus); }
@@ -327,10 +332,11 @@ a.skip-link:focus, a.skip-link:focus-visible {
 .delta__glyph { font-size: 12px; }
 
 /* Chart card */
-.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); min-width: 0; }
 .chart-card {
   background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-2);
   padding: var(--s-5) var(--s-6) var(--s-6);
+  min-width: 0;
 }
 .chart-card--unavailable { border-style: dashed; background: var(--paper-sunk); }
 .chart-unavail {
@@ -651,6 +657,7 @@ a.skip-link:focus, a.skip-link:focus-visible {
 }
 
 @media (max-width: 700px) {
+  .metric-numeral { font-size: var(--fs-56); }
   .section,
   .intro,
   .coverage-strip__inner,

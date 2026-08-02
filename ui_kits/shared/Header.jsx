@@ -56,6 +56,13 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
     }
   }, [sheetOpen]);
 
+  React.useEffect(() => {
+    // A fragment target is not keyboard focusable by default. Keep the shared
+    // skip-link target focusable without adding it to the ordinary tab order.
+    const main = document.getElementById('main');
+    if (main && !main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+  }, []);
+
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';
   const hasSiteRefresh = window.FR?.isPublishedRefreshStatus
     ? window.FR.isPublishedRefreshStatus(refreshStatus)
