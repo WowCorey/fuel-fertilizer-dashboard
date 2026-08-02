@@ -1087,7 +1087,7 @@ function ResourceValueAuditSummary() {
     href: card.href
   }, "Jump to evidence"), React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: metadata pending")))));
+  }, "Review date unavailable")))));
 }
 function ResourceValueEvidenceBoundary() {
   return React.createElement("section", {
@@ -1328,7 +1328,7 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"), React.createElement("div", {
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "Review date unavailable"), React.createElement("div", {
     style: {
       height: 12
     }

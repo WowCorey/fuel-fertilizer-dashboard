@@ -107,6 +107,19 @@ function buildRouteRegistry() {
   writeOrCheck(routesOutputPath, output);
 }
 
+function validateReviewLabels(dashboards) {
+  const maintainedUiFiles = new Set([
+    'index.html',
+    ...routeRegistry.routes.map(route => route.relative_url),
+    ...dashboards.map(name => `ui_kits/${name}/app.jsx`),
+  ]);
+  maintainedUiFiles.forEach(file => {
+    if (/\b(?:source\s+)?metadata\s+pending\b/i.test(read(file))) {
+      throw new Error(`${file} contains the retired metadata-pending placeholder`);
+    }
+  });
+}
+
 function buildReactVendor() {
   const result = buildSync({
     stdin: {
@@ -183,6 +196,7 @@ function compileDashboard(name) {
 }
 
 const dashboards = validateRouteRegistry();
+validateReviewLabels(dashboards);
 buildRouteRegistry();
 buildReactVendor();
 for (const dashboard of dashboards) {

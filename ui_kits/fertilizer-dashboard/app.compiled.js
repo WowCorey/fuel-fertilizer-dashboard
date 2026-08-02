@@ -1076,7 +1076,7 @@ function FoodSystemAuditSummary() {
     href: card.href
   }, "Jump to evidence"), React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: metadata pending")))));
+  }, "Review date unavailable")))));
 }
 function FoodEvidenceBoundary() {
   return React.createElement("section", {
@@ -1537,7 +1537,7 @@ function App() {
     }
   }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", {
     className: "mono"
-  }, "metadata pending"))), React.createElement("section", {
+  }, "Review date unavailable"))), React.createElement("section", {
     className: "freshness-notice",
     "aria-labelledby": "freshness-title"
   }, React.createElement("div", {

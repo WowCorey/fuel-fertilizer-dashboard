@@ -438,7 +438,7 @@ function PriorityBand({ band }) {
 }
 
 function LastReviewed({ value }) {
-  return <span className="audit-stamp">Last reviewed: {value || 'metadata pending'}</span>;
+  return <span className="audit-stamp">Last reviewed: {value || 'Review date unavailable'}</span>;
 }
 
 function App() {
@@ -876,7 +876,7 @@ function App() {
                     <td>{row.why}</td>
                     <td>{row.action}</td>
                     <td>{row.page}</td>
-                    <td>{row.last_reviewed || 'metadata pending'}</td>
+                    <td>{row.last_reviewed || 'Review date unavailable'}</td>
                   </tr>
                 ))}
               </tbody>

@@ -331,7 +331,7 @@ function OperationalSummary30s({ data }) {
             domestic-fuel pathway context.
           </p>
           <a href="#six-port-h">Jump to six-port pathway</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Partial / manual feeds</span>
@@ -342,7 +342,7 @@ function OperationalSummary30s({ data }) {
             signals, not parcel-level or project-level coverage.
           </p>
           <a href="#land-h">Jump to land and hubs</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Source-gated project feeds</span>
@@ -353,7 +353,7 @@ function OperationalSummary30s({ data }) {
             and approval completion rows.
           </p>
           <a href="#storage-h">Jump to project pathway</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Highest-priority visibility gaps</span>
@@ -364,7 +364,7 @@ function OperationalSummary30s({ data }) {
             federal/state policy alignment.
           </p>
           <a href="#blockers-h">Jump to delivery blockers</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
       </div>
     </section>
@@ -558,7 +558,7 @@ function App() {
             <span>Delivery/accountability tracker, not an operational fuel dashboard.</span>
             <div style={{ height: 12 }}/>
             <strong>Last reviewed</strong>
-            <span className="mono">metadata pending</span>
+            <span className="mono">Review date unavailable</span>
           </aside>
         </section>
 

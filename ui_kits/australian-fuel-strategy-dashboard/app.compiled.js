@@ -1285,7 +1285,7 @@ function OperationalSummary30s({
     href: "#reserve-indicators-h"
   }, "Jump to reserve and MSO indicators"), React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: metadata pending")), React.createElement("article", {
+  }, "Review date unavailable")), React.createElement("article", {
     className: "quick-link-card"
   }, React.createElement("span", {
     className: "eyebrow"
@@ -1295,7 +1295,7 @@ function OperationalSummary30s({
     href: "#product-days-h"
   }, "Jump to product-level visibility"), React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: metadata pending")), React.createElement("article", {
+  }, "Review date unavailable")), React.createElement("article", {
     className: "quick-link-card"
   }, React.createElement("span", {
     className: "eyebrow"
@@ -1305,7 +1305,7 @@ function OperationalSummary30s({
     href: "#publish-h"
   }, "Jump to publishing needs"), React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: metadata pending")), React.createElement("article", {
+  }, "Review date unavailable")), React.createElement("article", {
     className: "quick-link-card"
   }, React.createElement("span", {
     className: "eyebrow"
@@ -1315,7 +1315,7 @@ function OperationalSummary30s({
     href: "#implementation-h"
   }, "Jump to implementation tracker"), React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: metadata pending"))));
+  }, "Review date unavailable"))));
 }
 const STRATEGY_STATUS_LEGEND = [['observed', 'Verified', 'Source-backed and current enough for its cadence.'], ['partial', 'Partial', 'Source-backed, but incomplete by geography, product, timing or concept.'], ['stale', 'Stale', 'Source-backed, but outside its expected cadence window.'], ['manual', 'Manual', 'Hand-keyed from a named public source.'], ['derived', 'Derived', 'Calculated or selected from a named source envelope.'], ['unavailable', 'Unavailable', 'No public source-safe feed is loaded.'], ['source-gated', 'Source-gated', 'Waiting for a verified source, field, period, unit and reuse rights.'], ['roadmap', 'Roadmap', 'Planned dashboard area, not yet populated.']];
 function StatusLegendAtGlance() {
@@ -1485,7 +1485,7 @@ function App() {
     }
   }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", {
     className: "mono"
-  }, "metadata pending"))), React.createElement(DataCoverage, {
+  }, "Review date unavailable"))), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement(OperationalSummary30s, {

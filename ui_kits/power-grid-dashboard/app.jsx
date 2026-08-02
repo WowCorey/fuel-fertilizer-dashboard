@@ -123,7 +123,7 @@ function PowerAuditSummary() {
             <h3>{card.title}</h3>
             <p>{card.copy}</p>
             <a href={card.href}>Jump to evidence</a>
-            <span className="audit-stamp">Last reviewed: metadata pending</span>
+            <span className="audit-stamp">Review date unavailable</span>
           </article>
         ))}
       </div>
@@ -298,7 +298,7 @@ function App() {
             <span>Independent public-source prototype. No reliability claim is invented from partial grid data.</span>
             <div style={{ height: 12 }}/>
             <strong>Last reviewed</strong>
-            <span>metadata pending</span>
+            <span>Review date unavailable</span>
           </aside>
         </section>
 

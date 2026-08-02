@@ -274,7 +274,7 @@ function ProcurementAuditSummary() {
             <h3>{card.title}</h3>
             <p>{card.copy}</p>
             <a href={card.href}>Jump to evidence</a>
-            <span className="audit-stamp">Last reviewed: metadata pending</span>
+            <span className="audit-stamp">Review date unavailable</span>
           </article>
         ))}
       </div>
@@ -532,7 +532,7 @@ function App() {
             <span>{latestDataPoint || 'No source-backed procurement data point loaded'}</span>
             <div style={{ height: 12 }}/>
             <strong>Last reviewed</strong>
-            <span>metadata pending</span>
+            <span>Review date unavailable</span>
             <div style={{ height: 12 }}/>
             <strong>Boundary</strong>
             <span>Independent public-source prototype. No project, contract, capability or classified inference is invented.</span>

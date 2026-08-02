@@ -1371,7 +1371,7 @@ function LastReviewed({
 }) {
   return React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: ", value || 'metadata pending');
+  }, "Last reviewed: ", value || 'Review date unavailable');
 }
 function App() {
   const [refreshStatus, setRefreshStatus] = React.useState(null);
@@ -1681,7 +1681,7 @@ function App() {
     key: row.area
   }, React.createElement("td", null, row.area), React.createElement("td", null, React.createElement(StatusBadge, {
     status: row.status
-  })), React.createElement("td", null, row.gap), React.createElement("td", null, row.holder), React.createElement("td", null, row.why), React.createElement("td", null, row.action), React.createElement("td", null, row.page), React.createElement("td", null, row.last_reviewed || 'metadata pending'))))))), React.createElement("section", {
+  })), React.createElement("td", null, row.gap), React.createElement("td", null, row.holder), React.createElement("td", null, row.why), React.createElement("td", null, row.action), React.createElement("td", null, row.page), React.createElement("td", null, row.last_reviewed || 'Review date unavailable'))))))), React.createElement("section", {
     className: "section",
     "aria-labelledby": "roadmap-h"
   }, React.createElement("div", {

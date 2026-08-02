@@ -1072,7 +1072,7 @@ function EmploymentAuditSummary() {
     href: card.href
   }, "Jump to evidence"), React.createElement("span", {
     className: "audit-stamp"
-  }, "Last reviewed: metadata pending")))));
+  }, "Review date unavailable")))));
 }
 function EmploymentEvidenceBoundary() {
   return React.createElement("section", {
@@ -1197,7 +1197,7 @@ function App() {
     style: {
       height: 12
     }
-  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "metadata pending"))), React.createElement(EmploymentStatusLegend, null), React.createElement(EmploymentAuditSummary, null), React.createElement(EmploymentEvidenceBoundary, null), React.createElement(EmploymentRelatedSurfaces, null), React.createElement(DataCoverage, {
+  }), React.createElement("strong", null, "Last reviewed"), React.createElement("span", null, "Review date unavailable"))), React.createElement(EmploymentStatusLegend, null), React.createElement(EmploymentAuditSummary, null), React.createElement(EmploymentEvidenceBoundary, null), React.createElement(EmploymentRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {

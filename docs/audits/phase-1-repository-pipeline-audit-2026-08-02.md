@@ -18,7 +18,7 @@ The weak layer is now the human-reviewed and source-governance layer:
 - 20 of those warnings are manual public-source envelopes;
 - central fuel-security snapshot fields and their derived product-day cards are stale for their declared weekly cadence;
 - the broad source-link diagnostic reports 73 errors, although many are anti-bot responses or publisher timeouts rather than proof that the underlying dataset is dead;
-- public pages still contain `metadata pending` review stamps;
+- public pages still contain placeholder review stamps with no defensible date;
 - the existing Trust Status pull request is based on May data and has diverged from current `main`;
 - several canonical URLs, internal documentation URLs and one blank source URL require repair;
 - the frontend remains dependent on externally hosted React development bundles.
@@ -279,9 +279,9 @@ The envelope is transparent, but the series name can still be read as broader Au
 
 ---
 
-### P1-02 — `metadata pending` is embedded in public pages and tests
+### P1-02 — placeholder review metadata is embedded in public pages and tests
 
-`Last reviewed: metadata pending` appears across many source dashboard files, including fuel security, fuel strategy, Queensland fuel sovereignty, food/farms/water, AU economics, manufacturing, infrastructure, power, strategic resources, defence, resource value and the Missing Data Scoreboard.
+An unresolved last-reviewed placeholder appears across many source dashboard files, including fuel security, fuel strategy, Queensland fuel sovereignty, food/farms/water, AU economics, manufacturing, infrastructure, power, strategic resources, defence, resource value and the Missing Data Scoreboard.
 
 The smoke tests explicitly assert that placeholder text exists. That means the test suite currently protects unfinished metadata as expected behaviour.
 
@@ -432,7 +432,7 @@ Each issue should end Phase 2 in one of four states:
 | R-03 | Stale trust implementation | P0 | PR #108 based on May branch and diverged | Supersede with Trust Status v2 |
 | R-04 | Manual/public-source layer broadly overdue | P0 | 20 manual warnings | Source-by-source refresh matrix |
 | R-05 | NSW missing from multi-state retail average | P1 | Secret absent; latest envelope contains QLD and WA only | Configure secret or relabel coverage |
-| R-06 | Review metadata placeholders public and test-protected | P1 | `metadata pending` across source pages and smoke tests | Generate real review metadata |
+| R-06 | Review metadata placeholders public and test-protected | P1 | unresolved review labels across source pages and smoke tests | Generate real review metadata |
 | R-07 | External React CDN is a runtime dependency | P1 | All React dashboards load unpkg development bundles | Vendor/bundle production dependencies |
 | R-08 | Refresh success does not expose diagnostic degradation | P1 | Link-health errors are non-blocking and not public | Multi-signal trust/status surface |
 | R-09 | Refresh SHA points to pre-refresh commit | P1 | Marker written before git commit | Store input and published SHAs separately |
