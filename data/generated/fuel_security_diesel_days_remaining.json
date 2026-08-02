@@ -4,7 +4,7 @@
   "source_name": "Fuel security - diesel days remaining",
   "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "days",
-  "retrieved_at": "2026-08-02T12:34:00+00:00",
+  "retrieved_at": "2026-08-02T16:35:08+00:00",
   "last_data_point": "2026-07-28",
   "values": [
     {
@@ -12,11 +12,11 @@
       "v": 39.0
     }
   ],
-  "notes": "Derived by selecting diesel_days from pmc_mso_days_cover. This is a product-specific reshaping of the official Fuel Plan/DCCEEW public table, not an independent estimate.",
+  "notes": "Derived by selecting diesel_days from pmc_mso_days_cover. This is a product-specific reshaping of the PM&C/DCCEEW public table, not an independent estimate.",
   "status": "ok",
   "manual_entry": false,
-  "source_rights": "PM&C/Fuel Plan copyright and disclaimer; upstream source rights remain with stated publishers",
-  "citation": "Derived from Australian Government Fuel Plan, Fuel statistics; DCCEEW MSO days-of-coverage table.",
+  "source_rights": "PM&C copyright and disclaimer; upstream source rights remain with stated publishers",
+  "citation": "Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.",
   "extra": {
     "schema": "fuel_security_product_metric.v1",
     "fields": {

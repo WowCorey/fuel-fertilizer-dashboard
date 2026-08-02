@@ -4,15 +4,15 @@
   "source_name": "Retail pump price - ULP 91 multi-state average",
   "source_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
   "unit": "cents per litre",
-  "retrieved_at": "2026-07-26T17:38:34+00:00",
-  "last_data_point": "2026-07-27",
+  "retrieved_at": "2026-08-02T16:34:52+00:00",
+  "last_data_point": "2026-08-03",
   "values": [
     {
-      "t": "2026-07-27",
-      "v": 175.3
+      "t": "2026-08-03",
+      "v": 178.7
     }
   ],
-  "notes": "Multi-state ULP 91 average weighted by station count. QLD: 1559 stations, avg 163.1 c/L, source date 2026-06-30; WA: 937 stations, avg 195.7 c/L, source date 2026-07-27. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
+  "notes": "Multi-state ULP 91 average weighted by station count. QLD: 1559 stations, avg 163.1 c/L, source date 2026-06-30; WA: 936 stations, avg 204.7 c/L, source date 2026-08-03. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
   "status": "ok",
   "manual_entry": false,
   "source_rights": "Mixed state government terms; verify each source before reuse",
@@ -32,9 +32,9 @@
         },
         {
           "state": "WA",
-          "average": 195.7,
-          "stations": 937,
-          "date": "2026-07-27",
+          "average": 204.7,
+          "stations": 936,
+          "date": "2026-08-03",
           "detail": "FuelWatch ULP 91 RSS feed"
         }
       ]

@@ -1,0 +1,3585 @@
+{
+  "schema": "fuel_resilience_source_link_health.v2",
+  "generated_at": "2026-08-02T16:40:03+00:00",
+  "advisory": true,
+  "claim_boundary": "A failed automated landing-page request is not, by itself, proof that the underlying dataset is unavailable. Categories distinguish broken links from access blocks and transient failures.",
+  "registered_source_count": 219,
+  "classified_source_count": 219,
+  "checker_failure_count": 0,
+  "classification_complete": true,
+  "summary": {
+    "access_blocked": 24,
+    "canonical_blocked_fetch_healthy": 13,
+    "healthy": 98,
+    "healthy_internal": 52,
+    "healthy_redirect": 5,
+    "transient_error": 27
+  },
+  "repair_required_count": 0,
+  "sources": {
+    "abares_agricultural_commodities_beef": {
+      "source_id": "abares_agricultural_commodities_beef",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.agriculture.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+      "effective_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "abares_agricultural_commodities_wheat": {
+      "source_id": "abares_agricultural_commodities_wheat",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.agriculture.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+      "effective_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "abares_agricultural_exports": {
+      "source_id": "abares_agricultural_exports",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.agriculture.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture",
+      "effective_canonical_url": "https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "abares_fertiliser_price": {
+      "source_id": "abares_fertiliser_price",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.agriculture.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+      "effective_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abares_fertiliser_stock_cover": {
+      "source_id": "abares_fertiliser_stock_cover",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.agriculture.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+      "effective_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-outlook/data",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "abs_agricultural_exports": {
+      "source_id": "abs_agricultural_exports",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "abs_cpi_inflation": {
+      "source_id": "abs_cpi_inflation",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
+        "final_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_employment_population_ratio": {
+      "source_id": "abs_employment_population_ratio",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "final_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_fertiliser_imports": {
+      "source_id": "abs_fertiliser_imports",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_fertiliser_imports_compound": {
+      "source_id": "abs_fertiliser_imports_compound",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abs_fertiliser_imports_phosphate": {
+      "source_id": "abs_fertiliser_imports_phosphate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abs_fertiliser_imports_potash": {
+      "source_id": "abs_fertiliser_imports_potash",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abs_fertiliser_imports_urea": {
+      "source_id": "abs_fertiliser_imports_urea",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abs_fertiliser_source_concentration": {
+      "source_id": "abs_fertiliser_source_concentration",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_food_beverage_employment": {
+      "source_id": "abs_food_beverage_employment",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+        "final_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_food_imports": {
+      "source_id": "abs_food_imports",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "abs_gdp_real_growth": {
+      "source_id": "abs_gdp_real_growth",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+        "final_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_hours_worked": {
+      "source_id": "abs_hours_worked",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "final_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abs_job_vacancies": {
+      "source_id": "abs_job_vacancies",
+      "category": "healthy_redirect",
+      "canonical_check": {
+        "category": "healthy_redirect",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/job-vacancies-australia",
+        "final_url": "https://www.abs.gov.au/statistics/labour/jobs/job-vacancies-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/job-vacancies-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/job-vacancies-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_manufactured_exports_total": {
+      "source_id": "abs_manufactured_exports_total",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_manufacturing_capex": {
+      "source_id": "abs_manufacturing_capex",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
+        "final_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/business-indicators/private-new-capital-expenditure-and-expected-expenditure-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_manufacturing_employment": {
+      "source_id": "abs_manufacturing_employment",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+        "final_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_manufacturing_gdp_share": {
+      "source_id": "abs_manufacturing_gdp_share",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+        "final_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/national-accounts/australian-national-accounts-national-income-expenditure-and-product",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abs_manufacturing_output_index": {
+      "source_id": "abs_manufacturing_output_index",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia",
+        "final_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_participation_rate": {
+      "source_id": "abs_participation_rate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "final_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_petroleum_imports": {
+      "source_id": "abs_petroleum_imports",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_petroleum_imports_yoy": {
+      "source_id": "abs_petroleum_imports_yoy",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "final_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
+      "override_applied": false,
+      "fetch_mode": "derived"
+    },
+    "abs_population_growth_rate": {
+      "source_id": "abs_population_growth_rate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+        "final_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_population_quarterly": {
+      "source_id": "abs_population_quarterly",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+        "final_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_residential_dwelling_stock": {
+      "source_id": "abs_residential_dwelling_stock",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/total-value-dwellings",
+        "final_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/total-value-dwellings",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/total-value-dwellings",
+      "override_applied": true,
+      "fetch_mode": "programmatic",
+      "governance": {
+        "reason": "ABS moved Total Value of Dwellings from the former finance path to price indexes and inflation.",
+        "legacy_urls": [
+          "https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "abs_underemployment_rate": {
+      "source_id": "abs_underemployment_rate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "final_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "abs_unemployment_rate": {
+      "source_id": "abs_unemployment_rate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "final_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "abs_wage_price_index": {
+      "source_id": "abs_wage_price_index",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia",
+        "final_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia",
+      "effective_canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "accc_nbn_broadband_speeds": {
+      "source_id": "accc_nbn_broadband_speeds",
+      "category": "healthy_redirect",
+      "canonical_check": {
+        "category": "healthy_redirect",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report",
+        "final_url": "https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/final-performance-report",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report",
+      "effective_canonical_url": "https://www.accc.gov.au/by-industry/telecommunications-and-internet/telecommunications-monitoring/measuring-broadband-australia-program/latest-performance-report",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "accc_petrol_breakdown_series": {
+      "source_id": "accc_petrol_breakdown_series",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former petroleum-monitoring collection path returns 404.",
+        "legacy_urls": [
+          "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "accc_petrol_excise_component": {
+      "source_id": "accc_petrol_excise_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former petroleum-monitoring collection path returns 404.",
+        "legacy_urls": [
+          "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "accc_petrol_gird_component": {
+      "source_id": "accc_petrol_gird_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "accc_petrol_gst_component": {
+      "source_id": "accc_petrol_gst_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former petroleum-monitoring collection path returns 404.",
+        "legacy_urls": [
+          "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "accc_petrol_mogas95_component": {
+      "source_id": "accc_petrol_mogas95_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "accc_petrol_other_costs_margins_component": {
+      "source_id": "accc_petrol_other_costs_margins_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "accc_petrol_retail_margin_component": {
+      "source_id": "accc_petrol_retail_margin_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former petroleum-monitoring collection path returns 404.",
+        "legacy_urls": [
+          "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "accc_petrol_tax_component": {
+      "source_id": "accc_petrol_tax_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports/quarterly-report-on-the-australian-petroleum-market-december-quarter-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "accc_petrol_wholesale_component": {
+      "source_id": "accc_petrol_wholesale_component",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former petroleum-monitoring collection path returns 404.",
+        "legacy_urls": [
+          "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "accc_petroleum_monitoring": {
+      "source_id": "accc_petroleum_monitoring",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former petroleum-monitoring collection path returns 404; ACCC now publishes the series under Australian petroleum industry quarterly reports.",
+        "legacy_urls": [
+          "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "aemo_2024_isp_summary": {
+      "source_id": "aemo_2024_isp_summary",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp",
+        "final_url": "https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp",
+      "effective_canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/integrated-system-plan-isp/2024-integrated-system-plan-isp",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "aemo_coal_retirement_timeline": {
+      "source_id": "aemo_coal_retirement_timeline",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+        "final_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+      "effective_canonical_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "aemo_generation_information_register": {
+      "source_id": "aemo_generation_information_register",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+        "final_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+      "effective_canonical_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/nem-forecasting-and-planning/forecasting-and-planning-data/generation-information",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "aemo_nem_average_wholesale_price": {
+      "source_id": "aemo_nem_average_wholesale_price",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+        "final_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+      "effective_canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://aemo.com.au/aemo/data/nem/priceanddemand/",
+        "final_url": "https://www.aemo.com.au/aemo/data/nem/priceanddemand/",
+        "http_status": 403
+      }
+    },
+    "aemo_nem_fuel_mix": {
+      "source_id": "aemo_nem_fuel_mix",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+        "final_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+      "effective_canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "aemo_nem_total_demand": {
+      "source_id": "aemo_nem_total_demand",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+        "final_url": "https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+      "effective_canonical_url": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://aemo.com.au/aemo/data/nem/priceanddemand/",
+        "final_url": "https://www.aemo.com.au/aemo/data/nem/priceanddemand/",
+        "http_status": 403
+      }
+    },
+    "aemo_wem_summary": {
+      "source_id": "aemo_wem_summary",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+        "final_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+      "effective_canonical_url": "https://www.aemo.com.au/energy-systems/major-publications/quarterly-energy-dynamics-qed",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "ai_rollout_timeline_context": {
+      "source_id": "ai_rollout_timeline_context",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/employment-automation-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "Project methodology page governing chronology-only AI rollout context.",
+        "legacy_urls": [],
+        "supporting_urls": []
+      }
+    },
+    "aip_retail": {
+      "source_id": "aip_retail",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.aip.com.au/pricing",
+        "final_url": "https://www.aip.com.au/pricing",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.aip.com.au/pricing",
+      "effective_canonical_url": "https://www.aip.com.au/pricing",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "aip_tgp": {
+      "source_id": "aip_tgp",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.aip.com.au/pricing",
+        "final_url": "https://www.aip.com.au/pricing",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.aip.com.au/pricing",
+      "effective_canonical_url": "https://www.aip.com.au/pricing",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "aofm_gov_gross_debt": {
+      "source_id": "aofm_gov_gross_debt",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.aofm.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.aofm.gov.au/data-hub",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.aofm.gov.au/data-hub",
+      "effective_canonical_url": "https://www.aofm.gov.au/data-hub",
+      "override_applied": false,
+      "fetch_mode": "manual",
+      "fetch_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.aofm.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.aofm.gov.au/sites/default/files/2025-05-29/stock_ags.csv",
+        "final_url": null,
+        "http_status": null
+      }
+    },
+    "aps_exports_crude_feedstocks": {
+      "source_id": "aps_exports_crude_feedstocks",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_imports_diesel": {
+      "source_id": "aps_imports_diesel",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_imports_petrol": {
+      "source_id": "aps_imports_petrol",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_monthly": {
+      "source_id": "aps_monthly",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_production_diesel": {
+      "source_id": "aps_production_diesel",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_production_fuel_oil": {
+      "source_id": "aps_production_fuel_oil",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_production_jet": {
+      "source_id": "aps_production_jet",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_production_petrol": {
+      "source_id": "aps_production_petrol",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_refinery_utilisation": {
+      "source_id": "aps_refinery_utilisation",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "aps_sales_diesel": {
+      "source_id": "aps_sales_diesel",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_sales_jet": {
+      "source_id": "aps_sales_jet",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_sales_petrol": {
+      "source_id": "aps_sales_petrol",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_stocks_diesel": {
+      "source_id": "aps_stocks_diesel",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "aps_stocks_petrol": {
+      "source_id": "aps_stocks_petrol",
+      "category": "canonical_blocked_fetch_healthy",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "final_url": "https://data.gov.au/data/api/3/action/package_show?id=d889484e-fb65-4190-a2e3-1739517cbf9b",
+        "http_status": 200
+      }
+    },
+    "ato_corporate_tax": {
+      "source_id": "ato_corporate_tax",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/corporate-tax-transparency/report-of-entity-tax-information",
+        "final_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/corporate-tax-transparency/report-of-entity-tax-information",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/",
+      "effective_canonical_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/corporate-tax-transparency/report-of-entity-tax-information",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former ATO research-and-statistics path returns 404; the current ATO page explains the report and links to the official data.gov.au workbook dataset.",
+        "legacy_urls": [
+          "https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/"
+        ],
+        "supporting_urls": [
+          "https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26"
+        ]
+      }
+    },
+    "ato_prrt_details": {
+      "source_id": "ato_prrt_details",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/dataset/corporate-transparency",
+        "final_url": "https://data.gov.au/data/dataset/corporate-transparency",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://data.gov.au/data/dataset/corporate-transparency",
+      "effective_canonical_url": "https://data.gov.au/data/dataset/corporate-transparency",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "au_data_centre_capacity_register": {
+      "source_id": "au_data_centre_capacity_register",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/data-centre-capacity-source-gate.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/data-centre-capacity-source-gate.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/data-centre-capacity-source-gate.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/data-centre-capacity-source-gate.md",
+      "override_applied": true,
+      "fetch_mode": "unavailable",
+      "governance": {
+        "reason": "Project source-gate document records the absence of a canonical public Australian capacity register without substituting vendor estimates.",
+        "legacy_urls": [],
+        "supporting_urls": []
+      }
+    },
+    "aus_retail_fuel_multistate": {
+      "source_id": "aus_retail_fuel_multistate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
+        "final_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
+      "effective_canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "aus_retail_fuel_multistate_diesel": {
+      "source_id": "aus_retail_fuel_multistate_diesel",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today",
+        "final_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today",
+      "effective_canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "aus_retail_fuel_multistate_e10": {
+      "source_id": "aus_retail_fuel_multistate_e10",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 202",
+        "requested_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+        "final_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+        "http_status": 202
+      },
+      "registry_canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+      "effective_canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "aus_retail_fuel_multistate_premium95": {
+      "source_id": "aus_retail_fuel_multistate_premium95",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today",
+        "final_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today",
+      "effective_canonical_url": "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "australia_institute_gas_export_tax_proposal": {
+      "source_id": "australia_institute_gas_export_tax_proposal",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
+        "final_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
+      "effective_canonical_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "australia_institute_gas_giveaway_analysis": {
+      "source_id": "australia_institute_gas_giveaway_analysis",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
+        "final_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
+      "effective_canonical_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "automation_exposure_context": {
+      "source_id": "automation_exposure_context",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/employment-automation-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+      "override_applied": true,
+      "fetch_mode": "unavailable",
+      "governance": {
+        "reason": "Project methodology page explaining why no numeric Australian automation-exposure series is currently loaded.",
+        "legacy_urls": [],
+        "supporting_urls": []
+      }
+    },
+    "bitre_airport_passenger_movements": {
+      "source_id": "bitre_airport_passenger_movements",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.bitre.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.bitre.gov.au/publications/ongoing/airport_traffic_data",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.bitre.gov.au/publications/ongoing/airport_traffic_data",
+      "effective_canonical_url": "https://www.bitre.gov.au/publications/ongoing/airport_traffic_data",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "bitre_freight_volumes": {
+      "source_id": "bitre_freight_volumes",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.bitre.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight",
+      "effective_canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/freight",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "bitre_public_transport_patronage": {
+      "source_id": "bitre_public_transport_patronage",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.bitre.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers",
+      "effective_canonical_url": "https://www.bitre.gov.au/publications/2025/australian-infrastructure-and-transport-statistics-yearbook-2025/passengers",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "bom_rainfall_deficiency": {
+      "source_id": "bom_rainfall_deficiency",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services",
+        "final_url": "https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services",
+      "effective_canonical_url": "https://www.bom.gov.au/resources/learn-and-explore/drought-knowledge-centre/drought-services",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "bom_water_storage": {
+      "source_id": "bom_water_storage",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.bom.gov.au/water/",
+        "final_url": "https://www.bom.gov.au/water/",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.bom.gov.au/water/",
+      "effective_canonical_url": "https://www.bom.gov.au/water/",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "cer_renewable_energy_target_progress": {
+      "source_id": "cer_renewable_energy_target_progress",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://cer.gov.au/document/renewable-energy-target-administrative-report-2024",
+        "final_url": "https://cer.gov.au/document/renewable-energy-target-administrative-report-2024",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://cer.gov.au/document/renewable-energy-target-administrative-report-2024",
+      "effective_canonical_url": "https://cer.gov.au/document/renewable-energy-target-administrative-report-2024",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_ampol": {
+      "source_id": "company_ampol",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf",
+        "final_url": "https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf",
+      "effective_canonical_url": "https://wcsecure.weblink.com.au/pdf/ALD/02916187.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_bp_au": {
+      "source_id": "company_bp_au",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.bp.com/en_au/australia.html",
+        "final_url": "https://www.bp.com/en_au/australia.html",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.bp.com/en_au/australia.html",
+      "effective_canonical_url": "https://www.bp.com/en_au/australia.html",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_chevron_au": {
+      "source_id": "company_chevron_au",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf",
+        "final_url": "https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf",
+      "effective_canonical_url": "https://australia.chevron.com/-/media/australia/publications/documents/tax-transparency-report--year-end-2024.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_exxonmobil_au": {
+      "source_id": "company_exxonmobil_au",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports",
+        "final_url": "https://www.exxonmobil.com.au",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports",
+      "effective_canonical_url": "https://corporate.exxonmobil.com.au/energy-and-innovation/annual-reports",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_santos": {
+      "source_id": "company_santos",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf",
+        "final_url": "https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf",
+      "effective_canonical_url": "https://www.santos.com/wp-content/uploads/2026/02/Appendix-4E-and-2025-Annual-Report.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_shell_au": {
+      "source_id": "company_shell_au",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.shell.com.au/about-us.html",
+        "final_url": "https://www.shell.com.au/about-us.html",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.shell.com.au/about-us.html",
+      "effective_canonical_url": "https://www.shell.com.au/about-us.html",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_viva_energy": {
+      "source_id": "company_viva_energy",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx",
+        "final_url": "https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx",
+      "effective_canonical_url": "https://www.vivaenergy.com.au/ArticleDocuments/1429/Viva%20Energy%202025%20Annual%20Report.pdf.aspx",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "company_woodside": {
+      "source_id": "company_woodside",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
+        "final_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
+      "effective_canonical_url": "https://www.woodside.com/docs/default-source/investor-documents/major-reports-%28static-pdfs%29/2025-annual-report/annual-report-2025.pdf?sfvrsn=a6344a90_4",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "crop_planting_window_pressure": {
+      "source_id": "crop_planting_window_pressure",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "daff_agricultural_trade": {
+      "source_id": "daff_agricultural_trade",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.agriculture.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data",
+      "effective_canonical_url": "https://www.agriculture.gov.au/abares/research-topics/agricultural-commodities/agricultural-commodities-trade-data",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "dcceew_electricity_emissions": {
+      "source_id": "dcceew_electricity_emissions",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.dcceew.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025",
+      "effective_canonical_url": "https://www.dcceew.gov.au/climate-change/publications/national-greenhouse-gas-inventory-quarterly-update-september-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "defence_alliance_frameworks": {
+      "source_id": "defence_alliance_frameworks",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/defence-alliances-source-audit.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "defence_budget_2026_nds": {
+      "source_id": "defence_budget_2026_nds",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.defence.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf",
+      "effective_canonical_url": "https://www.defence.gov.au/sites/default/files/2026-04/2026%20NDS_Budget%20factsheet%20A4_WEB.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "defence_frigate_procurement_status": {
+      "source_id": "defence_frigate_procurement_status",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_japan_warship_procurement_source_gate": {
+      "source_id": "defence_japan_warship_procurement_source_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_naval_logistics_fuel_implication": {
+      "source_id": "defence_naval_logistics_fuel_implication",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_posture_profiles": {
+      "source_id": "defence_posture_profiles",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/defence-alliances-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "defence_procurement_contract_value_gate": {
+      "source_id": "defence_procurement_contract_value_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_procurement_delivery_timeline_gate": {
+      "source_id": "defence_procurement_delivery_timeline_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_procurement_public_boundary_gate": {
+      "source_id": "defence_procurement_public_boundary_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_public_capability_assets": {
+      "source_id": "defence_public_capability_assets",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/defence-alliances-source-audit.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "defence_readiness_gap": {
+      "source_id": "defence_readiness_gap",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/defence-alliances-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_shipbuilding_industry_content_gate": {
+      "source_id": "defence_shipbuilding_industry_content_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_sovereign_industry_context": {
+      "source_id": "defence_sovereign_industry_context",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.defence.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities",
+      "effective_canonical_url": "https://www.defence.gov.au/business-industry/industry-capability-programs/sovereign-defence-industrial-priorities",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "defence_surface_fleet_procurement_pathway": {
+      "source_id": "defence_surface_fleet_procurement_pathway",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "defence_uncrewed_systems": {
+      "source_id": "defence_uncrewed_systems",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/defence-alliances-source-audit.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/defence-alliances-source-audit.md",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "defence_workforce_annual_report_2024_25": {
+      "source_id": "defence_workforce_annual_report_2024_25",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.defence.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf",
+      "effective_canonical_url": "https://www.defence.gov.au/sites/default/files/2025-10/Defence-Annual-Report-2024-25.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "diesel_forward_contract_coverage": {
+      "source_id": "diesel_forward_contract_coverage",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "doe_industry_growth_centres_summary": {
+      "source_id": "doe_industry_growth_centres_summary",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.industry.gov.au/",
+      "effective_canonical_url": "https://www.industry.gov.au/",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "drought_pressure_agriculture_regions": {
+      "source_id": "drought_pressure_agriculture_regions",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "eia_brent": {
+      "source_id": "eia_brent",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.eia.gov/dnav/pet/hist/RBRTEm.htm",
+        "final_url": "https://www.eia.gov/dnav/pet/hist/RBRTEm.htm",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.eia.gov/dnav/pet/hist/RBRTEm.htm",
+      "effective_canonical_url": "https://www.eia.gov/dnav/pet/hist/RBRTEm.htm",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "eia_diesel_retail_us": {
+      "source_id": "eia_diesel_retail_us",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.eia.gov/petroleum/gasdiesel/",
+        "final_url": "https://www.eia.gov/petroleum/gasdiesel/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.eia.gov/petroleum/gasdiesel/",
+      "effective_canonical_url": "https://www.eia.gov/petroleum/gasdiesel/",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "eia_jet_spot_usgc": {
+      "source_id": "eia_jet_spot_usgc",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+        "final_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+      "effective_canonical_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "eia_wti": {
+      "source_id": "eia_wti",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.eia.gov/dnav/pet/hist/RWTCm.htm",
+        "final_url": "https://www.eia.gov/dnav/pet/hist/RWTCm.htm",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.eia.gov/dnav/pet/hist/RWTCm.htm",
+      "effective_canonical_url": "https://www.eia.gov/dnav/pet/hist/RWTCm.htm",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "emergency_reserve_contracts": {
+      "source_id": "emergency_reserve_contracts",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "farm_diesel_risk_source_gate": {
+      "source_id": "farm_diesel_risk_source_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fertiliser_forward_contract_coverage": {
+      "source_id": "fertiliser_forward_contract_coverage",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fertiliser_price_pressure_farm_gate": {
+      "source_id": "fertiliser_price_pressure_farm_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fertiliser_stock_cover_regional": {
+      "source_id": "fertiliser_stock_cover_regional",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "freight_disruption_farm_regions": {
+      "source_id": "freight_disruption_farm_regions",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fuel_forward_contract_coverage": {
+      "source_id": "fuel_forward_contract_coverage",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fuel_security_diesel_days_remaining": {
+      "source_id": "fuel_security_diesel_days_remaining",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "derived",
+      "governance": {
+        "reason": "Derived directly from the current Fuel Plan MSO table.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": [
+          "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+        ]
+      }
+    },
+    "fuel_security_jet_days_remaining": {
+      "source_id": "fuel_security_jet_days_remaining",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "derived",
+      "governance": {
+        "reason": "Derived directly from the current Fuel Plan MSO table.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": [
+          "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+        ]
+      }
+    },
+    "fuel_security_live_station_outage_feed": {
+      "source_id": "fuel_security_live_station_outage_feed",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fuel_security_live_vessel_tracking": {
+      "source_id": "fuel_security_live_vessel_tracking",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fuel_security_payment": {
+      "source_id": "fuel_security_payment",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.dcceew.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment",
+      "effective_canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/fuel-security-services-payment",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "fuel_security_petrol_days_remaining": {
+      "source_id": "fuel_security_petrol_days_remaining",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "derived",
+      "governance": {
+        "reason": "Derived directly from the current Fuel Plan MSO table.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": [
+          "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+        ]
+      }
+    },
+    "fuel_security_status_model": {
+      "source_id": "fuel_security_status_model",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "fuel_security_terminal_capacity": {
+      "source_id": "fuel_security_terminal_capacity",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "iea_90day": {
+      "source_id": "iea_90day",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.iea.org/data-and-statistics/data-tools/oil-stocks-of-iea-countries",
+        "final_url": "https://www.iea.org/data-and-statistics/data-tools/oil-stocks-of-iea-countries",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.iea.org/reports/oil-stockholding",
+      "effective_canonical_url": "https://www.iea.org/data-and-statistics/data-tools/oil-stocks-of-iea-countries",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former IEA oil-stockholding report path returns 404; the current official data tool documents the 90-day obligation and stockholding methodology.",
+        "legacy_urls": [
+          "https://www.iea.org/reports/oil-stockholding"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "infrastructure_australia_priority_list": {
+      "source_id": "infrastructure_australia_priority_list",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.infrastructureaustralia.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list",
+      "effective_canonical_url": "https://www.infrastructureaustralia.gov.au/2026-infrastructure-priority-list",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "jet_forward_contract_coverage": {
+      "source_id": "jet_forward_contract_coverage",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "mdba_water_storage": {
+      "source_id": "mdba_water_storage",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://library.mdba.gov.au/",
+        "final_url": "https://library.mdba.gov.au/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://library.mdba.gov.au/",
+      "effective_canonical_url": "https://library.mdba.gov.au/",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "nhsac_housing_target_progress": {
+      "source_id": "nhsac_housing_target_progress",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026",
+        "final_url": "https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026",
+      "effective_canonical_url": "https://nhsac.gov.au/reports-and-submissions/quarterly-report-march-2026",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "nz_fuel_import_supply_visibility": {
+      "source_id": "nz_fuel_import_supply_visibility",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-supply-disruption-response",
+        "final_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-supply-disruption-response",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-supply-disruption-response",
+      "effective_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-supply-disruption-response",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "nz_fuel_resilience_model_comparison": {
+      "source_id": "nz_fuel_resilience_model_comparison",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+        "final_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+      "effective_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "nz_fuel_security_dashboard_source_gate": {
+      "source_id": "nz_fuel_security_dashboard_source_gate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+        "final_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+      "effective_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "nz_fuel_security_stockholding": {
+      "source_id": "nz_fuel_security_stockholding",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand/minimum-stockholding-obligation",
+        "final_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand/minimum-stockholding-obligation",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand/minimum-stockholding-obligation",
+      "effective_canonical_url": "https://www.mbie.govt.nz/building-and-energy/energy-and-natural-resources/energy-generation-and-markets/liquid-fuel-market/fuel-security-in-new-zealand/minimum-stockholding-obligation",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "offshore_ticket_volumes": {
+      "source_id": "offshore_ticket_volumes",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.dcceew.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks",
+      "effective_canonical_url": "https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "olympics_2032_accommodation_pressure": {
+      "source_id": "olympics_2032_accommodation_pressure",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_emergency_logistics": {
+      "source_id": "olympics_2032_emergency_logistics",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_fuel_logistics": {
+      "source_id": "olympics_2032_fuel_logistics",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_infrastructure_delivery": {
+      "source_id": "olympics_2032_infrastructure_delivery",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_power_reliability": {
+      "source_id": "olympics_2032_power_reliability",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_public_safety_readiness": {
+      "source_id": "olympics_2032_public_safety_readiness",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_supply_chain_readiness": {
+      "source_id": "olympics_2032_supply_chain_readiness",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_tourism_pressure": {
+      "source_id": "olympics_2032_tourism_pressure",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_transport_capacity": {
+      "source_id": "olympics_2032_transport_capacity",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "olympics_2032_venue_readiness": {
+      "source_id": "olympics_2032_venue_readiness",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "petrol_forward_contract_coverage": {
+      "source_id": "petrol_forward_contract_coverage",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "pmc_forward_import_orders": {
+      "source_id": "pmc_forward_import_orders",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The current four-week forward-order statement is published on Fuel Plan.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "pmc_fuel_security_level": {
+      "source_id": "pmc_fuel_security_level",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former PM&C public-fuel-supply path redirects to the Australian Government Fuel Plan fuel-statistics page.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "pmc_mso_days_cover": {
+      "source_id": "pmc_mso_days_cover",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "Fuel Plan is the current operational publication; DCCEEW provides the supporting MSO statistics and compliance boundary.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": [
+          "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+        ]
+      }
+    },
+    "pmc_mso_fuel_reserves": {
+      "source_id": "pmc_mso_fuel_reserves",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "Fuel Plan is the current operational publication; DCCEEW provides the supporting MSO statistics and compliance boundary.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": [
+          "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+        ]
+      }
+    },
+    "pmc_retail_stockouts": {
+      "source_id": "pmc_retail_stockouts",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The current state, territory and national retail stock-out table is published on Fuel Plan.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "pmc_tankers_on_water": {
+      "source_id": "pmc_tankers_on_water",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The current DCCEEW/Kpler aggregate tanker table is published on Fuel Plan.",
+        "legacy_urls": [
+          "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "qld_domestic_fuel_production_pathway": {
+      "source_id": "qld_domestic_fuel_production_pathway",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "final_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "effective_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "qld_drilling_approvals_pathway": {
+      "source_id": "qld_drilling_approvals_pathway",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+        "final_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+      "effective_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "qld_fuel_hub_six_ports_official_list": {
+      "source_id": "qld_fuel_hub_six_ports_official_list",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "final_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "effective_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "qld_fuel_hub_state_owned_land": {
+      "source_id": "qld_fuel_hub_state_owned_land",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "final_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "effective_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "qld_fuel_security_bid_status": {
+      "source_id": "qld_fuel_security_bid_status",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "final_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "effective_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "qld_fuel_security_eoi_portal": {
+      "source_id": "qld_fuel_security_eoi_portal",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "final_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "effective_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "qld_fuel_security_private_proposals": {
+      "source_id": "qld_fuel_security_private_proposals",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "final_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "effective_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/accelerating-fuel-infrastructure-program",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "qld_fuel_security_unavailable_reports": {
+      "source_id": "qld_fuel_security_unavailable_reports",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 202",
+        "requested_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+        "final_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+        "http_status": 202
+      },
+      "registry_canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+      "effective_canonical_url": "https://www.data.qld.gov.au/dataset/fuel-price-reporting-2026",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "qld_refinery_option_status": {
+      "source_id": "qld_refinery_option_status",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "final_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "effective_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "qld_refining_capacity_source_gate": {
+      "source_id": "qld_refining_capacity_source_gate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "final_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "effective_canonical_url": "https://www.thepremier.qld.gov.au/news-and-updates/new-fuel-storage-and-refining-projects-to-help-restore-fuel-security.aspx",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "qld_taroom_trough_source_gate": {
+      "source_id": "qld_taroom_trough_source_gate",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+        "final_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+      "effective_canonical_url": "https://www.coordinatorgeneral.qld.gov.au/work-with-us/project-and-infrastructure-delivery/project-delivery/taroom-trough-development-plan",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "rba_aud_usd": {
+      "source_id": "rba_aud_usd",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.rba.gov.au/statistics/tables/#exchange-rates",
+        "final_url": "https://www.rba.gov.au/statistics/tables/#exchange-rates",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.rba.gov.au/statistics/tables/#exchange-rates",
+      "effective_canonical_url": "https://www.rba.gov.au/statistics/tables/#exchange-rates",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "rba_cash_rate": {
+      "source_id": "rba_cash_rate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.rba.gov.au/statistics/cash-rate/",
+        "final_url": "https://www.rba.gov.au/statistics/cash-rate/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.rba.gov.au/statistics/cash-rate/",
+      "effective_canonical_url": "https://www.rba.gov.au/statistics/cash-rate/",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "rba_cash_rate_latest": {
+      "source_id": "rba_cash_rate_latest",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.rba.gov.au/statistics/cash-rate/",
+        "final_url": "https://www.rba.gov.au/statistics/cash-rate/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.rba.gov.au/statistics/cash-rate/",
+      "effective_canonical_url": "https://www.rba.gov.au/statistics/cash-rate/",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "rba_credit_card_debt_accruing_interest": {
+      "source_id": "rba_credit_card_debt_accruing_interest",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.rba.gov.au/statistics/tables/#credit-cards",
+        "final_url": "https://www.rba.gov.au/statistics/tables/#credit-cards",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.rba.gov.au/statistics/tables/#credit-cards",
+      "effective_canonical_url": "https://www.rba.gov.au/statistics/tables/#credit-cards",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "rba_household_debt_to_income": {
+      "source_id": "rba_household_debt_to_income",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.rba.gov.au/statistics/tables/#household",
+        "final_url": "https://www.rba.gov.au/statistics/tables/#household",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.rba.gov.au/statistics/tables/#household",
+      "effective_canonical_url": "https://www.rba.gov.au/statistics/tables/#household",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "rba_standard_variable_mortgage_rate": {
+      "source_id": "rba_standard_variable_mortgage_rate",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.rba.gov.au/statistics/tables/#interest-rates",
+        "final_url": "https://www.rba.gov.au/statistics/tables/#interest-rates",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.rba.gov.au/statistics/tables/#interest-rates",
+      "effective_canonical_url": "https://www.rba.gov.au/statistics/tables/#interest-rates",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "resource_company_tax_rate": {
+      "source_id": "resource_company_tax_rate",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates",
+        "final_url": "https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates",
+      "effective_canonical_url": "https://www.ato.gov.au/tax-rates-and-codes/company-tax-rates",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_domestic_gas_prices_accc": {
+      "source_id": "resource_domestic_gas_prices_accc",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report",
+        "final_url": "https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report",
+      "effective_canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/gas-inquiry-2017-30-reports/gas-inquiry-march-2026-interim-report",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_gas_origin_aecr": {
+      "source_id": "resource_gas_origin_aecr",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.ga.gov.au/aecr2025/gas",
+        "final_url": "https://www.ga.gov.au/aecr2025/gas",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.ga.gov.au/aecr2025/gas",
+      "effective_canonical_url": "https://www.ga.gov.au/aecr2025/gas",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_lng_export_destinations_req": {
+      "source_id": "resource_lng_export_destinations_req",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "effective_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_lng_export_value_req": {
+      "source_id": "resource_lng_export_value_req",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "effective_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_lng_netback_accc": {
+      "source_id": "resource_lng_netback_accc",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30/lng-netback-price-series",
+        "final_url": "https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30/lng-netback-price-series",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30/lng-netback-price-series",
+      "effective_canonical_url": "https://www.accc.gov.au/inquiries-and-consultations/gas-inquiry-2017-30/lng-netback-price-series",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_norway_petroleum_tax_model": {
+      "source_id": "resource_norway_petroleum_tax_model",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.norskpetroleum.no/en/economy/petroleum-tax/",
+        "final_url": "https://www.norskpetroleum.no/en/economy/petroleum-tax/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.norskpetroleum.no/en/economy/petroleum-tax/",
+      "effective_canonical_url": "https://www.norskpetroleum.no/en/economy/petroleum-tax/",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_norway_state_revenue_model": {
+      "source_id": "resource_norway_state_revenue_model",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+        "final_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+      "effective_canonical_url": "https://www.norskpetroleum.no/en/economy/governments-revenues/",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_oil_export_value_req": {
+      "source_id": "resource_oil_export_value_req",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "effective_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_oil_origin_aecr": {
+      "source_id": "resource_oil_origin_aecr",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.ga.gov.au/aecr2025/oil",
+        "final_url": "https://www.ga.gov.au/aecr2025/oil",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.ga.gov.au/aecr2025/oil",
+      "effective_canonical_url": "https://www.ga.gov.au/aecr2025/oil",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_prrt_policy": {
+      "source_id": "resource_prrt_policy",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://www.ato.gov.au/businesses-and-organisations/gst-excise-and-indirect-taxes/petroleum-resource-rent-tax",
+        "final_url": "https://www.ato.gov.au/businesses-and-organisations/gst-excise-and-indirect-taxes/petroleum-resource-rent-tax",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax",
+      "effective_canonical_url": "https://www.ato.gov.au/businesses-and-organisations/gst-excise-and-indirect-taxes/petroleum-resource-rent-tax",
+      "override_applied": true,
+      "fetch_mode": "manual",
+      "governance": {
+        "reason": "The former ATO corporate-tax-measures path returns 404; the current ATO PRRT topic is published under GST, excise and indirect taxes.",
+        "legacy_urls": [
+          "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax"
+        ],
+        "supporting_urls": []
+      }
+    },
+    "resource_qld_petroleum_royalty_receipts": {
+      "source_id": "resource_qld_petroleum_royalty_receipts",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf",
+        "final_url": "https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf",
+      "effective_canonical_url": "https://budget.qld.gov.au/files/Budget-2025-26-BP2-Revenue.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_resource_rent_tax_receipts_budget": {
+      "source_id": "resource_resource_rent_tax_receipts_budget",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://budget.gov.au/content/bp1/",
+        "final_url": "https://budget.gov.au/content/bp1/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://budget.gov.au/content/bp1/",
+      "effective_canonical_url": "https://budget.gov.au/content/bp1/",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_state_production_aes": {
+      "source_id": "resource_state_production_aes",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.energy.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
+      "effective_canonical_url": "https://www.energy.gov.au/energy-data/australian-energy-statistics",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_value_leakage_model": {
+      "source_id": "resource_value_leakage_model",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://github.com/WowCorey/fuel-fertilizer-dashboard",
+        "final_url": "https://github.com/WowCorey/fuel-fertilizer-dashboard",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://github.com/WowCorey/fuel-fertilizer-dashboard",
+      "effective_canonical_url": "https://github.com/WowCorey/fuel-fertilizer-dashboard",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "resource_wa_petroleum_royalties": {
+      "source_id": "resource_wa_petroleum_royalties",
+      "category": "healthy_redirect",
+      "canonical_check": {
+        "category": "healthy_redirect",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties",
+        "final_url": "https://www.wa.gov.au/government/publications/petroleum-royalties-wa",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties",
+      "effective_canonical_url": "https://www.wa.gov.au/organisation/department-of-energy-mines-industry-regulation-and-safety/petroleum-royalties",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "resource_wa_petroleum_royalty_receipts": {
+      "source_id": "resource_wa_petroleum_royalty_receipts",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
+        "final_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
+      "effective_canonical_url": "https://www.wa.gov.au/system/files/2025-11/ostr-2025-26.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "small_business_confidence_source_gate": {
+      "source_id": "small_business_confidence_source_gate",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "small_business_energy_price_pressure": {
+      "source_id": "small_business_energy_price_pressure",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "small_business_freight_disruption": {
+      "source_id": "small_business_freight_disruption",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "small_business_supply_chain_delay": {
+      "source_id": "small_business_supply_chain_delay",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "small_business_tourism_route_pressure": {
+      "source_id": "small_business_tourism_route_pressure",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/fuel-security-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "state_government_debt_summary": {
+      "source_id": "state_government_debt_summary",
+      "category": "healthy_redirect",
+      "canonical_check": {
+        "category": "healthy_redirect",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.budget.gov.au/",
+        "final_url": "https://budget.gov.au/",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.budget.gov.au/",
+      "effective_canonical_url": "https://www.budget.gov.au/",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "state_nsw_minerals_petroleum_royalty_context": {
+      "source_id": "state_nsw_minerals_petroleum_royalty_context",
+      "category": "healthy_redirect",
+      "canonical_check": {
+        "category": "healthy_redirect",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties",
+        "final_url": "https://www.resources.nsw.gov.au/invest-nsw/royalties",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties",
+      "effective_canonical_url": "https://www.resources.nsw.gov.au/invest-nsw/nsw-mineral-resources/royalties",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "state_nt_mining_petroleum_royalty_context": {
+      "source_id": "state_nt_mining_petroleum_royalty_context",
+      "category": "access_blocked",
+      "canonical_check": {
+        "category": "access_blocked",
+        "detail": "HTTP 403",
+        "requested_url": "https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf",
+        "final_url": "https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf",
+        "http_status": 403
+      },
+      "registry_canonical_url": "https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf",
+      "effective_canonical_url": "https://budget.nt.gov.au/_resources/documents/2025/papers/2025-26-bp2-book.pdf",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "state_oil_gas_major_projects_remp": {
+      "source_id": "state_oil_gas_major_projects_remp",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024",
+      "effective_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-major-projects-2024",
+      "override_applied": false,
+      "fetch_mode": "programmatic",
+      "fetch_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/sites/default/files/2024-12/resources-and-energy-major-projects-2024-data.xlsx",
+        "final_url": null,
+        "http_status": null
+      }
+    },
+    "state_operating_refinery_counts": {
+      "source_id": "state_operating_refinery_counts",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='minister.dcceew.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty",
+      "effective_canonical_url": "https://minister.dcceew.gov.au/bowen/media-releases/securing-australias-fuel-sovereignty",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "state_petroleum_ledger_source_gates": {
+      "source_id": "state_petroleum_ledger_source_gates",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/petroleum-ledger-source-gates.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/petroleum-ledger-source-gates.md",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "state_petroleum_nopta_counts": {
+      "source_id": "state_petroleum_nopta_counts",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+        "final_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+      "effective_canonical_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "state_petroleum_production_licence_map": {
+      "source_id": "state_petroleum_production_licence_map",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+        "final_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+      "effective_canonical_url": "https://www.nopta.gov.au/maps-and-public-data/spatial-data.html",
+      "override_applied": false,
+      "fetch_mode": "programmatic"
+    },
+    "state_resource_contribution_profiles": {
+      "source_id": "state_resource_contribution_profiles",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/state-contribution-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/state-contribution-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "strategic_resources_aimr_2025": {
+      "source_id": "strategic_resources_aimr_2025",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables",
+        "final_url": "https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables",
+      "effective_canonical_url": "https://www.ga.gov.au/scientific-topics/minerals/aimr/preliminary-tables",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "strategic_resources_critical_minerals_context": {
+      "source_id": "strategic_resources_critical_minerals_context",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list",
+      "effective_canonical_url": "https://www.industry.gov.au/publications/australias-critical-minerals-list-and-strategic-materials-list",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "strategic_resources_operating_mines_2024": {
+      "source_id": "strategic_resources_operating_mines_2024",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer",
+        "final_url": "https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer",
+      "effective_canonical_url": "https://data.gov.au/data/dataset/australian-operating-mines-map-2024-digital-atlas-of-australia-hosted-feature-layer",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "strategic_resources_profiles": {
+      "source_id": "strategic_resources_profiles",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/strategic-resources-methodology.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-methodology.md",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "strategic_resources_req_dec2025": {
+      "source_id": "strategic_resources_req_dec2025",
+      "category": "transient_error",
+      "canonical_check": {
+        "category": "transient_error",
+        "detail": "Timeout: HTTPSConnectionPool(host='www.industry.gov.au', port=443): Read timed out. (read timeout=20.0)",
+        "requested_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+        "final_url": null,
+        "http_status": null
+      },
+      "registry_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "effective_canonical_url": "https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "strategic_resources_sulphur_gap": {
+      "source_id": "strategic_resources_sulphur_gap",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/strategic-resources-source-audit.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/strategic-resources-source-audit.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "tapis_crude": {
+      "source_id": "tapis_crude",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm",
+        "final_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm",
+      "effective_canonical_url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_m.htm",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    },
+    "wa_fuel_security_stockouts": {
+      "source_id": "wa_fuel_security_stockouts",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://fuelplan.gov.au/fuel-statistics",
+        "final_url": "https://fuelplan.gov.au/fuel-statistics",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "effective_canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "wa_fuel_security_weekly_update": {
+      "source_id": "wa_fuel_security_weekly_update",
+      "category": "healthy",
+      "canonical_check": {
+        "category": "healthy",
+        "detail": "HTTP 200",
+        "requested_url": "https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update",
+        "final_url": "https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update",
+        "http_status": 200
+      },
+      "registry_canonical_url": "https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update",
+      "effective_canonical_url": "https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update",
+      "override_applied": false,
+      "fetch_mode": "manual"
+    },
+    "water_allocation_food_regions": {
+      "source_id": "water_allocation_food_regions",
+      "category": "healthy_internal",
+      "canonical_check": {
+        "category": "healthy_internal",
+        "detail": "local file exists: docs/remaining-data-gaps.md",
+        "requested_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "final_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+        "http_status": null
+      },
+      "registry_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "effective_canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/remaining-data-gaps.md",
+      "override_applied": false,
+      "fetch_mode": "unavailable"
+    }
+  }
+}
