@@ -2,7 +2,7 @@
   "series_id": "pmc_retail_stockouts",
   "source_id": "pmc_retail_stockouts",
   "source_name": "PM&C public fuel supply - retail stock-outs",
-  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "sites",
   "retrieved_at": "2026-08-02T12:34:00Z",
   "last_data_point": "2026-07-31",
@@ -59,5 +59,13 @@
       "australia_diesel_change_7d": 1,
       "sites_covered_australia": 8118
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+    "reviewed_at": "2026-08-02",
+    "reason": "The current state, territory and national retail stock-out table is published on Fuel Plan.",
+    "legacy_urls": [
+      "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+    ]
   }
 }

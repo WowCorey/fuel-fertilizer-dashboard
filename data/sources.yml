@@ -1089,17 +1089,32 @@ sources:
     used_by: [national_status, fuel_security, brisbane_2032]
 
   - id: wa_fuel_security_stockouts
-    human_name: WA Government weekly fuel update - statewide stockouts
-    publisher: Government of Western Australia
-    url: https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update
-    canonical_url: https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update
+    human_name: Australian Government Fuel Plan - WA retail diesel stock-outs
+    publisher: Australian Government Fuel Plan, data provided by state and territory governments
+    url: https://fuelplan.gov.au/fuel-statistics
+    canonical_url: https://fuelplan.gov.au/fuel-statistics
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-02
+    rights: PM&C/Fuel Plan copyright and disclaimer; upstream source rights remain with stated publishers
+    rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
+    citation: Australian Government Fuel Plan, Fuel statistics; WA row in the retail stock-outs table provided by state and territory governments.
+    reuse_notes: Hand-key the dated WA petrol and diesel stock-out fields exactly as published in the Fuel Plan table. The display value is the diesel field and must retain its product, site-coverage and date scope. Do not compare it directly with the historical April WA Government all-stockout aggregate or describe it as live station availability.
+    fetch: manual
+    used_by: [fuel_security]
+
+  - id: wa_fuel_security_weekly_update
+    human_name: WA Government weekly fuel update - qualitative situation
+    publisher: Government of Western Australia
+    url: https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update
+    canonical_url: https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update
+    format: MIXED
+    update_cadence: weekly
+    last_verified: 2026-08-02
     rights: Government of Western Australia copyright; WA.gov.au terms of use apply
     rights_url: https://www.wa.gov.au/terms-of-use
-    citation: Government of Western Australia, WA Government Weekly Fuel Update.
-    reuse_notes: Hand-key the statewide stockout count and statewide station denominator from the official weekly update. This is WA-only dated partial coverage; it is not a national live outage feed, station-level availability feed, product-specific split, or terminal-stock measure.
+    citation: Government of Western Australia, Fuel Security - WA Government Weekly Fuel Update.
+    reuse_notes: Preserve the dated WA Government situation wording as qualitative evidence only. The 24 July 2026 update says supplies were stable and statewide stock-outs remained low but publishes no current exact statewide stock-out total; never convert that wording into a number.
     fetch: manual
     used_by: [fuel_security]
 

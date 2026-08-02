@@ -2,7 +2,7 @@
   "series_id": "pmc_fuel_security_level",
   "source_id": "pmc_fuel_security_level",
   "source_name": "PM&C public fuel supply - National Fuel Security Plan level",
-  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "level",
   "retrieved_at": "2026-08-02T12:34:00Z",
   "last_data_point": "2026-08-02",
@@ -26,5 +26,13 @@
       "latest_dated_operational_table_on_page": "2026-07-31",
       "source_page_context": "Official Fuel Plan fuel-statistics page reached through the PM&C public-fuel-supply URL; data compiled by DCCEEW."
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+    "reviewed_at": "2026-08-02",
+    "reason": "The former PM&C public-fuel-supply path redirects to the Australian Government Fuel Plan fuel-statistics page.",
+    "legacy_urls": [
+      "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+    ]
   }
 }

@@ -1,7 +1,7 @@
 {
   "series_id": "wa_fuel_security_stockouts",
   "source_id": "wa_fuel_security_stockouts",
-  "source_name": "WA Government weekly fuel update - statewide stockouts",
+  "source_name": "Australian Government Fuel Plan - WA retail diesel stock-outs",
   "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "sites reporting no diesel",
   "retrieved_at": "2026-08-02T12:34:00Z",
@@ -12,13 +12,13 @@
       "v": 3
     }
   ],
-  "notes": "Metric split: the display value is the quantified WA diesel stock-out count from the Australian Government Fuel Plan table. The WA Government weekly update is retained separately in typed fields as qualitative situation evidence and is not converted into a number.",
+  "notes": "The display value is the dated WA diesel stock-out count from the Australian Government Fuel Plan table. It is product-specific partial coverage, not a statewide all-product outage count or live station feed. The separate wa_fuel_security_weekly_update envelope preserves the WA Government qualitative situation evidence without converting it into a number.",
   "status": "ok",
   "manual_entry": true,
-  "source_rights": "Australian Government and Government of Western Australia copyright and disclaimer terms apply",
-  "citation": "Australian Government Fuel Plan, Fuel statistics, WA row; Government of Western Australia, Fuel Security: WA Government Weekly Fuel Update.",
+  "source_rights": "PM&C/Fuel Plan copyright and disclaimer; upstream source rights remain with stated publishers",
+  "citation": "Australian Government Fuel Plan, Fuel statistics; WA row in the retail stock-outs table provided by state and territory governments.",
   "extra": {
-    "schema": "wa_fuel_security_metric_split.v2",
+    "schema": "wa_fuel_security_stockouts.v2",
     "fields": {
       "jurisdiction": "WA",
       "quantified_stockouts": {
@@ -33,14 +33,7 @@
         "display_field": "diesel_stockout_sites",
         "coverage_class": "dated_state_row_within_national_table"
       },
-      "qualitative_weekly_situation": {
-        "source": "WA Government Weekly Fuel Update",
-        "source_url": "https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update",
-        "as_at": "2026-07-31",
-        "summary": "Fuel supplies are stable for July and August and fuel station stockouts remain low across the State.",
-        "numeric_conversion": "not permitted",
-        "coverage_class": "qualitative_state_situation_update"
-      },
+      "qualitative_source_id": "wa_fuel_security_weekly_update",
       "historical_wa_quantified_snapshot": {
         "as_at": "2026-04-17",
         "stockouts": 10,
@@ -55,16 +48,5 @@
         "all-product outage status"
       ]
     }
-  },
-  "source_url_governance": {
-    "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
-    "reviewed_at": "2026-08-02",
-    "reason": "The numeric WA petrol and diesel stock-out counts now come from the national Fuel Plan table. The WA weekly update remains a separate qualitative situation source and is preserved as supporting evidence.",
-    "legacy_urls": [
-      "https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update"
-    ],
-    "supporting_urls": [
-      "https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update"
-    ]
   }
 }

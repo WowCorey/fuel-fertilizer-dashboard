@@ -266,8 +266,10 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'Supply resilience belongs beside price pressure' })).toBeVisible();
   await expect(page.getByText('Status unavailable').first()).toBeVisible();
   await expect(page.getByText('No public national live station outage feed is loaded.')).toBeVisible();
-  await expect(page.getByText('WA weekly stockouts')).toBeVisible();
-  await expect(page.getByText('WA-only dated public update')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'WA diesel stock-outs' })).toBeVisible();
+  await expect(page.getByText('sites reporting no diesel', { exact: true })).toBeVisible();
+  await expect(page.getByText('not directly comparable with the historical April all-stockout aggregate')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'WA Government weekly fuel update - qualitative situation' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'QLD unavailable fuel reports' }).first()).toBeVisible();
   await expect(page.getByText('Monthly Queensland Open Data rows where Price = 9999')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Inbound fuel evidence board, not a live map' })).toBeVisible();
