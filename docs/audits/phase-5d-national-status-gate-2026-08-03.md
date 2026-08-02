@@ -41,7 +41,8 @@ not become zero in the gate.
 
 ## Current evaluation
 
-- Sources: 219 total — 52 programmatic, 101 manual, 4 derived, 62 unavailable.
+- Sources: 219 total — 52 programmatic, 101 manual, 4 derived, 62 unavailable
+  (28.3% of registered source IDs; unavailable is not zero).
 - Envelope presence: 49 generated-only, 163 manual-only, 7 both, 0 missing.
 - Warnings: 17 total — 13 manual stale, 4 generated stale, 0 rights, 0 source
   name, 0 source URL and 0 other.
@@ -75,6 +76,34 @@ unresolved with `null` values. No arbitrary numeric substitutes were added.
 - required indicator-state drift;
 - missing claim-boundary language; and
 - CI, Pages and refresh workflow integration.
+
+## Exact local validation
+
+- `npm ci` — passed; 56 packages installed, 57 audited.
+- `npm audit` — passed; 0 vulnerabilities.
+- `npm run check:ui` — passed.
+- `npm run test:ui-unit` — 6 passed.
+- `python -m py_compile` over all 13 maintained scripts — passed.
+- `python scripts/build_source_manifest.py --check` — passed.
+- `python scripts/apply_source_url_governance.py --check` — passed.
+- `python scripts/validate_project.py` — passed with 17 warnings (13 manual
+  stale, 4 generated stale, every other warning category zero).
+- `python scripts/build_trust_status.py --check` — passed.
+- `python scripts/validate_trust_status_v2.py` — passed.
+- `python scripts/validate_national_status_gate.py` — passed.
+- `python -m unittest discover -s tests` — 78 passed, including 13 new gate
+  tests.
+- `npx playwright install chromium` — passed.
+- `npm run smoke:ui` — 60 passed, 2 failed. Both failures are inherited from
+  current `main`: the committed marker is finalized/pushed v2, while two smoke
+  assertions still demand legacy-v1 text. The adaptive correction is isolated
+  in draft PR #112; it is not duplicated into this methodology branch.
+- Two consecutive `npm run build:ui` executions produced no content diff from
+  committed UI artifacts.
+
+The browser result means this branch is not green and must not merge. It does
+not invalidate the gate validator, but it remains a repository-level blocker
+until PR #112 is approved, merged and this branch is updated and rerun.
 
 ## Residual blockers
 
