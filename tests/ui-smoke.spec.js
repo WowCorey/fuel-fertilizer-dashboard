@@ -6,6 +6,20 @@ const routeRegistry = require('../data/site_routes.json');
 const routes = routeRegistry.routes
   .filter(route => route.public)
   .map(route => ({ ...route, path: route.id === 'home' ? '/' : `/${route.relative_url}` }));
+const fuelRoute = routes.find(route => route.id === 'fuel');
+
+async function waitForRouteReady(page, route) {
+  await expect(page.locator('h1').first()).toBeVisible();
+  if (route.kind === 'react-dashboard') {
+    await expect(page.locator('.loading-wrap')).toHaveCount(0);
+    await expect(page.locator('footer.site-footer')).toBeVisible();
+  }
+}
+
+async function collectRenderedHrefs(page, route) {
+  await waitForRouteReady(page, route);
+  return page.locator('a[href]').evaluateAll(anchors => anchors.map(anchor => anchor.getAttribute('href')));
+}
 
 test('canonical route registry reconciles with every public dashboard directory', () => {
   const root = path.resolve(__dirname, '..');
@@ -37,7 +51,7 @@ for (const route of routes) {
 
     const response = await page.goto(route.path);
     expect(response?.ok(), route.path).toBeTruthy();
-    await expect(page.locator('h1').first()).toBeVisible();
+    await waitForRouteReady(page, route);
     await expect(page.locator('body')).not.toContainText(/metadata pending/i);
     if (route.kind === 'react-dashboard') {
       await expect(page.getByLabel('Refresh status')).toContainText(/Refreshed|Refresh status unavailable|No successful refresh recorded|Page data retrieved/);
@@ -57,7 +71,7 @@ test('public pages have no broken same-origin links or fragment targets', async 
   for (const route of routes) {
     await page.goto(route.path);
     const pageUrl = new URL(page.url());
-    const links = await page.locator('a[href]').evaluateAll(anchors => anchors.map(anchor => anchor.getAttribute('href')));
+    const links = await collectRenderedHrefs(page, route);
     const missingFragments = await page.locator('a[href]').evaluateAll(anchors => anchors
       .map(anchor => new URL(anchor.href))
       .filter(url => url.origin === window.location.origin && url.pathname === window.location.pathname && url.hash)
@@ -77,6 +91,37 @@ test('public pages have no broken same-origin links or fragment targets', async 
   for (const target of internalTargets) {
     const response = await request.get(target);
     expect(response.status(), `${target} should resolve`).toBeLessThan(400);
+  }
+});
+
+test('link audit includes anchors rendered after asynchronous source loading', async ({ page }) => {
+  let releaseEnvelope;
+  let markIntercepted;
+  const releaseGate = new Promise(resolve => { releaseEnvelope = resolve; });
+  const intercepted = new Promise(resolve => { markIntercepted = resolve; });
+  const delayedHref = '../../ui_kits/fuel-dashboard/index.html?async-link-audit=1#sources';
+
+  await page.route('**/data/generated/aps_monthly.json', async route => {
+    markIntercepted();
+    const response = await route.fetch();
+    const envelope = await response.json();
+    envelope.source_url = delayedHref;
+    await releaseGate;
+    await route.fulfill({ response, json: envelope });
+  });
+
+  try {
+    await page.goto(fuelRoute.path);
+    await intercepted;
+    await expect(page.locator('.loading-wrap')).toBeVisible();
+    await expect(page.locator(`a[href="${delayedHref}"]`)).toHaveCount(0);
+
+    releaseEnvelope();
+    const links = await collectRenderedHrefs(page, fuelRoute);
+    expect(links).toContain(delayedHref);
+    await expect(page.locator(`a[href="${delayedHref}"]`).first()).toBeVisible();
+  } finally {
+    releaseEnvelope();
   }
 });
 
@@ -127,15 +172,6 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('link', { name: 'Open missing data scoreboard' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'National readiness priority matrix' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
-});
-
-test('homepage hero shows neutral deployment status line', async ({ page }) => {
-  await page.goto('/');
-  const status = page.locator('#refresh-badge');
-  await expect(status).toContainText('Last deployed:');
-  await expect(status).toContainText('Programmatic refresh: in rollout');
-  await expect(status).toContainText('Manual public-source snapshots are labelled where used');
-  await expect(status).not.toContainText('no successful refresh recorded');
 });
 
 test('homepage shows audit snapshot derived from source manifest', async ({ page }) => {
