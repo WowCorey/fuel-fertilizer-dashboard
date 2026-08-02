@@ -52,7 +52,7 @@ test('Trust Status labels the committed refresh marker without inventing deploym
     await expect(refresh).toContainText('Published');
     await expect(refresh).toContainText(manifest.latest_refresh.workflow_input_sha);
     await expect(refresh).toContainText(manifest.latest_refresh.output_commit_sha);
-    await expect(page.locator('#refresh-summary')).toContainText('not proof of the latest deployed commit');
+    await expect(refresh).toContainText('not proof of the latest deployed commit');
   } else {
     await expect(refresh).toContainText('Legacy Unverified');
     await expect(refresh).toContainText('Not recorded');
