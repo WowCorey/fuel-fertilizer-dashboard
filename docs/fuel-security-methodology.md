@@ -1,6 +1,6 @@
 # Fuel Security Dashboard Methodology
 
-Last reviewed: 2026-04-23
+Last reviewed: 2026-08-03
 
 This document defines the first public-source fuel-security dashboard surface.
 It is intentionally conservative: values are shown only when they are observed
@@ -50,6 +50,12 @@ Until then, the model fails closed and displays `Status unavailable`.
 The repo now treats a Stable/Tight/Disrupted/Critical model as a gated output,
 not a styling choice. The model must remain unavailable until the dashboard can
 show all required inputs beside the label:
+
+The authoritative readiness decision and machine-enforced blockers are in
+[`national-status-model-readiness-gate.md`](national-status-model-readiness-gate.md)
+and `data/national_status_model_gate.json`. This section is descriptive only.
+It does not approve four-state transition rules, an input set or any numeric
+coverage/freshness threshold.
 
 | Gate | Minimum requirement before launch |
 |---|---|
