@@ -889,7 +889,7 @@ function App() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="roadmap-h">
+        <section id="sources" className="section" aria-labelledby="roadmap-h">
           <div className="section__head">
             <div>
               <span className="eyebrow">Roadmap source gates</span>

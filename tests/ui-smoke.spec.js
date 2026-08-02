@@ -51,6 +51,35 @@ for (const route of routes) {
   });
 }
 
+test('public pages have no broken same-origin links or fragment targets', async ({ page, request }) => {
+  const internalTargets = new Set();
+
+  for (const route of routes) {
+    await page.goto(route.path);
+    const pageUrl = new URL(page.url());
+    const links = await page.locator('a[href]').evaluateAll(anchors => anchors.map(anchor => anchor.getAttribute('href')));
+    const missingFragments = await page.locator('a[href]').evaluateAll(anchors => anchors
+      .map(anchor => new URL(anchor.href))
+      .filter(url => url.origin === window.location.origin && url.pathname === window.location.pathname && url.hash)
+      .map(url => decodeURIComponent(url.hash.slice(1)))
+      .filter(id => !document.getElementById(id)));
+    expect(missingFragments, `${route.path} has missing fragment targets`).toEqual([]);
+
+    for (const href of links) {
+      if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) continue;
+      const target = new URL(href, pageUrl);
+      if (target.origin !== pageUrl.origin) continue;
+      target.hash = '';
+      internalTargets.add(target.href);
+    }
+  }
+
+  for (const target of internalTargets) {
+    const response = await request.get(target);
+    expect(response.status(), `${target} should resolve`).toBeLessThan(400);
+  }
+});
+
 test('homepage presents the national summary and status legend', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /Tracking what Australia.{1,5}s resilience data shows/ })).toBeVisible();
@@ -134,6 +163,41 @@ test('homepage primary nav exposes category groups', async ({ page }) => {
   await nav.getByRole('button', { name: /Fuel & Energy/ }).click();
   await expect(nav.getByRole('menuitem', { name: 'National fuel security' })).toBeVisible();
   await expect(nav.getByRole('menuitem', { name: 'Power grid' })).toBeVisible();
+});
+
+test('mobile navigation is keyboard operable on homepage and React dashboards', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  for (const routePath of ['/', '/ui_kits/fuel-dashboard/index.html']) {
+    await page.goto(routePath);
+    const toggle = page.getByRole('button', { name: 'Open navigation' });
+    await expect(toggle).toBeVisible();
+    await toggle.focus();
+    await page.keyboard.press('Enter');
+
+    const dialog = page.getByRole('dialog', { name: 'Site navigation' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAttribute('aria-modal', 'true');
+    await expect(page.getByRole('button', { name: 'Close navigation' })).toBeFocused();
+    await expect(dialog.getByRole('link', { name: 'Missing Data Scoreboard' })).toBeVisible();
+    await expect(dialog.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(toggle).toBeFocused();
+    const overflow = await page.evaluate(() => {
+      const width = document.documentElement.clientWidth;
+      return Array.from(document.querySelectorAll('body *'))
+        .map(element => ({
+          tag: element.tagName,
+          className: typeof element.className === 'string' ? element.className : '',
+          right: Math.round(element.getBoundingClientRect().right),
+        }))
+        .filter(item => item.right > width + 1)
+        .slice(0, 10);
+    });
+    expect(overflow, `${routePath} has horizontal overflow`).toEqual([]);
+  }
 });
 
 test('canonical registry supplies homepage and shared dashboard links', async ({ page }) => {

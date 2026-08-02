@@ -368,6 +368,8 @@ function Header({
   const [openGroup, setOpenGroup] = React.useState(null);
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const navRef = React.useRef(null);
+  const navToggleRef = React.useRef(null);
+  const navCloseRef = React.useRef(null);
   React.useEffect(() => {
     function onDocClick(ev) {
       if (!navRef.current) return;
@@ -390,8 +392,10 @@ function Header({
     if (sheetOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
+      navCloseRef.current?.focus();
       return () => {
         document.body.style.overflow = prev;
+        navToggleRef.current?.focus();
       };
     }
   }, [sheetOpen]);
@@ -440,6 +444,7 @@ function Header({
       onClick: () => setOpenGroup(null)
     }, it.label))));
   })), React.createElement("button", {
+    ref: navToggleRef,
     type: "button",
     className: "nav-toggle",
     "aria-label": "Open navigation",
@@ -460,12 +465,14 @@ function Header({
   }, React.createElement("div", {
     className: "nav-sheet__panel",
     role: "dialog",
+    "aria-modal": "true",
     "aria-label": "Site navigation"
   }, React.createElement("div", {
     className: "nav-sheet__head"
   }, React.createElement("span", {
     className: "brand__name"
   }, "Fuel Resilience AU"), React.createElement("button", {
+    ref: navCloseRef,
     type: "button",
     className: "nav-sheet__close",
     "aria-label": "Close navigation",
@@ -1689,6 +1696,7 @@ function App() {
   }, React.createElement("td", null, row.area), React.createElement("td", null, React.createElement(StatusBadge, {
     status: row.status
   })), React.createElement("td", null, row.gap), React.createElement("td", null, row.holder), React.createElement("td", null, row.why), React.createElement("td", null, row.action), React.createElement("td", null, row.page), React.createElement("td", null, row.last_reviewed || 'Review date unavailable'))))))), React.createElement("section", {
+    id: "sources",
     className: "section",
     "aria-labelledby": "roadmap-h"
   }, React.createElement("div", {

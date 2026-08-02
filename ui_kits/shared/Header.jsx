@@ -25,6 +25,8 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
   const [openGroup, setOpenGroup] = React.useState(null);
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const navRef = React.useRef(null);
+  const navToggleRef = React.useRef(null);
+  const navCloseRef = React.useRef(null);
 
   React.useEffect(() => {
     function onDocClick(ev) {
@@ -46,7 +48,11 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
     if (sheetOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = prev; };
+      navCloseRef.current?.focus();
+      return () => {
+        document.body.style.overflow = prev;
+        navToggleRef.current?.focus();
+      };
     }
   }, [sheetOpen]);
 
@@ -97,6 +103,7 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
           })}
         </nav>
         <button
+          ref={navToggleRef}
           type="button"
           className="nav-toggle"
           aria-label="Open navigation"
@@ -115,10 +122,10 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
         aria-hidden={sheetOpen ? 'false' : 'true'}
         onClick={(ev) => { if (ev.target === ev.currentTarget) setSheetOpen(false); }}
       >
-        <div className="nav-sheet__panel" role="dialog" aria-label="Site navigation">
+        <div className="nav-sheet__panel" role="dialog" aria-modal="true" aria-label="Site navigation">
           <div className="nav-sheet__head">
             <span className="brand__name">Fuel Resilience AU</span>
-            <button type="button" className="nav-sheet__close" aria-label="Close navigation" onClick={() => setSheetOpen(false)}>{'×'}</button>
+            <button ref={navCloseRef} type="button" className="nav-sheet__close" aria-label="Close navigation" onClick={() => setSheetOpen(false)}>{'×'}</button>
           </div>
           {groups.map(g => (
             <div key={g.id} className="nav-sheet__group">

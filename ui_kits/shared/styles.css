@@ -58,13 +58,15 @@ a.skip-link:focus, a.skip-link:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--s-4);
   margin-bottom: var(--s-6);
+  min-width: 0;
 }
 .source-card {
   background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-2);
   padding: var(--s-5); display: flex; flex-direction: column; gap: var(--s-2);
+  min-width: 0;
 }
 .source-card h4 { font-family: var(--font-serif); font-size: var(--fs-20); font-weight: 500; }
-.source-card a { font-size: var(--fs-13); font-family: var(--font-mono); }
+.source-card a { font-size: var(--fs-13); font-family: var(--font-mono); overflow-wrap: anywhere; }
 .sources-grid--compact { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .quick-link-grid {
   display: grid;

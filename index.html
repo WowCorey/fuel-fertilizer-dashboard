@@ -412,7 +412,7 @@
     </div>
   </header>
   <div id="primary-nav-sheet" class="nav-sheet" data-open="false" aria-hidden="true">
-    <div class="nav-sheet__panel" role="dialog" aria-label="Site navigation">
+    <div class="nav-sheet__panel" role="dialog" aria-modal="true" aria-label="Site navigation">
       <div class="nav-sheet__head">
         <span class="brand__name">Fuel Resilience AU</span>
         <button type="button" class="nav-sheet__close" aria-label="Close navigation">×</button>
@@ -1148,13 +1148,16 @@
         sheet.setAttribute('aria-hidden', 'false');
         toggle.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
+        if (close) close.focus();
       }
       function closeSheet() {
         if (!sheet || !toggle) return;
+        var wasOpen = sheet.getAttribute('data-open') === 'true';
         sheet.setAttribute('data-open', 'false');
         sheet.setAttribute('aria-hidden', 'true');
         toggle.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        if (wasOpen) toggle.focus();
       }
       if (toggle) toggle.addEventListener('click', openSheet);
       if (close) close.addEventListener('click', closeSheet);
