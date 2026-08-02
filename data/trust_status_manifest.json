@@ -1,0 +1,245 @@
+{
+  "schema": "fuel_resilience_trust_status.v2",
+  "generated_at": "2026-08-02T14:20:02+00:00",
+  "status": "operational_with_warnings",
+  "project": {
+    "name": "Fuel Resilience AU",
+    "repository": "WowCorey/fuel-fertilizer-dashboard",
+    "purpose": "Independent public-source Australian resilience data audit.",
+    "official_status": "not_official"
+  },
+  "source_inventory": {
+    "modes": {
+      "programmatic": 52,
+      "manual": 101,
+      "derived": 4,
+      "unavailable": 62,
+      "total": 219
+    },
+    "envelope_presence": {
+      "generated_only": 49,
+      "manual_only": 163,
+      "both": 7,
+      "missing": 0
+    },
+    "envelopes": {
+      "files_total": 226,
+      "generated_files": 56,
+      "manual_files": 170,
+      "unreadable": 0,
+      "status_ok": 139,
+      "status_unavailable": 87,
+      "status_other": 0,
+      "manual_entry_true": 170,
+      "manual_entry_false": 56
+    },
+    "evidence_path": "data/source_manifest.json"
+  },
+  "validation": {
+    "ok": true,
+    "error_count": 0,
+    "warning_count": 18,
+    "warning_categories": {
+      "generated_stale": 5,
+      "manual_stale": 13,
+      "other": 0,
+      "rights_metadata": 0,
+      "source_name_mismatch": 0,
+      "source_url_mismatch": 0
+    },
+    "warning_examples": {
+      "generated_stale": [
+        {
+          "path": "data/generated/abs_food_beverage_employment.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/generated/abs_manufacturing_employment.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/generated/abs_population_growth_rate.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/generated/abs_population_quarterly.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/generated/rba_aud_usd.json",
+          "message": "last_data_point may be stale for daily cadence"
+        }
+      ],
+      "manual_stale": [
+        {
+          "path": "data/manual/accc_nbn_broadband_speeds.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/manual/accc_petrol_gird_component.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/manual/accc_petrol_mogas95_component.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/manual/accc_petrol_other_costs_margins_component.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/manual/accc_petrol_tax_component.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/manual/aemo_coal_retirement_timeline.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/manual/aemo_generation_information_register.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        },
+        {
+          "path": "data/manual/aemo_nem_fuel_mix.json",
+          "message": "last_data_point may be stale for quarterly cadence"
+        }
+      ]
+    },
+    "errors": [],
+    "evidence_path": "scripts/validate_project.py"
+  },
+  "latest_refresh": {
+    "status": "success",
+    "refreshed_at": "2026-07-26T17:42:13+00:00",
+    "workflow": "Weekly data refresh",
+    "run_id": "30211934616",
+    "run_attempt": "1",
+    "reported_git_sha": "4b26665ae87b80d3f68dc5241ae7cffe34761118",
+    "sha_semantics": "Under the current v1 marker, git_sha records the workflow input commit and may not be the later commit that contains the published refresh.",
+    "evidence_path": "data/last_successful_refresh.json"
+  },
+  "link_health": {
+    "status": "not_yet_generated",
+    "generated_at": null,
+    "advisory": true,
+    "repair_required_count": null,
+    "registered_source_count": null,
+    "classified_source_count": null,
+    "checker_failure_count": null,
+    "classification_complete": null,
+    "categories": {},
+    "claim_boundary": "No classified link-health report is committed yet. This does not imply that all source pages are healthy or broken.",
+    "evidence_path": "data/source_link_health.json"
+  },
+  "workflow_configuration": [
+    {
+      "id": "continuous_integration",
+      "label": "Continuous integration",
+      "status": "configured",
+      "evidence_path": ".github/workflows/ci.yml",
+      "meaning": "Pushes and pull requests run source, validation, unit and browser checks. This describes configuration, not the latest run conclusion."
+    },
+    {
+      "id": "weekly_data_refresh",
+      "label": "Weekly data refresh",
+      "status": "configured",
+      "evidence_path": ".github/workflows/refresh-data.yml",
+      "meaning": "The configured scheduled workflow fetches and validates programmatic sources. This is configuration evidence, not the latest run conclusion; manual sources remain human-reviewed."
+    },
+    {
+      "id": "manual_review",
+      "label": "Manual source review",
+      "status": "configured",
+      "evidence_path": ".github/workflows/manual-data-review.yml",
+      "meaning": "The configured advisory workflow reports manual, unavailable and overdue evidence without inventing replacement values. This is not the latest run conclusion."
+    },
+    {
+      "id": "pages_deployment",
+      "label": "GitHub Pages deployment",
+      "status": "configured",
+      "evidence_path": ".github/workflows/pages.yml",
+      "meaning": "The repository contains a Pages deployment workflow. This does not assert the conclusion of the latest deployment run."
+    }
+  ],
+  "unavailable_coverage": {
+    "top_dashboards": [
+      {
+        "dashboard": "fuel_security",
+        "unavailable_sources": 21
+      },
+      {
+        "dashboard": "fertilizer",
+        "unavailable_sources": 18
+      },
+      {
+        "dashboard": "brisbane_2032",
+        "unavailable_sources": 12
+      },
+      {
+        "dashboard": "defence_procurement",
+        "unavailable_sources": 8
+      },
+      {
+        "dashboard": "qld_fuel_sovereignty",
+        "unavailable_sources": 4
+      },
+      {
+        "dashboard": "infrastructure",
+        "unavailable_sources": 1
+      },
+      {
+        "dashboard": "employment_automation",
+        "unavailable_sources": 1
+      },
+      {
+        "dashboard": "defence_posture",
+        "unavailable_sources": 1
+      },
+      {
+        "dashboard": "resource_value",
+        "unavailable_sources": 1
+      },
+      {
+        "dashboard": "strategic_resources",
+        "unavailable_sources": 1
+      },
+      {
+        "dashboard": "oil",
+        "unavailable_sources": 1
+      }
+    ],
+    "meaning": "Counts show how many registry entries marked unavailable are associated with each dashboard. They are visibility gaps, not risk scores or evidence of wrongdoing."
+  },
+  "confidence_bands": [
+    {
+      "id": "programmatic",
+      "label": "Programmatic public feed",
+      "meaning": "Fetched from a named machine-readable endpoint and validated before publication."
+    },
+    {
+      "id": "manual",
+      "label": "Manual public-source snapshot",
+      "meaning": "Hand-entered from a named public page or document and required to retain its date and caveats."
+    },
+    {
+      "id": "derived",
+      "label": "Derived from named envelopes",
+      "meaning": "Calculated or selected from traceable parent evidence; not an independent observed series."
+    },
+    {
+      "id": "unavailable",
+      "label": "Source-gated or unavailable",
+      "meaning": "No verified public field, period, unit and reuse path is loaded; the dashboard must not estimate it."
+    }
+  ],
+  "trust_rules": [
+    "No made-up data or unsupported estimates.",
+    "Manual public-source values remain labelled as manual.",
+    "Derived values retain traceable parent evidence.",
+    "Unavailable rows remain visible as public-data gaps.",
+    "A successful automated refresh does not prove every manual source is current.",
+    "A blocked or timed-out landing page does not, by itself, prove the underlying dataset is unavailable.",
+    "Workflow configuration is not presented as the latest workflow result."
+  ],
+  "claim_boundary": "Trust Status reports repository evidence, validation output, refresh metadata and public-source coverage. It is not a certification, not an official government assessment, not a security audit, not proof that every upstream value is correct, not proof that every source is reachable, and not a risk score."
+}

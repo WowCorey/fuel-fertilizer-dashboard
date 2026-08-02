@@ -46,6 +46,12 @@ jobs:
       - name: Validate source registry, envelopes and URL governance
         run: python scripts/validate_project.py
 
+      - name: Check committed Trust Status v2 manifest
+        run: python scripts/build_trust_status.py --check
+
+      - name: Validate Trust Status v2
+        run: python scripts/validate_trust_status_v2.py
+
       - name: Run tests
         run: python -m unittest discover -s tests
 

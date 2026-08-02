@@ -38,6 +38,12 @@ jobs:
       - name: Validate source registry, envelopes and URL governance
         run: python scripts/validate_project.py
 
+      - name: Build Trust Status v2
+        run: python scripts/build_trust_status.py
+
+      - name: Validate Trust Status v2
+        run: python scripts/validate_trust_status_v2.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v6
         with:

@@ -4,7 +4,7 @@
   "scripts": {
     "build:ui": "node scripts/build_ui.mjs",
     "check:ui": "node scripts/build_ui.mjs --check",
-    "smoke:ui": "playwright test tests/ui-smoke.spec.js --project=chromium"
+    "smoke:ui": "playwright test tests/ui-smoke.spec.js tests/trust-status-smoke.spec.js --project=chromium"
   },
   "devDependencies": {
     "@babel/core": "7.29.0",
