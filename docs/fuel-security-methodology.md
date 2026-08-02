@@ -1,6 +1,6 @@
 # Fuel Security Dashboard Methodology
 
-Last reviewed: 2026-04-23
+Last reviewed: 2026-08-03
 
 This document defines the first public-source fuel-security dashboard surface.
 It is intentionally conservative: values are shown only when they are observed
@@ -10,12 +10,16 @@ envelope.
 The source investigation log for operational gaps lives in
 `docs/fuel-security-source-investigation.md`.
 
+The state/territory access, field, cadence and rights audit lives in
+`docs/state-territory-fuel-coverage-matrix.md`.
+
 ## Source Priority
 
 Priority 1 sources are official Australian public sources already aligned with
 the repository's evidence model:
 
-- PM&C public information on fuel supply, compiled by DCCEEW.
+- Australian Government Fuel Plan statistics, compiled with DCCEEW and
+  state/territory evidence as identified on the source page.
 - DCCEEW Australian Petroleum Statistics.
 - DCCEEW Fuel Security Services Payment and stockholding disclosures.
 - ABS and state public fuel-price feeds already registered in `data/sources.yml`.
@@ -104,13 +108,17 @@ jet-stock envelope is shown on the fuel-security page.
 ## Outage And Disruption Visibility
 
 PM&C publishes state/territory retail stock-out counts as a dated public
-snapshot. The current table does not publish an Australia-wide petrol total.
-That absence must remain visible.
+snapshot. The current Fuel Plan table publishes Australia-wide petrol and
+diesel totals. These are dated snapshot fields, not a live station feed.
 
-The WA Government weekly fuel update also publishes a dated statewide stockout
-count and station denominator. The dashboard stores that as
+The dashboard stores the current product-specific Fuel Plan WA row as
 `wa_fuel_security_stockouts` and labels it `Partial coverage`. It is WA-only,
-manual, and not a live station-level feed.
+manual and not a live station-level feed. Its product and date scope must not be
+compared directly with the historical April WA all-stockout aggregate.
+
+The separate `wa_fuel_security_weekly_update` envelope preserves the WA
+Government's dated qualitative statement that supplies were stable and
+stock-outs remained low. It does not convert that wording into a number.
 
 Queensland Government Open Data publishes monthly Fuel Price Reporting change
 files. The official column explanation says `Price = 9999` denotes fuel stock
@@ -124,6 +132,22 @@ The dashboard displays seven-day changes when PM&C publishes them, but the
 counts remain dated snapshot coverage. WA stockouts also remain a dated
 snapshot. QLD unavailable fuel reports remain monthly change-report coverage.
 None of these sources is a live national station outage feed.
+
+State retail-price interfaces are not automatically outage sources:
+
+- the public NSW/Tasmania Fuel API v2 response exposes current prices but no
+  availability field;
+- the NSW contributor is skipped unless both approved key/secret credentials
+  and the full OAuth/current-price contract succeed;
+- Victoria's 24-hour-delayed API and South Australia's publisher API expose
+  availability but remain approval/credential/terms gated and are not loaded;
+- WA FuelWatch RSS has no documented availability field;
+- ACT and NT expose public interfaces but no documented reusable production
+  API was verified; and
+- a missing product in Tasmania cannot distinguish not sold from out of stock.
+
+The matrix document records these sources as candidates or blockers. It does
+not upgrade them to observed/programmatic evidence.
 
 The dashboard does not currently load:
 

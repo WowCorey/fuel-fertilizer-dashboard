@@ -17,14 +17,14 @@
     "schema": "fuel_security_status_model_gate.v1",
     "fields": {
       "decision": "unavailable",
-      "reviewed_at": "2026-04-23",
+      "reviewed_at": "2026-08-03",
       "reason": "Input coverage is not yet sufficient for a defensible Stable/Tight/Disrupted/Critical dashboard model.",
       "blockers": [
         "No public national live station outage feed is loaded.",
         "No source-safe live vessel or ETA-level shipment feed is loaded.",
         "No terminal-by-terminal public storage capacity or live inventory feed is loaded.",
-        "PM&C/DCCEEW public fuel-supply snapshot remains manual because local pipeline requests return an Incapsula challenge and no stable CSV/JSON/XLSX endpoint is exposed.",
-        "No documented, tested thresholds exist for mapping public snapshot fields into Stable/Tight/Disrupted/Critical labels."
+        "The canonical Fuel Plan snapshot is accessible static HTML but remains manual because no stable CSV/JSON/XLSX/JSON:API or public API endpoint is exposed.",
+        "No single internally consistent, documented and tested set of source-specific freshness, geographic coverage, missing-data and transition rules exists for Stable/Tight/Disrupted/Critical labels."
       ],
       "publishable_now": false,
       "required_inputs": [

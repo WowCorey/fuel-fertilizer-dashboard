@@ -1,6 +1,6 @@
 # Fuel Security Source Investigation
 
-Last reviewed: 2026-04-23
+Last reviewed: 2026-08-03
 
 This note records the source checks behind the fuel-security dashboard. It is
 not a wish list. A source moves into the dashboard only when the exact field,
@@ -8,38 +8,45 @@ date, unit, scope and reuse path are defensible.
 
 ## PM&C / DCCEEW Public Snapshot
 
-Source checked:
-https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
+Sources checked:
+
+- canonical: https://fuelplan.gov.au/fuel-statistics
+- legacy: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
 
 Decision: manual.
 
 Reason:
 
-- The browser-visible PM&C page publishes the current public fuel-supply
-  snapshot: National Fuel Security Plan level, prices, MSO days, MSO reserves,
-  ships on water, forward import orders and retail stock-outs.
-- Local pipeline requests on 2026-04-23 returned a short Incapsula challenge
-  HTML page, not the public table content.
-- The public page does not expose a stable linked CSV, JSON or XLSX data file
-  for these values.
-- Hand-keying the public page remains safer than scraping a protected HTML
-  page that may change shape.
+- The canonical Australian Government Fuel Plan page publishes the current
+  public fuel-supply snapshot: National Fuel Security Plan level, prices, MSO
+  days, MSO reserves, ships on water, forward import orders and retail
+  stock-outs.
+- Direct requests to the canonical page on 2026-08-03 returned the expected
+  static HTML tables. The former PM&C URL can still return a short Incapsula
+  incident page.
+- The canonical page does not expose a stable linked CSV, JSON, XLSX, JSON:API
+  or public API payload for these values.
+- Hand-keying the official table remains safer than treating a mutable HTML
+  layout as a production data contract. Issue #33 expressly excludes brittle
+  HTML scraping.
 
-Pass 1 re-check on 2026-04-23:
+Phase 5C re-check on 2026-08-03:
 
-- Browser and search-index views could see the current PM&C public snapshot.
-- Direct local pipeline requests to the same page, `?_format=json`, JSON:API
-  aliases, and search endpoints still returned the short Incapsula challenge
-  HTML or unrelated HTML rather than a data payload.
-- PM&C sitemap access worked, but it only confirmed page existence; it did not
-  expose the table data.
-- data.gov.au package searches for the public fuel-supply snapshot did not find
-  a matching official dataset.
+- The canonical page returned the expected semantic tables and both Australian
+  petrol and diesel totals.
+- Drupal JSON and JSON:API candidates returned `404` or `406`, and no official
+  static data download was linked.
+- The Fuel Plan sitemap confirms the page and its declared update frequency,
+  but does not expose the table data.
+- A successful HTML fetch does not prove a stable machine-readable contract.
 
 Unlock condition:
 
-- PM&C or DCCEEW publishes a stable machine-readable endpoint or static data
-  file with clear reuse terms for the public fuel-supply snapshot.
+- Fuel Plan, PM&C or DCCEEW publishes a stable machine-readable endpoint or
+  static data file with clear reuse terms for the public fuel-supply snapshot;
+  or issue #33 deliberately approves a strict HTML table contract with exact
+  headings, headers, cardinality, units, dates, challenge-page rejection and
+  fail-closed validation.
 
 ## Station Outage / Stock-Out Coverage
 
@@ -58,7 +65,7 @@ What is covered:
 
 - State and territory petrol and diesel stock-out counts.
 - Seven-day changes.
-- Australia-wide diesel stock-out count.
+- Australia-wide petrol and diesel stock-out counts.
 - WA Government weekly statewide stockout count and station denominator.
 - Queensland monthly Open Data unavailable fuel-type reports where `Price = 9999`.
 
@@ -66,7 +73,6 @@ What is not covered:
 
 - Station-level live dry-site records.
 - Regional outage polygons or alerts.
-- Australia-wide petrol total in the current PM&C table.
 - A reusable public national API for live station availability.
 
 Dashboard rule:
@@ -79,16 +85,19 @@ Dashboard rule:
 
 ### State and territory source hunt
 
+The complete access, field, unit, cadence and rights review is maintained in
+[`docs/state-territory-fuel-coverage-matrix.md`](state-territory-fuel-coverage-matrix.md).
+
 | Jurisdiction | Source checked | Classification | Result |
 |---|---|---|---|
-| ACT | ACT Government fuel supply page and FuelCheck references | no useful source found | Page says ACT supply remains secure and notes occasional product unavailability at stations, but publishes no stock-out count or machine-readable availability feed. |
-| NSW | NSW FuelCheck / OneGov API technical material | key-gated / rights-unclear | Technical material describes fuel-type availability fields and the existing repo already supports NSW FuelCheck for retail prices when `NSW_FUELCHECK_API_KEY` is present. No unauthenticated, rights-reviewed stock-out aggregate feed was verified in this pass. |
-| NT | MyFuel NT retailer material | app-only / unsuitable | Retailer training material shows operators can mark a fuel type out of stock, but no public API or aggregate stock-out table was verified. |
+| ACT | ACT Government FuelCheck and fuel-supply pages | public UI only | The UI displays ACT/NSW prices and historical review material reports greater than 95% voluntary ACT participation. The published API NSW contract does not document ACT access, and no reusable ACT availability feed was verified. |
+| NSW | API NSW Fuel API v2, support material and monthly FuelCheck history | price API key/secret gated; monthly history open | The current price API requires consumer-key/secret OAuth and exposes prices, not availability. Phase 5C corrects the repo client and keeps NSW absent unless both credentials and the full contract succeed. Do not reuse the old retailer write API's `isavailable` field as a public read claim. |
+| NT | MyFuel NT public and retailer material | public UI only / reuse blocked | The mandatory UI removes out-of-stock products, but no documented public API or broad reuse licence was verified. Do not scrape the app or infer an aggregate outage feed. |
 | QLD | Queensland Fuel Price Reporting 2026 Open Data and column explanation | usable public source | Added `qld_fuel_security_unavailable_reports`. The official column explanation says `Price = 9999` denotes fuel stock temporarily unavailable, such as a tank empty and awaiting new stock. The dashboard counts those rows by monthly Open Data resource and labels the result as QLD-only partial coverage, not a live station outage count. |
-| SA | SA fuel security page, SA Premier release, RAA fuel availability terms | useful but manual-only source | SA and RAA publish app/website fuel availability and dated stockout context. No stable public API or redistribution-safe endpoint was verified, so no envelope was added. |
-| TAS | TasALERT and RecFIT fuel-supply updates | useful but manual-only source | Public updates describe fuel supply and link to PDF updates, but no station-level or aggregate stock-out feed suitable for the outage layer was verified. |
-| VIC | vic.gov.au fuel supply page and Service Victoria Servo Saver help | app-only / unsuitable | Victoria says it monitors fuel availability using live Servo Saver data, but no public machine-readable reuse path was verified. |
-| WA | WA Government Weekly Fuel Update | usable manual partial source | Added `wa_fuel_security_stockouts` as WA-only dated partial coverage from the official weekly update. FuelWatch stock-level enhancement is noted by WA, but no public stock-level API was verified. |
+| SA | SA Fuel Pricing Information Scheme publisher API | viable but subscriber/terms gated | The documented publisher API exposes `9999` unavailability with site, product and timestamp fields. Registration, token access and contractual publication conditions must be completed before integration. |
+| TAS | FuelCheck/API NSW v2, LIST and RecFIT weekly updates | price API gated; dated manual availability evidence | API NSW v2 supports Tasmania but exposes no availability field. LIST product presence is not outage status. RecFIT reports can support exact dated manual evidence, subject to explicit date and rights notes. |
+| VIC | Service Victoria Servo Saver public API | viable but approval/key gated | The free, 24-hour-delayed API exposes price and `isAvailable` under CC BY 4.0 plus prescribed attribution. It remains unintegrated until credentials and a production response are verified. |
+| WA | FuelWatch RSS and WA Government Weekly Fuel Update | price RSS plus manual qualitative/quantitative partial evidence | RSS reuse is documented but has no availability field. Preserve the exact Fuel Plan stock-out row separately from the WA Government qualitative update; never turn “stock-outs low” into a number. |
 
 ## Shipping / Import Visibility
 
@@ -162,8 +171,9 @@ Reason:
   enough complete operational coverage to publish its own Stable/Tight/
   Disrupted/Critical model.
 - Missing inputs include a live station outage feed, live vessel/shipment feed,
-  terminal capacity/inventory feed, programmatic PM&C/DCCEEW snapshot access,
-  and documented thresholds for the status bands.
+  terminal capacity/inventory feed, a stable machine-readable national
+  snapshot, and one internally consistent set of source-specific freshness,
+  coverage, missing-data and status-transition rules.
 
 Dashboard rule:
 
