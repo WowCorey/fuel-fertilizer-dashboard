@@ -8,7 +8,7 @@
 
 ## Decision
 
-Phase 4 is deployed, and the first real refresh-marker v2 publication completed successfully. The committed and deployed marker is a truthful `published` marker for an earlier pushed output commit; it does not claim to prove the latest deployed commit.
+Phase 4 is deployed, and the first real refresh-marker v2 publication completed successfully. Its committed and deployed marker is a truthful `published` marker for an earlier pushed output commit; it does not claim to prove the latest deployed commit. A later scheduled refresh also finalised honestly, but independently reproduced the downstream-trigger defect and advanced `main` beyond the deployed Pages commit.
 
 The hostile verification found two material classes of defect:
 
@@ -32,7 +32,7 @@ PR #111 merged at `2026-08-02T16:14:58Z` as commit `2ed8b90b743b877b19ef99135ce1
 - output commit `6ed2b71e7e7c06340fe518f637e392e043520790` (`chore(data): weekly refresh 2026-08-02`); and
 - marker-finalisation commit `163b314dd7e9d0168d6fd07742b0f0472f2de317` (`chore(data): record published refresh 2026-08-02`).
 
-At the end of this audit, `163b314dd7e9d0168d6fd07742b0f0472f2de317` is the verified `origin/main` and deployed Pages commit. New Phase 4.1 work is based on that commit and is not on `main`.
+While this audit was being completed, scheduled refresh run `30758123699` advanced `main` again with output commit `d77a2cb3b95ba7089f0d5378322c20a30eba77a0` and marker-finalisation commit `d4802573d881dbb49b0f4d0d71a5dbb8d18851e7`. At the end of the audit, `d4802573d881dbb49b0f4d0d71a5dbb8d18851e7` is verified `origin/main`, while Pages still deploys `163b314dd7e9d0168d6fd07742b0f0472f2de317`. The Phase 4.1 branch merged the newer `main` without rewriting published review history; its changes remain outside `main`.
 
 ## GitHub Actions and deployment evidence
 
@@ -42,12 +42,13 @@ At the end of this audit, `163b314dd7e9d0168d6fd07742b0f0472f2de317` is the veri
 | Post-merge `Deploy GitHub Pages` | `push` | [30756200012](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/runs/30756200012) / 1 | `2ed8b90b743b877b19ef99135ce1b4187327ce2a` | 2026-08-02 16:15:01 | 2026-08-02 16:15:21 | success | deployed and observed before refresh |
 | Controlled `Weekly data refresh` | `workflow_dispatch` | [30756882879](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/runs/30756882879) / 1 | `2ed8b90b743b877b19ef99135ce1b4187327ce2a` | 2026-08-02 16:33:00 | 2026-08-02 16:40:10 | success | CI-like refresh controls verified; not a substitute for CI |
 | Refreshed `Deploy GitHub Pages` | `workflow_dispatch` | [30757302959](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/runs/30757302959) / 1 | `163b314dd7e9d0168d6fd07742b0f0472f2de317` | 2026-08-02 16:44:23 | 2026-08-02 16:44:46 | success | deployed and observed |
+| Scheduled `Weekly data refresh` | `schedule` | [30758123699](https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/runs/30758123699) / 1 | `163b314dd7e9d0168d6fd07742b0f0472f2de317` | 2026-08-02 17:06:06 | 2026-08-02 17:12:58 | success | refresh controls verified; output not followed by CI or Pages |
 
 The refreshed Pages job is `91521582402`. Deployment `5715665621` entered `success` at `2026-08-02T16:44:46Z`, names `github-pages`, records SHA `163b314dd7e9d0168d6fd07742b0f0472f2de317`, and links the production URL above.
 
 The refreshed Pages artifact is artifact `8836327442`, named `github-pages`, with GitHub-recorded digest `sha256:cc2941cef7186a29709feb4b55d00f99b7aba763e7c3579d1785eed7fb216ffc` and size 948,037 bytes. Its extracted payload has 388 files (421 total file/directory entries). The seven required public files below are byte-for-byte SHA-256 matches between that artifact and the live origin.
 
-No automatic CI or Pages run exists for either refresh-created commit. This is not evidence of a failed check; it is evidence that the check never ran. GitHub intentionally suppresses new workflow runs for most events caused by the repository `GITHUB_TOKEN`, so the existing `push` triggers were insufficient. I manually dispatched Pages only after inspecting the refreshed commits and their completed in-workflow validation. CI had no manual-dispatch trigger at that point.
+The live deployment remains the artifact above, but it is no longer the latest repository state: `main` is two workflow-authored commits ahead. No automatic CI or Pages run exists for any of the four commits created by the two refresh runs. This is not evidence of a failed check; it is evidence that the checks never ran. GitHub intentionally suppresses new workflow runs for most events caused by the repository `GITHUB_TOKEN`, so the existing `push` triggers were insufficient. I manually dispatched Pages after the controlled refresh only, once its commits and in-workflow validation had been inspected. The later scheduled refresh was not manually deployed around the inherited browser-test mismatch now visible on current `main`.
 
 ## Weekly-refresh safety review and operational marker proof
 
@@ -70,7 +71,7 @@ Run `30756882879` completed every fetch, governance, advisory link-health, valid
 - generated-data output commit `6ed2b71e7e7c06340fe518f637e392e043520790`; then
 - published-marker commit `163b314dd7e9d0168d6fd07742b0f0472f2de317`.
 
-The committed and deployed marker records:
+The marker currently deployed by Pages records:
 
 | Field | Deployed value |
 |---|---|
@@ -84,7 +85,9 @@ The committed and deployed marker records:
 | `output_commit_sha` | `6ed2b71e7e7c06340fe518f637e392e043520790` |
 | `output_commit_pushed` | `true` |
 
-The marker's own `sha_semantics` states that the output SHA is the earlier pushed output commit, not the later marker commit and not proof of the latest deployed commit. Trust Status renders that boundary in its SHA evidence row. Dashboard headers and footers render the v2 timestamp only because the marker is finalised, published and pushed. Prepared, incomplete and unknown markers remain fail-closed under the retained unit and browser tests.
+The later committed-but-not-deployed marker has the same safe semantics and records source refresh `2026-08-02T17:12:52+00:00`, workflow input `163b314dd7e9d0168d6fd07742b0f0472f2de317`, run `30758123699` attempt 1, output `d77a2cb3b95ba7089f0d5378322c20a30eba77a0`, `publication_state: published`, and `output_commit_pushed: true`. It is contained in later marker commit `d4802573d881dbb49b0f4d0d71a5dbb8d18851e7`. The mismatch between that committed marker and the older live marker is visible evidence that marker publication and Pages deployment are distinct.
+
+Both markers' `sha_semantics` state that the output SHA is the earlier pushed output commit, not the later marker commit and not proof of the latest deployed commit. Trust Status renders that boundary in its SHA evidence row. Dashboard headers and footers render the deployed v2 timestamp only because the deployed marker is finalised, published and pushed. Prepared, incomplete and unknown markers remain fail-closed under the retained unit and browser tests.
 
 The Pages job regenerated Trust Status at `2026-08-02T16:44:36+00:00`, after marker finalisation, before uploading its artifact.
 
@@ -181,9 +184,11 @@ The complete local branch validation at code commit `3febb7c` was:
 
 The first local browser run reported 61 passes and two failures: the obsolete Trust Status locator corrected in `3febb7c`, and a Windows `net::ERR_NO_BUFFER_SPACE` request failure. The final full rerun passed 63/63 and the socket failure did not recur; both attempts are disclosed rather than discarding the first result.
 
-`npm run build:ui` was run twice over 24 generated artifacts. Both builds produced aggregate SHA-256 `dd081f1ebbd381f92ab5fd8f6b6979c4b996996ae1c8198e3c763db6955671c7`; `git diff --quiet` returned success. The Windows index briefly reported line-ending/stat-only modifications, but Git content diffs were empty and the clean state was restored without changing content.
+After merging current `main` into the branch at `983196e`, the complete local Chromium suite was run again and passed 63/63. This specifically exercised the adaptive committed-marker assertions against the newer published v2 marker in `d480257`; current `main` itself still has the older test assertions, which is why the unmerged Phase 4.1 correction remains necessary.
 
-A final local Pages reproduction from commit `2928564279a280c38954c1d543987e2c5dc12c25` applied governance, passed project and Trust Status validation, then packaged the upload-visible tree with the workflow's dotfile exclusions. The tar contained 390 files and 33 directories (423 entries), all 23 route files, and 8/8 required public manifest, bundle, licence and homepage artifacts. It was 5,249,536 bytes with local SHA-256 `15cc35d7025fe06b777caf139ff007eaa6cb1afb39cf7ce0c85781984aa81229`. Local tar byte identity is not claimed against GitHub's artifact because tar metadata and Pages-generated Trust Status `generated_at` are time-dependent.
+`npm run build:ui` was then run twice over 24 generated artifacts. Both output inventories produced deterministic path-and-file-content aggregate SHA-256 `431b0287d18dc1914ac35db26a47c132aff0c07dc929b4759daa05b766f24d8b`; Git status showed no generated-file diff, only this audit update.
+
+A local Pages reproduction from the merged implementation commit `983196e` applied governance, passed project and Trust Status validation, then packaged the upload-visible tree with the workflow's dotfile exclusions. Each of two independent reproductions contained 390 files and 33 directories (423 entries), all 23 route files, and 8/8 required public manifest, bundle, licence and homepage artifacts. Each tar was 5,250,048 bytes. Their raw local SHA-256 values differed (`8b3a3da73f6fe71413ca741072d92859d9f152126fbb54aee72f06cd5f02e0ea` and `13056190d892ee39bbf65be1c0a1dd547686c3922c6ec57724b9525f08ae5c89`) because the generated Trust Status `generated_at` value differed. File-by-file comparison proved that `data/trust_status_manifest.json` was the only changed payload file and that `generated_at` was its only changed field. After normalising that explicitly time-dependent field, both 390-file content inventories produced SHA-256 `d99795b2927e54d364797ee9c30b7d1a80186c1880c8f5b5dc248a01dd29ddf8`. Raw local tar identity is not claimed against GitHub's artifact because tar metadata and this documented timestamp are time-dependent.
 
 At document creation time:
 
