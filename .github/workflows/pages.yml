@@ -24,8 +24,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
       - name: Apply governed canonical source URLs
         run: python scripts/apply_source_url_governance.py
+
+      - name: Build Trust Status v2
+        run: python scripts/build_trust_status.py
+
+      - name: Validate Trust Status v2
+        run: python scripts/validate_trust_status_v2.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
