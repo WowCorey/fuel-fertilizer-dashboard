@@ -39,7 +39,7 @@
     .evidence-card h3 { font-family: var(--font-serif); font-size: var(--fs-24); font-weight: 500; }
     .evidence-card p { margin-top: var(--s-3); color: var(--ink-2); line-height: 1.5; }
     .evidence-list { list-style: none; margin: var(--s-4) 0 0; padding: 0; }
-    .evidence-list li { display: flex; justify-content: space-between; gap: var(--s-4); padding: 9px 0; border-bottom: 1px dashed var(--rule); }
+    .evidence-list li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-2) var(--s-4); padding: 9px 0; border-bottom: 1px dashed var(--rule); }
     .evidence-list li:last-child { border-bottom: 0; }
     .evidence-list code { color: var(--ink-3); font-size: 11px; overflow-wrap: anywhere; }
     .evidence-list strong { font-variant-numeric: tabular-nums; }
@@ -51,7 +51,6 @@
     .plain-list { margin: var(--s-4) 0 0; padding-left: 1.25rem; color: var(--ink-2); }
     .plain-list li { margin: 8px 0; line-height: 1.5; }
     .claim-boundary { margin-top: var(--s-5); padding: var(--s-5); border-left: 4px solid var(--accent); background: var(--paper-sunk); color: var(--ink-2); line-height: 1.55; }
-    .bootstrap-note { display: none; margin-top: var(--s-4); padding: var(--s-3) var(--s-4); border: 1px solid var(--caution); border-radius: var(--r-1); background: var(--caution-tint); color: var(--ink-2); font-size: var(--fs-13); }
     .load-error { padding: var(--s-5); margin: var(--s-6) 0; border: 1px solid var(--deficit); background: var(--deficit-tint); border-radius: var(--r-2); }
     .trust-footer { padding: var(--s-6) 0; color: var(--ink-3); font-size: var(--fs-13); display: flex; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; }
     @media (max-width: 960px) { .metric-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .trust-hero { grid-template-columns: 1fr; } }
@@ -72,7 +71,7 @@
     </div>
   </header>
 
-  <main id="main" class="trust-shell">
+  <main id="main" class="trust-shell" tabindex="-1">
     <section class="trust-hero" aria-labelledby="trust-title">
       <div>
         <span class="eyebrow">Operational transparency</span>
@@ -81,7 +80,6 @@
           A generated view of what the repository can actually prove about its sources, refreshes,
           validation warnings and known gaps. <strong>Not an official government dashboard.</strong>
         </p>
-        <div id="bootstrap-note" class="bootstrap-note" role="note"></div>
       </div>
       <aside class="status-panel" aria-label="Current repository status">
         <span id="overall-badge" class="trust-badge" data-state="refresh_status_unknown">Loading</span>
@@ -177,7 +175,7 @@
     const MANIFEST_URL = '../../data/trust_status_manifest.json';
 
     function formatNumber(value) {
-      return Number.isFinite(Number(value)) ? Number(value).toLocaleString('en-AU') : 'Unavailable';
+      return typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString('en-AU') : 'Unavailable';
     }
 
     function formatTime(value) {
@@ -231,7 +229,7 @@
       appendMetric(parent, 'Unavailable / source-gated', modes.unavailable, 'No verified source-safe field, period, unit and reuse path is loaded.');
       const envelopes = manifest.source_inventory?.envelopes || {};
       appendMetric(parent, 'Loaded envelope files', envelopes.files_total, 'Generated and manual JSON evidence files currently present.');
-      appendMetric(parent, 'Envelopes marked OK', envelopes.status_ok, 'Schema-valid envelopes that contain observed or typed evidence.');
+      appendMetric(parent, 'Envelopes with status OK', envelopes.status_ok, 'Files whose envelope status field is “ok”; source fetch modes are counted separately.');
       appendMetric(parent, 'Unavailable envelopes', envelopes.status_unavailable, 'Explicit gaps kept visible instead of being estimated.');
     }
 
@@ -270,15 +268,24 @@
     function renderLinks(manifest) {
       const health = manifest.link_health || {};
       document.getElementById('link-summary').textContent = health.status === 'available'
-        ? `Classified link-health report generated ${formatTime(health.generated_at)}. Definite repair categories: ${formatNumber(health.repair_required_count)}.`
+        ? `Classified link-health report generated ${formatTime(health.generated_at)}. Sources in definite URL-repair categories: ${formatNumber(health.repair_required_count)}.`
         : 'No classified link-health report has been generated yet. No assumption is made about source-page health.';
       const list = document.getElementById('link-list');
       clear(list);
       const categories = health.categories || {};
       if (!Object.keys(categories).length) appendEvidence(list, 'Classified categories', 'Not yet generated');
       Object.entries(categories).sort((a, b) => b[1] - a[1]).forEach(([category, count]) => {
-        appendEvidence(list, titleCase(category), formatNumber(count));
+        appendEvidence(list, category, formatNumber(count), true);
       });
+      appendEvidence(list, 'Classification coverage', health.status === 'available'
+        ? `${formatNumber(health.classified_source_count)} / ${formatNumber(health.registered_source_count)}`
+        : 'Not yet generated');
+      appendEvidence(list, 'Classification complete', health.status === 'available'
+        ? (health.classification_complete === true ? 'Yes' : 'No')
+        : 'Not yet generated');
+      appendEvidence(list, 'Checker failures', health.status === 'available'
+        ? formatNumber(health.checker_failure_count)
+        : 'Not yet generated');
       appendEvidence(list, 'Advisory', health.advisory === true ? 'Yes' : 'No');
       appendEvidence(list, 'Evidence', health.evidence_path || 'Unavailable', true);
 
@@ -297,7 +304,7 @@
         card.className = 'workflow-card';
         const badge = document.createElement('span');
         badge.className = 'trust-badge';
-        badge.textContent = workflow.status || 'Unknown';
+        badge.textContent = titleCase(workflow.status);
         const heading = document.createElement('h3');
         heading.textContent = workflow.label || workflow.id;
         const body = document.createElement('p');
@@ -348,11 +355,6 @@
       };
       document.getElementById('overall-value').textContent = labels[manifest.status] || 'Repository status unavailable';
       document.getElementById('generated-time').textContent = `Manifest generated: ${formatTime(manifest.generated_at)}`;
-      if (manifest.bootstrap_notice) {
-        const note = document.getElementById('bootstrap-note');
-        note.textContent = manifest.bootstrap_notice;
-        note.style.display = 'block';
-      }
     }
 
     async function loadTrustStatus() {
