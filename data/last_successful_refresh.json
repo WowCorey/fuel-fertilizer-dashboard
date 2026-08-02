@@ -1,7 +1,7 @@
 {
   "schema": "fuel_resilience_refresh_status.v2",
-  "status": "pending_publication",
-  "publication_state": "prepared",
+  "status": "success",
+  "publication_state": "published",
   "refreshed_at": "2026-08-02T16:40:03+00:00",
   "source_data_refreshed_at": "2026-08-02T16:40:03+00:00",
   "git_sha": "2ed8b90b743b877b19ef99135ce1b4187327ce2a",
@@ -13,7 +13,7 @@
   "workflow_run_attempt": "1",
   "ref": "refs/heads/main",
   "branch": "main",
-  "output_commit_sha": null,
-  "output_commit_pushed": false,
-  "sha_semantics": "workflow_input_sha identifies the workflow input commit. output_commit_sha remains null until the generated refresh output commit has been pushed."
+  "output_commit_sha": "6ed2b71e7e7c06340fe518f637e392e043520790",
+  "output_commit_pushed": true,
+  "sha_semantics": "workflow_input_sha identifies the workflow input commit. output_commit_sha identifies the earlier pushed commit containing the generated refresh output; it is not the later marker commit and is not proof of the latest deployed commit."
 }

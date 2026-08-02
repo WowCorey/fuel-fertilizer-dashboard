@@ -1,7 +1,7 @@
 {
   "schema": "fuel_resilience_trust_status.v2",
-  "generated_at": "2026-08-02T16:40:04+00:00",
-  "status": "refresh_status_unknown",
+  "generated_at": "2026-08-02T16:40:06+00:00",
+  "status": "operational_with_warnings",
   "project": {
     "name": "Fuel Resilience AU",
     "repository": "WowCorey/fuel-fertilizer-dashboard",
@@ -105,9 +105,9 @@
     "evidence_path": "scripts/validate_project.py"
   },
   "latest_refresh": {
-    "status": "pending_publication",
+    "status": "success",
     "marker_schema": "fuel_resilience_refresh_status.v2",
-    "publication_state": "prepared",
+    "publication_state": "published",
     "refreshed_at": "2026-08-02T16:40:03+00:00",
     "source_data_refreshed_at": "2026-08-02T16:40:03+00:00",
     "workflow": "Weekly data refresh",
@@ -117,9 +117,9 @@
     "branch": "main",
     "reported_git_sha": "2ed8b90b743b877b19ef99135ce1b4187327ce2a",
     "workflow_input_sha": "2ed8b90b743b877b19ef99135ce1b4187327ce2a",
-    "output_commit_sha": null,
-    "output_commit_pushed": false,
-    "sha_semantics": "workflow_input_sha identifies the workflow input commit. No pushed output commit has yet been recorded, so the published refresh is not established.",
+    "output_commit_sha": "6ed2b71e7e7c06340fe518f637e392e043520790",
+    "output_commit_pushed": true,
+    "sha_semantics": "workflow_input_sha identifies the workflow input commit. output_commit_sha identifies the earlier pushed commit containing the generated refresh output; it is not the later marker commit and is not proof of the latest deployed commit.",
     "evidence_path": "data/last_successful_refresh.json"
   },
   "link_health": {
