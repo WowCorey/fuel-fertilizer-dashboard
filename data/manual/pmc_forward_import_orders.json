@@ -2,7 +2,7 @@
   "series_id": "pmc_forward_import_orders",
   "source_id": "pmc_forward_import_orders",
   "source_name": "PM&C public fuel supply - four-week import orders",
-  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "billion litres",
   "retrieved_at": "2026-08-02T12:34:00Z",
   "last_data_point": "2026-08-02",
@@ -28,5 +28,13 @@
       "source_date_published": null,
       "source_page_observed_at": "2026-08-02"
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+    "reviewed_at": "2026-08-02",
+    "reason": "The current four-week forward-order statement is published on Fuel Plan.",
+    "legacy_urls": [
+      "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+    ]
   }
 }

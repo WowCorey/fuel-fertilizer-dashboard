@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: "24"
           cache: npm
@@ -27,7 +27,7 @@ jobs:
         run: npm run check:ui
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
 
@@ -35,26 +35,22 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Compile scripts
-        run: |
-          python -m py_compile scripts/fetch_data.py
-          python -m py_compile scripts/enter_manual.py
-          python -m py_compile scripts/init_manual_stubs.py
-          python -m py_compile scripts/build_source_manifest.py
-          python -m py_compile scripts/review_due.py
-          python -m py_compile scripts/write_refresh_status.py
-          python -m py_compile scripts/validate_data.py
-
-      - name: Validate source registry and envelopes
-        run: python scripts/validate_data.py
+        run: python -m py_compile scripts/*.py
 
       - name: Check source manifest
         run: python scripts/build_source_manifest.py --check
+
+      - name: Check governed canonical source URLs
+        run: python scripts/apply_source_url_governance.py --check
+
+      - name: Validate source registry, envelopes and URL governance
+        run: python scripts/validate_project.py
 
       - name: Run tests
         run: python -m unittest discover -s tests
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}

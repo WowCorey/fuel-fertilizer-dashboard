@@ -2,7 +2,7 @@
   "series_id": "resource_prrt_policy",
   "source_id": "resource_prrt_policy",
   "source_name": "ATO Petroleum Resource Rent Tax policy",
-  "source_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax",
+  "source_url": "https://www.ato.gov.au/businesses-and-organisations/gst-excise-and-indirect-taxes/petroleum-resource-rent-tax",
   "unit": "%",
   "retrieved_at": "2026-04-21T18:31:04Z",
   "last_data_point": "2026-04-22",
@@ -24,5 +24,13 @@
       "basis": "taxable profit of a petroleum project",
       "not_captured": "This envelope does not show PRRT receipts, project-level liabilities, carried-forward deductions, uplift rates or company-level tax paid."
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://www.ato.gov.au/businesses-and-organisations/gst-excise-and-indirect-taxes/petroleum-resource-rent-tax",
+    "reviewed_at": "2026-08-02",
+    "reason": "The former ATO corporate-tax-measures path returns 404; the current ATO PRRT topic is published under GST, excise and indirect taxes.",
+    "legacy_urls": [
+      "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax"
+    ]
   }
 }

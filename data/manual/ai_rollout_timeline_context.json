@@ -59,5 +59,10 @@
         }
       ]
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+    "reviewed_at": "2026-08-02",
+    "reason": "Project methodology page governing chronology-only AI rollout context."
   }
 }

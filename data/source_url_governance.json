@@ -1,0 +1,170 @@
+{
+  "schema": "fuel_resilience_source_url_governance.v1",
+  "reviewed_at": "2026-08-02",
+  "purpose": "Narrow canonical-URL migration layer for sources whose official landing page moved, redirected, or is represented by a project source-gate document. This file does not change data values, fetch modes, cadence, rights, or evidence status.",
+  "overrides": {
+    "pmc_fuel_security_level": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "reason": "The former PM&C public-fuel-supply path redirects to the Australian Government Fuel Plan fuel-statistics page."
+    },
+    "pmc_mso_days_cover": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "supporting_urls": [
+        "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+      ],
+      "reason": "Fuel Plan is the current operational publication; DCCEEW provides the supporting MSO statistics and compliance boundary."
+    },
+    "pmc_mso_fuel_reserves": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "supporting_urls": [
+        "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+      ],
+      "reason": "Fuel Plan is the current operational publication; DCCEEW provides the supporting MSO statistics and compliance boundary."
+    },
+    "pmc_forward_import_orders": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "reason": "The current four-week forward-order statement is published on Fuel Plan."
+    },
+    "pmc_tankers_on_water": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "reason": "The current DCCEEW/Kpler aggregate tanker table is published on Fuel Plan."
+    },
+    "pmc_retail_stockouts": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "reason": "The current state, territory and national retail stock-out table is published on Fuel Plan."
+    },
+    "fuel_security_petrol_days_remaining": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "supporting_urls": [
+        "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+      ],
+      "reason": "Derived directly from the current Fuel Plan MSO table."
+    },
+    "fuel_security_diesel_days_remaining": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "supporting_urls": [
+        "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+      ],
+      "reason": "Derived directly from the current Fuel Plan MSO table."
+    },
+    "fuel_security_jet_days_remaining": {
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "legacy_urls": [
+        "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+      ],
+      "supporting_urls": [
+        "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+      ],
+      "reason": "Derived directly from the current Fuel Plan MSO table."
+    },
+    "accc_petroleum_monitoring": {
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "legacy_urls": [
+        "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+      ],
+      "reason": "The former petroleum-monitoring collection path returns 404; ACCC now publishes the series under Australian petroleum industry quarterly reports."
+    },
+    "accc_petrol_wholesale_component": {
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "legacy_urls": [
+        "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+      ],
+      "reason": "The former petroleum-monitoring collection path returns 404."
+    },
+    "accc_petrol_excise_component": {
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "legacy_urls": [
+        "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+      ],
+      "reason": "The former petroleum-monitoring collection path returns 404."
+    },
+    "accc_petrol_gst_component": {
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "legacy_urls": [
+        "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+      ],
+      "reason": "The former petroleum-monitoring collection path returns 404."
+    },
+    "accc_petrol_retail_margin_component": {
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "legacy_urls": [
+        "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+      ],
+      "reason": "The former petroleum-monitoring collection path returns 404."
+    },
+    "accc_petrol_breakdown_series": {
+      "canonical_url": "https://www.accc.gov.au/about-us/publications/serial-publications/australian-petroleum-industry-quarterly-reports",
+      "legacy_urls": [
+        "https://www.accc.gov.au/about-us/publications/serial-publications/petroleum-monitoring-reports"
+      ],
+      "reason": "The former petroleum-monitoring collection path returns 404."
+    },
+    "abs_residential_dwelling_stock": {
+      "canonical_url": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/total-value-dwellings",
+      "legacy_urls": [
+        "https://www.abs.gov.au/statistics/economy/finance/total-value-dwellings"
+      ],
+      "reason": "ABS moved Total Value of Dwellings from the former finance path to price indexes and inflation."
+    },
+    "ato_corporate_tax": {
+      "canonical_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/corporate-tax-transparency/report-of-entity-tax-information",
+      "legacy_urls": [
+        "https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/"
+      ],
+      "supporting_urls": [
+        "https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26"
+      ],
+      "reason": "The former ATO research-and-statistics path returns 404; the current ATO page explains the report and links to the official data.gov.au workbook dataset."
+    },
+    "resource_prrt_policy": {
+      "canonical_url": "https://www.ato.gov.au/businesses-and-organisations/gst-excise-and-indirect-taxes/petroleum-resource-rent-tax",
+      "legacy_urls": [
+        "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/petroleum-resource-rent-tax"
+      ],
+      "reason": "The former ATO corporate-tax-measures path returns 404; the current ATO PRRT topic is published under GST, excise and indirect taxes."
+    },
+    "iea_90day": {
+      "canonical_url": "https://www.iea.org/data-and-statistics/data-tools/oil-stocks-of-iea-countries",
+      "legacy_urls": [
+        "https://www.iea.org/reports/oil-stockholding"
+      ],
+      "reason": "The former IEA oil-stockholding report path returns 404; the current official data tool documents the 90-day obligation and stockholding methodology."
+    },
+    "ai_rollout_timeline_context": {
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+      "reason": "Project methodology page governing chronology-only AI rollout context."
+    },
+    "automation_exposure_context": {
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/employment-automation-methodology.md",
+      "reason": "Project methodology page explaining why no numeric Australian automation-exposure series is currently loaded."
+    },
+    "au_data_centre_capacity_register": {
+      "canonical_url": "https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/data-centre-capacity-source-gate.md",
+      "reason": "Project source-gate document records the absence of a canonical public Australian capacity register without substituting vendor estimates."
+    }
+  }
+}
