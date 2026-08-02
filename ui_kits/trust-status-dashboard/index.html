@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trust Status — Fuel Resilience AU</title>
+  <meta name="description" content="Repository-generated operational transparency for Fuel Resilience AU: source modes, refresh evidence, validation warnings, link health and public claim boundaries.">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../colors_and_type.css">
+  <link rel="stylesheet" href="../shared/styles.css">
+  <style>
+    :root { color-scheme: light; }
+    body { background: var(--paper); color: var(--ink); }
+    .trust-shell { max-width: var(--max-content); margin: 0 auto; padding: 0 var(--s-6) var(--s-8); }
+    .trust-header { border-bottom: 1px solid var(--rule); background: var(--paper); }
+    .trust-header__inner { max-width: var(--max-content); margin: 0 auto; min-height: 64px; padding: 0 var(--s-6); display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
+    .trust-header nav { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s-3); font-size: var(--fs-13); }
+    .trust-hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); gap: var(--s-7); padding: var(--s-8) 0 var(--s-7); border-bottom: 1px solid var(--rule); }
+    .trust-hero h1 { margin: var(--s-3) 0 0; max-width: 18ch; font-size: var(--fs-44); line-height: 1.08; }
+    .trust-hero p { max-width: 68ch; margin: var(--s-4) 0 0; color: var(--ink-2); font-size: var(--fs-18); line-height: 1.55; }
+    .status-panel { background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-2); padding: var(--s-5); align-self: start; }
+    .status-panel__value { margin-top: var(--s-3); font-family: var(--font-serif); font-size: var(--fs-30); line-height: 1.15; }
+    .status-panel__time { margin-top: var(--s-3); color: var(--ink-3); font-family: var(--font-mono); font-size: var(--fs-12); line-height: 1.5; }
+    .trust-badge { display: inline-flex; align-items: center; width: fit-content; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 9px; background: var(--paper-sunk); color: var(--ink-2); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+    .trust-badge[data-state="operational"] { color: var(--surplus); background: var(--surplus-tint); border-color: transparent; }
+    .trust-badge[data-state="operational_with_warnings"] { color: var(--caution); background: var(--caution-tint); border-color: transparent; }
+    .trust-badge[data-state="validation_failed"] { color: var(--deficit); background: var(--deficit-tint); border-color: transparent; }
+    .trust-section { padding: var(--s-7) 0; border-bottom: 1px solid var(--rule); }
+    .trust-section__head { max-width: 74ch; margin-bottom: var(--s-5); }
+    .trust-section h2 { margin-top: var(--s-2); font-family: var(--font-serif); font-size: var(--fs-30); font-weight: 500; }
+    .trust-section__lede { margin-top: var(--s-3); color: var(--ink-2); line-height: 1.55; }
+    .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); }
+    .metric-card { min-width: 0; padding: var(--s-5); border: 1px solid var(--rule); border-radius: var(--r-2); background: var(--card); }
+    .metric-card__label { color: var(--ink-3); font-family: var(--font-mono); font-size: var(--fs-12); text-transform: uppercase; letter-spacing: .04em; }
+    .metric-card__value { margin-top: var(--s-2); font-family: var(--font-serif); font-size: var(--fs-36); font-variant-numeric: tabular-nums; }
+    .metric-card__note { margin-top: var(--s-2); color: var(--ink-2); font-size: var(--fs-13); line-height: 1.45; overflow-wrap: anywhere; }
+    .two-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-5); }
+    .evidence-card { border: 1px solid var(--rule); border-radius: var(--r-2); background: var(--card); padding: var(--s-5); }
+    .evidence-card h3 { font-family: var(--font-serif); font-size: var(--fs-24); font-weight: 500; }
+    .evidence-card p { margin-top: var(--s-3); color: var(--ink-2); line-height: 1.5; }
+    .evidence-list { list-style: none; margin: var(--s-4) 0 0; padding: 0; }
+    .evidence-list li { display: flex; justify-content: space-between; gap: var(--s-4); padding: 9px 0; border-bottom: 1px dashed var(--rule); }
+    .evidence-list li:last-child { border-bottom: 0; }
+    .evidence-list code { color: var(--ink-3); font-size: 11px; overflow-wrap: anywhere; }
+    .evidence-list strong { font-variant-numeric: tabular-nums; }
+    .workflow-grid, .band-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4); }
+    .workflow-card, .band-card { padding: var(--s-4); border: 1px solid var(--rule); border-radius: var(--r-2); background: var(--card); }
+    .workflow-card h3, .band-card h3 { font-size: var(--fs-18); }
+    .workflow-card p, .band-card p { margin-top: var(--s-2); color: var(--ink-2); line-height: 1.5; }
+    .workflow-card code { display: block; margin-top: var(--s-3); color: var(--ink-3); font-size: 11px; overflow-wrap: anywhere; }
+    .plain-list { margin: var(--s-4) 0 0; padding-left: 1.25rem; color: var(--ink-2); }
+    .plain-list li { margin: 8px 0; line-height: 1.5; }
+    .claim-boundary { margin-top: var(--s-5); padding: var(--s-5); border-left: 4px solid var(--accent); background: var(--paper-sunk); color: var(--ink-2); line-height: 1.55; }
+    .bootstrap-note { display: none; margin-top: var(--s-4); padding: var(--s-3) var(--s-4); border: 1px solid var(--caution); border-radius: var(--r-1); background: var(--caution-tint); color: var(--ink-2); font-size: var(--fs-13); }
+    .load-error { padding: var(--s-5); margin: var(--s-6) 0; border: 1px solid var(--deficit); background: var(--deficit-tint); border-radius: var(--r-2); }
+    .trust-footer { padding: var(--s-6) 0; color: var(--ink-3); font-size: var(--fs-13); display: flex; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; }
+    @media (max-width: 960px) { .metric-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .trust-hero { grid-template-columns: 1fr; } }
+    @media (max-width: 680px) { .trust-header__inner { align-items: flex-start; flex-direction: column; padding-top: var(--s-3); padding-bottom: var(--s-3); } .metric-grid, .two-column, .workflow-grid, .band-grid { grid-template-columns: 1fr; } .trust-shell { padding-left: var(--s-4); padding-right: var(--s-4); } .trust-header__inner { padding-left: var(--s-4); padding-right: var(--s-4); } }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="trust-header">
+    <div class="trust-header__inner">
+      <a class="brand" href="../../index.html"><span class="brand__name">Fuel Resilience AU</span></a>
+      <nav aria-label="Trust status navigation">
+        <a href="../../index.html">Home</a>
+        <a href="../missing-data-scoreboard/index.html">Missing data</a>
+        <a href="../../data/source_manifest.json">Source manifest</a>
+        <a aria-current="page" href="index.html">Trust Status</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="trust-shell">
+    <section class="trust-hero" aria-labelledby="trust-title">
+      <div>
+        <span class="eyebrow">Operational transparency</span>
+        <h1 id="trust-title">Trust Status</h1>
+        <p>
+          A generated view of what the repository can actually prove about its sources, refreshes,
+          validation warnings and known gaps. <strong>Not an official government dashboard.</strong>
+        </p>
+        <div id="bootstrap-note" class="bootstrap-note" role="note"></div>
+      </div>
+      <aside class="status-panel" aria-label="Current repository status">
+        <span id="overall-badge" class="trust-badge" data-state="refresh_status_unknown">Loading</span>
+        <div id="overall-value" class="status-panel__value">Reading repository evidence…</div>
+        <div id="generated-time" class="status-panel__time">Manifest generation time unavailable</div>
+      </aside>
+    </section>
+
+    <div id="load-error" class="load-error" role="alert" hidden>
+      Trust Status could not load its generated manifest. No fallback score or estimate has been substituted.
+    </div>
+
+    <section class="trust-section" aria-labelledby="inventory-title">
+      <div class="trust-section__head">
+        <span class="eyebrow">Repository evidence</span>
+        <h2 id="inventory-title">Source inventory</h2>
+        <p class="trust-section__lede">Counts come directly from the generated source manifest. They describe how evidence enters the project; they do not rank publishers or certify individual values.</p>
+      </div>
+      <div id="source-metrics" class="metric-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="trust-section" aria-labelledby="validation-title">
+      <div class="trust-section__head">
+        <span class="eyebrow">Checks and debt</span>
+        <h2 id="validation-title">Validation and review debt</h2>
+        <p class="trust-section__lede">A successful automated refresh and a current manual review are different signals. Both are shown separately.</p>
+      </div>
+      <div class="two-column">
+        <article class="evidence-card">
+          <h3>Project validation</h3>
+          <p id="validation-summary">Validation evidence is loading.</p>
+          <ul id="validation-list" class="evidence-list"></ul>
+        </article>
+        <article class="evidence-card">
+          <h3>Latest recorded refresh</h3>
+          <p id="refresh-summary" aria-label="Refresh status">Refresh evidence is loading.</p>
+          <ul id="refresh-list" class="evidence-list"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="trust-section" aria-labelledby="links-title">
+      <div class="trust-section__head">
+        <span class="eyebrow">Publisher access</span>
+        <h2 id="links-title">Link health</h2>
+        <p class="trust-section__lede">Broken URLs, anti-bot blocks, timeouts and healthy machine endpoints are different conditions. The report is advisory and does not convert a request failure into a claim that a dataset is unavailable.</p>
+      </div>
+      <div class="two-column">
+        <article class="evidence-card">
+          <h3>Classified result</h3>
+          <p id="link-summary">Link-health evidence is loading.</p>
+          <ul id="link-list" class="evidence-list"></ul>
+        </article>
+        <article class="evidence-card">
+          <h3>Unavailable coverage</h3>
+          <p>These are dashboards associated with the largest numbers of registry entries explicitly marked unavailable. They are public-data visibility gaps, not official risk scores.</p>
+          <ul id="gap-list" class="evidence-list"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="trust-section" aria-labelledby="workflow-title">
+      <div class="trust-section__head">
+        <span class="eyebrow">Configured controls</span>
+        <h2 id="workflow-title">Workflow evidence</h2>
+        <p class="trust-section__lede">This section proves that controls are configured in the repository. It does not claim the conclusion of the latest CI or deployment run.</p>
+      </div>
+      <div id="workflow-grid" class="workflow-grid"></div>
+    </section>
+
+    <section class="trust-section" aria-labelledby="bands-title">
+      <div class="trust-section__head">
+        <span class="eyebrow">Interpretation</span>
+        <h2 id="bands-title">Confidence bands and trust rules</h2>
+        <p class="trust-section__lede">The project separates observed public feeds, manual snapshots, derived values and source-gated gaps instead of blending them into one confidence score.</p>
+      </div>
+      <div id="band-grid" class="band-grid"></div>
+      <ul id="trust-rules" class="plain-list"></ul>
+      <div id="claim-boundary" class="claim-boundary">
+        Trust Status is not a certification. Its claim boundary is loading from the generated manifest.
+      </div>
+    </section>
+
+    <footer class="trust-footer">
+      <span>Independent public-source prototype — not an official government dashboard.</span>
+      <a href="https://github.com/WowCorey/fuel-fertilizer-dashboard/issues">Report an error or source problem</a>
+    </footer>
+  </main>
+
+  <script>
+    'use strict';
+
+    const MANIFEST_URL = '../../data/trust_status_manifest.json';
+
+    function formatNumber(value) {
+      return Number.isFinite(Number(value)) ? Number(value).toLocaleString('en-AU') : 'Unavailable';
+    }
+
+    function formatTime(value) {
+      if (!value) return 'Not recorded';
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' });
+    }
+
+    function titleCase(value) {
+      return String(value || 'unknown').replaceAll('_', ' ').replace(/\b\w/g, character => character.toUpperCase());
+    }
+
+    function clear(node) {
+      while (node.firstChild) node.removeChild(node.firstChild);
+    }
+
+    function appendMetric(parent, label, value, note) {
+      const card = document.createElement('article');
+      card.className = 'metric-card';
+      const labelNode = document.createElement('div');
+      labelNode.className = 'metric-card__label';
+      labelNode.textContent = label;
+      const valueNode = document.createElement('div');
+      valueNode.className = 'metric-card__value';
+      valueNode.textContent = formatNumber(value);
+      const noteNode = document.createElement('div');
+      noteNode.className = 'metric-card__note';
+      noteNode.textContent = note;
+      card.append(labelNode, valueNode, noteNode);
+      parent.appendChild(card);
+    }
+
+    function appendEvidence(parent, label, value, code) {
+      const item = document.createElement('li');
+      const left = document.createElement('span');
+      left.textContent = label;
+      const right = document.createElement(code ? 'code' : 'strong');
+      right.textContent = value;
+      item.append(left, right);
+      parent.appendChild(item);
+    }
+
+    function renderInventory(manifest) {
+      const parent = document.getElementById('source-metrics');
+      clear(parent);
+      const modes = manifest.source_inventory?.modes || {};
+      appendMetric(parent, 'Total registered sources', modes.total, 'Every public dashboard source must appear in the source registry.');
+      appendMetric(parent, 'Programmatic feeds', modes.programmatic, 'Machine-readable public endpoints fetched by the data pipeline.');
+      appendMetric(parent, 'Manual snapshots', modes.manual, 'Human-reviewed values copied from named public evidence.');
+      appendMetric(parent, 'Derived series', modes.derived, 'Traceable transformations of named parent envelopes.');
+      appendMetric(parent, 'Unavailable / source-gated', modes.unavailable, 'No verified source-safe field, period, unit and reuse path is loaded.');
+      const envelopes = manifest.source_inventory?.envelopes || {};
+      appendMetric(parent, 'Loaded envelope files', envelopes.files_total, 'Generated and manual JSON evidence files currently present.');
+      appendMetric(parent, 'Envelopes marked OK', envelopes.status_ok, 'Schema-valid envelopes that contain observed or typed evidence.');
+      appendMetric(parent, 'Unavailable envelopes', envelopes.status_unavailable, 'Explicit gaps kept visible instead of being estimated.');
+    }
+
+    function renderValidation(manifest) {
+      const validation = manifest.validation || {};
+      document.getElementById('validation-summary').textContent = validation.ok
+        ? `Validation completed with ${formatNumber(validation.warning_count)} warning(s) and no blocking error.`
+        : `Validation reports ${formatNumber(validation.error_count)} blocking error(s) and ${formatNumber(validation.warning_count)} warning(s).`;
+      const list = document.getElementById('validation-list');
+      clear(list);
+      appendEvidence(list, 'Blocking errors', formatNumber(validation.error_count));
+      appendEvidence(list, 'Warnings', formatNumber(validation.warning_count));
+      const categories = validation.warning_categories || {};
+      Object.entries(categories).sort((a, b) => b[1] - a[1]).forEach(([category, count]) => {
+        appendEvidence(list, titleCase(category), formatNumber(count));
+      });
+      appendEvidence(list, 'Evidence', validation.evidence_path || 'Unavailable', true);
+    }
+
+    function renderRefresh(manifest) {
+      const refresh = manifest.latest_refresh || {};
+      document.getElementById('refresh-summary').textContent = refresh.status === 'success'
+        ? `The automated pipeline last recorded a successful refresh at ${formatTime(refresh.refreshed_at)}.`
+        : 'No successful committed refresh marker is currently available.';
+      const list = document.getElementById('refresh-list');
+      clear(list);
+      appendEvidence(list, 'Status', titleCase(refresh.status));
+      appendEvidence(list, 'Recorded at', formatTime(refresh.refreshed_at));
+      appendEvidence(list, 'Workflow', refresh.workflow || 'Not recorded');
+      appendEvidence(list, 'Run ID', refresh.run_id || 'Not recorded', true);
+      appendEvidence(list, 'Reported SHA', refresh.reported_git_sha || 'Not recorded', true);
+      appendEvidence(list, 'SHA meaning', refresh.sha_semantics || 'Not recorded');
+      appendEvidence(list, 'Evidence', refresh.evidence_path || 'Unavailable', true);
+    }
+
+    function renderLinks(manifest) {
+      const health = manifest.link_health || {};
+      document.getElementById('link-summary').textContent = health.status === 'available'
+        ? `Classified link-health report generated ${formatTime(health.generated_at)}. Definite repair categories: ${formatNumber(health.repair_required_count)}.`
+        : 'No classified link-health report has been generated yet. No assumption is made about source-page health.';
+      const list = document.getElementById('link-list');
+      clear(list);
+      const categories = health.categories || {};
+      if (!Object.keys(categories).length) appendEvidence(list, 'Classified categories', 'Not yet generated');
+      Object.entries(categories).sort((a, b) => b[1] - a[1]).forEach(([category, count]) => {
+        appendEvidence(list, titleCase(category), formatNumber(count));
+      });
+      appendEvidence(list, 'Advisory', health.advisory === true ? 'Yes' : 'No');
+      appendEvidence(list, 'Evidence', health.evidence_path || 'Unavailable', true);
+
+      const gaps = document.getElementById('gap-list');
+      clear(gaps);
+      const rows = manifest.unavailable_coverage?.top_dashboards || [];
+      if (!rows.length) appendEvidence(gaps, 'Generated gap ranking', 'Not available');
+      rows.forEach(row => appendEvidence(gaps, titleCase(row.dashboard), formatNumber(row.unavailable_sources)));
+    }
+
+    function renderWorkflows(manifest) {
+      const parent = document.getElementById('workflow-grid');
+      clear(parent);
+      (manifest.workflow_configuration || []).forEach(workflow => {
+        const card = document.createElement('article');
+        card.className = 'workflow-card';
+        const badge = document.createElement('span');
+        badge.className = 'trust-badge';
+        badge.textContent = workflow.status || 'Unknown';
+        const heading = document.createElement('h3');
+        heading.textContent = workflow.label || workflow.id;
+        const body = document.createElement('p');
+        body.textContent = workflow.meaning || '';
+        const evidence = document.createElement('code');
+        evidence.textContent = workflow.evidence_path || 'Evidence path unavailable';
+        card.append(badge, heading, body, evidence);
+        parent.appendChild(card);
+      });
+    }
+
+    function renderBandsAndRules(manifest) {
+      const bands = document.getElementById('band-grid');
+      clear(bands);
+      (manifest.confidence_bands || []).forEach(band => {
+        const card = document.createElement('article');
+        card.className = 'band-card';
+        const badge = document.createElement('span');
+        badge.className = 'trust-badge';
+        badge.textContent = titleCase(band.id);
+        const heading = document.createElement('h3');
+        heading.textContent = band.label;
+        const body = document.createElement('p');
+        body.textContent = band.meaning;
+        card.append(badge, heading, body);
+        bands.appendChild(card);
+      });
+
+      const rules = document.getElementById('trust-rules');
+      clear(rules);
+      (manifest.trust_rules || []).forEach(rule => {
+        const item = document.createElement('li');
+        item.textContent = rule;
+        rules.appendChild(item);
+      });
+      document.getElementById('claim-boundary').textContent = manifest.claim_boundary || 'Claim boundary unavailable.';
+    }
+
+    function renderStatus(manifest) {
+      const badge = document.getElementById('overall-badge');
+      badge.dataset.state = manifest.status || 'refresh_status_unknown';
+      badge.textContent = titleCase(manifest.status);
+      const labels = {
+        operational: 'Operational on recorded evidence',
+        operational_with_warnings: 'Operational with disclosed warnings',
+        refresh_status_unknown: 'Refresh status is not established',
+        validation_failed: 'Blocking validation errors detected'
+      };
+      document.getElementById('overall-value').textContent = labels[manifest.status] || 'Repository status unavailable';
+      document.getElementById('generated-time').textContent = `Manifest generated: ${formatTime(manifest.generated_at)}`;
+      if (manifest.bootstrap_notice) {
+        const note = document.getElementById('bootstrap-note');
+        note.textContent = manifest.bootstrap_notice;
+        note.style.display = 'block';
+      }
+    }
+
+    async function loadTrustStatus() {
+      try {
+        const response = await fetch(MANIFEST_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const manifest = await response.json();
+        renderStatus(manifest);
+        renderInventory(manifest);
+        renderValidation(manifest);
+        renderRefresh(manifest);
+        renderLinks(manifest);
+        renderWorkflows(manifest);
+        renderBandsAndRules(manifest);
+      } catch (error) {
+        document.getElementById('load-error').hidden = false;
+        document.getElementById('overall-badge').textContent = 'Unavailable';
+        document.getElementById('overall-value').textContent = 'No generated trust evidence loaded';
+        document.getElementById('generated-time').textContent = String(error);
+      }
+    }
+
+    loadTrustStatus();
+  </script>
+</body>
+</html>
