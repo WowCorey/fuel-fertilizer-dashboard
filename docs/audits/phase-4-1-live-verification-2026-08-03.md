@@ -183,7 +183,7 @@ The first local browser run reported 61 passes and two failures: the obsolete Tr
 
 `npm run build:ui` was run twice over 24 generated artifacts. Both builds produced aggregate SHA-256 `dd081f1ebbd381f92ab5fd8f6b6979c4b996996ae1c8198e3c763db6955671c7`; `git diff --quiet` returned success. The Windows index briefly reported line-ending/stat-only modifications, but Git content diffs were empty and the clean state was restored without changing content.
 
-A local Pages reproduction applied governance, passed project and Trust Status validation, then packaged the upload-visible tree with the workflow's dotfile exclusions. It contained all 23 route files and every required public manifest, bundle and licence artifact. Local tar byte identity is not claimed against GitHub's artifact because tar metadata and Pages-generated Trust Status `generated_at` are time-dependent.
+A final local Pages reproduction from commit `2928564279a280c38954c1d543987e2c5dc12c25` applied governance, passed project and Trust Status validation, then packaged the upload-visible tree with the workflow's dotfile exclusions. The tar contained 390 files and 33 directories (423 entries), all 23 route files, and 8/8 required public manifest, bundle, licence and homepage artifacts. It was 5,249,536 bytes with local SHA-256 `15cc35d7025fe06b777caf139ff007eaa6cb1afb39cf7ce0c85781984aa81229`. Local tar byte identity is not claimed against GitHub's artifact because tar metadata and Pages-generated Trust Status `generated_at` are time-dependent.
 
 At document creation time:
 
