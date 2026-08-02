@@ -83,6 +83,16 @@ test('dashboard headers and footers reject unknown refresh marker schemas', asyn
 });
 
 test('homepage labels legacy refresh evidence without claiming deployment', async ({ page }) => {
+  await page.route('**/data/last_successful_refresh.json', route => route.fulfill({
+    json: {
+      schema: 'fuel_resilience_refresh_status.v1',
+      status: 'success',
+      refreshed_at: '2026-08-02T16:00:00+00:00',
+      workflow: 'Weekly data refresh',
+      run_id: '12345',
+      run_attempt: '1',
+    },
+  }));
   await page.goto('/');
   const status = page.locator('#refresh-badge');
   await expect(status).toContainText('Recorded source refresh:');

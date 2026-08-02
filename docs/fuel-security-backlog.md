@@ -2,7 +2,7 @@
 
 Status: legacy scoped backlog retained for historical context. Current source state is authoritative in `data/sources.yml`, evidence envelopes and the Missing Data Scoreboard.
 
-Last source-by-source review: 2026-04-23
+Last source-by-source review: 2026-08-03
 
 This file is issue-ready backlog text for the hard source gaps that still block
 a complete operational fuel-security dashboard. Each item should stay fail
@@ -12,29 +12,32 @@ closed until the success condition is met.
 
 Why it matters:
 
-- The PM&C public fuel-supply page is the authoritative public snapshot for the
-  national level, MSO days, reserves, forward orders, tankers and stock-outs.
+- The canonical Australian Government Fuel Plan page is the authoritative
+  public snapshot for the national level, MSO days, reserves, forward orders,
+  tankers and stock-outs.
 - Manual entry is auditable but slower and easier to miss.
 
 Current blocker:
 
-- Direct local pipeline requests return Incapsula challenge HTML, and no stable
-  linked CSV, JSON, XLSX or data.gov.au package was verified.
+- The canonical Fuel Plan static HTML is accessible. The former PM&C URL can
+  return Incapsula incident HTML, and no stable linked CSV, JSON, XLSX,
+  JSON:API, public API or data.gov.au package was verified.
 
 Source requirements:
 
-- Official PM&C, DCCEEW, energy.gov.au or data.gov.au source.
+- Official Fuel Plan, PM&C, DCCEEW, energy.gov.au or data.gov.au source.
 - Stable machine-readable file or endpoint.
 - Clear reuse terms and field dates/units.
 
 Success condition:
 
-- `fetch: programmatic` source can refresh the PM&C/DCCEEW snapshot, pass the
-  validator, and preserve manual fallback for human review.
+- A `fetch: programmatic` source can refresh the snapshot, pass the validator,
+  reject challenge/schema drift and preserve manual fallback for human review;
+  otherwise issue #33 closes with the machine-readable-source blocker stated.
 
 Out of scope:
 
-- Scraping protected HTML.
+- Brittle or challenge-bypassing HTML scraping.
 - Using search-engine snippets as a data source.
 - Inferring missing table fields.
 
@@ -53,6 +56,8 @@ Current blocker:
 - Other jurisdictions still expose either price apps, narrative pages,
   key-gated APIs, or app-only availability rather than a reusable public
   outage feed.
+- The current jurisdiction-by-jurisdiction result and unlock condition are in
+  `docs/state-territory-fuel-coverage-matrix.md`.
 
 Source requirements:
 

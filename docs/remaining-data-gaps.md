@@ -2,7 +2,8 @@
 
 Governance reviewed: 2026-08-03
 
-Last source-by-source content review: 2026-05-06, except where a row names a later review or source date.
+Last source-by-source content review: 2026-05-06, with state/territory fuel
+visibility and national Fuel Plan rows rechecked on 2026-08-03.
 
 This register records the known dashboard gaps that should not be filled with
 estimates. A gap can move to "ready to populate" only when a named public source
@@ -86,7 +87,7 @@ names, bid counts, contracts, awards, approval completion or operational fuel ho
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Live station availability and town-level outage feeds | unavailable | No national public live dry-site/station-level API is loaded. | Add only with stable public rights, geography, product, timestamp and coverage fields. |
+| Live station availability and town-level outage feeds | unavailable nationally; QLD/WA partial | No national public live dry-site/station-level API is loaded. Victoria and SA expose gated official availability APIs; NSW/TAS public read data lacks an availability field; ACT/NT are UI-only for production ingestion. | Use the [state/territory matrix](state-territory-fuel-coverage-matrix.md) as the source gate. Add only with stable public rights, geography, product, timestamp and coverage fields. |
 | Terminal inventory and constraints | unavailable | Public APS/MSO stock context does not publish terminal-level live inventory/capacity. | Keep terminal feeds unavailable until an official or licence-safe source exists. |
 | Product cargo, port destination and tanker ETA visibility | unavailable | Aggregate tanker counts are not vessel names, cargo assignments, destinations or ETAs. | Do not infer from AIS or port calls. Add only with source-safe public feed rights. |
 | Contract-backed deliveries | unavailable | Forward import orders and shipments are not contracts. | Keep contract coverage source-gated unless government or industry publishes periods, products, volumes and counterparties. |
@@ -150,9 +151,9 @@ or public procurement sources provide exact fields.
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
-| Programmatic PM&C/DCCEEW public fuel-supply snapshot | deferred | Rechecked 2026-04-23: the PM&C public fuel-supply page is readable in a browser, but local pipeline requests return an Incapsula challenge page and the page exposes no stable CSV, JSON or XLSX download. DCCEEW/energy.gov.au publication pages remain unreliable from the local pipeline environment. | Keep the PM&C snapshot manual and source-linked. Move to `fetch: programmatic` only if PM&C/DCCEEW publishes a stable machine-readable endpoint or an accessible static data file. |
+| Programmatic Fuel Plan/PM&C/DCCEEW public fuel-supply snapshot | deferred | Rechecked 2026-08-03: the canonical Fuel Plan page returns the expected static HTML tables, while the former PM&C URL can return an Incapsula incident page. No stable CSV, JSON, XLSX, JSON:API or public API endpoint was verified. | Keep the Fuel Plan snapshot manual and source-linked. Close issue #33 with this explicit blocker unless a strict heading/header/cardinality/date/unit contract, challenge rejection and fail-closed tests are deliberately approved for HTML ingestion. |
 | Vessel-level tanker movements | intentionally not published | The public PM&C page reports aggregate tanker counts and equivalent days only. It does not publish vessel identities or live AIS movements. | Keep aggregate "ships on water" counts only. Do not add vessel-level movement displays without a public, licence-compatible source and clear public-interest rationale. |
-| Daily stock-out updates | partial | The current PM&C stock-out table is a dated public snapshot with seven-day changes. The WA weekly fuel update adds a WA-only dated statewide count and station denominator. Queensland Open Data now adds a monthly programmatic count of unavailable fuel-type reports where `Price = 9999`. None of these sources is a daily national API, and the PM&C table does not publish an Australia-wide petrol total. | Hand-key dated PM&C/WA snapshots when reviewed. Add further state/territory ingestion only when a stable source exposes outage or availability status with clear reuse terms. |
+| Daily stock-out updates | partial | The current Fuel Plan stock-out table is a dated public snapshot with seven-day changes and both Australian petrol and diesel totals. The exact WA Fuel Plan row remains separate from the qualitative WA Government update. Queensland Open Data adds a monthly programmatic count of unavailable fuel-type reports where `Price = 9999`. None is a daily national API. | Hand-key the dated Fuel Plan row exactly when reviewed. Keep WA quantitative and qualitative evidence separate. Gate any further jurisdiction ingestion through the state/territory matrix and source rights. |
 
 ## Fuel security
 
@@ -160,7 +161,7 @@ or public procurement sources provide exact fields.
 |---|---|---|---|
 | Fuel Security Status model | unavailable by design | The new fuel-security page shows official public snapshot fields and derived product-day cards, but it does not have enough complete, fresh operational coverage to publish a Stable/Tight/Disrupted/Critical model. Live station outages, live vessel tracking and terminal-level capacity are not loaded. | Keep `fuel_security_status_model` unavailable until the methodology has explicit coverage thresholds and every contributing input can be shown beside the output. |
 | Product days remaining | populated as derived | PM&C/DCCEEW publish product-specific days in the public fuel-supply snapshot. The dashboard stores each product as a derived envelope selected from the typed PM&C parent envelope so each card can carry its own status and source line. | Keep these visibly labelled as derived from the PM&C/DCCEEW snapshot, not independently calculated from hidden assumptions. |
-| Live national station outage feed | unavailable, with WA and QLD partial layers | The current public material exposes dated stock-out counts by state/territory. The WA weekly update provides one state-level dated snapshot. Queensland Open Data provides monthly unavailable fuel-type report rows. These sources do not expose a live national station outage API with station-level status. | Keep `fuel_security_live_station_outage_feed` unavailable. Add more partial state modules only when a public source exposes outage status with stable terms. |
+| Live national station outage feed | unavailable, with WA and QLD partial layers | Fuel Plan provides a dated national/state snapshot. The current WA Fuel Plan row is a manual product-specific partial layer and the WA Government update is qualitative; Queensland Open Data provides monthly unavailable fuel-type report rows. Victoria and SA have gated availability APIs, while NSW/TAS public read data lacks availability and ACT/NT lack a documented reusable API. | Keep `fuel_security_live_station_outage_feed` unavailable. Follow the [jurisdiction matrix](state-territory-fuel-coverage-matrix.md); never promote price-only or UI-only sources into outage evidence. |
 | Live vessel/shipment tracking | unavailable | PM&C publishes aggregate tanker counts and equivalent days. It does not publish vessel identities, ETA-level flows or a licence-safe live AIS feed. The fuel-security page now uses a shipping-visibility layout for aggregate counts only; route lines are contextual, not live tracks. | Keep `fuel_security_live_vessel_tracking` unavailable and use aggregate PM&C tanker counts only. Add vessel data only after redistribution rights, API credentials, schema, confidence labels and cargo-inference rules are documented. |
 | Terminal-level storage/capacity | unavailable | APS and MSO sources support national/product stock context. Geoscience Australia's National Liquid Fuel Terminals 2015 dataset was investigated on 2026-04-23; it is a terminal-location snapshot, not a capacity or live-inventory dataset. | Keep `fuel_security_terminal_capacity` unavailable. Add terminal capacity only from an official or clearly reusable source with units and date. |
 
@@ -190,6 +191,7 @@ or public procurement sources provide exact fields.
 
 | Gap | Current status | Why not filled yet | Next action |
 |---|---|---|---|
+| NSW FuelCheck current-price contribution | credential-gated | The documented Fuel API v2 requires an approved consumer key and secret, OAuth client-credentials exchange, bearer token, API key and transaction headers. The public read response has no availability field. | Configure both `NSW_FUELCHECK_API_KEY` and `NSW_FUELCHECK_API_SECRET` only after approval. Keep NSW absent on missing credentials or any contract failure; do not claim stock availability. |
 | AIP national average retail petrol/diesel | deferred after re-check | Existing live fuel page has AIP terminal gate price plus public-feed retail averages by product. AIP retail reports remain PDF/report oriented; no stable public historical CSV/XLSX/JSON feed with verified reuse terms has been confirmed. | Keep manual. Populate only from a reviewed AIP report or add a fetcher if AIP publishes a deterministic reusable data file. |
 | IEA obligation/current compliance distinction | deferred | The dashboard has APS net-import cover and an IEA 90-day benchmark constant. It does not yet publish a current official compliance-gap series. | Keep showing APS cover vs 90-day benchmark unless DCCEEW publishes a current compliance series. |
 

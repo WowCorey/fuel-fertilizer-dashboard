@@ -12,7 +12,7 @@
       "v": 155.2
     }
   ],
-  "notes": "Multi-state E10 average weighted by station count. QLD: 979 stations, avg 155.2 c/L, source date 2026-06-30. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
+  "notes": "Multi-state E10 average weighted by station count. QLD: 979 stations, avg 155.2 c/L, source date 2026-06-30. NSW contributes only when both NSW_FUELCHECK_API_KEY and NSW_FUELCHECK_API_SECRET are configured and the OAuth exchange succeeds.",
   "status": "ok",
   "manual_entry": false,
   "source_rights": "Mixed state government terms; verify each source before reuse",

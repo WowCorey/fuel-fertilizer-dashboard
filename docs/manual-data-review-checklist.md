@@ -28,16 +28,18 @@ source cannot safely be fetched programmatically.
 - Keep `manual_entry: true`.
 - Keep missing fields as `null` or unavailable. Do not estimate blanks.
 
-## PM&C National Fuel Status Snapshot
+## Fuel Plan National Fuel Status Snapshot
 
-- Review every PM&C envelope together so the page remains internally consistent:
+- Review every legacy-`pmc_` envelope together so the page remains internally consistent:
   `pmc_fuel_security_level`, `pmc_mso_days_cover`,
   `pmc_mso_fuel_reserves`, `pmc_forward_import_orders`,
   `pmc_tankers_on_water` and `pmc_retail_stockouts`.
 - Check `docs/fuel-security-source-investigation.md` before changing the
-  source mode. The current decision is manual because local pipeline requests
-  return an Incapsula challenge and no stable CSV/JSON/XLSX endpoint is loaded.
-- Preserve the source table date for each envelope. The PM&C page can publish
+  source mode. The current decision is manual because the canonical Fuel Plan
+  source is static HTML and no stable CSV/JSON/XLSX/JSON:API or public API
+  endpoint is loaded. The former PM&C URL's Incapsula response is a legacy-path
+  access condition, not evidence that Fuel Plan is unavailable.
+- Preserve the source table date for each envelope. The Fuel Plan page can publish
   different dates for stock coverage and stock-out tables.
 - Do not add vessel names, AIS data or inferred tanker movements. The dashboard
   publishes aggregate public counts only.

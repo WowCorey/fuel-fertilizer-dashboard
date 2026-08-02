@@ -388,7 +388,9 @@ freshness, confidence and coverage rules are locked in
 the score can show missing inputs, stale/manual status and component coverage
 beside the number. The fuel-security dashboard is not the Fuel Stress Index; its
 methodology and unavailable operational feeds are documented in
-`docs/fuel-security-methodology.md`.
+`docs/fuel-security-methodology.md`. State and territory price, availability,
+access, cadence and reuse boundaries are documented in
+`docs/state-territory-fuel-coverage-matrix.md`.
 
 ## Repo layout
 

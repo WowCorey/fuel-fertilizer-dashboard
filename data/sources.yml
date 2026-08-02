@@ -631,15 +631,16 @@ sources:
     check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: ulp91
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    nsw_oauth_url: https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken
     qld_ckan_base: https://www.data.qld.gov.au
     wa_fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=1&Day=today
     format: MIXED
     update_cadence: daily
-    last_verified: 2026-04-19
+    last_verified: 2026-08-03
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state ULP 91 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
+    reuse_notes: Programmatic multi-state ULP 91 average. NSW requires an approved API NSW application, NSW_FUELCHECK_API_KEY and NSW_FUELCHECK_API_SECRET; the client performs the documented client-credentials OAuth exchange and skips NSW when either credential, an approved token or a contract-valid current-price response is absent. The public Fuel API v2 current-price response does not expose a stock-availability field and must not be used as an outage feed. Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because NSW and WA are optional contributors and skipped contributors remain visible in fetch output.
     fetch: programmatic
     used_by: [fuel, fuel_security]
 
@@ -652,15 +653,16 @@ sources:
     check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: diesel
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    nsw_oauth_url: https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken
     qld_ckan_base: https://www.data.qld.gov.au
     wa_fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=4&Day=today
     format: MIXED
     update_cadence: daily
-    last_verified: 2026-04-22
+    last_verified: 2026-08-03
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state diesel average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
+    reuse_notes: Programmatic multi-state diesel average. NSW requires an approved API NSW application, NSW_FUELCHECK_API_KEY and NSW_FUELCHECK_API_SECRET; the client performs the documented client-credentials OAuth exchange and skips NSW when either credential, an approved token or a contract-valid current-price response is absent. The public Fuel API v2 current-price response does not expose a stock-availability field and must not be used as an outage feed. Queensland uses the latest frictionless public Open Data resource; WA uses the FuelWatch RSS feed when it returns usable data. The blocking refresh preflight checks the Queensland package because NSW and WA are optional contributors and skipped contributors remain visible in fetch output.
     fetch: programmatic
     used_by: [fuel, fuel_security]
 
@@ -673,15 +675,16 @@ sources:
     check_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: premium95
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    nsw_oauth_url: https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken
     qld_ckan_base: https://www.data.qld.gov.au
     wa_fetch_url: https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product=2&Day=today
     format: MIXED
     update_cadence: daily
-    last_verified: 2026-04-22
+    last_verified: 2026-08-03
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.fuelwatch.wa.gov.au/
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting; WA FuelWatch.
-    reuse_notes: Programmatic multi-state premium 95 average. NSW requires NSW_FUELCHECK_API_KEY and is skipped when absent; Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem, when it returns usable data. The blocking refresh preflight checks the Queensland package because the fetcher treats NSW and WA as optional contributors and logs skipped contributors in fetch output.
+    reuse_notes: Programmatic multi-state premium 95 average. NSW requires an approved API NSW application, NSW_FUELCHECK_API_KEY and NSW_FUELCHECK_API_SECRET; the client performs the documented client-credentials OAuth exchange and skips NSW when either credential, an approved token or a contract-valid current-price response is absent. The public Fuel API v2 current-price response does not expose a stock-availability field and must not be used as an outage feed. Queensland uses PULP 95/96 RON from the latest frictionless public Open Data resource; WA uses FuelWatch Product 2, labelled Premium Unleaded by the public FuelWatch RSS ecosystem, when it returns usable data. The blocking refresh preflight checks the Queensland package because NSW and WA are optional contributors and skipped contributors remain visible in fetch output.
     fetch: programmatic
     used_by: [fuel, fuel_security]
 
@@ -693,14 +696,15 @@ sources:
     fetch_url: https://www.data.qld.gov.au/api/3/action/package_show?id=fuel-price-reporting-2026
     retail_product: e10
     nsw_fetch_url: https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices
+    nsw_oauth_url: https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken
     qld_ckan_base: https://www.data.qld.gov.au
     format: MIXED
     update_cadence: monthly
-    last_verified: 2026-04-22
+    last_verified: 2026-08-03
     rights: Mixed state government terms; verify each source before reuse
     rights_url: https://www.data.qld.gov.au/article/data-licence
     citation: NSW FuelCheck; Queensland Government Open Data Fuel Price Reporting.
-    reuse_notes: Programmatic E10 average from public feeds where available. Queensland publishes E10 in monthly Open Data resources. NSW contributes only when NSW_FUELCHECK_API_KEY is configured. WA FuelWatch's active public RSS product-code list does not expose E10, so WA is intentionally excluded.
+    reuse_notes: Programmatic E10 average from public feeds where available. Queensland publishes E10 in monthly Open Data resources. NSW requires an approved API NSW application, NSW_FUELCHECK_API_KEY and NSW_FUELCHECK_API_SECRET; the client performs the documented client-credentials OAuth exchange and skips NSW when either credential, an approved token or a contract-valid current-price response is absent. The public Fuel API v2 current-price response does not expose a stock-availability field and must not be used as an outage feed. WA FuelWatch's active public RSS product-code list does not expose E10, so WA is intentionally excluded.
     fetch: programmatic
     used_by: [fuel, fuel_security]
 
@@ -1005,11 +1009,11 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; data compiled by DCCEEW.
-    reuse_notes: Hand-key from the public PM&C fuel supply page. Rechecked 2026-04-23; local pipeline requests return an Incapsula challenge page and the public page exposes no stable CSV, JSON or XLSX data file. Keep manual until PM&C/DCCEEW publishes a stable machine-readable endpoint.
+    reuse_notes: Hand-key from the canonical Australian Government Fuel Plan fuel-statistics page after applying source URL governance. Rechecked 2026-08-03; the canonical static HTML tables are directly accessible, while the former PM&C URL can return an Incapsula incident page. No stable CSV, JSON, XLSX, JSON:API or public API endpoint was verified. Keep manual unless a machine-readable source or a strict fail-closed HTML table contract is approved.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -1020,11 +1024,11 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
-    reuse_notes: Hand-key from the PM&C table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
+    reuse_notes: Hand-key from the Fuel Plan table "National days of coverage based on normal rates of consumption". Values are product-specific days of reserves under the Minimum Stockholding Obligation, not total national net-import cover. Rechecked 2026-08-03; the static HTML table is accessible but no stable CSV, JSON, XLSX, JSON:API or public API endpoint was verified.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -1035,11 +1039,11 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO reserves table.
-    reuse_notes: Hand-key from the PM&C table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
+    reuse_notes: Hand-key from the Fuel Plan table "Fuel reserves (ML) held under the minimum stockholding obligation". Includes stocks in Australia and on water in Australia's exclusive economic zone, as stated by the source page. Rechecked 2026-08-03; the static HTML table is accessible but no stable CSV, JSON, XLSX, JSON:API or public API endpoint was verified.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -1050,11 +1054,11 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; current and anticipated national supplies text.
-    reuse_notes: Hand-key only when PM&C publishes the reported four-week forward import-order volume. Do not infer from tanker counts or other sources. Rechecked 2026-04-23; no stable CSV, JSON or XLSX endpoint was exposed.
+    reuse_notes: Hand-key only when Fuel Plan publishes the reported four-week forward import-order volume. Do not infer it from tanker counts or other sources. Rechecked 2026-08-03; the static HTML page is accessible but no stable CSV, JSON, XLSX, JSON:API or public API endpoint was verified.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -1065,11 +1069,11 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW estimate using Kpler commodity terminal.
-    reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and should not be presented as individual tanker movement data. Rechecked 2026-04-23; no public vessel identities, ETAs or stable CSV/JSON/XLSX endpoint were exposed.
+    reuse_notes: Hand-key aggregate tanker counts and equivalent days only. This is not AIS vessel-level tracking and must not be presented as individual tanker movement data. Rechecked 2026-08-03; Fuel Plan exposes the aggregate static HTML table but no public vessel identities, ETAs or stable CSV/JSON/XLSX/JSON:API endpoint.
     fetch: manual
     used_by: [national_status, fuel_security]
 
@@ -1080,11 +1084,11 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: HTML_TABLE
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Department of the Prime Minister and Cabinet, Public information on fuel supply; retail stock-outs table provided by state and territory governments.
-    reuse_notes: Hand-key the state/territory stock-out counts and seven-day changes exactly as published. The PM&C page does not publish an Australia-wide petrol total in the current table; do not invent one. Rechecked 2026-04-23; no live station-level outage API or stable CSV/JSON/XLSX endpoint was exposed.
+    reuse_notes: Hand-key the state/territory and Australian petrol/diesel stock-out counts, seven-day changes, as-at date and site denominator exactly as published by Fuel Plan. Rechecked 2026-08-03; both Australian product totals are present, but no live station-level outage API or stable CSV/JSON/XLSX/JSON:API endpoint was verified.
     fetch: manual
     used_by: [national_status, fuel_security, brisbane_2032]
 
@@ -1129,7 +1133,7 @@ sources:
     qld_column_explanation_url: https://www.data.qld.gov.au/dataset/0dfad294-f852-45a5-b86f-986773745fe2/resource/2fc7161e-cf1f-4228-a1c7-141f0df99b4c/download/dataset-column-explanation-for-fuel-price-reporting.txt
     format: CSV
     update_cadence: monthly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: Creative Commons Attribution 4.0
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Queensland Government Open Data, Fuel Price Reporting 2026.
@@ -1144,7 +1148,7 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: JSON
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
@@ -1163,7 +1167,7 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: JSON
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
@@ -1182,7 +1186,7 @@ sources:
     canonical_url: https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply
     format: JSON
     update_cadence: weekly
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: PM&C copyright and disclaimer; upstream source rights remain with stated publishers
     rights_url: https://www.pmc.gov.au/copyright-and-disclaimer
     citation: Derived from Department of the Prime Minister and Cabinet, Public information on fuel supply; DCCEEW MSO days of coverage table.
@@ -1201,7 +1205,7 @@ sources:
     canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
     format: MIXED
     update_cadence: ad-hoc
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: Project metadata/prose CC BY 4.0
     rights_url: https://creativecommons.org/licenses/by/4.0/
     citation: Fuel Resilience AU, Fuel security methodology.
@@ -1216,11 +1220,11 @@ sources:
     canonical_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
     format: MIXED
     update_cadence: ad-hoc
-    last_verified: 2026-04-23
+    last_verified: 2026-08-03
     rights: Not applicable; unavailable placeholder
     rights_url: https://wowcorey.github.io/fuel-fertilizer-dashboard/docs/fuel-security-methodology.md
-    citation: Fuel Resilience AU source review; PM&C retail stock-out snapshot remains the loaded partial public source.
-    reuse_notes: Do not imply live national station outage visibility. Use PM&C retail stock-outs for the dated partial public snapshot until a stable, licence-safe public feed exists. Rechecked 2026-04-23; no national live dry-station feed was verified.
+    citation: Fuel Resilience AU state and territory source review; Australian Government Fuel Plan retail stock-out snapshot remains the loaded national partial source.
+    reuse_notes: Do not imply live national station outage visibility. Use the dated Fuel Plan state/territory and Australian petrol/diesel totals, the exact WA product row, the separate WA qualitative update and QLD monthly unavailable-report layer only within their stated scopes. Rechecked 2026-08-03; no national live dry-station feed was verified. NSW/TAS public API responses have no availability field; Victoria and SA are credential/terms gated; ACT and NT lack a documented reusable production API.
     fetch: unavailable
     used_by: [fuel_security, brisbane_2032]
 

@@ -41,7 +41,30 @@ test('Trust Status v2 separates workflow configuration from run conclusions', as
   await expect(workflowCards.first()).toContainText('Configured');
 });
 
-test('Trust Status labels the committed legacy refresh marker without inventing output evidence', async ({ page }) => {
+test('Trust Status labels a legacy refresh marker without inventing output evidence', async ({ page }) => {
+  await page.route('**/data/trust_status_manifest.json', async route => {
+    const response = await route.fetch();
+    const manifest = await response.json();
+    manifest.latest_refresh = {
+      status: 'success',
+      marker_schema: 'fuel_resilience_refresh_status.v1',
+      publication_state: 'legacy_unverified',
+      refreshed_at: '2026-08-02T16:00:00+00:00',
+      source_data_refreshed_at: '2026-08-02T16:00:00+00:00',
+      workflow: 'Weekly data refresh',
+      run_id: '12345',
+      run_attempt: '1',
+      ref: null,
+      branch: null,
+      reported_git_sha: '1'.repeat(40),
+      workflow_input_sha: '1'.repeat(40),
+      output_commit_sha: null,
+      output_commit_pushed: null,
+      sha_semantics: 'The legacy marker records an input commit and successful refresh, but no output commit or deployed commit is proven.',
+      evidence_path: 'data/last_successful_refresh.json'
+    };
+    await route.fulfill({ response, json: manifest });
+  });
   await page.goto('/ui_kits/trust-status-dashboard/index.html');
   const refresh = page.locator('#refresh-list');
   await expect(refresh).toContainText('Legacy Unverified');

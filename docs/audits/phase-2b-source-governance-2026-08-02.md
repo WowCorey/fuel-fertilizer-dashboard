@@ -305,3 +305,29 @@ Before merge:
 The project now has a defensible distinction between stale links, blocked publishers, transient network conditions, missing internal documents and healthy machine feeds. The WA evidence no longer forces a qualitative state statement into an unsupported number, and the current numeric WA row is preserved separately with explicit scope.
 
 This is the source-governance foundation required before Trust Status v2 and the wider Codex-led repository cleanup.
+
+---
+
+## Subsequent Phase 5C source-governance addendum — 2026-08-03
+
+This addendum does not rewrite the Phase 2B point-in-time audit. Phase 5C
+rechecked the governed Fuel Plan sources and confirmed that the overlay remains
+the correct narrow migration mechanism:
+
+- `https://fuelplan.gov.au/fuel-statistics` now returns the expected static
+  fuel-statistics tables directly;
+- the former PM&C URL can still return an Incapsula incident page;
+- no stable official CSV, JSON, XLSX, JSON:API or public API endpoint was
+  verified for the national snapshot; and
+- the governed source IDs therefore remain manual/derived exactly as before.
+
+Phase 5C also corrected the optional NSW retail-price fetch contract. The NSW
+OAuth token URL is a machine-authentication endpoint, not a canonical evidence
+landing page, so it was added to the relevant `data/sources.yml` operational
+fields rather than expanding `data/source_url_governance.json`. This preserves
+the overlay's purpose and does not change any source value, fetch mode, cadence,
+rights or evidence status.
+
+The detailed decision is recorded in
+`docs/audits/phase-5c-state-coverage-2026-08-03.md` and
+`docs/state-territory-fuel-coverage-matrix.md`.
