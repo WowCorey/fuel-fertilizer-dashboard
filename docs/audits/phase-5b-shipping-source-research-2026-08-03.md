@@ -424,7 +424,24 @@ onto current `origin/main` at `d4802573d881dbb49b0f4d0d71a5dbb8d18851e7`.
 | `python scripts/validate_trust_status_v2.py` | Passed |
 | `python -m unittest discover -s tests` | Passed; 65 tests |
 | `npx playwright install chromium` | Passed |
-| `npm run smoke:ui` | Passed; 62 Chromium tests |
+| `npm run smoke:ui` | 60 passed, 2 failed because current `main` now contains a published v2 marker while two inherited tests still require the former committed legacy-v1 marker |
+
+The two browser failures are:
+
+- `tests/refresh-status-smoke.spec.js`: homepage test requires the phrase
+  `legacy marker; output publication unverified`, while the homepage correctly
+  renders the committed published-v2 state;
+- `tests/trust-status-smoke.spec.js`: Trust Status test requires `Legacy
+  Unverified` and a missing output SHA, while the committed v2 marker correctly
+  supplies publication and pushed-output evidence.
+
+These failures reproduce on `main` at the branch point and are not caused by
+the Phase 5B documentation diff. They must be corrected in the separate Phase
+4.1 live-verification work rather than hidden in this source-research PR.
+
+GitHub CI runs `30758582794` (push) and `30758602962` (pull request) each passed
+every step before browser smoke, then reported the same two stale expectations:
+60 passed and 2 failed. The branch is therefore not described as green.
 
 The expected timeout/error text printed by unit fixtures exercises fail-closed
 optional and required source behaviour; the unit suite itself passed.
