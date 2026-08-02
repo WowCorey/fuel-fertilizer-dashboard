@@ -4,7 +4,8 @@
   "scripts": {
     "build:ui": "node scripts/build_ui.mjs",
     "check:ui": "node scripts/build_ui.mjs --check",
-    "smoke:ui": "playwright test tests/ui-smoke.spec.js tests/trust-status-smoke.spec.js --project=chromium"
+    "test:ui-unit": "node --test tests/data-loader.test.js",
+    "smoke:ui": "playwright test tests/ui-smoke.spec.js tests/trust-status-smoke.spec.js tests/refresh-status-smoke.spec.js --project=chromium"
   },
   "dependencies": {
     "react": "18.3.1",

@@ -364,7 +364,7 @@ function MoreThanPumpPrices() {
 }
 
 function FreshnessNotice({ refreshStatus, latestRetrieved, updatedDisplay }) {
-  const hasSiteRefresh = refreshStatus?.status === 'success';
+  const hasSiteRefresh = window.FR.isPublishedRefreshStatus(refreshStatus);
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : 'Refresh status unavailable';
   const hasPageRetrieved = Boolean(latestRetrieved);
   return (

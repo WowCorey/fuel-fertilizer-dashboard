@@ -487,7 +487,8 @@ function App() {
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const siteRefresh = window.FR.fmtRefreshStatus(refreshStatus);
-  const refreshHeading = refreshStatus?.status === 'success' ? `Site refreshed ${siteRefresh}` : siteRefresh;
+  const hasSiteRefresh = window.FR.isPublishedRefreshStatus(refreshStatus);
+  const refreshHeading = hasSiteRefresh ? `Site refreshed ${siteRefresh}` : siteRefresh;
 
   const overviewRows = [
     {
@@ -715,8 +716,8 @@ function App() {
               </p>
             </div>
             <div className="trust-badges">
-              <TrustBadge kind={refreshStatus?.status === 'success' ? 'observed' : 'unavailable'}>
-                {refreshStatus?.status === 'success' ? 'Site refresh recorded' : 'No site refresh recorded'}
+              <TrustBadge kind={hasSiteRefresh ? 'observed' : 'unavailable'}>
+                {hasSiteRefresh ? 'Site refresh recorded' : 'No site refresh recorded'}
               </TrustBadge>
             </div>
           </div>

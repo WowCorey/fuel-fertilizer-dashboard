@@ -434,7 +434,7 @@
           <a class="hero-button" href="ui_kits/fuel-security-dashboard/index.html">Open National Fuel Security</a>
         </div>
         <p class="home-status" id="refresh-badge" aria-live="polite">
-          <strong>Last deployed:</strong> <span id="refresh-date">date pending</span>.
+          <strong>Recorded source refresh:</strong> <span id="refresh-date">unavailable</span>.
           <strong>Programmatic refresh:</strong> in rollout.
           Manual public-source snapshots are labelled where used.
           <a class="deploy-badge" href="https://github.com/WowCorey/fuel-fertilizer-dashboard/actions/workflows/pages.yml" aria-label="Open GitHub Pages deploy workflow status">
@@ -1051,15 +1051,37 @@
       fetch('data/last_successful_refresh.json')
         .then(function (response) { return response.ok ? response.json() : null; })
         .then(function (status) {
-          if (status && status.status === 'success' && status.refreshed_at) {
+          var validTimestamp = status && typeof status.refreshed_at === 'string' && !isNaN(Date.parse(status.refreshed_at));
+          var legacy = status && status.schema === 'fuel_resilience_refresh_status.v1' && status.status === 'success' && validTimestamp;
+          var fullSha = /^[0-9a-f]{40}$/;
+          var publishedV2 = status
+            && status.schema === 'fuel_resilience_refresh_status.v2'
+            && status.status === 'success'
+            && status.publication_state === 'published'
+            && status.output_commit_pushed === true
+            && validTimestamp
+            && typeof status.source_data_refreshed_at === 'string'
+            && !isNaN(Date.parse(status.source_data_refreshed_at))
+            && typeof status.workflow === 'string' && status.workflow.length > 0
+            && typeof status.run_id === 'string' && status.run_id.length > 0
+            && typeof status.run_attempt === 'string' && status.run_attempt.length > 0
+            && typeof status.ref === 'string' && status.ref.length > 0
+            && typeof status.branch === 'string' && status.branch.length > 0
+            && fullSha.test(status.workflow_input_sha)
+            && fullSha.test(status.output_commit_sha);
+          if (legacy || publishedV2) {
             var formatted = formatDate(status.refreshed_at);
-            dateEl.textContent = formatted || 'date pending';
+            dateEl.textContent = formatted
+              ? formatted + (publishedV2
+                ? ' (published output marker; deployment not proven)'
+                : ' (legacy marker; output publication unverified)')
+              : 'unavailable';
           } else {
-            dateEl.textContent = 'date pending';
+            dateEl.textContent = 'unavailable';
           }
         })
         .catch(function () {
-          dateEl.textContent = 'date pending';
+          dateEl.textContent = 'unavailable';
         });
     }
 

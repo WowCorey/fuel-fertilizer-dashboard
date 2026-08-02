@@ -400,7 +400,7 @@ function Header({
     }
   }, [sheetOpen]);
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';
-  const hasSiteRefresh = refreshStatus?.status === 'success' && refreshStatus?.refreshed_at;
+  const hasSiteRefresh = window.FR?.isPublishedRefreshStatus ? window.FR.isPublishedRefreshStatus(refreshStatus) : false;
   const stampLabel = refreshStatus ? hasSiteRefresh ? `Refreshed ${siteRefresh}` : siteRefresh : updated ? `Page data retrieved ${updated}` : '';
   const groupIsActive = g => g.items.some(it => it.id === active);
   return React.createElement("header", {
@@ -1360,7 +1360,8 @@ function App() {
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const siteRefresh = window.FR.fmtRefreshStatus(refreshStatus);
-  const refreshHeading = refreshStatus?.status === 'success' ? `Site refreshed ${siteRefresh}` : siteRefresh;
+  const hasSiteRefresh = window.FR.isPublishedRefreshStatus(refreshStatus);
+  const refreshHeading = hasSiteRefresh ? `Site refreshed ${siteRefresh}` : siteRefresh;
   const overviewRows = [{
     id: 'abares_agricultural_exports',
     label: 'Major agricultural exports',
@@ -1556,8 +1557,8 @@ function App() {
   }, refreshHeading), React.createElement("p", null, "Latest verified page data retrieved: ", latestRetrieved ? updatedDisplay : 'not recorded for this page yet', ". This page may include programmatic, manual, stale, partial and unavailable public-source envelopes. Check the source cards below before treating any value as current.")), React.createElement("div", {
     className: "trust-badges"
   }, React.createElement(TrustBadge, {
-    kind: refreshStatus?.status === 'success' ? 'observed' : 'unavailable'
-  }, refreshStatus?.status === 'success' ? 'Site refresh recorded' : 'No site refresh recorded')))), React.createElement(FoodStatusLegend, null), React.createElement(FoodSystemAuditSummary, null), React.createElement(FoodEvidenceBoundary, null), React.createElement(FoodRelatedSurfaces, null), React.createElement(DataCoverage, {
+    kind: hasSiteRefresh ? 'observed' : 'unavailable'
+  }, hasSiteRefresh ? 'Site refresh recorded' : 'No site refresh recorded')))), React.createElement(FoodStatusLegend, null), React.createElement(FoodSystemAuditSummary, null), React.createElement(FoodEvidenceBoundary, null), React.createElement(FoodRelatedSurfaces, null), React.createElement(DataCoverage, {
     data: data,
     refreshStatus: refreshStatus
   }), React.createElement("section", {

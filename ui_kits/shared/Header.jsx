@@ -57,7 +57,9 @@ function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
   }, [sheetOpen]);
 
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';
-  const hasSiteRefresh = refreshStatus?.status === 'success' && refreshStatus?.refreshed_at;
+  const hasSiteRefresh = window.FR?.isPublishedRefreshStatus
+    ? window.FR.isPublishedRefreshStatus(refreshStatus)
+    : false;
   const stampLabel = refreshStatus
     ? (hasSiteRefresh ? `Refreshed ${siteRefresh}` : siteRefresh)
     : (updated ? `Page data retrieved ${updated}` : '');

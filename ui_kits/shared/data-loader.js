@@ -20,6 +20,9 @@
   const MAN_BASE = '../../data/manual/';
   const MANIFEST_URL = '../../data/source_manifest.json';
   const REFRESH_STATUS_URL = '../../data/last_successful_refresh.json';
+  const REFRESH_SCHEMA_V1 = 'fuel_resilience_refresh_status.v1';
+  const REFRESH_SCHEMA_V2 = 'fuel_resilience_refresh_status.v2';
+  const FULL_GIT_SHA = /^[0-9a-f]{40}$/;
   let manifestPromise = null;
   let refreshStatusPromise = null;
 
@@ -46,20 +49,63 @@
     return manifestPromise;
   }
 
+  function unavailableRefreshStatus() {
+    return {
+      schema: null,
+      status: 'unavailable',
+      publication_state: null,
+      refreshed_at: null,
+      source_data_refreshed_at: null,
+      workflow: null,
+      run_id: null,
+      run_attempt: null,
+      ref: null,
+      branch: null,
+      workflow_input_sha: null,
+      output_commit_sha: null,
+      output_commit_pushed: null,
+    };
+  }
+
+  function nonEmptyString(value) {
+    return typeof value === 'string' && Boolean(value.trim());
+  }
+
+  function validTimestamp(value) {
+    return nonEmptyString(value) && !Number.isNaN(Date.parse(value));
+  }
+
+  function isPublishedRefreshStatus(status) {
+    if (!status || typeof status !== 'object') return false;
+    if (status.schema === REFRESH_SCHEMA_V1) {
+      return status.status === 'success' && validTimestamp(status.refreshed_at);
+    }
+    if (status.schema !== REFRESH_SCHEMA_V2) return false;
+    return (
+      status.status === 'success'
+      && status.publication_state === 'published'
+      && status.output_commit_pushed === true
+      && validTimestamp(status.refreshed_at)
+      && validTimestamp(status.source_data_refreshed_at)
+      && nonEmptyString(status.workflow)
+      && nonEmptyString(status.run_id)
+      && nonEmptyString(status.run_attempt)
+      && nonEmptyString(status.ref)
+      && nonEmptyString(status.branch)
+      && FULL_GIT_SHA.test(status.workflow_input_sha)
+      && FULL_GIT_SHA.test(status.output_commit_sha)
+    );
+  }
+
+  function normalizeRefreshStatus(status) {
+    if (status && status.schema === REFRESH_SCHEMA_V1) return status;
+    if (isPublishedRefreshStatus(status)) return status;
+    return unavailableRefreshStatus();
+  }
+
   async function loadRefreshStatus() {
     if (!refreshStatusPromise) {
-      refreshStatusPromise = tryFetch(REFRESH_STATUS_URL).then(doc => (
-        doc && doc.schema === 'fuel_resilience_refresh_status.v1'
-          ? doc
-          : {
-              schema: 'fuel_resilience_refresh_status.v1',
-              status: 'unavailable',
-              refreshed_at: null,
-              workflow: null,
-              run_id: null,
-              run_attempt: null,
-            }
-      ));
+      refreshStatusPromise = tryFetch(REFRESH_STATUS_URL).then(normalizeRefreshStatus);
     }
     return refreshStatusPromise;
   }
@@ -218,9 +264,9 @@
   }
 
   function fmtRefreshStatus(status) {
-    if (!status) return 'Refresh status unavailable';
-    if (status.status === 'success' && status.refreshed_at) return fmtRetrieved(status.refreshed_at);
-    if (status.status === 'unavailable') return 'Refresh status unavailable';
+    const normalized = normalizeRefreshStatus(status);
+    if (isPublishedRefreshStatus(normalized)) return fmtRetrieved(normalized.refreshed_at);
+    if (normalized.status === 'unavailable') return 'Refresh status unavailable';
     return 'No successful refresh recorded';
   }
 
@@ -252,6 +298,7 @@
     loadOne,
     loadManifest,
     loadRefreshStatus,
+    isPublishedRefreshStatus,
     fmtRetrieved,
     fmtRefreshStatus,
     fmtVerifiedUpdated,

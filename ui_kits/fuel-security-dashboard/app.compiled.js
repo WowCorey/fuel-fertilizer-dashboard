@@ -400,7 +400,7 @@ function Header({
     }
   }, [sheetOpen]);
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';
-  const hasSiteRefresh = refreshStatus?.status === 'success' && refreshStatus?.refreshed_at;
+  const hasSiteRefresh = window.FR?.isPublishedRefreshStatus ? window.FR.isPublishedRefreshStatus(refreshStatus) : false;
   const stampLabel = refreshStatus ? hasSiteRefresh ? `Refreshed ${siteRefresh}` : siteRefresh : updated ? `Page data retrieved ${updated}` : '';
   const groupIsActive = g => g.items.some(it => it.id === active);
   return React.createElement("header", {
@@ -1279,7 +1279,7 @@ function FreshnessNotice({
   latestRetrieved,
   updatedDisplay
 }) {
-  const hasSiteRefresh = refreshStatus?.status === 'success';
+  const hasSiteRefresh = window.FR.isPublishedRefreshStatus(refreshStatus);
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : 'Refresh status unavailable';
   const hasPageRetrieved = Boolean(latestRetrieved);
   return React.createElement("section", {

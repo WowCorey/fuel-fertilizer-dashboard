@@ -26,6 +26,9 @@ jobs:
       - name: Check compiled dashboard JS
         run: npm run check:ui
 
+      - name: Run UI unit tests
+        run: npm run test:ui-unit
+
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
