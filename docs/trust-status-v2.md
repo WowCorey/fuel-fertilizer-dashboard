@@ -11,7 +11,7 @@ python scripts/build_trust_status.py
 python scripts/validate_trust_status_v2.py
 ```
 
-The builder writes `data/trust_status_manifest.json` from current repository evidence. Do not hand-edit generated counts after the builder has run.
+The builder writes `data/trust_status_manifest.json` from current repository evidence. The committed file is a real generated artifact, not a zero-count bootstrap. Do not hand-edit generated counts. CI runs `python scripts/build_trust_status.py --check`; Pages and the weekly refresh build the deployment/publication copy before validating it.
 
 ## Public page
 
@@ -30,4 +30,4 @@ The builder writes `data/trust_status_manifest.json` from current repository evi
 
 ## Claim boundary
 
-Trust Status is not a certification, not an official government assessment and not a security audit. It reports repository evidence and known limitations. A successful automated refresh does not make manual sources current, and an inaccessible landing page does not by itself prove that the underlying dataset is unavailable.
+Trust Status is not a certification, not an official government assessment, not a security audit and not a risk score. It is not proof that every upstream value is correct or that every source is reachable. It reports repository evidence and known limitations. A successful automated refresh does not make manual sources current, and an inaccessible landing page does not by itself prove that the underlying dataset is unavailable.

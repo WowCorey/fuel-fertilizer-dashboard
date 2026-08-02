@@ -4,7 +4,7 @@
 **Repository:** `WowCorey/fuel-fertilizer-dashboard`  
 **Review date:** 2026-08-02 AEST  
 **Branch:** `phase-3-trust-status-v2`  
-**Base:** Phase 2B head `aa7ea38b96b869871754d2eb58bc845feb91a85c`
+**Current base:** `main`, after Phase 2B merge commit `21f4ac11fba8eab05c3c0fc5008ad2a842c95223`
 
 ## Executive result
 
@@ -29,7 +29,7 @@ PR #108 was created from the May 2026 repository state and used a hand-authored 
 
 Phase 3 preserves the useful idea — a public credibility surface — but replaces the implementation with explicit generated fields and current repository evidence.
 
-The new work is stacked on Phase 2B rather than copied onto `main`, so source-governance review remains separate and traceable.
+The work was originally stacked on Phase 2B. After PR #109 merged, PR #110 was retargeted to `main` and updated by merging the new `main` head without rewriting its review history.
 
 ---
 
@@ -56,7 +56,7 @@ The builder reads `data/source_manifest.json` and reports exact counts for:
 - derived sources;
 - unavailable sources;
 - total registered sources;
-- generated-only, manual-only, duplicate and missing envelope presence.
+- generated-only, manual-only, both-present and missing envelope presence.
 
 It separately inspects JSON envelopes to report:
 
@@ -97,7 +97,7 @@ The manifest explicitly discloses the current v1 SHA ambiguity: the marker recor
 
 ### Link health
 
-When `data/source_link_health.json` exists, Trust Status publishes its classified category counts and definite-repair count.
+When `data/source_link_health.json` exists, Trust Status publishes its classified category counts, definite-repair source count, registered/classified coverage, checker-failure count and whether classification completed. Category IDs are preserved literally.
 
 When it does not exist, the trust manifest says `not_yet_generated`. It does not substitute zero or infer that all links are healthy.
 
@@ -117,8 +117,8 @@ Trust Status v2 uses a small deterministic status set:
 |---|---|
 | `validation_failed` | Project validator reports one or more blocking errors |
 | `refresh_status_unknown` | No successful committed refresh marker is available |
-| `operational_with_warnings` | Validation succeeds but warnings or definite link repairs remain |
-| `operational` | Validation succeeds, refresh status is successful and no disclosed warning/repair condition remains |
+| `operational_with_warnings` | Validation succeeds but warnings, definite link repairs, missing link evidence or incomplete link classification remain |
+| `operational` | Validation succeeds, refresh status is successful, classified link evidence is complete and no disclosed warning/repair condition remains |
 
 The status is descriptive. It is not a reliability percentage, certification grade or upstream-data guarantee.
 
@@ -177,9 +177,9 @@ If the generated manifest cannot be loaded, the page displays an explicit unavai
 CI now:
 
 1. compiles the Trust Status builder and validator;
-2. applies governed canonical URLs;
+2. checks that governed canonical URL artifacts are current;
 3. validates the source registry, envelopes and governance;
-4. generates Trust Status v2;
+4. checks the committed Trust Status v2 artifact against a fresh deterministic build, ignoring only `generated_at`;
 5. validates Trust Status v2;
 6. runs unit and browser tests.
 
@@ -200,7 +200,7 @@ The weekly data workflow now:
 
 The Pages workflow installs the Python requirements, applies governed URLs, generates Trust Status v2 and validates it before uploading the static artifact.
 
-This ensures the deployed public page receives a current generated manifest even when the committed bootstrap file has not yet been replaced by a scheduled refresh.
+This ensures the deployed public page receives a freshly generated manifest. The committed manifest is also real generated evidence and is checked in CI; there is no zero-count bootstrap.
 
 ---
 
@@ -211,6 +211,7 @@ This ensures the deployed public page receives a current generated manifest even
 - the v2 schema and allowed status values;
 - source-mode counts and totals;
 - envelope-presence totals;
+- exact reconciliation against the explicit source manifest and committed envelope files;
 - validation error/warning shapes;
 - existing evidence paths;
 - explicit refresh-SHA semantics;
@@ -240,6 +241,10 @@ Coverage includes:
 - warnings producing an operational-with-warnings state;
 - missing link-health evidence remaining unknown rather than healthy;
 - explicit refresh-marker SHA semantics.
+- unknown source modes failing closed;
+- missing refresh evidence remaining an unknown state;
+- missing or incomplete link-health evidence preventing an unqualified operational state;
+- bounded and redacted public diagnostic examples.
 
 ### Browser tests
 
@@ -254,16 +259,20 @@ Coverage includes:
 - absence of external `unpkg` scripts;
 - no browser or console errors;
 - workflow configuration being separated from latest-run conclusions.
+- visible manifest-load failure with no fallback metrics;
+- no coercion of missing counts to zero;
+- literal classified link category IDs;
+- narrow-layout overflow and keyboard skip-link behaviour.
 
 ---
 
-## 8. Bootstrap manifest
+## 8. Committed generated manifest
 
-The committed `data/trust_status_manifest.json` starts as an explicit zero-count bootstrap document.
+The committed `data/trust_status_manifest.json` is a deterministic generated artifact populated from repository evidence. It is not a placeholder and currently reconciles to the explicit source registry.
 
-It warns that it is not publication evidence. CI, weekly refresh and Pages all run the builder before validation or deployment, replacing those placeholders with repository-derived counts.
+CI uses the builder's `--check` mode so regeneration cannot hide drift. Weekly refresh and Pages generate the current publication copy before validating it. Repeated checks ignore only the explicitly time-dependent `generated_at` field.
 
-The bootstrap avoids pretending that manually guessed source-mode totals are current.
+The Trust Status validator rejects a `bootstrap_notice` and independently reconciles source and envelope totals, making a zero-count bootstrap impossible to confuse with publication evidence.
 
 ---
 
@@ -287,15 +296,15 @@ Phase 3 does not claim that:
 
 ## 10. Merge and dependency rule
 
-Phase 3 is intentionally stacked on Phase 2B.
+Phase 2B PR #109 is merged. Phase 3 PR #110 is retargeted to `main`; its hostile review corrections and full test suite must pass before merge. PR #108 remains closed as superseded.
 
-Recommended order:
+---
 
-1. review and merge Phase 2B PR #109;
-2. retarget or update the Phase 3 branch to `main` after Phase 2B lands;
-3. confirm Phase 3 CI again;
-4. close PR #108 as superseded;
-5. merge Phase 3 only after the generated public page and claim boundaries are reviewed.
+## 11. Hostile review corrections
+
+The post-Phase-2B review found that the original green CI run did not prove the committed artifact was current: CI regenerated the zero-count bootstrap before validating it. The review also found an unexecuted browser spec, a validator contradiction for an honestly missing refresh marker, unknown source modes that were counted then rejected later, link-check completeness omitted from public evidence, a repair-source count labelled as a category count, an unsupported “schema-valid” envelope label, an incomplete claim boundary, and numeric formatting that could coerce `null` to zero.
+
+The corrected implementation now fails closed on unknown modes, reconciles every count to explicit repository inputs, commits real generated evidence, runs the Trust Status browser suite, preserves missing and incomplete states, renders manifest strings through safe DOM APIs, discloses all required non-claims and publishes no fallback metric when the manifest is unavailable.
 
 ---
 
