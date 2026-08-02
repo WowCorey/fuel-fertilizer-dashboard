@@ -1,18 +1,25 @@
 # Remaining Data Gaps
 
-Last reviewed: 2026-05-06
+Governance reviewed: 2026-08-03
+
+Last source-by-source content review: 2026-05-06, except where a row names a later review or source date.
 
 This register records the known dashboard gaps that should not be filled with
 estimates. A gap can move to "ready to populate" only when a named public source
 contains the exact field, reporting period, unit, and reuse rights needed for a
 JSON envelope.
 
+This is a maintained editorial backlog, not an evidence registry and not a
+runtime input. `data/sources.yml`, its governed source URLs, the generated
+source manifest and the individual evidence envelopes are authoritative when
+this document and repository evidence differ.
+
 The public missing-data scoreboard lives at
 `ui_kits/missing-data-scoreboard/index.html`. It does not add new values; it
 turns the gaps below into a visible public-policy view of what is verified,
 partial, stale, unavailable, source-gated or roadmap-only. The scoreboard also
-uses this register to build a national readiness priority matrix and action
-queue.
+maintains an editorial readiness matrix and action queue in its own source. It
+does not parse this Markdown file, so changes must be reconciled deliberately.
 
 Priority bands in the public scoreboard are editorial/product triage only. They
 are not official risk ratings, not numeric scores, and not a substitute for
@@ -306,11 +313,15 @@ or public procurement sources provide exact fields.
 
 Do not start the Fuel Stress Index implementation until:
 
-- the public site is deployed and visible,
-- every visible card has verified, stale, derived, or awaiting status,
-- the deferred gaps above are either populated or intentionally excluded from
-  the index formula,
-- the index methodology includes component coverage and confidence.
+- minimum component, product, geography and freshness coverage thresholds are
+  documented and validated;
+- every candidate input has an explicit observed, manual, derived, stale or
+  unavailable state;
+- deferred gaps are intentionally excluded rather than estimated into the
+  formula;
+- the methodology exposes component coverage, missing inputs and confidence;
+- tests prove that insufficient coverage suppresses the score instead of
+  silently reweighting available inputs.
 
 The locked methodology gate now lives in `docs/fuel-stress-index-spec.md`.
 
