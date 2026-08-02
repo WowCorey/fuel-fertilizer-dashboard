@@ -46,6 +46,8 @@ jobs:
           python -m py_compile scripts/apply_source_url_governance.py
           python -m py_compile scripts/check_source_links.py
           python -m py_compile scripts/validate_project.py
+          python -m py_compile scripts/build_trust_status.py
+          python -m py_compile scripts/validate_trust_status_v2.py
 
       - name: Check source manifest
         run: python scripts/build_source_manifest.py --check
@@ -55,6 +57,12 @@ jobs:
 
       - name: Validate source registry, envelopes and URL governance
         run: python scripts/validate_project.py
+
+      - name: Build Trust Status v2
+        run: python scripts/build_trust_status.py
+
+      - name: Validate Trust Status v2
+        run: python scripts/validate_trust_status_v2.py
 
       - name: Run tests
         run: python -m unittest discover -s tests
