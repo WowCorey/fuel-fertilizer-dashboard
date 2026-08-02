@@ -243,8 +243,8 @@ An unavailable stub must not look freshly retrieved:
 
 Dashboard dates are deliberately split:
 
-- `Refreshed` is the last successful automated pipeline run recorded in
-  `data/last_successful_refresh.json`.
+- `Refreshed` is the source-data refresh timestamp from the latest successful
+  publication marker in `data/last_successful_refresh.json`.
 - `Page data retrieved` is the newest `retrieved_at` timestamp among verified
   envelopes loaded by that dashboard page.
 - `Latest source data point` is the newest reporting period in those envelopes.
@@ -314,9 +314,10 @@ python3 scripts/validate_data.py              # validate registry and envelopes
 4. Creates any missing manual stubs.
 5. Rebuilds `data/source_manifest.json`.
 6. Runs `scripts/validate_data.py` before committing.
-7. Writes `data/last_successful_refresh.json` only after successful refresh and
-   validation.
-8. Commits changed data files to the repository only after validation passes.
+7. Writes a prepared refresh marker only after successful refresh and validation.
+8. Commits and pushes the generated refresh output.
+9. Finalizes the marker with the pushed output commit SHA, rebuilds Trust Status,
+   and pushes the marker evidence in a second commit.
 
 Manual and canonical publisher pages should not block a valid programmatic data
 refresh; broken programmatic fetch URLs should fail loudly.
@@ -328,7 +329,8 @@ snapshot sources, such as PM&C national status, FSSP disclosures, company
 profits and resource-value receipts, still need a human review before changing
 their JSON.
 
-The site header uses the refresh marker for the top-level `Refreshed` date.
+The site header uses only a successful refresh marker for the top-level
+`Refreshed` date. A prepared-but-unpublished v2 marker is not shown as success.
 Page-level coverage panels and footers continue to show the latest verified
 retrieval date among the source envelopes loaded by that page.
 
@@ -410,7 +412,7 @@ scripts/
   init_manual_stubs.py         Creates missing data/manual/*.json stubs
   review_due.py                Reports manual sources that need review
   validate_data.py             Validates registry, envelopes and dashboard refs
-  write_refresh_status.py      Writes data/last_successful_refresh.json after refresh
+  write_refresh_status.py      Prepares/finalizes the two-commit refresh marker
 
 tests/
   test_fetch_transforms.py     Fetch/derivation transform coverage

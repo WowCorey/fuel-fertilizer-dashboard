@@ -62,12 +62,7 @@
   <header class="trust-header">
     <div class="trust-header__inner">
       <a class="brand" href="../../index.html"><span class="brand__name">Fuel Resilience AU</span></a>
-      <nav aria-label="Trust status navigation">
-        <a href="../../index.html">Home</a>
-        <a href="../missing-data-scoreboard/index.html">Missing data</a>
-        <a href="../../data/source_manifest.json">Source manifest</a>
-        <a aria-current="page" href="index.html">Trust Status</a>
-      </nav>
+      <nav id="trust-navigation" aria-label="Trust status navigation"></nav>
     </div>
   </header>
 
@@ -165,14 +160,45 @@
 
     <footer class="trust-footer">
       <span>Independent public-source prototype — not an official government dashboard.</span>
+      <nav id="trust-footer-routes" aria-label="Dashboard links"></nav>
       <a href="https://github.com/WowCorey/fuel-fertilizer-dashboard/issues">Report an error or source problem</a>
     </footer>
   </main>
 
+  <script src="../shared/routes.generated.js"></script>
   <script>
     'use strict';
 
     const MANIFEST_URL = '../../data/trust_status_manifest.json';
+
+    function routeHref(route) {
+      return `../../${route.relative_url}`;
+    }
+
+    function appendRouteLink(parent, route, active = false) {
+      const link = document.createElement('a');
+      link.href = routeHref(route);
+      link.textContent = route.nav_label;
+      if (active) link.setAttribute('aria-current', 'page');
+      parent.appendChild(link);
+    }
+
+    function renderRouteNavigation() {
+      const routes = (window.SITE_ROUTES?.routes || []).filter(route => route.public);
+      const byId = new Map(routes.map(route => [route.id, route]));
+      const navigation = document.getElementById('trust-navigation');
+      ['home', 'missing_data', 'trust_status'].forEach(id => {
+        const route = byId.get(id);
+        if (route) appendRouteLink(navigation, route, id === 'trust_status');
+      });
+      const sourceManifest = document.createElement('a');
+      sourceManifest.href = '../../data/source_manifest.json';
+      sourceManifest.textContent = 'Source manifest';
+      navigation.appendChild(sourceManifest);
+
+      const footer = document.getElementById('trust-footer-routes');
+      routes.filter(route => route.id !== 'home').forEach(route => appendRouteLink(footer, route, route.id === 'trust_status'));
+    }
 
     function formatNumber(value) {
       return typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString('en-AU') : 'Unavailable';
@@ -251,16 +277,29 @@
 
     function renderRefresh(manifest) {
       const refresh = manifest.latest_refresh || {};
-      document.getElementById('refresh-summary').textContent = refresh.status === 'success'
-        ? `The automated pipeline last recorded a successful refresh at ${formatTime(refresh.refreshed_at)}.`
-        : 'No successful committed refresh marker is currently available.';
+      let summary = 'No successful committed refresh marker is currently available.';
+      if (refresh.status === 'success' && refresh.publication_state === 'published' && refresh.output_commit_pushed === true) {
+        summary = `The pipeline recorded source-data refresh output at ${formatTime(refresh.source_data_refreshed_at)} and records its output commit as pushed.`;
+      } else if (refresh.status === 'success' && refresh.publication_state === 'legacy_unverified') {
+        summary = `A legacy marker records a successful refresh at ${formatTime(refresh.source_data_refreshed_at)}, but does not prove the output commit or deployed commit.`;
+      } else if (refresh.status === 'pending_publication') {
+        summary = `Source-data refresh output was prepared at ${formatTime(refresh.source_data_refreshed_at)}, but publication is not established.`;
+      }
+      document.getElementById('refresh-summary').textContent = summary;
       const list = document.getElementById('refresh-list');
       clear(list);
       appendEvidence(list, 'Status', titleCase(refresh.status));
-      appendEvidence(list, 'Recorded at', formatTime(refresh.refreshed_at));
+      appendEvidence(list, 'Marker schema', refresh.marker_schema || 'Not recorded', true);
+      appendEvidence(list, 'Publication state', titleCase(refresh.publication_state));
+      appendEvidence(list, 'Source data refreshed', formatTime(refresh.source_data_refreshed_at));
       appendEvidence(list, 'Workflow', refresh.workflow || 'Not recorded');
       appendEvidence(list, 'Run ID', refresh.run_id || 'Not recorded', true);
-      appendEvidence(list, 'Reported SHA', refresh.reported_git_sha || 'Not recorded', true);
+      appendEvidence(list, 'Run attempt', refresh.run_attempt || 'Not recorded', true);
+      appendEvidence(list, 'Ref', refresh.ref || 'Not recorded', true);
+      appendEvidence(list, 'Branch', refresh.branch || 'Not recorded', true);
+      appendEvidence(list, 'Workflow input SHA', refresh.workflow_input_sha || 'Not recorded', true);
+      appendEvidence(list, 'Output commit SHA', refresh.output_commit_sha || 'Not recorded', true);
+      appendEvidence(list, 'Output commit pushed', refresh.output_commit_pushed === true ? 'Yes' : (refresh.output_commit_pushed === false ? 'No' : 'Not recorded'));
       appendEvidence(list, 'SHA meaning', refresh.sha_semantics || 'Not recorded');
       appendEvidence(list, 'Evidence', refresh.evidence_path || 'Unavailable', true);
     }
@@ -377,6 +416,7 @@
       }
     }
 
+    renderRouteNavigation();
     loadTrustStatus();
   </script>
 </body>

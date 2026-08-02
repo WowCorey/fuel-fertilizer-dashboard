@@ -364,7 +364,7 @@ function MoreThanPumpPrices() {
 }
 
 function FreshnessNotice({ refreshStatus, latestRetrieved, updatedDisplay }) {
-  const hasSiteRefresh = refreshStatus?.status === 'success';
+  const hasSiteRefresh = window.FR.isPublishedRefreshStatus(refreshStatus);
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : 'Refresh status unavailable';
   const hasPageRetrieved = Boolean(latestRetrieved);
   return (
@@ -423,7 +423,7 @@ function OperationalSummary30s({ data }) {
             level, MSO reserves and days, APS stocks/sales/imports, ABS petroleum imports).
           </p>
           <a href="#national-summary">Jump to public national signals</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Derived feeds</span>
@@ -433,7 +433,7 @@ function OperationalSummary30s({ data }) {
             the public MSO table; no hidden demand assumptions are introduced).
           </p>
           <a href="#days-remaining">Jump to days remaining</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Partial / manual snapshots</span>
@@ -444,7 +444,7 @@ function OperationalSummary30s({ data }) {
             not live operational coverage.
           </p>
           <a href="#outages">Jump to outage visibility</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Source-gated / unavailable</span>
@@ -455,7 +455,7 @@ function OperationalSummary30s({ data }) {
             stay labelled until a named public source is loaded.
           </p>
           <a href="#publish-needed-h">Jump to publishing needs</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
       </div>
     </section>
@@ -1454,7 +1454,7 @@ function App() {
             <span className="mono">Status unavailable</span>
             <div style={{ height: 12 }}/>
             <strong>Last reviewed</strong>
-            <span className="mono">metadata pending</span>
+            <span className="mono">Review date unavailable</span>
           </aside>
         </section>
 

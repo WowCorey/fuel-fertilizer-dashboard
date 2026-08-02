@@ -213,23 +213,78 @@ def refresh_summary(refresh: dict[str, Any] | None) -> dict[str, Any]:
     if not refresh:
         return {
             "status": "not_recorded",
+            "marker_schema": None,
+            "publication_state": None,
             "refreshed_at": None,
+            "source_data_refreshed_at": None,
             "workflow": None,
             "run_id": None,
+            "run_attempt": None,
+            "ref": None,
+            "branch": None,
             "reported_git_sha": None,
+            "workflow_input_sha": None,
+            "output_commit_sha": None,
+            "output_commit_pushed": None,
             "sha_semantics": "No committed refresh marker was available.",
             "evidence_path": "data/last_successful_refresh.json",
         }
+
+    marker_schema = refresh.get("schema")
+    if marker_schema == "fuel_resilience_refresh_status.v2":
+        publication_state = refresh.get("publication_state")
+        if publication_state == "published":
+            semantics = (
+                "workflow_input_sha identifies the workflow input commit. output_commit_sha identifies "
+                "the earlier pushed commit containing the generated refresh output; it is not the later "
+                "marker commit and is not proof of the latest deployed commit."
+            )
+        elif publication_state == "prepared":
+            semantics = (
+                "workflow_input_sha identifies the workflow input commit. No pushed output commit has "
+                "yet been recorded, so the published refresh is not established."
+            )
+        else:
+            semantics = "The v2 marker has an unknown publication state; no published refresh is established."
+        workflow_input_sha = refresh.get("workflow_input_sha")
+        source_refreshed_at = refresh.get("source_data_refreshed_at") or refresh.get("refreshed_at")
+        return {
+            "status": refresh.get("status") or "unknown",
+            "marker_schema": marker_schema,
+            "publication_state": publication_state,
+            "refreshed_at": source_refreshed_at,
+            "source_data_refreshed_at": source_refreshed_at,
+            "workflow": refresh.get("workflow"),
+            "run_id": refresh.get("workflow_run_id") or refresh.get("run_id"),
+            "run_attempt": refresh.get("workflow_run_attempt") or refresh.get("run_attempt"),
+            "ref": refresh.get("ref"),
+            "branch": refresh.get("branch"),
+            "reported_git_sha": workflow_input_sha,
+            "workflow_input_sha": workflow_input_sha,
+            "output_commit_sha": refresh.get("output_commit_sha"),
+            "output_commit_pushed": refresh.get("output_commit_pushed") is True,
+            "sha_semantics": semantics,
+            "evidence_path": "data/last_successful_refresh.json",
+        }
+
     return {
         "status": refresh.get("status") or "unknown",
+        "marker_schema": marker_schema or "fuel_resilience_refresh_status.v1",
+        "publication_state": "legacy_unverified",
         "refreshed_at": refresh.get("refreshed_at"),
+        "source_data_refreshed_at": refresh.get("refreshed_at"),
         "workflow": refresh.get("workflow"),
         "run_id": refresh.get("run_id"),
         "run_attempt": refresh.get("run_attempt"),
+        "ref": None,
+        "branch": None,
         "reported_git_sha": refresh.get("git_sha"),
+        "workflow_input_sha": refresh.get("git_sha"),
+        "output_commit_sha": None,
+        "output_commit_pushed": None,
         "sha_semantics": (
-            "Under the current v1 marker, git_sha records the workflow input commit and may not be "
-            "the later commit that contains the published refresh."
+            "Under the legacy v1 marker, git_sha records the workflow input commit and may not be "
+            "the later commit that contains the published refresh; no output commit or deployment is proven."
         ),
         "evidence_path": "data/last_successful_refresh.json",
     }

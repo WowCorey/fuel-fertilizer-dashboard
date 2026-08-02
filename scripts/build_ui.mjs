@@ -4,9 +4,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { transformSync } from '@babel/core';
 import presetReact from '@babel/preset-react';
+import { buildSync } from 'esbuild';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const checkOnly = process.argv.includes('--check');
+const vendorOutputPath = path.join(root, 'ui_kits', 'shared', 'react-vendor.js');
+const thirdPartyLicensesOutputPath = path.join(root, 'ui_kits', 'shared', 'THIRD_PARTY_LICENSES.txt');
+const routesOutputPath = path.join(root, 'ui_kits', 'shared', 'routes.generated.js');
+const routeRegistry = JSON.parse(fs.readFileSync(path.join(root, 'data', 'site_routes.json'), 'utf8'));
 
 const sharedFiles = [
   'ui_kits/shared/DataCoverage.jsx',
@@ -19,36 +24,213 @@ const sharedFiles = [
   'ui_kits/shared/Footer.jsx',
 ];
 
-const dashboards = [
-  'national-status-dashboard',
-  'fuel-security-dashboard',
-  'australian-fuel-strategy-dashboard',
-  'qld-fuel-sovereignty-dashboard',
-  'resource-value-dashboard',
-  'state-contribution-dashboard',
-  'strategic-resources-dashboard',
-  'defence-alliances-dashboard',
-  'defence-procurement-watch',
-  'fuel-dashboard',
-  'fertilizer-dashboard',
-  'oil-and-production',
-  'who-pays-what',
-  'au-economics-dashboard',
-  'housing-economic-pressure-dashboard',
-  'manufacturing-dashboard',
-  'power-grid-dashboard',
-  'infrastructure-dashboard',
-  'brisbane-2032-readiness-dashboard',
-  'employment-automation-dashboard',
-  'missing-data-scoreboard',
-];
-
 function normalizeNewlines(text) {
   return text.replace(/\r\n/g, '\n');
 }
 
 function read(relPath) {
   return fs.readFileSync(path.join(root, relPath), 'utf8');
+}
+
+function writeOrCheck(outputPath, output) {
+  if (checkOnly) {
+    const existing = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : null;
+    if (existing === null || normalizeNewlines(existing) !== normalizeNewlines(output)) {
+      throw new Error(`${path.relative(root, outputPath)} is missing or stale. Run npm run build:ui.`);
+    }
+    return;
+  }
+  fs.writeFileSync(outputPath, output, 'utf8');
+  console.log(`Wrote ${path.relative(root, outputPath)}`);
+}
+
+function validateRouteRegistry() {
+  if (routeRegistry.schema_version !== 1) throw new Error('data/site_routes.json has an unsupported schema_version');
+  if (!Array.isArray(routeRegistry.groups) || !Array.isArray(routeRegistry.routes)) {
+    throw new Error('data/site_routes.json must contain groups and routes arrays');
+  }
+
+  const groupIds = new Set();
+  routeRegistry.groups.forEach(group => {
+    if (!group?.id || !group?.label || groupIds.has(group.id)) {
+      throw new Error(`Invalid or duplicate route group: ${JSON.stringify(group)}`);
+    }
+    groupIds.add(group.id);
+  });
+
+  const routeIds = new Set();
+  const routeUrls = new Set();
+  routeRegistry.routes.forEach(route => {
+    for (const field of ['id', 'title', 'nav_label', 'relative_url', 'group', 'kind']) {
+      if (typeof route?.[field] !== 'string' || !route[field].trim()) {
+        throw new Error(`Route is missing ${field}: ${JSON.stringify(route)}`);
+      }
+    }
+    if (route.public !== true) throw new Error(`Route ${route.id} must explicitly declare public: true`);
+    if (!groupIds.has(route.group)) throw new Error(`Route ${route.id} uses unknown group ${route.group}`);
+    if (!['react-dashboard', 'standalone'].includes(route.kind)) throw new Error(`Route ${route.id} has unknown kind ${route.kind}`);
+    if (routeIds.has(route.id)) throw new Error(`Duplicate route id ${route.id}`);
+    if (routeUrls.has(route.relative_url)) throw new Error(`Duplicate route URL ${route.relative_url}`);
+    if (route.relative_url.startsWith('/') || route.relative_url.includes('..') || /^[a-z]+:/i.test(route.relative_url)) {
+      throw new Error(`Route ${route.id} must use a safe repository-relative URL`);
+    }
+    const routePath = path.join(root, ...route.relative_url.split('/'));
+    if (!fs.existsSync(routePath)) throw new Error(`Registered public route is missing: ${route.relative_url}`);
+    routeIds.add(route.id);
+    routeUrls.add(route.relative_url);
+  });
+
+  const registeredDashboardDirs = new Set(
+    routeRegistry.routes
+      .filter(route => route.relative_url.startsWith('ui_kits/'))
+      .map(route => route.relative_url.split('/')[1]),
+  );
+  const publicDashboardDirs = fs.readdirSync(path.join(root, 'ui_kits'), { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(root, 'ui_kits', entry.name, 'index.html')))
+    .map(entry => entry.name);
+  const orphaned = publicDashboardDirs.filter(name => !registeredDashboardDirs.has(name));
+  const nonPublic = [...registeredDashboardDirs].filter(name => !publicDashboardDirs.includes(name));
+  if (orphaned.length) throw new Error(`Public dashboards orphaned from data/site_routes.json: ${orphaned.join(', ')}`);
+  if (nonPublic.length) throw new Error(`Registered dashboard directories are missing index.html: ${nonPublic.join(', ')}`);
+
+  return routeRegistry.routes
+    .filter(route => route.kind === 'react-dashboard')
+    .map(route => route.relative_url.split('/')[1]);
+}
+
+function buildRouteRegistry() {
+  const output = [
+    '// Generated by scripts/build_ui.mjs from data/site_routes.json.',
+    '// Do not edit by hand. Run npm run build:ui.',
+    `Object.assign(window, { SITE_ROUTES: ${JSON.stringify(routeRegistry, null, 2)} });`,
+    '',
+  ].join('\n');
+  writeOrCheck(routesOutputPath, output);
+}
+
+function validateReviewLabels(dashboards) {
+  const maintainedUiFiles = new Set([
+    'index.html',
+    ...routeRegistry.routes.map(route => route.relative_url),
+    ...dashboards.map(name => `ui_kits/${name}/app.jsx`),
+  ]);
+  maintainedUiFiles.forEach(file => {
+    if (/\b(?:source\s+)?metadata\s+pending\b/i.test(read(file))) {
+      throw new Error(`${file} contains the retired metadata-pending placeholder`);
+    }
+  });
+}
+
+function buildReactVendor() {
+  const result = buildSync({
+    stdin: {
+      contents: [
+        "import React from 'react';",
+        "import { createRoot } from 'react-dom/client';",
+        'Object.assign(globalThis, { React, ReactDOM: { createRoot } });',
+      ].join('\n'),
+      loader: 'js',
+      resolveDir: root,
+      sourcefile: 'react-vendor-entry.js',
+    },
+    bundle: true,
+    define: { 'process.env.NODE_ENV': '"production"' },
+    format: 'iife',
+    legalComments: 'eof',
+    minify: true,
+    platform: 'browser',
+    target: ['es2020'],
+    treeShaking: true,
+    write: false,
+  });
+  const code = result.outputFiles?.[0]?.text;
+  if (!code) throw new Error('esbuild produced no React vendor output');
+  for (const requiredNotice of [
+    '@license React',
+    'react.production.min.js',
+    'react-dom.production.min.js',
+    'Copyright (c) Facebook, Inc. and its affiliates.',
+    'licensed under the MIT license',
+  ]) {
+    if (!code.includes(requiredNotice)) {
+      throw new Error(`React vendor output is missing required legal notice text: ${requiredNotice}`);
+    }
+  }
+  const output = [
+    '// Generated by scripts/build_ui.mjs from package-lock-controlled React dependencies.',
+    '// Do not edit by hand. Run npm run build:ui.',
+    '// Full third-party licence texts accompany this bundle in THIRD_PARTY_LICENSES.txt.',
+    code.trimEnd(),
+    '',
+  ].join('\n');
+  writeOrCheck(vendorOutputPath, output);
+}
+
+function buildThirdPartyLicenses() {
+  const packages = [
+    { name: 'react', label: 'React' },
+    { name: 'react-dom', label: 'ReactDOM' },
+    { name: 'scheduler', label: 'Scheduler' },
+  ];
+  const blocks = packages.map(pkg => {
+    const packageRoot = path.join(root, 'node_modules', pkg.name);
+    const metadata = JSON.parse(fs.readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
+    const license = normalizeNewlines(fs.readFileSync(path.join(packageRoot, 'LICENSE'), 'utf8')).trim();
+    if (metadata.license !== 'MIT') {
+      throw new Error(`${pkg.name} no longer declares the expected MIT licence`);
+    }
+    for (const requiredText of [
+      'Copyright (c) Facebook, Inc. and its affiliates.',
+      'Permission is hereby granted, free of charge',
+      'The above copyright notice and this permission notice shall be included',
+    ]) {
+      if (!license.includes(requiredText)) {
+        throw new Error(`${pkg.name}/LICENSE is missing required MIT notice text: ${requiredText}`);
+      }
+    }
+    return [
+      `${pkg.label} ${metadata.version}`,
+      `Package: ${pkg.name}`,
+      `Declared licence: ${metadata.license}`,
+      '',
+      license,
+    ].join('\n');
+  });
+  const reactDomProductionSource = normalizeNewlines(fs.readFileSync(
+    path.join(root, 'node_modules', 'react-dom', 'cjs', 'react-dom.production.min.js'),
+    'utf8',
+  ));
+  const modernizrNotice = 'Modernizr 3.0.0pre (Custom Build) | MIT';
+  if (!reactDomProductionSource.includes(modernizrNotice)) {
+    throw new Error(`react-dom production source is missing embedded notice: ${modernizrNotice}`);
+  }
+  const output = [
+    'THIRD-PARTY LICENCES FOR THE LOCAL REACT PRODUCTION BUNDLE',
+    'Generated by scripts/build_ui.mjs from package-lock-controlled dependencies.',
+    'Do not edit by hand. Run npm run build:ui.',
+    '',
+    blocks.join('\n\n================================================================\n\n'),
+    '',
+    '================================================================',
+    '',
+    'Embedded ReactDOM notice preserved from react-dom.production.min.js:',
+    modernizrNotice,
+    '',
+  ].join('\n');
+  writeOrCheck(thirdPartyLicensesOutputPath, output);
+}
+
+function validateDashboardRuntime(name) {
+  const html = read(`ui_kits/${name}/index.html`);
+  if (/https?:\/\/[^"']+(?:react|react-dom)/i.test(html)) {
+    throw new Error(`ui_kits/${name}/index.html loads an external React runtime`);
+  }
+  if (!html.includes('../shared/react-vendor.js')) {
+    throw new Error(`ui_kits/${name}/index.html does not load the local React production bundle`);
+  }
+  if (!html.includes('../shared/routes.generated.js')) {
+    throw new Error(`ui_kits/${name}/index.html does not load the generated route registry`);
+  }
 }
 
 function compileDashboard(name) {
@@ -77,18 +259,15 @@ function compileDashboard(name) {
     '',
   ].join('\n');
 
-  if (checkOnly) {
-    const existing = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : null;
-    if (existing === null || normalizeNewlines(existing) !== normalizeNewlines(output)) {
-      throw new Error(`${path.relative(root, outputPath)} is missing or stale. Run npm run build:ui.`);
-    }
-    return;
-  }
-
-  fs.writeFileSync(outputPath, output, 'utf8');
-  console.log(`Wrote ${path.relative(root, outputPath)}`);
+  writeOrCheck(outputPath, output);
 }
 
+const dashboards = validateRouteRegistry();
+validateReviewLabels(dashboards);
+buildRouteRegistry();
+buildThirdPartyLicenses();
+buildReactVendor();
 for (const dashboard of dashboards) {
+  validateDashboardRuntime(dashboard);
   compileDashboard(dashboard);
 }

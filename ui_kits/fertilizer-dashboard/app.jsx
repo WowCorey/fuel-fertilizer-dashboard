@@ -145,7 +145,7 @@ function FoodSystemAuditSummary() {
             <h3>{card.title}</h3>
             <p>{card.copy}</p>
             <a href={card.href}>Jump to evidence</a>
-            <span className="audit-stamp">Last reviewed: metadata pending</span>
+            <span className="audit-stamp">Review date unavailable</span>
           </article>
         ))}
       </div>
@@ -487,7 +487,8 @@ function App() {
   const latestRetrieved = window.FR.latestVerifiedRetrieved(data);
   const updatedDisplay = window.FR.fmtVerifiedUpdated(latestRetrieved);
   const siteRefresh = window.FR.fmtRefreshStatus(refreshStatus);
-  const refreshHeading = refreshStatus?.status === 'success' ? `Site refreshed ${siteRefresh}` : siteRefresh;
+  const hasSiteRefresh = window.FR.isPublishedRefreshStatus(refreshStatus);
+  const refreshHeading = hasSiteRefresh ? `Site refreshed ${siteRefresh}` : siteRefresh;
 
   const overviewRows = [
     {
@@ -699,7 +700,7 @@ function App() {
             <span>Independent public-source prototype. Not an official government dashboard, live farm forecast, water-allocation service or commodity-trading tool.</span>
             <div style={{ height: 12 }}/>
             <strong>Last reviewed</strong>
-            <span className="mono">metadata pending</span>
+            <span className="mono">Review date unavailable</span>
           </aside>
         </section>
 
@@ -715,8 +716,8 @@ function App() {
               </p>
             </div>
             <div className="trust-badges">
-              <TrustBadge kind={refreshStatus?.status === 'success' ? 'observed' : 'unavailable'}>
-                {refreshStatus?.status === 'success' ? 'Site refresh recorded' : 'No site refresh recorded'}
+              <TrustBadge kind={hasSiteRefresh ? 'observed' : 'unavailable'}>
+                {hasSiteRefresh ? 'Site refresh recorded' : 'No site refresh recorded'}
               </TrustBadge>
             </div>
           </div>

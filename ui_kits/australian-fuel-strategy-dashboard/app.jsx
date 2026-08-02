@@ -438,7 +438,7 @@ function OperationalSummary30s({ data }) {
             days-cover envelopes.
           </p>
           <a href="#reserve-indicators-h">Jump to reserve and MSO indicators</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Partial / manual feeds</span>
@@ -448,7 +448,7 @@ function OperationalSummary30s({ data }) {
             FSSP payment-disclosure context, aggregate tanker counts and forward import orders.
           </p>
           <a href="#product-days-h">Jump to product-level visibility</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Source-gated implementation feeds</span>
@@ -459,7 +459,7 @@ function OperationalSummary30s({ data }) {
             until a named public source is loaded.
           </p>
           <a href="#publish-h">Jump to publishing needs</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
         <article className="quick-link-card">
           <span className="eyebrow">Highest-priority visibility gaps</span>
@@ -470,7 +470,7 @@ function OperationalSummary30s({ data }) {
             Queensland delivery linkage, forward contracts and public dashboard ownership.
           </p>
           <a href="#implementation-h">Jump to implementation tracker</a>
-          <span className="audit-stamp">Last reviewed: metadata pending</span>
+          <span className="audit-stamp">Review date unavailable</span>
         </article>
       </div>
     </section>
@@ -662,7 +662,7 @@ function App() {
             <span>No fuel reserves, contracts, cargoes or emergency powers are inferred.</span>
             <div style={{ height: 12 }}/>
             <strong>Last reviewed</strong>
-            <span className="mono">metadata pending</span>
+            <span className="mono">Review date unavailable</span>
           </aside>
         </section>
 

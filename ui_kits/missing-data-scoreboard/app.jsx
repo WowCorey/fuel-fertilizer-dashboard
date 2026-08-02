@@ -438,7 +438,7 @@ function PriorityBand({ band }) {
 }
 
 function LastReviewed({ value }) {
-  return <span className="audit-stamp">Last reviewed: {value || 'metadata pending'}</span>;
+  return <span className="audit-stamp">Last reviewed: {value || 'Review date unavailable'}</span>;
 }
 
 function App() {
@@ -477,6 +477,11 @@ function App() {
               <strong>What Australia can see, and what is still missing.</strong> The audit covers fuel,
               food, economy, defence, infrastructure and workforce. Priority bands are editorial/product
               triage only, not official risk ratings.
+            </p>
+            <p className="lede" style={{ marginTop: 'var(--s-3)' }}>
+              Repository controls, refresh evidence and disclosed validation warnings are shown in{' '}
+              <a href="../trust-status-dashboard/index.html">Trust Status</a>. That page is operational
+              transparency, not a certification or official assessment.
             </p>
           </div>
           <aside className="intro-card">
@@ -876,7 +881,7 @@ function App() {
                     <td>{row.why}</td>
                     <td>{row.action}</td>
                     <td>{row.page}</td>
-                    <td>{row.last_reviewed || 'metadata pending'}</td>
+                    <td>{row.last_reviewed || 'Review date unavailable'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -884,7 +889,7 @@ function App() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="roadmap-h">
+        <section id="sources" className="section" aria-labelledby="roadmap-h">
           <div className="section__head">
             <div>
               <span className="eyebrow">Roadmap source gates</span>

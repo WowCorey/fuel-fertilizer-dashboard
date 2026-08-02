@@ -1,6 +1,8 @@
 # Fuel Security Source Backlog
 
-Last reviewed: 2026-04-23
+Status: legacy scoped backlog retained for historical context. Current source state is authoritative in `data/sources.yml`, evidence envelopes and the Missing Data Scoreboard.
+
+Last source-by-source review: 2026-04-23
 
 This file is issue-ready backlog text for the hard source gaps that still block
 a complete operational fuel-security dashboard. Each item should stay fail

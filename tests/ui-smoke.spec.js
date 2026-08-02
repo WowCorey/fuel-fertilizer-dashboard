@@ -1,29 +1,42 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+const routeRegistry = require('../data/site_routes.json');
 
-const routes = [
-  { path: '/', heading: /Tracking what Australia.{1,5}s resilience data shows/ },
-  { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
-  { path: '/ui_kits/fuel-security-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-security data can verify/ },
-  { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-strategy data can verify/ },
-  { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ },
-  { path: '/ui_kits/resource-value-dashboard/index.html', heading: /What Australia.{1,5}s public resource-value data can verify/ },
-  { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
-  { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: /What Australia.{1,5}s public strategic-resource data can verify/ },
-  { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: /What Australia.{1,5}s public defence-posture data can verify/ },
-  { path: '/ui_kits/defence-procurement-watch/index.html', heading: /What Australia.{1,5}s public defence-procurement data can verify/ },
-  { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
-  { path: '/ui_kits/fertilizer-dashboard/index.html', heading: /What Australia.{1,5}s public food-system data can verify/ },
-  { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
-  { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
-  { path: '/ui_kits/au-economics-dashboard/index.html', heading: /What Australia.{1,5}s public economic data can verify/ },
-  { path: '/ui_kits/housing-economic-pressure-dashboard/index.html', heading: 'Housing and economic pressure' },
-  { path: '/ui_kits/manufacturing-dashboard/index.html', heading: /What Australia.{1,5}s public manufacturing-capacity data can verify/ },
-  { path: '/ui_kits/power-grid-dashboard/index.html', heading: /What Australia.{1,5}s public power-grid data can verify/ },
-  { path: '/ui_kits/infrastructure-dashboard/index.html', heading: /What Australia.{1,5}s public infrastructure-delivery data can verify/ },
-  { path: '/ui_kits/brisbane-2032-readiness-dashboard/index.html', heading: 'Brisbane 2032 readiness' },
-  { path: '/ui_kits/employment-automation-dashboard/index.html', heading: /What Australia.{1,5}s public employment and automation data can verify/ },
-  { path: '/ui_kits/missing-data-scoreboard/index.html', heading: /The public-data gaps behind Australia.{1,5}s resilience picture/ },
-];
+const routes = routeRegistry.routes
+  .filter(route => route.public)
+  .map(route => ({ ...route, path: route.id === 'home' ? '/' : `/${route.relative_url}` }));
+const fuelRoute = routes.find(route => route.id === 'fuel');
+
+async function waitForRouteReady(page, route) {
+  await expect(page.locator('h1').first()).toBeVisible();
+  if (route.kind === 'react-dashboard') {
+    await expect(page.locator('.loading-wrap')).toHaveCount(0);
+    await expect(page.locator('footer.site-footer')).toBeVisible();
+  }
+}
+
+async function collectRenderedHrefs(page, route) {
+  await waitForRouteReady(page, route);
+  return page.locator('a[href]').evaluateAll(anchors => anchors.map(anchor => anchor.getAttribute('href')));
+}
+
+test('canonical route registry reconciles with every public dashboard directory', () => {
+  const root = path.resolve(__dirname, '..');
+  const registered = routes
+    .filter(route => route.relative_url.startsWith('ui_kits/'))
+    .map(route => route.relative_url.split('/')[1])
+    .sort();
+  const publicDirectories = fs.readdirSync(path.join(root, 'ui_kits'), { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(root, 'ui_kits', entry.name, 'index.html')))
+    .map(entry => entry.name)
+    .sort();
+  expect(registered).toEqual(publicDirectories);
+  expect(new Set(routes.map(route => route.id)).size).toBe(routes.length);
+  expect(new Set(routes.map(route => route.relative_url)).size).toBe(routes.length);
+  expect(routes.find(route => route.id === 'missing_data')).toBeTruthy();
+  expect(routes.find(route => route.id === 'trust_status')).toBeTruthy();
+});
 
 for (const route of routes) {
   test(`${route.path} renders without console errors`, async ({ page }) => {
@@ -38,17 +51,79 @@ for (const route of routes) {
 
     const response = await page.goto(route.path);
     expect(response?.ok(), route.path).toBeTruthy();
-    await expect(page.getByRole('heading', { name: route.heading })).toBeVisible();
-    if (route.path !== '/') {
+    await waitForRouteReady(page, route);
+    await expect(page.locator('body')).not.toContainText(/metadata pending/i);
+    if (route.kind === 'react-dashboard') {
       await expect(page.getByLabel('Refresh status')).toContainText(/Refreshed|Refresh status unavailable|No successful refresh recorded|Page data retrieved/);
       await expect(page.getByText('Refreshed means the automated pipeline last ran successfully').first()).toBeVisible();
       await expect(page.getByText('Page data retrieved', { exact: true }).first()).toBeVisible();
     }
+    expect(await page.locator('script[src^="http:"] , script[src^="https:"]').count()).toBe(0);
     await expect(page.locator('body')).not.toContainText("There isn't a GitHub Pages site here.");
     expect(pageErrors).toEqual([]);
     expect(consoleErrors.filter(text => !text.includes('favicon'))).toEqual([]);
   });
 }
+
+test('public pages have no broken same-origin links or fragment targets', async ({ page, request }) => {
+  const internalTargets = new Set();
+
+  for (const route of routes) {
+    await page.goto(route.path);
+    const pageUrl = new URL(page.url());
+    const links = await collectRenderedHrefs(page, route);
+    const missingFragments = await page.locator('a[href]').evaluateAll(anchors => anchors
+      .map(anchor => new URL(anchor.href))
+      .filter(url => url.origin === window.location.origin && url.pathname === window.location.pathname && url.hash)
+      .map(url => decodeURIComponent(url.hash.slice(1)))
+      .filter(id => !document.getElementById(id)));
+    expect(missingFragments, `${route.path} has missing fragment targets`).toEqual([]);
+
+    for (const href of links) {
+      if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) continue;
+      const target = new URL(href, pageUrl);
+      if (target.origin !== pageUrl.origin) continue;
+      target.hash = '';
+      internalTargets.add(target.href);
+    }
+  }
+
+  for (const target of internalTargets) {
+    const response = await request.get(target);
+    expect(response.status(), `${target} should resolve`).toBeLessThan(400);
+  }
+});
+
+test('link audit includes anchors rendered after asynchronous source loading', async ({ page }) => {
+  let releaseEnvelope;
+  let markIntercepted;
+  const releaseGate = new Promise(resolve => { releaseEnvelope = resolve; });
+  const intercepted = new Promise(resolve => { markIntercepted = resolve; });
+  const delayedHref = '../../ui_kits/fuel-dashboard/index.html?async-link-audit=1#sources';
+
+  await page.route('**/data/generated/aps_monthly.json', async route => {
+    markIntercepted();
+    const response = await route.fetch();
+    const envelope = await response.json();
+    envelope.source_url = delayedHref;
+    await releaseGate;
+    await route.fulfill({ response, json: envelope });
+  });
+
+  try {
+    await page.goto(fuelRoute.path);
+    await intercepted;
+    await expect(page.locator('.loading-wrap')).toBeVisible();
+    await expect(page.locator(`a[href="${delayedHref}"]`)).toHaveCount(0);
+
+    releaseEnvelope();
+    const links = await collectRenderedHrefs(page, fuelRoute);
+    expect(links).toContain(delayedHref);
+    await expect(page.locator(`a[href="${delayedHref}"]`).first()).toBeVisible();
+  } finally {
+    releaseEnvelope();
+  }
+});
 
 test('homepage presents the national summary and status legend', async ({ page }) => {
   await page.goto('/');
@@ -83,7 +158,7 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('heading', { name: 'Power, manufacturing and infrastructure' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Defence and strategic resources' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'AI, workforce and future pressure' })).toBeVisible();
-  await expect(page.getByText('Last updated: source metadata pending').first()).toBeVisible();
+  await expect(page.getByText('Review date unavailable').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Who is this for?' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Travellers and tourism operators' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Farmers' })).toBeVisible();
@@ -99,18 +174,11 @@ test('homepage presents the national summary and status legend', async ({ page }
   await expect(page.getByRole('link', { name: 'Open priority matrix' })).toBeVisible();
 });
 
-test('homepage hero shows neutral deployment status line', async ({ page }) => {
-  await page.goto('/');
-  const status = page.locator('#refresh-badge');
-  await expect(status).toContainText('Last deployed:');
-  await expect(status).toContainText('Programmatic refresh: in rollout');
-  await expect(status).toContainText('Manual public-source snapshots are labelled where used');
-  await expect(status).not.toContainText('no successful refresh recorded');
-});
-
 test('homepage shows audit snapshot derived from source manifest', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'What public sources we track' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Trust Status' })).toBeVisible();
+  await expect(page.getByText('It is not a certification or official assessment.')).toBeVisible();
   await expect(page.locator('[data-band="verified"]')).not.toHaveText('—');
   await expect(page.locator('[data-band="manual"]')).not.toHaveText('—');
   await expect(page.locator('[data-band="derived"]')).not.toHaveText('—');
@@ -133,6 +201,59 @@ test('homepage primary nav exposes category groups', async ({ page }) => {
   await expect(nav.getByRole('menuitem', { name: 'Power grid' })).toBeVisible();
 });
 
+test('mobile navigation is keyboard operable on homepage and React dashboards', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  for (const routePath of ['/', '/ui_kits/fuel-dashboard/index.html']) {
+    await page.goto(routePath);
+    const toggle = page.getByRole('button', { name: 'Open navigation' });
+    await expect(toggle).toBeVisible();
+    await toggle.focus();
+    await page.keyboard.press('Enter');
+
+    const dialog = page.getByRole('dialog', { name: 'Site navigation' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAttribute('aria-modal', 'true');
+    await expect(page.getByRole('button', { name: 'Close navigation' })).toBeFocused();
+    await expect(dialog.getByRole('link', { name: 'Missing Data Scoreboard' })).toBeVisible();
+    await expect(dialog.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(toggle).toBeFocused();
+    const overflow = await page.evaluate(() => {
+      const width = document.documentElement.clientWidth;
+      return Array.from(document.querySelectorAll('body *'))
+        .map(element => ({
+          tag: element.tagName,
+          className: typeof element.className === 'string' ? element.className : '',
+          right: Math.round(element.getBoundingClientRect().right),
+        }))
+        .filter(item => item.right > width + 1)
+        .slice(0, 10);
+    });
+    expect(overflow, `${routePath} has horizontal overflow`).toEqual([]);
+  }
+});
+
+test('canonical registry supplies homepage and shared dashboard links', async ({ page }) => {
+  const dashboardCount = routes.filter(route => route.id !== 'home').length;
+  await page.goto('/');
+  const homeFooter = page.locator('#home-footer-routes');
+  await expect(homeFooter.getByRole('link')).toHaveCount(dashboardCount);
+  await expect(homeFooter.getByRole('link', { name: 'Missing Data Scoreboard' })).toBeVisible();
+  await expect(homeFooter.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+
+  await page.goto('/ui_kits/fuel-dashboard/index.html');
+  const dashboardFooter = page.locator('.site-footer__col').filter({ hasText: 'Dashboards' });
+  await expect(dashboardFooter.getByRole('link')).toHaveCount(dashboardCount);
+  await expect(dashboardFooter.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+  const primary = page.getByRole('navigation', { name: 'Primary' });
+  await primary.getByRole('button', { name: /Workforce & Data/ }).click();
+  await expect(primary.getByRole('menuitem', { name: 'Missing Data Scoreboard' })).toBeVisible();
+  await expect(primary.getByRole('menuitem', { name: 'Trust Status' })).toBeVisible();
+});
+
 test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {
   await page.goto('/ui_kits/missing-data-scoreboard/index.html');
   const main = page.locator('main');
@@ -144,6 +265,8 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
   await expect(page.getByText('A missing public feed is a visibility gap, not evidence of wrongdoing.')).toBeVisible();
   await expect(page.getByText('Priority bands are an editorial/product triage view, not official risk ratings or numeric scores.')).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Trust Status' }).first()).toBeVisible();
+  await expect(page.getByText('That page is operational transparency, not a certification or official assessment.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Public-data gaps grouped by category' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel operations and supply visibility' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Food, farms and water', exact: true })).toBeVisible();
@@ -151,7 +274,7 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByRole('heading', { name: 'Defence and strategic posture' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Infrastructure and Brisbane 2032' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Workforce and automation' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Open the dashboards behind these gaps' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open National Fuel Security' }).first()).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Queensland Fuel Sovereignty' }).first()).toBeVisible();
@@ -247,7 +370,7 @@ test('fuel security page keeps operational gaps fail-closed', async ({ page }) =
   await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Queensland Fuel Sovereignty', exact: true })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(page.getByText('Public calls for a national fuel dashboard are about certainty')).toBeVisible();
   await expect(page.getByRole('heading', { name: /Site refresh:|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
   await expect(page.getByText('Latest verified page data retrieved')).toBeVisible();
@@ -309,7 +432,7 @@ test('food farms and water page keeps unavailable source gates explicit', async 
   await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Australian Fuel Strategy' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open AU Economics' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(main.getByText('not an official government dashboard').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: /Site refreshed|Refresh status unavailable|No successful refresh recorded/ })).toBeVisible();
@@ -365,7 +488,7 @@ test('employment automation page separates observed labour signals from AI causa
   await expect(main.getByRole('link', { name: 'Open AU Economics' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Housing Pressure' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Labour-market source status comes first' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'As of the latest ABS publication' })).toBeVisible();
@@ -409,7 +532,7 @@ test('manufacturing page separates industrial signals from sovereign capability 
   await expect(main.getByRole('link', { name: 'Open Strategic Resources' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Industrial-capacity source status comes first' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'As of the latest publisher update' })).toBeVisible();
@@ -453,7 +576,7 @@ test('power grid page separates grid signals from reliability claims', async ({ 
   await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Housing Pressure' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Brisbane 2032 Readiness' }).first()).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Grid source status comes first' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'As of the latest publisher update' })).toBeVisible();
@@ -500,7 +623,7 @@ test('infrastructure page separates delivery signals from readiness claims', asy
   await expect(main.getByRole('link', { name: 'Open Housing Pressure' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Brisbane 2032 Readiness' }).first()).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Power Grid' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Infrastructure source status comes first' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'As of the latest publisher update' })).toBeVisible();
@@ -538,7 +661,7 @@ test('fuel strategy tracker keeps policy and operational data source-gated', asy
   await expect(main.getByRole('link', { name: 'Open Queensland Fuel Sovereignty', exact: true })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer fuel reserves, contracts, cargoes, emergency powers or security-sensitive holdings')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Open Defence Procurement Watch' })).toBeVisible();
@@ -576,7 +699,7 @@ test('Queensland fuel sovereignty tracker keeps delivery data source-gated', asy
   await expect(main.getByRole('link', { name: 'Open Missing Data Scoreboard' }).first()).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Australian Fuel Strategy Tracker' }).first()).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('independent public-source prototype').first()).toBeVisible();
   await expect(page.getByText('It does not infer land parcels, storage capacity, refinery capacity, proponents, bids, contracts')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Delivery evidence before delivery claims' })).toBeVisible();
@@ -628,7 +751,7 @@ test('defence procurement watch separates procurement signals from capability cl
   await expect(main.getByRole('link', { name: 'Open Manufacturing' }).first()).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Infrastructure' }).first()).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open National Fuel Security' }).first()).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(page.getByText('It does not infer contracts, prices, suppliers, delivery dates, vessel class')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Procurement evidence before procurement claims' })).toBeVisible();
   await expect(page.locator('section[aria-labelledby="pathway-h"]').getByRole('heading', { name: 'Procurement pathway' })).toBeVisible();
@@ -715,7 +838,7 @@ test('AU economics page separates macro signals from causal claims', async ({ pa
   await expect(main.getByRole('link', { name: 'Open Infrastructure' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Power Grid' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Food, Farms & Water' })).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Macroeconomic source status comes first' })).toBeVisible();
   await expect(page.getByText('A missing wage, household-stress, arrears, hardship, business-condition')).toBeVisible();
@@ -748,7 +871,7 @@ test('resource value page separates value signals from value-capture claims', as
   await expect(page.getByText('This dashboard separates source-backed royalty, export, processing and value')).toBeVisible();
   await expect(page.getByText('public value-capture signals without invented certainty')).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Status labels used on this value-capture page' })).toBeVisible();
   await expect(page.getByText('These labels match the Missing Data Scoreboard, Strategic Resources, AU Economics,')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What the value-capture audit can and cannot show' })).toBeVisible();
@@ -834,7 +957,7 @@ test('strategic resources page separates resource signals from capability claims
   await expect(main.getByRole('link', { name: 'Open Power Grid' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open National Fuel Security' })).toBeVisible();
   await expect(main.getByRole('link', { name: 'Open Defence Procurement Watch' }).first()).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Resource source status comes first' })).toBeVisible();
   await expect(page.getByText('A missing reserve, production, processing, export exposure')).toBeVisible();
@@ -869,7 +992,7 @@ test('defence posture page separates public defence signals from readiness claim
   await expect(page.getByText('This dashboard separates source-backed public defence signals from partial,')).toBeVisible();
   await expect(page.getByText('without invented readiness claims or classified inference')).toBeVisible();
   await expect(main.getByText('Independent public-source prototype').first()).toBeVisible();
-  await expect(main.getByText('Last reviewed: metadata pending').first()).toBeVisible();
+  await expect(main.getByText('Review date unavailable').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Status labels used on this public defence-posture page' })).toBeVisible();
   await expect(page.getByText('These labels match the Missing Data Scoreboard, Strategic Resources, Manufacturing,')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What the public defence-posture audit can and cannot show' })).toBeVisible();

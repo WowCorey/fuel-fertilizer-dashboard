@@ -166,7 +166,7 @@ function DefencePostureAuditSummary() {
             <h3>{card.title}</h3>
             <p>{card.copy}</p>
             <a href={card.href}>Jump to evidence</a>
-            <span className="audit-stamp">Last reviewed: metadata pending</span>
+            <span className="audit-stamp">Review date unavailable</span>
           </article>
         ))}
       </div>
@@ -655,7 +655,7 @@ function App() {
             <span className="mono">{updatedDisplay}</span>
             <div style={{ height: 12 }}/>
             <strong>Last reviewed</strong>
-            <span>metadata pending</span>
+            <span>Review date unavailable</span>
             <div style={{ height: 12 }}/>
             <strong>Boundary</strong>
             <span>Independent public-source prototype. No readiness, capability, operational-outcome or classified inference is invented.</span>

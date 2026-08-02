@@ -157,24 +157,89 @@ def validate_refresh(refresh: Any, errors: list[str]) -> None:
     evidence = refresh.get("evidence_path")
     semantics = str(refresh.get("sha_semantics") or "").lower()
     if status == "not_recorded":
-        for field in ("refreshed_at", "workflow", "run_id", "reported_git_sha"):
+        for field in (
+            "marker_schema",
+            "publication_state",
+            "refreshed_at",
+            "source_data_refreshed_at",
+            "workflow",
+            "run_id",
+            "run_attempt",
+            "ref",
+            "branch",
+            "reported_git_sha",
+            "workflow_input_sha",
+            "output_commit_sha",
+            "output_commit_pushed",
+        ):
             if refresh.get(field) is not None:
                 add(errors, f"latest_refresh.{field} must be null when no marker is recorded")
         if "no committed refresh marker" not in semantics:
             add(errors, "latest_refresh.sha_semantics must disclose that no committed marker is available")
         return
 
-    if status not in {"success", "failed", "unknown"}:
+    if status not in {"success", "pending_publication", "failed", "unknown"}:
         add(errors, "latest_refresh.status is invalid")
+    if not isinstance(evidence, str) or not (ROOT / evidence).exists():
+        add(errors, "latest_refresh.evidence_path must reference the committed refresh marker")
+
+    marker_schema = refresh.get("marker_schema")
+    if marker_schema == "fuel_resilience_refresh_status.v2":
+        for field in (
+            "refreshed_at",
+            "source_data_refreshed_at",
+            "workflow",
+            "run_id",
+            "run_attempt",
+            "ref",
+            "branch",
+            "workflow_input_sha",
+        ):
+            if not isinstance(refresh.get(field), str) or not refresh.get(field):
+                add(errors, f"latest_refresh.{field} is required for a v2 marker")
+        workflow_input_sha = refresh.get("workflow_input_sha")
+        if isinstance(workflow_input_sha, str) and not re.fullmatch(r"[0-9a-f]{40}", workflow_input_sha):
+            add(errors, "latest_refresh.workflow_input_sha must be a full lowercase Git SHA")
+        if refresh.get("reported_git_sha") != workflow_input_sha:
+            add(errors, "latest_refresh.reported_git_sha must preserve the workflow input SHA compatibility field")
+
+        publication_state = refresh.get("publication_state")
+        if publication_state == "prepared":
+            if status != "pending_publication":
+                add(errors, "a prepared v2 marker must remain pending_publication")
+            if refresh.get("output_commit_sha") is not None:
+                add(errors, "a prepared v2 marker must not claim an output commit SHA")
+            if refresh.get("output_commit_pushed") is not False:
+                add(errors, "a prepared v2 marker must report output_commit_pushed as false")
+            if "not established" not in semantics:
+                add(errors, "a prepared v2 marker must disclose that publication is not established")
+        elif publication_state == "published":
+            if status != "success":
+                add(errors, "a published v2 marker must report success")
+            output_sha = refresh.get("output_commit_sha")
+            if not isinstance(output_sha, str) or not re.fullmatch(r"[0-9a-f]{40}", output_sha):
+                add(errors, "a published v2 marker requires a full lowercase output commit SHA")
+            if refresh.get("output_commit_pushed") is not True:
+                add(errors, "a published v2 marker must prove output_commit_pushed")
+            for phrase in ("earlier pushed commit", "not the later marker commit", "not proof of the latest deployed commit"):
+                if phrase not in semantics:
+                    add(errors, f"published v2 SHA semantics must include: {phrase}")
+        else:
+            add(errors, "latest_refresh.publication_state is invalid for marker v2")
+        return
+
+    if marker_schema not in {"fuel_resilience_refresh_status.v1", None}:
+        add(errors, "latest_refresh.marker_schema is unsupported")
     if status == "success":
         for field in ("refreshed_at", "workflow", "run_id", "reported_git_sha"):
             if not isinstance(refresh.get(field), str) or not refresh.get(field):
-                add(errors, f"latest_refresh.{field} is required for a successful marker")
-
-    if not isinstance(evidence, str) or not (ROOT / evidence).exists():
-        add(errors, "latest_refresh.evidence_path must reference the committed refresh marker")
-    if "input commit" not in semantics or "published refresh" not in semantics:
-        add(errors, "latest_refresh.sha_semantics must disclose the current marker ambiguity")
+                add(errors, f"latest_refresh.{field} is required for a successful legacy marker")
+    if refresh.get("publication_state") != "legacy_unverified":
+        add(errors, "legacy refresh evidence must remain explicitly unverified")
+    if refresh.get("output_commit_sha") is not None or refresh.get("output_commit_pushed") is not None:
+        add(errors, "legacy refresh evidence must not claim output publication fields")
+    if "input commit" not in semantics or "published refresh" not in semantics or "no output commit" not in semantics:
+        add(errors, "legacy SHA semantics must disclose the marker ambiguity")
 
 
 def validate_link_health(links: Any, errors: list[str]) -> None:

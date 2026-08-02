@@ -41,6 +41,50 @@ test('Trust Status v2 separates workflow configuration from run conclusions', as
   await expect(workflowCards.first()).toContainText('Configured');
 });
 
+test('Trust Status labels the committed legacy refresh marker without inventing output evidence', async ({ page }) => {
+  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  const refresh = page.locator('#refresh-list');
+  await expect(refresh).toContainText('Legacy Unverified');
+  await expect(refresh).toContainText('Workflow input SHA');
+  await expect(refresh).toContainText('Output commit SHA');
+  await expect(refresh).toContainText('Not recorded');
+  await expect(page.locator('#refresh-summary')).toContainText('does not prove the output commit or deployed commit');
+});
+
+test('Trust Status renders v2 input and pushed output commits as different evidence', async ({ page }) => {
+  await page.route('**/data/trust_status_manifest.json', async route => {
+    const response = await route.fetch();
+    const manifest = await response.json();
+    manifest.latest_refresh = {
+      status: 'success',
+      marker_schema: 'fuel_resilience_refresh_status.v2',
+      publication_state: 'published',
+      refreshed_at: '2026-08-02T16:00:00+00:00',
+      source_data_refreshed_at: '2026-08-02T16:00:00+00:00',
+      workflow: 'Weekly data refresh',
+      run_id: '12345',
+      run_attempt: '2',
+      ref: 'refs/heads/main',
+      branch: 'main',
+      reported_git_sha: '1'.repeat(40),
+      workflow_input_sha: '1'.repeat(40),
+      output_commit_sha: '2'.repeat(40),
+      output_commit_pushed: true,
+      sha_semantics: 'The output is an earlier pushed commit, not the later marker commit and not proof of the latest deployed commit.',
+      evidence_path: 'data/last_successful_refresh.json'
+    };
+    await route.fulfill({ response, json: manifest });
+  });
+  await page.goto('/ui_kits/trust-status-dashboard/index.html');
+  const refresh = page.locator('#refresh-list');
+  await expect(refresh).toContainText('Published');
+  await expect(refresh).toContainText('1'.repeat(40));
+  await expect(refresh).toContainText('2'.repeat(40));
+  await expect(refresh).toContainText('Output commit pushed');
+  await expect(refresh).toContainText('Yes');
+  await expect(refresh).toContainText('not proof of the latest deployed commit');
+});
+
 test('Trust Status v2 exposes a visible unavailable state without fallback metrics', async ({ page }) => {
   await page.route('**/data/trust_status_manifest.json', route => route.fulfill({ status: 503, body: 'unavailable' }));
   await page.goto('/ui_kits/trust-status-dashboard/index.html');
