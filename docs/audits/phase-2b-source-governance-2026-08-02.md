@@ -91,6 +91,14 @@ This corrects the canonical path without converting unavailable component rows i
 
 `abs_residential_dwelling_stock` is mapped from the obsolete finance path to the current ABS Total Value of Dwellings landing page under price indexes and inflation.
 
+#### Additional confirmed 404 repairs from hostile review
+
+The classified checker found three further confirmed 404 responses. Their current official replacements are governed without changing any envelope values or evidence status:
+
+- `ato_corporate_tax` now uses the current ATO Report of entity tax information page and retains the official data.gov.au workbook dataset as supporting evidence;
+- `resource_prrt_policy` now uses the current ATO PRRT topic under GST, excise and indirect taxes;
+- `iea_90day` now uses the IEA Oil Stocks of IEA Countries data tool, which documents the 90-day obligation and methodology.
+
 #### Missing internal source documents
 
 Phase 2B adds:
@@ -112,12 +120,13 @@ Using that qualitative statement to generate a current number would violate the 
 
 ### New governed state
 
-The envelope now separates two official products:
+The repository now uses two registered source IDs and two envelopes so the products cannot be conflated:
 
 #### Quantified state row
 
 Source: Australian Government Fuel Plan retail stock-outs table  
 Data date: 2026-07-31
+Envelope: `wa_fuel_security_stockouts`
 
 - WA sites covered: 1,002
 - petrol stock-out sites: 3
@@ -127,8 +136,10 @@ Data date: 2026-07-31
 #### Qualitative weekly situation
 
 Source: WA Government Weekly Fuel Update
+Evidence date recorded in Phase 2A: 2026-07-24
+Envelope: `wa_fuel_security_weekly_update`
 
-The WA statement is retained as qualitative evidence that supplies are stable for July and August and stock-outs remain low. The envelope explicitly records that the statement must not be converted into a numeric value.
+The WA statement is retained as qualitative evidence that supplies are stable for July and August and stock-outs remain low. Its envelope contains no display values and explicitly records that the statement must not be converted into a numeric value.
 
 #### Historical provenance
 
@@ -162,7 +173,8 @@ Schema:
 | `transient_error` | Timeout, connection failure or retryable server response |
 | `malformed_url` | Blank or invalid public URL |
 | `internal_missing` | Project-authored GitHub Pages document does not exist locally |
-| `http_error` | Other unclassified request error |
+| `http_error` | Other classified request error |
+| `checker_failure` | The checker itself failed unexpectedly; classification coverage is incomplete |
 | `canonical_blocked_fetch_healthy` | Public landing page is blocked or transiently inaccessible while the machine fetch endpoint is healthy |
 | `canonical_broken_fetch_healthy` | Public landing page is definitely broken while the machine fetch endpoint remains healthy |
 
@@ -247,7 +259,7 @@ Phase 2B does not perform a wholesale rewrite of `data/sources.yml`.
 
 This is intentional:
 
-- the registry contains 218 entries;
+- the registry contained 218 entries at the branch point and now contains 219 after the qualitative WA evidence was assigned its own source ID;
 - source metadata changes can affect generated manifests, validation and many envelopes;
 - the current task is to establish a safe evidence mechanism before Codex performs the broader cleanup;
 - the migration layer is explicit, validated and reversible.

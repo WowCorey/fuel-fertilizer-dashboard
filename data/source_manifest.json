@@ -3521,16 +3521,32 @@
     },
     "wa_fuel_security_stockouts": {
       "id": "wa_fuel_security_stockouts",
-      "human_name": "WA Government weekly fuel update - statewide stockouts",
+      "human_name": "Australian Government Fuel Plan - WA retail diesel stock-outs",
+      "publisher": "Australian Government Fuel Plan, data provided by state and territory governments",
+      "fetch": "manual",
+      "update_cadence": "weekly",
+      "used_by": [
+        "fuel_security"
+      ],
+      "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+      "rights": "PM&C/Fuel Plan copyright and disclaimer; upstream source rights remain with stated publishers",
+      "citation": "Australian Government Fuel Plan, Fuel statistics; WA row in the retail stock-outs table provided by state and territory governments.",
+      "preferred_dir": "manual",
+      "has_generated": false,
+      "has_manual": true
+    },
+    "wa_fuel_security_weekly_update": {
+      "id": "wa_fuel_security_weekly_update",
+      "human_name": "WA Government weekly fuel update - qualitative situation",
       "publisher": "Government of Western Australia",
       "fetch": "manual",
       "update_cadence": "weekly",
       "used_by": [
         "fuel_security"
       ],
-      "canonical_url": "https://www.wa.gov.au/government/publications/wa-government-weekly-fuel-update",
+      "canonical_url": "https://www.wa.gov.au/government/publications/fuel-security-wa-government-weekly-fuel-update",
       "rights": "Government of Western Australia copyright; WA.gov.au terms of use apply",
-      "citation": "Government of Western Australia, WA Government Weekly Fuel Update.",
+      "citation": "Government of Western Australia, Fuel Security - WA Government Weekly Fuel Update.",
       "preferred_dir": "manual",
       "has_generated": false,
       "has_manual": true

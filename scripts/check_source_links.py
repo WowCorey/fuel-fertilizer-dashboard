@@ -165,7 +165,11 @@ def check_many(urls: Iterable[Any], *, workers: int, timeout: float) -> dict[str
             try:
                 results[url] = future.result()
             except Exception as exc:  # Defensive: one checker must not abort the report.
-                results[url] = LinkResult("http_error", f"unexpected checker error: {type(exc).__name__}: {exc}", url)
+                results[url] = LinkResult(
+                    "checker_failure",
+                    f"unexpected checker failure: {type(exc).__name__}: {exc}",
+                    url,
+                )
     return results
 
 
@@ -246,15 +250,27 @@ def build_report(*, only: str | None, workers: int, timeout: float) -> dict[str,
         entries[source_id] = entry
 
     generated_at = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    checker_failure_count = summary.get("checker_failure", 0)
     return {
         "schema": "fuel_resilience_source_link_health.v2",
         "generated_at": generated_at,
         "advisory": True,
         "claim_boundary": "A failed automated landing-page request is not, by itself, proof that the underlying dataset is unavailable. Categories distinguish broken links from access blocks and transient failures.",
+        "registered_source_count": len(sources),
+        "classified_source_count": len(entries),
+        "checker_failure_count": checker_failure_count,
+        "classification_complete": len(entries) == len(sources) and checker_failure_count == 0,
         "summary": dict(sorted(summary.items())),
         "repair_required_count": sum(summary.get(category, 0) for category in REPAIR_CATEGORIES),
         "sources": entries,
     }
+
+
+def printable_output_path(output: pathlib.Path, *, root: pathlib.Path = ROOT) -> str:
+    try:
+        return output.relative_to(root).as_posix()
+    except ValueError:
+        return str(output)
 
 
 def main() -> int:
@@ -279,10 +295,15 @@ def main() -> int:
             output = ROOT / output
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        print(f"Wrote {output.relative_to(ROOT)}")
+        print(f"Wrote {printable_output_path(output)}")
 
     for category, count in report["summary"].items():
         print(f"{category}: {count}")
+    print(
+        "classification coverage: "
+        f"{report['classified_source_count']}/{report['registered_source_count']} "
+        f"(complete: {str(report['classification_complete']).lower()})"
+    )
     print(f"definite repair categories: {report['repair_required_count']}")
 
     if args.strict and report["repair_required_count"]:

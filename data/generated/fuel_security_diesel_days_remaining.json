@@ -2,7 +2,7 @@
   "series_id": "fuel_security_diesel_days_remaining",
   "source_id": "fuel_security_diesel_days_remaining",
   "source_name": "Fuel security - diesel days remaining",
-  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "days",
   "retrieved_at": "2026-08-02T12:34:00+00:00",
   "last_data_point": "2026-07-28",
@@ -27,5 +27,16 @@
       "parent_manual_entry": true,
       "method": "typed_extra_field_selection"
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+    "reviewed_at": "2026-08-02",
+    "reason": "Derived directly from the current Fuel Plan MSO table.",
+    "legacy_urls": [
+      "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+    ],
+    "supporting_urls": [
+      "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+    ]
   }
 }

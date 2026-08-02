@@ -2,7 +2,7 @@
   "series_id": "pmc_mso_days_cover",
   "source_id": "pmc_mso_days_cover",
   "source_name": "PM&C public fuel supply - MSO days of cover",
-  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "days",
   "retrieved_at": "2026-08-02T12:34:00Z",
   "last_data_point": "2026-07-28",
@@ -29,5 +29,16 @@
       "march_quarter_2026_jet_fuel_days": 30,
       "compliance_note": "MSO compliance is based on volume held, not days of coverage."
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+    "reviewed_at": "2026-08-02",
+    "reason": "Fuel Plan is the current operational publication; DCCEEW provides the supporting MSO statistics and compliance boundary.",
+    "legacy_urls": [
+      "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+    ],
+    "supporting_urls": [
+      "https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics"
+    ]
   }
 }

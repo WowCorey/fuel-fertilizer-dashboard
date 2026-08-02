@@ -2,7 +2,7 @@
   "series_id": "pmc_tankers_on_water",
   "source_id": "pmc_tankers_on_water",
   "source_name": "PM&C public fuel supply - ships on water to Australia",
-  "source_url": "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply",
+  "source_url": "https://fuelplan.gov.au/fuel-statistics",
   "unit": "tankers",
   "retrieved_at": "2026-08-02T12:34:00Z",
   "last_data_point": "2026-07-31",
@@ -32,5 +32,13 @@
       "previous_clean_refined_product_equivalent_days": 14,
       "clean_products_definition": "Diesel, jet fuel, petrol and blend stocks"
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://fuelplan.gov.au/fuel-statistics",
+    "reviewed_at": "2026-08-02",
+    "reason": "The current DCCEEW/Kpler aggregate tanker table is published on Fuel Plan.",
+    "legacy_urls": [
+      "https://www.pmc.gov.au/domestic-policy/fuel-supply-taskforce/public-information-fuel-supply"
+    ]
   }
 }

@@ -2,7 +2,7 @@
   "series_id": "ato_corporate_tax",
   "source_id": "ato_corporate_tax",
   "source_name": "ATO Corporate Tax Transparency Report (latest year)",
-  "source_url": "https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/",
+  "source_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/corporate-tax-transparency/report-of-entity-tax-information",
   "unit": "",
   "retrieved_at": "2026-04-28T08:12:15+00:00",
   "last_data_point": "2024-06-30",
@@ -19,5 +19,16 @@
       "cutoff_date": "2025-08-18",
       "source_workbook": "2023-24 Corporate Report of Entity Tax Information"
     }
+  },
+  "source_url_governance": {
+    "canonical_url": "https://www.ato.gov.au/businesses-and-organisations/corporate-tax-measures-and-assurance/large-business/corporate-tax-transparency/report-of-entity-tax-information",
+    "reviewed_at": "2026-08-02",
+    "reason": "The former ATO research-and-statistics path returns 404; the current ATO page explains the report and links to the official data.gov.au workbook dataset.",
+    "legacy_urls": [
+      "https://www.ato.gov.au/About-ATO/Research-and-statistics/In-detail/Taxation-statistics/Corporate-tax-transparency/"
+    ],
+    "supporting_urls": [
+      "https://data.gov.au/data/dataset/c2524c87-cea4-4636-acac-599a82048a26"
+    ]
   }
 }

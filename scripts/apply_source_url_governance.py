@@ -91,6 +91,10 @@ def main() -> int:
         print(f"source URL governance error: {exc}", file=sys.stderr)
         return 1
 
+    if args.only and args.only not in doc["overrides"]:
+        print(f"unknown governed source id: {args.only}", file=sys.stderr)
+        return 1
+
     changed_paths: list[str] = []
     missing: list[str] = []
     for source_id, override in sorted(doc["overrides"].items()):

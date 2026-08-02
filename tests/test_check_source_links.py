@@ -3,6 +3,7 @@ import pathlib
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 MODULE_PATH = pathlib.Path(__file__).resolve().parents[1] / "scripts" / "check_source_links.py"
 SPEC = importlib.util.spec_from_file_location("check_source_links", MODULE_PATH)
@@ -58,11 +59,22 @@ class SourceLinkHealthTests(unittest.TestCase):
             MODULE.classify_http_status(503, requested_url="https://example.test").category,
             "transient_error",
         )
+        self.assertEqual(
+            MODULE.classify_http_status(410, requested_url="https://example.test").category,
+            "confirmed_broken",
+        )
+        self.assertEqual(
+            MODULE.classify_http_status(429, requested_url="https://example.test").category,
+            "access_blocked",
+        )
 
     def test_malformed_url_is_distinct(self):
         result = MODULE.check_url_once("")
         self.assertEqual(result.category, "malformed_url")
         self.assertIn("blank", result.detail)
+
+        missing_host = MODULE.check_url_once("https:///missing-host")
+        self.assertEqual(missing_host.category, "malformed_url")
 
     def test_internal_project_document_exists(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -128,6 +140,39 @@ class SourceLinkHealthTests(unittest.TestCase):
             MODULE.combine_category(canonical, fetch),
             "canonical_broken_fetch_healthy",
         )
+
+    def test_unexpected_checker_failure_is_not_reported_as_http_health(self):
+        with mock.patch.object(MODULE, "check_url_once", side_effect=RuntimeError("worker failed")):
+            results = MODULE.check_many(["https://example.test"], workers=1, timeout=1)
+
+        self.assertEqual(results["https://example.test"].category, "checker_failure")
+        self.assertIn("worker failed", results["https://example.test"].detail)
+
+    def test_report_marks_checker_failure_as_incomplete(self):
+        source = {
+            "id": "broken_worker",
+            "url": "https://example.test/source",
+            "fetch": "manual",
+        }
+        failure = MODULE.LinkResult(
+            "checker_failure",
+            "unexpected checker failure: RuntimeError: worker failed",
+            source["url"],
+        )
+        with mock.patch.object(MODULE, "load_sources", return_value=[source]), mock.patch.object(
+            MODULE, "load_governance", return_value={"overrides": {}}
+        ), mock.patch.object(MODULE, "check_many", return_value={source["url"]: failure}):
+            report = MODULE.build_report(only=None, workers=1, timeout=1)
+
+        self.assertFalse(report["classification_complete"])
+        self.assertEqual(report["checker_failure_count"], 1)
+        self.assertEqual(report["classified_source_count"], report["registered_source_count"])
+
+    def test_external_output_path_has_a_printable_fallback(self):
+        with tempfile.TemporaryDirectory() as root_dir, tempfile.TemporaryDirectory() as output_dir:
+            root = pathlib.Path(root_dir)
+            output = pathlib.Path(output_dir) / "health.json"
+            self.assertEqual(MODULE.printable_output_path(output, root=root), str(output))
 
 
 if __name__ == "__main__":

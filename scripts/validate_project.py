@@ -15,6 +15,7 @@ import json
 import pathlib
 import subprocess
 import sys
+import urllib.parse
 from typing import Any
 
 try:
@@ -54,7 +55,23 @@ def valid_date(value: Any) -> bool:
 
 
 def valid_http_url(value: Any) -> bool:
-    return isinstance(value, str) and value.startswith(("http://", "https://")) and len(value) > 10
+    if not isinstance(value, str) or value != value.strip():
+        return False
+    parsed = urllib.parse.urlparse(value)
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
+def expected_governance_metadata(governance: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    metadata: dict[str, Any] = {
+        "canonical_url": override.get("canonical_url"),
+        "reviewed_at": governance.get("reviewed_at"),
+        "reason": override.get("reason"),
+    }
+    if override.get("legacy_urls"):
+        metadata["legacy_urls"] = override["legacy_urls"]
+    if override.get("supporting_urls"):
+        metadata["supporting_urls"] = override["supporting_urls"]
+    return metadata
 
 
 def run_base_validator() -> dict[str, Any]:
@@ -128,8 +145,12 @@ def governance_checks(
             values = override.get(field, [])
             if not isinstance(values, list) or any(not valid_http_url(value) for value in values):
                 add(errors, item_path, f"{field} must be a list of http(s) URLs")
+            elif len(values) != len(set(values)):
+                add(errors, item_path, f"{field} must not contain duplicate URLs")
         if canonical in override.get("legacy_urls", []):
             add(errors, item_path, "canonical_url must not also be listed as legacy")
+        if canonical in override.get("supporting_urls", []):
+            add(errors, item_path, "canonical_url must not also be listed as supporting")
 
         env_path = envelope_path(source_id)
         if env_path is None:
@@ -145,8 +166,8 @@ def governance_checks(
         metadata = envelope.get("source_url_governance")
         if not isinstance(metadata, dict):
             add(errors, env_path.relative_to(ROOT).as_posix(), "missing source_url_governance metadata")
-        elif metadata.get("canonical_url") != canonical:
-            add(errors, env_path.relative_to(ROOT).as_posix(), "source_url_governance canonical_url mismatch")
+        elif metadata != expected_governance_metadata(governance, override):
+            add(errors, env_path.relative_to(ROOT).as_posix(), "source_url_governance metadata does not exactly match the governed override")
 
     if len(governed_ids) > 50:
         add(warnings, path, "governance overrides are becoming broad; fold mature URL changes back into data/sources.yml")
