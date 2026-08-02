@@ -1407,7 +1407,14 @@ function App() {
     style: {
       marginTop: 'var(--s-3)'
     }
-  }, React.createElement("strong", null, "What Australia can see, and what is still missing."), " The audit covers fuel, food, economy, defence, infrastructure and workforce. Priority bands are editorial/product triage only, not official risk ratings.")), React.createElement("aside", {
+  }, React.createElement("strong", null, "What Australia can see, and what is still missing."), " The audit covers fuel, food, economy, defence, infrastructure and workforce. Priority bands are editorial/product triage only, not official risk ratings."), React.createElement("p", {
+    className: "lede",
+    style: {
+      marginTop: 'var(--s-3)'
+    }
+  }, "Repository controls, refresh evidence and disclosed validation warnings are shown in", ' ', React.createElement("a", {
+    href: "../trust-status-dashboard/index.html"
+  }, "Trust Status"), ". That page is operational transparency, not a certification or official assessment.")), React.createElement("aside", {
     className: "intro-card"
   }, React.createElement("strong", null, "Boundary"), React.createElement("span", null, "Independent public-source prototype"), React.createElement("div", {
     style: {

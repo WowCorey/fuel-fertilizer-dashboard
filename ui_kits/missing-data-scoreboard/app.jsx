@@ -478,6 +478,11 @@ function App() {
               food, economy, defence, infrastructure and workforce. Priority bands are editorial/product
               triage only, not official risk ratings.
             </p>
+            <p className="lede" style={{ marginTop: 'var(--s-3)' }}>
+              Repository controls, refresh evidence and disclosed validation warnings are shown in{' '}
+              <a href="../trust-status-dashboard/index.html">Trust Status</a>. That page is operational
+              transparency, not a certification or official assessment.
+            </p>
           </div>
           <aside className="intro-card">
             <strong>Boundary</strong>

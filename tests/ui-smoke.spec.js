@@ -112,6 +112,8 @@ test('homepage hero shows neutral deployment status line', async ({ page }) => {
 test('homepage shows audit snapshot derived from source manifest', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'What public sources we track' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open Trust Status' })).toBeVisible();
+  await expect(page.getByText('It is not a certification or official assessment.')).toBeVisible();
   await expect(page.locator('[data-band="verified"]')).not.toHaveText('—');
   await expect(page.locator('[data-band="manual"]')).not.toHaveText('—');
   await expect(page.locator('[data-band="derived"]')).not.toHaveText('—');
@@ -163,6 +165,8 @@ test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }
   await expect(page.getByText('Unavailable means no public source-safe feed has been loaded yet.')).toBeVisible();
   await expect(page.getByText('A missing public feed is a visibility gap, not evidence of wrongdoing.')).toBeVisible();
   await expect(page.getByText('Priority bands are an editorial/product triage view, not official risk ratings or numeric scores.')).toBeVisible();
+  await expect(main.getByRole('link', { name: 'Trust Status' }).first()).toBeVisible();
+  await expect(page.getByText('That page is operational transparency, not a certification or official assessment.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Public-data gaps grouped by category' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Fuel operations and supply visibility' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Food, farms and water', exact: true })).toBeVisible();
