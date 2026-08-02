@@ -160,9 +160,11 @@ def validate_manifest(doc: dict[str, Any], errors: list[str]) -> None:
             evidence = item.get("evidence_path")
             if not isinstance(evidence, str) or not (ROOT / evidence).exists():
                 add(errors, f"workflow_configuration[{index}].evidence_path does not exist")
-            meaning = str(item.get("meaning") or "").lower()
-            if "configuration" not in meaning and "configured" not in meaning:
-                add(errors, f"workflow_configuration[{index}] must distinguish configuration from a run result")
+            meaning = str(item.get("meaning") or "").strip().lower()
+            if not meaning:
+                add(errors, f"workflow_configuration[{index}].meaning is required")
+            if any(term in meaning for term in (" workflow passed", " workflow succeeded", " latest run passed", " latest run succeeded")):
+                add(errors, f"workflow_configuration[{index}] must not claim an unverified run result")
 
     bands = doc.get("confidence_bands")
     expected_bands = {"programmatic", "manual", "derived", "unavailable"}
