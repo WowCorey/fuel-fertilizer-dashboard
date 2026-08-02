@@ -12,7 +12,7 @@
       "v": 209.7
     }
   ],
-  "notes": "Multi-state diesel average weighted by station count. QLD: 1015 stations, avg 185.2 c/L, source date 2026-06-30; WA: 677 stations, avg 246.5 c/L, source date 2026-08-03. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
+  "notes": "Multi-state diesel average weighted by station count. QLD: 1015 stations, avg 185.2 c/L, source date 2026-06-30; WA: 677 stations, avg 246.5 c/L, source date 2026-08-03. NSW contributes only when both NSW_FUELCHECK_API_KEY and NSW_FUELCHECK_API_SECRET are configured and the OAuth exchange succeeds.",
   "status": "ok",
   "manual_entry": false,
   "source_rights": "Mixed state government terms; verify each source before reuse",

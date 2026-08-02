@@ -1,9 +1,13 @@
+import contextlib
+import io
 import json
 import pathlib
 import sys
 import tempfile
 import unittest
 import datetime as dt
+import base64
+import re
 from unittest import mock
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -523,6 +527,188 @@ class FetchTransformTests(unittest.TestCase):
         self.assertRegex(out["last_data_point"], r"^20\d{2}-\d{2}-\d{2}$")
         self.assertEqual(out["values"][0]["v"], 200.0)
         self.assertEqual(out["extra"]["fields"]["states"], contributors)
+
+    def test_nsw_fuelcheck_uses_oauth_contract_and_nsw_scope(self):
+        calls = []
+
+        def fake_get(url, **kwargs):
+            calls.append((url, kwargs))
+            if url == fetch_data.NSW_FUELCHECK_OAUTH_URL:
+                return FakeResponse(
+                    json_doc={
+                        "access_token": "short-lived-access-token",
+                        "status": "approved",
+                    }
+                )
+            return FakeResponse(
+                json_doc={
+                    "stations": [
+                        {"code": "1001", "state": "NSW"},
+                        {"code": "1002", "state": "NSW"},
+                    ],
+                    "prices": [
+                        {
+                            "stationcode": "1001",
+                            "fueltype": "U91",
+                            "price": 180.5,
+                            "lastupdated": "02/08/2026 23:10:00",
+                            "state": "NSW",
+                        },
+                        {
+                            "stationcode": "1002",
+                            "fueltype": "U91",
+                            "price": 190.5,
+                            "lastupdated": "03/08/2026 01:15:00 AM",
+                            "state": "NSW",
+                        },
+                        {
+                            "stationcode": "1001",
+                            "fueltype": "DL",
+                            "price": 200.0,
+                            "lastupdated": "03/08/2026 01:15:00 AM",
+                            "state": "NSW",
+                        },
+                    ],
+                }
+            )
+
+        with mock.patch.dict(
+            fetch_data.os.environ,
+            {
+                "NSW_FUELCHECK_API_KEY": "consumer-key",
+                "NSW_FUELCHECK_API_SECRET": "consumer-secret",
+            },
+            clear=True,
+        ), mock.patch.object(fetch_data.requests, "get", side_effect=fake_get):
+            out = fetch_data.fetch_nsw_fuelcheck(
+                "https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices",
+                {"U91"},
+            )
+
+        self.assertEqual(out["average"], 185.5)
+        self.assertEqual(out["stations"], 2)
+        self.assertEqual(out["date"], "2026-08-03")
+        self.assertEqual(len(calls), 2)
+
+        oauth_url, oauth_request = calls[0]
+        self.assertEqual(oauth_url, fetch_data.NSW_FUELCHECK_OAUTH_URL)
+        self.assertEqual(oauth_request["params"], {"grant_type": "client_credentials"})
+        basic_header = oauth_request["headers"]["Authorization"]
+        self.assertTrue(basic_header.startswith("Basic "))
+        self.assertEqual(
+            base64.b64decode(basic_header.removeprefix("Basic ")).decode("utf-8"),
+            "consumer-key:consumer-secret",
+        )
+
+        price_url, price_request = calls[1]
+        self.assertEqual(price_url, "https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices")
+        self.assertEqual(price_request["params"], {"states": "NSW"})
+        headers = price_request["headers"]
+        self.assertEqual(headers["Authorization"], "Bearer short-lived-access-token")
+        self.assertEqual(headers["apikey"], "consumer-key")
+        self.assertEqual(headers["Content-Type"], "application/json; charset=utf-8")
+        self.assertRegex(headers["transactionid"], r"^[0-9a-f-]{36}$")
+        self.assertTrue(
+            re.fullmatch(r"\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2} (AM|PM)", headers["requesttimestamp"])
+        )
+
+    def test_nsw_fuelcheck_requires_both_credentials_without_network_call(self):
+        credential_sets = (
+            {},
+            {"NSW_FUELCHECK_API_KEY": "consumer-key"},
+            {"NSW_FUELCHECK_API_SECRET": "consumer-secret"},
+        )
+        for credentials in credential_sets:
+            with self.subTest(credentials=sorted(credentials)), mock.patch.dict(
+                fetch_data.os.environ, credentials, clear=True
+            ), mock.patch.object(fetch_data.requests, "get") as request_get:
+                self.assertIsNone(fetch_data.fetch_nsw_fuelcheck("https://example.test/prices"))
+                request_get.assert_not_called()
+
+    def test_nsw_fuelcheck_fails_closed_when_oauth_exchange_fails(self):
+        with mock.patch.dict(
+            fetch_data.os.environ,
+            {
+                "NSW_FUELCHECK_API_KEY": "consumer-key",
+                "NSW_FUELCHECK_API_SECRET": "consumer-secret",
+            },
+            clear=True,
+        ), mock.patch.object(
+            fetch_data.requests,
+            "get",
+            return_value=FakeResponse(status_code=401, json_doc={"error": "invalid_client"}),
+        ) as request_get:
+            self.assertIsNone(fetch_data.fetch_nsw_fuelcheck("https://example.test/prices"))
+            self.assertEqual(request_get.call_count, 1)
+
+    def test_nsw_fuelcheck_fails_closed_on_unknown_price_schema(self):
+        responses = [
+            FakeResponse(json_doc={"access_token": "access-token", "status": "approved"}),
+            FakeResponse(json_doc={"fuelPrices": []}),
+        ]
+        with mock.patch.dict(
+            fetch_data.os.environ,
+            {
+                "NSW_FUELCHECK_API_KEY": "consumer-key",
+                "NSW_FUELCHECK_API_SECRET": "consumer-secret",
+            },
+            clear=True,
+        ), mock.patch.object(fetch_data.requests, "get", side_effect=responses):
+            self.assertIsNone(fetch_data.fetch_nsw_fuelcheck("https://example.test/prices"))
+
+    def test_nsw_fuelcheck_does_not_substitute_date_for_malformed_response(self):
+        responses = [
+            FakeResponse(json_doc={"access_token": "access-token", "status": "approved"}),
+            FakeResponse(
+                json_doc={
+                    "stations": [{"code": "1001", "state": "NSW"}],
+                    "prices": [
+                        {
+                            "stationcode": "1001",
+                            "fueltype": "U91",
+                            "price": 180.5,
+                            "lastupdated": "not-a-date",
+                            "state": "NSW",
+                        }
+                    ],
+                }
+            ),
+        ]
+        with mock.patch.dict(
+            fetch_data.os.environ,
+            {
+                "NSW_FUELCHECK_API_KEY": "consumer-key",
+                "NSW_FUELCHECK_API_SECRET": "consumer-secret",
+            },
+            clear=True,
+        ), mock.patch.object(fetch_data.requests, "get", side_effect=responses):
+            self.assertIsNone(fetch_data.fetch_nsw_fuelcheck("https://example.test/prices"))
+
+    def test_nsw_fuelcheck_failure_log_does_not_expose_credentials(self):
+        stderr = io.StringIO()
+        with mock.patch.dict(
+            fetch_data.os.environ,
+            {
+                "NSW_FUELCHECK_API_KEY": "consumer-key",
+                "NSW_FUELCHECK_API_SECRET": "consumer-secret",
+            },
+            clear=True,
+        ), mock.patch.object(
+            fetch_data.requests,
+            "get",
+            side_effect=RuntimeError("consumer-key consumer-secret"),
+        ), contextlib.redirect_stderr(stderr):
+            self.assertIsNone(fetch_data.fetch_nsw_fuelcheck("https://example.test/prices"))
+
+        self.assertNotIn("consumer-key", stderr.getvalue())
+        self.assertNotIn("consumer-secret", stderr.getvalue())
+
+    def test_retail_multistate_does_not_build_empty_failure_envelope(self):
+        with mock.patch.object(fetch_data, "fetch_nsw_fuelcheck", return_value=None), \
+             mock.patch.object(fetch_data, "fetch_qld_open_data", return_value=None), \
+             mock.patch.object(fetch_data, "fetch_wa_fuelwatch", return_value=None):
+            with self.assertRaisesRegex(RuntimeError, "existing generated envelope was not overwritten"):
+                fetch_data.fetch_retail_multistate({})
 
     def test_nopta_petroleum_counts_keep_object_classes_separate(self):
         calls = []

@@ -19,6 +19,7 @@ Design rules
 from __future__ import annotations
 
 import argparse
+import base64
 import calendar
 import csv
 import datetime as dt
@@ -30,6 +31,7 @@ import pathlib
 import re
 import sys
 import urllib.parse
+import uuid
 import xml.etree.ElementTree as ET
 from typing import Any, Callable
 
@@ -51,6 +53,7 @@ GENERATED_DIR = ROOT / "data" / "generated"
 MANUAL_DIR = ROOT / "data" / "manual"
 
 UA = "FuelResilienceAU-DataBot/1.0 (+https://github.com/WowCorey/fuel-fertilizer-dashboard)"
+NSW_FUELCHECK_OAUTH_URL = "https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken"
 
 
 def fetch_eia_series(series_code: str, url: str | None = None) -> dict[str, Any]:
@@ -1707,54 +1710,146 @@ def fetch_qld_unavailable_reports(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def fetch_nsw_fuelcheck(url: str, fuel_types: set[str] | None = None, label: str = "ULP 91") -> dict[str, Any] | None:
-    token = os.environ.get("NSW_FUELCHECK_API_KEY", "").strip()
-    if not token:
-        warn_skip("NSW FuelCheck", "NSW_FUELCHECK_API_KEY is not set")
+def parse_nsw_fuelcheck_date(value: Any) -> str | None:
+    """Return an ISO date from a documented FuelCheck response timestamp."""
+    if not isinstance(value, str) or not value.strip():
         return None
+    value = value.strip()
+    for date_format in (
+        "%d/%m/%Y %H:%M:%S",
+        "%d/%m/%Y %I:%M:%S %p",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%dT%H:%M:%S",
+    ):
+        try:
+            return dt.datetime.strptime(value, date_format).date().isoformat()
+        except ValueError:
+            continue
+    return None
+
+
+def fetch_nsw_fuelcheck(
+    url: str,
+    fuel_types: set[str] | None = None,
+    label: str = "ULP 91",
+    oauth_url: str = NSW_FUELCHECK_OAUTH_URL,
+) -> dict[str, Any] | None:
+    """Fetch current NSW prices using the published Fuel API v2 OAuth contract."""
+    api_key = os.environ.get("NSW_FUELCHECK_API_KEY", "").strip()
+    api_secret = os.environ.get("NSW_FUELCHECK_API_SECRET", "").strip()
+    missing = [
+        name
+        for name, value in (
+            ("NSW_FUELCHECK_API_KEY", api_key),
+            ("NSW_FUELCHECK_API_SECRET", api_secret),
+        )
+        if not value
+    ]
+    if missing:
+        warn_skip("NSW FuelCheck", f"required credential variables are not set: {', '.join(missing)}")
+        return None
+
+    basic_credentials = base64.b64encode(f"{api_key}:{api_secret}".encode("utf-8")).decode("ascii")
     try:
-        r = requests.get(
-            url,
+        token_response = requests.get(
+            oauth_url,
+            params={"grant_type": "client_credentials"},
             headers={
                 "User-Agent": UA,
-                "Authorization": f"Bearer {token}",
-                "apikey": token,
+                "Authorization": f"Basic {basic_credentials}",
                 "Accept": "application/json",
             },
             timeout=45,
         )
-        if r.status_code != 200:
-            warn_skip("NSW FuelCheck", f"HTTP {r.status_code}")
+        if token_response.status_code != 200:
+            warn_skip("NSW FuelCheck", f"OAuth token exchange returned HTTP {token_response.status_code}")
             return None
-        doc = r.json()
+        token_doc = token_response.json()
     except Exception as exc:
-        warn_skip("NSW FuelCheck", f"{type(exc).__name__}: {exc}")
+        warn_skip("NSW FuelCheck", f"OAuth token exchange failed ({type(exc).__name__})")
         return None
 
-    prices: list[float] = []
+    if not isinstance(token_doc, dict):
+        warn_skip("NSW FuelCheck", "OAuth token exchange returned an unexpected schema")
+        return None
+    access_token = token_doc.get("access_token")
+    if not isinstance(access_token, str) or not access_token.strip():
+        warn_skip("NSW FuelCheck", "OAuth token exchange returned no access token")
+        return None
+    if str(token_doc.get("status") or "").lower() != "approved":
+        warn_skip("NSW FuelCheck", "OAuth token exchange did not return approved status")
+        return None
+
+    request_timestamp = dt.datetime.now(dt.timezone.utc).strftime("%d/%m/%Y %I:%M:%S %p")
+    try:
+        price_response = requests.get(
+            url,
+            params={"states": "NSW"},
+            headers={
+                "User-Agent": UA,
+                "Authorization": f"Bearer {access_token.strip()}",
+                "Content-Type": "application/json; charset=utf-8",
+                "apikey": api_key,
+                "transactionid": str(uuid.uuid4()),
+                "requesttimestamp": request_timestamp,
+                "Accept": "application/json",
+            },
+            timeout=45,
+        )
+        if price_response.status_code != 200:
+            warn_skip("NSW FuelCheck", f"price request returned HTTP {price_response.status_code}")
+            return None
+        doc = price_response.json()
+    except Exception as exc:
+        warn_skip("NSW FuelCheck", f"price request failed ({type(exc).__name__})")
+        return None
+
+    if not isinstance(doc, dict) or not isinstance(doc.get("stations"), list) or not isinstance(doc.get("prices"), list):
+        warn_skip("NSW FuelCheck", "price request returned an unexpected Fuel API v2 schema")
+        return None
+
+    prices_by_station: dict[str, float] = {}
     dates: set[str] = set()
     fuel_types = fuel_types or RETAIL_PRODUCTS["ulp91"]["nsw_fuel_types"]
-    price_nodes = doc.get("prices") or doc.get("Prices") or doc.get("fuelPrices") or []
-    if isinstance(price_nodes, dict):
-        price_nodes = list(price_nodes.values())
-    for item in price_nodes if isinstance(price_nodes, list) else []:
+    for item in doc["prices"]:
         if not isinstance(item, dict):
+            warn_skip("NSW FuelCheck", "price request contained a malformed price row")
+            return None
+        fuel_type_value = item.get("fueltype")
+        if not isinstance(fuel_type_value, str) or not fuel_type_value.strip():
+            warn_skip("NSW FuelCheck", "price request contained a row without fueltype")
+            return None
+        fuel_type = fuel_type_value.strip().upper()
+        if fuel_type not in fuel_types:
             continue
-        fuel_type = str(item.get("fueltype") or item.get("fuelType") or item.get("FuelType") or "").upper()
-        if fuel_type and fuel_type not in fuel_types:
-            continue
+        state = str(item.get("state") or "NSW").strip().upper()
+        if state != "NSW":
+            warn_skip("NSW FuelCheck", "NSW-scoped price request returned a non-NSW row")
+            return None
+        station_code = item.get("stationcode")
+        if not isinstance(station_code, str) or not station_code.strip():
+            warn_skip("NSW FuelCheck", "price request contained a missing or duplicate stationcode")
+            return None
+        station_code = station_code.strip()
+        if station_code in prices_by_station:
+            warn_skip("NSW FuelCheck", "price request contained a missing or duplicate stationcode")
+            return None
         try:
-            price = float(item.get("price") or item.get("Price"))
+            price = float(item.get("price"))
         except (TypeError, ValueError):
-            continue
-        if price > 0:
-            prices.append(price)
-        date_text = item.get("lastupdated") or item.get("lastUpdated") or item.get("TransactionDateUtc")
-        if isinstance(date_text, str) and len(date_text) >= 10:
-            dates.add(date_text[:10])
+            warn_skip("NSW FuelCheck", "price request contained a non-numeric price")
+            return None
+        source_date = parse_nsw_fuelcheck_date(item.get("lastupdated"))
+        if price <= 0 or source_date is None:
+            warn_skip("NSW FuelCheck", "price request contained a non-positive price or invalid lastupdated value")
+            return None
+        prices_by_station[station_code] = price
+        dates.add(source_date)
 
-    source_date = sorted(dates)[-1] if dates else dt.datetime.now(dt.timezone.utc).date().isoformat()
-    return retail_result("NSW", prices, source_date, f"NSW FuelCheck API {label}")
+    result = retail_result("NSW", list(prices_by_station.values()), max(dates) if dates else "", f"NSW FuelCheck API {label}")
+    if result is None:
+        warn_skip("NSW FuelCheck", f"price request returned no usable {label} observations")
+    return result
 
 
 def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
@@ -1775,6 +1870,7 @@ def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
             source.get("nsw_fetch_url", "https://api.onegov.nsw.gov.au/FuelPriceCheck/v2/fuel/prices"),
             product["nsw_fuel_types"],
             label,
+            source.get("nsw_oauth_url", NSW_FUELCHECK_OAUTH_URL),
         ),
         fetch_qld_open_data(
             source.get("qld_ckan_base", "https://www.data.qld.gov.au"),
@@ -1786,17 +1882,10 @@ def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
     ]
     states = [state for state in contributors if state]
     if not states:
-        return {
-            "status": "unavailable",
-            "unit": "cents per litre",
-            "values": [],
-            "last_data_point": None,
-            "notes": f"No public state retail fuel feed returned usable {label} observations during this fetch.",
-            "extra": {
-                "schema": "retail_fuel_multistate.v1",
-                "fields": {"states": [], "skipped": ["NSW", "QLD", "WA"]},
-            },
-        }
+        raise RuntimeError(
+            f"No public state retail fuel feed returned usable {label} observations; "
+            "the existing generated envelope was not overwritten"
+        )
 
     total_stations = sum(state["stations"] for state in states)
     weighted = sum(state["average"] * state["stations"] for state in states) / total_stations
@@ -1812,7 +1901,8 @@ def fetch_retail_multistate(source: dict[str, Any]) -> dict[str, Any]:
         "notes": (
             f"Multi-state {label} average weighted by station count. "
             + "; ".join(labels)
-            + ". NSW contributes only when NSW_FUELCHECK_API_KEY is configured."
+            + ". NSW contributes only when both NSW_FUELCHECK_API_KEY and "
+            "NSW_FUELCHECK_API_SECRET are configured and the OAuth exchange succeeds."
         ),
         "extra": {
             "schema": "retail_fuel_multistate.v1",

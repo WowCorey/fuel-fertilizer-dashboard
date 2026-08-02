@@ -12,7 +12,7 @@
       "v": 189.6
     }
   ],
-  "notes": "Multi-state premium 95 average weighted by station count. QLD: 914 stations, avg 175.8 c/L, source date 2026-06-30; WA: 522 stations, avg 213.7 c/L, source date 2026-08-03. NSW contributes only when NSW_FUELCHECK_API_KEY is configured.",
+  "notes": "Multi-state premium 95 average weighted by station count. QLD: 914 stations, avg 175.8 c/L, source date 2026-06-30; WA: 522 stations, avg 213.7 c/L, source date 2026-08-03. NSW contributes only when both NSW_FUELCHECK_API_KEY and NSW_FUELCHECK_API_SECRET are configured and the OAuth exchange succeeds.",
   "status": "ok",
   "manual_entry": false,
   "source_rights": "Mixed state government terms; verify each source before reuse",
