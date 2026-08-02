@@ -59,6 +59,12 @@ jobs:
       - name: Write last successful refresh marker
         run: python scripts/write_refresh_status.py
 
+      - name: Build Trust Status v2
+        run: python scripts/build_trust_status.py
+
+      - name: Validate Trust Status v2
+        run: python scripts/validate_trust_status_v2.py
+
       - name: Commit any changed data
         run: |
           git config user.name "github-actions[bot]"
