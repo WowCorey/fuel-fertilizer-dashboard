@@ -206,7 +206,8 @@ No issue should be closed until the relevant audit/implementation PR is merged.
 
 Phase 5C validation covers the exact OAuth exchange, required request headers,
 NSW-only query, both documented timestamp shapes, missing credentials,
-authentication failure, schema drift and all-contributor failure preservation.
+authentication failure, schema drift, exact station-code-to-NSW-station mapping
+and all-contributor failure preservation.
 
 Local results:
 
@@ -221,13 +222,18 @@ Local results:
 | `python scripts/apply_source_url_governance.py` and `--check` | Passed. |
 | `python scripts/validate_project.py` | Passed with 17 declared freshness warnings: 13 manual and 4 generated; no rights, URL/source-name or other warning. |
 | `python scripts/build_trust_status.py`, `--check` and `python scripts/validate_trust_status_v2.py` | Passed. The time-only `generated_at` rebuild was not retained as meaningless churn. |
-| `python -m unittest discover -s tests` | Passed; 72/72 tests. |
+| `python -m unittest discover -s tests` | Passed; 75/75 tests. |
 | `npx playwright install chromium` | Passed. |
 | `npm run smoke:ui` | Passed; 62/62 Chromium tests, including all public routes and console-error checks. |
 | Two consecutive `npm run build:ui` runs plus `npm run check:ui` | Passed; Git-filtered output hashes were identical and no UI content diff remained. Windows emitted line-ending/stat warnings only. |
 | `python scripts/check_source_links.py --no-write` | Advisory run completed for 219/219 sources: 102 healthy, 52 healthy internal, 5 healthy redirects, 20 access-blocked, 13 blocked canonical landing pages with healthy fetch endpoints, 27 transient errors and 0 definite repair categories. |
 
-CI run IDs are recorded in the draft PR after the branch is pushed.
+The initial push run `30759430329` and pull-request run `30759457486` failed
+because browser tests assumed the committed refresh marker would remain legacy
+v1 after main published a v2 marker. Commit `3811170` made those legacy cases
+explicit fixtures. Final-head CI run IDs are recorded in the draft PR rather
+than this committed audit because recording a new run ID here would change the
+head SHA and create another run.
 
 Residual limitations:
 
