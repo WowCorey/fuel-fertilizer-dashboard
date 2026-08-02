@@ -2,6 +2,8 @@
 function Footer({ updated = '', refreshStatus = null }) {
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : 'Refresh status unavailable';
   const pageRetrieved = updated || 'No verified page data loaded yet';
+  const dashboardRoutes = (window.SITE_ROUTES?.routes || [])
+    .filter(route => route.public && route.id !== 'home');
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
@@ -18,27 +20,9 @@ function Footer({ updated = '', refreshStatus = null }) {
         <div className="site-footer__col">
           <span className="eyebrow">Dashboards</span>
           <ul>
-            <li><a href="../national-status-dashboard/index.html">National status</a></li>
-            <li><a href="../fuel-security-dashboard/index.html">National fuel security</a></li>
-            <li><a href="../australian-fuel-strategy-dashboard/index.html">Fuel strategy</a></li>
-            <li><a href="../qld-fuel-sovereignty-dashboard/index.html">QLD fuel sovereignty</a></li>
-            <li><a href="../fuel-dashboard/index.html">Fuel</a></li>
-            <li><a href="../oil-and-production/index.html">Oil &amp; production</a></li>
-            <li><a href="../power-grid-dashboard/index.html">Power grid</a></li>
-            <li><a href="../fertilizer-dashboard/index.html">Food &amp; farms</a></li>
-            <li><a href="../who-pays-what/index.html">Who pays what</a></li>
-            <li><a href="../au-economics-dashboard/index.html">AU economics</a></li>
-            <li><a href="../housing-economic-pressure-dashboard/index.html">Housing pressure</a></li>
-            <li><a href="../state-contribution-dashboard/index.html">State ledger</a></li>
-            <li><a href="../resource-value-dashboard/index.html">Resource value</a></li>
-            <li><a href="../strategic-resources-dashboard/index.html">Strategic resources</a></li>
-            <li><a href="../defence-alliances-dashboard/index.html">Defence posture</a></li>
-            <li><a href="../defence-procurement-watch/index.html">Defence procurement</a></li>
-            <li><a href="../infrastructure-dashboard/index.html">Infrastructure</a></li>
-            <li><a href="../manufacturing-dashboard/index.html">Manufacturing</a></li>
-            <li><a href="../brisbane-2032-readiness-dashboard/index.html">Brisbane 2032 readiness</a></li>
-            <li><a href="../employment-automation-dashboard/index.html">Employment &amp; automation</a></li>
-            <li><a href="../missing-data-scoreboard/index.html">Missing data scoreboard</a></li>
+            {dashboardRoutes.map(route => (
+              <li key={route.id}><a href={`../../${route.relative_url}`}>{route.nav_label}</a></li>
+            ))}
           </ul>
         </div>
         <div className="site-footer__col">

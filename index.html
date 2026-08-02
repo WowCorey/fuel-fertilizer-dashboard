@@ -396,6 +396,7 @@
     .home-card { min-height: auto; }
     .home-footer { flex-direction: column; }
   }
+  .home-footer nav { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); }
 </style>
 </head>
 <body>
@@ -406,72 +407,7 @@
       <a href="index.html" class="brand" aria-label="Fuel Resilience AU home">
         <span class="brand__name">Fuel Resilience AU</span>
       </a>
-      <nav id="primary-nav" class="site-nav site-nav--grouped" aria-label="Primary">
-        <a class="active" aria-current="page" href="index.html">Home</a>
-        <div class="nav-group" data-group="fuel_energy">
-          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-fuel-energy">
-            Fuel &amp; Energy <span class="nav-group__caret" aria-hidden="true">▾</span>
-          </button>
-          <div id="nav-panel-fuel-energy" class="nav-group__panel" role="menu" hidden>
-            <a role="menuitem" href="ui_kits/national-status-dashboard/index.html">National status</a>
-            <a role="menuitem" href="ui_kits/fuel-security-dashboard/index.html">National fuel security</a>
-            <a role="menuitem" href="ui_kits/australian-fuel-strategy-dashboard/index.html">Fuel strategy</a>
-            <a role="menuitem" href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">QLD fuel sovereignty</a>
-            <a role="menuitem" href="ui_kits/fuel-dashboard/index.html">Fuel</a>
-            <a role="menuitem" href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
-            <a role="menuitem" href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
-          </div>
-        </div>
-        <div class="nav-group" data-group="food_farms">
-          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-food-farms">
-            Food &amp; Farms <span class="nav-group__caret" aria-hidden="true">▾</span>
-          </button>
-          <div id="nav-panel-food-farms" class="nav-group__panel" role="menu" hidden>
-            <a role="menuitem" href="ui_kits/fertilizer-dashboard/index.html">Food, farms &amp; water</a>
-          </div>
-        </div>
-        <div class="nav-group" data-group="economy">
-          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-economy">
-            Economy &amp; Households <span class="nav-group__caret" aria-hidden="true">▾</span>
-          </button>
-          <div id="nav-panel-economy" class="nav-group__panel" role="menu" hidden>
-            <a role="menuitem" href="ui_kits/who-pays-what/index.html">Who pays what</a>
-            <a role="menuitem" href="ui_kits/au-economics-dashboard/index.html">AU economics</a>
-            <a role="menuitem" href="ui_kits/housing-economic-pressure-dashboard/index.html">Housing pressure</a>
-            <a role="menuitem" href="ui_kits/state-contribution-dashboard/index.html">State petroleum ledger</a>
-            <a role="menuitem" href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
-          </div>
-        </div>
-        <div class="nav-group" data-group="defence">
-          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-defence">
-            Defence &amp; Strategic <span class="nav-group__caret" aria-hidden="true">▾</span>
-          </button>
-          <div id="nav-panel-defence" class="nav-group__panel" role="menu" hidden>
-            <a role="menuitem" href="ui_kits/defence-alliances-dashboard/index.html">Defence posture</a>
-            <a role="menuitem" href="ui_kits/defence-procurement-watch/index.html">Defence procurement</a>
-            <a role="menuitem" href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
-          </div>
-        </div>
-        <div class="nav-group" data-group="infrastructure">
-          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-infrastructure">
-            Infrastructure <span class="nav-group__caret" aria-hidden="true">▾</span>
-          </button>
-          <div id="nav-panel-infrastructure" class="nav-group__panel" role="menu" hidden>
-            <a role="menuitem" href="ui_kits/infrastructure-dashboard/index.html">Infrastructure</a>
-            <a role="menuitem" href="ui_kits/manufacturing-dashboard/index.html">Manufacturing</a>
-            <a role="menuitem" href="ui_kits/brisbane-2032-readiness-dashboard/index.html">Brisbane 2032 readiness</a>
-          </div>
-        </div>
-        <div class="nav-group" data-group="workforce">
-          <button type="button" class="nav-group__btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-workforce">
-            Workforce <span class="nav-group__caret" aria-hidden="true">▾</span>
-          </button>
-          <div id="nav-panel-workforce" class="nav-group__panel" role="menu" hidden>
-            <a role="menuitem" href="ui_kits/employment-automation-dashboard/index.html">Employment &amp; automation</a>
-          </div>
-        </div>
-        <a class="nav-scoreboard" href="ui_kits/missing-data-scoreboard/index.html">Missing Data Scoreboard</a>
-      </nav>
+      <nav id="primary-nav" class="site-nav site-nav--grouped" aria-label="Primary"></nav>
       <button type="button" class="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-nav-sheet">Menu</button>
     </div>
   </header>
@@ -481,50 +417,7 @@
         <span class="brand__name">Fuel Resilience AU</span>
         <button type="button" class="nav-sheet__close" aria-label="Close navigation">×</button>
       </div>
-      <div class="nav-sheet__group">
-        <a class="active" aria-current="page" href="index.html">Home</a>
-      </div>
-      <div class="nav-sheet__group">
-        <span class="eyebrow">Fuel &amp; Energy</span>
-        <a href="ui_kits/national-status-dashboard/index.html">National status</a>
-        <a href="ui_kits/fuel-security-dashboard/index.html">National fuel security</a>
-        <a href="ui_kits/australian-fuel-strategy-dashboard/index.html">Fuel strategy</a>
-        <a href="ui_kits/qld-fuel-sovereignty-dashboard/index.html">QLD fuel sovereignty</a>
-        <a href="ui_kits/fuel-dashboard/index.html">Fuel</a>
-        <a href="ui_kits/oil-and-production/index.html">Oil &amp; production</a>
-        <a href="ui_kits/power-grid-dashboard/index.html">Power grid</a>
-      </div>
-      <div class="nav-sheet__group">
-        <span class="eyebrow">Food &amp; Farms</span>
-        <a href="ui_kits/fertilizer-dashboard/index.html">Food, farms &amp; water</a>
-      </div>
-      <div class="nav-sheet__group">
-        <span class="eyebrow">Economy &amp; Households</span>
-        <a href="ui_kits/who-pays-what/index.html">Who pays what</a>
-        <a href="ui_kits/au-economics-dashboard/index.html">AU economics</a>
-        <a href="ui_kits/housing-economic-pressure-dashboard/index.html">Housing pressure</a>
-        <a href="ui_kits/state-contribution-dashboard/index.html">State petroleum ledger</a>
-        <a href="ui_kits/resource-value-dashboard/index.html">Resource value</a>
-      </div>
-      <div class="nav-sheet__group">
-        <span class="eyebrow">Defence &amp; Strategic</span>
-        <a href="ui_kits/defence-alliances-dashboard/index.html">Defence posture</a>
-        <a href="ui_kits/defence-procurement-watch/index.html">Defence procurement</a>
-        <a href="ui_kits/strategic-resources-dashboard/index.html">Strategic resources</a>
-      </div>
-      <div class="nav-sheet__group">
-        <span class="eyebrow">Infrastructure</span>
-        <a href="ui_kits/infrastructure-dashboard/index.html">Infrastructure</a>
-        <a href="ui_kits/manufacturing-dashboard/index.html">Manufacturing</a>
-        <a href="ui_kits/brisbane-2032-readiness-dashboard/index.html">Brisbane 2032 readiness</a>
-      </div>
-      <div class="nav-sheet__group">
-        <span class="eyebrow">Workforce</span>
-        <a href="ui_kits/employment-automation-dashboard/index.html">Employment &amp; automation</a>
-      </div>
-      <div class="nav-sheet__group">
-        <a href="ui_kits/missing-data-scoreboard/index.html"><strong>Missing Data Scoreboard</strong></a>
-      </div>
+      <div id="primary-nav-sheet-routes"></div>
     </div>
   </div>
 
@@ -1045,11 +938,101 @@
 
   <footer class="home-footer">
     <span>Code MIT. Project metadata/prose CC BY 4.0. Upstream data rights remain with publishers.</span>
+    <nav id="home-footer-routes" aria-label="Dashboard links"></nav>
     <a href="data/sources.yml">Open source registry</a>
   </footer>
 </div>
+<script src="ui_kits/shared/routes.generated.js"></script>
 <script>
   (function () {
+    function createRouteLink(route, role) {
+      var link = document.createElement('a');
+      link.href = route.relative_url;
+      link.textContent = route.nav_label;
+      if (role) link.setAttribute('role', role);
+      if (route.id === 'home') {
+        link.className = 'active';
+        link.setAttribute('aria-current', 'page');
+      }
+      return link;
+    }
+
+    function renderRouteNavigation() {
+      var registry = window.SITE_ROUTES;
+      if (!registry || !Array.isArray(registry.routes) || !Array.isArray(registry.groups)) return;
+      var routes = registry.routes.filter(function (route) { return route.public; });
+      var nav = document.getElementById('primary-nav');
+      var sheetRoutes = document.getElementById('primary-nav-sheet-routes');
+      var footer = document.getElementById('home-footer-routes');
+      var home = routes.find(function (route) { return route.id === 'home'; });
+
+      if (nav) {
+        nav.replaceChildren();
+        if (home) nav.appendChild(createRouteLink(home));
+        registry.groups.filter(function (group) { return group.navigation; }).forEach(function (group) {
+          var items = routes.filter(function (route) { return route.group === group.id; });
+          var wrapper = document.createElement('div');
+          wrapper.className = 'nav-group';
+          wrapper.dataset.group = group.id;
+          var button = document.createElement('button');
+          var panel = document.createElement('div');
+          var panelId = 'nav-panel-' + group.id.replaceAll('_', '-');
+          button.type = 'button';
+          button.className = 'nav-group__btn';
+          button.setAttribute('aria-expanded', 'false');
+          button.setAttribute('aria-haspopup', 'true');
+          button.setAttribute('aria-controls', panelId);
+          button.appendChild(document.createTextNode(group.label + ' '));
+          var caret = document.createElement('span');
+          caret.className = 'nav-group__caret';
+          caret.setAttribute('aria-hidden', 'true');
+          caret.textContent = '▾';
+          button.appendChild(caret);
+          panel.id = panelId;
+          panel.className = 'nav-group__panel';
+          panel.setAttribute('role', 'menu');
+          panel.hidden = true;
+          items.forEach(function (route) { panel.appendChild(createRouteLink(route, 'menuitem')); });
+          wrapper.append(button, panel);
+          nav.appendChild(wrapper);
+        });
+        routes.filter(function (route) { return route.featured; }).forEach(function (route) {
+          var link = createRouteLink(route);
+          link.className = 'nav-scoreboard';
+          nav.appendChild(link);
+        });
+      }
+
+      if (sheetRoutes) {
+        sheetRoutes.replaceChildren();
+        if (home) {
+          var homeGroup = document.createElement('div');
+          homeGroup.className = 'nav-sheet__group';
+          homeGroup.appendChild(createRouteLink(home));
+          sheetRoutes.appendChild(homeGroup);
+        }
+        registry.groups.filter(function (group) { return group.navigation; }).forEach(function (group) {
+          var wrapper = document.createElement('div');
+          wrapper.className = 'nav-sheet__group';
+          var label = document.createElement('span');
+          label.className = 'eyebrow';
+          label.textContent = group.label;
+          wrapper.appendChild(label);
+          routes.filter(function (route) { return route.group === group.id; }).forEach(function (route) {
+            wrapper.appendChild(createRouteLink(route));
+          });
+          sheetRoutes.appendChild(wrapper);
+        });
+      }
+
+      if (footer) {
+        footer.replaceChildren();
+        routes.filter(function (route) { return route.id !== 'home'; }).forEach(function (route) {
+          footer.appendChild(createRouteLink(route));
+        });
+      }
+    }
+
     function formatDate(iso) {
       try {
         return new Date(iso).toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -1104,7 +1087,11 @@
             if (fillEl) fillEl.style.width = (counts[band] / max * 100) + '%';
           });
           if (note) {
-            note.innerHTML = 'Counts derived from <a href="data/source_manifest.json">data/source_manifest.json</a> (' + total + ' tracked sources). No numbers are invented.';
+            note.replaceChildren(
+              document.createTextNode('Counts derived from '),
+              Object.assign(document.createElement('a'), { href: 'data/source_manifest.json', textContent: 'data/source_manifest.json' }),
+              document.createTextNode(' (' + total + ' tracked sources). No numbers are invented.')
+            );
           }
         })
         .catch(function () {
@@ -1176,11 +1163,13 @@
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () {
+        renderRouteNavigation();
         setRefreshDate();
         setAuditCounts();
         setupNav();
       });
     } else {
+      renderRouteNavigation();
       setRefreshDate();
       setAuditCounts();
       setupNav();

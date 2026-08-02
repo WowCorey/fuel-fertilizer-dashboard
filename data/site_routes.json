@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "groups": [
+    { "id": "home", "label": "Home", "navigation": false },
+    { "id": "fuel_energy", "label": "Fuel & Energy", "navigation": true },
+    { "id": "food_farms", "label": "Food & Farms", "navigation": true },
+    { "id": "economy", "label": "Economy & Households", "navigation": true },
+    { "id": "defence", "label": "Defence & Strategic", "navigation": true },
+    { "id": "infrastructure", "label": "Infrastructure & Systems", "navigation": true },
+    { "id": "workforce", "label": "Workforce & Data", "navigation": true }
+  ],
+  "routes": [
+    {
+      "id": "home",
+      "title": "Fuel Resilience AU — Australian resilience data audit",
+      "nav_label": "Home",
+      "relative_url": "index.html",
+      "group": "home",
+      "kind": "standalone",
+      "public": true
+    },
+    {
+      "id": "national_status",
+      "title": "National fuel status",
+      "nav_label": "National status",
+      "relative_url": "ui_kits/national-status-dashboard/index.html",
+      "group": "fuel_energy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "fuel_security",
+      "title": "National fuel security",
+      "nav_label": "National fuel security",
+      "relative_url": "ui_kits/fuel-security-dashboard/index.html",
+      "group": "fuel_energy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "fuel_strategy",
+      "title": "Australian Fuel Strategy Tracker",
+      "nav_label": "Fuel strategy",
+      "relative_url": "ui_kits/australian-fuel-strategy-dashboard/index.html",
+      "group": "fuel_energy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "qld_fuel_sovereignty",
+      "title": "Queensland Fuel Sovereignty Delivery Tracker",
+      "nav_label": "QLD fuel sovereignty",
+      "relative_url": "ui_kits/qld-fuel-sovereignty-dashboard/index.html",
+      "group": "fuel_energy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "fuel",
+      "title": "Australia's liquid fuel, in plain English",
+      "nav_label": "Fuel",
+      "relative_url": "ui_kits/fuel-dashboard/index.html",
+      "group": "fuel_energy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "oil",
+      "title": "Oil & production",
+      "nav_label": "Oil & production",
+      "relative_url": "ui_kits/oil-and-production/index.html",
+      "group": "fuel_energy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "power_grid",
+      "title": "Power grid reliability audit",
+      "nav_label": "Power grid",
+      "relative_url": "ui_kits/power-grid-dashboard/index.html",
+      "group": "fuel_energy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "fertilizer",
+      "title": "Food-system resilience audit",
+      "nav_label": "Food, farms & water",
+      "relative_url": "ui_kits/fertilizer-dashboard/index.html",
+      "group": "food_farms",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "who_pays_what",
+      "title": "Who pays what",
+      "nav_label": "Who pays what",
+      "relative_url": "ui_kits/who-pays-what/index.html",
+      "group": "economy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "au_economics",
+      "title": "Macroeconomic resilience audit",
+      "nav_label": "AU economics",
+      "relative_url": "ui_kits/au-economics-dashboard/index.html",
+      "group": "economy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "housing_pressure",
+      "title": "Housing and Economic Pressure",
+      "nav_label": "Housing pressure",
+      "relative_url": "ui_kits/housing-economic-pressure-dashboard/index.html",
+      "group": "economy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "state_contribution",
+      "title": "State petroleum ledger",
+      "nav_label": "State petroleum ledger",
+      "relative_url": "ui_kits/state-contribution-dashboard/index.html",
+      "group": "economy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "resource_value",
+      "title": "Resource value-capture audit",
+      "nav_label": "Resource value",
+      "relative_url": "ui_kits/resource-value-dashboard/index.html",
+      "group": "economy",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "defence_posture",
+      "title": "Defence posture public-data audit",
+      "nav_label": "Defence posture",
+      "relative_url": "ui_kits/defence-alliances-dashboard/index.html",
+      "group": "defence",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "defence_procurement",
+      "title": "Defence procurement public-data audit",
+      "nav_label": "Defence procurement",
+      "relative_url": "ui_kits/defence-procurement-watch/index.html",
+      "group": "defence",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "strategic_resources",
+      "title": "Strategic resource resilience audit",
+      "nav_label": "Strategic resources",
+      "relative_url": "ui_kits/strategic-resources-dashboard/index.html",
+      "group": "defence",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "infrastructure",
+      "title": "Infrastructure delivery audit",
+      "nav_label": "Infrastructure",
+      "relative_url": "ui_kits/infrastructure-dashboard/index.html",
+      "group": "infrastructure",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "manufacturing",
+      "title": "Manufacturing capacity audit",
+      "nav_label": "Manufacturing",
+      "relative_url": "ui_kits/manufacturing-dashboard/index.html",
+      "group": "infrastructure",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "brisbane_2032",
+      "title": "Brisbane 2032 Readiness Dashboard",
+      "nav_label": "Brisbane 2032 readiness",
+      "relative_url": "ui_kits/brisbane-2032-readiness-dashboard/index.html",
+      "group": "infrastructure",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "employment_automation",
+      "title": "Employment and automation audit",
+      "nav_label": "Employment & automation",
+      "relative_url": "ui_kits/employment-automation-dashboard/index.html",
+      "group": "workforce",
+      "kind": "react-dashboard",
+      "public": true
+    },
+    {
+      "id": "missing_data",
+      "title": "Missing data scoreboard",
+      "nav_label": "Missing Data Scoreboard",
+      "relative_url": "ui_kits/missing-data-scoreboard/index.html",
+      "group": "workforce",
+      "kind": "react-dashboard",
+      "public": true,
+      "featured": true
+    },
+    {
+      "id": "trust_status",
+      "title": "Trust Status",
+      "nav_label": "Trust Status",
+      "relative_url": "ui_kits/trust-status-dashboard/index.html",
+      "group": "workforce",
+      "kind": "standalone",
+      "public": true
+    }
+  ]
+}

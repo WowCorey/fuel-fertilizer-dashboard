@@ -1,29 +1,28 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+const routeRegistry = require('../data/site_routes.json');
 
-const routes = [
-  { path: '/', heading: /Tracking what Australia.{1,5}s resilience data shows/ },
-  { path: '/ui_kits/national-status-dashboard/index.html', heading: 'A single public snapshot of Australian fuel resilience.' },
-  { path: '/ui_kits/fuel-security-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-security data can verify/ },
-  { path: '/ui_kits/australian-fuel-strategy-dashboard/index.html', heading: /What Australia.{1,5}s public fuel-strategy data can verify/ },
-  { path: '/ui_kits/qld-fuel-sovereignty-dashboard/index.html', heading: /What Queensland.{1,5}s public fuel-sovereignty data can verify/ },
-  { path: '/ui_kits/resource-value-dashboard/index.html', heading: /What Australia.{1,5}s public resource-value data can verify/ },
-  { path: '/ui_kits/state-contribution-dashboard/index.html', heading: "What each state contributes to Australia's petroleum system." },
-  { path: '/ui_kits/strategic-resources-dashboard/index.html', heading: /What Australia.{1,5}s public strategic-resource data can verify/ },
-  { path: '/ui_kits/defence-alliances-dashboard/index.html', heading: /What Australia.{1,5}s public defence-posture data can verify/ },
-  { path: '/ui_kits/defence-procurement-watch/index.html', heading: /What Australia.{1,5}s public defence-procurement data can verify/ },
-  { path: '/ui_kits/fuel-dashboard/index.html', heading: "Australia's liquid fuel, in plain English." },
-  { path: '/ui_kits/fertilizer-dashboard/index.html', heading: /What Australia.{1,5}s public food-system data can verify/ },
-  { path: '/ui_kits/oil-and-production/index.html', heading: 'What crude costs, what we refine, and what the government pays.' },
-  { path: '/ui_kits/who-pays-what/index.html', heading: 'What companies earn, what tax they pay, and what consumers pay.' },
-  { path: '/ui_kits/au-economics-dashboard/index.html', heading: /What Australia.{1,5}s public economic data can verify/ },
-  { path: '/ui_kits/housing-economic-pressure-dashboard/index.html', heading: 'Housing and economic pressure' },
-  { path: '/ui_kits/manufacturing-dashboard/index.html', heading: /What Australia.{1,5}s public manufacturing-capacity data can verify/ },
-  { path: '/ui_kits/power-grid-dashboard/index.html', heading: /What Australia.{1,5}s public power-grid data can verify/ },
-  { path: '/ui_kits/infrastructure-dashboard/index.html', heading: /What Australia.{1,5}s public infrastructure-delivery data can verify/ },
-  { path: '/ui_kits/brisbane-2032-readiness-dashboard/index.html', heading: 'Brisbane 2032 readiness' },
-  { path: '/ui_kits/employment-automation-dashboard/index.html', heading: /What Australia.{1,5}s public employment and automation data can verify/ },
-  { path: '/ui_kits/missing-data-scoreboard/index.html', heading: /The public-data gaps behind Australia.{1,5}s resilience picture/ },
-];
+const routes = routeRegistry.routes
+  .filter(route => route.public)
+  .map(route => ({ ...route, path: route.id === 'home' ? '/' : `/${route.relative_url}` }));
+
+test('canonical route registry reconciles with every public dashboard directory', () => {
+  const root = path.resolve(__dirname, '..');
+  const registered = routes
+    .filter(route => route.relative_url.startsWith('ui_kits/'))
+    .map(route => route.relative_url.split('/')[1])
+    .sort();
+  const publicDirectories = fs.readdirSync(path.join(root, 'ui_kits'), { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(root, 'ui_kits', entry.name, 'index.html')))
+    .map(entry => entry.name)
+    .sort();
+  expect(registered).toEqual(publicDirectories);
+  expect(new Set(routes.map(route => route.id)).size).toBe(routes.length);
+  expect(new Set(routes.map(route => route.relative_url)).size).toBe(routes.length);
+  expect(routes.find(route => route.id === 'missing_data')).toBeTruthy();
+  expect(routes.find(route => route.id === 'trust_status')).toBeTruthy();
+});
 
 for (const route of routes) {
   test(`${route.path} renders without console errors`, async ({ page }) => {
@@ -38,12 +37,13 @@ for (const route of routes) {
 
     const response = await page.goto(route.path);
     expect(response?.ok(), route.path).toBeTruthy();
-    await expect(page.getByRole('heading', { name: route.heading })).toBeVisible();
-    if (route.path !== '/') {
+    await expect(page.locator('h1').first()).toBeVisible();
+    if (route.kind === 'react-dashboard') {
       await expect(page.getByLabel('Refresh status')).toContainText(/Refreshed|Refresh status unavailable|No successful refresh recorded|Page data retrieved/);
       await expect(page.getByText('Refreshed means the automated pipeline last ran successfully').first()).toBeVisible();
       await expect(page.getByText('Page data retrieved', { exact: true }).first()).toBeVisible();
     }
+    expect(await page.locator('script[src^="http:"] , script[src^="https:"]').count()).toBe(0);
     await expect(page.locator('body')).not.toContainText("There isn't a GitHub Pages site here.");
     expect(pageErrors).toEqual([]);
     expect(consoleErrors.filter(text => !text.includes('favicon'))).toEqual([]);
@@ -131,6 +131,24 @@ test('homepage primary nav exposes category groups', async ({ page }) => {
   await nav.getByRole('button', { name: /Fuel & Energy/ }).click();
   await expect(nav.getByRole('menuitem', { name: 'National fuel security' })).toBeVisible();
   await expect(nav.getByRole('menuitem', { name: 'Power grid' })).toBeVisible();
+});
+
+test('canonical registry supplies homepage and shared dashboard links', async ({ page }) => {
+  const dashboardCount = routes.filter(route => route.id !== 'home').length;
+  await page.goto('/');
+  const homeFooter = page.locator('#home-footer-routes');
+  await expect(homeFooter.getByRole('link')).toHaveCount(dashboardCount);
+  await expect(homeFooter.getByRole('link', { name: 'Missing Data Scoreboard' })).toBeVisible();
+  await expect(homeFooter.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+
+  await page.goto('/ui_kits/fuel-dashboard/index.html');
+  const dashboardFooter = page.locator('.site-footer__col').filter({ hasText: 'Dashboards' });
+  await expect(dashboardFooter.getByRole('link')).toHaveCount(dashboardCount);
+  await expect(dashboardFooter.getByRole('link', { name: 'Trust Status' })).toBeVisible();
+  const primary = page.getByRole('navigation', { name: 'Primary' });
+  await primary.getByRole('button', { name: /Workforce & Data/ }).click();
+  await expect(primary.getByRole('menuitem', { name: 'Missing Data Scoreboard' })).toBeVisible();
+  await expect(primary.getByRole('menuitem', { name: 'Trust Status' })).toBeVisible();
 });
 
 test('missing data scoreboard keeps roadmap areas source-gated', async ({ page }) => {

@@ -6,60 +6,21 @@
 // category. On narrow viewports the same groups collapse into a
 // right-edge drawer triggered by the "Menu" button.
 function Header({ active = 'fuel', updated = '', refreshStatus = null }) {
-  const groups = [
-    {
-      id: 'fuel_energy', label: 'Fuel & energy',
-      items: [
-        { id: 'national_status',         label: 'National status',         href: '../national-status-dashboard/index.html' },
-        { id: 'fuel_security',           label: 'National fuel security',  href: '../fuel-security-dashboard/index.html' },
-        { id: 'fuel_strategy',           label: 'Fuel strategy',           href: '../australian-fuel-strategy-dashboard/index.html' },
-        { id: 'qld_fuel_sovereignty',    label: 'QLD fuel sovereignty',    href: '../qld-fuel-sovereignty-dashboard/index.html' },
-        { id: 'fuel',                    label: 'Fuel',                    href: '../fuel-dashboard/index.html' },
-        { id: 'oil',                     label: 'Oil & production',        href: '../oil-and-production/index.html' },
-        { id: 'power_grid',              label: 'Power grid',              href: '../power-grid-dashboard/index.html' },
-      ],
-    },
-    {
-      id: 'food_farms', label: 'Food & farms',
-      items: [
-        { id: 'fertilizer',              label: 'Food & farms',            href: '../fertilizer-dashboard/index.html' },
-      ],
-    },
-    {
-      id: 'economy', label: 'Economy & households',
-      items: [
-        { id: 'who_pays_what',           label: 'Who pays what',           href: '../who-pays-what/index.html' },
-        { id: 'au_economics',            label: 'AU economics',            href: '../au-economics-dashboard/index.html' },
-        { id: 'housing_pressure',        label: 'Housing pressure',        href: '../housing-economic-pressure-dashboard/index.html' },
-        { id: 'state_contribution',      label: 'State ledger',            href: '../state-contribution-dashboard/index.html' },
-        { id: 'resource_value',          label: 'Resource value',          href: '../resource-value-dashboard/index.html' },
-      ],
-    },
-    {
-      id: 'defence', label: 'Defence & strategic',
-      items: [
-        { id: 'defence_posture',         label: 'Defence posture',         href: '../defence-alliances-dashboard/index.html' },
-        { id: 'defence_procurement',     label: 'Defence procurement',     href: '../defence-procurement-watch/index.html' },
-        { id: 'strategic_resources',     label: 'Strategic resources',     href: '../strategic-resources-dashboard/index.html' },
-      ],
-    },
-    {
-      id: 'infrastructure', label: 'Infrastructure & systems',
-      items: [
-        { id: 'infrastructure',          label: 'Infrastructure',          href: '../infrastructure-dashboard/index.html' },
-        { id: 'manufacturing',           label: 'Manufacturing',           href: '../manufacturing-dashboard/index.html' },
-        { id: 'brisbane_2032',           label: '2032 readiness',          href: '../brisbane-2032-readiness-dashboard/index.html' },
-      ],
-    },
-    {
-      id: 'workforce', label: 'Workforce & data',
-      items: [
-        { id: 'employment_automation',   label: 'Employment & automation', href: '../employment-automation-dashboard/index.html' },
-        { id: 'missing_data',            label: 'Missing data scoreboard', href: '../missing-data-scoreboard/index.html' },
-        { id: 'sources',                 label: 'Sources & methodology',   href: '#sources' },
-      ],
-    },
-  ];
+  const registry = window.SITE_ROUTES;
+  const publicRoutes = registry?.routes?.filter(route => route.public) || [];
+  const groups = (registry?.groups || [])
+    .filter(group => group.navigation)
+    .map(group => ({
+      id: group.id,
+      label: group.label,
+      items: publicRoutes
+        .filter(route => route.group === group.id)
+        .map(route => ({
+          id: route.id,
+          label: route.nav_label,
+          href: `../../${route.relative_url}`,
+        })),
+    }));
 
   const [openGroup, setOpenGroup] = React.useState(null);
   const [sheetOpen, setSheetOpen] = React.useState(false);
