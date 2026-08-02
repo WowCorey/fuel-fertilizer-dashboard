@@ -1808,6 +1808,31 @@ def fetch_nsw_fuelcheck(
         warn_skip("NSW FuelCheck", "price request returned an unexpected Fuel API v2 schema")
         return None
 
+    station_states: dict[str, str] = {}
+    for station in doc["stations"]:
+        if not isinstance(station, dict):
+            warn_skip("NSW FuelCheck", "price request contained a malformed station row")
+            return None
+        station_code_value = station.get("code")
+        station_state_value = station.get("state")
+        if (
+            not isinstance(station_code_value, str)
+            or not station_code_value.strip()
+            or not isinstance(station_state_value, str)
+            or not station_state_value.strip()
+        ):
+            warn_skip("NSW FuelCheck", "price request contained a station without code or state")
+            return None
+        station_code = station_code_value.strip()
+        station_state = station_state_value.strip().upper()
+        if station_code in station_states:
+            warn_skip("NSW FuelCheck", "price request contained a duplicate station code")
+            return None
+        if station_state != "NSW":
+            warn_skip("NSW FuelCheck", "NSW-scoped price request contained a non-NSW station")
+            return None
+        station_states[station_code] = station_state
+
     prices_by_station: dict[str, float] = {}
     dates: set[str] = set()
     fuel_types = fuel_types or RETAIL_PRODUCTS["ulp91"]["nsw_fuel_types"]
@@ -1822,17 +1847,22 @@ def fetch_nsw_fuelcheck(
         fuel_type = fuel_type_value.strip().upper()
         if fuel_type not in fuel_types:
             continue
-        state = str(item.get("state") or "NSW").strip().upper()
-        if state != "NSW":
+        price_state = item.get("state")
+        if price_state is not None and (
+            not isinstance(price_state, str) or price_state.strip().upper() != "NSW"
+        ):
             warn_skip("NSW FuelCheck", "NSW-scoped price request returned a non-NSW row")
             return None
         station_code = item.get("stationcode")
         if not isinstance(station_code, str) or not station_code.strip():
-            warn_skip("NSW FuelCheck", "price request contained a missing or duplicate stationcode")
+            warn_skip("NSW FuelCheck", "price request contained a missing stationcode")
             return None
         station_code = station_code.strip()
+        if station_code not in station_states:
+            warn_skip("NSW FuelCheck", "selected price row did not map to exactly one NSW station")
+            return None
         if station_code in prices_by_station:
-            warn_skip("NSW FuelCheck", "price request contained a missing or duplicate stationcode")
+            warn_skip("NSW FuelCheck", "price request contained a duplicate selected stationcode")
             return None
         try:
             price = float(item.get("price"))

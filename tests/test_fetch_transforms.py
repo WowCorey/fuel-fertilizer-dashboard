@@ -32,6 +32,21 @@ class FakeResponse:
 
 
 class FetchTransformTests(unittest.TestCase):
+    def _fetch_nsw_price_document(self, price_document):
+        responses = [
+            FakeResponse(json_doc={"access_token": "access-token", "status": "approved"}),
+            FakeResponse(json_doc=price_document),
+        ]
+        with mock.patch.dict(
+            fetch_data.os.environ,
+            {
+                "NSW_FUELCHECK_API_KEY": "consumer-key",
+                "NSW_FUELCHECK_API_SECRET": "consumer-secret",
+            },
+            clear=True,
+        ), mock.patch.object(fetch_data.requests, "get", side_effect=responses):
+            return fetch_data.fetch_nsw_fuelcheck("https://example.test/prices")
+
     def test_non_required_fetch_check_failure_does_not_block(self):
         source = {
             "id": "slow_optional_source",
@@ -624,6 +639,59 @@ class FetchTransformTests(unittest.TestCase):
             ), mock.patch.object(fetch_data.requests, "get") as request_get:
                 self.assertIsNone(fetch_data.fetch_nsw_fuelcheck("https://example.test/prices"))
                 request_get.assert_not_called()
+
+    def test_nsw_fuelcheck_rejects_selected_price_without_station_record(self):
+        self.assertIsNone(
+            self._fetch_nsw_price_document(
+                {
+                    "stations": [{"code": "9999", "state": "NSW"}],
+                    "prices": [
+                        {
+                            "stationcode": "1001",
+                            "fueltype": "U91",
+                            "price": 180.5,
+                            "lastupdated": "03/08/2026 01:15:00 AM",
+                        }
+                    ],
+                }
+            )
+        )
+
+    def test_nsw_fuelcheck_rejects_duplicate_or_malformed_station_records(self):
+        price = {
+            "stationcode": "1001",
+            "fueltype": "U91",
+            "price": 180.5,
+            "lastupdated": "03/08/2026 01:15:00 AM",
+        }
+        station_cases = (
+            [{"code": "1001", "state": "NSW"}, {"code": "1001", "state": "NSW"}],
+            [{"state": "NSW"}],
+            [{"code": "1001"}],
+            ["not-a-station-record"],
+        )
+        for stations in station_cases:
+            with self.subTest(stations=stations):
+                self.assertIsNone(
+                    self._fetch_nsw_price_document({"stations": stations, "prices": [price]})
+                )
+
+    def test_nsw_fuelcheck_rejects_non_nsw_mapped_station(self):
+        self.assertIsNone(
+            self._fetch_nsw_price_document(
+                {
+                    "stations": [{"code": "1001", "state": "QLD"}],
+                    "prices": [
+                        {
+                            "stationcode": "1001",
+                            "fueltype": "U91",
+                            "price": 180.5,
+                            "lastupdated": "03/08/2026 01:15:00 AM",
+                        }
+                    ],
+                }
+            )
+        )
 
     def test_nsw_fuelcheck_fails_closed_when_oauth_exchange_fails(self):
         with mock.patch.dict(
