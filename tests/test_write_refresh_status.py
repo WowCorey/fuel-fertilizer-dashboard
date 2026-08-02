@@ -80,6 +80,20 @@ class RefreshStatusV2Tests(unittest.TestCase):
             workflow,
         )
 
+    def test_ci_and_pages_follow_successful_main_refresh_runs(self):
+        for relative_path in (
+            ".github/workflows/ci.yml",
+            ".github/workflows/pages.yml",
+        ):
+            workflow = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn('workflows: ["Weekly data refresh"]', workflow, relative_path)
+            self.assertIn("types: [completed]", workflow, relative_path)
+            self.assertIn("github.event.workflow_run.conclusion == 'success'", workflow, relative_path)
+            self.assertIn("github.event.workflow_run.head_branch == 'main'", workflow, relative_path)
+
+        ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+        self.assertIn("workflow_dispatch:", ci)
+
 
 if __name__ == "__main__":
     unittest.main()
