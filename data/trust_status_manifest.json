@@ -1,0 +1,125 @@
+{
+  "schema": "fuel_resilience_trust_status.v2",
+  "generated_at": "2026-08-02T13:02:00+00:00",
+  "status": "refresh_status_unknown",
+  "bootstrap_notice": "Bootstrap only. Workflows run scripts/build_trust_status.py before validation and publication so repository-derived counts replace these zero placeholders.",
+  "project": {
+    "name": "Fuel Resilience AU",
+    "repository": "WowCorey/fuel-fertilizer-dashboard",
+    "purpose": "Independent public-source Australian resilience data audit.",
+    "official_status": "not_official"
+  },
+  "source_inventory": {
+    "modes": {
+      "programmatic": 0,
+      "manual": 0,
+      "derived": 0,
+      "unavailable": 0,
+      "total": 0
+    },
+    "envelope_presence": {
+      "generated_only": 0,
+      "manual_only": 0,
+      "both": 0,
+      "missing": 0
+    },
+    "envelopes": {
+      "files_total": 0
+    },
+    "evidence_path": "data/source_manifest.json"
+  },
+  "validation": {
+    "ok": true,
+    "error_count": 0,
+    "warning_count": 0,
+    "warning_categories": {},
+    "warning_examples": {},
+    "errors": [],
+    "evidence_path": "scripts/validate_project.py"
+  },
+  "latest_refresh": {
+    "status": "not_recorded",
+    "refreshed_at": null,
+    "workflow": null,
+    "run_id": null,
+    "run_attempt": null,
+    "reported_git_sha": null,
+    "sha_semantics": "Under the current v1 marker, git_sha records the workflow input commit and may not be the later commit that contains the published refresh.",
+    "evidence_path": "data/last_successful_refresh.json"
+  },
+  "link_health": {
+    "status": "not_yet_generated",
+    "generated_at": null,
+    "advisory": true,
+    "repair_required_count": null,
+    "categories": {},
+    "claim_boundary": "No classified report is loaded in this bootstrap file. This does not imply that source pages are healthy or broken.",
+    "evidence_path": "data/source_link_health.json"
+  },
+  "workflow_configuration": [
+    {
+      "id": "continuous_integration",
+      "label": "Continuous integration",
+      "status": "configured",
+      "evidence_path": ".github/workflows/ci.yml",
+      "meaning": "The repository contains configured validation checks; configuration is not the latest run result."
+    },
+    {
+      "id": "weekly_data_refresh",
+      "label": "Weekly data refresh",
+      "status": "configured",
+      "evidence_path": ".github/workflows/refresh-data.yml",
+      "meaning": "The repository contains a configured weekly refresh; configuration is not the latest run result."
+    },
+    {
+      "id": "manual_review",
+      "label": "Manual source review",
+      "status": "configured",
+      "evidence_path": ".github/workflows/manual-data-review.yml",
+      "meaning": "The repository contains configured manual-review reporting; configuration is not the latest run result."
+    },
+    {
+      "id": "pages_deployment",
+      "label": "GitHub Pages deployment",
+      "status": "configured",
+      "evidence_path": ".github/workflows/pages.yml",
+      "meaning": "The repository contains a configured Pages deployment; configuration is not the latest run result."
+    }
+  ],
+  "unavailable_coverage": {
+    "top_dashboards": [],
+    "meaning": "Bootstrap only. Generated counts show unavailable registry entries associated with dashboards; they are visibility gaps, not risk scores."
+  },
+  "confidence_bands": [
+    {
+      "id": "programmatic",
+      "label": "Programmatic public feed",
+      "meaning": "Fetched from a named machine-readable endpoint and validated before publication."
+    },
+    {
+      "id": "manual",
+      "label": "Manual public-source snapshot",
+      "meaning": "Hand-entered from a named public page or document and required to retain its date and caveats."
+    },
+    {
+      "id": "derived",
+      "label": "Derived from named envelopes",
+      "meaning": "Calculated or selected from traceable parent evidence; not an independent observed series."
+    },
+    {
+      "id": "unavailable",
+      "label": "Source-gated or unavailable",
+      "meaning": "No verified public field, period, unit and reuse path is loaded; the dashboard must not estimate it."
+    }
+  ],
+  "trust_rules": [
+    "No made-up data or unsupported estimates.",
+    "Manual public-source values remain labelled as manual.",
+    "Derived values retain traceable parent evidence.",
+    "Unavailable rows remain visible as public-data gaps.",
+    "A successful automated refresh does not prove every manual source is current.",
+    "A blocked or timed-out landing page does not, by itself, prove the underlying dataset is unavailable.",
+    "Workflow configuration is not presented as the latest workflow result."
+  ],
+  "claim_boundary": "Trust Status reports repository evidence, validation output, refresh metadata and public-source coverage. It is not a certification, not an official government assessment, not a security audit, and not proof that every upstream source is accurate or currently reachable."
+}
