@@ -4,13 +4,9 @@
   "source_name": "ABS International Merchandise Trade — petroleum imports YoY",
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "%",
-  "retrieved_at": "2026-08-02T17:07:42+00:00",
-  "last_data_point": "2026-05-31",
+  "retrieved_at": "2026-08-09T16:43:24+00:00",
+  "last_data_point": "2026-06-30",
   "values": [
-    {
-      "t": "2022-06",
-      "v": 106.9
-    },
     {
       "t": "2022-07",
       "v": 101.1
@@ -177,11 +173,11 @@
     },
     {
       "t": "2025-12",
-      "v": -12.0
+      "v": -12.6
     },
     {
       "t": "2026-01",
-      "v": -14.3
+      "v": -14.2
     },
     {
       "t": "2026-02",
@@ -189,15 +185,19 @@
     },
     {
       "t": "2026-03",
-      "v": 46.3
+      "v": 48.0
     },
     {
       "t": "2026-04",
-      "v": 120.4
+      "v": 117.0
     },
     {
       "t": "2026-05",
-      "v": 97.8
+      "v": 88.6
+    },
+    {
+      "t": "2026-06",
+      "v": 57.4
     }
   ],
   "notes": "Derived from abs_petroleum_imports by comparing each month to the same month one year earlier. Source: ABS International Merchandise Trade.",

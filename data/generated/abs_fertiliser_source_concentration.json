@@ -4,13 +4,9 @@
   "source_name": "ABS International Merchandise Trade - fertiliser source-country concentration",
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "%",
-  "retrieved_at": "2026-08-02T17:07:44+00:00",
-  "last_data_point": "2026-05-31",
+  "retrieved_at": "2026-08-09T16:43:27+00:00",
+  "last_data_point": "2026-06-30",
   "values": [
-    {
-      "t": "2021-06",
-      "v": 53.2
-    },
     {
       "t": "2021-07",
       "v": 49.7
@@ -241,11 +237,15 @@
     },
     {
       "t": "2026-04",
-      "v": 44.5
+      "v": 44.6
     },
     {
       "t": "2026-05",
-      "v": 55.8
+      "v": 54.8
+    },
+    {
+      "t": "2026-06",
+      "v": 53.4
     }
   ],
   "notes": "Fetched from ABS Data API MERCH_IMP using SITC 562 by country of origin. Each value is the share of monthly SITC 562 import value from the three largest non-total source countries. Values are trimmed to the last 60 monthly observations.",
@@ -257,27 +257,27 @@
     "schema": "abs_sitc562_source_concentration.v1",
     "fields": {
       "commodity": "SITC 562 manufactured fertilisers",
-      "period": "2026-05",
-      "total_import_value_aud_thousands": 886656,
-      "top3_share_percent": 55.8,
-      "top3_value_aud_thousands": 494747,
+      "period": "2026-06",
+      "total_import_value_aud_thousands": 723731,
+      "top3_share_percent": 53.4,
+      "top3_value_aud_thousands": 386391,
       "positive_country_count": 41,
-      "hhi": 1345.2,
+      "hhi": 1336.3,
       "top_countries": [
         {
-          "country": "China (excludes SARs and Taiwan)",
-          "value_aud_thousands": 181715,
-          "share_percent": 20.5
-        },
-        {
-          "country": "Oman",
-          "value_aud_thousands": 167981,
-          "share_percent": 18.9
-        },
-        {
           "country": "Nigeria",
-          "value_aud_thousands": 145051,
-          "share_percent": 16.4
+          "value_aud_thousands": 179640,
+          "share_percent": 24.8
+        },
+        {
+          "country": "Indonesia",
+          "value_aud_thousands": 125863,
+          "share_percent": 17.4
+        },
+        {
+          "country": "Malaysia",
+          "value_aud_thousands": 80888,
+          "share_percent": 11.2
         }
       ]
     }

@@ -4,13 +4,9 @@
   "source_name": "ABS International Trade - manufactured exports (SITC 5-8), monthly",
   "source_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods",
   "unit": "AUD millions",
-  "retrieved_at": "2026-08-02T17:09:45+00:00",
-  "last_data_point": "2026-05-31",
+  "retrieved_at": "2026-08-09T16:45:33+00:00",
+  "last_data_point": "2026-06-30",
   "values": [
-    {
-      "t": "2021-06",
-      "v": 4286
-    },
     {
       "t": "2021-07",
       "v": 4335
@@ -229,11 +225,11 @@
     },
     {
       "t": "2026-01",
-      "v": 4645
+      "v": 4646
     },
     {
       "t": "2026-02",
-      "v": 5082
+      "v": 5079
     },
     {
       "t": "2026-03",
@@ -245,7 +241,11 @@
     },
     {
       "t": "2026-05",
-      "v": 5728
+      "v": 5610
+    },
+    {
+      "t": "2026-06",
+      "v": 6383
     }
   ],
   "notes": "Fetched from ABS International Trade in Goods latest-release XLSX Table 12a. Value is the monthly sum of original FOB export values for SITC sections 5, 6, 7 and 8. ABS workbook values are AUD millions and are trimmed to the last 60 monthly observations.",
@@ -256,7 +256,7 @@
   "extra": {
     "schema": "abs_xlsx_series.v1",
     "fields": {
-      "workbook_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/may-2026/5368012a.xlsx",
+      "workbook_url": "https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/jun-2026/5368012a.xlsx",
       "workbook_unit": "$ Millions",
       "component_series": [
         {
@@ -265,7 +265,7 @@
           "sheet": "Data1",
           "series_type": "Original",
           "unit": "$ Millions",
-          "value": 1125
+          "value": 1142
         },
         {
           "description": "6 Manufactured goods classified chiefly by material ;",
@@ -273,7 +273,7 @@
           "sheet": "Data1",
           "series_type": "Original",
           "unit": "$ Millions",
-          "value": 1722
+          "value": 2290
         },
         {
           "description": "7 Machinery and transport equipment ;",
@@ -281,7 +281,7 @@
           "sheet": "Data1",
           "series_type": "Original",
           "unit": "$ Millions",
-          "value": 1926
+          "value": 1960
         },
         {
           "description": "8 Miscellaneous manufactured articles ;",
@@ -289,7 +289,7 @@
           "sheet": "Data1",
           "series_type": "Original",
           "unit": "$ Millions",
-          "value": 955
+          "value": 991
         }
       ]
     }
