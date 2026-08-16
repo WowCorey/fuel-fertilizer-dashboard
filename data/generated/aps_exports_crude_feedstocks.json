@@ -4,13 +4,9 @@
   "source_name": "Australian Petroleum Statistics - crude and refinery feedstock exports",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "ML",
-  "retrieved_at": "2026-08-09T16:43:22+00:00",
-  "last_data_point": "2026-05-31",
+  "retrieved_at": "2026-08-16T16:33:02+00:00",
+  "last_data_point": "2026-06-30",
   "values": [
-    {
-      "t": "2021-06",
-      "v": 908.3
-    },
     {
       "t": "2021-07",
       "v": 1078.6
@@ -233,19 +229,23 @@
     },
     {
       "t": "2026-02",
-      "v": 989.1
+      "v": 989.6
     },
     {
       "t": "2026-03",
-      "v": 1322.5
+      "v": 1320.9
     },
     {
       "t": "2026-04",
-      "v": 750.7
+      "v": 747.3
     },
     {
       "t": "2026-05",
-      "v": 1330.1
+      "v": 1335.1
+    },
+    {
+      "t": "2026-06",
+      "v": 892.8
     }
   ],
   "notes": "Fetched from the Australian Petroleum Statistics XLSX data extract. Sheet: Exports volume; column: Crude oil & other refinery feedstocks (ML). Values are trimmed to the last 60 monthly observations.",

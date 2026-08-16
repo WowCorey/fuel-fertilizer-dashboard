@@ -4,13 +4,9 @@
   "source_name": "Australian Petroleum Statistics - diesel stocks",
   "source_url": "https://www.energy.gov.au/publications/australian-petroleum-statistics",
   "unit": "ML",
-  "retrieved_at": "2026-08-09T16:43:22+00:00",
-  "last_data_point": "2026-05-31",
+  "retrieved_at": "2026-08-16T16:33:02+00:00",
+  "last_data_point": "2026-06-30",
   "values": [
-    {
-      "t": "2021-06",
-      "v": 1628.3
-    },
     {
       "t": "2021-07",
       "v": 1823.3
@@ -246,6 +242,10 @@
     {
       "t": "2026-05",
       "v": 2817.9
+    },
+    {
+      "t": "2026-06",
+      "v": 2831.2
     }
   ],
   "notes": "Fetched from the Australian Petroleum Statistics XLSX data extract. Sheet: Stock volume by product; column: Diesel oil (ML). Values are trimmed to the last 60 monthly observations.",

@@ -1,6 +1,6 @@
 {
   "schema": "fuel_resilience_source_link_health.v2",
-  "generated_at": "2026-08-09T16:48:50+00:00",
+  "generated_at": "2026-08-16T16:38:30+00:00",
   "advisory": true,
   "claim_boundary": "A failed automated landing-page request is not, by itself, proof that the underlying dataset is unavailable. Categories distinguish broken links from access blocks and transient failures.",
   "registered_source_count": 219,
@@ -8,9 +8,9 @@
   "checker_failure_count": 0,
   "classification_complete": true,
   "summary": {
-    "access_blocked": 26,
+    "access_blocked": 24,
     "canonical_blocked_fetch_healthy": 13,
-    "healthy": 96,
+    "healthy": 98,
     "healthy_internal": 52,
     "healthy_redirect": 5,
     "transient_error": 27
@@ -1339,13 +1339,13 @@
     },
     "australia_institute_gas_export_tax_proposal": {
       "source_id": "australia_institute_gas_export_tax_proposal",
-      "category": "access_blocked",
+      "category": "healthy",
       "canonical_check": {
-        "category": "access_blocked",
-        "detail": "HTTP 403",
+        "category": "healthy",
+        "detail": "HTTP 200",
         "requested_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
         "final_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
-        "http_status": 403
+        "http_status": 200
       },
       "registry_canonical_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
       "effective_canonical_url": "https://australiainstitute.org.au/report/we-have-already-missed-out-on-63-8-billion-in-taxes-from-gas-exports/",
@@ -1354,13 +1354,13 @@
     },
     "australia_institute_gas_giveaway_analysis": {
       "source_id": "australia_institute_gas_giveaway_analysis",
-      "category": "access_blocked",
+      "category": "healthy",
       "canonical_check": {
-        "category": "access_blocked",
-        "detail": "HTTP 403",
+        "category": "healthy",
+        "detail": "HTTP 200",
         "requested_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
         "final_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
-        "http_status": 403
+        "http_status": 200
       },
       "registry_canonical_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
       "effective_canonical_url": "https://australiainstitute.org.au/report/taxing-gas-in-australia-and-japan/",
