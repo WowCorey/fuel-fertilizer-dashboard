@@ -1,6 +1,6 @@
 # Fuel Security Dashboard Methodology
 
-Last reviewed: 2026-04-23
+Last reviewed: 2026-08-03
 
 This document defines the first public-source fuel-security dashboard surface.
 It is intentionally conservative: values are shown only when they are observed
@@ -166,6 +166,9 @@ that the repo has live vessel intelligence.
 
 ### Vessel-data gate
 
+The current source decision and field-level rules are recorded in
+`docs/shipping-live-data-source-gate.md`.
+
 Live AIS or vessel API data must stay out of the public dashboard until all of
 these are true:
 
@@ -174,8 +177,18 @@ these are true:
 - source rights are represented in `data/sources.yml`,
 - a vessel-envelope schema is defined and validated,
 - the UI labels confidence for confirmed, likely and scheduled vessels,
-- inferred cargo/product types are either source-provided or visibly labelled
-  as estimates with a documented method.
+- cargo, product and quantity come from an authoritative cargo report or a
+  licensed provider field with documented provenance, method and confidence,
+- observed, reported, scheduled, estimated and inferred fields remain
+  structurally separate.
+
+Vessel type, AIS `ship_and_cargo_type`, draught, route, destination, terminal,
+berth, deadweight and design capacity do not establish the cargo, product or
+quantity aboard. These fields must never be combined to promote a cargo guess
+to observed fact. A licensed provider model may be represented only as
+`provider_inferred`, with its provider, method or product, generated time and
+confidence disclosed. If that evidence or the public-display right is missing,
+the cargo fields remain unavailable.
 
 Until then, the live vessel layer remains `Unavailable`.
 
