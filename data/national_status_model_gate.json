@@ -1,0 +1,427 @@
+{
+  "schema": "fuel_resilience_national_status_model_gate.v1",
+  "reviewed_at": "2026-08-03",
+  "decision": "blocked",
+  "current_outcome": "ready_for_public_non_composite_indicators",
+  "decision_summary": "The repository may continue publishing source-labelled non-composite indicators, but it is not ready to publish a project-authored national status label, national risk level or composite score.",
+  "current_repository": {
+    "source_modes": {
+      "programmatic": 52,
+      "manual": 101,
+      "derived": 4,
+      "unavailable": 62,
+      "total": 219
+    },
+    "envelope_presence": {
+      "generated_only": 49,
+      "manual_only": 163,
+      "both": 7,
+      "missing": 0,
+      "total": 219
+    },
+    "validation_warnings": {
+      "manual_stale": 13,
+      "generated_stale": 4,
+      "rights_metadata": 0,
+      "source_name_mismatch": 0,
+      "source_url_mismatch": 0,
+      "other": 0,
+      "total": 17
+    },
+    "public_routes": 23,
+    "required_indicator_states": {
+      "fuel_security_status_model": "unavailable",
+      "fuel_security_live_station_outage_feed": "unavailable",
+      "fuel_security_live_vessel_tracking": "unavailable",
+      "fuel_security_terminal_capacity": "unavailable",
+      "fuel_security_petrol_days_remaining": "ok",
+      "fuel_security_diesel_days_remaining": "ok",
+      "fuel_security_jet_days_remaining": "ok",
+      "pmc_mso_fuel_reserves": "ok",
+      "pmc_forward_import_orders": "ok",
+      "pmc_tankers_on_water": "ok",
+      "pmc_retail_stockouts": "ok"
+    },
+    "evidence_paths": [
+      "data/source_manifest.json",
+      "data/trust_status_manifest.json",
+      "data/site_routes.json",
+      "data/manual/fuel_security_status_model.json"
+    ]
+  },
+  "readiness_dimensions": {
+    "coverage_readiness": {
+      "status": "blocked",
+      "rationale": "Product-day and aggregate snapshot evidence exists, but national current outage coverage, terminal capacity and reusable live vessel/cargo coverage do not.",
+      "blocking_condition_ids": [
+        "national_outage_coverage_missing",
+        "terminal_capacity_unavailable",
+        "vessel_shipping_rights_blocked",
+        "coverage_thresholds_unapproved"
+      ],
+      "evidence_paths": [
+        "data/manual/fuel_security_live_station_outage_feed.json",
+        "data/manual/fuel_security_terminal_capacity.json",
+        "data/manual/fuel_security_live_vessel_tracking.json"
+      ]
+    },
+    "freshness_readiness": {
+      "status": "partially_ready",
+      "rationale": "Repository validation separates manual and generated staleness, but no approved model-specific freshness window exists for every proposed critical input and 17 stale warnings remain.",
+      "blocking_condition_ids": [
+        "source_specific_freshness_thresholds_unapproved"
+      ],
+      "evidence_paths": [
+        "data/trust_status_manifest.json",
+        "scripts/validate_project.py"
+      ]
+    },
+    "methodology_readiness": {
+      "status": "blocked",
+      "rationale": "The existing five-band 0-100 draft conflicts with the four-state issue, and no approved normalisation, weighting, transition or sensitivity method exists.",
+      "blocking_condition_ids": [
+        "model_definition_conflict",
+        "historical_baseline_missing",
+        "transition_rules_and_tests_missing",
+        "approved_methodology_missing"
+      ],
+      "evidence_paths": [
+        "docs/fuel-stress-index-spec.md",
+        "docs/fuel-security-methodology.md"
+      ]
+    },
+    "rights_readiness": {
+      "status": "partially_ready",
+      "rationale": "Current registered evidence carries rights metadata, but a final contributing input set is not approved and live shipping/terminal candidates do not provide a complete reusable path.",
+      "blocking_condition_ids": [
+        "vessel_shipping_rights_blocked",
+        "approved_methodology_missing"
+      ],
+      "evidence_paths": [
+        "data/source_manifest.json",
+        "data/trust_status_manifest.json"
+      ]
+    },
+    "operational_readiness": {
+      "status": "blocked",
+      "rationale": "The repository has validation and deployment controls, but it has no approved status computation, transition test suite, historical replay or generated run evidence for a model.",
+      "blocking_condition_ids": [
+        "transition_rules_and_tests_missing",
+        "historical_baseline_missing",
+        "programmatic_national_snapshot_contract_missing"
+      ],
+      "evidence_paths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/refresh-data.yml"
+      ]
+    },
+    "communication_readiness": {
+      "status": "partially_ready",
+      "rationale": "The UI correctly shows the model as unavailable and maintains claim boundaries, but no approved explanation exists for future score movement, uncertainty, conflicts or omitted inputs.",
+      "blocking_condition_ids": [
+        "approved_methodology_missing",
+        "publisher_concentration_unmeasured"
+      ],
+      "evidence_paths": [
+        "ui_kits/fuel-security-dashboard/app.jsx",
+        "data/manual/fuel_security_status_model.json"
+      ]
+    }
+  },
+  "thresholds": [
+    {
+      "id": "maximum_unknown_source_modes",
+      "kind": "maximum",
+      "status": "approved_invariant",
+      "value": 0,
+      "unit": "sources",
+      "rationale": "An unknown source mode makes coverage and evidence handling non-reconcilable.",
+      "measurement_method": "Count source-manifest fetch values outside programmatic, manual, derived and unavailable.",
+      "sensitivity_justification": "Relaxing this invariant by even one would allow evidence to disappear from defined source-mode handling; zero is a schema invariant, not empirical calibration.",
+      "failure_behavior": "Block all project-authored status or score publication.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "maximum_missing_source_envelopes",
+      "kind": "maximum",
+      "status": "approved_invariant",
+      "value": 0,
+      "unit": "sources",
+      "rationale": "Every registered source must reconcile to a generated or manual evidence envelope, including explicit unavailable envelopes.",
+      "measurement_method": "Count source-manifest entries where both has_generated and has_manual are false.",
+      "sensitivity_justification": "Allowing a missing envelope would make the source's status and caveats unknowable; zero follows the repository evidence contract.",
+      "failure_behavior": "Block all project-authored status or score publication.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "maximum_unresolved_contributing_rights",
+      "kind": "maximum",
+      "status": "approved_invariant",
+      "value": 0,
+      "unit": "contributing inputs",
+      "rationale": "A public composite cannot lawfully or reproducibly depend on an input whose display, transformation or redistribution rights are unresolved.",
+      "measurement_method": "Count proposed contributing inputs without an approved rights record covering the intended model use.",
+      "sensitivity_justification": "Any non-zero allowance would knowingly publish a result derived from rights-uncertain evidence; zero is a publication precondition.",
+      "failure_behavior": "Keep the model unavailable and identify the affected input.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "maximum_stale_critical_inputs",
+      "kind": "maximum",
+      "status": "approved_invariant",
+      "value": 0,
+      "unit": "critical inputs",
+      "rationale": "A critical input outside its approved source-specific freshness window cannot support a current national label.",
+      "measurement_method": "Evaluate each approved critical input against its source-specific reviewed or retrieved date and freshness window.",
+      "sensitivity_justification": "The allowed count is zero because a critical input is, by definition, one whose absence or staleness invalidates the current label; critical-input designation itself remains subject to methodology approval.",
+      "failure_behavior": "Suppress the label and show the stale input rather than reweighting remaining evidence.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "maximum_unvalidated_derived_inputs",
+      "kind": "maximum",
+      "status": "approved_invariant",
+      "value": 0,
+      "unit": "derived inputs",
+      "rationale": "Every derived contribution must have a documented formula, aligned fields and tests before it can affect a public model.",
+      "measurement_method": "Count proposed derived inputs without formula documentation, parent provenance and calculation tests.",
+      "sensitivity_justification": "Allowing one unvalidated transformation would make score movement irreproducible; zero is a methodology invariant.",
+      "failure_behavior": "Exclude the model from publication; do not silently drop or reweight the input.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "minimum_current_outage_geographic_coverage_percent",
+      "kind": "minimum",
+      "status": "unresolved_approval_gate",
+      "value": null,
+      "unit": "percent of defined national geography",
+      "rationale": "The repository has unlike state systems and no defensible denominator that makes site, population or jurisdiction coverage equivalent.",
+      "measurement_method": "Unresolved: first define the national denominator, product scope, station universe and treatment of voluntary or delayed schemes.",
+      "sensitivity_justification": "No sensitivity analysis is possible until comparable jurisdiction data and a defensible denominator exist; assigning a percentage now would fabricate precision.",
+      "failure_behavior": "Keep national availability and composite claims unavailable.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "maximum_unavailable_contributing_input_percent",
+      "kind": "maximum",
+      "status": "unresolved_approval_gate",
+      "value": null,
+      "unit": "percent of approved model weight",
+      "rationale": "No approved component set or weights exist, so an unavailable-input percentage cannot yet be measured honestly.",
+      "measurement_method": "Unresolved: approve components and non-adaptive weights before calculating unavailable weight.",
+      "sensitivity_justification": "A numeric limit without approved weights would permit silent reweighting and materially different results from the same missing inputs.",
+      "failure_behavior": "Keep the model unavailable; never convert unavailable weight to zero or redistribute it.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "minimum_historical_baseline_periods",
+      "kind": "minimum",
+      "status": "unresolved_approval_gate",
+      "value": null,
+      "unit": "comparable periods",
+      "rationale": "Candidate inputs have different cadences, revisions and history lengths, and no baseline study establishes the periods needed for stable transitions.",
+      "measurement_method": "Unresolved: construct aligned candidate histories, test missingness and revisions, and measure transition stability over alternative windows.",
+      "sensitivity_justification": "The required period count must follow replay and sensitivity evidence; selecting one now would be arbitrary.",
+      "failure_behavior": "Block any historical normalisation, percentile threshold or public composite.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "maximum_single_publisher_weight_percent",
+      "kind": "maximum",
+      "status": "unresolved_approval_gate",
+      "value": null,
+      "unit": "percent of approved model weight",
+      "rationale": "Source independence cannot be quantified until components, publisher lineage and weights are approved.",
+      "measurement_method": "Unresolved: trace each component to ultimate publishers and calculate direct and derived weight by publisher.",
+      "sensitivity_justification": "A cap must be tested against the actual input graph; a guessed percentage would not establish independence.",
+      "failure_behavior": "Keep source-independence readiness blocked and show publisher concentration explicitly.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    },
+    {
+      "id": "source_specific_freshness_windows",
+      "kind": "maximum_age",
+      "status": "unresolved_approval_gate",
+      "value": null,
+      "unit": "source-specific durations",
+      "rationale": "Cadence alone does not establish how old each operational input may be before a current national claim fails.",
+      "measurement_method": "Unresolved: document one window per approved critical source using publication cadence, expected delay and revision behavior.",
+      "sensitivity_justification": "One global age or an invented number would treat weekly, monthly, quarterly and manual evidence as falsely comparable.",
+      "failure_behavior": "Suppress the model when any critical source lacks an approved window or exceeds it.",
+      "owner": "repository maintainers",
+      "reviewed_at": "2026-08-03"
+    }
+  ],
+  "blocking_conditions": [
+    {
+      "id": "model_definition_conflict",
+      "status": "open",
+      "summary": "The five-band 0-100 draft conflicts with the four-state model requested by issue #37.",
+      "affected_claims": ["fuel_security_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["docs/fuel-stress-index-spec.md", "docs/fuel-security-methodology.md"],
+      "condition_to_clear": "Approve one named output, band vocabulary and claim scope; archive or reconcile the conflicting draft."
+    },
+    {
+      "id": "national_outage_coverage_missing",
+      "status": "open",
+      "summary": "No verified live reusable national station-outage feed is loaded.",
+      "affected_claims": ["fuel_availability_status", "fuel_security_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["data/manual/fuel_security_live_station_outage_feed.json"],
+      "condition_to_clear": "Load validated current outage evidence with declared geography and products, or approve a non-national claim whose exclusions are explicit."
+    },
+    {
+      "id": "terminal_capacity_unavailable",
+      "status": "open",
+      "summary": "No current public production-safe terminal-capacity or inventory series is loaded.",
+      "affected_claims": ["fuel_security_status", "resilience_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["data/manual/fuel_security_terminal_capacity.json"],
+      "condition_to_clear": "Load a dated, rights-safe capacity source with precise identity, units and product scope, or narrow and approve a model that does not claim terminal resilience."
+    },
+    {
+      "id": "vessel_shipping_rights_blocked",
+      "status": "open",
+      "summary": "Aggregate tanker context is public, but no live vessel/cargo path has verified redistribution rights and cargo evidence.",
+      "affected_claims": ["supply_chain_status", "resilience_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["data/manual/fuel_security_live_vessel_tracking.json", "data/manual/pmc_tankers_on_water.json"],
+      "condition_to_clear": "Approve a rights-safe source and field-level observed/reported/inferred rules, or constrain the claim to dated aggregate shipping context."
+    },
+    {
+      "id": "programmatic_national_snapshot_contract_missing",
+      "status": "open",
+      "summary": "The national Fuel Plan statistics evidence is reviewed manually; no stable machine-readable publication contract is registered.",
+      "affected_claims": ["fuel_security_status", "composite_national_score"],
+      "evidence_paths": ["data/manual/pmc_fuel_security_level.json", "data/manual/pmc_mso_days_cover.json"],
+      "condition_to_clear": "Establish a stable official machine-readable source or approve a fail-closed reviewed extraction contract with fixtures and explicit manual-source freshness."
+    },
+    {
+      "id": "source_specific_freshness_thresholds_unapproved",
+      "status": "open",
+      "summary": "No approved model-specific maximum age exists for every proposed critical source.",
+      "affected_claims": ["fuel_availability_status", "fuel_security_status", "supply_chain_status", "resilience_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["data/trust_status_manifest.json", "docs/fuel-security-methodology.md"],
+      "condition_to_clear": "Approve source-specific windows with cadence/revision rationale, tests and fail-closed stale behavior."
+    },
+    {
+      "id": "historical_baseline_missing",
+      "status": "open",
+      "summary": "No aligned historical replay establishes normalisation or stable transition behavior.",
+      "affected_claims": ["national_risk_level", "composite_national_score"],
+      "evidence_paths": ["docs/fuel-stress-index-spec.md"],
+      "condition_to_clear": "Build a provenance-preserving historical input set and publish replay, revision and alternative-window sensitivity results."
+    },
+    {
+      "id": "transition_rules_and_tests_missing",
+      "status": "open",
+      "summary": "No approved, implemented and tested rule exists for every status transition or score movement.",
+      "affected_claims": ["fuel_availability_status", "fuel_security_status", "supply_chain_status", "resilience_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["docs/fuel-security-methodology.md", "docs/fuel-stress-index-spec.md"],
+      "condition_to_clear": "Approve rules, implement them separately, and test every boundary, stale input, conflict and missing-data transition."
+    },
+    {
+      "id": "coverage_thresholds_unapproved",
+      "status": "open",
+      "summary": "Geographic, product and unavailable-weight thresholds lack a defensible denominator and sensitivity analysis.",
+      "affected_claims": ["fuel_availability_status", "fuel_security_status", "resilience_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["docs/fuel-security-methodology.md", "docs/fuel-stress-index-spec.md"],
+      "condition_to_clear": "Define comparable denominators and approve evidence-backed thresholds after sensitivity analysis."
+    },
+    {
+      "id": "publisher_concentration_unmeasured",
+      "status": "open",
+      "summary": "Dependence on one ultimate publisher has not been measured against an approved component graph.",
+      "affected_claims": ["resilience_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["data/source_manifest.json"],
+      "condition_to_clear": "Approve components, trace publisher lineage through derived inputs and publish concentration sensitivity."
+    },
+    {
+      "id": "approved_methodology_missing",
+      "status": "open",
+      "summary": "No reviewed methodology approval records the final input set, weights, uncertainty, conflicts and communication rules.",
+      "affected_claims": ["fuel_availability_status", "fuel_security_status", "supply_chain_status", "resilience_status", "national_risk_level", "composite_national_score"],
+      "evidence_paths": ["docs/fuel-security-methodology.md", "docs/fuel-stress-index-spec.md"],
+      "condition_to_clear": "Complete independent methodology review and record explicit approval before implementation or publication."
+    }
+  ],
+  "claim_assessments": {
+    "fuel_availability_status": {
+      "status": "blocked",
+      "rationale": "Current state outage evidence is partial, delayed or unavailable and has no approved national denominator.",
+      "blocking_condition_ids": ["national_outage_coverage_missing", "coverage_thresholds_unapproved", "source_specific_freshness_thresholds_unapproved"]
+    },
+    "fuel_security_status": {
+      "status": "blocked",
+      "rationale": "Official snapshot indicators may be shown individually, but a project-authored current security label lacks complete coverage and rules.",
+      "blocking_condition_ids": ["national_outage_coverage_missing", "terminal_capacity_unavailable", "programmatic_national_snapshot_contract_missing", "transition_rules_and_tests_missing"]
+    },
+    "supply_chain_status": {
+      "status": "blocked",
+      "rationale": "Only dated aggregate shipping context is defensible; live vessel, cargo and route evidence is rights- or evidence-blocked.",
+      "blocking_condition_ids": ["vessel_shipping_rights_blocked", "source_specific_freshness_thresholds_unapproved", "transition_rules_and_tests_missing"]
+    },
+    "resilience_status": {
+      "status": "blocked",
+      "rationale": "A broad resilience claim would overreach current outage, terminal, shipping, independence and historical evidence.",
+      "blocking_condition_ids": ["national_outage_coverage_missing", "terminal_capacity_unavailable", "vessel_shipping_rights_blocked", "publisher_concentration_unmeasured", "historical_baseline_missing"]
+    },
+    "national_risk_level": {
+      "status": "blocked",
+      "rationale": "No approved risk construct, baseline, transition logic or coverage threshold exists.",
+      "blocking_condition_ids": ["model_definition_conflict", "historical_baseline_missing", "coverage_thresholds_unapproved", "approved_methodology_missing"]
+    },
+    "composite_national_score": {
+      "status": "blocked",
+      "rationale": "The proposed component set, weights, thresholds, historical baseline, source independence and approval are unresolved.",
+      "blocking_condition_ids": ["model_definition_conflict", "historical_baseline_missing", "coverage_thresholds_unapproved", "publisher_concentration_unmeasured", "approved_methodology_missing"]
+    }
+  },
+  "publication": {
+    "public_composite_model_ready": false,
+    "composite_score_allowed": false,
+    "project_status_label_allowed": false,
+    "methodology_approved": false,
+    "published_score": null,
+    "published_status_label": null,
+    "active_blocking_condition_ids": [
+      "model_definition_conflict",
+      "national_outage_coverage_missing",
+      "terminal_capacity_unavailable",
+      "vessel_shipping_rights_blocked",
+      "programmatic_national_snapshot_contract_missing",
+      "source_specific_freshness_thresholds_unapproved",
+      "historical_baseline_missing",
+      "transition_rules_and_tests_missing",
+      "coverage_thresholds_unapproved",
+      "publisher_concentration_unmeasured",
+      "approved_methodology_missing"
+    ],
+    "approval": {
+      "status": "not_approved",
+      "approved_by": null,
+      "approved_at": null
+    }
+  },
+  "claim_boundary": [
+    "Passing this gate would not mean that any Australian government endorses the model.",
+    "Passing this gate would not prove that every upstream source is correct.",
+    "Passing this gate would not prove that all private fuel stocks are known.",
+    "Passing this gate would not prove that every terminal is covered.",
+    "Passing this gate would not prove that all disruptions are visible.",
+    "Passing this gate would not mean that the result predicts shortages.",
+    "Passing this gate would not make the result an official security assessment."
+  ],
+  "evidence_paths": [
+    "docs/national-status-model-readiness-gate.md",
+    "docs/fuel-security-methodology.md",
+    "docs/fuel-stress-index-spec.md",
+    "data/source_manifest.json",
+    "data/trust_status_manifest.json"
+  ]
+}

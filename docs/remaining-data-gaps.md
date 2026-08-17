@@ -309,9 +309,10 @@ or public procurement sources provide exact fields.
 | Uncrewed mission-capable rates, sortie rates and live availability | intentionally unavailable | Defence public project pages do not publish per-platform mission-capable rates, sortie rates or live availability for any uncrewed system. | Do not add. Keep readiness-sensitive uncrewed metrics out of the dashboard. |
 | Classified or sensitive uncrewed systems | intentionally unavailable | Public-facing dashboard. Sensitive or classified uncrewed work is not in scope. | Do not add. |
 
-## Fuel Stress Index Gate
+## National status-model gate
 
-Do not start the Fuel Stress Index implementation until:
+Do not start a Fuel Stress Index, Stable/Tight/Disrupted/Critical label or other
+project-authored national composite until:
 
 - minimum component, product, geography and freshness coverage thresholds are
   documented and validated;
@@ -323,9 +324,13 @@ Do not start the Fuel Stress Index implementation until:
 - tests prove that insufficient coverage suppresses the score instead of
   silently reweighting available inputs.
 
-The locked methodology gate now lives in `docs/fuel-stress-index-spec.md`.
+The canonical fail-closed decision now lives in
+`docs/national-status-model-readiness-gate.md`, with a machine-readable snapshot
+in `data/national_status_model_gate.json`. The older
+`docs/fuel-stress-index-spec.md` is retained as an unapproved candidate only;
+its 60% cutoff, multipliers, weights and five-band table are not launch rules.
 
-Locked candidate inputs before any scoring work:
+Historical candidate inputs to reassess before any scoring work:
 
 - Include only verified envelopes for retail pump prices, ABS petroleum imports
   and YoY, APS net-import cover, APS stocks/imports/exports/production, and
@@ -338,5 +343,6 @@ Locked candidate inputs before any scoring work:
 - Treat manual sources as lower-confidence than programmatic sources unless
   the page is a dated public snapshot, such as PM&C national status.
 - Treat stale sources as loaded but confidence-reducing, not as fresh signal.
-- Publish no 0-100 score unless the visible page can show component coverage,
-  missing inputs and stale/manual status beside the score.
+- Publish no 0-100 score unless an independently reviewed methodology and every
+  fail-closed gate are approved, implemented and validated. Visibility of
+  component coverage alone is not approval.

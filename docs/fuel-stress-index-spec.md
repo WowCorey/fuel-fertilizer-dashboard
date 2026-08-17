@@ -1,10 +1,17 @@
-# Fuel Stress Index Input Specification
+# Fuel Stress Index Input Specification (archived candidate)
 
-Last reviewed: 2026-04-23
+Last reviewed: 2026-08-03
 
-This document locks the rules that must exist before the project publishes any
-0-100 Fuel Stress Index. It is a methodology gate only; there is no public score,
-public label, or index UI until every rule below is implemented and visible.
+Status: **unapproved and superseded as a launch gate**. The five bands, 60%
+coverage cutoff, quality multipliers and tentative weights below have not been
+calibrated, sensitivity-tested or approved. They are retained as design history
+only and must not be implemented or cited as publication thresholds. The
+canonical fail-closed decision is
+[`national-status-model-readiness-gate.md`](national-status-model-readiness-gate.md).
+
+This document records an early candidate shape for a 0-100 Fuel Stress Index.
+It is not an approved methodology. There is no public score, public label or
+index UI, and none may be added from the candidate numbers below.
 
 The fuel-security dashboard added in v1.6 is a visibility page, not this index.
 It can show observed, derived, partial and unavailable operational signals, but
@@ -17,9 +24,9 @@ The index should summarise pressure in Australia's liquid-fuel system without
 fabricating missing values. It must behave as a transparent coverage-weighted
 indicator, not as an authoritative official security rating.
 
-## Candidate Bands
+## Unapproved candidate bands
 
-These labels are reserved for a future public score:
+These historical candidate labels are not reserved or approved:
 
 | Score | Label |
 |---:|---|
@@ -72,7 +79,7 @@ Each component must carry one visible state:
 Stale data may reduce confidence, but it must not silently disappear from the
 method. Unavailable data must not be replaced by estimates.
 
-## Confidence And Coverage
+## Unapproved confidence and coverage proposal
 
 The future score must show both:
 
@@ -90,14 +97,13 @@ Minimum quality multipliers:
 | Stale manual | 0.35 |
 | Unavailable | 0.00 |
 
-A public score must not render when coverage is below 60%. In that case the page
-should render "Index unavailable - insufficient verified inputs" and list the
-missing components.
+The former 60% cutoff is withdrawn. It had no defensible national denominator,
+empirical calibration or sensitivity analysis. The machine gate records the
+corresponding threshold as `null` until those prerequisites exist.
 
-## First Formula Shape
+## Unapproved first formula shape
 
-The first formula should use conservative equal-ish weights and be easy to
-audit:
+The following historical weights are not approved and must not be used:
 
 | Component | Tentative weight |
 |---|---:|
@@ -108,8 +114,9 @@ audit:
 | Stock/import/order snapshot | 20 |
 | Retail stock-out/tanker disruption snapshot | 10 |
 
-Weights should be rebalanced only with a documented reason. No component can be
-used unless its normalisation formula is documented beside the score.
+Any future weights require a separately reviewed methodology, calibration and
+sensitivity evidence. No component can be used unless its normalisation formula
+is documented beside the score.
 
 ## Normalisation Guardrails
 
@@ -131,5 +138,5 @@ Before writing score code, complete these checks:
   "Pressure" if the score mostly reflects prices and imports rather than true
   physical security.
 - Add unit tests for every normalisation transform.
-- Add a browser smoke assertion that the score is hidden when coverage is below
-  the threshold.
+- Add browser smoke assertions that every approved coverage failure suppresses
+  the score. No coverage threshold is approved by this archived document.
