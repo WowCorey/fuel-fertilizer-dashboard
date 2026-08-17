@@ -3,12 +3,19 @@ name: CI
 on:
   pull_request:
   push:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Weekly data refresh"]
+    types: [completed]
 
 permissions:
   contents: read
 
 jobs:
   validate-data:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -1,17 +1,22 @@
 const { defineConfig, devices } = require('@playwright/test');
 
+const deployedSiteBaseUrl = process.env.PLAYWRIGHT_SITE_BASE_URL?.trim();
+const localBaseUrl = 'http://127.0.0.1:4173';
+
 module.exports = defineConfig({
   timeout: 30_000,
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: deployedSiteBaseUrl || localBaseUrl,
     trace: 'retain-on-failure',
   },
-  webServer: {
-    command: 'python -m http.server 4173',
-    url: 'http://127.0.0.1:4173',
-    reuseExistingServer: !process.env.CI,
-    timeout: 20_000,
-  },
+  webServer: deployedSiteBaseUrl
+    ? undefined
+    : {
+        command: 'python -m http.server 4173',
+        url: localBaseUrl,
+        reuseExistingServer: !process.env.CI,
+        timeout: 20_000,
+      },
   projects: [
     {
       name: 'chromium',

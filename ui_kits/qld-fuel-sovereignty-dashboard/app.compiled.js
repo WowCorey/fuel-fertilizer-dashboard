@@ -399,6 +399,10 @@ function Header({
       };
     }
   }, [sheetOpen]);
+  React.useEffect(() => {
+    const main = document.getElementById('main');
+    if (main && !main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+  }, []);
   const siteRefresh = window.FR?.fmtRefreshStatus ? window.FR.fmtRefreshStatus(refreshStatus) : '';
   const hasSiteRefresh = window.FR?.isPublishedRefreshStatus ? window.FR.isPublishedRefreshStatus(refreshStatus) : false;
   const stampLabel = refreshStatus ? hasSiteRefresh ? `Refreshed ${siteRefresh}` : siteRefresh : updated ? `Page data retrieved ${updated}` : '';

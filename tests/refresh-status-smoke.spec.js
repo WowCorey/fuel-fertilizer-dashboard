@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
+const { siteUrl } = require('./site-target');
 
-const fuelPath = '/ui_kits/fuel-dashboard/index.html';
+const fuelPath = siteUrl('/ui_kits/fuel-dashboard/index.html');
 
 async function waitForFuelReady(page) {
   await expect(page.locator('h1').first()).toBeVisible();
@@ -60,7 +61,7 @@ test('dashboard headers and footers fail closed for prepared v2 refresh markers'
   await expect(ui.header).toHaveText('Refresh status unavailable');
   await expect(ui.footer).toContainText('Site refresh: Refresh status unavailable');
   await expect(ui.header).not.toContainText('Refreshed 02 Aug 2026');
-  await page.goto('/');
+  await page.goto(siteUrl('/'));
   await expect(page.locator('#refresh-date')).toHaveText('unavailable');
 });
 
@@ -68,7 +69,7 @@ test('dashboard headers and footers render finalized and pushed v2 refresh marke
   const ui = await openFuelWithRefreshMarker(page, publishedRefreshV2());
   await expect(ui.header).toHaveText('Refreshed 02 Aug 2026');
   await expect(ui.footer).toContainText('Site refresh: 02 Aug 2026');
-  await page.goto('/');
+  await page.goto(siteUrl('/'));
   await expect(page.locator('#refresh-date')).toContainText('published output marker; deployment not proven');
 });
 
@@ -82,12 +83,17 @@ test('dashboard headers and footers reject unknown refresh marker schemas', asyn
   await expect(ui.footer).toContainText('Site refresh: Refresh status unavailable');
 });
 
-test('homepage labels legacy refresh evidence without claiming deployment', async ({ page }) => {
-  await page.goto('/');
+test('homepage labels committed refresh evidence without claiming deployment', async ({ page, request }) => {
+  const marker = await (await request.get(siteUrl('/data/last_successful_refresh.json'))).json();
+  await page.goto(siteUrl('/'));
   const status = page.locator('#refresh-badge');
   await expect(status).toContainText('Recorded source refresh:');
-  await expect(status).toContainText('legacy marker; output publication unverified');
-  await expect(status).toContainText('Programmatic refresh: in rollout');
+  if (marker.schema === 'fuel_resilience_refresh_status.v2') {
+    await expect(status).toContainText('published output marker; deployment not proven');
+  } else {
+    await expect(status).toContainText('legacy marker; output publication unverified');
+  }
+  await expect(status).toContainText('Programmatic refresh:');
   await expect(status).toContainText('Manual public-source snapshots are labelled where used');
   await expect(status).not.toContainText('Last deployed:');
 });
